@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Nerd</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_NEW_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YOUR_NEW_ID');
+    </script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container-fluid my-4">
+        <div class="row gx-3 gy-3">
+            <main class="col-md-9">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-body">
+                        <div class="row" id="pages-grid">
+                            <div class="col-12 text-center text-muted py-5">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3">Loading pages...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <aside class="col-md-3">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-body p-0">
+                        <nav class="sidebar nav flex-column" id="dynamic-sidebar">
+                            </nav>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+    
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/component-loader.js"></script>
+
+    <script>
+        // Function to load and render the list of pages
+        async function loadPages() {
+            try {
+                // UPDATE: Fetch from new 'config/pages.json'
+                const response = await fetch('config/pages.json');
+                if (!response.ok) throw new Error('Failed to load pages.json');
+                const pages = await response.json();
+
+                // Sort pages alphabetically by name
+                pages.sort((a, b) => a.name.localeCompare(b.name));
+
+                const currentPage = 'index'; // Hardcoded for homepage
+
+                // Generate the sidebar
+                const sidebarHtml = pages.map(page => {
+                    const isActive = page.slug === currentPage;
+                    const activeClass = isActive ? ' active' : '';
+                    const iconHtml = page.icon ?
+                        (page.icon.endsWith('.svg') || page.icon.endsWith('.png') ?
+                            `<img src="${page.icon}" alt="" class="icon me-2" aria-hidden="true" />` :
+                            `<span class="material-icons me-2" aria-hidden="true">${page.icon}</span>`) :
+                        `<span class="me-2" style="width: 24px;"></span>`;
+
+                    return `
+                        <a class="nav-link d-flex align-items-center${activeClass}" href="${page.slug}.html">
+                            ${iconHtml}
+                            <span>${page.name}</span>
+                        </a>
+                    `;
+                }).join('');
+
+                document.getElementById('dynamic-sidebar').innerHTML = sidebarHtml;
+
+                // Generate the homepage grid
+                const gridHtml = pages.map(page => {
+                    const iconHtml = page.icon ?
+                        (page.icon.endsWith('.svg') || page.icon.endsWith('.png') ?
+                            `<img src="${page.icon}" alt="" class="icon me-2" aria-hidden="true" />` :
+                            `<span class="material-icons me-2" aria-hidden="true">${page.icon}</span>`) :
+                        '';
+
+                    return `
+                        <div class="col-sm-6 col-lg-4 mb-4">
+                            <a href="${page.slug}.html" class="card-link">
+                                <div class="card bg-dark border-secondary h-100 hover-accent">
+                                    <div class="card-body">
+                                        <h5 class="card-title d-flex align-items-center">
+                                            ${iconHtml}
+                                            ${page.name}
+                                        </h5>
+                                        <p class="card-text text-white-50">
+                                            ${page.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+
+                // UPDATE: Target the new 'pages-grid' ID
+                document.getElementById('pages-grid').innerHTML = gridHtml;
+
+            } catch (error) {
+                console.error('Error loading pages:', error);
+                document.getElementById('pages-grid').innerHTML = `<div class="alert alert-danger col-12">Failed to load pages.</div>`;
+            }
+        }
+
+        // (The initThemeSwitcher function is identical, copy it from 'index.html' or 'js/main.js')
+        function initThemeSwitcher() {
+            const themes = ['burlywood', 'cadetblue', 'cornflowerblue', 'dodgerblue', 'lightcoral', 'lightgreen', 'plum', 'thistle', 'tomato', 'violet', 'goldenyellow', 'mutedcoral', 'softpink', 'lightcyan', 'lightgray', 'neongreen', 'brightyellow']; 
+			const themeDropdown = document.getElementById('accentColorDropdownMenu');
+            const htmlElement = document.documentElement;
+
+            function applyTheme(theme) {
+                htmlElement.className = '';
+                htmlElement.classList.add('theme-' + theme);
+                localStorage.setItem('accentTheme', theme);
+            }
+
+            if (themeDropdown) {
+                themes.forEach(theme => {
+                    const li = document.createElement('li');
+                    const button = document.createElement('button');
+                    button.className = 'dropdown-item';
+                    button.type = 'button';
+                    button.textContent = theme;
+                    button.onclick = () => applyTheme(theme);
+                    li.appendChild(button);
+                    themeDropdown.appendChild(li);
+                });
+            }
+            const savedTheme = localStorage.getItem('accentTheme') || 'burlywood';
+            applyTheme(savedTheme);
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async function () {
+            await ComponentLoader.loadAll();
+            initThemeSwitcher();
+            loadPages(); // UPDATE: Call loadPages()
+            
+            const yearElement = document.getElementById('current-year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+</html>
