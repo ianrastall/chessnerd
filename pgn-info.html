@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PGN Info</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body class="bg-dark text-light">
+  <div id="header-placeholder"></div>
+
+  <div class="container-fluid my-4">
+    <div class="row gx-3 gy-3">
+      <main class="col-md-9">
+        <div class="card bg-dark border-secondary shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <span class="material-icons me-3" aria-hidden="true" style="font-size: 36px;">bar_chart</span>
+              <h2 class="m-0">PGN Info</h2>
+            </div>
+            <p class="text-white-50 mb-4">Paste or upload a PGN (≤ 50 MB) and get quick stats.</p>
+            
+            <div id="errorArea" class="mb-3"></div>
+
+            <form id="pgnForm" onsubmit="return false;" class="mb-4">
+              <div class="mb-3">
+                <label class="form-label" for="pgnFile">Upload PGN file (≤ 50 MB)</label>
+                <input type="file" class="form-control" id="pgnFile" name="pgnFile" accept=".pgn,text/plain">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="pgnText">...or paste PGN (≤ 50 MB)</label>
+                <textarea class="form-control font-monospace" id="pgnText" name="pgnText" rows="10" placeholder="Paste PGN..."></textarea>
+              </div>
+              <button class="btn btn-task d-flex align-items-center" type="submit" id="analyzeBtn">
+                <span class="material-icons me-2" aria-hidden="true">bar_chart</span>Analyze
+              </button>
+            </form>
+
+            <div class="mb-3">
+              <label class="form-label" for="statsOutput">Statistics</label>
+              <textarea readonly class="form-control font-monospace" id="statsOutput" rows="16" placeholder="Statistics will appear here..."></textarea>
+            </div>
+          </div>
+        </div>
+      </main>
+      <aside class="col-md-3">
+        <div class="card bg-dark border-secondary shadow-sm">
+          <div class="card-body p-0">
+            <div id="dynamic-sidebar" class="sidebar"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/component-loader.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script src="js/pgn-info.js"></script>
+</body>
+</html>
