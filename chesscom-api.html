@@ -122,16 +122,16 @@
 <h3>General Use Features and Issues</h3>
 <p>The format for each endpoint will be different, and described in a release note about that endpoint. They all share the following features and issues. Even though you only need a URL to obtain the data, we advise that you read through and understand all of these before you start any significant work.</p>
 <p><strong>Cache invalidation:</strong> This endpoints refresh at most once every 12 hours</p>
-<h6>Not (Yet) Guaranteed Current</h6>
+<h4>Not (Yet) Guaranteed Current</h4>
 <p>About 3% of players are still actively using the old "v2" website for some actions. When these players perform an action that modifies the data you are requesting, the data may be out of date when we deliver it to you. We expect to remove the option of using v2 in the coming months. Until then, you can communicate to your users that data accuracy will be improved if they and their opponents are all using the new v3 website.</p>
 <p>This issue does not apply to people using the mobile apps.</p>
-<h6>English</h6>
+<h4>English</h4>
 <p>URL responses are the same for everyone, no matter who or where they are. This speeds up delivery, but also means that in cases where the data contain words (for example, reasons for game ending, error responses), these words will be in English.</p>
-<h6>Rate Limiting</h6>
+<h4>Rate Limiting</h4>
 <p>Your serial access rate is unlimited. If you always wait to receive the response to your previous request before making your next request, then you should never encounter rate limiting.</p>
 <p>However, if you make requests in parallel (for example, in a threaded application or a webserver handling multiple simultaneous requests), then some requests may be blocked depending on how much work it takes to fulfill your previous request. You should be prepared to accept a "<code>429 Too Many Requests</code>" response from our server for any non-serial request that you make.</p>
 <p>In some cases, if we detect abnormal or suspicious activity, we may block your application entirely. If you supply a recognizable user-agent that contains contact information, then if we must block you application we will attempt to contact you to correct the problem.</p>
-<h6>How to get the PubAPI data</h6>
+<h4>How to get the PubAPI data</h4>
 <p>The PubAPI endpoints can be called, by any kind of client or browsers that supports the HTTP protocol.</p>
 <p>So if you only want to see what happens when you issue a <i>request</i> to an endpoint you can open your browser and write in the address bar the endpoint you are interested in (for example the <a href="https://api.chess.com/pub/player/hikaru">Profile</a> endpoint.</p>
 <p>The <i>response</i> is compressed, but there are many tools only that can render that response in a more readable format (gor example <a href="https://jsonformatter.curiousconcept.com" rel="ugc nofollow noreferrer noopener" target="_blank">https://jsonformatter.curiousconcept.com</a>).</p>
@@ -139,7 +139,7 @@
 <p>If you don't want to deal with command line there are many free tools online that provide an easier user interface. The ones that we use mostly in our team are <a href="https://www.getpostman.com/" rel="ugc nofollow noreferrer noopener">Postman</a> and <a href="https://insomnia.rest" rel="ugc nofollow noreferrer noopener">Insomnia</a>.</p>
 <p>If you use Postman or Insomnia, <b>we have released a collection of endpoints</b> that you can download from <a href="https://www.chess.com/postman/collection-dev.json">HERE</a>. After installing the collection you will find all the current endpoints that you can call by a click (and analyze the response, convert the call into a language of your choice etc.) . If you need instructions on how import collections, check this <a href="https://www.getpostman.com/docs/postman/collections/data_formats" rel="ugc nofollow noreferrer noopener">link</a> for Postman or this <a href="https://support.insomnia.rest/article/52-importing-and-exporting-data" rel="ugc nofollow noreferrer noopener">link</a> for Insomnia.</p>
 <p>All time fields are expressed as "timestamp", which is a number calculated as the time measured in the number of <b>seconds</b> since the Unix Epoch (January 1 1970 00:00:00 GMT). All programming languages have functions to convert timestamps to an human-readable format, but if you want to try by hand you can use one of the many <a href="https://www.epochconverter.com" rel="ugc nofollow noreferrer noopener" target="_blank">online converters</a>.</p>
-<h6>HTTP Responses</h6>
+<h4>HTTP Responses</h4>
 <p>Response codes are used to tell your client about the state of the data you requests.</p>
 <ul>
 <li><code>200 =</code> "enjoy your JSON"</li>
@@ -149,25 +149,25 @@
 <li><code>410 =</code> we know for certain that no data will ever be available at the URL you requested; your client should not request this URL again</li>
 <li><code>429 =</code> we are refusing to interpret your request due to rate limits; see "<a href="#pubapi-general-rate-limits">Rate Limiting</a>" above</li>
 </ul>
-<h6>JSON-LD</h6>
+<h4>JSON-LD</h4>
 <p>We provide "linked data" contexts for each of our JSON data formats. JSON-LD can be parsed as regular JSON (it is fully compatible), but we also provide <a href="https://www.w3.org/TR/json-ld/#interpreting-json-as-json-ld" rel="ugc nofollow noreferrer noopener">an HTTP header called "<code>Link</code>"</a> which contains a URL to the JSON-LD context for this data format. This helps the data describe its own meaning. You can read more about <a href="https://json-ld.org/spec/latest/json-ld/" rel="ugc nofollow noreferrer noopener">JSON-LD by reading the spec</a> or searching Google in your language.</p>
-<h6>JSONP</h6>
+<h4>JSONP</h4>
 <p>In <a href="https://en.wikipedia.org/wiki/JSONP" rel="ugc nofollow noreferrer noopener">JSONP, or "JSON with padding,"</a> a "<code>callback</code>" parameter can be sent in the query string of any URL, and the value will be treated as the name of a function to call with the data as a parameter. This is useful if you want to point to the URL in a &lt;script&gt; tag's src value, instead of calling the URL programmatically in your code. As an example, compare these:</p>
 <ul>
 <li><a href="https://api.chess.com/pub/player/erik">https://api.chess.com/pub/player/erik</a></li>
 <li><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction"></a><a href="https://api.chess.com/pub/player/erik?callback=myJavascriptFunction">https://api.chess.com/pub/player/erik?callback=myJavascriptFunction</a></li>
 </ul>
 <p>JSONP function names containing non literal chars or longer than 200 chars will be removed from response.</p>
-<h6>Caching</h6>
+<h4>Caching</h4>
 <p>Each response has "<code>ETag</code>" and "<code>Last-Modified</code>" headers. If your client supplies the proper header in the request to prove that the data have not changed since your previous request ("<code>If-None-Match</code>" and "<code>If-Modified-Since</code>", respectively), then you will receive a <code>304 Not Modified</code> response code, telling you that it is safe and correct to use your cached version.</p>
 <p>If you make a request more frequently than the "<code>Cache-Control</code>" header's "max-age" value, then our CDN may respond to you directly with cached values. At refresh rates greater than specified in the "max-age" value, the CDN will validate the currency of its response before sending it to you. You may see headers indicating a cache "HIT", "MISS", "EXPIRED", or "REVALIDATED" for this purpose.</p>
 <p><strong>Please note:</strong> The endpoints refresh at most once every 24 hours, if not noted otherwise.</p>
-<h6>HTTP Compression &amp; HTTP/2</h6>
+<h4>HTTP Compression &amp; HTTP/2</h4>
 <p>If the request is made with an "<code>Accept-Encoding: gzip</code>" header, then the response will be gzip compressed for transfer if it is of a size where this saves time (generally, more than 200 bytes). With gzip'd transfers, you can save up to 80% of the download bandwidth for the same data.</p>
 <p>HTTP/2 requests will get HTTP/2 responses. For the most part, this means header compression / binary transfer, and multiplexed responses for parallel downloads. However, see <a href="#pubapi-general-rate-limits">above-mentioned rate limits on parallel requests</a>.</p>
 <hr/>
 <h3>Endpoints</h3>
-<h6>Player Profile</h6>
+<h4>Player Profile</h4>
 <p><strong>Description:</strong> Get additional details about a player in a game. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username} <br/><strong>Data format:</strong></p>
 <pre>{
   "@id": "URL", // the location of this profile (always self-referencing)
@@ -190,7 +190,7 @@
 </pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/Player.jsonld">https://api.chess.com/context/Player.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik">https://api.chess.com/pub/player/erik</a></p>
 <p><em>Note: the "player_id" is provided as a convenience to determine when a username has been changed. If you retrieve a Player Profile by the username-based URL linked from a Game or other object, and this new Player Profile has a "player_id" that matches a Profile you previously downloaded, then you can safely assume that this new Profile replaces the old, and all URLs with the previous username will now be found under the new username. This should be an extremely rare occurrence. This "player_id" will never change for a given account, however the future availability of this ID is not guaranteed.</em></p>
-<h6>Titled Players</h6>
+<h4>Titled Players</h4>
 <p><strong>Description:</strong> List of titled-player usernames. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/titled/">https://api.chess.com/pub/titled/</a>{title-abbrev}</p>
 <p>Valid title abbreviations are: GM, WGM, IM, WIM, FM, WFM, NM, WNM, CM, WCM.</p>
 <p><strong>Data Format:</strong></p>
@@ -202,7 +202,7 @@
 </pre>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/Players.jsonld">https://api.chess.com/context/Players.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/titled/GM">https://api.chess.com/pub/titled/GM</a></p>
-<h6>Player Stats</h6>
+<h4>Player Stats</h4>
 <p><strong>Description:</strong> Get ratings, win/loss, and other stats about a player's game play, tactics, lessons and Puzzle Rush score. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/stats</p>
 <p>The response contains many "stats objects," each identified by the ratings-type from the game, composed of the rules code, an underscore, and the time-class code. If a person has not played a particular game type, no stats object will be present for it. Like so:</p>
 <pre>{
@@ -277,7 +277,7 @@
 </pre>
 <p><strong>JSON-LD contexts:</strong> <em>in progress</em> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/stats">https://api.chess.com/pub/player/erik/stats</a></p>
 <hr/>
-<h6>Player online status</h6>
+<h4>Player online status</h4>
 <p><strong>Description:</strong> Tells if an unser has been online in the last five minutes. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/is-online</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -287,7 +287,7 @@
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/PlayerIsOnline.jsonld">https://api.chess.com/context/PlayerIsOnline.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/is-online">https://api.chess.com/pub/player/erik/is-online</a></p>
 <hr/>
-<h6>Player Games</h6>
+<h4>Player Games</h4>
 <p>There are six endpoints for a player's games: to-move, current, list of available monthly archives, monthly archive, live archive by time control, and downloadable-PGN monthly archive. The to-move, current games, and monthly archive lists use this wrapping data format:</p>
 <pre>{
   "games": [
@@ -305,7 +305,7 @@
 <li><code>last_activity</code>: in currently-playing (daily) games, this timestamp represents the time of the last action affecting the game. This may be a move, draw offer, or even a deactivation of the chat window. Omitted in archives, where it is synonymous with the <code>end_time</code>.</li>
 </ul>
 <hr/>
-<h6>Current Daily Chess</h6>
+<h4>Current Daily Chess</h4>
 <p><strong>Description:</strong> Array of Daily Chess games that a player is currently playing. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/games</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -333,7 +333,7 @@
 </pre>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/ChessGames.jsonld">https://api.chess.com/context/ChessGames.jsonld</a>, <a href="https://api.chess.com/context/ChessGame.jsonld">https://api.chess.com/context/ChessGame.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/games">https://api.chess.com/pub/player/erik/games</a></p>
 <hr/>
-<h6>To-Move Daily Chess</h6>
+<h4>To-Move Daily Chess</h4>
 <p><strong>Description:</strong> Array of Daily Chess games where it is the player's turn to act. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/games/to-move</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -352,7 +352,7 @@
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/ChessGames.jsonld">https://api.chess.com/context/ChessGames.jsonld</a>, <a href="https://api.chess.com/context/ChessGame.jsonld">https://api.chess.com/context/ChessGame.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/games/to-move">https://api.chess.com/pub/player/erik/games/to-move</a></p>
 <hr/>
-<h6>List of Monthly Archives</h6>
+<h4>List of Monthly Archives</h4>
 <p><strong>Description:</strong> Array of monthly archives available for this player. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/games/archives</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -364,7 +364,7 @@
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/GameArchives.jsonld">https://api.chess.com/context/GameArchives.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/games/archives">https://api.chess.com/pub/player/erik/games/archives</a></p>
 <hr/>
-<h6>Complete Monthly Archives</h6>
+<h4>Complete Monthly Archives</h4>
 <p><strong>Description:</strong> Array of Live and Daily Chess games that a player has finished. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/games/{YYYY}/{MM}</p>
 <ul>
 <li>"YYYY" is the four digit year of the game-end</li>
@@ -403,7 +403,7 @@
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/ChessGames.jsonld">https://api.chess.com/context/ChessGames.jsonld</a>, <a href="https://api.chess.com/context/ChessGame.jsonld">https://api.chess.com/context/ChessGame.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/games/2009/10">https://api.chess.com/pub/player/erik/games/2009/10</a></p>
 <hr/>
-<h6>Complete Live Archive by Time Control</h6>
+<h4>Complete Live Archive by Time Control</h4>
 <p><strong>Description:</strong> Array of Live Chess games that a player has finished by time control. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/games/live/{BASETIME}/(INCREMENT)</p>
 <ul>
 <li>"BASETIME" is the base time control in seconds</li>
@@ -446,7 +446,7 @@
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/ChessGames.jsonld">https://api.chess.com/context/ChessGames.jsonld</a>, <a href="https://api.chess.com/context/ChessGame.jsonld">https://api.chess.com/context/ChessGame.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/games/live/180/2">https://api.chess.com/pub/player/erik/games/live/180/2</a></p>
 <hr/>
-<h6>Multi-Game PGN Download</h6>
+<h4>Multi-Game PGN Download</h4>
 <p><strong>Description:</strong> standard multi-game format PGN containing all games for a month. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/games/{YYYY}/{MM}/pgn</p>
 <p><strong>Data Format:</strong> this download follows <a href="https://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm" rel="ugc nofollow noreferrer noopener">the PGN standard</a>, and is not JSON-encoded. The response has two special headers worth noting if programmatically hitting this endpoint (browsers handle these automatically):</p>
 <ul>
@@ -454,7 +454,7 @@
 <li><code>Content-Disposition: attachment; filename="ChessCom_username_YYYYMM.pgn"</code> <br/><em>This disposition indicates that browser should download, not display, the result, and it suggests a filename based on the source archive</em></li>
 </ul>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/games/2009/10/pgn">https://api.chess.com/pub/player/erik/games/2009/10/pgn</a></p>
-<h6>Player's Clubs</h6>
+<h4>Player's Clubs</h4>
 <p><strong>Description:</strong> List of clubs the player is a member of, with joined date and last activity date. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/clubs</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -472,7 +472,7 @@
 </pre>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/PlayerClubs.jsonld">https://api.chess.com/context/PlayerClubs.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/clubs">https://api.chess.com/pub/player/erik/clubs</a></p>
-<h6>Player Matches</h6>
+<h4>Player Matches</h4>
 <p><strong>Description:</strong> List of Team matches the player has attended, is partecipating or is currently registered. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/matches</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -514,7 +514,7 @@
 </pre>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/PlayerMatches.jsonld">https://api.chess.com/context/PlayerMatches.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/matches">https://api.chess.com/pub/player/erik/matches</a></p>
-<h6>Player's Tournaments</h6>
+<h4>Player's Tournaments</h4>
 <p><strong>Description:</strong> List of tournaments the player is registered, is attending or has attended in the past. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/player/">https://api.chess.com/pub/player/</a>{username}/tournaments</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -548,10 +548,10 @@
 }</pre>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/PlayerTournaments.jsonld">https://api.chess.com/context/PlayerTournaments.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/player/erik/tournaments">https://api.chess.com/pub/player/erik/tournaments</a></p>
-<h6>Clubs</h6>
+<h4>Clubs</h4>
 <p>All club-based URLs use the club's "URL ID" to specify which club you want data for. <br/><a href="https://api.chess.com/pub/club/">https://api.chess.com/pub/club/</a>{url-ID}</p>
 <p>The <code>url-ID</code> is the same as found in the URL for the club's web page on <a href="https://www.chess.com">www.chess.com</a>. For example, the url-ID of <a href="https://www.chess.com/club/chess-com-developer-community">the Chess.com Developer's Club</a> is <code>chess-com-developer-community</code></p>
-<h6>Club Profile</h6>
+<h4>Club Profile</h4>
 <p><strong>Description:</strong> Get additional details about a club. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/club/">https://api.chess.com/pub/club/</a>{url-ID} <br/><strong>Data format:</strong></p>
 <pre>{
   "@id": "URL", // the location of this profile (always self-referencing)
@@ -572,7 +572,7 @@
 }
 </pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/Club.jsonld">https://api.chess.com/context/Club.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/club/chess-com-developer-community">https://api.chess.com/pub/club/chess-com-developer-community</a></p>
-<h6>Club Members</h6>
+<h4>Club Members</h4>
 <p><strong>Description:</strong> List of club members (usernames and joined date timestamp), grouped by club-activity frequency. The club-activity is one of this actions:</p>
 <ul>
 <li>Viewing the club homepage</li>
@@ -609,7 +609,7 @@
 <p><strong>Note:</strong> these lists are only updated based on members joining, leaving, or being banned. A member listed as a monthly-active or "all_time" member may not be moved to the weekly-active list for up to 24 hours after posting, reading club news, or participating in club activities.</p>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/ClubMembers.jsonld">https://api.chess.com/context/ClubMembers.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/club/chess-com-developer-community/members">https://api.chess.com/pub/club/chess-com-developer-community/members</a></p>
-<h6>Club Matches</h6>
+<h4>Club Matches</h4>
 <p><strong>Description:</strong> List of daily and club matches, grouped by status (registered, in progress, finished). <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/club/">https://api.chess.com/pub/club/</a>{ID}/matches</p>
 <pre>{
     "finished": [
@@ -646,10 +646,10 @@
 </pre>
 <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/ClubMatches.jsonld">https://api.chess.com/context/ClubMatches.jsonld</a></p>
 <p><strong>Example:</strong> <a href="https://api.chess.com/pub/club/team-usa-southwest/matches">https://api.chess.com/pub/club/team-usa-southwest/matches</a></p>
-<h6>Tournaments</h6>
+<h4>Tournaments</h4>
 <p>All tournaments-based URLs use the tournament's "URL ID" to specify which tournament you want data for. <br/><a href="https://api.chess.com/pub/tournament/">https://api.chess.com/pub/tournament/</a>{url-ID}</p>
 <p>The <code>url-ID</code> is the same as found in the URL for the tournament's web page on <a href="https://www.chess.com">www.chess.com</a>. For example, the url-ID of <a href="https://www.chess.com/tournament/-33rd-chesscom-quick-knockouts-1401-1600">the Chess.com Developer's Club</a> is <code>-33rd-chesscom-quick-knockouts-1401-1600</code></p>
-<h6>Tournament</h6>
+<h4>Tournament</h4>
 <p><strong>Description:</strong> Get details about a daily, live and arena tournament. <br/><strong>URL pattern:</strong> <a href="httpshttps://api.chess.com/pub/tournament/">https://api.chess.com/pub/tournament/</a>{url-ID} <br/><strong>Data format:</strong></p>
 <pre>{
     "name": "name",
@@ -688,7 +688,7 @@
     ]
 }</pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/Tournament.jsonld">https://api.chess.com/context/Tournament.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600">https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600</a></p>
-<h6>Tournament's round</h6>
+<h4>Tournament's round</h4>
 <p><strong>Description:</strong> Get details about a tournament's round. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/tournament/">https://api.chess.com/pub/tournament/</a>{url-ID}/{round} <br/><strong>Data format:</strong></p>
 <pre>{
     "groups": [
@@ -703,7 +703,7 @@
     ]
 }</pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/TournamentRound.jsonld">https://api.chess.com/context/TournamentRound.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600/1">https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600/1</a></p>
-<h6>Tournament's round group</h6>
+<h4>Tournament's round group</h4>
 <p><strong>Description:</strong> Get details about a tournament's round group. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/tournament/">https://api.chess.com/pub/tournament/</a>{url-ID}/{round}/{group} <br/><strong>Data format:</strong></p>
 <pre>{
     "fair_play_removals":[ 
@@ -741,10 +741,10 @@
     ]
 }</pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/TournamentRoundGroup.jsonld">https://api.chess.com/context/TournamentRoundGroup.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600/1/1">https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600/1/1</a></p>
-<h6>Daily Team matches</h6>
+<h4>Daily Team matches</h4>
 <p>All team matches-based URLs use the match "ID" to specify which match you want data for. <br/><a href="https://api.chess.com/pub/match/">https://api.chess.com/pub/match/</a>{ID}</p>
 <p>The <code>ID</code> is the same as found in the URL for the team match web page on <a href="https://www.chess.com">www.chess.com</a>. For example, the ID <a href="https://www.chess.com/club/matches/12803">WORLD LEAGUE Round 5: Romania vs USA Southwest</a> is <code>12803</code>.</p>
-<h6>Team Match</h6>
+<h4>Team Match</h4>
 <p><strong>Description:</strong> Get details about a team match and players playing that match. After the match is finished there will be a link to each player's stats endpoint, in order to get up-to-date information about the player. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/match/">https://api.chess.com/pub/match/</a>{ID} <br/><strong>Data format of match in its registration phase:</strong></p>
 <pre>{
     "name": string, 
@@ -855,7 +855,7 @@
 }</pre>
 <p><strong>Please note:</strong> we don't keep snapshots of user's statistics changes during matches, so after the registration phase you will able to get up-to-date statistics following the stats link of every player wich will lead to <a href="#pubapi-endpoint-player-stats"> Player's stats endpoint</a>.</p>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/Match.jsonld">https://api.chess.com/context/Match.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/match/12803">https://api.chess.com/pub/match/12803</a></p>
-<h6>Daily Team match board</h6>
+<h4>Daily Team match board</h4>
 <p><strong>Description:</strong> Get details about a team match board. Only in-progress or finished games will be included, so there may be one or two games in this list. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/match/">https://api.chess.com/pub/match/</a>{ID}/{board} <br/><strong>Data format:</strong></p>
 <pre>{
     "board_scores":{
@@ -897,10 +897,10 @@
     ]
 }</pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/MatchBoard.jsonld">https://api.chess.com/context/MatchBoard.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/match/12803/1">https://api.chess.com/pub/match/12803/1</a></p>
-<h6>Live Team matches</h6>
+<h4>Live Team matches</h4>
 <p>All live team matches-based URLs use the match "ID" to specify which match you want data for. <br/><a href="https://api.chess.com/pub/match/">https://api.chess.com/pub/match/</a>{ID}</p>
 <p>The <code>ID</code> is the same as found in the URL for the team match web page on <a href="https://www.chess.com">www.chess.com</a>. For example, the ID <a href="https://www.chess.com/club/matches/live/5833">Friendly 5+2</a> is <code>5833</code>.</p>
-<h6>Live Team Match</h6>
+<h4>Live Team Match</h4>
 <p><strong>Description:</strong> Get details about a team match and players playing that match. After the match is finished there will be a link to each player's stats endpoint, in order to get up-to-date information about the player. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/match/live">https://api.chess.com/pub/match/live</a>{ID} <br/><strong>Data format of match whenn scheduled:</strong></p>
 <pre>{
    "@id":"https://api.chess.com/pub/match/live/5861",
@@ -1088,7 +1088,7 @@
 }</pre>
 <p><strong>Please note:</strong> we don't keep snapshots of user's statistics changes during matches, so after the registration phase you will able to get up-to-date statistics following the stats link of every player wich will lead to <a href="#pubapi-endpoint-player-stats"> Player's stats endpoint</a>.</p>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/Match.jsonld">https://api.chess.com/context/Match.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/match/live/5833">https://api.chess.com/pub/match/live/5833</a></p>
-<h6>Live Team match board</h6>
+<h4>Live Team match board</h4>
 <p><strong>Description:</strong> Get details about a team match board. Only in-progress or finished games will be included, so there may be one or two games in this list. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/match/live/">https://api.chess.com/pub/match/live/</a>{ID}/{board} <br/><strong>Data format:</strong></p>
 <pre>{
    "board_scores":{
@@ -1145,7 +1145,7 @@
    ]
 }</pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/MatchBoard.jsonld">https://api.chess.com/context/MatchBoard.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/match/live/5833/5">https://api.chess.com/pub/match/live/5833/5</a></p>
-<h6>Countries</h6>
+<h4>Countries</h4>
 <p>All country-based URLs use the country's 2-character ISO 3166 code (capitalized) to specify which country you want data for. <br/><a href="https://api.chess.com/pub/country/">https://api.chess.com/pub/country/</a>{iso} <br/><a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" rel="ugc nofollow noreferrer noopener" target="_blank">https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</a></p>
 <p>Chess.com supports players and clubs identifying with some regions that are not recognized countries in this ISO list. These countries are identified with codes within the "<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#User-assigned_code_elements" rel="ugc nofollow noreferrer noopener">user-assigned code</a>" ranges. When possible, we tried to use codes that are commonly used in other applications. This is a list of these codes at Chess.com:</p>
 <ul>
@@ -1161,7 +1161,7 @@
 <li><code>XX</code> : "International"</li>
 </ul>
 <p>The presence or absence of any region on this list does not reflect any political opinion by Chess.com. We're just here to play chess. </p>
-<h6>Country Profile</h6>
+<h4>Country Profile</h4>
 <p><strong>Description:</strong> Get additional details about a country. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/country/">https://api.chess.com/pub/country/</a>{iso} <br/><strong>Data format:</strong></p>
 <pre>{
   "@id": "URL", // the location of this profile (always self-referencing)
@@ -1170,7 +1170,7 @@
 }
 </pre>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/Country.jsonld">https://api.chess.com/context/Country.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/country/IT">https://api.chess.com/pub/country/IT</a></p>
-<h6>Country Players</h6>
+<h4>Country Players</h4>
 <p><strong>Description:</strong> List of usernames for players who identify themselves as being in this country. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/country/">https://api.chess.com/pub/country/</a>{iso}/players</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -1182,7 +1182,7 @@
 <p><strong>Note:</strong> complete lists of all players are not available to download. By requesting this list once per day, you will obtain a list of all new registrants and all people who are currently active on Chess.com and identify themselves as being in (or associated with) this country. People who switch their country designation will be included in the next generation of the list.</p>
 <p><br/><strong>Cache invalidation:</strong> This endpoints refresh at most once every 12 hours</p>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/CountryPlayers.jsonld">https://api.chess.com/context/CountryPlayers.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/country/IT/players">https://api.chess.com/pub/country/IT/players</a></p>
-<h6>Country Clubs</h6>
+<h4>Country Clubs</h4>
 <p><strong>Description:</strong> List of URLs for clubs identified as being in or associated with this country. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/country/">https://api.chess.com/pub/country/</a>{iso}/clubs</p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -1193,7 +1193,7 @@
 </pre>
 <p><strong>Note:</strong> the "country" of a club means different things to different clubs. In some cases, the clubs solicit membership from people in that country; in others, they attempt to meet for OTB chess and the country is where they do that; sometimes it indicates the language spoken; sometimes it's just the country of the founder and they haven't given it much thought.</p>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/CountryClubs.jsonld">https://api.chess.com/context/CountryClubs.jsonld</a> <br/><strong>Example:</strong> <a href="httpshttps://api.chess.com/pub/country/IT/clubs">https://api.chess.com/pub/country/IT/clubs</a></p>
-<h6>Daily puzzle</h6>
+<h4>Daily puzzle</h4>
 <p><strong>Description:</strong> Information about the daily puzzle found in <a href="https://www.chess.com">www.chess.com</a> . <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/puzzle">https://api.chess.com/pub/puzzle</a></p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -1207,7 +1207,7 @@
 </pre>
 <p><strong>Note:</strong> if you are going to publish the Daily Puzzle somewhere please remember to give credits to Chess.com by means of a clearly visibile text link that points to the url of the puzzle page.</p>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/DailyPuzzle.jsonld">https://api.chess.com/context/DailyPuzzle.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/puzzle">https://api.chess.com/pub/puzzle</a></p>
-<h6>Random daily puzzle</h6>
+<h4>Random daily puzzle</h4>
 <p><strong>Description:</strong> Information about a randomly picked daily puzzle. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/puzzle/random">https://api.chess.com/pub/puzzle/random</a></p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -1221,7 +1221,7 @@
 </pre>
 <p><strong>Notes:</strong> the puzzle doesn't change every request but has some caching latency (around 15 seconds). If you are going to publish the Daily Puzzle somewhere please remember to give credits to Chess.com by means of a clearly visibile text link that points to the url of the puzzle page.</p>
 <p><strong>JSON-LD Context:</strong> <a href="https://api.chess.com/context/DailyPuzzle.jsonld">https://api.chess.com/context/DailyPuzzle.jsonld</a> <br/><strong>Example:</strong> <a href="https://api.chess.com/pub/puzzle/random">https://api.chess.com/pub/puzzle/random</a></p>
-<h6>Streamers</h6>
+<h4>Streamers</h4>
 <p><strong>Description:</strong> Information about Chess.com streamers. <br/><strong>URL pattern:</strong> <a href="httpsimg src="https://api.chess.com/pub/streamers">https://api.chess.com/pub/streamers</a></p>
 <p><strong>Data Format:</strong></p>
 <pre>{
@@ -1237,7 +1237,7 @@
 </pre>
 <p><strong>Notes:</strong> the endpoint refreshes every 5 minutes.</p>
 <p><br/><strong>Example:</strong> <a href="https://api.chess.com/pub/streamers">https://api.chess.com/pub/streamers</a></p>
-<h6>Leaderboards</h6>
+<h4>Leaderboards</h4>
 <p><strong>Description:</strong> It displays information about top 50 player for daily and live games, tactics and lessons. <br/><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/leaderboards">https://api.chess.com/pub/leaderboards</a></p>
 <p><strong>Data Format:</strong></p>
 <pre>{
