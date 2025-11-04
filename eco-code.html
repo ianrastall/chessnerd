@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECO Code Browser</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body class="bg-dark text-light">
+  <div id="header-placeholder"></div>
+
+  <div class="container-fluid my-4">
+    <div class="row gx-3 gy-3">
+      <main class="col-md-9">
+        <div class="card bg-dark border-secondary shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <span class="material-icons me-3" aria-hidden="true" style="font-size: 36px;">code</span>
+              <h2 class="m-0">ECO Code Browser</h2>
+            </div>
+            <p class="text-white-50 mb-4">Browse ECO chess opening codes hierarchically.</p>
+            
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <label for="eco1" class="form-label">Volume (A-E)</label>
+                <select id="eco1" class="form-select"></select>
+              </div>
+              <div class="col-md-4">
+                <label for="eco2" class="form-label">Sub-code</label>
+                <select id="eco2" class="form-select" disabled></select>
+              </div>
+              <div class="col-md-4">
+                <label for="eco3" class="form-label">Variation</label>
+                <select id="eco3" class="form-select" disabled></select>
+              </div>
+            </div>
+
+            <div id="ecoContent" class="p-3 rounded" style="background-color: #1a1a1a;">
+              </div>
+            
+          </div>
+        </div>
+      </main>
+      <aside class="col-md-3">
+        <div class="card bg-dark border-secondary shadow-sm">
+          <div class="card-body p-0">
+            <div id="dynamic-sidebar" class="sidebar"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/component-loader.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script src="js/eco-code.js"></script>
+</body>
+</html>
