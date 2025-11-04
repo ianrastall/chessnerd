@@ -87,16 +87,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /**
+     * Attempts to load the ECO dataset from several fallback locations.
+     * This helps when the JSON is served from different directories in dev vs. production.
+     * @returns {Promise<Object>} Resolved ECO dataset.
+     */
+    async function loadEcoData() {
+        const paths = [
+            'config/eco-code.json',
+            'js/eco-code.json',
+            'eco-code.json'
+        ];
+
+        for (const path of paths) {
+            try {
+                const response = await fetch(path);
+                if (!response.ok) {
+                    console.warn(`ECO data request failed for ${path}: ${response.status}`);
+                    continue;
+                }
+                return await response.json();
+            } catch (error) {
+                console.warn(`ECO data fetch threw for ${path}:`, error);
+            }
+        }
+
+        throw new Error('Failed to locate eco-code.json');
+    }
+
+    /**
      * Main initialization function.
      * Fetches the data and kicks off the app.
      */
     async function init() {
         try {
-            const response = await fetch('config/eco-code.json');
-            if (!response.ok) {
-                throw new Error('Failed to load eco-code.json');
-            }
-            ecoData = await response.json();
+            ecoData = await loadEcoData();
             
             // Once data is loaded, populate the first dropdown
             populate(first, ['A', 'B', 'C', 'D', 'E']);
