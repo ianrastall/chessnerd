@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess.com Titled Players</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body class="bg-dark text-light">
+  <div id="header-placeholder"></div>
+
+  <div class="container-fluid my-4">
+    <div class="row gx-3 gy-3">
+      <main class="col-md-9">
+        <div class="card bg-dark border-secondary shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <span class="material-icons me-3" aria-hidden="true" style="font-size: 36px;">emoji_events</span>
+              <h2 class="m-0">Chess.com Titled Players</h2>
+            </div>
+            <p class="text-white-50 mb-4">Fetch a combined list of all players for the selected titles from Chess.com.</p>
+            
+            <div id="errorArea" class="mb-3"></div>
+            
+            <form id="titleForm" onsubmit="return false;" class="mb-4">
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <label class="form-label mb-0">Select Titles:</label>
+                  <div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="selectAllBtn">Select All</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="selectNoneBtn">Select None</button>
+                  </div>
+                </div>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2">
+                  </div>
+              </div>
+              <button class="btn btn-task d-flex align-items-center" type="submit" id="fetchBtn">
+                <span class="material-icons me-2" aria-hidden="true">group</span>Fetch Players
+              </button>
+            </form>
+
+            <div id="resultsContainer" class="d-none">
+              <hr class="my-4 border-secondary">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 id="resultCount"></h5>
+                <button class="btn btn-sm btn-task" id="copyBtn">
+                  <span class="material-icons me-1" style="font-size: 1rem; vertical-align: text-bottom;">content_copy</span>Copy List
+                </button>
+              </div>
+              <textarea class="form-control font-monospace" id="playersList" rows="15" readonly></textarea>
+            </div>
+            
+          </div>
+        </div>
+      </main>
+      <aside class="col-md-3">
+        <div class="card bg-dark border-secondary shadow-sm">
+          <div class="card-body p-0">
+            <div id="dynamic-sidebar" class="sidebar"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+              <div class="toast-body">
+                  <span class="material-icons me-2" style="vertical-align: middle;">check_circle</span>
+                  List copied to clipboard!
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+      </div>
+  </div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/component-loader.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script src="js/titled-players.js"></script>
+</body>
+</html>
