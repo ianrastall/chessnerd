@@ -1,64 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ECO Code Browser</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/custom.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO Codes - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Tool-specific styles */
+        #ecoContent {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-height: 200px;
+        }
+        
+        #ecoContent h5 {
+            color: var(--accent);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .eco-move-text {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .loading {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+    </style>
 </head>
-<body class="bg-dark text-light">
-  <div id="header-placeholder"></div>
-
-  <div class="container-fluid my-4">
-    <div class="row gx-3 gy-3">
-      <main class="col-md-9">
-        <div class="card bg-dark border-secondary shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <span class="material-icons me-3" aria-hidden="true" style="font-size: 36px;">code</span>
-              <h2 class="m-0">ECO Code Browser</h2>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="material-icons">castle</span>
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
             </div>
-            <p class="text-white-50 mb-4">Browse ECO chess opening codes hierarchically.</p>
-            
-            <div class="row g-3 mb-4">
-              <div class="col-md-4">
-                <label for="eco1" class="form-label">Volume (A-E)</label>
-                <select id="eco1" class="form-select"></select>
-              </div>
-              <div class="col-md-4">
-                <label for="eco2" class="form-label">Sub-code</label>
-                <select id="eco2" class="form-select" disabled></select>
-              </div>
-              <div class="col-md-4">
-                <label for="eco3" class="form-label">Variation</label>
-                <select id="eco3" class="form-select" disabled></select>
-              </div>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#0d9488">Teal</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
             </div>
+        </header>
 
-            <div id="ecoContent" class="p-3 rounded" style="background-color: #1a1a1a;">
-              </div>
-            
-          </div>
-        </div>
-      </main>
-      <aside class="col-md-3">
-        <div class="card bg-dark border-secondary shadow-sm">
-          <div class="card-body p-0">
-            <div id="dynamic-sidebar" class="sidebar"></div>
-          </div>
-        </div>
-      </aside>
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">menu_book</span>
+                        <h2 id="toolName">ECO Code Browser</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div class="options-panel">
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label for="eco1">Volume (A-E)</label>
+                            <select id="eco1"><option value="">Loading...</option></select>
+                        </div>
+                        <div class="option-group">
+                            <label for="eco2">Group</label>
+                            <select id="eco2" disabled></select>
+                        </div>
+                        <div class="option-group">
+                            <label for="eco3">Opening</label>
+                            <select id="eco3" disabled></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ecoContent">
+                    <div class="loading">Loading database...</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
     </div>
-  </div>
 
-  <div id="footer-placeholder"></div>
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
 
-  <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/component-loader.js"></script>
-  <script src="js/main.js"></script>
-  
-  <script src="js/eco-code.js"></script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let ecoData = {};
+            const first = document.getElementById('eco1');
+            const second = document.getElementById('eco2');
+            const third = document.getElementById('eco3');
+            const content = document.getElementById('ecoContent');
+
+            function populate(select, codes) {
+                select.innerHTML = '<option value="">- Select -</option>';
+                if (!ecoData) return;
+
+                codes.forEach(code => {
+                    const name = ecoData[code]?.name || code;
+                    const option = document.createElement('option');
+                    option.value = code;
+                    option.textContent = `${code}: ${name}`;
+                    select.appendChild(option);
+                });
+            }
+
+            function render(code) {
+                if (!code || !ecoData[code]) {
+                    content.innerHTML = '<p style="color: var(--text-secondary)">Select a code to view details.</p>';
+                    return;
+                }
+
+                let html = `<p>${ecoData[code].content.replace(/\n/g, '<br>')}</p>`;
+
+                if (ecoData[code].openings && ecoData[code].openings.length > 0) {
+                    html += '<h5>Named Openings</h5>';
+                    ecoData[code].openings.forEach(op => {
+                        html += `<div class="eco-move-text">${op.replace(/\n/g, '<br>')}</div>`;
+                    });
+                }
+                content.innerHTML = html;
+            }
+
+            first.addEventListener('change', () => {
+                const c = first.value;
+                second.disabled = true;
+                third.disabled = true;
+                second.innerHTML = '';
+                third.innerHTML = '';
+                
+                render(c);
+
+                if (c && ecoData[c] && ecoData[c].children.length) {
+                    populate(second, ecoData[c].children);
+                    second.disabled = false;
+                }
+            });
+
+            second.addEventListener('change', () => {
+                const c = second.value;
+                third.disabled = true;
+                third.innerHTML = '';
+                
+                render(c);
+
+                if (c && ecoData[c] && ecoData[c].children.length) {
+                    populate(third, ecoData[c].children);
+                    third.disabled = false;
+                }
+            });
+
+            third.addEventListener('change', () => {
+                render(third.value);
+            });
+
+            async function init() {
+                try {
+                    const response = await fetch('js/eco-code.json');
+                    if (!response.ok) throw new Error('Failed to load eco-code.json');
+                    
+                    ecoData = await response.json();
+                    
+                    populate(first, ['A', 'B', 'C', 'D', 'E']);
+                    content.innerHTML = '<p style="color: var(--text-secondary)">Please select a volume to begin.</p>';
+                } catch (error) {
+                    console.error(error);
+                    content.innerHTML = `<div class="error">Error: Could not load ECO data. Make sure 'js/eco-code.json' exists.</div>`;
+                }
+            }
+
+            init();
+        });
+    </script>
 </body>
 </html>

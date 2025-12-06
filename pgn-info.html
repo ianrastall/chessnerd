@@ -1,66 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PGN Info</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/custom.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGN Info - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-dark text-light">
-  <div id="header-placeholder"></div>
-
-  <div class="container-fluid my-4">
-    <div class="row gx-3 gy-3">
-      <main class="col-md-9">
-        <div class="card bg-dark border-secondary shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <span class="material-icons me-3" aria-hidden="true" style="font-size: 36px;">bar_chart</span>
-              <h2 class="m-0">PGN Info</h2>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="material-icons">castle</span>
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
             </div>
-            <p class="text-white-50 mb-4">Paste or upload a PGN (≤ 50 MB) and get quick stats.</p>
-            
-            <div id="errorArea" class="mb-3"></div>
-
-            <form id="pgnForm" onsubmit="return false;" class="mb-4">
-              <div class="mb-3">
-                <label class="form-label" for="pgnFile">Upload PGN file (≤ 50 MB)</label>
-                <input type="file" class="form-control" id="pgnFile" name="pgnFile" accept=".pgn,text/plain">
-              </div>
-              <div class="mb-3">
-                <label class="form-label" for="pgnText">...or paste PGN (≤ 50 MB)</label>
-                <textarea class="form-control font-monospace" id="pgnText" name="pgnText" rows="10" placeholder="Paste PGN..."></textarea>
-              </div>
-              <button class="btn btn-task d-flex align-items-center" type="submit" id="analyzeBtn">
-                <span class="material-icons me-2" aria-hidden="true">bar_chart</span>Analyze
-              </button>
-            </form>
-
-            <div class="mb-3">
-              <label class="form-label" for="statsOutput">Statistics</label>
-              <textarea readonly class="form-control font-monospace" id="statsOutput" rows="16" placeholder="Statistics will appear here..."></textarea>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#0d9488">Teal</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
             </div>
-          </div>
-        </div>
-      </main>
-      <aside class="col-md-3">
-        <div class="card bg-dark border-secondary shadow-sm">
-          <div class="card-body p-0">
-            <div id="dynamic-sidebar" class="sidebar"></div>
-          </div>
-        </div>
-      </aside>
+        </header>
+
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">analytics</span>
+                        <h2 id="toolName">PGN Info</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary">
+                            <span class="material-icons">delete</span>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="options-panel">
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label for="pgnFile">Analyze from File (Max 50MB)</label>
+                            <input type="file" id="pgnFile" accept=".pgn,text/plain">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="io-container">
+                    <div class="io-panel">
+                        <div class="io-label">
+                            <span>Input PGN Text</span>
+                            <span class="stats" id="inputStats">0 chars</span>
+                        </div>
+                        <textarea id="pgnText" placeholder="Paste PGN data here, or upload a file above..."></textarea>
+                    </div>
+                    <div class="io-panel">
+                        <div class="io-label">
+                            <span>Statistics Report</span>
+                        </div>
+                        <textarea id="statsOutput" class="output" readonly placeholder="Analysis results will appear here..."></textarea>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <div id="statusMessage">Ready to analyze</div>
+                    <button id="analyzeBtn" class="btn btn-primary" style="padding: 0.25rem 1rem; font-size: 0.8rem;">
+                        <span class="material-icons" style="font-size: 1rem;">play_arrow</span> Analyze
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
     </div>
-  </div>
 
-  <div id="footer-placeholder"></div>
-
-  <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/component-loader.js"></script>
-  <script src="js/main.js"></script>
-  
-  <script src="js/pgn-info.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/pgn-info.js"></script>
 </body>
 </html>
