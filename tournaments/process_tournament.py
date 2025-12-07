@@ -4,6 +4,7 @@ import re
 import subprocess
 import zipfile
 import argparse
+import sqlite3
 from datetime import datetime
 from collections import defaultdict
 
@@ -13,6 +14,11 @@ from collections import defaultdict
 PROJECT_DIR = r"D:\GitHub\chessnerd"
 TOOLS_DIR = r"D:\chessnerd"
 
+# Database path (Adjust if your DB is in a specific spot)
+# We check PROJECT_DIR/tournaments first, then D:\
+DB_PATH_PRIMARY = os.path.join(PROJECT_DIR, "tournaments", "players.db")
+DB_PATH_SECONDARY = r"D:\players.db"
+
 PGN_EXTRACT_PATH = os.path.join(TOOLS_DIR, "pgn-extract.exe")
 ROSTER_PATH = os.path.join(TOOLS_DIR, "roster.txt")
 TOURNAMENTS_HTML_PATH = os.path.join(PROJECT_DIR, "tournaments.html")
@@ -20,11 +26,16 @@ TOURNAMENTS_DIR = os.path.join(PROJECT_DIR, "tournaments")
 
 # ---------------------------------------------------------
 
+def get_db_connection():
+    if os.path.exists(DB_PATH_PRIMARY):
+        return sqlite3.connect(DB_PATH_PRIMARY)
+    elif os.path.exists(DB_PATH_SECONDARY):
+        return sqlite3.connect(DB_PATH_SECONDARY)
+    return None
+
 def parse_date(date_str):
-    if not date_str or date_str.strip() in ["????.??.??", "??.??.??", ""]:
-        return None
-    if '-' in date_str:
-        date_str = date_str.split('-')[0].strip()
+    if not date_str or date_str.strip() in ["????.??.??", "??.??.??", ""]: return None
+    if '-' in date_str: date_str = date_str.split('-')[0].strip()
     date_str = date_str.replace('.', ' ').replace('/', ' ').replace('-', ' ')
     parts = date_str.strip().split()
     if len(parts) < 3: return None
@@ -39,12 +50,10 @@ def parse_date(date_str):
         month = parts[1].zfill(2) if parts[1].isdigit() else '01'
         day = parts[0].zfill(2) if parts[0].isdigit() else '01'
 
-    if year and month and day:
-        return f"{year}{month}{day}"
+    if year and month and day: return f"{year}{month}{day}"
     return None
 
 def extract_tournament_dates(pgn_file):
-    min_date, max_date = None, None
     try:
         with open(pgn_file, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
@@ -54,14 +63,125 @@ def extract_tournament_dates(pgn_file):
             pd = parse_date(d)
             if pd: valid_dates.append(pd)
         if valid_dates:
-            min_date = min(valid_dates)
-            max_date = max(valid_dates)
-            print(f"  Found {len(valid_dates)} valid dates. Range: {min_date} to {max_date}")
-            return min_date, max_date
+            return min(valid_dates), max(valid_dates)
         return None, None
-    except Exception as e:
-        print(f"Error extracting dates: {e}")
-        return None, None
+    except: return None, None
+
+def normalize_pgn_with_db(pgn_path, start_date):
+    """
+    Reads PGN, queries players.db, updates Names and Elo, writes back to file.
+    """
+    conn = get_db_connection()
+    if not conn:
+        print("  Warning: players.db not found. Skipping normalization.")
+        return
+
+    print("  Connecting to players.db for normalization...")
+    cursor = conn.cursor()
+    
+    # Parse Tournament Date
+    t_year = int(start_date[:4])
+    t_month = int(start_date[4:6])
+    
+    with open(pgn_path, 'r', encoding='utf-8', errors='ignore') as f:
+        lines = f.readlines()
+
+    new_lines = []
+    
+    # Regex to catch tags
+    # We want to catch White/Black tags specifically to normalize them
+    name_tag_pattern = re.compile(r'\[(White|Black)\s+"([^"]+)"\]')
+    
+    current_white_pid = None
+    current_black_pid = None
+    
+    # Buffer to hold lines for a single game so we can inject ratings
+    # However, since we process line by line, we can just print updated tags.
+    # The trick is deleting old Elo tags if we are replacing them, or adding them if missing.
+    # Simpler approach: Rewrite lines. If we find a Player tag, look up/update. 
+    # If we find an Elo tag, we might overwrite it later, or we just update it now if we have the ID.
+    
+    # Optimization: Pre-fetch common names? No, DB is fast enough.
+    
+    for line in lines:
+        match = name_tag_pattern.match(line)
+        if match:
+            tag, name = match.groups()
+            
+            # 1. FIND PLAYER ID (Try alias first, then direct name)
+            cursor.execute("SELECT player_id FROM aliases WHERE alias = ? COLLATE NOCASE", (name,))
+            res = cursor.fetchone()
+            if not res:
+                # Try exact match on players table just in case
+                cursor.execute("SELECT id FROM players WHERE name = ? COLLATE NOCASE", (name,))
+                res = cursor.fetchone()
+            
+            player_id = res[0] if res else None
+            canonical_name = name # Default to existing
+            
+            if player_id:
+                # 2. GET CANONICAL NAME
+                cursor.execute("SELECT name FROM players WHERE id = ?", (player_id,))
+                p_res = cursor.fetchone()
+                if p_res:
+                    canonical_name = p_res[0]
+
+                # Store ID for rating lookup
+                if tag == "White": current_white_pid = player_id
+                else: current_black_pid = player_id
+                
+                # Write the Canonical Name tag
+                new_lines.append(f'[{tag} "{canonical_name}"]\n')
+                
+                # 3. LOOKUP RATING immediately after the name tag
+                # Find most recent rating BEFORE or DURING the tournament month
+                # Logic: Year < T_Year OR (Year = T_Year AND Index <= T_Month)
+                rating_query = """
+                    SELECT value FROM ratings 
+                    WHERE player_id = ? 
+                    AND source = 'fide'
+                    AND (year < ? OR (year = ? AND series_index <= ?))
+                    ORDER BY year DESC, series_index DESC
+                    LIMIT 1
+                """
+                cursor.execute(rating_query, (player_id, t_year, t_year, t_month))
+                r_res = cursor.fetchone()
+                
+                if r_res:
+                    elo_tag = "WhiteElo" if tag == "White" else "BlackElo"
+                    new_lines.append(f'[{elo_tag} "{r_res[0]}"]\n')
+            else:
+                # Player not found in DB, keep original line
+                new_lines.append(line)
+        
+        elif line.startswith('[WhiteElo') or line.startswith('[BlackElo'):
+            # Skip existing Elo tags because we just injected fresh ones 
+            # above based on the database.
+            # If we didn't find the player in DB, we haven't injected one, 
+            # so we might want to keep the original?
+            # Complexity: simpler to just SKIP all original Elo tags 
+            # if we rely on the DB. But if DB fails, we lose data.
+            # safe strategy: Only skip if we found the player ID previously.
+            
+            is_white = line.startswith('[WhiteElo')
+            pid = current_white_pid if is_white else current_black_pid
+            
+            if not pid:
+                # We didn't identify this player, keep original rating
+                new_lines.append(line)
+        else:
+            # Check for End of Game (Reset IDs)
+            if line.strip() == "" or line.startswith("[Event"):
+                # Reset logic if needed, though tag detection resets state effectively
+                pass
+            new_lines.append(line)
+
+    conn.close()
+    
+    # Overwrite the file with normalized data
+    with open(pgn_path, 'w', encoding='utf-8') as f:
+        f.writelines(new_lines)
+    print("  Normalization complete (Names standardized, Ratings injected).")
 
 def remove_gameid_tags(pgn_content):
     lines = pgn_content.split('\n')
@@ -111,7 +231,6 @@ def calculate_tournament_stats(pgn_file):
                 players[current_black] = int(current_b_elo)
 
         if not players:
-            print("  Warning: No players with ratings found.")
             return 0, 0, 0, game_count
 
         ratings = list(players.values())
@@ -126,7 +245,6 @@ def calculate_tournament_stats(pgn_file):
         return None, None, None, 0
 
 def format_event_name(event_name):
-    # Capitalize nicely and fix ordinals (1St -> 1st)
     display_name = event_name.replace('-', ' ').title()
     display_name = re.sub(r'(\d+)(St|Nd|Rd|Th)', lambda m: m.group(1) + m.group(2).lower(), display_name)
     return display_name
@@ -203,17 +321,20 @@ def process_tournament(input_file, event_name, skip_cleanup):
     with open(temp_clean, 'w', encoding='utf-8') as f:
         f.write(clean_content)
 
-    print("Step 2: Running pgn-extract...")
+    print("Step 2: Running pgn-extract (Standardization)...")
     temp_processed = os.path.join(script_dir, "temp_processed.pgn")
     if not run_pgn_extract(temp_clean, temp_processed): return
 
-    print("Step 3: Dates...")
+    print("Step 3: Dates & Normalization...")
     start, end = extract_tournament_dates(temp_processed)
     if not start:
         print("  Failed to extract dates."); return
     print(f"  Range: {start} - {end}")
     
-    # Filename is forced lowercase
+    # NEW STEP: NORMALIZE USING DB
+    normalize_pgn_with_db(temp_processed, start)
+    
+    # Filename forced lowercase
     final_base = f"{start}-{end}-{event_name.replace(' ', '-').lower()}"
     final_pgn_path = os.path.join(script_dir, f"{final_base}.pgn")
     if os.path.exists(final_pgn_path): os.remove(final_pgn_path)
@@ -221,17 +342,13 @@ def process_tournament(input_file, event_name, skip_cleanup):
 
     print("Step 4: Stats...")
     players, avg_elo, category, games = calculate_tournament_stats(final_pgn_path)
-    if not players: print("  Stats failed."); return
+    if not players: print("  Stats failed (or no rated players).")
     print(f"  Players: {players}, Elo: {avg_elo}, Cat: {category}, Games: {games}")
 
     print("Step 5: HTML Crosstable...")
     final_html_path = os.path.join(script_dir, f"{final_base}.html")
     gen_script = os.path.join(script_dir, "generate_crosstable.py")
-    
-    # Calculate nice title to pass to generator
     report_title = format_event_name(event_name)
-    
-    # Pass 3 arguments: Input PGN, Output HTML, Report Title
     subprocess.run([sys.executable, gen_script, final_pgn_path, final_html_path, report_title], check=True)
 
     print("Step 6: Zipping...")
@@ -242,6 +359,7 @@ def process_tournament(input_file, event_name, skip_cleanup):
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
         z.write(final_pgn_path, os.path.basename(final_pgn_path))
         z.write(final_html_path, os.path.basename(final_html_path))
+    print(f"  Zip created: {zip_path}")
 
     print("Step 7: Updating Master HTML...")
     update_tournaments_html(event_name, start, end, players, games, avg_elo, category, f"tournaments/{zip_name}")
