@@ -24,7 +24,7 @@ def parse_pgn(pgn_text):
         
         # Clean up Result
         if tags['Result'] not in ['1-0', '0-1', '1/2-1/2']:
-            tags['Result'] = '*' # Handle adjourned/unknown
+            tags['Result'] = '*' 
             
         games.append(tags)
     return games
@@ -52,7 +52,6 @@ def get_stats(games):
             stats[w]['draws'] += 1
             stats[b]['draws'] += 1
             
-    # Convert to list and sort by Score descending
     player_list = []
     for name, s in stats.items():
         pct = (s['points'] / s['games'] * 100) if s['games'] > 0 else 0
@@ -72,13 +71,9 @@ def group_by_round(games):
     rounds = defaultdict(list)
     for g in games:
         r_str = g['Round']
-        # Try to parse "1.1" as Round 1, "4.2" as Round 4
-        # If it's just "1", "2", that works too.
-        # If it's "?", put it at the end.
         main_round = "Unknown"
         
         if r_str and r_str != "?":
-            # Extract the first number found
             match = re.match(r'^(\d+)', r_str)
             if match:
                 main_round = int(match.group(1))
@@ -87,14 +82,12 @@ def group_by_round(games):
         
         rounds[main_round].append(g)
     
-    # Sort round keys (integers first, then strings)
     sorted_keys = sorted([k for k in rounds.keys() if isinstance(k, int)]) + \
                   sorted([k for k in rounds.keys() if not isinstance(k, int)])
                   
     return rounds, sorted_keys
 
-def generate_html(player_stats, rounds, round_keys, input_filename):
-    # Enhanced Dark Mode CSS with Tabs/Sections
+def generate_html(player_stats, rounds, round_keys, title):
     DARK_MODE_CSS = """
     <style>
         :root {
@@ -118,8 +111,6 @@ def generate_html(player_stats, rounds, round_keys, input_filename):
         }
         h1, h2 { color: var(--highlight); }
         h2 { border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-top: 40px; }
-        
-        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -130,15 +121,11 @@ def generate_html(player_stats, rounds, round_keys, input_filename):
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
         th { background-color: #333; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; }
         tr:hover { background-color: #2a2a2a; }
-        
-        /* Utility Classes */
         .score-cell { font-weight: bold; color: var(--highlight); }
         .win { color: var(--win); font-weight: bold; }
         .loss { color: var(--loss); font-weight: bold; }
         .draw { color: var(--draw); }
         .round-header { background-color: #383838; font-weight: bold; color: #fff; padding: 8px 15px; margin-top: 20px; border-radius: 4px; }
-        
-        /* Flex layout for Round games */
         .game-row {
             display: flex;
             justify-content: space-between;
@@ -159,11 +146,11 @@ def generate_html(player_stats, rounds, round_keys, input_filename):
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Tournament Report - {input_filename}</title>
+        <title>{title}</title>
         {DARK_MODE_CSS}
     </head>
     <body>
-        <h1>Tournament Report: {input_filename}</h1>
+        <h1>{title}</h1>
         
         <h2>Standings</h2>
         <table>
@@ -209,7 +196,6 @@ def generate_html(player_stats, rounds, round_keys, input_filename):
             if g['Result'] == '1-0': res_class = "win"
             elif g['Result'] == '0-1': res_class = "loss"
             
-            # Highlight winner if applicable
             w_style = "color: var(--win)" if g['Result'] == '1-0' else ""
             b_style = "color: var(--win)" if g['Result'] == '0-1' else ""
             
@@ -230,30 +216,32 @@ def generate_html(player_stats, rounds, round_keys, input_filename):
     return html
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate tournament crosstable HTML')
-    parser.add_argument('input_file', help='Input PGN file')
-    parser.add_argument('output_file', help='Output HTML file')
-    
-    args = parser.parse_args()
+    if len(sys.argv) < 3:
+        print("Usage: python generate_crosstable.py <input.pgn> <output.html> [Title]")
+        sys.exit(1)
+        
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    # Check if Title argument is provided, otherwise default to filename
+    report_title = sys.argv[3] if len(sys.argv) > 3 else f"Tournament Report: {input_file}"
     
     try:
-        with open(args.input_file, 'r', encoding='utf-8') as f:
+        with open(input_file, 'r', encoding='utf-8') as f:
             pgn_data = f.read()
             
         games = parse_pgn(pgn_data)
         stats = get_stats(games)
         rounds, sorted_keys = group_by_round(games)
         
-        html = generate_html(stats, rounds, sorted_keys, args.input_file)
+        html = generate_html(stats, rounds, sorted_keys, report_title)
         
-        with open(args.output_file, "w", encoding="utf-8") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             f.write(html)
             
-        print(f"Report generated: {args.output_file}")
-        print(f"Found {len(games)} games across {len(sorted_keys)} rounds.")
+        print(f"Report generated: {output_file}")
         
     except FileNotFoundError:
-        print(f"Error: Could not find '{args.input_file}'.")
+        print(f"Error: Could not find '{input_file}'.")
     except Exception as e:
         print(f"Error: {e}")
 
