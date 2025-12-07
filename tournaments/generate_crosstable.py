@@ -4,8 +4,8 @@ from collections import defaultdict
 # ---------------------------------------------------------
 # CONFIGURATION
 # ---------------------------------------------------------
-INPUT_FILENAME = "18571006-18571110-1st-chess-congress.pgn"
-OUTPUT_FILENAME = "18571006-18571110-1st-chess-congress.html"
+INPUT_FILENAME = "20251101-20251126-fide-world-cup-goa.pgn"
+OUTPUT_FILENAME = "20251101-20251126-fide-world-cup-goa.html"
 
 # Enhanced Dark Mode CSS with Tabs/Sections
 DARK_MODE_CSS = """
