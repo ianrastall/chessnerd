@@ -1,7 +1,8 @@
 /**
  * js/pgn-info.js
- * * Logic for the PGN Info tool.
- * Parses PGN data (from file or text) and generates statistics.
+ * Logic for the PGN Info tool.
+ * Parses PGN data (from file or text) and generates statistics,
+ * or extracts lists of players/events.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusMessage = document.getElementById('statusMessage');
     const inputStats = document.getElementById('inputStats');
     const backButton = document.getElementById('backButton');
+    
+    // NEW Elements
+    const extractPlayersBtn = document.getElementById('extractPlayersBtn');
+    const extractEventsBtn = document.getElementById('extractEventsBtn');
+    const copyBtn = document.getElementById('copyBtn');
 
     const MAX_BYTES = 52428800; // 50 MB
 
@@ -149,6 +155,35 @@ document.addEventListener('DOMContentLoaded', () => {
         return out;
     };
 
+    // --- NEW: Extraction Helper ---
+    const extractList = (text, type) => {
+        const items = new Set();
+        let regex;
+
+        if (type === 'players') {
+            // Matches [White "Name"] OR [Black "Name"]
+            regex = /\[(White|Black)\s+"(.*?)"\]/g;
+        } else {
+            // Matches [Event "Name"]
+            regex = /\[Event\s+"(.*?)"\]/g;
+        }
+
+        let match;
+        // Use regex.exec loop to find all occurrences globally
+        while ((match = regex.exec(text)) !== null) {
+            // match[2] is the name for players, match[1] for events
+            const val = (type === 'players') ? match[2] : match[1];
+            if (val && val !== '?' && val.trim() !== '') {
+                items.add(val.trim());
+            }
+        }
+
+        const sorted = Array.from(items).sort();
+        return `EXTRACTED ${type.toUpperCase()} (${sorted.length})\n` +
+               `==========================\n` +
+               sorted.join('\n');
+    };
+
     // --- Event Handlers ---
 
     // 1. Update char count for text input
@@ -176,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pgnText.value = e.target.result;
             inputStats.textContent = `${pgnText.value.length} chars`;
             statusMessage.textContent = "File loaded. Click Analyze.";
-            // Auto-analyze on file load? Optional. Let's wait for user click to be consistent.
         };
         
         reader.onerror = () => {
@@ -217,7 +251,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 10);
     });
 
-    // 4. Clear Button
+    // 4. Extract Players Button (NEW)
+    extractPlayersBtn.addEventListener('click', () => {
+        const text = pgnText.value;
+        if (!text.trim()) {
+            statusMessage.textContent = "No PGN text to extract from.";
+            return;
+        }
+        statusMessage.textContent = "Extracting players...";
+        setTimeout(() => {
+            const list = extractList(text, 'players');
+            statsOutput.value = list;
+            statusMessage.textContent = "Player list extracted.";
+            statusMessage.className = "success";
+        }, 10);
+    });
+
+    // 5. Extract Events Button (NEW)
+    extractEventsBtn.addEventListener('click', () => {
+        const text = pgnText.value;
+        if (!text.trim()) {
+            statusMessage.textContent = "No PGN text to extract from.";
+            return;
+        }
+        statusMessage.textContent = "Extracting events...";
+        setTimeout(() => {
+            const list = extractList(text, 'events');
+            statsOutput.value = list;
+            statusMessage.textContent = "Event list extracted.";
+            statusMessage.className = "success";
+        }, 10);
+    });
+
+    // 6. Copy Output Button (NEW)
+    copyBtn.addEventListener('click', () => {
+        if (!statsOutput.value) return;
+        
+        statsOutput.select();
+        statsOutput.setSelectionRange(0, 99999); // Mobile compatibility
+
+        navigator.clipboard.writeText(statsOutput.value).then(() => {
+            const originalText = statusMessage.textContent;
+            statusMessage.textContent = "Output copied to clipboard!";
+            setTimeout(() => {
+                statusMessage.textContent = originalText;
+            }, 2000);
+        }).catch(err => {
+            statusMessage.textContent = "Failed to copy";
+            console.error('Copy failed', err);
+        });
+    });
+
+    // 7. Clear Button
     clearBtn.addEventListener('click', () => {
         pgnText.value = '';
         statsOutput.value = '';
@@ -228,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { statusMessage.textContent = 'Ready'; }, 2000);
     });
 
-    // 5. Back Button
+    // 8. Back Button
     if (backButton) {
         backButton.addEventListener('click', () => {
             window.location.href = 'index.html';

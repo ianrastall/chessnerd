@@ -70,17 +70,29 @@
                         <textarea id="pgnText" placeholder="Paste PGN data here, or upload a file above..."></textarea>
                     </div>
                     <div class="io-panel">
-                        <div class="io-label">
+                        <div class="io-label" style="display: flex; justify-content: space-between; align-items: center;">
                             <span>Statistics Report</span>
+                            <button id="copyBtn" class="btn-icon" title="Copy to Clipboard" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0;">
+                                <span class="material-icons" style="font-size: 1.2rem;">content_copy</span>
+                            </button>
                         </div>
                         <textarea id="statsOutput" class="output" readonly placeholder="Analysis results will appear here..."></textarea>
                     </div>
                 </div>
 
-                <div class="status-bar">
-                    <div id="statusMessage">Ready to analyze</div>
+                <div class="status-bar" style="gap: 10px;">
+                    <div id="statusMessage" style="flex-grow: 1;">Ready to analyze</div>
+                    
+                    <button id="extractPlayersBtn" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                        <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">people</span> Players
+                    </button>
+                    
+                    <button id="extractEventsBtn" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                        <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">event</span> Events
+                    </button>
+
                     <button id="analyzeBtn" class="btn btn-primary" style="padding: 0.25rem 1rem; font-size: 0.8rem;">
-                        <span class="material-icons" style="font-size: 1rem;">play_arrow</span> Analyze
+                        <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">play_arrow</span> Analyze
                     </button>
                 </div>
             </div>
