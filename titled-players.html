@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titled Player Database</title>
+    </head>
+<body>
+
+    <div class="controls">
+        <h3>Filter Database</h3>
+        
+        <div class="checkbox-group">
+            <label><input type="checkbox" value="GM" checked> GM</label>
+            <label><input type="checkbox" value="IM" checked> IM</label>
+            <label><input type="checkbox" value="FM"> FM</label>
+            </div>
+
+        <div style="margin: 15px 0;">
+            <label>Sort/Filter By: 
+                <select id="ratingType">
+                    <option value="rapid">Rapid</option>
+                    <option value="blitz">Blitz</option>
+                    <option value="bullet">Bullet</option>
+                </select>
+            </label>
+            <label>Min Elo: <input type="number" id="minElo" value="2500"></label>
+            <label>Country: <input type="text" id="countryFilter" placeholder="e.g. US, RU, IN" maxlength="2"></label>
+        </div>
+
+        <button onclick="applyFilters()">Update List</button>
+        <span id="countDisplay" style="margin-left:10px; color:#888;"></span>
+    </div>
+
+    <table id="playerTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Country</th>
+                <th>Rapid</th>
+                <th>Blitz</th>
+                <th>Bullet</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let fullData = [];
+
+        // 1. Load the file immediately on page load
+        fetch('titled_players.json')
+            .then(response => response.json())
+            .then(data => {
+                fullData = data;
+                document.getElementById('countDisplay').innerText = `Database loaded: ${data.length} players.`;
+                applyFilters(); // Show initial view
+            })
+            .catch(err => console.error("Could not load player database:", err));
+
+        function applyFilters() {
+            const tableBody = document.querySelector('#playerTable tbody');
+            tableBody.innerHTML = '';
+
+            // Get inputs
+            const minElo = parseInt(document.getElementById('minElo').value) || 0;
+            const ratingType = document.getElementById('ratingType').value; // 'rapid', 'blitz', etc.
+            const countrySearch = document.getElementById('countryFilter').value.toUpperCase();
+            
+            // Get selected titles
+            const checkedBoxes = document.querySelectorAll('.checkbox-group input:checked');
+            const selectedTitles = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // Filter logic
+            const filtered = fullData.filter(p => {
+                // Check Title
+                if (!selectedTitles.includes(p.title)) return false;
+                
+                // Check Rating (using the dynamic property key)
+                if (p[ratingType] < minElo) return false;
+
+                // Check Country (if typed)
+                if (countrySearch && p.country !== countrySearch) return false;
+
+                return true;
+            });
+
+            // Sort logic (Highest rating first)
+            filtered.sort((a, b) => b[ratingType] - a[ratingType]);
+
+            // Limit display to top 100 to avoid freezing browser if list is huge
+            const displayList = filtered.slice(0, 100);
+
+            displayList.forEach(p => {
+                const row = `<tr>
+                    <td><a href="https://www.chess.com/member/${p.username}" target="_blank">${p.username}</a></td>
+                    <td>${p.title}</td>
+                    <td>${p.country}</td>
+                    <td ${ratingType === 'rapid' ? 'style="font-weight:bold; color:gold;"' : ''}>${p.rapid}</td>
+                    <td ${ratingType === 'blitz' ? 'style="font-weight:bold; color:gold;"' : ''}>${p.blitz}</td>
+                    <td>${p.bullet}</td>
+                </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+
+            document.getElementById('countDisplay').innerText = `Showing top ${displayList.length} of ${filtered.length} matches.`;
+        }
+    </script>
+</body>
+</html>
