@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engine List - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Page-specific styles for the engine table */
+        .search-bar {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .engine-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .engine-table th, .engine-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .engine-table th {
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .engine-table th:hover {
+            color: var(--accent-light);
+        }
+
+        .engine-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .engine-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .engine-link:hover {
+            color: var(--accent);
+        }
+
+        .lang-tag {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .date-cell {
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
+            </div>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#0d9488">Teal</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">memory</span>
+                        <h2 id="toolName">Engine Database</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 8px;">
+                    <div class="search-bar">
+                        <input type="text" id="engineSearch" placeholder="Search engines, languages, or dates...">
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="engine-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('name')">Engine Name <span class="material-icons" style="font-size: 14px">sort</span></th>
+                                    <th onclick="sortTable('language')">Language <span class="material-icons" style="font-size: 14px">sort</span></th>
+                                    <th onclick="sortTable('date')">Released <span class="material-icons" style="font-size: 14px">sort</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="engineList">
+                                <tr><td colspan="3" class="loading">Loading database...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="countDisplay" style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;"></div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        // Common navigation
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // Engine List Logic
+        let engines = [];
+        let sortDir = 1;
+
+        async function loadEngines() {
+            try {
+                // Fetching the JSON you generated
+                const response = await fetch('data/engines.json');
+                if (!response.ok) throw new Error("Data not found");
+                engines = await response.json();
+                renderEngines(engines);
+            } catch (error) {
+                document.getElementById('engineList').innerHTML = 
+                    `<tr><td colspan="3" class="error">Error loading data: ${error.message}. <br>Make sure engines.json is in the 'data' folder.</td></tr>`;
+            }
+        }
+
+        function renderEngines(data) {
+            const tbody = document.getElementById('engineList');
+            const countDisplay = document.getElementById('countDisplay');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem;">No engines found</td></tr>`;
+                countDisplay.textContent = '';
+                return;
+            }
+
+            tbody.innerHTML = data.map(e => {
+                // Ensure link has protocol if it exists
+                let link = e.link || '#';
+                if (link !== '#' && !link.startsWith('http')) link = 'https://' + link;
+                
+                const linkAttr = link === '#' ? '' : `href="${link}" target="_blank"`;
+                const icon = link === '#' ? '' : '<span class="material-icons" style="font-size: 14px; opacity: 0.7;">open_in_new</span>';
+
+                return `
+                <tr>
+                    <td>
+                        <a ${linkAttr} class="engine-link">
+                            ${e.name}
+                            ${icon}
+                        </a>
+                    </td>
+                    <td>
+                        ${e.language ? `<span class="lang-tag">${e.language}</span>` : ''}
+                    </td>
+                    <td class="date-cell">${e.date || '-'}</td>
+                </tr>
+            `}).join('');
+
+            countDisplay.textContent = `Showing ${data.length} engines`;
+        }
+
+        // Search Filter
+        document.getElementById('engineSearch').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = engines.filter(eng => 
+                (eng.name && eng.name.toLowerCase().includes(term)) ||
+                (eng.language && eng.language.toLowerCase().includes(term)) ||
+                (eng.date && eng.date.includes(term))
+            );
+            renderEngines(filtered);
+        });
+
+        // Simple Sort
+        window.sortTable = (field) => {
+            sortDir *= -1;
+            const sorted = [...engines].sort((a, b) => {
+                const valA = (a[field] || '').toLowerCase();
+                const valB = (b[field] || '').toLowerCase();
+                return valA > valB ? sortDir : -sortDir;
+            });
+            renderEngines(sorted);
+        };
+
+        // Initialize
+        loadEngines();
+    </script>
+</body>
+</html>
