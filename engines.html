@@ -15,18 +15,20 @@
         
         .search-container input {
             flex: 1;
-            padding: 0.6rem 1rem;
+            padding: 0.75rem 1rem;
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
             border-radius: 4px;
             color: var(--text-primary);
+            font-size: 1rem;
         }
 
-        /* Table Styles */
+        /* Table Wrapper with Scroll */
         .table-wrapper {
             overflow-x: auto;
             border: 1px solid var(--border-color);
             border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .engine-table {
@@ -36,37 +38,83 @@
             white-space: nowrap;
         }
 
+        /* Header Styling */
         .engine-table th {
             background: var(--bg-secondary);
             color: var(--accent);
-            font-weight: 600;
+            font-weight: 700;
             text-align: left;
-            padding: 0.6rem 0.8rem;
+            padding: 1rem;
             cursor: pointer;
             user-select: none;
             border-bottom: 2px solid var(--border-color);
+            border-right: 1px solid var(--border-color); /* Column separator */
+            position: relative;
         }
 
-        .engine-table td {
-            padding: 0.5rem 0.8rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
+        .engine-table th:last-child {
+            border-right: none;
         }
 
-        .engine-table tr:hover {
+        .engine-table th:hover {
             background: var(--bg-tertiary);
             color: var(--text-primary);
         }
 
-        /* Specific column formatting */
-        .col-name { font-weight: 500; color: var(--text-primary) !important; }
-        .col-proto { text-transform: uppercase; font-size: 0.8rem; font-weight: bold; opacity: 0.8; }
-        .col-lang { font-family: monospace; opacity: 0.9; }
+        /* Cell Styling */
+        .engine-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color); /* Column separator */
+            color: var(--text-secondary);
+        }
+
+        .engine-table td:last-child {
+            border-right: none;
+        }
+
+        /* Striped Rows */
+        .engine-table tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .engine-table tbody tr:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Column Width Distribution */
+        .engine-table th:nth-child(1) { width: 30%; } /* Name - stretches */
+        .engine-table th:nth-child(2) { width: 10%; text-align: center; } /* Protocol */
+        .engine-table th:nth-child(3) { width: 15%; } /* Lang */
+        .engine-table th:nth-child(4) { width: 20%; } /* First Release */
+        .engine-table th:nth-child(5) { width: 25%; } /* Latest Release */
+
+        /* Content Specifics */
+        .col-name { 
+            font-weight: 600; 
+            color: var(--text-primary) !important;
+            font-size: 0.95rem;
+        }
+        
+        .col-proto { 
+            text-transform: uppercase; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        .col-lang { 
+            font-family: 'Consolas', 'Monaco', monospace; 
+            opacity: 0.9;
+            font-size: 0.85rem;
+        }
         
         .version-tag {
             font-size: 0.85em;
-            opacity: 0.7;
-            margin-left: 6px;
+            opacity: 0.6;
+            margin-left: 8px;
             font-style: italic;
         }
 
@@ -75,12 +123,13 @@
             color: inherit;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         
         .engine-link:hover { color: var(--accent); }
 
-        .loading { text-align: center; padding: 2rem; }
+        .loading { text-align: center; padding: 3rem; font-style: italic; }
+        .error { color: var(--error); text-align: center; padding: 2rem; }
     </style>
 </head>
 <body>
@@ -125,7 +174,7 @@
                 </div>
 
                 <div class="search-container">
-                    <input type="text" id="engineSearch" placeholder="Search engines, languages, protocols...">
+                    <input type="text" id="engineSearch" placeholder="Search engines, languages, protocols (e.g. 'UCI', 'Rust', 'Stockfish')...">
                 </div>
 
                 <div class="table-wrapper">
@@ -134,7 +183,7 @@
                             <tr>
                                 <th onclick="sortTable('name')">Name</th>
                                 <th onclick="sortTable('protocol')">Protocol</th>
-                                <th onclick="sortTable('lang')">Lang</th>
+                                <th onclick="sortTable('lang')">Language</th>
                                 <th onclick="sortTable('d_first')">First Release</th>
                                 <th onclick="sortTable('d_last')">Latest (Ver)</th>
                             </tr>
@@ -144,7 +193,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="countDisplay" style="margin-top: 0.5rem; text-align: right; font-size: 0.8rem; color: var(--text-secondary);"></div>
+                <div id="countDisplay" style="margin-top: 0.8rem; text-align: right; font-size: 0.85rem; color: var(--text-secondary);"></div>
             </div>
         </main>
         
@@ -162,16 +211,16 @@
 
         async function loadEngines() {
             try {
-                // Ensure this path matches where you put the JSON file
+                // Ensure this path matches your file structure
                 const response = await fetch('data/engines.json');
-                if (!response.ok) throw new Error("File not found");
+                if (!response.ok) throw new Error("File not found (data/engines.json)");
                 engines = await response.json();
                 renderEngines(engines);
             } catch (error) {
                 document.getElementById('engineList').innerHTML = 
-                    `<tr><td colspan="5" class="error" style="color: var(--error); text-align: center; padding: 1rem;">
-                        Error loading data: ${error.message}<br>
-                        <small>Make sure 'engines.json' is in the 'chessnerd/data/' folder.</small>
+                    `<tr><td colspan="5" class="error">
+                        <strong>Error loading data:</strong> ${error.message}<br>
+                        Please run the python script and move 'engines.json' to 'chessnerd/data/'.
                     </td></tr>`;
             }
         }
@@ -181,26 +230,25 @@
             document.getElementById('countDisplay').textContent = `${data.length} engines found`;
             
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem;">No matches</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 3rem;">No matching engines found</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = data.map(e => {
-                // Link Logic
                 let link = e.link || '#';
                 if (link !== '#' && !link.startsWith('http')) link = 'https://' + link;
                 
                 const linkTag = link === '#' ? 'span' : 'a';
                 const hrefAttr = link === '#' ? '' : `href="${link}" target="_blank"`;
-                const icon = link === '#' ? '' : '<span class="material-icons" style="font-size: 12px; opacity: 0.5;">open_in_new</span>';
+                // Only show link icon if it's a real link
+                const icon = link === '#' ? '' : '<span class="material-icons" style="font-size: 14px; opacity: 0.5;">open_in_new</span>';
 
-                // Display Date + Version
-                let lastRelease = e.d_last || '-';
+                // Format Latest Release + Version
+                let lastReleaseDisplay = e.d_last || '-';
                 if (e.ver) {
-                    lastRelease += ` <span class="version-tag">(${e.ver})</span>`;
+                    lastReleaseDisplay += ` <span class="version-tag">(${e.ver})</span>`;
                 }
 
-                // IMPORTANT: These keys (e.protocol, e.lang) must match the JSON output
                 return `
                 <tr>
                     <td class="col-name">
@@ -212,12 +260,11 @@
                     <td class="col-proto">${e.protocol || '-'}</td>
                     <td class="col-lang">${e.lang || '-'}</td>
                     <td>${e.d_first || '-'}</td>
-                    <td>${lastRelease}</td>
+                    <td>${lastReleaseDisplay}</td>
                 </tr>
             `}).join('');
         }
 
-        // Search Filter
         document.getElementById('engineSearch').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = engines.filter(eng => 
@@ -228,7 +275,6 @@
             renderEngines(filtered);
         });
 
-        // Sort Function
         window.sortTable = (field) => {
             sortDir *= -1;
             const sorted = [...engines].sort((a, b) => {
