@@ -11,7 +11,7 @@
         .tour-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .tour-table th {
             text-align: left;
@@ -19,16 +19,13 @@
             border-bottom: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
         }
         .tour-table td {
-            padding: 1rem;
+            padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--border-color);
             vertical-align: middle;
-        }
-        .tour-table tr:last-child td {
-            border-bottom: none;
         }
         .tour-table tr:hover {
             background: var(--bg-tertiary);
@@ -51,12 +48,7 @@
         .cat-elite {
             color: var(--warning);
             border: 1px solid var(--warning);
-            background: rgba(217, 119, 6, 0.1); /* Low opacity warning color */
-        }
-
-        /* Responsive hiding */
-        @media (max-width: 700px) {
-            .hide-mobile { display: none; }
+            background: rgba(217, 119, 6, 0.1);
         }
     </style>
 </head>
@@ -114,44 +106,27 @@
                                     <thead>
                                         <tr>
                                             <th>Tournament</th>
-                                            <th class="hide-mobile">Dates</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Avg Elo</th>
-                                            <th>Cat</th>
+                                            <th>Category</th>
                                             <th style="text-align: right;">File</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr data-elo="2752">
-                                            <td>
-                                                <div style="font-weight: 500;">Tata Steel Masters 2024</div>
-                                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Wijk aan Zee, NED</div>
-                                            </td>
-                                            <td class="hide-mobile" style="font-size: 0.9rem; color: var(--text-secondary);">
-                                                Jan 12 - Jan 28, 2024
-                                            </td>
-                                            <td style="font-family: monospace;">2752</td>
+                                        
+                                        <tr data-elo="2244">
+                                            <td style="font-weight: 500;">1st American Chess Congress</td>
+                                            <td>1857-10-06</td>
+                                            <td>1857-11-10</td>
+                                            <td style="font-family: monospace;">2244</td>
                                             <td class="cat-cell"></td> <td style="text-align: right;">
-                                                <a href="tournaments/tata_steel_2024.zip" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">
+                                                <a href="tournaments/18571006-18571110-1st-chess-congress.zip" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">
                                                     <span class="material-icons" style="font-size: 1rem;">download</span> ZIP
                                                 </a>
                                             </td>
                                         </tr>
 
-                                        <tr data-elo="2615">
-                                            <td>
-                                                <div style="font-weight: 500;">Reykjavik Open 2023</div>
-                                            </td>
-                                            <td class="hide-mobile" style="font-size: 0.9rem; color: var(--text-secondary);">
-                                                Mar 29 - Apr 04, 2023
-                                            </td>
-                                            <td style="font-family: monospace;">2615</td>
-                                            <td class="cat-cell"></td>
-                                            <td style="text-align: right;">
-                                                <a href="tournaments/reykjavik_2023.zip" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">
-                                                    <span class="material-icons" style="font-size: 1rem;">download</span> ZIP
-                                                </a>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -172,28 +147,35 @@
 
     <script src="js/theme.js"></script>
     <script>
-        // Standard Navigation
+        // Navigation
         document.getElementById('backButton').addEventListener('click', () => {
             window.location.href = 'index.html';
         });
 
-        // Auto-Calculate Categories
+        // ---------------------------------------------------------
+        // SCRIPT: Auto-Calculate Tournament Category
+        // ---------------------------------------------------------
         document.addEventListener("DOMContentLoaded", function() {
             const rows = document.querySelectorAll("tr[data-elo]");
-            document.getElementById('tourCount').innerText = `${rows.length} items`;
+            document.getElementById('tourCount').innerText = `${rows.length} tournaments`;
 
             rows.forEach(row => {
-                const elo = parseInt(row.getAttribute("data-elo"));
+                const eloAttr = row.getAttribute("data-elo");
                 const catCell = row.querySelector(".cat-cell");
 
-                if (!isNaN(elo) && catCell) {
+                if (eloAttr && catCell) {
+                    const elo = parseInt(eloAttr);
+                    
+                    // FIDE Category Formula:
+                    // Category 1 is 2251-2275.
+                    // Calculation: Floor((Elo - 2251) / 25) + 1
+                    
                     if (elo < 2251) {
                         catCell.innerHTML = '<span class="cat-badge">-</span>';
                     } else {
-                        // Formula: floor((Elo - 2251) / 25) + 1
                         const category = Math.floor((elo - 2251) / 25) + 1;
                         
-                        // Style Elite Categories (Cat 15+)
+                        // Highlight high categories (15+)
                         const styleClass = category >= 15 ? "cat-elite" : "";
                         catCell.innerHTML = `<span class="cat-badge ${styleClass}">${category}</span>`;
                     }
