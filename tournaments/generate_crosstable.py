@@ -1,71 +1,7 @@
 import re
+import sys
+import argparse
 from collections import defaultdict
-
-# ---------------------------------------------------------
-# CONFIGURATION
-# ---------------------------------------------------------
-INPUT_FILENAME = "20130508-20130518-1st-norway-chess.pgn"
-OUTPUT_FILENAME = "20130508-20130518-1st-norway-chess.html"
-
-# Enhanced Dark Mode CSS with Tabs/Sections
-DARK_MODE_CSS = """
-<style>
-    :root {
-        --bg-color: #1e1e1e;
-        --card-bg: #252525;
-        --text-main: #e0e0e0;
-        --text-muted: #a0a0a0;
-        --border: #333;
-        --highlight: #007acc;
-        --win: #4caf50;
-        --loss: #f44336;
-        --draw: #9e9e9e;
-    }
-    body {
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        padding: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-    h1, h2 { color: var(--highlight); }
-    h2 { border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-top: 40px; }
-    
-    /* Tables */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: var(--card-bg);
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-    th { background-color: #333; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; }
-    tr:hover { background-color: #2a2a2a; }
-    
-    /* Utility Classes */
-    .score-cell { font-weight: bold; color: var(--highlight); }
-    .win { color: var(--win); font-weight: bold; }
-    .loss { color: var(--loss); font-weight: bold; }
-    .draw { color: var(--draw); }
-    .round-header { background-color: #383838; font-weight: bold; color: #fff; padding: 8px 15px; margin-top: 20px; border-radius: 4px; }
-    
-    /* Flex layout for Round games */
-    .game-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        background: var(--card-bg);
-        border-bottom: 1px solid var(--border);
-        align-items: center;
-    }
-    .game-row:last-child { border-bottom: none; }
-    .game-white, .game-black { flex: 1; font-weight: 500; }
-    .game-result { flex: 0 0 80px; text-align: center; font-weight: bold; background: #333; padding: 4px; border-radius: 4px; font-size: 0.9em; }
-    .game-eco { flex: 0 0 60px; text-align: right; color: var(--text-muted); font-size: 0.8em; }
-</style>
-"""
 
 def parse_pgn(pgn_text):
     games = []
@@ -157,17 +93,77 @@ def group_by_round(games):
                   
     return rounds, sorted_keys
 
-def generate_html(player_stats, rounds, round_keys):
+def generate_html(player_stats, rounds, round_keys, input_filename):
+    # Enhanced Dark Mode CSS with Tabs/Sections
+    DARK_MODE_CSS = """
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --card-bg: #252525;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border: #333;
+            --highlight: #007acc;
+            --win: #4caf50;
+            --loss: #f44336;
+            --draw: #9e9e9e;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2 { color: var(--highlight); }
+        h2 { border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-top: 40px; }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: #333; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; }
+        tr:hover { background-color: #2a2a2a; }
+        
+        /* Utility Classes */
+        .score-cell { font-weight: bold; color: var(--highlight); }
+        .win { color: var(--win); font-weight: bold; }
+        .loss { color: var(--loss); font-weight: bold; }
+        .draw { color: var(--draw); }
+        .round-header { background-color: #383838; font-weight: bold; color: #fff; padding: 8px 15px; margin-top: 20px; border-radius: 4px; }
+        
+        /* Flex layout for Round games */
+        .game-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+        .game-row:last-child { border-bottom: none; }
+        .game-white, .game-black { flex: 1; font-weight: 500; }
+        .game-result { flex: 0 0 80px; text-align: center; font-weight: bold; background: #333; padding: 4px; border-radius: 4px; font-size: 0.9em; }
+        .game-eco { flex: 0 0 60px; text-align: right; color: var(--text-muted); font-size: 0.8em; }
+    </style>
+    """
+    
     html = f"""
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Tournament Report</title>
+        <title>Tournament Report - {input_filename}</title>
         {DARK_MODE_CSS}
     </head>
     <body>
-        <h1>Tournament Report</h1>
+        <h1>Tournament Report: {input_filename}</h1>
         
         <h2>Standings</h2>
         <table>
@@ -234,24 +230,32 @@ def generate_html(player_stats, rounds, round_keys):
     return html
 
 def main():
+    parser = argparse.ArgumentParser(description='Generate tournament crosstable HTML')
+    parser.add_argument('input_file', help='Input PGN file')
+    parser.add_argument('output_file', help='Output HTML file')
+    
+    args = parser.parse_args()
+    
     try:
-        with open(INPUT_FILENAME, 'r', encoding='utf-8') as f:
+        with open(args.input_file, 'r', encoding='utf-8') as f:
             pgn_data = f.read()
             
         games = parse_pgn(pgn_data)
         stats = get_stats(games)
         rounds, sorted_keys = group_by_round(games)
         
-        html = generate_html(stats, rounds, sorted_keys)
+        html = generate_html(stats, rounds, sorted_keys, args.input_file)
         
-        with open(OUTPUT_FILENAME, "w", encoding="utf-8") as f:
+        with open(args.output_file, "w", encoding="utf-8") as f:
             f.write(html)
             
-        print(f"Report generated: {OUTPUT_FILENAME}")
+        print(f"Report generated: {args.output_file}")
         print(f"Found {len(games)} games across {len(sorted_keys)} rounds.")
         
     except FileNotFoundError:
-        print(f"Error: Could not find '{INPUT_FILENAME}'.")
+        print(f"Error: Could not find '{args.input_file}'.")
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
