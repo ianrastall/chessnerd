@@ -3,86 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engine List - Chess Nerd</title>
+    <title>Engine Database - Chess Nerd</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Page-specific styles for the engine table */
-        .search-bar {
+        .search-container {
             margin-bottom: 1rem;
             display: flex;
             gap: 1rem;
         }
         
-        .search-bar input {
+        .search-container input {
             flex: 1;
-            padding: 0.75rem;
+            padding: 0.6rem 1rem;
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
             border-radius: 4px;
             color: var(--text-primary);
-            font-size: 1rem;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
         }
 
         .engine-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        .engine-table th, .engine-table td {
-            text-align: left;
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
 
         .engine-table th {
+            background: var(--bg-secondary);
             color: var(--accent);
             font-weight: 600;
+            text-align: left;
+            padding: 0.6rem 0.8rem;
             cursor: pointer;
             user-select: none;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        .engine-table th:hover {
-            color: var(--accent-light);
+        .engine-table td {
+            padding: 0.5rem 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
         }
 
         .engine-table tr:hover {
-            background: var(--bg-secondary);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Specific column formatting */
+        .col-name { font-weight: 500; color: var(--text-primary) !important; }
+        .col-proto { text-transform: uppercase; font-size: 0.8rem; font-weight: bold; opacity: 0.8; }
+        .col-lang { font-family: monospace; opacity: 0.9; }
+        
+        .version-tag {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-left: 6px;
+            font-style: italic;
         }
 
         .engine-link {
-            color: var(--text-primary);
             text-decoration: none;
-            font-weight: 500;
+            color: inherit;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 6px;
         }
+        
+        .engine-link:hover { color: var(--accent); }
 
-        .engine-link:hover {
-            color: var(--accent);
-        }
-
-        .lang-tag {
-            font-size: 0.8rem;
-            padding: 2px 8px;
-            background: var(--bg-primary);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .date-cell {
-            color: var(--text-secondary);
-            font-family: monospace;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-        }
+        .loading { text-align: center; padding: 2rem; }
     </style>
 </head>
 <body>
@@ -126,27 +124,27 @@
                     </div>
                 </div>
 
-                <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 8px;">
-                    <div class="search-bar">
-                        <input type="text" id="engineSearch" placeholder="Search engines, languages, or dates...">
-                    </div>
-                    
-                    <div class="table-container">
-                        <table class="engine-table">
-                            <thead>
-                                <tr>
-                                    <th onclick="sortTable('name')">Engine Name <span class="material-icons" style="font-size: 14px">sort</span></th>
-                                    <th onclick="sortTable('language')">Language <span class="material-icons" style="font-size: 14px">sort</span></th>
-                                    <th onclick="sortTable('date')">Released <span class="material-icons" style="font-size: 14px">sort</span></th>
-                                </tr>
-                            </thead>
-                            <tbody id="engineList">
-                                <tr><td colspan="3" class="loading">Loading database...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="countDisplay" style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;"></div>
+                <div class="search-container">
+                    <input type="text" id="engineSearch" placeholder="Search engines, languages, protocols...">
                 </div>
+
+                <div class="table-wrapper">
+                    <table class="engine-table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('name')">Name</th>
+                                <th onclick="sortTable('protocol')">Protocol</th>
+                                <th onclick="sortTable('lang')">Lang</th>
+                                <th onclick="sortTable('d_first')">First Release</th>
+                                <th onclick="sortTable('d_last')">Latest (Ver)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="engineList">
+                            <tr><td colspan="5" class="loading">Loading database...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="countDisplay" style="margin-top: 0.5rem; text-align: right; font-size: 0.8rem; color: var(--text-secondary);"></div>
             </div>
         </main>
         
@@ -157,62 +155,66 @@
 
     <script src="js/theme.js"></script>
     <script>
-        // Common navigation
-        document.getElementById('backButton').addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
+        document.getElementById('backButton').addEventListener('click', () => window.location.href = 'index.html');
 
-        // Engine List Logic
         let engines = [];
         let sortDir = 1;
 
         async function loadEngines() {
             try {
-                // Fetching the JSON you generated
+                // Ensure this path matches where you put the JSON file
                 const response = await fetch('data/engines.json');
-                if (!response.ok) throw new Error("Data not found");
+                if (!response.ok) throw new Error("File not found");
                 engines = await response.json();
                 renderEngines(engines);
             } catch (error) {
                 document.getElementById('engineList').innerHTML = 
-                    `<tr><td colspan="3" class="error">Error loading data: ${error.message}. <br>Make sure engines.json is in the 'data' folder.</td></tr>`;
+                    `<tr><td colspan="5" class="error" style="color: var(--error); text-align: center; padding: 1rem;">
+                        Error loading data: ${error.message}<br>
+                        <small>Make sure 'engines.json' is in the 'chessnerd/data/' folder.</small>
+                    </td></tr>`;
             }
         }
 
         function renderEngines(data) {
             const tbody = document.getElementById('engineList');
-            const countDisplay = document.getElementById('countDisplay');
+            document.getElementById('countDisplay').textContent = `${data.length} engines found`;
             
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem;">No engines found</td></tr>`;
-                countDisplay.textContent = '';
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem;">No matches</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = data.map(e => {
-                // Ensure link has protocol if it exists
+                // Link Logic
                 let link = e.link || '#';
                 if (link !== '#' && !link.startsWith('http')) link = 'https://' + link;
                 
-                const linkAttr = link === '#' ? '' : `href="${link}" target="_blank"`;
-                const icon = link === '#' ? '' : '<span class="material-icons" style="font-size: 14px; opacity: 0.7;">open_in_new</span>';
+                const linkTag = link === '#' ? 'span' : 'a';
+                const hrefAttr = link === '#' ? '' : `href="${link}" target="_blank"`;
+                const icon = link === '#' ? '' : '<span class="material-icons" style="font-size: 12px; opacity: 0.5;">open_in_new</span>';
 
+                // Display Date + Version
+                let lastRelease = e.d_last || '-';
+                if (e.ver) {
+                    lastRelease += ` <span class="version-tag">(${e.ver})</span>`;
+                }
+
+                // IMPORTANT: These keys (e.protocol, e.lang) must match the JSON output
                 return `
                 <tr>
-                    <td>
-                        <a ${linkAttr} class="engine-link">
+                    <td class="col-name">
+                        <${linkTag} ${hrefAttr} class="engine-link">
                             ${e.name}
                             ${icon}
-                        </a>
+                        </${linkTag}>
                     </td>
-                    <td>
-                        ${e.language ? `<span class="lang-tag">${e.language}</span>` : ''}
-                    </td>
-                    <td class="date-cell">${e.date || '-'}</td>
+                    <td class="col-proto">${e.protocol || '-'}</td>
+                    <td class="col-lang">${e.lang || '-'}</td>
+                    <td>${e.d_first || '-'}</td>
+                    <td>${lastRelease}</td>
                 </tr>
             `}).join('');
-
-            countDisplay.textContent = `Showing ${data.length} engines`;
         }
 
         // Search Filter
@@ -220,13 +222,13 @@
             const term = e.target.value.toLowerCase();
             const filtered = engines.filter(eng => 
                 (eng.name && eng.name.toLowerCase().includes(term)) ||
-                (eng.language && eng.language.toLowerCase().includes(term)) ||
-                (eng.date && eng.date.includes(term))
+                (eng.lang && eng.lang.toLowerCase().includes(term)) ||
+                (eng.protocol && eng.protocol.toLowerCase().includes(term))
             );
             renderEngines(filtered);
         });
 
-        // Simple Sort
+        // Sort Function
         window.sortTable = (field) => {
             sortDir *= -1;
             const sorted = [...engines].sort((a, b) => {
@@ -237,7 +239,6 @@
             renderEngines(sorted);
         };
 
-        // Initialize
         loadEngines();
     </script>
 </body>
