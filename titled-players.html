@@ -1,109 +1,384 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Titled Player Database</title>
-    </head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titled Players Database - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Database Table Styles */
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .db-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+        }
+        .db-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+        .db-table tr:hover {
+            background: var(--bg-secondary);
+        }
 
-    <div class="controls">
-        <h3>Filter Database</h3>
+        /* Filter Controls Area */
+        .filters-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        /* Custom Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .checkbox-label:hover {
+            border-color: var(--accent);
+        }
+        .checkbox-label input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Inputs */
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .input-wrapper label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .std-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            width: 100px;
+        }
+        .std-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        select.std-input {
+            width: 120px;
+        }
+
+        /* Badges */
+        .title-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        .gm-title { color: #ffd700; background: rgba(255, 215, 0, 0.15); }
+        .im-title { color: #c0c0c0; background: rgba(192, 192, 192, 0.15); }
+        .rating-cell { font-family: 'Monaco', monospace; font-weight: bold; }
         
-        <div class="checkbox-group">
-            <label><input type="checkbox" value="GM" checked> GM</label>
-            <label><input type="checkbox" value="IM" checked> IM</label>
-            <label><input type="checkbox" value="FM"> FM</label>
+        .results-count {
+            margin-left: auto;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .filter-row { gap: 1rem; }
+            .results-count { margin-left: 0; width: 100%; margin-top: 0.5rem; }
+            .hide-mobile { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
             </div>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#0d9488">Teal</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
 
-        <div style="margin: 15px 0;">
-            <label>Sort/Filter By: 
-                <select id="ratingType">
-                    <option value="rapid">Rapid</option>
-                    <option value="blitz">Blitz</option>
-                    <option value="bullet">Bullet</option>
-                </select>
-            </label>
-            <label>Min Elo: <input type="number" id="minElo" value="2500"></label>
-            <label>Country: <input type="text" id="countryFilter" placeholder="e.g. US, RU, IN" maxlength="2"></label>
-        </div>
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">groups</span>
+                        <h2 id="toolName">Titled Players Database</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
 
-        <button onclick="applyFilters()">Update List</button>
-        <span id="countDisplay" style="margin-left:10px; color:#888;"></span>
+                <div class="io-container">
+                    <div class="io-panel" style="width: 100%">
+                        
+                        <div class="filters-panel">
+                            <div class="filter-row">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label"><input type="checkbox" value="GM" checked> GM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="IM" checked> IM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="FM"> FM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="CM"> CM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="NM"> NM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WGM"> WGM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WIM"> WIM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WFM"> WFM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WCM"> WCM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WNM"> WNM</label>
+                                </div>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-secondary" onclick="toggleAll(true)" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
+                                    <button class="btn btn-secondary" onclick="toggleAll(false)" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
+                                </div>
+                            </div>
+
+                            <div class="filter-row">
+                                <div class="input-wrapper">
+                                    <label>Sort By:</label>
+                                    <select id="ratingType" class="std-input">
+                                        <option value="rapid">Rapid</option>
+                                        <option value="blitz">Blitz</option>
+                                        <option value="bullet">Bullet</option>
+                                    </select>
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Min Elo:</label>
+                                    <input type="number" id="minElo" class="std-input" value="2500" step="50">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Country:</label>
+                                    <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="2" style="text-transform: uppercase;">
+                                </div>
+                                <div class="results-count" id="countDisplay">Loading database...</div>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden; max-height: 800px; overflow-y: auto;">
+                            <table class="db-table">
+                                <thead>
+                                    <tr>
+                                        <th>Player</th>
+                                        <th>Title</th>
+                                        <th>Country</th>
+                                        <th id="ratingHeader">Rapid</th>
+                                        <th class="hide-mobile">Status</th>
+                                        <th style="text-align: right;">Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    </tbody>
+                            </table>
+                            <div id="loadMoreArea" style="text-align: center; padding: 1rem; display: none;">
+                                <button id="loadMoreBtn" class="btn btn-primary">Show More</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
     </div>
 
-    <table id="playerTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Title</th>
-                <th>Country</th>
-                <th>Rapid</th>
-                <th>Blitz</th>
-                <th>Bullet</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
+    <script src="js/theme.js"></script>
     <script>
-        let fullData = [];
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
 
-        // 1. Load the file immediately on page load
+        // --- DATABASE LOGIC ---
+        let allPlayers = [];
+        let filteredPlayers = [];
+        let displayLimit = 100;
+        const BATCH_SIZE = 100;
+
+        // Load JSON on startup
         fetch('titled_players.json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                fullData = data;
-                document.getElementById('countDisplay').innerText = `Database loaded: ${data.length} players.`;
-                applyFilters(); // Show initial view
+                allPlayers = data;
+                applyFilters();
             })
-            .catch(err => console.error("Could not load player database:", err));
+            .catch(err => {
+                document.getElementById('countDisplay').innerText = "Error loading database file.";
+                console.error(err);
+            });
+
+        // Event Listeners
+        document.querySelectorAll('.checkbox-label input').forEach(cb => {
+            cb.addEventListener('change', () => applyFilters());
+        });
+        document.getElementById('ratingType').addEventListener('change', () => applyFilters());
+        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            displayLimit += BATCH_SIZE;
+            renderTable();
+        });
+
+        function toggleAll(checked) {
+            document.querySelectorAll('.checkbox-label input').forEach(cb => cb.checked = checked);
+            applyFilters();
+        }
 
         function applyFilters() {
-            const tableBody = document.querySelector('#playerTable tbody');
-            tableBody.innerHTML = '';
-
-            // Get inputs
+            // reset pagination
+            displayLimit = 100;
+            
+            const ratingType = document.getElementById('ratingType').value;
             const minElo = parseInt(document.getElementById('minElo').value) || 0;
-            const ratingType = document.getElementById('ratingType').value; // 'rapid', 'blitz', etc.
-            const countrySearch = document.getElementById('countryFilter').value.toUpperCase();
+            const countrySearch = document.getElementById('countryFilter').value.toUpperCase().trim();
             
             // Get selected titles
-            const checkedBoxes = document.querySelectorAll('.checkbox-group input:checked');
+            const checkedBoxes = document.querySelectorAll('.checkbox-label input:checked');
             const selectedTitles = Array.from(checkedBoxes).map(cb => cb.value);
 
+            // Update Header Text
+            document.getElementById('ratingHeader').innerText = ratingType.charAt(0).toUpperCase() + ratingType.slice(1);
+
             // Filter logic
-            const filtered = fullData.filter(p => {
-                // Check Title
+            filteredPlayers = allPlayers.filter(p => {
                 if (!selectedTitles.includes(p.title)) return false;
-                
-                // Check Rating (using the dynamic property key)
                 if (p[ratingType] < minElo) return false;
-
-                // Check Country (if typed)
                 if (countrySearch && p.country !== countrySearch) return false;
-
                 return true;
             });
 
             // Sort logic (Highest rating first)
-            filtered.sort((a, b) => b[ratingType] - a[ratingType]);
+            filteredPlayers.sort((a, b) => b[ratingType] - a[ratingType]);
 
-            // Limit display to top 100 to avoid freezing browser if list is huge
-            const displayList = filtered.slice(0, 100);
+            // Update UI
+            document.getElementById('countDisplay').innerText = `${filteredPlayers.length} players found`;
+            
+            renderTable();
+        }
 
-            displayList.forEach(p => {
-                const row = `<tr>
-                    <td><a href="https://www.chess.com/member/${p.username}" target="_blank">${p.username}</a></td>
-                    <td>${p.title}</td>
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const ratingType = document.getElementById('ratingType').value;
+            const subset = filteredPlayers.slice(0, displayLimit);
+
+            subset.forEach(p => {
+                const tr = document.createElement('tr');
+                
+                // Style title badge
+                let titleClass = 'title-badge';
+                if(p.title === 'GM') titleClass += ' gm-title';
+                if(p.title === 'IM') titleClass += ' im-title';
+
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-weight:500;">${p.username}</div>
+                    </td>
+                    <td><span class="${titleClass}">${p.title}</span></td>
                     <td>${p.country}</td>
-                    <td ${ratingType === 'rapid' ? 'style="font-weight:bold; color:gold;"' : ''}>${p.rapid}</td>
-                    <td ${ratingType === 'blitz' ? 'style="font-weight:bold; color:gold;"' : ''}>${p.blitz}</td>
-                    <td>${p.bullet}</td>
-                </tr>`;
-                tableBody.insertAdjacentHTML('beforeend', row);
+                    <td class="rating-cell" style="color: var(--accent);">${p[ratingType] || '-'}</td>
+                    <td class="hide-mobile" style="color: ${p.status==='active'?'#4caf50':'var(--text-secondary)'}; font-size:0.85rem;">
+                        ${p.status}
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="https://www.chess.com/member/${p.username}" target="_blank" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.8rem;">
+                            View
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
 
-            document.getElementById('countDisplay').innerText = `Showing top ${displayList.length} of ${filtered.length} matches.`;
+            // Show/Hide "Load More" button
+            const loadBtnArea = document.getElementById('loadMoreArea');
+            if (filteredPlayers.length > displayLimit) {
+                loadBtnArea.style.display = 'block';
+            } else {
+                loadBtnArea.style.display = 'none';
+            }
+        }
+
+        // Utility: Debounce to prevent lag while typing
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
         }
     </script>
 </body>
