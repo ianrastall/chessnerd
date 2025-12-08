@@ -269,15 +269,20 @@
         const BATCH_SIZE = 100;
 
         // Load JSON on startup
-        fetch('titled_players.json')
-            .then(res => res.json())
+        fetch('titled-players.json')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
                 allPlayers = data;
                 applyFilters();
             })
             .catch(err => {
                 document.getElementById('countDisplay').innerText = "Error loading database file.";
-                console.error(err);
+                console.error("Failed to load titled-players.json:", err);
             });
 
         // Event Listeners
