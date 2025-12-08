@@ -11,10 +11,17 @@ import shutil
 PROJECT_DIR = r"D:\GitHub\chessnerd"
 TOOLS_DIR = r"D:\chessnerd"
 
+# NEW: Path to your Data Repo
+DATA_REPO_DIR = r"D:\GitHub\PgnTours"
+
+# NEW: Your GitHub Username (Required for cross-repo links)
+# Example link: https://[User].github.io/[Repo]/[Decade]/[File.zip]
+GITHUB_USER = "ianrastall" 
+DATA_REPO_NAME = "PgnTours" # The name of the repo on GitHub
+
 # Paths
 REVIEW_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_REVIEW")
 TOURNAMENTS_HTML_PATH = os.path.join(PROJECT_DIR, "tournaments.html")
-FINAL_ZIP_DIR = os.path.join(PROJECT_DIR, "tournaments")
 PGN_EXTRACT_PATH = os.path.join(TOOLS_DIR, "pgn-extract.exe")
 
 # ---------------------------------------------------------
@@ -63,9 +70,16 @@ def calculate_stats(pgn_file):
     except: return 0, 0, 0, 0
 
 def parse_filename_dates(filename):
+    # Expects: YYYYMMDD-YYYYMMDD-slug.pgn
     parts = filename.split('-')
     if len(parts) >= 2: return parts[0], parts[1]
     return "00000000", "00000000"
+
+def get_decade_folder(year_str):
+    """Returns '1880s', '1990s', etc."""
+    if len(year_str) >= 3:
+        return year_str[:3] + "0s"
+    return "Unknown"
 
 def format_display_name(raw_name):
     display = raw_name.replace('-', ' ').title()
@@ -92,7 +106,6 @@ def polish_pgn_tags(input_path):
     ]
     try:
         subprocess.run(cmd, capture_output=True, cwd=TOOLS_DIR, check=True)
-        # Replace original with polished
         shutil.move(temp_polished, input_path)
         print("  -> PGN tags reordered.")
         return True
@@ -132,7 +145,7 @@ def bulk_update_html(new_entries):
         <td style="font-family: monospace;">{entry['avg_elo']}</td>
         <td class="cat-cell">{cat_cell}</td>
         <td style="text-align: right;">
-            <a href="{entry['zip_rel']}" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">
+            <a href="{entry['link_url']}" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">
                 <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
             </a>
         </td>
@@ -156,6 +169,11 @@ def bulk_update_html(new_entries):
 
 def main():
     if not os.path.exists(REVIEW_DIR): return
+    if not os.path.exists(DATA_REPO_DIR):
+        print(f"Error: Data Repo not found at {DATA_REPO_DIR}")
+        print("Please create the folder or update the script configuration.")
+        return
+
     pgn_files = [f for f in os.listdir(REVIEW_DIR) if f.endswith('.pgn')]
     if not pgn_files: return
 
@@ -173,29 +191,43 @@ def main():
         if not os.path.exists(html_path): continue
 
         print(f"Finalizing: {base_name}")
-        
-        # 1. Polish Tags (In-place update)
         polish_pgn_tags(pgn_path)
 
-        # 2. Gather Metadata
         start, end = parse_filename_dates(base_name)
         event_name = get_event_name_from_pgn(pgn_path)
         players, avg_elo, category, games = calculate_stats(pgn_path)
 
-        # 3. Create Zip
+        # --- LOGIC CHANGE: Sort into Decade Folders ---
+        year = start[:4]
+        decade = get_decade_folder(year)
+        
+        # Target folder: D:\GitHub\Tours\1880s\
+        target_folder = os.path.join(DATA_REPO_DIR, decade)
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+            print(f"  -> Created decade folder: {decade}")
+
         zip_filename = base_name + ".zip"
-        zip_dest = os.path.join(FINAL_ZIP_DIR, zip_filename)
-        if not os.path.exists(FINAL_ZIP_DIR): os.makedirs(FINAL_ZIP_DIR)
+        zip_dest = os.path.join(target_folder, zip_filename)
 
         with zipfile.ZipFile(zip_dest, 'w', zipfile.ZIP_DEFLATED) as z:
             z.write(pgn_path, pgn_file)
             z.write(html_path, html_file)
-        print(f"  -> Zipped to: tournaments/{zip_filename}")
+        
+        print(f"  -> Zipped to: {DATA_REPO_NAME}\\{decade}\\{zip_filename}")
+
+        # --- Generate Absolute URL ---
+        # https://[User].github.io/[Repo]/[Decade]/[File]
+        if GITHUB_USER == "YOUR_GITHUB_USERNAME":
+             print("  WARNING: GITHUB_USER not set in script. Links will be broken online.")
+        
+        web_link = f"https://{GITHUB_USER}.github.io/{DATA_REPO_NAME}/{decade}/{zip_filename}"
 
         new_entries.append({
             'event_name': event_name, 'start': start, 'end': end,
             'players': players, 'games': games, 'avg_elo': avg_elo,
-            'category': category, 'zip_rel': f"tournaments/{zip_filename}"
+            'category': category, 
+            'link_url': web_link  # NEW: Absolute URL
         })
         processed_files.append(pgn_path); processed_files.append(html_path)
 
