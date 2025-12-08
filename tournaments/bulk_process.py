@@ -12,10 +12,11 @@ from collections import defaultdict
 PROJECT_DIR = r"D:\GitHub\chessnerd"
 TOOLS_DIR = r"D:\chessnerd"
 
-# Helper Scripts & DB
+# Helper Scripts
 GENERATE_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "generate_crosstable.py")
-DB_PATH_PRIMARY = os.path.join(PROJECT_DIR, "tournaments", "players.db")
-DB_PATH_SECONDARY = r"D:\players.db"
+
+# Database Path - CORRECTED to look in D:\chessnerd\players.db
+DB_PATH = os.path.join(TOOLS_DIR, "players.db")
 
 # Tools
 PGN_EXTRACT_PATH = os.path.join(TOOLS_DIR, "pgn-extract.exe")
@@ -27,8 +28,9 @@ REVIEW_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_REVIEW")
 # ---------------------------------------------------------
 
 def get_db_connection():
-    if os.path.exists(DB_PATH_PRIMARY): return sqlite3.connect(DB_PATH_PRIMARY)
-    elif os.path.exists(DB_PATH_SECONDARY): return sqlite3.connect(DB_PATH_SECONDARY)
+    if os.path.exists(DB_PATH): 
+        return sqlite3.connect(DB_PATH)
+    print(f"  Warning: Database not found at {DB_PATH}")
     return None
 
 def parse_date(date_str):
@@ -79,7 +81,9 @@ def normalize_pgn_content(content, start_date):
     Does NOT write to file directly.
     """
     conn = get_db_connection()
-    if not conn: return content # Skip if no DB
+    if not conn: 
+        print(f"  Skipping normalization (DB not found).")
+        return content 
 
     cursor = conn.cursor()
     t_year = int(start_date[:4])
@@ -134,9 +138,6 @@ def normalize_pgn_content(content, start_date):
                 new_lines.append(line)
         
         elif line.startswith('[WhiteElo') or line.startswith('[BlackElo'):
-            # Skip existing Elo tags only if we identified the player (and thus injected a new one)
-            # Simpler: just keep them if we didn't identify player. 
-            # If we identified player, we already wrote the tag above.
             is_white = line.startswith('[WhiteElo')
             pid = current_white_pid if is_white else current_black_pid
             if not pid:
@@ -155,7 +156,6 @@ def process_file(filepath):
     with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
         raw_content = f.read()
     
-    # Remove GameId
     lines = raw_content.splitlines()
     clean_lines = [l for l in lines if not l.strip().startswith('[GameId')]
     clean_content = "\n".join(clean_lines)
@@ -165,7 +165,6 @@ def process_file(filepath):
     print(f"  Detected Event: {event_name}")
 
     # 3. Run PGN-Extract (Standardization)
-    # We write to a temp file in REVIEW_DIR
     if not os.path.exists(REVIEW_DIR): os.makedirs(REVIEW_DIR)
     temp_in = os.path.join(REVIEW_DIR, "temp_in.pgn")
     temp_out = os.path.join(REVIEW_DIR, "temp_out.pgn")
@@ -181,6 +180,7 @@ def process_file(filepath):
     ]
     
     try:
+        # Run inside TOOLS_DIR so it finds roster.txt
         subprocess.run(cmd, capture_output=True, cwd=TOOLS_DIR, check=True)
     except subprocess.CalledProcessError:
         print("  Error: pgn-extract failed.")
@@ -210,8 +210,6 @@ def process_file(filepath):
     print(f"  Saved PGN: {final_filename}")
 
     # 7. Generate HTML Report
-    # Title format: "London Chess Classic" (We format the raw event name nicely)
-    # Logic copied from previous script for pretty title
     display_title = event_name.replace('-', ' ').title()
     display_title = re.sub(r'(\d+)(St|Nd|Rd|Th)', lambda m: m.group(1) + m.group(2).lower(), display_title)
 
@@ -226,7 +224,6 @@ def process_file(filepath):
     if os.path.exists(temp_out): os.remove(temp_out)
 
 def main():
-    # Get all PGNs in current dir
     cwd = os.getcwd()
     pgn_files = glob.glob(os.path.join(cwd, "*.pgn"))
     
@@ -236,9 +233,9 @@ def main():
 
     print(f"Found {len(pgn_files)} PGN files. Processing...")
     print(f"Output folder: {REVIEW_DIR}")
+    print(f"Using Database: {DB_PATH}")
     
     for pgn in pgn_files:
-        # Skip files that are already in the REVIEW folder if script is run there
         if REVIEW_DIR in pgn: continue
         process_file(pgn)
         
