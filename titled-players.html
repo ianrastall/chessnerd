@@ -142,8 +142,8 @@
     </style>
 </head>
 <body>
-<div class="container" style="max-width: 100%; padding: 0 2rem;">
-    <header>
+    <div class="container">
+        <header>
             <div class="logo">
                 <a href="index.html" style="color: inherit; text-decoration: none;">
                     <span>Chess Nerd</span>
@@ -182,7 +182,7 @@
                     </div>
                 </div>
 
-                <div class="io-container" style="display: block;">
+                <div class="io-container">
                     <div class="io-panel" style="width: 100%">
                         
                         <div class="filters-panel">
@@ -223,14 +223,16 @@
                                     <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="2" style="text-transform: uppercase;">
                                 </div>
                                 <div class="results-count" id="countDisplay">Loading database...</div>
+                                <button id="copyBtn" class="btn btn-secondary" onclick="copyList()" title="Copy list to clipboard (Excel compatible)" style="display: flex; align-items: center; gap: 5px; margin-left: 10px;">
+                                    <span class="material-icons" style="font-size: 1.1rem;">content_copy</span> Copy
+                                </button>
                             </div>
                         </div>
 
-                        <div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                        <div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden; max-height: 800px; overflow-y: auto;">
                             <table class="db-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 50px;">Avatar</th>
                                         <th>Player</th>
                                         <th>Title</th>
                                         <th>Country</th>
@@ -269,21 +271,16 @@
         let displayLimit = 100;
         const BATCH_SIZE = 100;
 
-        // Load JSON on startup
+        // Load JSON on startup (Fixed filename to match python script output)
         fetch('titled-players.json')
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 allPlayers = data;
                 applyFilters();
             })
             .catch(err => {
                 document.getElementById('countDisplay').innerText = "Error loading database file.";
-                console.error("Failed to load titled-players.json:", err);
+                console.error(err);
             });
 
         // Event Listeners
@@ -350,12 +347,7 @@
                 if(p.title === 'GM') titleClass += ' gm-title';
                 if(p.title === 'IM') titleClass += ' im-title';
 
-                const avatarHtml = p.avatar 
-                    ? `<img src="${p.avatar}" alt="${p.username}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` 
-                    : `<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.8rem;">${p.username.charAt(0).toUpperCase()}</div>`;
-
                 tr.innerHTML = `
-                    <td>${avatarHtml}</td>
                     <td>
                         <div style="font-weight:500;">${p.username}</div>
                     </td>
@@ -381,6 +373,63 @@
             } else {
                 loadBtnArea.style.display = 'none';
             }
+        }
+
+        function copyList() {
+            if (!filteredPlayers || filteredPlayers.length === 0) {
+                alert("No players to copy!");
+                return;
+            }
+
+            const ratingType = document.getElementById('ratingType').value;
+            const headers = ["Username", "Name", "Title", "Country", "Rating (" + ratingType + ")", "Status", "Profile Link"];
+            
+            let tsvContent = headers.join("\t") + "\n";
+            
+            filteredPlayers.forEach(p => {
+                const row = [
+                    p.username,
+                    p.name || "", // Added Name since it exists in JSON
+                    p.title,
+                    p.country,
+                    p[ratingType] || 0,
+                    p.status,
+                    `https://www.chess.com/member/${p.username}`
+                ];
+                tsvContent += row.join("\t") + "\n";
+            });
+
+            // Robust copy method
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(tsvContent).then(() => showCopySuccess()).catch(err => fallbackCopy(tsvContent));
+            } else {
+                fallbackCopy(tsvContent);
+            }
+        }
+
+        function fallbackCopy(text) {
+            let textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+                alert("Failed to copy to clipboard.");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showCopySuccess() {
+            const btn = document.getElementById('copyBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!`;
+            setTimeout(() => btn.innerHTML = originalHTML, 2000);
         }
 
         // Utility: Debounce to prevent lag while typing
