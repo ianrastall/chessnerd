@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titled Players Database - Chess Nerd</title>
+    <title>Chess.com Titled Players - Chess Nerd</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -172,7 +172,12 @@
                 <div class="tool-header">
                     <div class="tool-title">
                         <span class="material-icons" id="toolIcon">groups</span>
-                        <h2 id="toolName">Titled Players Database</h2>
+                        <div>
+                            <h2 id="toolName" style="margin-bottom: 0;">Chess.com Titled Players</h2>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
+                                Verified accounts from Chess.com API
+                            </div>
+                        </div>
                     </div>
                     <div class="tool-actions">
                         <button id="backButton" class="btn btn-secondary">
@@ -271,7 +276,7 @@
         let displayLimit = 100;
         const BATCH_SIZE = 100;
 
-        // Load JSON on startup (Fixed filename to match python script output)
+        // Load JSON on startup
         fetch('titled-players.json')
             .then(res => res.json())
             .then(data => {
@@ -399,7 +404,6 @@
                 tsvContent += row.join("\t") + "\n";
             });
 
-            // Robust copy method
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(tsvContent).then(() => showCopySuccess()).catch(err => fallbackCopy(tsvContent));
             } else {
