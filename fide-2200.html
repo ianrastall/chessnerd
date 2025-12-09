@@ -60,34 +60,6 @@
             align-items: center;
         }
 
-        /* Custom Checkboxes */
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            background: var(--bg-primary);
-            padding: 6px 12px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            user-select: none;
-            transition: all 0.2s;
-        }
-        .checkbox-label:hover {
-            border-color: var(--accent);
-        }
-        .checkbox-label input {
-            accent-color: var(--accent);
-        }
-
-        /* Inputs + layout */
         .input-wrapper {
             display: flex;
             flex-direction: column;
@@ -223,25 +195,7 @@
                 <div class="io-container" style="display: block;">
                     <div class="io-panel" style="width: 100%;">
                         <div class="filters-panel">
-                            <!-- Row 1: Title filters -->
-                            <div class="filter-row">
-                                <div class="checkbox-group">
-                                    <label class="checkbox-label"><input type="checkbox" value="GM" checked> GM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="IM" checked> IM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="FM"> FM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="CM"> CM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WGM"> WGM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WIM"> WIM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WFM"> WFM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WCM"> WCM</label>
-                                </div>
-                                <div style="display:flex; gap:0.5rem;">
-                                    <button class="btn btn-secondary" onclick="toggleAll(true)" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
-                                    <button class="btn btn-secondary" onclick="toggleAll(false)" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
-                                </div>
-                            </div>
-
-                            <!-- Row 2: Rating type, Min Elo, Country -->
+                            <!-- Row 1: Rating type, Min Elo, Federation -->
                             <div class="filter-row">
                                 <div class="input-wrapper">
                                     <label>Rating Type:</label>
@@ -252,16 +206,30 @@
                                     </select>
                                 </div>
                                 <div class="input-wrapper">
-                                    <label>Min Elo:</label>
-                                    <input type="number" id="minElo" class="std-input" value="2200" step="50">
+                                    <label>Min Elo (floor 2200):</label>
+                                    <input
+                                        type="number"
+                                        id="minElo"
+                                        class="std-input"
+                                        value="2200"
+                                        step="50"
+                                        min="2200"
+                                    >
                                 </div>
                                 <div class="input-wrapper">
                                     <label>Federation (3-letter):</label>
-                                    <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="3" style="text-transform: uppercase;">
+                                    <input
+                                        type="text"
+                                        id="countryFilter"
+                                        class="std-input"
+                                        placeholder="All"
+                                        maxlength="3"
+                                        style="text-transform: uppercase;"
+                                    >
                                 </div>
                             </div>
 
-                            <!-- Row 3: Count + Copy -->
+                            <!-- Row 2: Count + Copy -->
                             <div class="filter-row filters-footer">
                                 <div class="results-count" id="countDisplay">Loading database...</div>
                                 <button id="copyBtn" class="btn btn-secondary copy-btn">
@@ -302,6 +270,9 @@
             window.location.href = 'index.html';
         });
 
+        // --- CONFIG ---
+        const MIN_ELO_FLOOR = 2200;
+
         // --- DATABASE LOGIC ---
         let allPlayers = [];
         let filteredPlayers = [];
@@ -325,11 +296,14 @@
                 document.getElementById('countDisplay').innerText = 'Error loading database file.';
             });
 
-        function toggleAll(checked) {
-            document.querySelectorAll('.checkbox-label input').forEach(cb => {
-                cb.checked = checked;
-            });
-            applyFilters();
+        function getCurrentMinElo() {
+            const input = document.getElementById('minElo');
+            let val = parseInt(input.value || '0', 10) || 0;
+            if (val < MIN_ELO_FLOOR) {
+                val = MIN_ELO_FLOOR;
+            }
+            input.value = val;
+            return val;
         }
 
         function applyFilters() {
@@ -337,28 +311,13 @@
             displayLimit = 100;
 
             const ratingType = document.getElementById('ratingType').value;
-            const minElo = parseInt(document.getElementById('minElo').value || '0', 10) || 0;
+            const minElo = getCurrentMinElo();
             const countryFilter = (document.getElementById('countryFilter').value || '').trim().toUpperCase();
-
-            const selectedTitles = Array
-                .from(document.querySelectorAll('.checkbox-label input:checked'))
-                .map(cb => cb.value.toUpperCase());
 
             filteredPlayers = allPlayers.filter(p => {
                 const std = p.std || 0;
                 const rapid = p.rapid || 0;
                 const blitz = p.blitz || 0;
-
-                // Title filter (consider both title and w_title)
-                const titles = [];
-                if (p.title) titles.push(String(p.title).toUpperCase());
-                if (p.w_title) titles.push(String(p.w_title).toUpperCase());
-
-                const titleMatch = selectedTitles.length === 0
-                    ? true
-                    : titles.some(t => selectedTitles.includes(t));
-
-                if (!titleMatch) return false;
 
                 // Rating filter
                 const ratingValue = ratingType === 'std' ? std :
@@ -407,7 +366,7 @@
         function updateCountDisplay() {
             const countDisplay = document.getElementById('countDisplay');
             const ratingType = document.getElementById('ratingType').value;
-            const minElo = parseInt(document.getElementById('minElo').value || '0', 10) || 0;
+            const minElo = getCurrentMinElo();
 
             if (!filteredPlayers.length) {
                 countDisplay.textContent = 'No players match the current filters.';
@@ -558,9 +517,6 @@
         }
 
         // Event Listeners
-        document.querySelectorAll('.checkbox-label input').forEach(cb => {
-            cb.addEventListener('change', () => applyFilters());
-        });
         document.getElementById('ratingType').addEventListener('change', () => applyFilters());
         document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
         document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
