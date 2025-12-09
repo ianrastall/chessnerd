@@ -195,7 +195,7 @@
                 <div class="io-container" style="display: block;">
                     <div class="io-panel" style="width: 100%;">
                         <div class="filters-panel">
-                            <!-- Row 1: Rating type, Min Elo, Federation -->
+                            <!-- Single row: Rating type, Min Elo, Federation, Search -->
                             <div class="filter-row">
                                 <div class="input-wrapper">
                                     <label>Rating Type:</label>
@@ -227,22 +227,19 @@
                                         style="text-transform: uppercase;"
                                     >
                                 </div>
-                            </div>
-
-                            <!-- Row 2: Search bar -->
-                            <div class="filter-row" style="width: 100%;">
-                                <div class="input-wrapper" style="flex: 1 1 260px;">
+                                <div class="input-wrapper">
                                     <label>Search (Name / FIDE ID):</label>
                                     <input
                                         type="text"
                                         id="searchFilter"
                                         class="std-input"
-                                        placeholder="Type to narrow the list…"
+                                        placeholder="Type to narrow…"
+                                        style="width: 220px;"
                                     >
                                 </div>
                             </div>
 
-                            <!-- Row 3: Count + Copy -->
+                            <!-- Row 2: Count + Copy -->
                             <div class="filter-row filters-footer">
                                 <div class="results-count" id="countDisplay">Loading database...</div>
                                 <button id="copyBtn" class="btn btn-secondary copy-btn">
@@ -499,7 +496,6 @@
                     .then(showCopySuccess)
                     .catch(err => console.error('Clipboard copy failed:', err));
             } else {
-                // Fallback
                 const ta = document.createElement('textarea');
                 ta.value = text;
                 ta.style.position = 'fixed';
