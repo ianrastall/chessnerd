@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .software-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .software-table th,
+        .software-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .software-table th {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        .software-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .software-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: var(--bg-secondary);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s, color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .link-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .table-note {
+            margin-top: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
+            </div>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#0d9488">Teal</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ee82ee">Violet</option>
+                        <option value="#9b4d96">Plum</option>
+                        <option value="#f9a8d4">Soft Pink</option>
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="tool-container">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons">inventory_2</span>
+                        <h2>Software Catalog</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+                <p class="tool-description">
+                    Reference table of popular chess software with quick links to downloads and repositories.
+                </p>
+
+                <table class="software-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Latest Release</th>
+                            <th>Language</th>
+                            <th>Direct Link</th>
+                            <th>Repository</th>
+                        </tr>
+                    </thead>
+                    <tbody id="softwareTableBody"></tbody>
+                </table>
+                <div class="table-note">
+                    Release dates are the latest tagged GitHub releases at the time of publishing.
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        const softwareEntries = [
+            {
+                name: 'Stockfish',
+                releaseDate: '2025-03-30',
+                language: 'C++',
+                directUrl: 'https://stockfishchess.org/download/',
+                repoUrl: 'https://github.com/official-stockfish/Stockfish'
+            },
+            {
+                name: 'Leela Chess Zero',
+                releaseDate: '2025-11-23',
+                language: 'C++ / CUDA',
+                directUrl: 'https://lczero.org/play/download/',
+                repoUrl: 'https://github.com/LeelaChessZero/lc0'
+            },
+            {
+                name: 'Cute Chess',
+                releaseDate: '2025-06-05',
+                language: 'C++',
+                directUrl: 'https://github.com/cutechess/cutechess/releases/latest',
+                repoUrl: 'https://github.com/cutechess/cutechess'
+            },
+            {
+                name: 'Banksia GUI',
+                releaseDate: '2019-07-29',
+                language: 'C++',
+                directUrl: 'https://banksiagui.com/',
+                repoUrl: 'https://github.com/nguyenpham/Banksia'
+            },
+            {
+                name: 'python-chess',
+                releaseDate: '2025-02-25',
+                language: 'Python',
+                directUrl: 'https://pypi.org/project/chess/',
+                repoUrl: 'https://github.com/niklasf/python-chess'
+            },
+            {
+                name: 'PyChess',
+                releaseDate: '2025-09-22',
+                language: 'Python',
+                directUrl: 'https://pychess.github.io/download.html',
+                repoUrl: 'https://github.com/pychess/pychess'
+            }
+        ];
+
+        function renderSoftwareTable() {
+            const tbody = document.getElementById('softwareTableBody');
+            tbody.innerHTML = softwareEntries.map(entry => `
+                <tr>
+                    <td>${entry.name}</td>
+                    <td>${entry.releaseDate}</td>
+                    <td><span class="tag">${entry.language}</span></td>
+                    <td><a class="link-btn" href="${entry.directUrl}" target="_blank" rel="noopener">Direct</a></td>
+                    <td><a class="link-btn" href="${entry.repoUrl}" target="_blank" rel="noopener">Repo</a></td>
+                </tr>
+            `).join('');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderSoftwareTable);
+        } else {
+            renderSoftwareTable();
+        }
+    </script>
+</body>
+</html>

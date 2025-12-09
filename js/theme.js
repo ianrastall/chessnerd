@@ -7,7 +7,7 @@
         { value: '#5f9ea0', label: 'Cadet Blue' },
         { value: '#6495ed', label: 'Cornflower' },
         { value: '#8b5cf6', label: 'Purple' },
-        { value: '#7c3aed', label: 'Violet' },
+        { value: '#ee82ee', label: 'Violet' },
         { value: '#9b4d96', label: 'Plum' },
         { value: '#f9a8d4', label: 'Soft Pink' },
         { value: '#deb887', label: 'Burlywood' },
