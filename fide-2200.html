@@ -229,7 +229,20 @@
                                 </div>
                             </div>
 
-                            <!-- Row 2: Count + Copy -->
+                            <!-- Row 2: Search bar -->
+                            <div class="filter-row" style="width: 100%;">
+                                <div class="input-wrapper" style="flex: 1 1 260px;">
+                                    <label>Search (Name / FIDE ID):</label>
+                                    <input
+                                        type="text"
+                                        id="searchFilter"
+                                        class="std-input"
+                                        placeholder="Type to narrow the list…"
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Row 3: Count + Copy -->
                             <div class="filter-row filters-footer">
                                 <div class="results-count" id="countDisplay">Loading database...</div>
                                 <button id="copyBtn" class="btn btn-secondary copy-btn">
@@ -313,6 +326,8 @@
             const ratingType = document.getElementById('ratingType').value;
             const minElo = getCurrentMinElo();
             const countryFilter = (document.getElementById('countryFilter').value || '').trim().toUpperCase();
+            const searchTermRaw = (document.getElementById('searchFilter').value || '').trim();
+            const searchTerm = searchTermRaw.toLowerCase();
 
             filteredPlayers = allPlayers.filter(p => {
                 const std = p.std || 0;
@@ -327,6 +342,15 @@
                 // Federation filter (3-letter code)
                 if (countryFilter) {
                     if (!p.country || String(p.country).toUpperCase() !== countryFilter) {
+                        return false;
+                    }
+                }
+
+                // Search filter (name / FIDE ID)
+                if (searchTerm) {
+                    const name = (p.name || '').toLowerCase();
+                    const fideid = String(p.fideid || '');
+                    if (!name.includes(searchTerm) && !fideid.includes(searchTermRaw)) {
                         return false;
                     }
                 }
@@ -520,6 +544,7 @@
         document.getElementById('ratingType').addEventListener('change', () => applyFilters());
         document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
         document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('searchFilter').addEventListener('input', debounce(applyFilters, 300));
         document.getElementById('loadMoreBtn').addEventListener('click', () => {
             displayLimit += BATCH_SIZE;
             renderTable();
