@@ -1,0 +1,574 @@
+<!-- fide-2200.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDE 2200+ - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Database Table Styles */
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .db-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .db-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .db-table tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+        .db-table tr:nth-child(odd) {
+            background: var(--bg-primary);
+        }
+        .db-table tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Filter Controls Area */
+        .filters-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        /* Custom Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .checkbox-label:hover {
+            border-color: var(--accent);
+        }
+        .checkbox-label input {
+            accent-color: var(--accent);
+        }
+
+        /* Inputs + layout */
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .std-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            min-width: 0;
+        }
+        .std-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        select.std-input {
+            width: 140px;
+        }
+
+        /* Badges */
+        .title-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        .gm-title {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.15);
+        }
+        .im-title {
+            color: #c0c0c0;
+            background: rgba(192, 192, 192, 0.15);
+        }
+        .rating-cell {
+            font-family: "Monaco", monospace;
+            font-weight: bold;
+        }
+
+        .results-count {
+            margin-left: auto;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filters-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .hide-mobile {
+            display: table-cell;
+        }
+        @media (max-width: 768px) {
+            .hide-mobile {
+                display: none;
+            }
+            .filters-panel {
+                padding: 1rem;
+            }
+            .filter-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 100%; padding: 0 2rem;">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
+            </div>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#0d9488">Teal</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">groups</span>
+                        <div>
+                            <h2 id="toolName" style="margin-bottom: 0;">FIDE 2200+ Players</h2>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
+                                FIDE-rated players with Standard, Rapid, or Blitz rating &ge; 2200 (from monthly FIDE players list)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div class="io-container" style="display: block;">
+                    <div class="io-panel" style="width: 100%;">
+                        <div class="filters-panel">
+                            <!-- Row 1: Title filters -->
+                            <div class="filter-row">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label"><input type="checkbox" value="GM" checked> GM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="IM" checked> IM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="FM"> FM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="CM"> CM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WGM"> WGM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WIM"> WIM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WFM"> WFM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WCM"> WCM</label>
+                                </div>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-secondary" onclick="toggleAll(true)" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
+                                    <button class="btn btn-secondary" onclick="toggleAll(false)" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
+                                </div>
+                            </div>
+
+                            <!-- Row 2: Rating type, Min Elo, Country -->
+                            <div class="filter-row">
+                                <div class="input-wrapper">
+                                    <label>Rating Type:</label>
+                                    <select id="ratingType" class="std-input">
+                                        <option value="std">Standard</option>
+                                        <option value="rapid">Rapid</option>
+                                        <option value="blitz">Blitz</option>
+                                    </select>
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Min Elo:</label>
+                                    <input type="number" id="minElo" class="std-input" value="2200" step="50">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Federation (3-letter):</label>
+                                    <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="3" style="text-transform: uppercase;">
+                                </div>
+                            </div>
+
+                            <!-- Row 3: Count + Copy -->
+                            <div class="filter-row filters-footer">
+                                <div class="results-count" id="countDisplay">Loading database...</div>
+                                <button id="copyBtn" class="btn btn-secondary copy-btn">
+                                    <span class="material-icons" style="font-size: 1.1rem;">content_copy</span>
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Results table -->
+                        <div class="output-panel" style="background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden;">
+                            <table class="db-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name / FIDE ID</th>
+                                        <th>Title</th>
+                                        <th>Federation</th>
+                                        <th id="ratingHeader">Standard</th>
+                                        <th class="hide-mobile">Year</th>
+                                        <th style="text-align: right;">Profile</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody"></tbody>
+                            </table>
+                            <div id="loadMoreArea" style="text-align: center; padding: 1rem; display: none;">
+                                <button id="loadMoreBtn" class="btn btn-primary">Show More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // --- DATABASE LOGIC ---
+        let allPlayers = [];
+        let filteredPlayers = [];
+        let displayLimit = 100;
+        const BATCH_SIZE = 100;
+
+        // Load JSON on startup
+        fetch('fide-2200.json')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('HTTP error ' + res.status);
+                }
+                return res.json();
+            })
+            .then(data => {
+                allPlayers = data || [];
+                applyFilters();
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('countDisplay').innerText = 'Error loading database file.';
+            });
+
+        function toggleAll(checked) {
+            document.querySelectorAll('.checkbox-label input').forEach(cb => {
+                cb.checked = checked;
+            });
+            applyFilters();
+        }
+
+        function applyFilters() {
+            // reset pagination
+            displayLimit = 100;
+
+            const ratingType = document.getElementById('ratingType').value;
+            const minElo = parseInt(document.getElementById('minElo').value || '0', 10) || 0;
+            const countryFilter = (document.getElementById('countryFilter').value || '').trim().toUpperCase();
+
+            const selectedTitles = Array
+                .from(document.querySelectorAll('.checkbox-label input:checked'))
+                .map(cb => cb.value.toUpperCase());
+
+            filteredPlayers = allPlayers.filter(p => {
+                const std = p.std || 0;
+                const rapid = p.rapid || 0;
+                const blitz = p.blitz || 0;
+
+                // Title filter (consider both title and w_title)
+                const titles = [];
+                if (p.title) titles.push(String(p.title).toUpperCase());
+                if (p.w_title) titles.push(String(p.w_title).toUpperCase());
+
+                const titleMatch = selectedTitles.length === 0
+                    ? true
+                    : titles.some(t => selectedTitles.includes(t));
+
+                if (!titleMatch) return false;
+
+                // Rating filter
+                const ratingValue = ratingType === 'std' ? std :
+                                    ratingType === 'rapid' ? rapid : blitz;
+                if (ratingValue < minElo) return false;
+
+                // Federation filter (3-letter code)
+                if (countryFilter) {
+                    if (!p.country || String(p.country).toUpperCase() !== countryFilter) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // Sort by selected rating type (desc), then name
+            filteredPlayers.sort((a, b) => {
+                const rA = a[ratingType] || 0;
+                const rB = b[ratingType] || 0;
+                if (rB !== rA) return rB - rA;
+
+                const nameA = (a.name || '').toUpperCase();
+                const nameB = (b.name || '').toUpperCase();
+                if (nameA < nameB) return -1;
+                if (nameA > nameB) return 1;
+                return 0;
+            });
+
+            updateRatingHeader();
+            updateCountDisplay();
+            renderTable();
+        }
+
+        function updateRatingHeader() {
+            const ratingType = document.getElementById('ratingType').value;
+            const header = document.getElementById('ratingHeader');
+            if (!header) return;
+
+            if (ratingType === 'std') header.textContent = 'Standard';
+            else if (ratingType === 'rapid') header.textContent = 'Rapid';
+            else if (ratingType === 'blitz') header.textContent = 'Blitz';
+            else header.textContent = 'Rating';
+        }
+
+        function updateCountDisplay() {
+            const countDisplay = document.getElementById('countDisplay');
+            const ratingType = document.getElementById('ratingType').value;
+            const minElo = parseInt(document.getElementById('minElo').value || '0', 10) || 0;
+
+            if (!filteredPlayers.length) {
+                countDisplay.textContent = 'No players match the current filters.';
+                return;
+            }
+
+            const label = ratingType === 'std' ? 'Standard' :
+                          ratingType === 'rapid' ? 'Rapid' : 'Blitz';
+
+            countDisplay.textContent = `${filteredPlayers.length.toLocaleString()} players ( ${label} ≥ ${minElo} )`;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const ratingType = document.getElementById('ratingType').value;
+
+            const toShow = filteredPlayers.slice(0, displayLimit);
+
+            toShow.forEach(p => {
+                const tr = document.createElement('tr');
+
+                const displayTitlePieces = [];
+                if (p.title) displayTitlePieces.push(p.title);
+                if (p.w_title) displayTitlePieces.push(p.w_title);
+                const displayTitle = displayTitlePieces.join(' / ');
+
+                let titleClass = 'title-badge';
+                const primaryTitle = (p.title || p.w_title || '').toUpperCase();
+                if (primaryTitle.includes('GM')) titleClass += ' gm-title';
+                else if (primaryTitle.includes('IM')) titleClass += ' im-title';
+
+                const ratingValue = p[ratingType] || 0;
+                const ratingText = ratingValue > 0 ? ratingValue : '-';
+                const yearText = p.year || '';
+
+                const profileUrl = `https://ratings.fide.com/profile/${p.fideid}`;
+
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-weight:500;">${escapeHtml(p.name || '(No name)')}</div>
+                        <div class="hide-mobile" style="font-size:0.8rem; color:var(--text-secondary);">
+                            FIDE ID: ${escapeHtml(String(p.fideid || ''))}
+                        </div>
+                    </td>
+                    <td>
+                        ${displayTitle ? `<span class="${titleClass}">${escapeHtml(displayTitle)}</span>` : ''}
+                    </td>
+                    <td>${escapeHtml(p.country || '')}</td>
+                    <td class="rating-cell" style="color: var(--accent);">
+                        ${ratingText}
+                    </td>
+                    <td class="hide-mobile">${yearText ? escapeHtml(String(yearText)) : ''}</td>
+                    <td style="text-align: right;">
+                        <a href="${profileUrl}" target="_blank" rel="noopener" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.8rem;">
+                            View
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const loadMoreArea = document.getElementById('loadMoreArea');
+            if (filteredPlayers.length > displayLimit) {
+                loadMoreArea.style.display = 'block';
+            } else {
+                loadMoreArea.style.display = 'none';
+            }
+        }
+
+        function copyListToClipboard() {
+            if (!filteredPlayers.length) {
+                return;
+            }
+            const ratingType = document.getElementById('ratingType').value;
+            const ratingLabel = ratingType === 'std' ? 'Standard' :
+                                ratingType === 'rapid' ? 'Rapid' : 'Blitz';
+
+            const lines = [];
+            lines.push(['Name', 'Title(s)', 'Federation', ratingLabel, 'Year', 'FIDE ID'].join('\t'));
+
+            filteredPlayers.forEach(p => {
+                const titlePieces = [];
+                if (p.title) titlePieces.push(p.title);
+                if (p.w_title) titlePieces.push(p.w_title);
+                const titleStr = titlePieces.join(' / ');
+
+                const ratingValue = p[ratingType] || 0;
+                const ratingText = ratingValue > 0 ? ratingValue : '';
+
+                lines.push([
+                    p.name || '',
+                    titleStr,
+                    p.country || '',
+                    ratingText,
+                    p.year || '',
+                    p.fideid || ''
+                ].join('\t'));
+            });
+
+            const text = lines.join('\n');
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(showCopySuccess)
+                    .catch(err => console.error('Clipboard copy failed:', err));
+            } else {
+                // Fallback
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) { console.error(e); }
+                document.body.removeChild(ta);
+                showCopySuccess();
+            }
+        }
+
+        function showCopySuccess() {
+            const btn = document.getElementById('copyBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!`;
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+
+        // Utility: simple HTML escape
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Utility: Debounce to prevent lag while typing
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.checkbox-label input').forEach(cb => {
+            cb.addEventListener('change', () => applyFilters());
+        });
+        document.getElementById('ratingType').addEventListener('change', () => applyFilters());
+        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            displayLimit += BATCH_SIZE;
+            renderTable();
+        });
+        document.getElementById('copyBtn').addEventListener('click', () => copyListToClipboard());
+    </script>
+</body>
+</html>
