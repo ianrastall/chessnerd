@@ -143,6 +143,8 @@
     // --- Configuration ---
     const STORAGE_KEY = 'holiday_snow_enabled';
     const BTN_CLASS = 'btn btn-secondary';
+    const BTN_ID = 'snowToggle';
+    // Using innerHTML for the icons. You can adjust the text here.
     const BTN_TEXT_ON = '<span class="material-icons">ac_unit</span> Disable Snow';
     const BTN_TEXT_OFF = '<span class="material-icons">ac_unit</span> Enable Snow';
 
@@ -163,17 +165,20 @@
             // Find Thanksgiving (4th Thursday)
             const firstOfNov = new Date(now.getFullYear(), 10, 1);
             const dayOfWeek = firstOfNov.getDay(); // 0 (Sun) to 6 (Sat)
-            // Calculate days to first Thursday (4 is Thursday)
             let daysToFirstThurs = (4 - dayOfWeek + 7) % 7;
-            const thanksgivingDate = 1 + daysToFirstThurs + 21; // 1st Thurs + 3 weeks
+            const thanksgivingDate = 1 + daysToFirstThurs + 21; 
             
             return date >= thanksgivingDate;
         }
-        
         return false;
     }
 
-    if (!isHolidaySeason()) return;
+    // Stop execution if not holiday season
+    if (!isHolidaySeason()) {
+        // cleanup storage if date passed so it doesn't auto-start next year unexpectedly
+        localStorage.removeItem(STORAGE_KEY);
+        return; 
+    }
 
     // --- Snow Logic ---
     let canvas, ctx, w, h, particles = [], animationId;
@@ -184,7 +189,6 @@
     }
 
     function createSnow() {
-        // Create canvas if it doesn't exist
         if (!canvas) {
             canvas = document.createElement('canvas');
             canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
@@ -195,24 +199,27 @@
         }
         canvas.style.display = 'block';
         
-        // Initialize particles
+        // Initialize particles - "Light Snowfall" settings
         particles = [];
-        const particleCount = Math.min(window.innerWidth / 4, 150); // Limit count for performance
+        // Much lower density: Max 50 flakes, or fewer on mobile
+        const particleCount = Math.min(window.innerWidth / 10, 50); 
+        
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * w,
                 y: Math.random() * h,
-                r: Math.random() * 3 + 1, // radius
-                d: Math.random() * particleCount, // density
-                s: Math.random() * 1 + 0.5 // speed
+                r: Math.random() * 2 + 1, // Size: 1px to 3px
+                d: Math.random() * particleCount, // density factor
+                s: Math.random() * 0.5 + 0.2 // Speed: 0.2 to 0.7 (Very slow/gentle)
             });
         }
-        draw();
+        
+        if (!animationId) draw();
     }
 
     function draw() {
         ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // Slightly more transparent
         ctx.beginPath();
         for (let i = 0; i < particles.length; i++) {
             const p = particles[i];
@@ -228,10 +235,11 @@
         for (let i = 0; i < particles.length; i++) {
             const p = particles[i];
             p.y += p.s;
-            p.x += Math.sin(p.d) * 0.5; // Slight sway
+            p.x += Math.sin(p.d) * 0.5; // Gentle sway
             p.d += 0.01;
 
             if (p.y > h) {
+                // Reset to top when it hits bottom
                 particles[i] = { x: Math.random() * w, y: -10, r: p.r, d: p.d, s: p.s };
             }
         }
@@ -239,7 +247,10 @@
 
     function stopSnow() {
         if (canvas) canvas.style.display = 'none';
-        cancelAnimationFrame(animationId);
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
     }
 
     // --- UI Integration ---
@@ -247,17 +258,30 @@
         const controls = document.querySelector('.controls');
         if (!controls) return;
 
+        // Check if button already exists (prevents duplicate if script runs twice)
+        if (document.getElementById(BTN_ID)) return;
+
         const btn = document.createElement('button');
         btn.className = BTN_CLASS;
-        btn.id = 'snowToggle';
-        btn.innerHTML = BTN_TEXT_OFF;
-        btn.style.marginLeft = '0.5rem'; // Small gap
+        btn.id = BTN_ID;
+        btn.style.marginLeft = '0.5rem';
         
-        // State management
-        let isSnowing = false;
+        // check persistence
+        let isSnowing = localStorage.getItem(STORAGE_KEY) === 'true';
+
+        // Set initial state
+        if (isSnowing) {
+            btn.innerHTML = BTN_TEXT_ON;
+            createSnow();
+        } else {
+            btn.innerHTML = BTN_TEXT_OFF;
+        }
 
         btn.addEventListener('click', () => {
             isSnowing = !isSnowing;
+            // Save state to localStorage
+            localStorage.setItem(STORAGE_KEY, isSnowing);
+            
             if (isSnowing) {
                 btn.innerHTML = BTN_TEXT_ON;
                 createSnow();
