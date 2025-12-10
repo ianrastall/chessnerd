@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play vs Lozza - Chess Nerd</title>
+    <title>Engine Game - Chess Nerd</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -38,7 +38,7 @@
                 <div class="tool-header">
                     <div class="tool-title">
                         <span class="material-icons" id="toolIcon">smart_toy</span>
-                        <h2 id="toolName">Play vs Lozza</h2>
+                        <h2 id="toolName">Engine Game</h2>
                     </div>
                     <div class="tool-actions">
                         <button id="backButton" class="btn btn-secondary">
@@ -98,7 +98,15 @@
                                     </button>
                                 </div>
                             </div>
-                            <div id="chessBoard" class="chess-board" data-orientation="white"></div>
+                            <div class="board-shell">
+                                <div class="board-files" id="filesTop"></div>
+                                <div class="board-mid">
+                                    <div class="board-ranks" id="ranksLeft"></div>
+                                    <div id="chessBoard" class="chess-board" data-orientation="white"></div>
+                                    <div class="board-ranks" id="ranksRight"></div>
+                                </div>
+                                <div class="board-files" id="filesBottom"></div>
+                            </div>
                             <div class="board-footer">
                                 <div id="playerSide" class="color-pill">You: White</div>
                                 <div id="engineSideLabel" class="color-pill engine">Lozza: Black</div>

@@ -2,6 +2,10 @@
     'use strict';
 
     const boardEl = document.getElementById('chessBoard');
+    const filesTopEl = document.getElementById('filesTop');
+    const filesBottomEl = document.getElementById('filesBottom');
+    const ranksLeftEl = document.getElementById('ranksLeft');
+    const ranksRightEl = document.getElementById('ranksRight');
     const moveListEl = document.getElementById('moveList');
     const pgnTextEl = document.getElementById('pgnText');
     const moveStatsEl = document.getElementById('moveStats');
@@ -106,6 +110,13 @@
         toolStats.textContent = `Engine: ${engineReady ? 'ready' : 'loading'} • ${engineThinking ? 'thinking' : 'idle'}`;
     }
 
+    function renderCoords(files, ranks) {
+        if (filesTopEl) filesTopEl.innerHTML = files.map((f) => `<span>${f}</span>`).join('');
+        if (filesBottomEl) filesBottomEl.innerHTML = files.map((f) => `<span>${f}</span>`).join('');
+        if (ranksLeftEl) ranksLeftEl.innerHTML = ranks.map((r) => `<span>${r}</span>`).join('');
+        if (ranksRightEl) ranksRightEl.innerHTML = ranks.map((r) => `<span>${r}</span>`).join('');
+    }
+
     function renderBoard() {
         boardEl.innerHTML = '';
         boardEl.dataset.orientation = orientation;
@@ -147,6 +158,8 @@
                 boardEl.appendChild(squareEl);
             });
         });
+
+        renderCoords(files, ranks);
     }
 
     function renderMoveList() {

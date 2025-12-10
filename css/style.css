@@ -244,6 +244,10 @@ header {
     .io-container {
         grid-template-columns: 1fr;
     }
+
+    .board-shell {
+        width: 100%;
+    }
 }
 
 .io-panel {
@@ -397,7 +401,7 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 .engine-grid {
-    grid-template-columns: minmax(320px, 520px) 1fr;
+    grid-template-columns: minmax(440px, 1.3fr) minmax(260px, 0.9fr);
     align-items: start;
 }
 
@@ -454,6 +458,7 @@ input[type="checkbox"], input[type="radio"] {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     aspect-ratio: 1 / 1;
+    width: 100%;
     border: 1px solid var(--border-color);
     border-radius: 6px;
     overflow: hidden;
@@ -479,17 +484,6 @@ input[type="checkbox"], input[type="radio"] {
 
 .dark-square {
     background: var(--board-dark);
-}
-
-.square::after {
-    content: attr(data-coord);
-    position: absolute;
-    bottom: 4px;
-    right: 6px;
-    font-size: 0.65rem;
-    color: var(--text-secondary);
-    opacity: 0.6;
-    pointer-events: none;
 }
 
 .piece {
@@ -613,6 +607,42 @@ input[type="checkbox"], input[type="radio"] {
 .piece[data-piece="bR"] { background-image: url('../img/merida/bR.svg'); }
 .piece[data-piece="bQ"] { background-image: url('../img/merida/bQ.svg'); }
 .piece[data-piece="bK"] { background-image: url('../img/merida/bK.svg'); }
+
+.board-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    width: min(100%, 640px);
+    margin: 0 auto;
+}
+
+.board-mid {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.board-files {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    width: 100%;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.board-ranks {
+    display: grid;
+    grid-template-rows: repeat(8, 1fr);
+    gap: 2px;
+    width: 26px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
 
 .hidden {
     display: none !important;
