@@ -1030,7 +1030,7 @@
 			}
 
 			const centuriesSet = new Set();
-			const decadesSet = new Set();
+			const decadesByCentury = {};  // { centuryString: Set(decades) }
 
 			// ---------------------------------------------------------
 			// 1) Compute category + derive year/century/decade per row
@@ -1064,12 +1064,19 @@
 						const century = Math.floor((year - 1) / 100) + 1; // 19 => 1801-1900, etc.
 						const decade = Math.floor(year / 10) * 10;        // 1880, 1890, ...
 
+						const centuryKey = String(century);
+						const decadeVal = decade;
+
 						row.dataset.year = String(year);
-						row.dataset.century = String(century);
-						row.dataset.decade = String(decade);
+						row.dataset.century = centuryKey;
+						row.dataset.decade = String(decadeVal);
 
 						centuriesSet.add(century);
-						decadesSet.add(decade);
+
+						if (!decadesByCentury[centuryKey]) {
+							decadesByCentury[centuryKey] = new Set();
+						}
+						decadesByCentury[centuryKey].add(decadeVal);
 					}
 				}
 			});
@@ -1107,21 +1114,52 @@
 				});
 			}
 
-			// Populate decade select from data
-			if (decadeSelect) {
-				const decades = Array.from(decadesSet).sort((a, b) => a - b);
-				decades.forEach(d => {
+			// Helper: (re)populate decade select based on selected century
+			function populateDecadesForCentury(centuryVal) {
+				if (!decadeSelect) return;
+
+				// Clear existing options
+				decadeSelect.innerHTML = "";
+
+				const optAll = document.createElement('option');
+				optAll.value = "all";
+				optAll.textContent = "All decades";
+				decadeSelect.appendChild(optAll);
+
+				// If "All centuries" or no per-century data, disable decade filter
+				if (centuryVal === "all" || !decadesByCentury[centuryVal]) {
+					decadeSelect.disabled = true;
+					decadeSelect.value = "all";
+					return;
+				}
+
+				const decSet = decadesByCentury[centuryVal];
+				const decs = Array.from(decSet).sort((a, b) => a - b);
+				decs.forEach(d => {
 					const opt = document.createElement('option');
 					opt.value = String(d);
 					opt.textContent = `${d}s`;
 					decadeSelect.appendChild(opt);
 				});
+
+				decadeSelect.disabled = false;
+				decadeSelect.value = "all";
+			}
+
+			// Initially, no specific century selected -> decade dropdown disabled
+			if (decadeSelect) {
+				decadeSelect.disabled = true;
 			}
 
 			function applyFilters() {
 				const query      = searchInput ? searchInput.value.trim().toLowerCase() : "";
 				const centuryVal = centurySelect ? centurySelect.value : "all";
 				const decadeVal  = decadeSelect  ? decadeSelect.value  : "all";
+
+				const useDecadeFilter =
+					decadeSelect &&
+					!decadeSelect.disabled &&
+					decadeVal !== "all";
 
 				filteredRows = rows.filter(row => {
 					// Name filter (substring anywhere in tournament name)
@@ -1140,8 +1178,8 @@
 						}
 					}
 
-					// Decade filter
-					if (decadeVal !== "all") {
+					// Decade filter (only if enabled and a concrete decade selected)
+					if (useDecadeFilter) {
 						if (row.dataset.decade !== decadeVal) {
 							return false;
 						}
@@ -1200,7 +1238,11 @@
 				searchInput.addEventListener('input', applyFilters);
 			}
 			if (centurySelect) {
-				centurySelect.addEventListener('change', applyFilters);
+				centurySelect.addEventListener('change', () => {
+					const selectedCentury = centurySelect.value;
+					populateDecadesForCentury(selectedCentury);
+					applyFilters();
+				});
 			}
 			if (decadeSelect) {
 				decadeSelect.addEventListener('change', applyFilters);
@@ -1225,7 +1267,7 @@
 				});
 			}
 
-			// Initial filter+render (page 1, no filters)
+			// Initial render (no filters, page 1)
 			applyFilters();
 		});
 	</script>
