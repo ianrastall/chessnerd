@@ -51,6 +51,86 @@
             border: 1px solid var(--warning);
             background: rgba(217, 119, 6, 0.1);
         }
+        .tour-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .tour-filters-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1 1 200px;
+            min-width: 0;
+        }
+
+        .tour-search-icon {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .tour-search-input {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .tour-search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .tour-filters-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .tour-filter-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .tour-filter-select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .tour-pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .tour-page-info {
+            white-space: nowrap;
+        }
+
+        .tour-pagination .btn {
+            padding-inline: 0.6rem;
+            font-size: 0.8rem;
+        }
+
     </style>
 </head>
 <body>
@@ -96,12 +176,42 @@
                 
                 <div class="io-container" style="display: block;">
                     <div class="io-panel" style="width: 100%"> 
-                        <div class="io-label">
-                            <span>Available Archives</span>
-                            <span class="stats" id="tourCount">54 tournaments</span>
-                        </div>
-                        
-                        <div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+					<div class="io-label">
+						<span>Available Archives</span>
+						<span class="stats" id="tourCount">54 tournaments</span>
+					</div>
+
+					<div class="tour-controls">
+						<div class="tour-filters-left">
+							<span class="material-icons tour-search-icon">search</span>
+							<input
+								type="text"
+								id="tourSearch"
+								class="tour-search-input"
+								placeholder="Filter by tournament name..."
+								autocomplete="off"
+							>
+						</div>
+						<div class="tour-filters-right">
+							<label class="tour-filter-label">
+								Century
+								<select id="centuryFilter" class="tour-filter-select">
+									<option value="all">All centuries</option>
+									<!-- JS will populate actual centuries -->
+								</select>
+							</label>
+							<label class="tour-filter-label">
+								Decade
+								<select id="decadeFilter" class="tour-filter-select">
+									<option value="all">All decades</option>
+									<!-- JS will populate actual decades -->
+								</select>
+							</label>
+						</div>
+					</div>
+
+					<div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+
                             <div style="overflow-x: auto;">
                                 <table class="tour-table">
                                     <thead>
@@ -846,7 +956,7 @@
         </td>
     </tr>
     <tr data-elo="2696">
-        <td style="font-weight: 500;">Clash Of Generations Ii</td>
+        <td style="font-weight: 500;">Clash Of Generations II</td>
         <td style="white-space: nowrap;">2025-12-03</td>
         <td style="white-space: nowrap;">2025-12-08</td>
         <td style="text-align: center;">2</td>
@@ -877,6 +987,17 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="tour-pagination">
+                            <button id="prevPage" type="button" class="btn btn-secondary">
+                                <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-right: 2px;">chevron_left</span>
+                                Previous
+                            </button>
+                            <span id="pageInfo" class="tour-page-info">Page 1 of 1</span>
+                            <button id="nextPage" type="button" class="btn btn-secondary">
+                                Next
+                                <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-left: 2px;">chevron_right</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
@@ -892,42 +1013,221 @@
     </div>
 
     <script src="js/theme.js"></script>
-    <script>
-        // Navigation
-        document.getElementById('backButton').addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
+	<script>
+		// Back navigation
+		const backBtn = document.getElementById('backButton');
+		if (backBtn) {
+			backBtn.addEventListener('click', () => {
+				window.location.href = 'index.html';
+			});
+		}
 
-        // ---------------------------------------------------------
-        // SCRIPT: Auto-Calculate Tournament Category
-        // ---------------------------------------------------------
-        document.addEventListener("DOMContentLoaded", function() {
-            const rows = document.querySelectorAll("tr[data-elo]");
-            document.getElementById('tourCount').innerText = `${rows.length} tournaments`;
+		document.addEventListener("DOMContentLoaded", function() {
+			const rows = Array.from(document.querySelectorAll("tbody tr[data-elo]"));
+			const tourCountEl = document.getElementById('tourCount');
+			if (tourCountEl) {
+				tourCountEl.innerText = `${rows.length} tournaments`;
+			}
 
-            rows.forEach(row => {
-                const eloAttr = row.getAttribute("data-elo");
-                const catCell = row.querySelector(".cat-cell");
+			const centuriesSet = new Set();
+			const decadesSet = new Set();
 
-                if (eloAttr && catCell) {
-                    const elo = parseInt(eloAttr);
-                    
-                    // FIDE Category Formula:
-                    // Category 1 is 2251-2275.
-                    // Calculation: Floor((Elo - 2251) / 25) + 1
-                    
-                    if (elo < 2251) {
-                        catCell.innerHTML = '<span class="cat-badge">-</span>';
-                    } else {
-                        const category = Math.floor((elo - 2251) / 25) + 1;
-                        
-                        // Highlight high categories (15+)
-                        const styleClass = category >= 15 ? "cat-elite" : "";
-                        catCell.innerHTML = `<span class="cat-badge ${styleClass}">${category}</span>`;
-                    }
-                }
-            });
-        });
-    </script>
+			// ---------------------------------------------------------
+			// 1) Compute category + derive year/century/decade per row
+			// ---------------------------------------------------------
+			rows.forEach(row => {
+				const eloAttr = row.getAttribute("data-elo");
+				const catCell = row.querySelector(".cat-cell");
+
+				// Category badge
+				if (eloAttr && catCell) {
+					const elo = parseInt(eloAttr, 10);
+
+					// FIDE Category Formula:
+					// Category 1 is 2251-2275.
+					// Floor((Elo - 2251) / 25) + 1
+					if (Number.isNaN(elo) || elo < 2251) {
+						catCell.innerHTML = '<span class="cat-badge">-</span>';
+					} else {
+						const category = Math.floor((elo - 2251) / 25) + 1;
+						const styleClass = category >= 15 ? "cat-elite" : "";
+						catCell.innerHTML = `<span class="cat-badge ${styleClass}">${category}</span>`;
+					}
+				}
+
+				// Year / century / decade from start date (2nd column)
+				const startCell = row.cells[1];
+				if (startCell) {
+					const dateText = startCell.textContent.trim();
+					const year = parseInt(dateText.slice(0, 4), 10);
+					if (!Number.isNaN(year)) {
+						const century = Math.floor((year - 1) / 100) + 1; // 19 => 1801-1900, etc.
+						const decade = Math.floor(year / 10) * 10;        // 1880, 1890, ...
+
+						row.dataset.year = String(year);
+						row.dataset.century = String(century);
+						row.dataset.decade = String(decade);
+
+						centuriesSet.add(century);
+						decadesSet.add(decade);
+					}
+				}
+			});
+
+			// ---------------------------------------------------------
+			// 2) Wire up search, century/decade filters, pagination
+			// ---------------------------------------------------------
+			const searchInput   = document.getElementById('tourSearch');
+			const centurySelect = document.getElementById('centuryFilter');
+			const decadeSelect  = document.getElementById('decadeFilter');
+			const prevBtnPage   = document.getElementById('prevPage');
+			const nextBtnPage   = document.getElementById('nextPage');
+			const pageInfoEl    = document.getElementById('pageInfo');
+
+			const rowsPerPage = 100;
+			let filteredRows = rows.slice();
+			let currentPage = 1;
+
+			function ordinal(n) {
+				const s = ["th","st","nd","rd"];
+				const v = n % 100;
+				return n + (s[(v - 20) % 10] || s[v] || s[0]);
+			}
+
+			// Populate century select from data
+			if (centurySelect) {
+				const centuries = Array.from(centuriesSet).sort((a, b) => a - b);
+				centuries.forEach(c => {
+					const opt = document.createElement('option');
+					opt.value = String(c);
+					const startYear = (c - 1) * 100 + 1;
+					const endYear   = c * 100;
+					opt.textContent = `${ordinal(c)} century (${startYear}-${endYear})`;
+					centurySelect.appendChild(opt);
+				});
+			}
+
+			// Populate decade select from data
+			if (decadeSelect) {
+				const decades = Array.from(decadesSet).sort((a, b) => a - b);
+				decades.forEach(d => {
+					const opt = document.createElement('option');
+					opt.value = String(d);
+					opt.textContent = `${d}s`;
+					decadeSelect.appendChild(opt);
+				});
+			}
+
+			function applyFilters() {
+				const query      = searchInput ? searchInput.value.trim().toLowerCase() : "";
+				const centuryVal = centurySelect ? centurySelect.value : "all";
+				const decadeVal  = decadeSelect  ? decadeSelect.value  : "all";
+
+				filteredRows = rows.filter(row => {
+					// Name filter (substring anywhere in tournament name)
+					if (query) {
+						const nameCell = row.cells[0];
+						const nameText = nameCell ? nameCell.textContent.toLowerCase() : "";
+						if (!nameText.includes(query)) {
+							return false;
+						}
+					}
+
+					// Century filter
+					if (centuryVal !== "all") {
+						if (row.dataset.century !== centuryVal) {
+							return false;
+						}
+					}
+
+					// Decade filter
+					if (decadeVal !== "all") {
+						if (row.dataset.decade !== decadeVal) {
+							return false;
+						}
+					}
+
+					return true;
+				});
+
+				currentPage = 1;
+				renderPage();
+			}
+
+			function renderPage() {
+				const total = filteredRows.length;
+				const totalPages = total === 0 ? 1 : Math.ceil(total / rowsPerPage);
+
+				if (currentPage > totalPages) {
+					currentPage = totalPages;
+				}
+
+				// Hide all, then show only current page rows
+				rows.forEach(row => {
+					row.style.display = "none";
+				});
+
+				if (total > 0) {
+					const startIndex = (currentPage - 1) * rowsPerPage;
+					const endIndex   = startIndex + rowsPerPage;
+					filteredRows.slice(startIndex, endIndex).forEach(row => {
+						row.style.display = "";
+					});
+				}
+
+				// Page info
+				if (pageInfoEl) {
+					if (total === 0) {
+						pageInfoEl.textContent = "No tournaments found";
+					} else {
+						const pages = Math.ceil(total / rowsPerPage);
+						pageInfoEl.textContent = `Page ${currentPage} of ${pages} (${total} shown)`;
+					}
+				}
+
+				// Button enable/disable
+				const pages = total === 0 ? 1 : Math.ceil(total / rowsPerPage);
+				if (prevBtnPage) {
+					prevBtnPage.disabled = currentPage <= 1;
+				}
+				if (nextBtnPage) {
+					nextBtnPage.disabled = currentPage >= pages;
+				}
+			}
+
+			// Event wiring
+			if (searchInput) {
+				searchInput.addEventListener('input', applyFilters);
+			}
+			if (centurySelect) {
+				centurySelect.addEventListener('change', applyFilters);
+			}
+			if (decadeSelect) {
+				decadeSelect.addEventListener('change', applyFilters);
+			}
+
+			if (prevBtnPage) {
+				prevBtnPage.addEventListener('click', () => {
+					if (currentPage > 1) {
+						currentPage -= 1;
+						renderPage();
+					}
+				});
+			}
+			if (nextBtnPage) {
+				nextBtnPage.addEventListener('click', () => {
+					const total = filteredRows.length;
+					const pages = total === 0 ? 1 : Math.ceil(total / rowsPerPage);
+					if (currentPage < pages) {
+						currentPage += 1;
+						renderPage();
+					}
+				});
+			}
+
+			// Initial filter+render (page 1, no filters)
+			applyFilters();
+		});
+	</script>
 </body>
 </html>
