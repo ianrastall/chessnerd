@@ -19,6 +19,7 @@
     let activeGuide = null;
     let activeChapterId = null;
     let currentFilePath = '';
+    let chaptersData = [];
 
     document.getElementById('backButton')?.addEventListener('click', () => {
         window.location.href = 'index.html';
@@ -88,48 +89,42 @@
     }
 
     function buildChapterDropdown() {
-        const headings = Array.from(guideContent.querySelectorAll('h1'));
         chapterSelect.innerHTML = '';
 
-        if (!headings.length) {
+        if (!chaptersData.length) {
             chapterSelect.disabled = true;
             return;
         }
 
-        const getHeadingText = (heading) => {
-            const clone = heading.cloneNode(true);
-            const anchor = clone.querySelector('.heading-anchor');
-            if (anchor) anchor.remove();
-            return (clone.textContent || '').trim();
-        };
-
-        headings.forEach((h, idx) => {
-            const label = getHeadingText(h) || `Chapter ${idx + 1}`;
-            if (!h.id) h.id = slugify(label || `chapter-${idx + 1}`);
+        chaptersData.forEach((chapter, idx) => {
             const opt = document.createElement('option');
-            opt.value = h.id;
-            opt.textContent = label;
+            opt.value = chapter.id;
+            opt.textContent = chapter.label || `Chapter ${idx + 1}`;
             chapterSelect.appendChild(opt);
         });
 
         chapterSelect.disabled = false;
     }
 
-    function scrollToChapter(chapterId, smooth = true) {
-        if (!chapterId) return;
-        const target = guideContent.querySelector(`#${CSS.escape(chapterId)}`);
-        if (!target) return;
-        activeChapterId = chapterId;
-        chapterSelect.value = chapterId;
-        const behavior = smooth ? 'smooth' : 'auto';
-        target.scrollIntoView({ behavior, block: 'start' });
+    function renderChapter(chapterId) {
+        if (!chaptersData.length) return;
+        const fallback = chaptersData[0];
+        const chapter = chaptersData.find((c) => c.id === chapterId) || fallback;
+        if (!chapter) return;
+
+        activeChapterId = chapter.id;
+        guideContent.innerHTML = chapter.html;
+        decorateHeadings();
+        chapterSelect.value = chapter.id;
         updateUrl();
+        setStatus('Loaded', 'success');
     }
 
     async function loadChapter(chapter) {
         if (!chapter || !chapter.file) return;
         setStatus('Loading chapter...', 'warning');
         guideContent.innerHTML = '<p class="placeholder">Loading...</p>';
+        chaptersData = [];
 
         try {
             const response = await fetch(chapter.file);
@@ -139,18 +134,63 @@
             const markdown = await response.text();
             if (!window.marked) throw new Error('Markdown renderer failed to load.');
             const html = window.marked.parse(markdown, { mangle: false, headerIds: true });
-            guideContent.innerHTML = html;
-            decorateHeadings();
-            buildChapterDropdown();
 
-            const params = new URLSearchParams(window.location.search);
-            const initialChapterId = params.get('chapter') || chapterSelect.options[0]?.value;
-            if (initialChapterId) {
-                scrollToChapter(initialChapterId, false);
+            // Build per-chapter slices (by H1) so only one shows at a time.
+            const container = document.createElement('div');
+            container.innerHTML = html;
+            const headings = Array.from(container.querySelectorAll('h1'));
+
+            if (!headings.length) {
+                guideContent.innerHTML = html;
+                decorateHeadings();
+                updateActions(chapter.file);
+                buildChapterDropdown();
+                setStatus('Loaded', 'success');
+                return;
             }
 
+            const extractHeadingText = (heading) => {
+                const clone = heading.cloneNode(true);
+                clone.querySelectorAll('.heading-anchor').forEach((n) => n.remove());
+                return (clone.textContent || '').trim();
+            };
+
+            const addAnchorToHeading = (heading) => {
+                if (heading.querySelector('.heading-anchor')) return;
+                const anchor = document.createElement('a');
+                anchor.href = `#${heading.id}`;
+                anchor.className = 'heading-anchor';
+                anchor.innerHTML = '<span class="material-icons">link</span>';
+                heading.appendChild(anchor);
+            };
+
+            chaptersData = headings.map((h, idx) => {
+                const next = headings[idx + 1];
+                const label = extractHeadingText(h) || `Chapter ${idx + 1}`;
+                if (!h.id) h.id = slugify(label || `chapter-${idx + 1}`);
+                addAnchorToHeading(h);
+
+                const wrapper = document.createElement('div');
+                wrapper.appendChild(h.cloneNode(true));
+
+                let cursor = h.nextSibling;
+                while (cursor && cursor !== next) {
+                    wrapper.appendChild(cursor.cloneNode(true));
+                    cursor = cursor.nextSibling;
+                }
+
+                return {
+                    id: h.id,
+                    label,
+                    html: wrapper.innerHTML
+                };
+            });
+
+            buildChapterDropdown();
+            const params = new URLSearchParams(window.location.search);
+            const initialChapterId = params.get('chapter') || chaptersData[0]?.id;
+            renderChapter(initialChapterId);
             updateActions(chapter.file);
-            setStatus('Loaded', 'success');
         } catch (error) {
             guideContent.innerHTML = `<p class="error-text">${error.message}</p>`;
             setStatus(error.message, 'error');
@@ -244,7 +284,7 @@
         });
 
         chapterSelect.addEventListener('change', (e) => {
-            scrollToChapter(e.target.value);
+            renderChapter(e.target.value);
         });
     }
 

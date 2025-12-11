@@ -2,28 +2,104 @@
 
 ## 1.1. Scope and Audience
 
-This guide describes a structured workflow for analysing chess games using a graphical user interface (GUI) such as ChessBase or Hiarcs in conjunction with modern engines such as Stockfish or Dragon. It assumes that the reader is comfortable with algebraic notation and has experience playing tournament or online chess, but it does not assume professional-level expertise.
+### 1.1.1 Who this guide is for
 
-The emphasis throughout is on producing annotated portable game notation (PGN) files that are useful for long-term study, publication, and instruction. The guide is tool-agnostic: concrete examples may reference particular GUIs, but the procedures and principles are intended to transfer across platforms. You should feel confident that the habits you build here will work whether you use a commercial database, a lightweight UCI front end, or a cloud analysis board.
+- Club and tournament players (OTB or online) who already record games in algebraic notation and want to level up their review process.
+- Coaches, streamers, or writers who need repeatable, portable annotations that travel well between GUIs and publishing tools.
+- Advanced beginners who know the rules, common notation, and basic tactics, and who want a structured on-ramp to engines without losing their own voice.
+
+### 1.1.2 What this guide is not
+
+- Not a primer on chess rules, piece movement, or basic tactics.
+- Not a deep dive into one specific GUI or one specific engine option set.
+- Not a theoretical opening repertoire; instead it teaches *how to analyse* whatever games or lines you care about.
+
+### 1.1.3 Assumed baseline skills
+
+- Comfort with algebraic notation and understanding of move numbers.
+- Ability to replay a game in a GUI, add or remove variations, and save a PGN.
+- Awareness of typical chess vocabulary: initiative, tempo, pawn structure, king safety, outpost, open file, and similar.
+
+### 1.1.4 Deliverable mindset
+
+The intended output of your work is a high-quality annotated PGN that:
+
+- Reads cleanly in any standard GUI.
+- Encodes judgments consistently via NAGs.
+- Explains ideas in plain language without drowning in engine lines.
+- Remains useful months later when you revisit the game or share it with a student or teammate.
 
 ## 1.2. Key Concepts
 
-This guide uses three interlocking concepts:
+### 1.2.1 Analysis
 
-- **Analysis**: The systematic examination of a game or position to identify better moves, plans, and critical moments. A good analyst alternates between calculation and evaluation, pausing to mark critical junctions.
-- **Annotation**: The process of embedding information in a PGN file, including text comments, Numeric Annotation Glyphs (NAGs), and variations. Annotation forces clarity: every note should either explain *why* or provide a *reference* line.
-- **Evaluation**: The assignment of a numerical or verbal judgment to a position, informed by both human reasoning and engine output. A solid evaluation framework prevents you from chasing ghosts or over-valuing one-off tactics.
+Analysis is the systematic examination of a game or position to identify better moves, plans, and critical moments. Strong analysis combines:
 
-These concepts are interdependent. Evaluation informs annotation, and annotation captures analysis in a durable and reusable form. By looping through these phases deliberately, you create a repeatable workflow that resists bias and maintains clarity.
+- **Calculation**: concrete sequences, forcing lines, and tactical shots.
+- **Evaluation**: assessment of resulting positions (material, activity, king safety, pawn structure, initiative).
+- **Criticality sensing**: recognizing where a decision meaningfully changes the character of the game.
+
+### 1.2.2 Annotation
+
+Annotation captures and communicates what you learned. Good annotation:
+
+- States ideas, not just moves. ("...f5 seizes space and fights for e4, but weakens e6.")
+- Uses NAGs sparingly and consistently.
+- Prunes variations so only instructive branches remain.
+- Distinguishes human insight from engine verdicts (for example, "Practical try" vs. "Engine line").
+
+### 1.2.3 Evaluation
+
+Evaluation assigns a numerical or verbal judgment. A practical scale:
+
+- **Decisive**: winning or lost with best play.
+- **Clear**: stable, sizeable advantage.
+- **Slight**: small, manageable edge.
+- **Dynamic/unclear**: evaluation hinges on concrete play.
+- **Equal**: neither side can press without risk.
+
+Numeric engine scores are aids, not the final product. Translate them into verbal summaries that convey difficulty and plan ideas.
+
+### 1.2.4 How the concepts interlock
+
+- Evaluation guides what to annotate ("this is where the game flipped").
+- Annotation records the insights discovered during analysis.
+- Analysis iterates: new evaluations refine annotations; annotations surface gaps in analysis.
 
 ## 1.3. Human and Engine Roles
 
-Engines excel at calculating tactical sequences and providing accurate numerical evaluations. Humans excel at identifying practical difficulties, explaining plans, and conveying ideas in a way that is meaningful to other players. The best annotated games show both voices: the engine ensures correctness; the human gives context, story, and pedagogy.
+### 1.3.1 Human strengths
 
-A well-designed workflow alternates between:
+- Identifying practical difficulty: which lines are easy to play over the board.
+- Explaining plans in natural language and highlighting themes.
+- Detecting psychological factors (time trouble, nerves, preparation surprises).
+- Choosing how much to show a student or reader without overload.
 
-- **Human-led phases**: Identifying critical moments, proposing candidate moves, and articulating plans in natural language.
-- **Engine-led phases**: Verifying or correcting human impressions, refining candidate moves, and detecting tactical oversights.
+### 1.3.2 Engine strengths
+
+- Spotting tactics and refutations quickly and reliably.
+- Providing concrete principal variations and centipawn/mate scores.
+- Exhausting complicated endgame resources (with or without tablebases).
+- Debunking human biases and over-optimistic plans.
+
+### 1.3.3 The alternating workflow
+
+- **Human-first pass**: mark critical positions, propose candidates, describe plans.
+- **Engine verification**: test candidates, find refutations, refine evaluations.
+- **Human synthesis**: choose which lines to keep, phrase explanations, assign NAGs.
+- **Engine spot-check**: confirm key lines after pruning.
+
+### 1.3.4 Common failure modes
+
+- Blind transcription of engine PVs without commentary.
+- Overuse of extreme NAGs (`!!`, `??`) that dilutes meaning.
+- Ignoring practical difficulty: "0.00" does not equal "easy draw."
+- Letting engine depth creep stall the session; spending 10 minutes per move on routine positions.
+
+### 1.3.5 Division of labor guideline
+
+- Use the engine for *verification and refutation*.
+- Use yourself for *storytelling, pedagogy, and prioritization*.
 
 ## 1.4. Target Outcomes
 
@@ -35,6 +111,225 @@ By the end of the guide, you should be able to:
 - Incorporate engine analysis in a disciplined manner that avoids over-reliance.
 - Produce clear, readable annotated games with consistent symbols and evaluations.
 - Export, store, and catalogue annotated games for later use.
+
+### 1.4.1 Deliverables you can produce
+
+- A single annotated PGN with:
+  - Main line plus a small set of principal variations.
+  - Consistent NAGs for move quality and positional notes.
+  - Text comments that explain *why*, not just *what*.
+  - Engine lines only where they clarify a point.
+- A personal checklist for future analysis sessions (import, manual passes, engine passes, pruning, export).
+- A short reference sheet of your preferred NAG set.
+
+### 1.4.2 Success criteria for an annotated game
+
+- A reader can follow the narrative without replaying every move.
+- Critical turning points are clearly marked and justified.
+- Variations are pruned to what is instructive; noise is removed.
+- Engine numbers are present only when they add value.
+- Comments distinguish between human observation and engine verdict.
+
+## 1.5. Methodological Overview
+
+### 1.5.1 The four-pass method
+
+1) **Ingest**: import PGN, verify tags, clean obvious artifacts (duplicate result tags, malformed comments).  
+2) **Manual passes**: quick narrative pass, then a candidate-move pass with human evaluations.  
+3) **Engine passes**: targeted engine checks on marked positions; refine evaluations and lines.  
+4) **Publish**: prune, label, and export a clean PGN; document engine settings for reproducibility.
+
+### 1.5.2 Time budgeting
+
+- Full-game review target: 20–40 minutes for club games; 60–90 minutes for important tournament games.
+- Manual passes: ~30–50% of the time.
+- Engine passes: ~30–50% of the time, focused on marked spots.
+- Pruning and polishing: ~20% of the time.
+
+### 1.5.3 Minimal viable workflow
+
+- One manual pass to mark critical points.
+- One engine pass to verify only those points.
+- One pruning pass to keep the file readable.
+- Result: a serviceable annotated PGN in under an hour.
+
+### 1.5.4 Deep-dive workflow
+
+- Two manual passes (narrative + candidate moves).
+- Two engine passes (breadth with MultiPV, then depth on chosen lines).
+- Supplemental sources (reference database for theory checks, tablebases for endings).
+- Result: a publication-grade PGN with disciplined branching and polished text.
+
+## 1.6. Evaluation Vocabulary and Scales
+
+### 1.6.1 Verbal scale (suggested)
+
+- **Winning / Lost**: decisive with best play.
+- **Clear advantage**: large, stable plus (or minus) with multiple ways to improve.
+- **Slight advantage**: small, maintainable edge; still play required.
+- **Dynamic/unclear**: depends on concrete play; evaluation may swing.
+- **Equal**: neither side can press without risk.
+
+### 1.6.2 Numeric to verbal mapping (rough)
+
+- +2.0 or higher: winning edge barring blunders.
+- +1.0 to +1.9: clear advantage.
+- +0.40 to +0.9: slight advantage.
+- -0.40 to +0.40: roughly equal or unclear.
+- -1.0 to -0.41: slight advantage for the opponent.
+- -2.0 or lower: losing.
+
+Numbers are context-sensitive. A +0.70 rook endgame may be trivial; a +0.70 sharp middlegame may be nearly impossible to convert.
+
+### 1.6.3 Practicality tags you can reuse in comments
+
+- **Practical**: easier to play over the board than engine's top line.
+- **Technical**: requires accuracy but low risk if you know the plan.
+- **Resource**: defensive drawing idea or perpetual check.
+- **Trap-aware**: warns of a common blunder or motif.
+
+## 1.7. Notation and Formatting Conventions
+
+### 1.7.1 Move text
+
+- Use SAN in PGN; avoid mixing long algebraic unless demonstrating clarity in prose.
+- Keep move numbers aligned with the main line; side lines start with `(` and close cleanly.
+
+### 1.7.2 Comments
+
+- Surround with `{}` and keep concise.
+- Lead with idea/plan, then a short justification.
+- Add engine score only when it clarifies difficulty: `{Better is 18...c5 (≈0.00); text move drifts.}`
+
+### 1.7.3 NAG usage
+
+- Use move-quality NAGs sparingly (`!`, `?`, `!?`, `?!`, `!!`, `??`).
+- Use positional/evaluative NAGs when they replace long prose (initiative, attack, compensation).
+- Document your subset in Chapter 10 and stick to it.
+
+### 1.7.4 Variation hygiene
+
+- Keep principal variations short and purposeful.
+- Avoid nesting more than two levels unless absolutely necessary.
+- End long forced lines with a verbal conclusion instead of more moves.
+
+## 1.8. Example Analysis Session (Narrative)
+
+### 1.8.1 Setup
+
+- Import last night's rapid game.
+- Apply "Standard post-game" engine profile (moderate hash, MultiPV=2).
+- Confirm tags: Event, Site, Date, White, Black, Result.
+
+### 1.8.2 Manual pass (10–15 minutes)
+
+- Replay quickly; mark three critical points (opening novelty, missed tactic, endgame transition).
+- Add brief comments at each marker to capture first impressions.
+
+### 1.8.3 Candidate pass (10–20 minutes)
+
+- At each marker, list 2–3 candidates and a human evaluation (slight/clear, for whom).
+- Note plans ("play ...c5 to challenge center," "double on the d-file").
+
+### 1.8.4 Engine pass (10–20 minutes)
+
+- Turn on engine only at marked moves.
+- Compare top 2 lines, note eval deltas and tactical points.
+- Promote the best improvement as a side line; prune others.
+
+### 1.8.5 Polish (5–10 minutes)
+
+- Convert notes to clean comments.
+- Assign NAGs; remove redundant branches.
+- Export PGN; copy engine settings into a text footer or personal log.
+
+## 1.9. Common Pitfalls and How to Avoid Them
+
+### 1.9.1 Pitfall: Overlong engine dumps
+
+- **Symptom**: MultiPV=10 lines pasted verbatim; unreadable PGN.
+- **Fix**: Limit to 1–2 illustrative alternatives; replace the rest with a verbal summary.
+
+### 1.9.2 Pitfall: Inflated punctuation
+
+- **Symptom**: Half the moves get `!!` or `??`.
+- **Fix**: Reserve extreme NAGs for objective, high-impact moments; prefer `?!`/`!?` for speculative tries.
+
+### 1.9.3 Pitfall: Ignoring practical difficulty
+
+- **Symptom**: Calling a line "equal" when one side has only engine-perfect moves.
+- **Fix**: Add practicality tags ("hard to hold OTB") and brief explanations of the required resources.
+
+### 1.9.4 Pitfall: Losing the story
+
+- **Symptom**: Reader cannot tell where the game turned or why.
+- **Fix**: Mark turning points explicitly; open comments with the narrative ("This is where Black seizes the initiative").
+
+### 1.9.5 Pitfall: Uncontrolled branching
+
+- **Symptom**: Nested variations four levels deep for a side note.
+- **Fix**: Collapse deep side lines into a concise summary after the key point.
+
+## 1.10. Exercises (Self-Check)
+
+1) Take a recent blitz game. Do a manual pass only. Write down three critical decisions and your evaluations. No engine.  
+2) Run a targeted engine check on those three moves. Compare: where were you off, and why?  
+3) Annotate the game with one principal variation per critical move and a short verbal note.  
+4) Share the PGN with a friend or coach and ask if the story is clear without replaying every move.  
+5) Revisit the same game a week later: can you reconstruct the key ideas quickly? If not, improve your comment clarity.
+
+## 1.11. Ready-to-Use Checklists
+
+### 1.11.1 Pre-analysis
+
+- [ ] PGN imports cleanly; tags are correct.
+- [ ] Engine profile set (threads/hash/MultiPV).
+- [ ] Tablebases path set (if available).
+- [ ] Notebook ready for manual impressions.
+
+### 1.11.2 Manual phase
+
+- [ ] Full narrative pass completed.
+- [ ] Critical positions marked.
+- [ ] Candidates and human evals recorded.
+
+### 1.11.3 Engine phase
+
+- [ ] Engine used only at marked spots.
+- [ ] Top alternatives compared; eval deltas noted.
+- [ ] Tablebase check for endgames (if relevant).
+
+### 1.11.4 Pruning and export
+
+- [ ] Redundant branches removed.
+- [ ] NAGs applied consistently.
+- [ ] Comments distinguish human vs engine insight.
+- [ ] PGN saved; backup made.
+- [ ] Engine settings logged for reproducibility.
+
+## 1.12. Frequently Asked Questions
+
+**Q: How many variations per critical move are acceptable?**  
+A: Usually one principal alternative (engine suggestion) and, at most, one instructive sideline. More than that should be summarized in prose.
+
+**Q: Should I include raw engine scores?**  
+A: Only when they illuminate difficulty or surprise. Replace most numbers with verbal evaluations.
+
+**Q: What depth should I trust?**  
+A: Enough for the position type. Tactics: depth 20+ is often plenty. Quiet middlegames: look for stability across a few depths. Endgames: tablebases if in range; otherwise let depth rise until eval stops swinging.
+
+**Q: How do I handle opening theory?**  
+A: Cite a reference line briefly, but keep focus on the game. Avoid turning your notes into a theory dump unless the point of the game was the opening branch itself.
+
+**Q: How do I mark uncertainty?**  
+A: State it: "Unclear, practical chances for both." Use `!?`/`?!` and short prose to show that the verdict depends on concrete play.
+
+## 1.13. What to Save After Each Session
+
+- Annotated PGN (master copy).
+- Engine profile used (threads, hash, MultiPV, tablebase path).
+- Date, time, and engine version (useful for reproducibility).
+- A short text snippet of session takeaways (three bullets: biggest surprise, key tactical motif, key strategic motif).
 
 ---
 
