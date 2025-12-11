@@ -1,37 +1,33 @@
-# Analysis, Annotation, and Evaluation
+# Chapter 1: Overview and Objectives
 
-## 1. Overview and Objectives
+## 1.1. Scope and Audience
 
-### 1.1. Scope and Audience
+This guide describes a structured workflow for analysing chess games using a graphical user interface (GUI) such as ChessBase or Hiarcs in conjunction with modern engines such as Stockfish or Dragon. It assumes that the reader is comfortable with algebraic notation and has experience playing tournament or online chess, but it does not assume professional-level expertise.
 
-This guide describes a structured workflow for analysing chess games using a graphical user interface (GUI) such as ChessBase or Hiarcs in conjunction with modern engines such as Stockfish or Dragon. It assumes that the reader is comfortable with basic algebraic notation and has experience playing tournament or online chess, but does not assume professional-level expertise.
+The emphasis throughout is on producing annotated portable game notation (PGN) files that are useful for long-term study, publication, and instruction. The guide is tool-agnostic: concrete examples may reference particular GUIs, but the procedures and principles are intended to transfer across platforms. You should feel confident that the habits you build here will work whether you use a commercial database, a lightweight UCI front end, or a cloud analysis board.
 
-The emphasis throughout is on producing annotated portable game notation (PGN) files that are useful for long-term study, publication, and instruction. The guide is tool-agnostic: concrete examples may reference particular GUIs, but the procedures and principles are intended to transfer across platforms.
+## 1.2. Key Concepts
 
-### 1.2. Key Concepts
+This guide uses three interlocking concepts:
 
-This guide uses the following core concepts:
+- **Analysis**: The systematic examination of a game or position to identify better moves, plans, and critical moments. A good analyst alternates between calculation and evaluation, pausing to mark critical junctions.
+- **Annotation**: The process of embedding information in a PGN file, including text comments, Numeric Annotation Glyphs (NAGs), and variations. Annotation forces clarity: every note should either explain *why* or provide a *reference* line.
+- **Evaluation**: The assignment of a numerical or verbal judgment to a position, informed by both human reasoning and engine output. A solid evaluation framework prevents you from chasing ghosts or over-valuing one-off tactics.
 
-- **Analysis**: The systematic examination of a game or position to identify better moves, plans, and critical moments.
-- **Annotation**: The process of embedding information in a PGN file, including text comments, Numeric Annotation Glyphs (NAGs), and variations.
-- **Evaluation**: The assignment of a numerical or verbal judgment to a position, informed by both human reasoning and engine output.
+These concepts are interdependent. Evaluation informs annotation, and annotation captures analysis in a durable and reusable form. By looping through these phases deliberately, you create a repeatable workflow that resists bias and maintains clarity.
 
-These concepts are interdependent. Evaluation informs annotation, and annotation captures analysis in a durable and reusable form.
+## 1.3. Human and Engine Roles
 
-### 1.3. Human and Engine Roles
+Engines excel at calculating tactical sequences and providing accurate numerical evaluations. Humans excel at identifying practical difficulties, explaining plans, and conveying ideas in a way that is meaningful to other players. The best annotated games show both voices: the engine ensures correctness; the human gives context, story, and pedagogy.
 
-Engines excel at calculating tactical sequences and providing accurate numerical evaluations. Humans excel at identifying practical difficulties, explaining plans, and conveying ideas in a way that is meaningful to other players.
-
-A well-designed workflow therefore alternates between:
+A well-designed workflow alternates between:
 
 - **Human-led phases**: Identifying critical moments, proposing candidate moves, and articulating plans in natural language.
 - **Engine-led phases**: Verifying or correcting human impressions, refining candidate moves, and detecting tactical oversights.
 
-The remainder of the guide formalises this alternation into reproducible steps.
+## 1.4. Target Outcomes
 
-### 1.4. Target Outcomes
-
-By the end of the guide, the reader should be able to:
+By the end of the guide, you should be able to:
 
 - Configure an analysis environment with one or more engines and a suitable GUI.
 - Read, interpret, and modify PGN files containing comments, NAGs, and variations.
@@ -42,9 +38,9 @@ By the end of the guide, the reader should be able to:
 
 ---
 
-## 2. Analysis Environment and Tooling
+# Chapter 2: Analysis Environment and Tooling
 
-### 2.1. Requirements for an Analysis GUI
+## 2.1. Requirements for an Analysis GUI
 
 A suitable analysis GUI should support at minimum:
 
@@ -54,81 +50,79 @@ A suitable analysis GUI should support at minimum:
 - Search and filtering over collections of games.
 - Basic visual aids (highlighted squares, arrows, and evaluation bars).
 
-The choice of GUI affects workflow details but does not alter the conceptual structure presented in this guide.
+A pleasant workflow depends on small comforts: keyboard shortcuts for navigation, easy toggles for move/variation promotion, and straightforward engine management. Test these before committing to a platform.
 
-### 2.2. Engine Integration Basics
+## 2.2. Engine Integration Basics
 
-Most modern engines communicate through the **Universal Chess Interface (UCI)** protocol. The GUI launches the engine as an external process and exchanges commands and analysis results.
+Most modern engines communicate through the **Universal Chess Interface (UCI)** protocol. The GUI launches the engine as an external process and exchanges commands and analysis results. Knowing a few core UCI options helps you tune engines without drowning in settings.
 
 Critical configuration parameters include:
 
-- **Threads**: The number of CPU cores allocated to the engine.
-- **Hash**: Memory reserved for the transposition table, influencing search depth and speed.
-- **MultiPV (Multiple Principal Variations)**: The number of top lines the engine will report.
-- **Syzygy or other tablebases**: Precomputed endgame databases that yield perfect play in certain material configurations.
+- **Threads**: CPU cores allocated to the engine. Reserve some cores for your GUI and other background tasks if the machine feels sluggish.
+- **Hash**: Memory reserved for the transposition table, influencing search depth and speed. Raising hash is most helpful in long sessions on stable positions.
+- **MultiPV (Multiple Principal Variations)**: Number of top lines reported. MultiPV > 1 is invaluable for teaching and comparing plans, but it slows search.
+- **Syzygy or other tablebases**: Precomputed endgame databases that yield perfect play in certain material configurations. Point the engine to the directory where your tablebases live.
 
-For practical analysis, moderate settings for threads and hash are sufficient on most modern hardware.
+## 2.3. Performance–Quality Trade-offs
 
-### 2.3. Performance-Quality Trade-offs
-
-Engine settings influence both the depth of analysis and the responsiveness of the interface.
+Engine settings influence both the depth of analysis and the responsiveness of the interface:
 
 - Higher thread counts and larger hash settings yield deeper search but may reduce interactivity.
 - MultiPV settings above three lines often yield diminishing returns in practical work.
 - Infinite analysis modes should be used selectively, especially when investigating critical positions.
 
-The analyst should treat configuration as a series of trade-offs rather than maximising every parameter.
+Treat configuration as a set of trade-offs rather than a race to "max out" hardware. A responsive session encourages exploration; a bogged-down session discourages curiosity.
 
-### 2.4. Recommended Default Profiles
+## 2.4. Recommended Default Profiles
 
-A practical approach is to define distinct "profiles" for common tasks:
+Define a few presets to avoid fiddling every session:
 
 - **Quick blunder-check profile**  
-  - Relatively low depth, small hash, MultiPV = 1 or 2.  
-  - Intended for rapid screening of gross tactical errors.
+  - Low depth, small hash, MultiPV = 1–2.  
+  - Purpose: fast scan for outright tactics.
 
 - **Standard post-game analysis profile**  
-  - Moderate hash, MultiPV = 2 or 3, depth sufficient for reliable middlegame evaluations.  
-  - Balanced between speed and accuracy.
+  - Moderate hash, MultiPV = 2–3, depth sufficient for reliable middlegame evaluations.  
+  - Purpose: balanced quality and speed for full-game review.
 
 - **Deep investigation profile**  
-  - Larger hash, MultiPV = 1 or 2, generous time per move or infinite analysis.  
-  - Reserved for key positions or high-value games.
+  - Larger hash, MultiPV = 1–2, generous time per move or infinite analysis.  
+  - Purpose: slow, careful work on key positions.
 
-Storing these configurations in the GUI streamlines future analysis sessions.
+Save these profiles and note them in your checklist so you can reproduce results later or share them with teammates.
 
 ---
 
-## 3. PGN and Annotation Fundamentals
+# Chapter 3: PGN and Annotation Fundamentals
 
-### 3.1. PGN Structure
+## 3.1. PGN Structure
 
 A PGN file consists of two main components:
 
-- **Tag pair section**: Key-value pairs enclosed in square brackets at the start of the file, specifying event, players, date, result, and other metadata.
-- **Movetext section**: The sequence of moves, written in algebraic notation, and the final result marker (for example, `1-0`, `0-1`, `1/2-1/2`).
+- **Tag pair section**: Key–value pairs enclosed in square brackets at the start of the file, specifying event, players, date, result, and other metadata.
+- **Movetext section**: The sequence of moves, written in algebraic notation, followed by the result marker (for example, `1-0`, `0-1`, `1/2-1/2`).
 
-Annotations augment the movetext section without altering the underlying game score.
+Think of the tag section as the file header and the movetext as the data payload. Keep tags accurate; they are the anchor for later search and filtering.
 
-### 3.2. Comments in PGN
+## 3.2. Comments in PGN
 
-Comments are delimited by curly braces `{}` in PGN. They typically contain natural-language explanations, evaluations, or notes, such as:
+Comments are delimited by curly braces `{}`. They typically contain natural-language explanations, evaluations, or notes such as:
 
 - Explanations of plans or ideas.
 - References to alternative lines not shown explicitly as variations.
 - Verbal evaluations (for example, "White is clearly better").
 
-Most GUIs present comments in a separate pane or interleaved with moves, while preserving the underlying PGN syntax.
+Use comments to convey *why* and *how*, not just engine scores. A concise verbal note often outlives a centipawn number when theory changes.
 
-### 3.3. Numeric Annotation Glyphs (NAGs)
+## 3.3. Numeric Annotation Glyphs (NAGs)
 
-NAGs are numeric codes prefixed by a dollar sign (for example, `$1`, `$2`) that most GUIs display as symbolic annotations such as `!`, `?`, `!?`, and similar. They serve several purposes:
+NAGs are numeric codes prefixed by `$` that most GUIs display as symbolic annotations such as `!`, `?`, `!?`, and similar. They serve to:
 
 - Provide a machine-readable representation of standard assessment symbols.
 - Preserve compatibility across tools and platforms.
 - Allow automated filtering and statistics (for example, locating all moves marked as `??`).
 
-A subset of NAGs covers commonly used move-quality judgments:
+Common move-quality NAGs:
 
 - `$1`: Good move (`!`)
 - `$2`: Poor move (`?`)
@@ -137,9 +131,9 @@ A subset of NAGs covers commonly used move-quality judgments:
 - `$5`: Speculative move (`!?`)
 - `$6`: Dubious move (`?!`)
 
-Additional NAGs encode positional features and evaluations, discussed later in the guide.
+Extend beyond these when helpful: positional NAGs capture initiative, compensation, or attack, and evaluative NAGs capture slight/clear/decisive advantages.
 
-### 3.4. Variations and Branches
+## 3.4. Variations and Branches
 
 Variations in PGN are enclosed in parentheses `()`. They represent alternative sequences of moves branching from a given position. Variations may themselves contain nested sub-variations.
 
@@ -149,67 +143,67 @@ Conceptually, variations fall into three categories:
 - **Principal variation**: The engine's or analyst's preferred continuation in a hypothetical position.
 - **Side variations**: Alternative lines illustrating traps, sidelines, or instructive possibilities.
 
-Effective annotation requires controlling the depth and branching factor of variations to preserve readability.
+Control both depth and branching. Excessive nesting makes a PGN unreadable. Prune aggressively and keep only lines that illustrate ideas, highlight traps, or correct misconceptions.
 
 ---
 
-## 4. Manual Analysis Workflow (Pre-Engine)
+# Chapter 4: Manual Analysis Workflow (Pre-Engine)
 
-### 4.1. Rationale for Engine-Free Passes
+## 4.1. Rationale for Engine-Free Passes
 
-Conducting an initial analysis without engine assistance offers several benefits:
+Conduct an initial analysis without engine assistance:
 
-- It strengthens independent calculation and evaluation skills.
-- It prevents premature convergence on engine suggestions.
-- It exposes discrepancies between human intuition and objective evaluation, which are themselves instructive.
+- Strengthen independent calculation and evaluation skills.
+- Avoid premature convergence on engine suggestions.
+- Expose discrepancies between intuition and objective evaluation.
 
-The engine is treated as a later-stage tool for verification and refinement, not as a primary driver.
+This is not about rejecting engines; it is about capturing your thought process honestly before verification. That honesty is instructive for you and for readers.
 
-### 4.2. First Pass: Narrative Overview
+## 4.2. First Pass: Narrative Overview
 
 During the first pass:
 
 - Replay the game at a moderate pace, without deep calculation.
-- Identify and mark obvious turning points, such as blunders, missed wins, or dramatic shifts in initiative.
-- Note practical factors such as time pressure or psychological decisions, if known.
+- Identify turning points: blunders, missed wins, or shifts in initiative.
+- Note practical factors (time pressure, psychological decisions) if known.
 
-At this stage, comments can be brief and largely descriptive: "Black equalises here," "White begins a kingside attack," or "This move initiates an inferior plan."
+Keep comments brief and narrative: "Black equalises here," "White begins a kingside attack," or "This move launches an inferior plan." Resist the urge to open a side line yet; just mark the spot.
 
-### 4.3. Second Pass: Candidate Moves and Critical Positions
+## 4.3. Second Pass: Candidate Moves and Critical Positions
 
 The second pass focuses on positions where important decisions were made:
 
 - For each critical position, record the move played and at least one plausible alternative.
 - Formulate a qualitative evaluation (for example, "White is slightly better," "dynamic equality," "unclear") without engine assistance.
-- Indicate the reasoning behind each candidate: piece activity, king safety, pawn structure, or specific tactical ideas.
+- Note reasoning: piece activity, king safety, pawn structure, or specific tactical ideas.
 
-These observations are recorded as comments in the PGN or in a separate note that will later be integrated.
+This is the phase where your chess vocabulary matters. Use it. Label motifs (outpost, minority attack, central break) so later engine checks have context.
 
-### 4.4. Third Pass: Consolidating Manual Annotations
+## 4.4. Third Pass: Consolidating Manual Annotations
 
 Before involving the engine:
 
 - Convert informal notes into structured comments within the PGN.
-- Assign preliminary NAGs to moves that appear clearly strong or weak based on human judgment.
-- Mark positions for engine verification (for example, by using GUI markers or simple textual tags such as "ENGINE CHECK").
+- Assign preliminary NAGs to moves that appear clearly strong or weak.
+- Mark positions for engine verification (for example, "ENGINE CHECK").
 
-The goal is to produce a coherent manual annotation that captures the analyst's understanding independently.
+The goal is a coherent manual annotation that captures your understanding independently. If two candidate lines feel equally strong, mark that uncertainty; later engine work should resolve or document it.
 
 ---
 
-## 5. Engine-Assisted Analysis Workflow
+# Chapter 5: Engine-Assisted Analysis Workflow
 
-### 5.1. Selecting Positions for Engine Use
+## 5.1. Selecting Positions for Engine Use
 
-Engines are most valuable when applied selectively:
+Apply engines selectively:
 
 - Critical positions identified during manual analysis.
-- Complex tactical situations where human calculation is likely to err.
-- Endgames where tablebases or deep search can reveal accurate conclusions.
+- Complex tactical situations where human calculation may err.
+- Endgames where tablebases or deep search clarify outcomes.
 
-Systematically working through the "ENGINE CHECK" markers ensures that the engine is applied where it yields maximum value.
+Use your "ENGINE CHECK" markers as a to-do list. Avoid leaving the engine running on every move; that wastes time and hides your own thinking.
 
-### 5.2. Interpreting Engine Scores and Outputs
+## 5.2. Interpreting Engine Scores and Outputs
 
 Engine outputs typically include:
 
@@ -217,254 +211,237 @@ Engine outputs typically include:
 - **Mate indications**: special values denoting forced mate in a specified number of moves.
 - **Principal variations**: sequences of best moves from the engine's perspective.
 
-Interpreting these outputs requires care:
+Interpret with caution:
 
 - Small centipawn differences may not reflect practical difficulty.
-- An evaluation such as +0.80 may be easy or extremely difficult to convert, depending on the position.
-- Mate scores should be translated into clear human language in the annotations.
+- A +0.80 evaluation may be trivial or nearly impossible to convert, depending on the position.
+- Translate mate scores into human language ("mate in 5 after ...") to keep notes readable.
 
-### 5.3. MultiPV and Alternative Lines
+## 5.3. MultiPV and Alternative Lines
 
-Using MultiPV allows the engine to produce several candidate lines:
+Using MultiPV exposes several candidate lines:
 
-- For each candidate, note the evaluation and any distinctive strategic features.
-- Identify whether different lines represent genuinely different plans or only minor move-order changes.
-- Select at most a small number of alternatives to carry into the final annotation to avoid excessive branching.
+- Note the evaluation and strategic features of each candidate.
+- Separate lines that represent different plans from those that are mere move-order tweaks.
+- Carry forward only a small number of alternatives to avoid bloat.
 
-MultiPV is a tool for exploring options, not for reproducing every engine line in the final PGN.
+MultiPV is a tool for exploration, not transcription. Keep only what supports the story of the game.
 
-### 5.4. Revising Manual Conclusions
+## 5.4. Revising Manual Conclusions
 
 After engine analysis:
 
 - Compare engine evaluations with earlier human evaluations.
-- When human and engine conclusions diverge, determine whether the difference is due to missed tactics, mis-evaluated endgames, or subjective biases.
-- Revise NAGs and textual comments as needed, documenting the change where it is instructive.
+- Identify whether divergences stem from missed tactics, endgame nuances, or bias.
+- Revise NAGs and textual comments as needed, documenting where insight changed.
 
-Recording such revisions explicitly can be valuable for training: "Initial impression was that White is winning; engine reveals drawing resources based on activity of the king."
+Explicitly note changes: "Initial impression: White is winning. Engine shows Black holds due to perpetual check motif." That record is gold for training.
 
 ---
 
-## 6. Building and Managing Variations
+# Chapter 6: Building and Managing Variations
 
-### 6.1. Criteria for Including a Variation
+## 6.1. Criteria for Including a Variation
 
-Not every engine line warrants inclusion. A variation should typically satisfy at least one of the following:
+Include a variation when it:
 
-- It illustrates a clear tactical motif (for example, a sacrifice, a deflection, or a mating net).
-- It presents a plausible alternative plan that a player might reasonably consider.
-- It corrects a common misconception or refutes a natural but flawed move.
+- Illustrates a tactical motif (sacrifice, deflection, mating net).
+- Presents a plausible alternative plan a player might actually consider.
+- Corrects a misconception or refutes a natural but flawed move.
 
-Variations that merely confirm that an obviously inferior move remains inferior may be omitted.
+Skip lines that merely confirm obvious inferiority. Readers value signal over completeness.
 
-### 6.2. Depth and Breadth of Variations
+## 6.2. Depth and Breadth of Variations
 
-Readability imposes constraints on both the **depth** and **breadth** of variations:
+Readability constraints:
 
-- Variations should generally not extend beyond the point where the evaluation stabilises and the strategic outcome is clear.
-- Excessively long forced lines may be truncated with a verbal indication such as "with a clear advantage for White."
-- Branching should be kept narrow; only a few main alternatives per critical position should be presented.
+- Do not extend beyond the point where evaluation stabilises and the strategic outcome is clear.
+- Truncate forced lines with a verbal note when the rest is routine.
+- Keep branching narrow—only a few main alternatives per critical position.
 
-This discipline maintains a balance between thoroughness and pedagogical clarity.
+Think of each variation as an illustration, not an encyclopedia entry.
 
-### 6.3. Structural Organisation in the GUI
+## 6.3. Structural Organisation in the GUI
 
-Most GUIs allow manipulation of variations:
+Most GUIs allow:
 
-- Promoting or demoting variations between main line and side lines.
-- Collapsing or expanding branches in the variation tree.
+- Promoting or demoting variations between main and side lines.
+- Collapsing or expanding branches.
 - Deleting redundant or uninteresting lines.
 
-The analyst should enforce a hierarchical structure where:
+Enforce hierarchy:
 
-- The game's actual moves constitute the main line.
-- The engine's preferred improvement (if any) becomes the principal side variation.
-- Additional explanatory lines are nested as sub-variations, used sparingly.
+- The game's moves form the main line.
+- The engine's preferred improvement (if any) is the principal side line.
+- Additional explanatory lines nest as sub-variations and stay short.
 
-### 6.4. Naming and Labeling Variations
+## 6.4. Naming and Labeling Variations
 
-In extensive analyses, it can be useful to assign informal labels to key variations, either within comments or as local headings:
+In extensive analyses, label key variations:
 
 - "Line A: Safe consolidation"
 - "Line B: Pawn sacrifice for activity"
 - "Line C: Endgame transition"
 
-Such labels help readers navigate complex branches, particularly in long games.
+Labels help readers and your future self navigate dense trees quickly.
 
 ---
 
-## 7. Using NAGs and Symbols Systematically
+# Chapter 7: Using NAGs and Symbols Systematically
 
-### 7.1. Move-Quality NAGs
+## 7.1. Move-Quality NAGs
 
-Move-quality NAGs encode judgments such as:
+Move-quality NAGs encode judgments:
 
-- Excellent, good, or strong moves.
-- Weak or clearly erroneous moves.
-- Speculative or dubious choices.
+- `$3` (`!!`): Non-obvious and objectively very strong.
+- `$1` (`!`): Clearly best or significantly better than alternatives.
+- `$2` (`?`) and `$4` (`??`): Mistakes that worsen or lose the game.
+- `$5` (`!?`) and `$6` (`?!`): Playable but risky or strategically suspect.
 
-The analyst should adopt consistent criteria, for example:
+Use sparingly. Overuse dulls impact and misleads readers about severity.
 
-- `$3` (`!!`): Only for moves that are both non-obvious and objectively very strong.
-- `$1` (`!`): For moves that are clearly best or significantly better than alternatives.
-- `$2` (`?`) and `$4` (`??`): For mistakes that respectively worsen the position or lose material or the game.
-- `$5` (`!?`) and `$6` (`?!`): For moves that are playable but risky or strategically suspect.
+## 7.2. Positional and Evaluative NAGs
 
-Overuse of extreme symbols reduces their impact and should be avoided.
+Beyond move quality, NAGs capture:
 
-### 7.2. Positional and Evaluative NAGs
+- Advantage assessments (slight/clear/decisive).
+- Positional elements (initiative, attack, compensation, time advantage).
+- Structural features (weak squares, passed pawns, bishop pair).
 
-Beyond move quality, NAGs exist for:
+Pick a small, consistent subset and document it at the end of the guide to keep your annotations uniform.
 
-- Advantage assessments (for example, slight, moderate, decisive).
-- Positional elements such as initiative, attack, compensation, or time advantage.
-- Structural features such as weak squares or passed pawns.
+## 7.3. Combining NAGs with Text and Engine Scores
 
-Using these NAGs:
+Integrate three layers:
 
-- Summarises complex evaluations in compact form.
-- Facilitates searching for specific themes.
-- Reinforces verbal commentary.
+1. **Symbolic**: NAGs for move quality and positional traits.
+2. **Verbal**: Comments explaining ideas, plans, and strategic context.
+3. **Numerical**: Engine evaluations in centipawns or mate distances when they clarify practical chances.
 
-A limited, well-chosen subset is usually sufficient in everyday analysis.
-
-### 7.3. Combining NAGs with Text and Engine Scores
-
-An effective annotation format integrates three layers:
-
-1. **Symbolic layer**: NAGs indicating quality and characteristics of moves.
-2. **Verbal layer**: Text comments explaining ideas, plans, and strategic context.
-3. **Numerical layer**: Engine evaluations in centipawns or mate distances, where informative.
-
-For example:
+Example:
 
 > `23...Re8 $6?!`  
-> `{Black chooses a passive plan. The engine suggests 23...c5 (approx 0.00), maintaining dynamic counterplay, whereas after the text move White gradually consolidates a space advantage.}`
+> `{Black chooses a passive plan. Engine prefers 23...c5 (≈ 0.00), keeping counterplay; after the text move White consolidates a space edge.}`
 
-The analyst should avoid clutter by omitting numbers when they add little insight.
-
----
-
-## 8. Converting Engine Analysis into Human-Facing Commentary
-
-### 8.1. Identifying the Game's Narrative
-
-A useful annotated game conveys a coherent narrative. Key elements include:
-
-- The initial strategic direction chosen by each player.
-- The moments when that direction changed, succeeded, or failed.
-- The tactical episodes that decisively influenced the result.
-- The transformation of the position across opening, middlegame, and endgame phases.
-
-The narrative should be visible even to readers who do not follow every variation in detail.
-
-### 8.2. Explaining Ideas Rather than Moves
-
-Engine lines tend to enumerate moves without explanation. The analyst's role is to:
-
-- Identify recurring motifs (for example, knight outposts, pawn breaks, king safety).
-- Translate these motifs into statements about plans and counterplans.
-- Highlight why certain moves are natural but flawed, and why the best move may be counterintuitive.
-
-Text comments should prioritise ideas and plans over exhaustive recounting of move sequences.
-
-### 8.3. Adapting Depth to the Intended Audience
-
-The level of detail should match the intended readership:
-
-- For self-study at an advanced level, more technical language and deeper variations may be appropriate.
-- For students or general audiences, concise explanations and fewer variations are usually preferable.
-
-In either case, the commentary should remain internally consistent and avoid abrupt changes in technical depth.
-
-### 8.4. Using Diagrams and Position References (Optional)
-
-If the presentation medium allows diagrams:
-
-- Insert diagrams at critical moments, such as before a decisive tactical blow or a key strategic decision.
-- Refer to positions by move number and indicate side to move unambiguously.
-- Synchronise diagrams with textual commentary so that each diagram supports a clearly stated point.
-
-Although diagrams lie outside the core PGN specification, many GUIs and publishing tools support them as an overlay.
+Omit numbers when they add little. Prioritise human readability.
 
 ---
 
-## 9. Exporting, Sharing, and Archiving Annotated Games
+# Chapter 8: Converting Engine Analysis into Human-Facing Commentary
 
-### 9.1. Ensuring PGN Integrity
+## 8.1. Identifying the Game's Narrative
+
+A useful annotated game conveys a coherent narrative. Key elements:
+
+- The initial strategic direction of each player.
+- Moments when that direction changed, succeeded, or failed.
+- Tactical episodes that influenced the result.
+- Phase transitions: opening → middlegame → endgame.
+
+Readers should grasp the story even if they skim variations.
+
+## 8.2. Explaining Ideas Rather than Moves
+
+Engine lines list moves; humans explain *why*. Focus on:
+
+- Recurring motifs (outposts, pawn breaks, king safety).
+- Plans and counterplans.
+- Why natural moves fail and why best moves may be counterintuitive.
+
+Translate tactics into themes: "The e-file pin makes ...Re8 lethal," not just "...Re8! -1.8."
+
+## 8.3. Adapting Depth to the Intended Audience
+
+Adjust depth to readership:
+
+- Advanced self-study: allow deeper lines and technical language.
+- Students or general audiences: keep lines short and commentary concise.
+
+Remain consistent within a single game to avoid whiplash between depths.
+
+## 8.4. Using Diagrams and Position References (Optional)
+
+If the medium supports diagrams:
+
+- Insert diagrams at critical moments (before a decisive tactic or key plan).
+- Refer to positions by move number and side to move.
+- Align diagrams with comments so each diagram reinforces a point.
+
+Even without diagrams, precise references ("after 18...Nc5, Black threatens ...b4") anchor the reader.
+
+---
+
+# Chapter 9: Exporting, Sharing, and Archiving Annotated Games
+
+## 9.1. Ensuring PGN Integrity
 
 Before exporting:
 
-- Confirm that comments, NAGs, and variations are correctly attached to the intended moves.
-- Verify that the game result and basic tag information are accurate.
-- Check for syntax errors (for example, unbalanced braces or parentheses) that may disrupt other tools.
+- Confirm comments, NAGs, and variations attach to correct moves.
+- Verify result and basic tag information.
+- Check for syntax errors (unbalanced braces or parentheses).
 
-Several GUIs provide built-in PGN validation; otherwise, external tools can be used.
+Validation prevents embarrassment when sharing databases or publishing.
 
-### 9.2. Export Formats and Interoperability
+## 9.2. Export Formats and Interoperability
 
-Annotated games are typically stored as:
+Annotated games typically live as:
 
 - **PGN files**: Human-readable and widely supported.
 - **Database formats**: Proprietary binary formats used by specific GUIs.
 
-For maximum interoperability:
+Keep a PGN master copy. Use database formats for speed and indexing, but avoid lock-in. When sharing, PGN is the safest default.
 
-- Maintain a PGN master copy of critical annotated games.
-- Use database formats to support fast search and indexing within a particular tool, but avoid lock-in.
+## 9.3. Organising a Personal Annotated Library
 
-When sharing with others, PGN is usually the safest default format.
+Build a sustainable library:
 
-### 9.3. Organising a Personal Annotated Library
+- Consistent naming scheme (by player, opening, theme, or event).
+- Tags for openings, themes, and training purposes.
+- Regular backups to external or cloud storage.
 
-A sustainable library requires:
-
-- A consistent naming scheme for files and databases (for example, by player, opening, or theme).
-- Tagging of games with metadata such as opening codes, themes, and training purposes.
-- Regular backups to external drives or cloud storage to protect against data loss.
-
-The goal is to make annotated games easy to locate and reuse months or years later.
+Your future self will thank you when hunting for an example of "rook endgame with active king" years later.
 
 ---
 
-## 10. Reference Tables and Checklists
+# Chapter 10: Reference Tables and Checklists
 
-### 10.1. Core NAG Reference
+## 10.1. Core NAG Reference
 
-Maintain a concise reference of the most-used NAGs, including:
+Maintain a concise reference of commonly used NAGs:
 
-- Codes for move quality (`!!`, `!`, `!?`, `?!`, `?`, `??`).
-- Codes for evaluations (for example, slight advantage, clear advantage, decisive advantage).
-- Codes for key positional themes relevant to your own work.
+- Move quality: `!!`, `!`, `!?`, `?!`, `?`, `??`.
+- Evaluations: slight, clear, decisive advantages for either side.
+- Positional motifs: initiative, attack, compensation, time advantage, bishop pair, weak squares.
 
-Including this table at the end of the guide or as a separate appendix aids consistency.
+Documenting your exact codes keeps annotations consistent across sessions and collaborators.
 
-### 10.2. Analysis Session Checklist
+## 10.2. Analysis Session Checklist
 
-Before, during, and after an analysis session, the following checklist is useful:
+Before, during, and after an analysis session:
 
 - **Preparation**  
-  - Engine configuration matches the intended depth and speed.  
-  - PGN imports correctly and metadata is accurate.
+  - Engine configuration matches intended depth and speed.  
+  - PGN imports correctly; metadata is accurate.
 
 - **Manual phase**  
-  - At least one full pass has been made without engine assistance.  
-  - Critical moments and candidate moves are identified and noted.
+  - At least one full pass completed without engine assistance.  
+  - Critical moments and candidate moves identified and noted.
 
 - **Engine phase**  
-  - Engine is applied selectively at critical positions.  
-  - Discrepancies between engine and human evaluations are reviewed and resolved.
+  - Engine applied selectively at critical positions.  
+  - Discrepancies between engine and human evaluations reviewed and resolved.
 
 - **Finalisation**  
-  - Variations are pruned and organised for readability.  
-  - NAGs and comments are consistent and free from contradictions.  
-  - The annotated PGN is validated and backed up.
+  - Variations pruned and organised for readability.  
+  - NAGs and comments consistent and non-contradictory.  
+  - Annotated PGN validated and backed up.
 
-### 10.3. Engine Configuration Reference
+## 10.3. Engine Configuration Reference
 
 Maintain a short record of preferred configurations:
 
-- Default thread and hash values for the current hardware.
+- Default thread and hash values for current hardware.
 - MultiPV settings for quick checks versus deep investigations.
 - Tablebase locations and settings, if available.
 

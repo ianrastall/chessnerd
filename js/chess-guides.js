@@ -17,7 +17,8 @@
 
     let guides = [];
     let activeGuide = null;
-    let activeChapter = null;
+    let activeChapterId = null;
+    let currentFilePath = '';
 
     document.getElementById('backButton')?.addEventListener('click', () => {
         window.location.href = 'index.html';
@@ -39,33 +40,35 @@
     }
 
     function updateUrl() {
-        if (!activeGuide || !activeChapter) return;
+        if (!activeGuide || !activeChapterId) return;
         const params = new URLSearchParams(window.location.search);
         params.set('guide', activeGuide.id);
-        params.set('chapter', activeChapter.id);
+        params.set('chapter', activeChapterId);
         const newUrl = `${window.location.pathname}?${params.toString()}`;
         window.history.replaceState({}, '', newUrl);
     }
 
     function updateActions(filePath) {
-        const hasSelection = Boolean(activeGuide && activeChapter);
-        openRawBtn.disabled = !hasSelection;
-        copyLinkBtn.disabled = !hasSelection;
+        const hasGuide = Boolean(activeGuide);
+        openRawBtn.disabled = !hasGuide;
+        copyLinkBtn.disabled = !hasGuide;
+        currentFilePath = filePath;
 
-        if (hasSelection) {
-            openRawBtn.onclick = () => window.open(filePath, '_blank', 'noopener');
-            copyLinkBtn.onclick = async () => {
-                try {
-                    await navigator.clipboard.writeText(window.location.href);
-                    setStatus('Link copied to clipboard', 'success');
-                } catch (err) {
-                    setStatus('Clipboard not available', 'warning');
-                }
-            };
-        } else {
+        if (!hasGuide) {
             openRawBtn.onclick = null;
             copyLinkBtn.onclick = null;
+            return;
         }
+
+        openRawBtn.onclick = () => window.open(filePath, '_blank', 'noopener');
+        copyLinkBtn.onclick = async () => {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                setStatus('Link copied to clipboard', 'success');
+            } catch (err) {
+                setStatus('Clipboard not available', 'warning');
+            }
+        };
     }
 
     function decorateHeadings() {
@@ -84,6 +87,37 @@
         });
     }
 
+    function buildChapterDropdown() {
+        const headings = Array.from(guideContent.querySelectorAll('h1'));
+        chapterSelect.innerHTML = '';
+
+        if (!headings.length) {
+            chapterSelect.disabled = true;
+            return;
+        }
+
+        headings.forEach((h, idx) => {
+            if (!h.id) h.id = slugify(h.textContent || `chapter-${idx + 1}`);
+            const opt = document.createElement('option');
+            opt.value = h.id;
+            opt.textContent = h.textContent || `Chapter ${idx + 1}`;
+            chapterSelect.appendChild(opt);
+        });
+
+        chapterSelect.disabled = false;
+    }
+
+    function scrollToChapter(chapterId, smooth = true) {
+        if (!chapterId) return;
+        const target = guideContent.querySelector(`#${CSS.escape(chapterId)}`);
+        if (!target) return;
+        activeChapterId = chapterId;
+        chapterSelect.value = chapterId;
+        const behavior = smooth ? 'smooth' : 'auto';
+        target.scrollIntoView({ behavior, block: 'start' });
+        updateUrl();
+    }
+
     async function loadChapter(chapter) {
         if (!chapter || !chapter.file) return;
         setStatus('Loading chapter...', 'warning');
@@ -99,6 +133,14 @@
             const html = window.marked.parse(markdown, { mangle: false, headerIds: true });
             guideContent.innerHTML = html;
             decorateHeadings();
+            buildChapterDropdown();
+
+            const params = new URLSearchParams(window.location.search);
+            const initialChapterId = params.get('chapter') || chapterSelect.options[0]?.value;
+            if (initialChapterId) {
+                scrollToChapter(initialChapterId, false);
+            }
+
             updateActions(chapter.file);
             setStatus('Loaded', 'success');
         } catch (error) {
@@ -129,27 +171,13 @@
             return;
         }
 
+        // For single-file guides, the dropdown is rebuilt from headings after load.
         guide.chapters.forEach((chapter) => {
             const option = document.createElement('option');
             option.value = chapter.id;
             option.textContent = chapter.title;
             chapterSelect.appendChild(option);
         });
-
-        chapterSelect.disabled = false;
-    }
-
-    function selectChapter(chapterId) {
-        if (!activeGuide) return;
-        const fallback = activeGuide.chapters?.[0];
-        const chapter = activeGuide.chapters.find((c) => c.id === chapterId) || fallback;
-        if (!chapter) return;
-
-        activeChapter = chapter;
-        chapterSelect.value = chapter.id;
-        renderMeta();
-        updateUrl();
-        loadChapter(chapter);
     }
 
     function selectGuide(guideId) {
@@ -161,7 +189,13 @@
         guideSelect.value = guide.id;
         populateChapterSelect(guide);
         const params = new URLSearchParams(window.location.search);
-        selectChapter(params.get('chapter') || guide.chapters?.[0]?.id);
+        const initialChapter = params.get('chapter') || guide.chapters?.[0]?.id;
+        const fallbackChapter = guide.chapters?.[0];
+        renderMeta();
+        updateUrl();
+        loadChapter(
+            guide.chapters.find((c) => c.id === initialChapter) || fallbackChapter
+        );
     }
 
     function populateGuideSelect() {
@@ -202,7 +236,7 @@
         });
 
         chapterSelect.addEventListener('change', (e) => {
-            selectChapter(e.target.value);
+            scrollToChapter(e.target.value);
         });
     }
 
