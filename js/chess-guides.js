@@ -96,11 +96,19 @@
             return;
         }
 
+        const getHeadingText = (heading) => {
+            const clone = heading.cloneNode(true);
+            const anchor = clone.querySelector('.heading-anchor');
+            if (anchor) anchor.remove();
+            return (clone.textContent || '').trim();
+        };
+
         headings.forEach((h, idx) => {
-            if (!h.id) h.id = slugify(h.textContent || `chapter-${idx + 1}`);
+            const label = getHeadingText(h) || `Chapter ${idx + 1}`;
+            if (!h.id) h.id = slugify(label || `chapter-${idx + 1}`);
             const opt = document.createElement('option');
             opt.value = h.id;
-            opt.textContent = h.textContent || `Chapter ${idx + 1}`;
+            opt.textContent = label;
             chapterSelect.appendChild(opt);
         });
 
