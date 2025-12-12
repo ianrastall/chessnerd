@@ -46,7 +46,7 @@
     let activePly = 0;
 
     // Puzzles state
-    const bucketCache = {}; // key -> { puzzles, themes }
+    const bucketCache = {}; // key -> { puzzles, themes, skipped }
     let currentBucketKey = null;
     let currentPuzzles = [];
     let currentFiltered = [];
@@ -75,8 +75,46 @@
             `${filtered} match current filters`;
     }
 
+    function resetUiToBlank(message = 'No puzzle loaded.') {
+        currentPuzzle = null;
+        currentPuzzleIndex = -1;
+        selectedSquare = null;
+        legalTargets = [];
+        redoStack = [];
+        activePly = 0;
+        orientation = 'white';
+
+        const blank = new Chess();
+        blank.clear();
+        game = blank;
+
+        if (puzzleMoveListEl) puzzleMoveListEl.innerHTML = '';
+        if (solutionMovesEl) solutionMovesEl.innerHTML = '';
+
+        refreshBoard();
+        if (boardStatsEl) boardStatsEl.textContent = message;
+        if (moveStatsEl) moveStatsEl.textContent = '0 moves';
+
+        if (puzzleLabelEl) puzzleLabelEl.textContent = message;
+        if (puzzleMetaPrimary) puzzleMetaPrimary.textContent = 'Rating: -';
+        if (puzzleMetaSecondary) puzzleMetaSecondary.textContent = 'Themes: -';
+        if (puzzleGameLink) {
+            puzzleGameLink.href = '#';
+            puzzleGameLink.textContent = '';
+            puzzleGameLink.classList.add('hidden');
+        }
+    }
+
     function updateBoardStats() {
         if (!boardStatsEl) return;
+
+        if (!currentPuzzle) {
+            boardStatsEl.textContent = 'No puzzle loaded.';
+            if (moveStatsEl) {
+                moveStatsEl.textContent = '0 moves';
+            }
+            return;
+        }
 
         if (game.game_over()) {
             let msg = 'Game over.';
@@ -399,7 +437,9 @@
 
     async function loadBucket(bucketKey, url) {
         if (bucketCache[bucketKey]) {
-            return bucketCache[bucketKey];
+            const cached = bucketCache[bucketKey];
+            setStatus(`Loaded ${cached.puzzles.length} puzzles for ${bucketKey} (cached).`, 'success');
+            return cached;
         }
 
         setStatus(`Loading puzzles for ${bucketKey}…`, 'warning');
@@ -413,10 +453,14 @@
         const lines = text.split(/\r?\n/);
         const puzzles = [];
         const themeSet = new Set();
+        let skipped = 0;
 
         for (const line of lines) {
             const p = parseLichessEpdLine(line);
-            if (!p) continue;
+            if (!p) {
+                if (line.trim()) skipped += 1;
+                continue;
+            }
             puzzles.push(p);
             if (p.themes && p.themes.length) {
                 p.themes.forEach((t) => themeSet.add(t));
@@ -425,8 +469,9 @@
 
         const themes = Array.from(themeSet).sort((a, b) => a.localeCompare(b));
 
-        bucketCache[bucketKey] = { puzzles, themes };
-        setStatus(`Loaded ${puzzles.length} puzzles for ${bucketKey}.`, 'success');
+        bucketCache[bucketKey] = { puzzles, themes, skipped };
+        const skippedText = skipped ? ` Skipped ${skipped} invalid lines.` : '';
+        setStatus(`Loaded ${puzzles.length} puzzles for ${bucketKey}.${skippedText}`, 'success');
         return bucketCache[bucketKey];
     }
 
@@ -462,6 +507,8 @@
         const url = opt.dataset.file;
         if (!url) {
             setStatus('No EPD file configured for this rating range.', 'error');
+            resetUiToBlank('No puzzle loaded.');
+            updateToolStats();
             return;
         }
 
@@ -472,6 +519,8 @@
             bucketData = await loadBucket(bucketKey, url);
         } catch (err) {
             setStatus(err.message || String(err), 'error');
+            resetUiToBlank('Unable to load puzzles.');
+            updateToolStats();
             return;
         }
 
@@ -484,10 +533,7 @@
         updateToolStats();
 
         if (!currentFiltered.length) {
-            puzzleLabelEl.textContent = `No puzzles found for ${bucketKey}.`;
-            puzzleMetaPrimary.textContent = 'Rating: –';
-            puzzleMetaSecondary.textContent = 'Themes: –';
-            if (puzzleGameLink) puzzleGameLink.classList.add('hidden');
+            resetUiToBlank(`No puzzles found for ${bucketKey}.`);
             setStatus(`No puzzles available for ${bucketKey}.`, 'warning');
             return;
         }
@@ -516,8 +562,7 @@
 
         if (!currentFiltered.length) {
             updateToolStats();
-            puzzleLabelEl.textContent =
-                'No puzzles match this theme in the current rating range.';
+            resetUiToBlank('No puzzles match this theme in the current rating range.');
             setStatus('No puzzles match the selected theme.', 'warning');
             return;
         }
