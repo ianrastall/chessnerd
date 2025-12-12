@@ -4,7 +4,7 @@
     const boardEl = document.getElementById('chessBoard');
     if (!boardEl) return;
 
-    // Coordinates
+    // Coordinate labels
     const filesTopEl = document.getElementById('filesTop');
     const filesBottomEl = document.getElementById('filesBottom');
     const ranksLeftEl = document.getElementById('ranksLeft');
@@ -45,7 +45,7 @@
     let redoStack = [];
     let activePly = 0;
 
-    // Puzzle state
+    // Puzzles state
     const bucketCache = {}; // key -> { puzzles, themes }
     let currentBucketKey = null;
     let currentPuzzles = [];
@@ -53,9 +53,9 @@
     let currentPuzzleIndex = -1;
     let currentPuzzle = null;
 
-    // ------------------------------------------------------------------------
-    // Status + stats
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // Status / stats
+    // ---------------------------------------------------------------------
 
     function setStatus(msg, type = 'success') {
         if (!statusMessage) return;
@@ -65,16 +65,14 @@
 
     function updateToolStats() {
         if (!toolStats) return;
-
         if (!currentBucketKey || !currentPuzzles.length) {
             toolStats.textContent = 'No puzzles loaded.';
             return;
         }
-
-        const filteredCount = currentFiltered.length || 0;
+        const filtered = currentFiltered.length;
         toolStats.textContent =
             `Bucket ${currentBucketKey}: ${currentPuzzles.length} puzzles • ` +
-            `${filteredCount} match current filters`;
+            `${filtered} match current filters`;
     }
 
     function updateBoardStats() {
@@ -106,9 +104,9 @@
         }
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Board rendering
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     function renderCoords(files, ranks) {
         if (filesTopEl) filesTopEl.innerHTML = files.map((f) => `<span>${f}</span>`).join('');
@@ -192,9 +190,9 @@
         updateBoardStats();
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Board interaction
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     function handleSquareClick(square) {
         if (game.game_over()) return;
@@ -292,9 +290,9 @@
         setStatus('Puzzle reset to starting position.', 'success');
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // EPD parsing (Lichess)
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     function parseOps(rest) {
         const ops = {};
@@ -420,7 +418,6 @@
             const p = parseLichessEpdLine(line);
             if (!p) continue;
             puzzles.push(p);
-
             if (p.themes && p.themes.length) {
                 p.themes.forEach((t) => themeSet.add(t));
             }
@@ -433,14 +430,12 @@
         return bucketCache[bucketKey];
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Filtering + puzzle selection
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     function populateThemeSelect(themes) {
         if (!themeSelect) return;
-
-        const previous = themeSelect.value;
 
         themeSelect.innerHTML = '';
         const anyOpt = document.createElement('option');
@@ -455,20 +450,18 @@
             themeSelect.appendChild(opt);
         });
 
-        // Reset to "Any theme" on bucket change
         themeSelect.value = '';
     }
 
     async function handleRatingBucketChange() {
         if (!ratingBucketSelect) return;
-
         const opt = ratingBucketSelect.options[ratingBucketSelect.selectedIndex];
         if (!opt) return;
 
         const bucketKey = opt.value;
         const url = opt.dataset.file;
         if (!url) {
-            setStatus('No EPD file is configured for this rating range.', 'error');
+            setStatus('No EPD file configured for this rating range.', 'error');
             return;
         }
 
@@ -523,7 +516,8 @@
 
         if (!currentFiltered.length) {
             updateToolStats();
-            puzzleLabelEl.textContent = 'No puzzles match this theme in the current rating range.';
+            puzzleLabelEl.textContent =
+                'No puzzles match this theme in the current rating range.';
             setStatus('No puzzles match the selected theme.', 'warning');
             return;
         }
@@ -547,7 +541,9 @@
         const popText = puzzle.popularity != null ? `Popularity: ${puzzle.popularity}` : 'Popularity: n/a';
         const playsText = puzzle.plays != null ? `Plays: ${puzzle.plays}` : 'Plays: n/a';
 
-        puzzleLabelEl.textContent = `Lichess • ${puzzle.id || 'Puzzle'} • #${idx + 1} of ${currentFiltered.length}`;
+        puzzleLabelEl.textContent =
+            `Lichess • ${puzzle.id || 'Puzzle'} • #${idx + 1} of ${currentFiltered.length}`;
+
         puzzleMetaPrimary.textContent = `${ratingText} • ${popText} • ${playsText}`;
 
         const themeText = (puzzle.themes && puzzle.themes.length)
@@ -591,9 +587,9 @@
         refreshBoard();
     }
 
-    // ------------------------------------------------------------------------
-    // Solution preview (Lichess: bm = candidate best moves)
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // Solution preview: Lichess "bm" candidates
+    // ---------------------------------------------------------------------
 
     function showSolutionPreview() {
         solutionMovesEl.innerHTML = '';
@@ -628,7 +624,7 @@
             solutionMovesEl.appendChild(tag);
         });
 
-        setStatus('Showing best-move candidates.', 'success');
+        setStatus('Showing best-move candidates from EPD.', 'success');
     }
 
     function previewBestMoveFromStart(san) {
@@ -656,9 +652,9 @@
         setStatus(`Applied best-move candidate: ${san}`, 'success');
     }
 
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Controls / init
-    // ------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     function initControls() {
         if (backButton) {
@@ -710,10 +706,16 @@
         }
     }
 
-    function init() {
+    async function init() {
         initControls();
-        setStatus('Select a rating range to load puzzles.', 'warning');
-        updateToolStats();
+        setStatus('Loading initial rating bucket…', 'warning');
+
+        // Auto-load the first bucket so the user sees something immediately.
+        if (ratingBucketSelect && ratingBucketSelect.options.length > 0) {
+            await handleRatingBucketChange();
+        } else {
+            setStatus('No rating buckets configured.', 'error');
+        }
     }
 
     if (document.readyState === 'loading') {
