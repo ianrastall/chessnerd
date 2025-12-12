@@ -44,6 +44,9 @@
     let legalTargets = [];
     let redoStack = [];
     let activePly = 0;
+    let engine = null;
+    let engineReady = false;
+    let engineThinking = false;
 
     // Puzzles state
     const bucketCache = {}; // key -> { puzzles, themes, skipped }
@@ -83,6 +86,7 @@
         redoStack = [];
         activePly = 0;
         orientation = 'white';
+        stopEngineSearch();
 
         const blank = new Chess();
         blank.clear();
@@ -140,6 +144,23 @@
         if (moveStatsEl) {
             moveStatsEl.textContent = `${history.length} move${history.length === 1 ? '' : 's'}`;
         }
+    }
+
+    function normalizeSan(san) {
+        return (san || '')
+            .replace(/0/g, 'O')
+            .replace(/[+#?!]/g, '')
+            .trim()
+            .toLowerCase();
+    }
+
+    function isCorrectFirstMove(moveSan, plyBefore) {
+        if (plyBefore > 0) return true; // Only validate the very first move; later moves are free play.
+        if (!currentPuzzle) return true;
+        const best = currentPuzzle.bestMoves || [];
+        if (!best.length) return true;
+        const norm = normalizeSan(moveSan);
+        return best.some((bm) => normalizeSan(bm) === norm);
     }
 
     // ---------------------------------------------------------------------
@@ -258,9 +279,24 @@
     }
 
     function attemptMove(from, to) {
+        if (engineThinking) {
+            setStatus('Wait for the puzzle reply first.', 'warning');
+            return;
+        }
+
+        const plyBefore = game.history().length;
         const move = game.move({ from, to, promotion: 'q' });
         if (!move) {
             setStatus('Illegal move.', 'error');
+            return;
+        }
+
+        if (!isCorrectFirstMove(move.san, plyBefore)) {
+            game.undo();
+            selectedSquare = null;
+            legalTargets = [];
+            setStatus('That is not one of the puzzle\'s best moves. Try again.', 'error');
+            renderBoard();
             return;
         }
 
@@ -269,11 +305,17 @@
         legalTargets = [];
         activePly = game.history().length;
 
-        setStatus(`You played ${move.san}`, 'success');
+        const validated = (currentPuzzle?.bestMoves || []).length
+            ? 'Correct best move! Puzzle replying…'
+            : `You played ${move.san}`;
+
+        setStatus(validated, 'success');
         refreshBoard();
+        queuePuzzleReply();
     }
 
     function undoMove() {
+        stopEngineSearch();
         const move = game.undo();
         if (!move) {
             setStatus('Nothing to undo.', 'warning');
@@ -286,6 +328,7 @@
     }
 
     function redoMove() {
+        stopEngineSearch();
         const move = redoStack.pop();
         if (!move) {
             setStatus('Nothing to redo.', 'warning');
@@ -297,8 +340,108 @@
         refreshBoard();
     }
 
+    function stopEngineSearch() {
+        if (engine) {
+            try {
+                engine.postMessage('stop');
+            } catch (err) {
+                // ignore
+            }
+        }
+        engineThinking = false;
+    }
+
+    function pickReplyMove(moves) {
+        const value = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+        let best = moves[0];
+        let bestScore = -1;
+        moves.forEach((m) => {
+            let score = 0;
+            if (m.flags && (m.flags.includes('c') || m.flags.includes('e'))) {
+                score += 10 + (value[m.captured?.toLowerCase()] || 0);
+            }
+            if (m.san.includes('#')) score += 50;
+            else if (m.san.includes('+')) score += 5;
+            if (score > bestScore) {
+                bestScore = score;
+                best = m;
+            }
+        });
+        return best;
+    }
+
+    function applyReplyMove(reply) {
+        let move;
+        if (typeof reply === 'string') {
+            const from = reply.slice(0, 2);
+            const to = reply.slice(2, 4);
+            const promotion = reply.length > 4 ? reply[4] : undefined;
+            move = game.move({ from, to, promotion });
+        } else {
+            move = game.move({ from: reply.from, to: reply.to, promotion: reply.promotion });
+        }
+
+        if (!move) {
+            setStatus('Puzzle could not find a valid reply.', 'warning');
+            engineThinking = false;
+            refreshBoard();
+            return;
+        }
+
+        redoStack = [];
+        selectedSquare = null;
+        legalTargets = [];
+        activePly = game.history().length;
+        engineThinking = false;
+
+        setStatus(`Puzzle played ${move.san}`, 'success');
+        refreshBoard();
+    }
+
+    function autoReplyFallback() {
+        const replies = game.moves({ verbose: true });
+        if (!replies.length) {
+            engineThinking = false;
+            refreshBoard();
+            return;
+        }
+        const reply = pickReplyMove(replies);
+        applyReplyMove(reply);
+    }
+
+    function queuePuzzleReply() {
+        if (game.game_over()) {
+            updateBoardStats();
+            return;
+        }
+
+        const replies = game.moves({ verbose: true });
+        if (!replies.length) {
+            updateBoardStats();
+            return;
+        }
+
+        if (engineReady && engine) {
+            engineThinking = true;
+            const fen = game.fen();
+            try {
+                engine.postMessage('stop');
+                engine.postMessage(`position fen ${fen}`);
+                engine.postMessage('go movetime 800');
+                setStatus('Puzzle is thinking of a reply…', 'warning');
+                return;
+            } catch (err) {
+                engineThinking = false;
+            }
+        }
+
+        // Fallback if engine not ready or failed
+        autoReplyFallback();
+    }
+
     function jumpToPly(ply) {
         if (!currentPuzzle) return;
+        stopEngineSearch();
         const fullHistory = game.history({ verbose: true });
         const slice = fullHistory.slice(0, ply);
 
@@ -624,10 +767,15 @@
         selectedSquare = null;
         legalTargets = [];
         activePly = 0;
+        stopEngineSearch();
 
         const fenParts = puzzle.fen.split(/\s+/);
         const sideToMove = fenParts[1] || 'w';
         orientation = sideToMove === 'w' ? 'white' : 'black';
+
+        if (engineReady && engine) {
+            engine.postMessage('ucinewgame');
+        }
 
         refreshBoard();
     }
@@ -698,6 +846,52 @@
     }
 
     // ---------------------------------------------------------------------
+    // Lightweight puzzle reply engine (Lozza)
+    // ---------------------------------------------------------------------
+
+    function handleEngineMessage(e) {
+        const line = (e.data || '').toString().trim();
+        if (!line) return;
+
+        if (line === 'uciok') {
+            engine?.postMessage('isready');
+            return;
+        }
+
+        if (line === 'readyok') {
+            engineReady = true;
+            setStatus('Puzzle reply engine ready.', 'success');
+            engine?.postMessage('ucinewgame');
+            return;
+        }
+
+        if (line.startsWith('bestmove')) {
+            const parts = line.split(/\s+/);
+            const mv = parts[1];
+            engineThinking = false;
+            if (!mv || mv === '(none)') {
+                autoReplyFallback();
+                return;
+            }
+            applyReplyMove(mv);
+        }
+    }
+
+    function initEngine() {
+        try {
+            engine = new Worker('js/lozza.js');
+            engine.onmessage = handleEngineMessage;
+            engine.onerror = (err) => setStatus(`Puzzle engine error: ${err.message || err}`, 'error');
+            engine.postMessage('uci');
+            setStatus('Starting puzzle reply engine…', 'warning');
+        } catch (err) {
+            engine = null;
+            engineReady = false;
+            setStatus('Puzzle reply engine unavailable; using fallback replies.', 'warning');
+        }
+    }
+
+    // ---------------------------------------------------------------------
     // Controls / init
     // ---------------------------------------------------------------------
 
@@ -753,6 +947,7 @@
 
     async function init() {
         initControls();
+        initEngine();
         setStatus('Loading initial rating bucket…', 'warning');
 
         // Auto-load the first bucket so the user sees something immediately.
