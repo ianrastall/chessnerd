@@ -63,37 +63,9 @@
                 </div>
 
                 <div class="io-container engine-grid">
-                    <!-- LEFT: Board + movelist + metadata -->
+                    <!-- LEFT: Board only -->
                     <div class="io-panel">
-                        <div class="io-label">
-                            <span>Board</span>
-                            <span class="stats" id="boardStats">No puzzle loaded</span>
-                        </div>
-
                         <div class="board-wrapper">
-                            <div class="board-toolbar">
-                                <div id="puzzleLabel" class="engine-chip">
-                                    Select a rating and load puzzles…
-                                </div>
-                                <div class="board-buttons">
-                                    <button id="undoBtn" class="btn btn-secondary btn-compact">
-                                        <span class="material-icons" style="font-size: 1rem;">undo</span> Undo
-                                    </button>
-                                    <button id="redoBtn" class="btn btn-secondary btn-compact">
-                                        <span class="material-icons" style="font-size: 1rem;">redo</span> Redo
-                                    </button>
-                                    <button id="resetPuzzleBtn" class="btn btn-secondary btn-compact">
-                                        <span class="material-icons" style="font-size: 1rem;">restart_alt</span> Reset
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="io-label" style="margin-top: 0.25rem;">
-                                <span>Moves played</span>
-                                <span class="stats" id="moveStats">0 moves</span>
-                            </div>
-                            <div id="puzzleMoveList" class="move-list"></div>
-
                             <div class="board-shell">
                                 <div class="board-files" id="filesTop"></div>
                                 <div class="board-mid">
@@ -104,15 +76,44 @@
                                 <div class="board-files" id="filesBottom"></div>
                             </div>
 
-                            <div class="board-footer">
-                                <div id="puzzleMetaPrimary" class="color-pill">Rating: –</div>
-                                <div id="puzzleMetaSecondary" class="color-pill engine">Themes: –</div>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- RIGHT: Rating, theme, navigation, solution -->
+                    <!-- RIGHT: Info + controls + options -->
                     <div class="io-panel">
+                        <div class="options-panel" style="margin-bottom: 1rem;">
+                            <div class="puzzle-info">
+                                <div class="puzzle-info-header">
+                                    <div id="puzzleLabel" class="engine-chip">
+                                        Select a rating and load puzzles.
+                                    </div>
+                                    <div class="board-buttons">
+                                        <button id="undoBtn" class="btn btn-secondary btn-compact">
+                                            <span class="material-icons" style="font-size: 1rem;">undo</span> Undo
+                                        </button>
+                                        <button id="redoBtn" class="btn btn-secondary btn-compact">
+                                            <span class="material-icons" style="font-size: 1rem;">redo</span> Redo
+                                        </button>
+                                        <button id="resetPuzzleBtn" class="btn btn-secondary btn-compact">
+                                            <span class="material-icons" style="font-size: 1rem;">restart_alt</span> Reset
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="puzzle-info-grid">
+                                    <div class="pill" id="boardStats">No puzzle loaded</div>
+                                    <div class="pill" id="moveStats">0 moves</div>
+                                    <div class="pill muted" id="puzzleMetaPrimary">Rating: -</div>
+                                    <div class="pill engine" id="puzzleMetaSecondary">Themes: -</div>
+                                </div>
+
+                                <div class="io-label" style="margin-top: 0.25rem;">
+                                    <span>Moves played</span>
+                                </div>
+                                <div id="puzzleMoveList" class="move-list"></div>
+                            </div>
+                        </div>
+
                         <div class="options-panel">
                             <div class="options-grid">
                                 <div class="option-group">
@@ -161,7 +162,7 @@
                         <div class="options-panel" style="margin-top: 1rem;">
                             <div class="options-grid">
                                 <div class="option-group">
-                                    <label>Best moves (EPD “bm” field)</label>
+                                    <label>Best moves (EPD "bm" field)</label>
                                     <div class="pgn-actions">
                                         <button id="showSolutionBtn" class="btn btn-secondary btn-compact">
                                             <span class="material-icons" style="font-size: 1rem;">visibility</span>
@@ -185,7 +186,7 @@
                 </div>
 
                 <div class="status-bar">
-                    <div id="statusMessage" class="warning">Select a rating and click “Load rating”.</div>
+                    <div id="statusMessage" class="warning">Select a rating and click "Load rating".</div>
                     <div id="toolStats"></div>
                 </div>
             </div>

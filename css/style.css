@@ -54,6 +54,15 @@ body {
     padding: 1rem 1.5rem;
 }
 
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-light);
+}
+
 /* Header */
 header {
     display: flex;
@@ -429,13 +438,50 @@ input[type="checkbox"], input[type="radio"] {
     flex-wrap: wrap;
 }
 
+.puzzle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.puzzle-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.puzzle-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.5rem;
+}
+
+.pill {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.pill.engine {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.pill.muted {
+    color: var(--text-secondary);
+}
+
 .engine-chip {
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--accent);
     background: var(--bg-secondary);
     font-size: 0.85rem;
-    color: var(--text-secondary);
+    color: var(--accent);
 }
 
 .engine-chip.ready {
@@ -544,22 +590,25 @@ input[type="checkbox"], input[type="radio"] {
 .move-tag {
     padding: 0.25rem 0.6rem;
     background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--accent);
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.85rem;
     transition: border 0.2s, transform 0.2s;
+    color: var(--accent);
 }
 
 .move-tag:hover {
-    border-color: var(--accent);
+    border-color: var(--accent-light);
+    background: var(--bg-tertiary);
+    color: var(--accent-light);
     transform: translateY(-1px);
 }
 
 .move-tag.active {
-    background: rgba(13, 148, 136, 0.15);
+    background: var(--accent);
     border-color: var(--accent);
-    color: var(--accent);
+    color: #ffffff;
 }
 
 .pgn-panel {
@@ -691,4 +740,3 @@ input[type="checkbox"], input[type="radio"] {
 .io-container.puzzle-grid {
     align-items: flex-start;
 }
-
