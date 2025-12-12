@@ -56,6 +56,9 @@
     let currentFiltered = [];
     let currentPuzzleIndex = -1;
     let currentPuzzle = null;
+    let playerColor = 'w'; // color controlled by the user for the active puzzle
+    let solutionMoves = []; // principal variation (SAN tokens)
+    let solutionIndex = 0; // next expected ply in solutionMoves
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -198,6 +201,37 @@
     // Board interaction
     // ---------------------------------------------------------------------
 
+    function sanEqual(a, b) {
+        if (!a || !b) return false;
+        return a.replace(/[+#]/g, '') === b.replace(/[+#]/g, '');
+    }
+
+    function autoPlayOpponentLine() {
+        if (!currentPuzzle || !solutionMoves.length) return;
+
+        let lastAuto = null;
+        while (solutionIndex < solutionMoves.length && game.turn() !== playerColor) {
+            const expected = solutionMoves[solutionIndex];
+            const move = game.move(expected);
+            if (!move) {
+                setStatus(`Opponent move "${expected}" is illegal from this position.`, 'error');
+                refreshBoard();
+                return;
+            }
+            lastAuto = move.san;
+            solutionIndex = game.history().length;
+            activePly = solutionIndex;
+        }
+
+        refreshBoard();
+
+        if (solutionIndex >= solutionMoves.length) {
+            setStatus('Puzzle completed!', 'success');
+        } else if (lastAuto) {
+            setStatus(`Opponent played ${lastAuto}. Your move.`, 'success');
+        }
+    }
+
     function handleSquareClick(square) {
         if (game.game_over()) return;
 
@@ -224,9 +258,21 @@
     }
 
     function attemptMove(from, to) {
+        const expected = solutionMoves[game.history().length];
         const move = game.move({ from, to, promotion: 'q' });
         if (!move) {
             setStatus('Illegal move.', 'error');
+            return;
+        }
+
+        if (expected && !sanEqual(expected, move.san)) {
+            game.undo();
+            selectedSquare = null;
+            legalTargets = [];
+            activePly = game.history().length;
+            solutionIndex = activePly;
+            refreshBoard();
+            setStatus(`Incorrect move. Expected ${expected}.`, 'error');
             return;
         }
 
@@ -234,9 +280,17 @@
         selectedSquare = null;
         legalTargets = [];
         activePly = game.history().length;
+        solutionIndex = activePly;
 
         setStatus(`You played ${move.san}`, 'success');
         refreshBoard();
+
+        if (solutionIndex >= solutionMoves.length) {
+            setStatus('Puzzle completed!', 'success');
+            return;
+        }
+
+        autoPlayOpponentLine();
     }
 
     function undoMove() {
@@ -247,6 +301,7 @@
         }
         redoStack.push(move);
         activePly = game.history().length;
+        solutionIndex = activePly;
         setStatus('Move undone.', 'success');
         refreshBoard();
     }
@@ -259,6 +314,7 @@
         }
         game.move({ from: move.from, to: move.to, promotion: move.promotion });
         activePly = game.history().length;
+        solutionIndex = activePly;
         setStatus('Move redone.', 'success');
         refreshBoard();
     }
@@ -285,6 +341,7 @@
         selectedSquare = null;
         legalTargets = [];
         activePly = ply;
+        solutionIndex = game.history().length;
         setStatus(`Jumped to move ${ply}.`, 'success');
         refreshBoard();
     }
@@ -396,6 +453,7 @@
         }
 
         const bestMoves = ops.bm ? ops.bm.slice() : [];
+        const pvMoves = ops.pv ? ops.pv.slice() : [];
 
         return {
             source: 'lichess',
@@ -406,6 +464,7 @@
             plays,
             themes,
             bestMoves,
+            pvMoves,
             gameUrl,
             description: c2 || ''
         };
@@ -574,6 +633,16 @@
         selectedSquare = null;
         legalTargets = [];
         activePly = 0;
+        playerColor = next.turn();
+
+        if (puzzle.pvMoves && puzzle.pvMoves.length) {
+            solutionMoves = puzzle.pvMoves.slice();
+        } else if (puzzle.bestMoves && puzzle.bestMoves.length) {
+            solutionMoves = puzzle.bestMoves.slice();
+        } else {
+            solutionMoves = [];
+        }
+        solutionIndex = 0;
 
         const sideToMove = next.turn(); // 'w' or 'b'
         orientation = sideToMove === 'w' ? 'white' : 'black';
@@ -642,6 +711,7 @@
         selectedSquare = null;
         legalTargets = [];
         activePly = game.history().length;
+        solutionIndex = activePly;
 
         refreshBoard();
         setStatus(`Applied best-move candidate: ${san}`, 'success');
