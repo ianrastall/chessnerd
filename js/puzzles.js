@@ -39,7 +39,7 @@
     const backButton = document.getElementById('backButton');
 
     // Root for split EPD files; adjust if you used a different folder name.
-    const PUZZLE_ROOT = 'data/lichess-by-rating';
+    const PUZZLE_ROOT = 'data/lichess-buckets';
 
     // Chess state
     let game = new Chess();
