@@ -220,6 +220,10 @@
         gameMovesEl.classList.remove('hidden');
     }
 
+    function normalizeFen(fen) {
+        return (fen || '').trim().split(/\s+/).slice(0, 4).join(' ');
+    }
+
     function lichessPgnUrl(gameUrl) {
         if (!gameUrl) return null;
         try {
@@ -233,6 +237,19 @@
         }
     }
 
+    function lichessApiPgnUrl(gameUrl) {
+        if (!gameUrl) return null;
+        try {
+            const u = new URL(gameUrl);
+            const parts = u.pathname.split('/').filter(Boolean);
+            if (!parts.length) return null;
+            const id = parts[0];
+            return `${u.origin}/game/export/${id}?moves=1&tags=1&evals=0&clocks=0&literate=0`;
+        } catch (err) {
+            return null;
+        }
+    }
+
     async function loadGameMovesFromSource() {
         if (!currentPuzzle || !currentPuzzle.gameUrl) return;
         const cacheKey = currentPuzzle.id || currentPuzzle.gameUrl;
@@ -241,7 +258,8 @@
             return;
         }
 
-        const pgnUrl = lichessPgnUrl(currentPuzzle.gameUrl);
+        const apiUrl = lichessApiPgnUrl(currentPuzzle.gameUrl);
+        const pgnUrl = apiUrl || lichessPgnUrl(currentPuzzle.gameUrl);
         if (!pgnUrl) return;
 
         try {
@@ -253,9 +271,47 @@
             const ok = scratch.load_pgn(pgn);
             if (!ok) throw new Error('Unable to parse PGN.');
 
-            const sanMoves = scratch.history({ verbose: true }).map((m) => m.san);
-            gameMovesCache.set(cacheKey, sanMoves);
-            renderGameMoves(sanMoves);
+            const verboseMoves = scratch.history({ verbose: true });
+            const sanMoves = verboseMoves.map((m) => m.san);
+
+            // Rewind and walk to find the ply where the puzzle FEN occurs.
+            const headerFen = scratch.header().FEN;
+            const replay = new Chess();
+            if (headerFen) {
+                if (!replay.load(headerFen)) {
+                    throw new Error('Unable to load game start FEN.');
+                }
+            } else {
+                replay.reset();
+            }
+            const targetFen = normalizeFen(currentPuzzle.fen);
+            let matchIdx = -1;
+
+            // Check starting position first
+            if (normalizeFen(replay.fen()) === targetFen) {
+                matchIdx = 0;
+            } else {
+                for (let i = 0; i < verboseMoves.length; i++) {
+                    replay.move({
+                        from: verboseMoves[i].from,
+                        to: verboseMoves[i].to,
+                        promotion: verboseMoves[i].promotion
+                    });
+                    if (normalizeFen(replay.fen()) === targetFen) {
+                        matchIdx = i + 1; // position after this ply
+                        break;
+                    }
+                }
+            }
+
+            const displayMoves = matchIdx === -1 ? sanMoves : sanMoves.slice(matchIdx);
+
+            if (matchIdx === -1) {
+                setStatus('Source game loaded, but puzzle position was not found. Showing full game moves.', 'warning');
+            }
+
+            gameMovesCache.set(cacheKey, displayMoves);
+            renderGameMoves(displayMoves);
         } catch (err) {
             setStatus(`Unable to load source game: ${err && err.message ? err.message : err}`, 'warning');
         }
