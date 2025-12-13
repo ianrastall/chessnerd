@@ -62,6 +62,7 @@
     let puzzleHistory = [];
     let historyPos = -1;
     let puzzleComplete = false; // whether the puzzle line is finished
+    let fullMoveHistory = []; // full move line (verbose moves) even when rewound
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -230,7 +231,7 @@
 
     function renderMoveHistory() {
         if (!puzzleMoveListEl) return;
-        const history = game.history({ verbose: true });
+        const history = fullMoveHistory;
 
         puzzleMoveListEl.innerHTML = '';
 
@@ -279,6 +280,7 @@
                 refreshBoard();
                 return;
             }
+            fullMoveHistory.push(move);
             lastAuto = move.san;
             solutionIndex = game.history().length;
             activePly = solutionIndex;
@@ -321,6 +323,11 @@
     }
 
     function attemptMove(from, to) {
+        if (activePly < fullMoveHistory.length) {
+            // If we're branching from an earlier position, drop future moves.
+            fullMoveHistory = fullMoveHistory.slice(0, activePly);
+        }
+
         const expected = solutionMoves[game.history().length];
         const move = game.move({ from, to, promotion: 'q' });
         if (!move) {
@@ -340,6 +347,7 @@
             return;
         }
 
+        fullMoveHistory.push(move);
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -366,15 +374,19 @@
             setStatus('Nothing to undo.', 'warning');
             return;
         }
-        redoStack.push(move);
         activePly = game.history().length;
         solutionIndex = activePly;
+        redoStack = fullMoveHistory.slice(activePly).reverse();
         puzzleComplete = game.game_over() || (solutionIndex >= solutionMoves.length);
         setStatus('Move undone.', 'success');
         refreshBoard();
     }
 
     function redoMove() {
+        if (!redoStack.length && activePly < fullMoveHistory.length) {
+            redoStack = fullMoveHistory.slice(activePly).reverse();
+        }
+
         const move = redoStack.pop();
         if (!move) {
             setStatus('Nothing to redo.', 'warning');
@@ -394,23 +406,21 @@
 
     function jumpToPly(ply) {
         if (!currentPuzzle) return;
+        if (ply < 0 || ply > fullMoveHistory.length) return;
 
         // Rebuild from the original FEN + prefix of moves
-        const fullHistory = game.history({ verbose: true });
-        const slice = fullHistory.slice(0, ply);
-
         const next = new Chess();
         if (!next.load(currentPuzzle.fen)) {
             setStatus('Unable to reload puzzle FEN.', 'error');
             return;
         }
 
-        slice.forEach((m) => {
+        fullMoveHistory.slice(0, ply).forEach((m) => {
             next.move({ from: m.from, to: m.to, promotion: m.promotion });
         });
 
         game = next;
-        redoStack = [];
+        redoStack = fullMoveHistory.slice(ply).reverse();
         selectedSquare = null;
         legalTargets = [];
         activePly = ply;
@@ -727,6 +737,7 @@
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
+        fullMoveHistory = [];
         activePly = 0;
         playerColor = next.turn();
         puzzleComplete = false;
@@ -812,6 +823,7 @@
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
+        fullMoveHistory = game.history({ verbose: true });
         activePly = game.history().length;
         solutionIndex = activePly;
 
