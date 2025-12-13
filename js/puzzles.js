@@ -60,6 +60,7 @@
     let solutionIndex = 0; // next expected ply in solutionMoves
     let puzzleHistory = [];
     let historyPos = -1;
+    let puzzleComplete = false; // whether the puzzle line is finished
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -157,7 +158,7 @@
         const matedColor = isCheckmate ? game.turn() : null;
         const matedSquare = isCheckmate ? findKingSquare(matedColor) : null;
 
-        boardEl.classList.toggle('game-over', game.game_over());
+        boardEl.classList.toggle('game-over', puzzleComplete || game.game_over());
 
         ranks.forEach((rank) => {
             files.forEach((file) => {
@@ -248,6 +249,7 @@
         refreshBoard();
 
         if (solutionIndex >= solutionMoves.length) {
+            puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
         } else if (lastAuto) {
             setStatus(`Opponent played ${lastAuto}. Your move.`, 'success');
@@ -293,6 +295,7 @@
             legalTargets = [];
             activePly = game.history().length;
             solutionIndex = activePly;
+            puzzleComplete = false;
             refreshBoard();
             setStatus(`Incorrect move. Expected ${expected}.`, 'error');
             return;
@@ -303,11 +306,13 @@
         legalTargets = [];
         activePly = game.history().length;
         solutionIndex = activePly;
+        puzzleComplete = solutionIndex >= solutionMoves.length || game.game_over();
 
         setStatus(`You played ${move.san}`, 'success');
         refreshBoard();
 
         if (solutionIndex >= solutionMoves.length) {
+            puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
             return;
         }
@@ -324,6 +329,7 @@
         redoStack.push(move);
         activePly = game.history().length;
         solutionIndex = activePly;
+        puzzleComplete = game.game_over() || (solutionIndex >= solutionMoves.length);
         setStatus('Move undone.', 'success');
         refreshBoard();
     }
@@ -337,6 +343,7 @@
         game.move({ from: move.from, to: move.to, promotion: move.promotion });
         activePly = game.history().length;
         solutionIndex = activePly;
+        puzzleComplete = game.game_over() || (solutionIndex >= solutionMoves.length);
         setStatus('Move redone.', 'success');
         refreshBoard();
     }
@@ -364,6 +371,7 @@
         legalTargets = [];
         activePly = ply;
         solutionIndex = game.history().length;
+        puzzleComplete = game.game_over() || (solutionIndex >= solutionMoves.length);
         setStatus(`Jumped to move ${ply}.`, 'success');
         refreshBoard();
     }
@@ -673,6 +681,7 @@
         legalTargets = [];
         activePly = 0;
         playerColor = next.turn();
+        puzzleComplete = false;
 
         if (puzzle.pvMoves && puzzle.pvMoves.length) {
             solutionMoves = puzzle.pvMoves.slice();
@@ -688,6 +697,7 @@
 
         refreshBoard();
         if (game.in_checkmate()) {
+            puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
         }
     }
