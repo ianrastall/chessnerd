@@ -29,7 +29,6 @@
 
     const prevPuzzleBtn = document.getElementById('prevPuzzleBtn');
     const nextPuzzleBtn = document.getElementById('nextPuzzleBtn');
-    const randomPuzzleBtn = document.getElementById('randomPuzzleBtn');
 
     const showSolutionBtn = document.getElementById('showSolutionBtn');
     const resetPuzzleBtn = document.getElementById('resetPuzzleBtn');
@@ -59,6 +58,8 @@
     let playerColor = 'w'; // color controlled by the user for the active puzzle
     let solutionMoves = []; // principal variation (SAN tokens)
     let solutionIndex = 0; // next expected ply in solutionMoves
+    let puzzleHistory = [];
+    let historyPos = -1;
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -115,6 +116,21 @@
     // Board rendering
     // ---------------------------------------------------------------------
 
+    function findKingSquare(color) {
+        const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const ranks = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        for (const rank of ranks) {
+            for (const file of files) {
+                const sq = `${file}${rank}`;
+                const piece = game.get(sq);
+                if (piece && piece.type === 'k' && piece.color === color) {
+                    return sq;
+                }
+            }
+        }
+        return null;
+    }
+
     function renderCoords(files, ranks) {
         if (filesTopEl) filesTopEl.innerHTML = files.map((f) => `<span>${f}</span>`).join('');
         if (filesBottomEl) filesBottomEl.innerHTML = files.map((f) => `<span>${f}</span>`).join('');
@@ -137,6 +153,11 @@
         const lastMove = history[history.length - 1];
         const highlights = lastMove ? [lastMove.from, lastMove.to] : [];
         const targetSet = new Set(legalTargets);
+        const isCheckmate = game.in_checkmate();
+        const matedColor = isCheckmate ? game.turn() : null;
+        const matedSquare = isCheckmate ? findKingSquare(matedColor) : null;
+
+        boardEl.classList.toggle('game-over', game.game_over());
 
         ranks.forEach((rank) => {
             files.forEach((file) => {
@@ -150,6 +171,7 @@
                 if (highlights.includes(square)) squareEl.classList.add('highlight');
                 if (square === selectedSquare) squareEl.classList.add('selected');
                 if (targetSet.has(square)) squareEl.classList.add('target');
+                if (isCheckmate && square === matedSquare) squareEl.classList.add('mated');
 
                 const piece = game.get(square);
                 if (piece) {
@@ -549,6 +571,8 @@
             currentFiltered = [];
             currentPuzzleIndex = -1;
             currentPuzzle = null;
+            puzzleHistory = [];
+            historyPos = -1;
             updateToolStats();
             return;
         }
@@ -564,6 +588,8 @@
 
         currentPuzzleIndex = -1;
         currentPuzzle = null;
+        puzzleHistory = [];
+        historyPos = -1;
 
         if (!currentFiltered.length) {
             updateToolStats();
@@ -577,18 +603,25 @@
             return;
         }
 
-        showPuzzleAtIndex(0);
+        showRandomPuzzle();
     }
 
-    function showPuzzleAtIndex(idx) {
+    function showPuzzleAtIndex(idx, trackHistory = true) {
         if (!currentFiltered.length) return;
 
-        if (idx < 0) idx = currentFiltered.length - 1;
-        if (idx >= currentFiltered.length) idx = 0;
+        if (idx < 0 || idx >= currentFiltered.length) return;
 
         currentPuzzleIndex = idx;
         const puzzle = currentFiltered[idx];
         currentPuzzle = puzzle;
+
+        if (trackHistory) {
+            if (historyPos < puzzleHistory.length - 1) {
+                puzzleHistory = puzzleHistory.slice(0, historyPos + 1);
+            }
+            puzzleHistory.push(idx);
+            historyPos = puzzleHistory.length - 1;
+        }
 
         loadPuzzleIntoBoard(puzzle);
 
@@ -621,6 +654,12 @@
         setStatus(`Loaded puzzle ${idx + 1} of ${currentFiltered.length}.`, 'success');
     }
 
+    function showRandomPuzzle() {
+        if (!currentFiltered.length) return;
+        const idx = Math.floor(Math.random() * currentFiltered.length);
+        showPuzzleAtIndex(idx);
+    }
+
     function loadPuzzleIntoBoard(puzzle) {
         const next = new Chess();
         if (!next.load(puzzle.fen)) {
@@ -648,6 +687,9 @@
         orientation = sideToMove === 'w' ? 'white' : 'black';
 
         refreshBoard();
+        if (game.in_checkmate()) {
+            setStatus('Puzzle completed!', 'success');
+        }
     }
 
     // ---------------------------------------------------------------------
@@ -760,11 +802,13 @@
         currentFiltered = currentPuzzles.slice();
         currentPuzzleIndex = -1;
         currentPuzzle = null;
+        puzzleHistory = [];
+        historyPos = -1;
 
         if (!currentPuzzles.length) {
             puzzleLabelEl.textContent = `No puzzles found for rating ${rating}.`;
-            puzzleMetaPrimary.textContent = 'Rating: –';
-            puzzleMetaSecondary.textContent = 'Themes: –';
+            puzzleMetaPrimary.textContent = 'Rating: -';
+            puzzleMetaSecondary.textContent = 'Themes: -';
             if (puzzleGameLink) puzzleGameLink.classList.add('hidden');
             setStatus(`No puzzles available for rating ${rating}.`, 'warning');
             refreshBoard();
@@ -774,7 +818,7 @@
 
         populateThemeSelect(bundle.themes || []);
         updateToolStats();
-        showPuzzleAtIndex(0);
+        showRandomPuzzle();
     }
 
     function initControls() {
@@ -791,22 +835,26 @@
         if (prevPuzzleBtn) {
             prevPuzzleBtn.addEventListener('click', () => {
                 if (!currentFiltered.length) return;
-                showPuzzleAtIndex(currentPuzzleIndex - 1);
+                if (historyPos > 0) {
+                    historyPos -= 1;
+                    const idx = puzzleHistory[historyPos];
+                    showPuzzleAtIndex(idx, false);
+                } else {
+                    setStatus('No previous puzzle in history.', 'warning');
+                }
             });
         }
 
         if (nextPuzzleBtn) {
             nextPuzzleBtn.addEventListener('click', () => {
                 if (!currentFiltered.length) return;
-                showPuzzleAtIndex(currentPuzzleIndex + 1);
-            });
-        }
-
-        if (randomPuzzleBtn) {
-            randomPuzzleBtn.addEventListener('click', () => {
-                if (!currentFiltered.length) return;
-                const idx = Math.floor(Math.random() * currentFiltered.length);
-                showPuzzleAtIndex(idx);
+                if (historyPos < puzzleHistory.length - 1) {
+                    historyPos += 1;
+                    const idx = puzzleHistory[historyPos];
+                    showPuzzleAtIndex(idx, false);
+                } else {
+                    showRandomPuzzle();
+                }
             });
         }
 
