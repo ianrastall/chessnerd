@@ -62,8 +62,6 @@
     let puzzleHistory = [];
     let historyPos = -1;
     let puzzleComplete = false; // whether the puzzle line is finished
-    const gameMovesCache = new Map(); // puzzleId -> array of SAN moves
-    let gameMovesLoaded = false;
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -220,114 +218,13 @@
         gameMovesEl.classList.remove('hidden');
     }
 
-    function normalizeFen(fen) {
-        return (fen || '').trim().split(/\s+/).slice(0, 4).join(' ');
-    }
-
-    function lichessApiPgnUrl(gameUrl) {
-        if (!gameUrl) return null;
-        try {
-            const u = new URL(gameUrl);
-            const parts = u.pathname.split('/').filter(Boolean);
-            if (!parts.length) return null;
-            const id = parts[0];
-            // Use Lichess API with Accept header for PGN - this endpoint supports CORS
-            return `https://lichess.org/game/export/${id}?moves=1&tags=1&evals=0&clocks=0&literate=0`;
-        } catch (err) {
-            return null;
-        }
-    }
-
-    async function loadGameMovesFromSource() {
-        if (!currentPuzzle || !currentPuzzle.gameUrl) {
-            console.log('[puzzles] No puzzle or gameUrl available for loading source game.');
-            return;
-        }
-
-        if (!gameMovesEl) {
-            console.warn('[puzzles] gameMovesEl element not found in DOM.');
-            return;
-        }
-
-        const cacheKey = currentPuzzle.id || currentPuzzle.gameUrl;
-        if (gameMovesCache.has(cacheKey)) {
-            renderGameMoves(gameMovesCache.get(cacheKey));
-            return;
-        }
-
-        const pgnUrl = lichessApiPgnUrl(currentPuzzle.gameUrl);
-        if (!pgnUrl) {
-            console.warn('[puzzles] Could not construct PGN URL from:', currentPuzzle.gameUrl);
-            return;
-        }
-
-        console.log('[puzzles] Fetching PGN from:', pgnUrl);
-
-        try {
-            const resp = await fetch(pgnUrl, {
-                headers: {
-                    'Accept': 'application/x-chess-pgn'
-                }
-            });
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const pgn = await resp.text();
-
-            console.log('[puzzles] PGN received, length:', pgn.length);
-
-            const scratch = new Chess();
-            const ok = scratch.load_pgn(pgn);
-            if (!ok) throw new Error('Unable to parse PGN.');
-
-            const verboseMoves = scratch.history({ verbose: true });
-            const sanMoves = verboseMoves.map((m) => m.san);
-
-            console.log('[puzzles] Parsed', sanMoves.length, 'moves from PGN');
-
-            // Rewind and walk to find the ply where the puzzle FEN occurs.
-            const headerFen = scratch.header().FEN;
-            const replay = new Chess();
-            if (headerFen) {
-                if (!replay.load(headerFen)) {
-                    throw new Error('Unable to load game start FEN.');
-                }
-            } else {
-                replay.reset();
-            }
-            const targetFen = normalizeFen(currentPuzzle.fen);
-            let matchIdx = -1;
-
-            // Check starting position first
-            if (normalizeFen(replay.fen()) === targetFen) {
-                matchIdx = 0;
-            } else {
-                for (let i = 0; i < verboseMoves.length; i++) {
-                    replay.move({
-                        from: verboseMoves[i].from,
-                        to: verboseMoves[i].to,
-                        promotion: verboseMoves[i].promotion
-                    });
-                    if (normalizeFen(replay.fen()) === targetFen) {
-                        matchIdx = i + 1; // position after this ply
-                        break;
-                    }
-                }
-            }
-
-            console.log('[puzzles] Puzzle FEN match index:', matchIdx);
-
-            const displayMoves = matchIdx === -1 ? sanMoves : sanMoves.slice(matchIdx);
-
-            if (matchIdx === -1) {
-                setStatus('Source game loaded, but puzzle position was not found. Showing full game moves.', 'warning');
-            } else {
-                setStatus(`Loaded ${displayMoves.length} continuation moves from source game.`, 'success');
-            }
-
-            gameMovesCache.set(cacheKey, displayMoves);
-            renderGameMoves(displayMoves);
-        } catch (err) {
-            console.error('[puzzles] Error loading source game:', err);
-            setStatus(`Unable to load source game: ${err && err.message ? err.message : err}`, 'warning');
+    function showSolutionMovesOnComplete() {
+        if (!currentPuzzle) return;
+        
+        // Show the full PV (principal variation) as the solution moves
+        const pvMoves = currentPuzzle.pvMoves || [];
+        if (pvMoves.length > 0) {
+            renderGameMoves(pvMoves);
         }
     }
 
@@ -392,10 +289,7 @@
         if (solutionIndex >= solutionMoves.length) {
             puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
-            if (!gameMovesLoaded) {
-                gameMovesLoaded = true;
-                loadGameMovesFromSource();
-            }
+            showSolutionMovesOnComplete();
         } else if (lastAuto) {
             setStatus(`Opponent played ${lastAuto}. Your move.`, 'success');
         }
@@ -459,10 +353,7 @@
         if (solutionIndex >= solutionMoves.length) {
             puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
-            if (!gameMovesLoaded) {
-                gameMovesLoaded = true;
-                loadGameMovesFromSource();
-            }
+            showSolutionMovesOnComplete();
             return;
         }
 
@@ -496,9 +387,8 @@
         setStatus('Move redone.', 'success');
         refreshBoard();
 
-        if (puzzleComplete && !gameMovesLoaded) {
-            gameMovesLoaded = true;
-            loadGameMovesFromSource();
+        if (puzzleComplete) {
+            showSolutionMovesOnComplete();
         }
     }
 
@@ -529,9 +419,8 @@
         setStatus(`Jumped to move ${ply}.`, 'success');
         refreshBoard();
 
-        if (puzzleComplete && !gameMovesLoaded) {
-            gameMovesLoaded = true;
-            loadGameMovesFromSource();
+        if (puzzleComplete) {
+            showSolutionMovesOnComplete();
         }
     }
 
@@ -841,7 +730,6 @@
         activePly = 0;
         playerColor = next.turn();
         puzzleComplete = false;
-        gameMovesLoaded = false;
         clearGameMoves();
 
         if (puzzle.pvMoves && puzzle.pvMoves.length) {
@@ -860,10 +748,7 @@
         if (game.in_checkmate()) {
             puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
-            if (!gameMovesLoaded) {
-                gameMovesLoaded = true;
-                loadGameMovesFromSource();
-            }
+            showSolutionMovesOnComplete();
         }
     }
 
@@ -980,7 +865,6 @@
         puzzleHistory = [];
         historyPos = -1;
         clearGameMoves();
-        gameMovesLoaded = false;
 
         if (!currentPuzzles.length) {
             puzzleLabelEl.textContent = `No puzzles found for rating ${rating}.`;
