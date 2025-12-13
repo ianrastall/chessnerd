@@ -64,7 +64,9 @@
     let puzzleComplete = false; // whether the puzzle line is finished
     let fullMoveHistory = []; // full move line (verbose moves) even when rewound
     let fullGameDisplay = null; // { moves, startPlyOffset, highlightStart, highlightLength }
+    let replayBaseFen = null; // base FEN for rebuilding via jumpToPly
     const gameMoveCache = new Map(); // rating -> Map(gameId -> uciMoves)
+    const START_FEN = new Chess().fen();
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -180,6 +182,7 @@
     function convertGameLineToSan(uciMoves, puzzleFen = null) {
         const tempGame = new Chess();
         const sanMoves = [];
+        const verboseMoves = [];
         const targetFen = normalizeFen(puzzleFen);
         let puzzleStartPly = targetFen ? -1 : null;
 
@@ -194,12 +197,13 @@
                 break;
             }
             sanMoves.push(move.san);
+            verboseMoves.push(move);
             if (targetFen && puzzleStartPly === -1 && normalizeFen(tempGame.fen()) === targetFen) {
                 puzzleStartPly = i + 1;
             }
         }
 
-        return { sanMoves, puzzleStartPly };
+        return { sanMoves, verboseMoves, puzzleStartPly };
     }
 
     function extractGameId(url) {
@@ -348,7 +352,8 @@
         if (!gameMap || !gameMap.has(gameId)) return;
 
         const uciMoves = gameMap.get(gameId);
-        const { sanMoves, puzzleStartPly } = convertGameLineToSan(uciMoves, currentPuzzle.fen);
+        const { sanMoves, verboseMoves, puzzleStartPly } =
+            convertGameLineToSan(uciMoves, currentPuzzle.fen);
         if (!sanMoves.length) return;
 
         const puzzleLine = (currentPuzzle.pvMoves && currentPuzzle.pvMoves.length)
@@ -366,8 +371,23 @@
             highlightStart,
             highlightLength
         };
+        fullMoveHistory = verboseMoves.slice();
+        replayBaseFen = START_FEN;
 
-        renderMoveHistory();
+        // Move the board to the end of the full game and allow clicking through it.
+        const replay = new Chess();
+        verboseMoves.forEach((m) => {
+            replay.move({ from: m.from, to: m.to, promotion: m.promotion });
+        });
+        game = replay;
+        redoStack = [];
+        selectedSquare = null;
+        legalTargets = [];
+        activePly = fullMoveHistory.length;
+        solutionIndex = activePly;
+        puzzleComplete = true;
+
+        refreshBoard();
         clearGameMoves(); // keep the bottom panel empty; use the main movelist instead
 
         const label = gameMovesEl ? gameMovesEl.previousElementSibling : null;
@@ -391,9 +411,9 @@
             puzzleMoveListEl.innerHTML = '';
 
             const startBtn = document.createElement('button');
-            startBtn.className = 'move-tag';
+            startBtn.className = `move-tag ${activePly === 0 ? 'active' : ''}`;
             startBtn.textContent = 'Game start';
-            startBtn.disabled = true;
+            startBtn.addEventListener('click', () => jumpToPly(0));
             puzzleMoveListEl.appendChild(startBtn);
 
             moves.forEach((san, idx) => {
@@ -401,7 +421,8 @@
                 const moveNum = Math.floor(globalPly / 2) + 1;
                 const prefix = globalPly % 2 === 0 ? `${moveNum}.` : `${moveNum}...`;
                 const tag = document.createElement('button');
-                tag.className = 'move-tag';
+                const ply = idx + 1 + startPlyOffset;
+                tag.className = `move-tag ${activePly === ply ? 'active' : ''}`;
                 if (
                     highlightStart != null &&
                     idx >= highlightStart &&
@@ -410,7 +431,7 @@
                     tag.classList.add('puzzle-segment');
                 }
                 tag.textContent = `${prefix} ${san}`;
-                tag.disabled = true;
+                tag.addEventListener('click', () => jumpToPly(ply));
                 puzzleMoveListEl.appendChild(tag);
             });
             return;
@@ -594,8 +615,11 @@
         if (ply < 0 || ply > fullMoveHistory.length) return;
 
         // Rebuild from the original FEN + prefix of moves
+        const baseFen = replayBaseFen || (currentPuzzle && currentPuzzle.fen);
+        if (!baseFen) return;
+
         const next = new Chess();
-        if (!next.load(currentPuzzle.fen)) {
+        if (!next.load(baseFen)) {
             setStatus('Unable to reload puzzle FEN.', 'error');
             return;
         }
@@ -924,6 +948,7 @@
         legalTargets = [];
         fullMoveHistory = [];
         fullGameDisplay = null;
+        replayBaseFen = puzzle.fen;
         activePly = 0;
         playerColor = next.turn();
         puzzleComplete = false;
