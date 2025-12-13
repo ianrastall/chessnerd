@@ -63,6 +63,7 @@
     let historyPos = -1;
     let puzzleComplete = false; // whether the puzzle line is finished
     let fullMoveHistory = []; // full move line (verbose moves) even when rewound
+    const gameMoveCache = new Map(); // rating -> Map(gameId -> uciMoves)
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -113,6 +114,104 @@
         if (moveStatsEl) {
             moveStatsEl.textContent = `${history.length} move${history.length === 1 ? '' : 's'}`;
         }
+    }
+
+    // ---------------------------------------------------------------------
+    // Full-game move loading (JSONL) + helpers
+    // ---------------------------------------------------------------------
+
+    function normalizeFen(fen) {
+        if (!fen) return '';
+        return fen.trim().split(/\s+/).slice(0, 4).join(' ');
+    }
+
+    async function loadGameMovesForRating(rating) {
+        if (gameMoveCache.has(rating)) {
+            return gameMoveCache.get(rating);
+        }
+
+        const low = Math.floor(rating / 100) * 100;
+        const high = low + 99;
+        const folder = `${low.toString().padStart(4, '0')}-${high.toString().padStart(4, '0')}`;
+        const file = `games-${folder}.jsonl`;
+        const url = `${PUZZLE_ROOT}/${folder}/${file}`;
+
+        let response;
+        try {
+            response = await fetch(url);
+        } catch (err) {
+            console.warn(`Failed to fetch ${url}:`, err);
+            return null;
+        }
+
+        if (!response.ok) {
+            console.warn(`No game moves file for rating ${rating}: ${response.status}`);
+            return null;
+        }
+
+        const text = await response.text();
+        const lines = text.trim().split('\n');
+        const gameMap = new Map();
+
+        for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+                const entry = JSON.parse(line);
+                if (entry.id && entry.moves) {
+                    gameMap.set(entry.id, entry.moves);
+                }
+            } catch (err) {
+                console.warn('Failed to parse JSONL line:', err);
+            }
+        }
+
+        gameMoveCache.set(rating, gameMap);
+        return gameMap;
+    }
+
+    function applyUciMove(chess, uci) {
+        const from = uci.substring(0, 2);
+        const to = uci.substring(2, 4);
+        const promotion = uci.length > 4 ? uci[4] : undefined;
+        return chess.move({ from, to, promotion });
+    }
+
+    function convertGameLineToSan(uciMoves, puzzleFen = null) {
+        const tempGame = new Chess();
+        const sanMoves = [];
+        const targetFen = normalizeFen(puzzleFen);
+        let puzzleStartPly = targetFen ? -1 : null;
+
+        if (targetFen && normalizeFen(tempGame.fen()) === targetFen) {
+            puzzleStartPly = 0;
+        }
+
+        for (let i = 0; i < uciMoves.length; i++) {
+            const move = applyUciMove(tempGame, uciMoves[i]);
+            if (!move) {
+                console.warn(`Invalid UCI move: ${uciMoves[i]} at position ${tempGame.fen()}`);
+                break;
+            }
+            sanMoves.push(move.san);
+            if (targetFen && puzzleStartPly === -1 && normalizeFen(tempGame.fen()) === targetFen) {
+                puzzleStartPly = i + 1;
+            }
+        }
+
+        return { sanMoves, puzzleStartPly };
+    }
+
+    function extractGameId(url) {
+        if (!url) return null;
+        const match = url.match(/lichess\.org\/([a-zA-Z0-9]{8})/);
+        return match ? match[1] : null;
+    }
+
+    function preloadGameMoves() {
+        if (!currentRating) return;
+        loadGameMovesForRating(currentRating).catch((err) => {
+            console.warn('Failed to preload game moves:', err);
+        });
     }
 
     // ---------------------------------------------------------------------
@@ -198,7 +297,7 @@
         gameMovesEl.classList.add('hidden');
     }
 
-    function renderGameMoves(moves) {
+    function renderGameMoves(moves, options = {}) {
         if (!gameMovesEl) return;
         gameMovesEl.innerHTML = '';
 
@@ -207,11 +306,25 @@
             return;
         }
 
+        const {
+            startPlyOffset = 0,
+            highlightStart = null,
+            highlightLength = 0
+        } = options;
+
         moves.forEach((san, idx) => {
-            const moveNum = Math.floor(idx / 2) + 1;
-            const prefix = idx % 2 === 0 ? `${moveNum}.` : `${moveNum}...`;
+            const globalPly = startPlyOffset + idx;
+            const moveNum = Math.floor(globalPly / 2) + 1;
+            const prefix = globalPly % 2 === 0 ? `${moveNum}.` : `${moveNum}...`;
             const tag = document.createElement('button');
             tag.className = 'move-tag';
+            if (
+                highlightStart != null &&
+                idx >= highlightStart &&
+                idx < highlightStart + highlightLength
+            ) {
+                tag.classList.add('puzzle-segment');
+            }
             tag.textContent = `${prefix} ${san}`;
             gameMovesEl.appendChild(tag);
         });
@@ -219,13 +332,48 @@
         gameMovesEl.classList.remove('hidden');
     }
 
-    function showSolutionMovesOnComplete() {
+    async function showSolutionMovesOnComplete() {
         if (!currentPuzzle) return;
-        
-        // Show the full PV (principal variation) as the solution moves
-        const pvMoves = currentPuzzle.pvMoves || [];
-        if (pvMoves.length > 0) {
-            renderGameMoves(pvMoves);
+
+        // Always show the puzzle line immediately (PV if available, else best moves)
+        const puzzleLine = (currentPuzzle.pvMoves && currentPuzzle.pvMoves.length)
+            ? currentPuzzle.pvMoves
+            : (currentPuzzle.bestMoves || []);
+
+        if (puzzleLine.length) {
+            renderGameMoves(puzzleLine, {
+                highlightStart: 0,
+                highlightLength: puzzleLine.length
+            });
+        }
+
+        if (!currentPuzzle.gameUrl || !currentRating) return;
+
+        const gameId = extractGameId(currentPuzzle.gameUrl);
+        if (!gameId) return;
+
+        const gameMap = await loadGameMovesForRating(currentRating);
+        if (!gameMap || !gameMap.has(gameId)) return;
+
+        const uciMoves = gameMap.get(gameId);
+        const { sanMoves, puzzleStartPly } = convertGameLineToSan(uciMoves, currentPuzzle.fen);
+        if (!sanMoves.length) return;
+
+        const highlightStart = (puzzleStartPly != null && puzzleStartPly >= 0)
+            ? puzzleStartPly
+            : null;
+        const highlightLength = solutionMoves.length || puzzleLine.length || 0;
+
+        renderGameMoves(sanMoves, {
+            startPlyOffset: 0,
+            highlightStart,
+            highlightLength
+        });
+
+        const label = gameMovesEl ? gameMovesEl.previousElementSibling : null;
+        if (label && label.classList.contains('io-label')) {
+            const span = label.querySelector('span');
+            if (span) span.textContent = 'Full game moves (from source game)';
         }
     }
 
@@ -892,6 +1040,7 @@
         populateThemeSelect(bundle.themes || []);
         updateToolStats();
         showRandomPuzzle();
+        preloadGameMoves();
     }
 
     function initControls() {
