@@ -224,19 +224,6 @@
         return (fen || '').trim().split(/\s+/).slice(0, 4).join(' ');
     }
 
-    function lichessPgnUrl(gameUrl) {
-        if (!gameUrl) return null;
-        try {
-            const u = new URL(gameUrl);
-            const parts = u.pathname.split('/').filter(Boolean);
-            if (!parts.length) return null;
-            const id = parts[0];
-            return `${u.origin}/${id}.pgn`;
-        } catch (err) {
-            return null;
-        }
-    }
-
     function lichessApiPgnUrl(gameUrl) {
         if (!gameUrl) return null;
         try {
@@ -244,28 +231,48 @@
             const parts = u.pathname.split('/').filter(Boolean);
             if (!parts.length) return null;
             const id = parts[0];
-            return `${u.origin}/game/export/${id}?moves=1&tags=1&evals=0&clocks=0&literate=0`;
+            // Use Lichess API with Accept header for PGN - this endpoint supports CORS
+            return `https://lichess.org/game/export/${id}?moves=1&tags=1&evals=0&clocks=0&literate=0`;
         } catch (err) {
             return null;
         }
     }
 
     async function loadGameMovesFromSource() {
-        if (!currentPuzzle || !currentPuzzle.gameUrl) return;
+        if (!currentPuzzle || !currentPuzzle.gameUrl) {
+            console.log('[puzzles] No puzzle or gameUrl available for loading source game.');
+            return;
+        }
+
+        if (!gameMovesEl) {
+            console.warn('[puzzles] gameMovesEl element not found in DOM.');
+            return;
+        }
+
         const cacheKey = currentPuzzle.id || currentPuzzle.gameUrl;
         if (gameMovesCache.has(cacheKey)) {
             renderGameMoves(gameMovesCache.get(cacheKey));
             return;
         }
 
-        const apiUrl = lichessApiPgnUrl(currentPuzzle.gameUrl);
-        const pgnUrl = apiUrl || lichessPgnUrl(currentPuzzle.gameUrl);
-        if (!pgnUrl) return;
+        const pgnUrl = lichessApiPgnUrl(currentPuzzle.gameUrl);
+        if (!pgnUrl) {
+            console.warn('[puzzles] Could not construct PGN URL from:', currentPuzzle.gameUrl);
+            return;
+        }
+
+        console.log('[puzzles] Fetching PGN from:', pgnUrl);
 
         try {
-            const resp = await fetch(pgnUrl);
+            const resp = await fetch(pgnUrl, {
+                headers: {
+                    'Accept': 'application/x-chess-pgn'
+                }
+            });
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const pgn = await resp.text();
+
+            console.log('[puzzles] PGN received, length:', pgn.length);
 
             const scratch = new Chess();
             const ok = scratch.load_pgn(pgn);
@@ -273,6 +280,8 @@
 
             const verboseMoves = scratch.history({ verbose: true });
             const sanMoves = verboseMoves.map((m) => m.san);
+
+            console.log('[puzzles] Parsed', sanMoves.length, 'moves from PGN');
 
             // Rewind and walk to find the ply where the puzzle FEN occurs.
             const headerFen = scratch.header().FEN;
@@ -304,15 +313,20 @@
                 }
             }
 
+            console.log('[puzzles] Puzzle FEN match index:', matchIdx);
+
             const displayMoves = matchIdx === -1 ? sanMoves : sanMoves.slice(matchIdx);
 
             if (matchIdx === -1) {
                 setStatus('Source game loaded, but puzzle position was not found. Showing full game moves.', 'warning');
+            } else {
+                setStatus(`Loaded ${displayMoves.length} continuation moves from source game.`, 'success');
             }
 
             gameMovesCache.set(cacheKey, displayMoves);
             renderGameMoves(displayMoves);
         } catch (err) {
+            console.error('[puzzles] Error loading source game:', err);
             setStatus(`Unable to load source game: ${err && err.message ? err.message : err}`, 'warning');
         }
     }
