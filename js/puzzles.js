@@ -17,6 +17,7 @@
     const boardStatsEl = document.getElementById('boardStats');
     const statusMessage = document.getElementById('statusMessage');
     const toolStats = document.getElementById('toolStats');
+    const gameMovesEl = document.getElementById('gameMoves');
 
     const puzzleLabelEl = document.getElementById('puzzleLabel');
     const puzzleMetaPrimary = document.getElementById('puzzleMetaPrimary');
@@ -61,6 +62,8 @@
     let puzzleHistory = [];
     let historyPos = -1;
     let puzzleComplete = false; // whether the puzzle line is finished
+    const gameMovesCache = new Map(); // puzzleId -> array of SAN moves
+    let gameMovesLoaded = false;
 
     // ---------------------------------------------------------------------
     // Utility: status + stats
@@ -190,6 +193,74 @@
         renderCoords(files, ranks);
     }
 
+    function clearGameMoves() {
+        if (!gameMovesEl) return;
+        gameMovesEl.innerHTML = '';
+        gameMovesEl.classList.add('hidden');
+    }
+
+    function renderGameMoves(moves) {
+        if (!gameMovesEl) return;
+        gameMovesEl.innerHTML = '';
+
+        if (!moves || !moves.length) {
+            gameMovesEl.classList.add('hidden');
+            return;
+        }
+
+        moves.forEach((san, idx) => {
+            const moveNum = Math.floor(idx / 2) + 1;
+            const prefix = idx % 2 === 0 ? `${moveNum}.` : `${moveNum}...`;
+            const tag = document.createElement('button');
+            tag.className = 'move-tag';
+            tag.textContent = `${prefix} ${san}`;
+            gameMovesEl.appendChild(tag);
+        });
+
+        gameMovesEl.classList.remove('hidden');
+    }
+
+    function lichessPgnUrl(gameUrl) {
+        if (!gameUrl) return null;
+        try {
+            const u = new URL(gameUrl);
+            const parts = u.pathname.split('/').filter(Boolean);
+            if (!parts.length) return null;
+            const id = parts[0];
+            return `${u.origin}/${id}.pgn`;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    async function loadGameMovesFromSource() {
+        if (!currentPuzzle || !currentPuzzle.gameUrl) return;
+        const cacheKey = currentPuzzle.id || currentPuzzle.gameUrl;
+        if (gameMovesCache.has(cacheKey)) {
+            renderGameMoves(gameMovesCache.get(cacheKey));
+            return;
+        }
+
+        const pgnUrl = lichessPgnUrl(currentPuzzle.gameUrl);
+        if (!pgnUrl) return;
+
+        try {
+            const resp = await fetch(pgnUrl);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const pgn = await resp.text();
+
+            const scratch = new Chess();
+            const ok = scratch.load_pgn(pgn);
+            if (!ok) throw new Error('Unable to parse PGN.');
+
+            const sanMoves = scratch.history({ verbose: true }).map((m) => m.san);
+            gameMovesCache.set(cacheKey, sanMoves);
+            renderGameMoves(sanMoves);
+        } catch (err) {
+            setStatus(`Unable to load source game: ${err && err.message ? err.message : err}`, 'warning');
+        }
+    }
+
     function renderMoveHistory() {
         if (!puzzleMoveListEl) return;
         const history = game.history({ verbose: true });
@@ -251,6 +322,10 @@
         if (solutionIndex >= solutionMoves.length) {
             puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
+            if (!gameMovesLoaded) {
+                gameMovesLoaded = true;
+                loadGameMovesFromSource();
+            }
         } else if (lastAuto) {
             setStatus(`Opponent played ${lastAuto}. Your move.`, 'success');
         }
@@ -314,6 +389,10 @@
         if (solutionIndex >= solutionMoves.length) {
             puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
+            if (!gameMovesLoaded) {
+                gameMovesLoaded = true;
+                loadGameMovesFromSource();
+            }
             return;
         }
 
@@ -346,6 +425,11 @@
         puzzleComplete = game.game_over() || (solutionIndex >= solutionMoves.length);
         setStatus('Move redone.', 'success');
         refreshBoard();
+
+        if (puzzleComplete && !gameMovesLoaded) {
+            gameMovesLoaded = true;
+            loadGameMovesFromSource();
+        }
     }
 
     function jumpToPly(ply) {
@@ -374,6 +458,11 @@
         puzzleComplete = game.game_over() || (solutionIndex >= solutionMoves.length);
         setStatus(`Jumped to move ${ply}.`, 'success');
         refreshBoard();
+
+        if (puzzleComplete && !gameMovesLoaded) {
+            gameMovesLoaded = true;
+            loadGameMovesFromSource();
+        }
     }
 
     function resetPuzzle() {
@@ -682,6 +771,8 @@
         activePly = 0;
         playerColor = next.turn();
         puzzleComplete = false;
+        gameMovesLoaded = false;
+        clearGameMoves();
 
         if (puzzle.pvMoves && puzzle.pvMoves.length) {
             solutionMoves = puzzle.pvMoves.slice();
@@ -699,6 +790,10 @@
         if (game.in_checkmate()) {
             puzzleComplete = true;
             setStatus('Puzzle completed!', 'success');
+            if (!gameMovesLoaded) {
+                gameMovesLoaded = true;
+                loadGameMovesFromSource();
+            }
         }
     }
 
@@ -814,6 +909,8 @@
         currentPuzzle = null;
         puzzleHistory = [];
         historyPos = -1;
+        clearGameMoves();
+        gameMovesLoaded = false;
 
         if (!currentPuzzles.length) {
             puzzleLabelEl.textContent = `No puzzles found for rating ${rating}.`;
