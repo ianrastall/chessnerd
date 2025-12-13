@@ -63,6 +63,7 @@
     let historyPos = -1;
     let puzzleComplete = false; // whether the puzzle line is finished
     let fullMoveHistory = []; // full move line (verbose moves) even when rewound
+    let fullGameDisplay = null; // { moves, startPlyOffset, highlightStart, highlightLength }
     const gameMoveCache = new Map(); // rating -> Map(gameId -> uciMoves)
 
     // ---------------------------------------------------------------------
@@ -335,19 +336,10 @@
     async function showSolutionMovesOnComplete() {
         if (!currentPuzzle) return;
 
-        // Always show the puzzle line immediately (PV if available, else best moves)
-        const puzzleLine = (currentPuzzle.pvMoves && currentPuzzle.pvMoves.length)
-            ? currentPuzzle.pvMoves
-            : (currentPuzzle.bestMoves || []);
-
-        if (puzzleLine.length) {
-            renderGameMoves(puzzleLine, {
-                highlightStart: 0,
-                highlightLength: puzzleLine.length
-            });
+        if (!currentPuzzle.gameUrl || !currentRating) {
+            fullGameDisplay = null;
+            return;
         }
-
-        if (!currentPuzzle.gameUrl || !currentRating) return;
 
         const gameId = extractGameId(currentPuzzle.gameUrl);
         if (!gameId) return;
@@ -359,16 +351,24 @@
         const { sanMoves, puzzleStartPly } = convertGameLineToSan(uciMoves, currentPuzzle.fen);
         if (!sanMoves.length) return;
 
+        const puzzleLine = (currentPuzzle.pvMoves && currentPuzzle.pvMoves.length)
+            ? currentPuzzle.pvMoves
+            : (currentPuzzle.bestMoves || []);
+
         const highlightStart = (puzzleStartPly != null && puzzleStartPly >= 0)
             ? puzzleStartPly
             : null;
         const highlightLength = solutionMoves.length || puzzleLine.length || 0;
 
-        renderGameMoves(sanMoves, {
+        fullGameDisplay = {
+            moves: sanMoves,
             startPlyOffset: 0,
             highlightStart,
             highlightLength
-        });
+        };
+
+        renderMoveHistory();
+        clearGameMoves(); // keep the bottom panel empty; use the main movelist instead
 
         const label = gameMovesEl ? gameMovesEl.previousElementSibling : null;
         if (label && label.classList.contains('io-label')) {
@@ -379,6 +379,43 @@
 
     function renderMoveHistory() {
         if (!puzzleMoveListEl) return;
+
+        if (puzzleComplete && fullGameDisplay) {
+            const {
+                moves,
+                startPlyOffset = 0,
+                highlightStart = null,
+                highlightLength = 0
+            } = fullGameDisplay;
+
+            puzzleMoveListEl.innerHTML = '';
+
+            const startBtn = document.createElement('button');
+            startBtn.className = 'move-tag';
+            startBtn.textContent = 'Game start';
+            startBtn.disabled = true;
+            puzzleMoveListEl.appendChild(startBtn);
+
+            moves.forEach((san, idx) => {
+                const globalPly = startPlyOffset + idx;
+                const moveNum = Math.floor(globalPly / 2) + 1;
+                const prefix = globalPly % 2 === 0 ? `${moveNum}.` : `${moveNum}...`;
+                const tag = document.createElement('button');
+                tag.className = 'move-tag';
+                if (
+                    highlightStart != null &&
+                    idx >= highlightStart &&
+                    idx < highlightStart + highlightLength
+                ) {
+                    tag.classList.add('puzzle-segment');
+                }
+                tag.textContent = `${prefix} ${san}`;
+                tag.disabled = true;
+                puzzleMoveListEl.appendChild(tag);
+            });
+            return;
+        }
+
         const history = fullMoveHistory;
 
         puzzleMoveListEl.innerHTML = '';
@@ -886,6 +923,7 @@
         selectedSquare = null;
         legalTargets = [];
         fullMoveHistory = [];
+        fullGameDisplay = null;
         activePly = 0;
         playerColor = next.turn();
         puzzleComplete = false;
