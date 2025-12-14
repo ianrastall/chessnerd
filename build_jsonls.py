@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 """
 Extract game movelists from Lichess for puzzles and save as JSONL.
-Reads EPD files, fetches games, converts to UCI, outputs one JSONL per bucket.
+Reads EPD files, fetches games in parallel, converts to UCI, outputs one JSONL per bucket.
+
+Features:
+- Parallel fetching with 8 workers for high throughput
+- Lichess API token support for 20x higher rate limits
+- Bulk game export (300 games per request)
+- Resume support (skips already-fetched games)
+- Thread-safe rate limiting (15 req/sec with token)
+
+Usage:
+    export LICHESS_TOKEN="lip_xxxxxxxxxxxx"  # Optional but recommended
+    python build_jsonls.py
+
+Expected performance:
+    With token: ~4,500 games/minute (15 req/sec × 300 games/batch)
+    Without token: ~300 games/minute (1 req/sec)
 
 Requirements: pip install chess requests
 """
