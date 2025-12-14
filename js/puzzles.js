@@ -605,7 +605,8 @@
         setStatus('Move redone.', 'success');
         refreshBoard();
 
-        if (puzzleComplete) {
+        // Only trigger full-game load if puzzle just completed and we're not already viewing the full game
+        if (puzzleComplete && !fullGameDisplay) {
             showSolutionMovesOnComplete();
         }
     }
@@ -638,7 +639,8 @@
         setStatus(`Jumped to move ${ply}.`, 'success');
         refreshBoard();
 
-        if (puzzleComplete) {
+        // Only trigger full-game load if puzzle just completed and we're not already viewing the full game
+        if (puzzleComplete && !fullGameDisplay) {
             showSolutionMovesOnComplete();
         }
     }
