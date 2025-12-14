@@ -47,29 +47,30 @@ class RateLimiter:
     
     def acquire(self):
         """Block until a request can be made within rate limits."""
-        with self.lock:
-            now = time.time()
-            # Remove requests outside the time window
-            self.requests = [req_time for req_time in self.requests 
-                           if now - req_time < self.time_window]
-            
-            if len(self.requests) >= self.max_requests:
+        while True:
+            with self.lock:
+                now = time.time()
+                # Remove requests outside the time window
+                self.requests = [req_time for req_time in self.requests 
+                               if now - req_time < self.time_window]
+                
+                if len(self.requests) < self.max_requests:
+                    # We can make a request
+                    self.requests.append(time.time())
+                    return
+                
                 # Calculate wait time
                 oldest_request = self.requests[0]
                 wait_time = self.time_window - (now - oldest_request)
-                if wait_time > 0:
-                    time.sleep(wait_time)
-                    # Refresh the list after sleeping
-                    now = time.time()
-                    self.requests = [req_time for req_time in self.requests 
-                                   if now - req_time < self.time_window]
             
-            self.requests.append(time.time())
+            # Sleep outside the lock to allow other threads to proceed
+            if wait_time > 0:
+                time.sleep(wait_time)
 
 
 def extract_game_id(url: str) -> Optional[str]:
-    """Extract 8-character game ID from Lichess URL."""
-    match = re.search(r'lichess\.org/([a-zA-Z0-9]{8})', url)
+    """Extract game ID from Lichess URL (8-12 characters)."""
+    match = re.search(r'lichess\.org/([a-zA-Z0-9]{8,12})', url)
     return match.group(1) if match else None
 
 
@@ -84,7 +85,7 @@ def parse_epd_file(epd_path: Path) -> List[str]:
                 continue
             
             # Look for c2 or c3 fields containing game URLs
-            match = re.search(r'c[23]\s+"[^"]*https://lichess\.org/([a-zA-Z0-9]{8})', line)
+            match = re.search(r'c[23]\s+"[^"]*https://lichess\.org/([a-zA-Z0-9]{8,12})', line)
             if match:
                 game_ids.add(match.group(1))
     
@@ -171,7 +172,8 @@ def fetch_games_bulk(game_ids: List[str], rate_limiter: RateLimiter) -> Dict[str
     
     url = "https://lichess.org/api/games/export/_ids"
     headers = {
-        'Accept': 'application/x-chess-pgn'
+        'Accept': 'application/x-chess-pgn',
+        'Content-Type': 'text/plain'
     }
     
     # Add authorization header if token is available
@@ -191,19 +193,29 @@ def fetch_games_bulk(game_ids: List[str], rate_limiter: RateLimiter) -> Dict[str
                 games_dict = {}
                 pgn_text = response.text
                 
-                # Split by double newline to separate games
-                game_sections = pgn_text.split('\n\n\n')
+                # Split by empty lines to separate games more robustly
+                # PGN games are separated by at least one blank line
+                current_game = []
+                game_id = None
                 
-                for section in game_sections:
-                    section = section.strip()
-                    if not section:
-                        continue
-                    
-                    # Extract game ID from the Site header
-                    match = re.search(r'\[Site "https://lichess\.org/([a-zA-Z0-9]{8})"\]', section)
-                    if match:
-                        game_id = match.group(1)
-                        games_dict[game_id] = section
+                for line in pgn_text.split('\n'):
+                    if line.strip():
+                        current_game.append(line)
+                        # Extract game ID from Site header
+                        if line.startswith('[Site "https://lichess.org/'):
+                            match = re.search(r'lichess\.org/([a-zA-Z0-9]{8,12})', line)
+                            if match:
+                                game_id = match.group(1)
+                    else:
+                        # Empty line - might be end of game or just spacing
+                        if current_game and game_id:
+                            games_dict[game_id] = '\n'.join(current_game)
+                            current_game = []
+                            game_id = None
+                
+                # Don't forget the last game if file doesn't end with blank line
+                if current_game and game_id:
+                    games_dict[game_id] = '\n'.join(current_game)
                 
                 return games_dict
                 
@@ -254,11 +266,10 @@ def process_game_batch(game_ids: List[str], rate_limiter: RateLimiter) -> List[D
     # Try bulk fetch first
     bulk_games = fetch_games_bulk(game_ids, rate_limiter)
     
-    # Check which games we got
+    # Process bulk fetched games in order, tracking which are missing
     fetched_ids = set(bulk_games.keys())
-    missing_ids = [gid for gid in game_ids if gid not in fetched_ids]
+    missing_ids = []
     
-    # Process bulk fetched games
     for game_id in game_ids:
         if game_id in bulk_games:
             pgn = bulk_games[game_id]
@@ -268,6 +279,8 @@ def process_game_batch(game_ids: List[str], rate_limiter: RateLimiter) -> List[D
                     "id": game_id,
                     "moves": uci_moves
                 })
+        else:
+            missing_ids.append(game_id)
     
     # Fall back to individual fetches for missing games
     if missing_ids:
