@@ -400,7 +400,7 @@
     function renderMoveHistory() {
         if (!puzzleMoveListEl) return;
 
-        if (puzzleComplete && fullGameDisplay) {
+        if (fullGameDisplay) {
             const {
                 moves,
                 startPlyOffset = 0,
