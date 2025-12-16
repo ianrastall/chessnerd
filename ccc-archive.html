@@ -139,6 +139,7 @@
                                             <th>Event</th>
                                             <th>Start</th>
                                             <th>End</th>
+                                            <th style="text-align: center;">Games</th>
                                             <th style="text-align: right;">Download</th>
                                         </tr>
                                     </thead>
@@ -151,7 +152,7 @@
                             </div>
                         </div>
                         <div class="table-note">
-                            Built automatically from <code>ccc_links.txt</code> and <code>events.txt</code> (ccc-archive repo). Files stay in the order provided.
+                            Built automatically from <code>ccc_links.txt</code>, <code>events.txt</code>, and <code>game_counts.txt</code> (ccc-archive repo). Files stay in the order provided.
                         </div>
                     </div>
                 </div>
@@ -203,7 +204,24 @@
             return map;
         }
 
-        function buildEntries(linksText, eventsMap) {
+        function buildGameCountMap(text) {
+            const map = {};
+            text.split(/\r?\n/).forEach(line => {
+                if (!line.trim()) return;
+                const separatorIndex = line.indexOf(':');
+                if (separatorIndex === -1) return;
+                const filePart = line.slice(0, separatorIndex).trim();
+                const trailing = line.slice(separatorIndex + 1).trim();
+                const numString = trailing.split(/\s+/)[0];
+                const num = parseInt(numString, 10);
+                if (!filePart || Number.isNaN(num)) return;
+                const base = filePart.replace('.pgn', '');
+                map[base] = num;
+            });
+            return map;
+        }
+
+        function buildEntries(linksText, eventsMap, gameCountsMap) {
             return linksText
                 .split(/\r?\n/)
                 .filter(Boolean)
@@ -215,12 +233,17 @@
                     const endCode = parts[1] || '';
 
                     const eventName = eventsMap[base] || base;
+                    const games = gameCountsMap && Object.prototype.hasOwnProperty.call(gameCountsMap, base)
+                        ? gameCountsMap[base]
+                        : null;
+
                     return {
                         eventName,
                         startDate: toIsoDate(startCode),
                         endDate: toIsoDate(endCode),
                         url,
                         fileName,
+                        games,
                         eventLower: eventName.toLowerCase(),
                         fileLower: fileName.toLowerCase()
                     };
@@ -242,6 +265,7 @@
                     </td>
                     <td><span class="date-chip">${entry.startDate}</span></td>
                     <td><span class="date-chip">${entry.endDate}</span></td>
+                    <td style="text-align: center;">${entry.games ?? '—'}</td>
                     <td style="text-align: right;">
                         <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
                             <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
@@ -269,22 +293,25 @@
         async function loadCCCArchive() {
             try {
                 statusMessage.textContent = 'Loading CCC archive...';
-                const [linksRes, eventsRes] = await Promise.all([
+                const [linksRes, eventsRes, countsRes] = await Promise.all([
                     fetch('ccc_links.txt'),
-                    fetch('events.txt')
+                    fetch('events.txt'),
+                    fetch('game_counts.txt')
                 ]);
 
-                if (!linksRes.ok || !eventsRes.ok) {
+                if (!linksRes.ok || !eventsRes.ok || !countsRes.ok) {
                     throw new Error('Unable to load CCC lists.');
                 }
 
-                const [linksText, eventsText] = await Promise.all([
+                const [linksText, eventsText, countsText] = await Promise.all([
                     linksRes.text(),
-                    eventsRes.text()
+                    eventsRes.text(),
+                    countsRes.text()
                 ]);
 
                 const eventsMap = buildEventMap(eventsText);
-                allEntries = buildEntries(linksText, eventsMap);
+                const gameCountsMap = buildGameCountMap(countsText);
+                allEntries = buildEntries(linksText, eventsMap, gameCountsMap);
 
                 renderRows(allEntries);
                 statusMessage.textContent = 'Ready';
