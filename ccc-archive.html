@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XQ7B0Z9FK3');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCC Archive - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .ccc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ccc-table th,
+        .ccc-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .ccc-table th {
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        .ccc-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ccc-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .event-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .file-name {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.15rem;
+        }
+
+        .date-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.55rem;
+            border-radius: 999px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .table-note {
+            margin-top: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
+            </div>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown">
+                        <option value="#deb887">Burlywood</option>
+                        <option value="#5f9ea0">Cadet Blue</option>
+                        <option value="#6495ed">Cornflower</option>
+                        <option value="#0d9488">Teal</option>
+                        <option value="#8b5cf6">Purple</option>
+                        <option value="#ef4444">Red</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">folder_zip</span>
+                        <h2 id="toolName">CCC Archive</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div class="io-container" style="display: block;">
+                    <div class="io-panel" style="width: 100%">
+                        <div class="io-label">
+                            <span>Computer Chess Championship files</span>
+                            <span class="stats" id="cccCount">Loading...</span>
+                        </div>
+
+                        <div class="search-box">
+                            <input type="text" id="cccSearch" placeholder="Filter by event or filename..." aria-label="Search CCC archive">
+                        </div>
+
+                        <div style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                            <div style="overflow-x: auto;">
+                                <table class="ccc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Event</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th style="text-align: right;">Download</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cccTableBody">
+                                        <tr>
+                                            <td colspan="4">Loading CCC archive...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="table-note">
+                            Built automatically from <code>ccc_links.txt</code> and <code>events.txt</code> (ccc-archive repo). Files stay in the order provided.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <div id="statusMessage" class="success">Loading CCC archive...</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        const cccTableBody = document.getElementById('cccTableBody');
+        const cccCount = document.getElementById('cccCount');
+        const searchInput = document.getElementById('cccSearch');
+        const statusMessage = document.getElementById('statusMessage');
+
+        let allEntries = [];
+
+        function toIsoDate(code) {
+            if (!/^[0-9]{6}$/.test(code)) return code;
+            const yy = Number(code.slice(0, 2));
+            const mm = code.slice(2, 4);
+            const dd = code.slice(4, 6);
+            return `20${String(yy).padStart(2, '0')}-${mm}-${dd}`;
+        }
+
+        function buildEventMap(text) {
+            const map = {};
+            text.split(/\r?\n/).forEach(line => {
+                if (!line.trim()) return;
+                const separatorIndex = line.indexOf(':');
+                if (separatorIndex === -1) return;
+                const filePart = line.slice(0, separatorIndex).trim();
+                const eventName = line.slice(separatorIndex + 1).trim();
+                if (!filePart || !eventName) return;
+                const base = filePart.replace('.pgn', '');
+                map[base] = eventName;
+            });
+            return map;
+        }
+
+        function buildEntries(linksText, eventsMap) {
+            return linksText
+                .split(/\r?\n/)
+                .filter(Boolean)
+                .map(url => {
+                    const fileName = url.split('/').pop();
+                    const base = fileName.replace('.zip', '');
+                    const parts = base.split('-');
+                    const startCode = parts[0] || '';
+                    const endCode = parts[1] || '';
+
+                    const eventName = eventsMap[base] || base;
+                    return {
+                        eventName,
+                        startDate: toIsoDate(startCode),
+                        endDate: toIsoDate(endCode),
+                        url,
+                        fileName,
+                        eventLower: eventName.toLowerCase(),
+                        fileLower: fileName.toLowerCase()
+                    };
+                });
+        }
+
+        function renderRows(entries) {
+            if (!entries.length) {
+                cccTableBody.innerHTML = '<tr><td colspan="4">No matching events.</td></tr>';
+                cccCount.textContent = '0 files';
+                return;
+            }
+
+            cccTableBody.innerHTML = entries.map(entry => `
+                <tr>
+                    <td>
+                        <div class="event-name">${entry.eventName}</div>
+                        <div class="file-name">${entry.fileName}</div>
+                    </td>
+                    <td><span class="date-chip">${entry.startDate}</span></td>
+                    <td><span class="date-chip">${entry.endDate}</span></td>
+                    <td style="text-align: right;">
+                        <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                            <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+
+            const label = entries.length === 1 ? 'file' : 'files';
+            cccCount.textContent = `${entries.length} ${label}`;
+        }
+
+        function applyFilter(query) {
+            if (!query) {
+                renderRows(allEntries);
+                return;
+            }
+            const q = query.toLowerCase();
+            const filtered = allEntries.filter(entry =>
+                entry.eventLower.includes(q) || entry.fileLower.includes(q)
+            );
+            renderRows(filtered);
+        }
+
+        async function loadCCCArchive() {
+            try {
+                statusMessage.textContent = 'Loading CCC archive...';
+                const [linksRes, eventsRes] = await Promise.all([
+                    fetch('ccc_links.txt'),
+                    fetch('events.txt')
+                ]);
+
+                if (!linksRes.ok || !eventsRes.ok) {
+                    throw new Error('Unable to load CCC lists.');
+                }
+
+                const [linksText, eventsText] = await Promise.all([
+                    linksRes.text(),
+                    eventsRes.text()
+                ]);
+
+                const eventsMap = buildEventMap(eventsText);
+                allEntries = buildEntries(linksText, eventsMap);
+
+                renderRows(allEntries);
+                statusMessage.textContent = 'Ready';
+            } catch (err) {
+                console.error(err);
+                statusMessage.textContent = 'Error loading CCC archive';
+                cccTableBody.innerHTML = `<tr><td colspan="4">${err.message}</td></tr>`;
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+        }
+
+        loadCCCArchive();
+    </script>
+</body>
+</html>
