@@ -77,6 +77,37 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
+
+        .ccc-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .ccc-page-info {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .ccc-page-size {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .ccc-page-size select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+        }
     </style>
 </head>
 <body>
@@ -145,10 +176,31 @@
                                     </thead>
                                     <tbody id="cccTableBody">
                                         <tr>
-                                            <td colspan="4">Loading CCC archive...</td>
+                                            <td colspan="5">Loading CCC archive...</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                        <div class="ccc-pagination">
+                            <div class="ccc-page-size">
+                                <label for="cccPageSize">Rows per page:</label>
+                                <select id="cccPageSize">
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100" selected>100</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <button id="cccPrevPage" type="button" class="btn btn-secondary">
+                                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-right: 2px;">chevron_left</span>
+                                    Previous
+                                </button>
+                                <span id="cccPageInfo" class="ccc-page-info">Page 1 of 1</span>
+                                <button id="cccNextPage" type="button" class="btn btn-secondary">
+                                    Next
+                                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-left: 2px;">chevron_right</span>
+                                </button>
                             </div>
                         </div>
                         <div class="table-note">
@@ -178,8 +230,15 @@
         const cccCount = document.getElementById('cccCount');
         const searchInput = document.getElementById('cccSearch');
         const statusMessage = document.getElementById('statusMessage');
+        const prevBtnPage = document.getElementById('cccPrevPage');
+        const nextBtnPage = document.getElementById('cccNextPage');
+        const pageInfoEl = document.getElementById('cccPageInfo');
+        const pageSizeSelect = document.getElementById('cccPageSize');
 
         let allEntries = [];
+        let filteredEntries = [];
+        let currentPage = 1;
+        let rowsPerPage = 100;
 
         function toIsoDate(code) {
             if (!/^[0-9]{6}$/.test(code)) return code;
@@ -250,44 +309,67 @@
                 });
         }
 
-        function renderRows(entries) {
-            if (!entries.length) {
-                cccTableBody.innerHTML = '<tr><td colspan="4">No matching events.</td></tr>';
+        function formatNumber(val) {
+            if (val === null || val === undefined) return '—';
+            const num = Number(val);
+            if (Number.isNaN(num)) return '—';
+            return num.toLocaleString();
+        }
+
+        function renderPage() {
+            const total = filteredEntries.length;
+            const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            if (!total) {
+                cccTableBody.innerHTML = '<tr><td colspan="5">No matching events.</td></tr>';
                 cccCount.textContent = '0 files';
-                return;
+            } else {
+                const startIndex = (currentPage - 1) * rowsPerPage;
+                const visible = filteredEntries.slice(startIndex, startIndex + rowsPerPage);
+
+                cccTableBody.innerHTML = visible.map(entry => `
+                    <tr>
+                        <td>
+                            <div class="event-name">${entry.eventName}</div>
+                            <div class="file-name">${entry.fileName}</div>
+                        </td>
+                        <td><span class="date-chip">${entry.startDate}</span></td>
+                        <td><span class="date-chip">${entry.endDate}</span></td>
+                        <td style="text-align: center;">${formatNumber(entry.games)}</td>
+                        <td style="text-align: right;">
+                            <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                                <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+
+                const label = total === 1 ? 'file' : 'files';
+                cccCount.textContent = `${total} ${label}`;
             }
 
-            cccTableBody.innerHTML = entries.map(entry => `
-                <tr>
-                    <td>
-                        <div class="event-name">${entry.eventName}</div>
-                        <div class="file-name">${entry.fileName}</div>
-                    </td>
-                    <td><span class="date-chip">${entry.startDate}</span></td>
-                    <td><span class="date-chip">${entry.endDate}</span></td>
-                    <td style="text-align: center;">${entry.games ?? '—'}</td>
-                    <td style="text-align: right;">
-                        <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
-                            <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
-                        </a>
-                    </td>
-                </tr>
-            `).join('');
+            const pages = Math.max(1, Math.ceil(total / rowsPerPage));
+            if (pageInfoEl) {
+                if (total === 0) {
+                    pageInfoEl.textContent = 'No matching pages';
+                } else {
+                    pageInfoEl.textContent = `Page ${currentPage} of ${pages} (${total} shown)`;
+                }
+            }
 
-            const label = entries.length === 1 ? 'file' : 'files';
-            cccCount.textContent = `${entries.length} ${label}`;
+            if (prevBtnPage) prevBtnPage.disabled = currentPage <= 1 || filteredEntries.length === 0;
+            if (nextBtnPage) nextBtnPage.disabled = currentPage >= pages || filteredEntries.length === 0;
         }
 
         function applyFilter(query) {
-            if (!query) {
-                renderRows(allEntries);
-                return;
-            }
-            const q = query.toLowerCase();
-            const filtered = allEntries.filter(entry =>
-                entry.eventLower.includes(q) || entry.fileLower.includes(q)
+            const q = query ? query.toLowerCase() : '';
+            filteredEntries = allEntries.filter(entry =>
+                !q || entry.eventLower.includes(q) || entry.fileLower.includes(q)
             );
-            renderRows(filtered);
+            currentPage = 1;
+            renderPage();
         }
 
         async function loadCCCArchive() {
@@ -312,18 +394,46 @@
                 const eventsMap = buildEventMap(eventsText);
                 const gameCountsMap = buildGameCountMap(countsText);
                 allEntries = buildEntries(linksText, eventsMap, gameCountsMap);
-
-                renderRows(allEntries);
+                filteredEntries = allEntries.slice();
+                renderPage();
                 statusMessage.textContent = 'Ready';
             } catch (err) {
                 console.error(err);
                 statusMessage.textContent = 'Error loading CCC archive';
-                cccTableBody.innerHTML = `<tr><td colspan="4">${err.message}</td></tr>`;
+                cccTableBody.innerHTML = `<tr><td colspan="5">${err.message}</td></tr>`;
             }
         }
 
         if (searchInput) {
             searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+        }
+
+        if (pageSizeSelect) {
+            pageSizeSelect.addEventListener('change', () => {
+                const val = parseInt(pageSizeSelect.value, 10);
+                rowsPerPage = Number.isNaN(val) ? 100 : val;
+                currentPage = 1;
+                renderPage();
+            });
+        }
+
+        if (prevBtnPage) {
+            prevBtnPage.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage -= 1;
+                    renderPage();
+                }
+            });
+        }
+
+        if (nextBtnPage) {
+            nextBtnPage.addEventListener('click', () => {
+                const pages = Math.max(1, Math.ceil(filteredEntries.length / rowsPerPage));
+                if (currentPage < pages) {
+                    currentPage += 1;
+                    renderPage();
+                }
+            });
         }
 
         loadCCCArchive();
