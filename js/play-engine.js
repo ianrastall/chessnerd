@@ -19,6 +19,7 @@
     const playerSideLabel = document.getElementById('playerSide');
     const engineSideLabel = document.getElementById('engineSideLabel');
     const engineLogEl = document.getElementById('engineLog');
+    const analyzeGameBtn = document.getElementById('analyzeGameBtn');
 
     if (!boardEl) return;
 
@@ -34,6 +35,13 @@
     let activePly = 0;
     let redoStack = [];
     let engineLines = [];
+    let analysisActive = false;
+    let analysisIndex = 0;
+    let analysisTotal = 0;
+    let analysisPositions = [];
+    let analysisResults = [];
+    let analysisCurrent = null;
+    let analysisMoveTime = 0;
 
     function setStatus(msg, type = 'success') {
         statusMessage.textContent = msg;
@@ -91,6 +99,55 @@
         return parts.length ? parts.join(' | ') : line;
     }
 
+    function parseInfoLine(line) {
+        const score = line.match(/\bscore\s+(cp|mate)\s+(-?\d+)/);
+        if (!score) return null;
+        const depth = (line.match(/\bdepth\s+(\d+)/) || [])[1];
+        const pv = (line.match(/\bpv\s+(.+)/) || [])[1];
+        return {
+            scoreType: score[1],
+            scoreValue: parseInt(score[2], 10),
+            depth: depth ? parseInt(depth, 10) : null,
+            pv: pv || null
+        };
+    }
+
+    function normalizeEval(result, ply) {
+        if (!result || !result.scoreType) return null;
+        const sideToMove = ply % 2 === 0 ? 'w' : 'b';
+        const sign = sideToMove === 'b' ? -1 : 1;
+        return {
+            type: result.scoreType,
+            value: result.scoreValue * sign
+        };
+    }
+
+    function formatEvalValue(result, ply) {
+        const normalized = normalizeEval(result, ply);
+        if (!normalized) return null;
+        if (normalized.type === 'mate') {
+            return `#${normalized.value}`;
+        }
+        const value = normalized.value / 100;
+        const sign = value > 0 ? '+' : '';
+        return `${sign}${value.toFixed(2)}`;
+    }
+
+    function formatEvalComment(result, ply) {
+        const evalText = formatEvalValue(result, ply);
+        return evalText ? `{${evalText}}` : null;
+    }
+
+    function formatAnalysisTitle(result, ply) {
+        if (!result || !result.scoreType) return '';
+        const parts = [];
+        const evalText = formatEvalValue(result, ply);
+        if (evalText) parts.push(`Eval ${evalText}`);
+        if (result.depth) parts.push(`Depth ${result.depth}`);
+        if (result.pv) parts.push(`PV ${result.pv}`);
+        return parts.join(' | ');
+    }
+
     function updateBoardStats() {
         if (game.game_over()) {
             boardStatsEl.textContent = 'Game over';
@@ -108,6 +165,25 @@
         moveStatsEl.textContent = `${history.length} move${history.length === 1 ? '' : 's'}`;
 
         toolStats.textContent = `Engine: ${engineReady ? 'ready' : 'loading'} • ${engineThinking ? 'thinking' : 'idle'}`;
+        updateAnalyzeButton();
+    }
+
+    function updateAnalyzeButton() {
+        if (!analyzeGameBtn) return;
+        const iconEl = analyzeGameBtn.querySelector('.material-icons');
+        const labelEl = analyzeGameBtn.querySelector('.btn-label');
+
+        if (analysisActive) {
+            analyzeGameBtn.disabled = false;
+            if (iconEl) iconEl.textContent = 'stop_circle';
+            if (labelEl) labelEl.textContent = 'Stop Analysis';
+            return;
+        }
+
+        const canAnalyze = engineReady && game.game_over() && game.history().length > 0;
+        analyzeGameBtn.disabled = !canAnalyze;
+        if (iconEl) iconEl.textContent = 'analytics';
+        if (labelEl) labelEl.textContent = 'Analyze Game';
     }
 
     function renderCoords(files, ranks) {
@@ -178,7 +254,15 @@
             const prefix = move.color === 'w' ? `${moveNum}.` : `${moveNum}...`;
             const tag = document.createElement('button');
             tag.className = `move-tag ${activePly === ply ? 'active' : ''}`;
-            tag.textContent = `${prefix} ${move.san}`;
+            const result = analysisResults[ply - 1];
+            const comment = formatEvalComment(result, ply);
+            tag.textContent = comment ? `${prefix} ${move.san} ${comment}` : `${prefix} ${move.san}`;
+            const title = formatAnalysisTitle(result, ply);
+            if (title) {
+                tag.title = title;
+            } else {
+                tag.removeAttribute('title');
+            }
             tag.addEventListener('click', () => jumpToPly(ply));
             moveListEl.appendChild(tag);
         });
@@ -228,6 +312,94 @@
         engineThinking = false;
     }
 
+    function buildAnalysisPositions(history) {
+        const uciMoves = history.map((m) => m.from + m.to + (m.promotion ? m.promotion : ''));
+        const positions = [];
+        let movesText = '';
+        uciMoves.forEach((move) => {
+            movesText = movesText ? `${movesText} ${move}` : move;
+            positions.push(`position startpos moves ${movesText}`);
+        });
+        return positions;
+    }
+
+    function runAnalysisStep() {
+        if (!analysisActive) return;
+        if (analysisIndex >= analysisTotal) {
+            finishAnalysis();
+            return;
+        }
+
+        analysisCurrent = null;
+        const position = analysisPositions[analysisIndex];
+        setStatus(`Analyzing ${analysisIndex + 1}/${analysisTotal}...`, 'warning');
+        engine.postMessage(position);
+        engine.postMessage(`go movetime ${analysisMoveTime}`);
+    }
+
+    function startAnalysis() {
+        if (analysisActive) return;
+        if (!engineReady) {
+            setStatus('Lozza is still loading.', 'warning');
+            return;
+        }
+        if (!game.game_over()) {
+            setStatus('Finish the game before analyzing.', 'warning');
+            return;
+        }
+        const history = game.history({ verbose: true });
+        if (!history.length) {
+            setStatus('No moves to analyze.', 'warning');
+            return;
+        }
+
+        stopEngine();
+        engine.postMessage('ucinewgame');
+
+        analysisPositions = buildAnalysisPositions(history);
+        analysisResults = new Array(history.length).fill(null);
+        analysisIndex = 0;
+        analysisTotal = analysisPositions.length;
+        analysisMoveTime = moveTime;
+        analysisCurrent = null;
+        analysisActive = true;
+
+        renderMoveList();
+        updateEngineStatus('Analyzing...', 'busy');
+        updateAnalyzeButton();
+        runAnalysisStep();
+    }
+
+    function finishAnalysis() {
+        analysisActive = false;
+        analysisCurrent = null;
+        updateEngineStatus(engineReady ? 'Lozza ready' : 'Engine unavailable', engineReady ? 'ready' : '');
+        updateAnalyzeButton();
+        setStatus(`Analysis complete (${analysisTotal} positions).`, 'success');
+    }
+
+    function stopAnalysis(silent = false) {
+        if (!analysisActive) return;
+        analysisActive = false;
+        analysisCurrent = null;
+        engine?.postMessage('stop');
+        updateEngineStatus(engineReady ? 'Lozza ready' : 'Engine unavailable', engineReady ? 'ready' : '');
+        updateAnalyzeButton();
+        if (!silent) {
+            setStatus('Analysis canceled.', 'warning');
+        }
+    }
+
+    function resetAnalysisResults() {
+        stopAnalysis(true);
+        analysisPositions = [];
+        analysisResults = [];
+        analysisIndex = 0;
+        analysisTotal = 0;
+        analysisCurrent = null;
+        updateAnalyzeButton();
+    }
+
     function maybeQueueEngine() {
         if (!engineReady) return;
         if (game.game_over()) return;
@@ -256,6 +428,7 @@
             return;
         }
 
+        resetAnalysisResults();
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -279,6 +452,7 @@
             return;
         }
 
+        resetAnalysisResults();
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -305,15 +479,34 @@
             setStatus('Lozza is ready.', 'success');
             engine.postMessage('ucinewgame');
             maybeQueueEngine();
+            updateAnalyzeButton();
             return;
         }
 
         if (line.startsWith('info')) {
+            if (analysisActive) {
+                const parsed = parseInfoLine(line);
+                if (parsed && (!analysisCurrent || (parsed.depth || 0) >= (analysisCurrent.depth || 0))) {
+                    analysisCurrent = parsed;
+                }
+            }
             pushEngineLine(describeInfo(line));
             return;
         }
 
         if (line.startsWith('bestmove')) {
+            if (analysisActive) {
+                analysisResults[analysisIndex] = analysisCurrent;
+                analysisCurrent = null;
+                analysisIndex += 1;
+                renderMoveList();
+                if (analysisIndex >= analysisTotal) {
+                    finishAnalysis();
+                } else {
+                    runAnalysisStep();
+                }
+                return;
+            }
             if (!engineThinking) return;
             engineThinking = false;
             updateEngineStatus('Lozza ready', 'ready');
@@ -360,6 +553,7 @@
 
     function newGame(keepOrientation = false) {
         stopEngine();
+        resetAnalysisResults();
         game = new Chess();
         redoStack = [];
         selectedSquare = null;
@@ -403,6 +597,7 @@
         }
 
         game = next;
+        resetAnalysisResults();
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -487,6 +682,13 @@
         document.getElementById('copyPgnBtn')?.addEventListener('click', copyPgnToClipboard);
         document.getElementById('undoBtn')?.addEventListener('click', undoMove);
         document.getElementById('redoBtn')?.addEventListener('click', redoMove);
+        analyzeGameBtn?.addEventListener('click', () => {
+            if (analysisActive) {
+                stopAnalysis();
+                return;
+            }
+            startAnalysis();
+        });
 
         moveTimeInput?.addEventListener('input', () => {
             updateMoveTimeLabel();
