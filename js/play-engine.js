@@ -35,6 +35,7 @@
     let activePly = 0;
     let redoStack = [];
     let engineLines = [];
+    let gameDateTag = formatDateTag(new Date());
     let analysisActive = false;
     let analysisIndex = 0;
     let analysisTotal = 0;
@@ -146,6 +147,130 @@
         if (result.depth) parts.push(`Depth ${result.depth}`);
         if (result.pv) parts.push(`PV ${result.pv}`);
         return parts.join(' | ');
+    }
+
+    function formatDateTag(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}.${month}.${day}`;
+    }
+
+    function computeResultTag() {
+        if (!game.game_over()) return '*';
+        if (game.in_checkmate()) {
+            return game.turn() === 'w' ? '0-1' : '1-0';
+        }
+        if (game.in_draw() || game.in_stalemate() || game.insufficient_material() || game.in_threefold_repetition()) {
+            return '1/2-1/2';
+        }
+        return '*';
+    }
+
+    function ensureDefaultHeaders() {
+        const headers = game.header();
+        const defaults = {
+            Event: 'Casual Game',
+            Site: 'Chess Nerd',
+            Date: gameDateTag,
+            Round: '-',
+            White: engineSide === 'w' ? 'Lozza' : 'You',
+            Black: engineSide === 'w' ? 'You' : 'Lozza',
+            Result: '*'
+        };
+
+        Object.keys(defaults).forEach((key) => {
+            if (!headers[key]) {
+                game.header(key, defaults[key]);
+            }
+        });
+
+        if (game.game_over()) {
+            game.header('Result', computeResultTag());
+        }
+    }
+
+    function buildHeaderMap() {
+        const headers = game.header();
+        const defaults = {
+            Event: 'Casual Game',
+            Site: 'Chess Nerd',
+            Date: gameDateTag,
+            Round: '-',
+            White: engineSide === 'w' ? 'Lozza' : 'You',
+            Black: engineSide === 'w' ? 'You' : 'Lozza',
+            Result: computeResultTag()
+        };
+        const merged = { ...defaults };
+
+        Object.keys(headers).forEach((key) => {
+            const value = headers[key];
+            if (value) {
+                merged[key] = value;
+            }
+        });
+
+        if (!merged.Result) {
+            merged.Result = computeResultTag();
+        } else if (game.game_over()) {
+            merged.Result = computeResultTag();
+        }
+
+        return merged;
+    }
+
+    function buildPgnHeaders(headerMap) {
+        const order = ['Event', 'Site', 'Date', 'Round', 'White', 'Black', 'Result'];
+        const used = new Set();
+        const lines = [];
+
+        order.forEach((key) => {
+            if (!headerMap[key]) return;
+            lines.push(`[${key} "${headerMap[key]}"]`);
+            used.add(key);
+        });
+
+        Object.keys(headerMap).sort().forEach((key) => {
+            if (used.has(key) || !headerMap[key]) return;
+            lines.push(`[${key} "${headerMap[key]}"]`);
+        });
+
+        return lines.join('\n');
+    }
+
+    function buildAnnotatedMovetext(history, resultTag) {
+        const tokens = [];
+
+        history.forEach((move, idx) => {
+            const ply = idx + 1;
+            const moveNum = Math.floor(idx / 2) + 1;
+            if (move.color === 'w') {
+                tokens.push(`${moveNum}.`);
+            } else if (idx === 0) {
+                tokens.push(`${moveNum}...`);
+            }
+
+            let san = move.san;
+            const comment = formatEvalComment(analysisResults[ply - 1], ply);
+            if (comment) san += ` ${comment}`;
+            tokens.push(san);
+        });
+
+        tokens.push(resultTag || '*');
+        return tokens.join(' ');
+    }
+
+    function buildAnnotatedPgn() {
+        const history = game.history({ verbose: true });
+        if (!history.length) {
+            return '[No moves yet]';
+        }
+
+        const headerMap = buildHeaderMap();
+        const headers = buildPgnHeaders(headerMap);
+        const moves = buildAnnotatedMovetext(history, headerMap.Result);
+
+        return headers ? `${headers}\n\n${moves}` : moves;
     }
 
     function updateBoardStats() {
@@ -269,8 +394,8 @@
     }
 
     function syncPgn() {
-        const pgn = game.pgn({ max_width: 80, newline_char: '\n' });
-        pgnTextEl.value = pgn || '[No moves yet]';
+        ensureDefaultHeaders();
+        pgnTextEl.value = buildAnnotatedPgn();
     }
 
     function refreshUI() {
@@ -304,6 +429,8 @@
         boardStatsEl.textContent = msg;
         updateEngineStatus('Game over', '');
         engineThinking = false;
+        ensureDefaultHeaders();
+        syncPgn();
         return true;
     }
 
@@ -500,6 +627,7 @@
                 analysisCurrent = null;
                 analysisIndex += 1;
                 renderMoveList();
+                syncPgn();
                 if (analysisIndex >= analysisTotal) {
                     finishAnalysis();
                 } else {
@@ -555,6 +683,8 @@
         stopEngine();
         resetAnalysisResults();
         game = new Chess();
+        gameDateTag = formatDateTag(new Date());
+        ensureDefaultHeaders();
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -597,6 +727,8 @@
         }
 
         game = next;
+        gameDateTag = next.header().Date || formatDateTag(new Date());
+        ensureDefaultHeaders();
         resetAnalysisResults();
         redoStack = [];
         selectedSquare = null;
@@ -614,6 +746,7 @@
             setStatus('Clipboard not available in this browser.', 'warning');
             return;
         }
+        syncPgn();
         navigator.clipboard.writeText(pgnTextEl.value || '')
             .then(() => setStatus('PGN copied to clipboard.', 'success'))
             .catch(() => setStatus('Copy failed.', 'error'));
