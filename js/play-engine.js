@@ -273,23 +273,41 @@
         return headers ? `${headers}\n\n${moves}` : moves;
     }
 
+    function buildViewGame(ply) {
+        const history = game.history({ verbose: true });
+        if (ply >= history.length) return game;
+        const next = new Chess();
+        const slice = history.slice(0, ply);
+        slice.forEach((m) => next.move({ from: m.from, to: m.to, promotion: m.promotion }));
+        return next;
+    }
+
+    function isViewingPast() {
+        return activePly < game.history().length;
+    }
+
     function updateBoardStats() {
-        if (game.game_over()) {
+        const fullHistory = game.history({ verbose: true });
+        const viewGame = buildViewGame(activePly);
+        if (viewGame.game_over()) {
             boardStatsEl.textContent = 'Game over';
         } else {
-            const turn = game.turn() === 'w' ? 'White' : 'Black';
-            const inCheck = game.in_check() ? ' • Check' : '';
+            const turn = viewGame.turn() === 'w' ? 'White' : 'Black';
+            const inCheck = viewGame.in_check() ? '  Check' : '';
             boardStatsEl.textContent = `${turn} to move${inCheck}`;
+        }
+
+        if (isViewingPast()) {
+            boardStatsEl.textContent += ` (viewing ${activePly}/${fullHistory.length})`;
         }
 
         const humanColor = engineSide === 'w' ? 'Black' : 'White';
         playerSideLabel.textContent = `You: ${humanColor}`;
         engineSideLabel.textContent = `Lozza: ${engineSide === 'w' ? 'White' : 'Black'}`;
 
-        const history = game.history();
-        moveStatsEl.textContent = `${history.length} move${history.length === 1 ? '' : 's'}`;
+        moveStatsEl.textContent = `${fullHistory.length} move${fullHistory.length === 1 ? '' : 's'}`;
 
-        toolStats.textContent = `Engine: ${engineReady ? 'ready' : 'loading'} • ${engineThinking ? 'thinking' : 'idle'}`;
+        toolStats.textContent = `Engine: ${engineReady ? 'ready' : 'loading'}  ${engineThinking ? 'thinking' : 'idle'}`;
         updateAnalyzeButton();
     }
 
@@ -322,6 +340,7 @@
         boardEl.innerHTML = '';
         boardEl.dataset.orientation = orientation;
 
+        const viewGame = buildViewGame(activePly);
         const files = orientation === 'white'
             ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
             : ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'];
@@ -329,7 +348,7 @@
             ? ['8', '7', '6', '5', '4', '3', '2', '1']
             : ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-        const history = game.history({ verbose: true });
+        const history = viewGame.history({ verbose: true });
         const lastMove = history[history.length - 1];
         const highlights = lastMove ? [lastMove.from, lastMove.to] : [];
         const targetSet = new Set(legalTargets);
@@ -347,7 +366,7 @@
                 if (square === selectedSquare) squareEl.classList.add('selected');
                 if (targetSet.has(square)) squareEl.classList.add('target');
 
-                const piece = game.get(square);
+                const piece = viewGame.get(square);
                 if (piece) {
                     const pieceEl = document.createElement('div');
                     pieceEl.className = 'piece';
@@ -530,6 +549,7 @@
     function maybeQueueEngine() {
         if (!engineReady) return;
         if (game.game_over()) return;
+        if (activePly !== game.history().length) return;
         if (game.turn() !== engineSide) return;
         if (engineThinking) return;
 
@@ -544,6 +564,10 @@
     }
 
     function attemptMove(from, to) {
+        if (activePly !== game.history().length) {
+            setStatus('Jump to latest move to play.', 'warning');
+            return;
+        }
         if (game.turn() === engineSide) {
             setStatus('Wait for Lozza to move.', 'warning');
             return;
@@ -652,6 +676,10 @@
 
     function handleSquareClick(square) {
         if (game.game_over()) return;
+        if (activePly !== game.history().length) {
+            setStatus('Jump to latest move to play.', 'warning');
+            return;
+        }
         if (engineThinking && game.turn() === engineSide) {
             setStatus('Lozza is thinking...', 'warning');
             return;
@@ -700,18 +728,14 @@
 
     function jumpToPly(ply) {
         stopEngine();
-        const history = game.history({ verbose: true });
-        const slice = history.slice(0, ply);
-        const next = new Chess();
-        slice.forEach((m) => next.move({ from: m.from, to: m.to, promotion: m.promotion }));
-        game = next;
-        redoStack = [];
         selectedSquare = null;
         legalTargets = [];
         activePly = ply;
         setStatus(`Jumped to move ${ply}.`, 'success');
         refreshUI();
-        maybeQueueEngine();
+        if (activePly === game.history().length) {
+            maybeQueueEngine();
+        }
     }
 
     function loadPgnFromPrompt() {
