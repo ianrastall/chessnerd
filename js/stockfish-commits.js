@@ -91,6 +91,92 @@
     return !!(c?.downloads?.github_actions_artifacts?.length);
   }
 
+  function uniq(arr) {
+    return Array.from(new Set(arr.filter(Boolean)));
+  }
+
+  function extractPullNumber(message) {
+    // Typical line: "closes https://github.com/official-stockfish/Stockfish/pull/6488"
+    const m = (message || '').match(/\/pull\/(\d+)\b/);
+    return m ? m[1] : '';
+  }
+
+  function extractBench(message) {
+    // "Bench: 2325401" or "bench 2717363"
+    const m = (message || '').match(/^\s*Bench:\s*(\d+)\s*$/im) || (message || '').match(/^\s*bench\s+(\d+)\s*$/im);
+    return m ? m[1] : '';
+  }
+
+  function extractTestLinks(message) {
+    // Pull all tests.stockfishchess.org URLs and attempt a label from their line context.
+    const lines = (message || '').split('\n');
+    const out = [];
+
+    for (const line of lines) {
+      const urls = line.match(/https:\/\/tests\.stockfishchess\.org\/\S+/g) || [];
+      for (const url of urls) {
+        let label = 'Test';
+        if (/STC/i.test(line)) label = 'STC';
+        else if (/LTC/i.test(line)) label = 'LTC';
+        else if (/Non-Regression/i.test(line)) label = 'Non-regression';
+        else if (/live_elo/i.test(url)) label = 'Live ELO';
+        else if (/tests\/view/i.test(url)) label = 'Test view';
+
+        out.push({ label, url });
+      }
+    }
+
+    // De-dup by URL
+    const seen = new Set();
+    return out.filter(x => {
+      if (seen.has(x.url)) return false;
+      seen.add(x.url);
+      return true;
+    });
+  }
+
+  function linkRow(label, url, onCopy) {
+    const row = document.createElement('div');
+    row.className = 'sf-linkrow';
+
+    const head = document.createElement('div');
+    head.className = 'sf-linkrow-head';
+
+    const lab = document.createElement('div');
+    lab.className = 'sf-linkrow-label';
+    lab.textContent = label;
+
+    const actions = document.createElement('div');
+    actions.className = 'sf-linkrow-actions';
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'btn btn-secondary';
+    copyBtn.type = 'button';
+    copyBtn.innerHTML = '<span class="material-icons">content_copy</span>';
+    copyBtn.title = 'Copy URL';
+    copyBtn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      onCopy(url);
+    });
+
+    actions.appendChild(copyBtn);
+
+    head.appendChild(lab);
+    head.appendChild(actions);
+
+    const a = document.createElement('a');
+    a.className = 'sf-url';
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = url;
+
+    row.appendChild(head);
+    row.appendChild(a);
+    return row;
+  }
+
   function applyFilters() {
     const q = searchBox.value.trim().toLowerCase();
     const wantAbrok = showAbrok.checked;
@@ -272,80 +358,172 @@
   function renderCommit(c) {
     const short = safeText(c.short) || safeText(c.hash).slice(0, 8);
     const dateStr = toLocalDateTime(c.date);
+    const pr = extractPullNumber(c.message);
+    const bench = extractBench(c.message);
+    const tests = extractTestLinks(c.message);
 
-    const pills = [];
-    if (commitHasAbrok(c)) pills.push(el('span', { class: 'sf-pill', text: `ABROK: ${c.downloads.abrok_eu.length}` }));
-    if (commitHasArtifacts(c)) pills.push(el('span', { class: 'sf-pill warn', text: `Artifacts: ${c.downloads.github_actions_artifacts.length}` }));
+    const hasAbrok = commitHasAbrok(c);
+    const hasArtifacts = commitHasArtifacts(c);
+    const srcCount = (c.source_code || []).length;
+    const abrokCount = (c?.downloads?.abrok_eu || []).length;
+    const artCount = (c?.downloads?.github_actions_artifacts || []).length;
 
     const details = el('details', { class: 'sf-commit', id: anchorForCommit(c) });
 
-    const summaryLeft = el('div', { class: 'sf-summary-left' }, [
-      el('span', { class: 'sf-date', text: dateStr }),
-      el('span', { class: 'sf-hash', text: short }),
-      el('span', { class: 'sf-subject', text: safeText(c.subject || '(no subject)') }),
-      el('span', { class: 'sf-author', text: safeText(c.author || '') })
-    ]);
+    // ----- SUMMARY (clickable) -----
+    const summary = document.createElement('summary');
 
-    const summary = el('summary', {}, [
-      el('div', { class: 'sf-summary-left' }, summaryLeft.childNodes ? Array.from(summaryLeft.childNodes) : []),
-      el('div', { class: 'sf-pills' }, pills)
-    ]);
+    const top = document.createElement('div');
+    top.className = 'sf-summary-top';
 
-    // Rebuild summary (safe)
-    summary.innerHTML = '';
-    summary.appendChild(summaryLeft);
-    summary.appendChild(el('div', { class: 'sf-pills' }, pills));
+    const title = document.createElement('div');
+    title.className = 'sf-summary-title';
+    title.textContent = safeText(c.subject || '(no subject)');
 
-    const links = el('div', { class: 'sf-links' });
+    const pills = document.createElement('div');
+    pills.className = 'sf-pills';
 
-    if (c.github_url) links.appendChild(el('a', { href: c.github_url, target: '_blank', rel: 'noopener', text: 'GitHub commit' }));
+    // Useful counts visible in the clickable area
+    if (srcCount) pills.appendChild(el('span', { class: 'sf-pill', text: `Source: ${srcCount}` }));
+    if (hasAbrok) pills.appendChild(el('span', { class: 'sf-pill', text: `ABROK: ${abrokCount}` }));
+    if (hasArtifacts) pills.appendChild(el('span', { class: 'sf-pill warn', text: `Artifacts: ${artCount}` }));
+    if (pr) pills.appendChild(el('span', { class: 'sf-pill', text: `PR: #${pr}` }));
+    if (bench) pills.appendChild(el('span', { class: 'sf-pill', text: `Bench: ${bench}` }));
+
+    top.appendChild(title);
+    top.appendChild(pills);
+
+    const meta = document.createElement('div');
+    meta.className = 'sf-summary-meta';
+    meta.appendChild(el('span', { class: 'sf-date', text: dateStr }));
+    meta.appendChild(el('span', { class: 'sf-hash', text: short }));
+    if (c.author) meta.appendChild(el('span', { class: 'sf-author', text: safeText(c.author) }));
+
+    const keyLinks = document.createElement('div');
+    keyLinks.className = 'sf-summary-links';
+
+    // Key links in the clickable header (so you do not have to expand everything)
+    if (c.github_url) {
+      const a = document.createElement('a');
+      a.className = 'sf-linkchip';
+      a.href = c.github_url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = '<span class="material-icons">open_in_new</span>GitHub';
+      keyLinks.appendChild(a);
+    }
+
+    // Show ZIP/TAR (if present) as chips in summary
+    const srcZip = (c.source_code || []).find(x => (x.label || '').toUpperCase() === 'ZIP');
+    const srcTar = (c.source_code || []).find(x => (x.label || '').toUpperCase().includes('TAR'));
+
+    if (srcZip?.url) {
+      const a = document.createElement('a');
+      a.className = 'sf-linkchip';
+      a.href = srcZip.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = '<span class="material-icons">folder_zip</span>ZIP';
+      keyLinks.appendChild(a);
+    }
+    if (srcTar?.url) {
+      const a = document.createElement('a');
+      a.className = 'sf-linkchip';
+      a.href = srcTar.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = '<span class="material-icons">folder_zip</span>TAR.GZ';
+      keyLinks.appendChild(a);
+    }
+
+    // Show up to 2 test links in summary (STC/LTC most useful)
+    const stc = tests.find(t => t.label === 'STC');
+    const ltc = tests.find(t => t.label === 'LTC');
+    const extraTests = tests.filter(t => t !== stc && t !== ltc);
+
+    for (const t of [stc, ltc].filter(Boolean)) {
+      const a = document.createElement('a');
+      a.className = 'sf-linkchip';
+      a.href = t.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = `<span class="material-icons">science</span>${t.label}`;
+      keyLinks.appendChild(a);
+    }
+    if (!stc && extraTests[0]) {
+      const a = document.createElement('a');
+      a.className = 'sf-linkchip';
+      a.href = extraTests[0].url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = '<span class="material-icons">science</span>Test';
+      keyLinks.appendChild(a);
+    }
+
+    summary.appendChild(top);
+    summary.appendChild(meta);
+    summary.appendChild(keyLinks);
+
+    // ----- BODY (expanded) -----
+    const body = el('div', { class: 'sf-body' });
+
+    // Explicit link lists
+    const linkList = document.createElement('div');
+    linkList.className = 'sf-linklist';
+
+    const copyUrl = async (url) => {
+      await copyTextToClipboard(url);
+    };
+
+    // Section: Commit + Source
+    body.appendChild(el('div', { class: 'sf-section-title', text: 'Primary links' }));
+    linkList.appendChild(linkRow('GitHub commit', c.github_url, copyUrl));
 
     for (const sc of (c.source_code || [])) {
       if (!sc?.url) continue;
-      const label = sc.label || sc.type || 'Source';
-      links.appendChild(el('a', { href: sc.url, target: '_blank', rel: 'noopener', text: label }));
+      linkList.appendChild(linkRow(`Source code: ${sc.label || sc.type || 'archive'}`, sc.url, copyUrl));
+    }
+    body.appendChild(linkList);
+
+    // Section: ABROK
+    if (showAbrok.checked && hasAbrok) {
+      body.appendChild(el('div', { class: 'sf-section-title', text: `ABROK builds (${abrokCount})` }));
+      const note = el('div', { class: 'sf-section-note', text: 'Direct binaries hosted externally; URLs shown explicitly.' });
+      body.appendChild(note);
+
+      const abrokList = document.createElement('div');
+      abrokList.className = 'sf-linklist';
+      for (const d of (c.downloads.abrok_eu || [])) {
+        if (!d?.url) continue;
+        abrokList.appendChild(linkRow(d.label || 'ABROK build', d.url, copyUrl));
+      }
+      body.appendChild(abrokList);
     }
 
-    const copyBtn = el('button', { class: 'btn btn-secondary' }, []);
-    copyBtn.innerHTML = '<span class="material-icons">content_copy</span> Copy commit links';
-    copyBtn.addEventListener('click', async (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      const urls = collectUrlsFromCommit(c);
-      await copyTextToClipboard(urls.join('\n'));
-    });
+    // Section: Artifacts
+    if (showArtifacts.checked && hasArtifacts) {
+      body.appendChild(el('div', { class: 'sf-section-title', text: `GitHub Actions artifacts (${artCount})` }));
+      const note = el('div', {
+        class: 'sf-section-note',
+        text: 'These often expire due to retention policies and may require GitHub authentication.'
+      });
+      body.appendChild(note);
 
-    links.appendChild(copyBtn);
+      const artList = document.createElement('div');
+      artList.className = 'sf-linklist';
+      for (const d of (c.downloads.github_actions_artifacts || [])) {
+        if (!d?.url) continue;
+        const label = d.bytes ? `${d.label} (${d.bytes} bytes)` : (d.label || 'Artifact');
+        artList.appendChild(linkRow(label, d.url, copyUrl));
+      }
+      body.appendChild(artList);
+    }
 
-    const body = el('div', { class: 'sf-body' });
-
-    // Downloads subsections
-    const sub = el('div', { class: 'sf-subsection' });
-
-    const abrokDetails = el('details', {}, [
-      el('summary', { text: `ABROK builds (${(c?.downloads?.abrok_eu || []).length})` }),
-      el('div', { class: 'sf-downloads' }, (c?.downloads?.abrok_eu || []).map(d =>
-        el('a', { href: d.url, target: '_blank', rel: 'noopener', text: d.label || d.url })
-      ))
-    ]);
-
-    const ghaDetails = el('details', {}, [
-      el('summary', { text: `GitHub Actions artifacts (${(c?.downloads?.github_actions_artifacts || []).length}) — may require auth / may expire` }),
-      el('div', { class: 'sf-downloads' }, (c?.downloads?.github_actions_artifacts || []).map(d => {
-        const label = d.bytes ? `${d.label} (${d.bytes} bytes)` : (d.label || d.url);
-        return el('a', { href: d.url, target: '_blank', rel: 'noopener', text: label });
-      }))
-    ]);
-
-    // Respect toggles by default: hide sections if user unchecked.
-    if (showAbrok.checked && commitHasAbrok(c)) sub.appendChild(abrokDetails);
-    if (showArtifacts.checked && commitHasArtifacts(c)) sub.appendChild(ghaDetails);
-
-    const msg = el('div', { class: 'sf-message', text: safeText(c.message || '') });
-
-    body.appendChild(links);
-    if (sub.childNodes.length) body.appendChild(sub);
-    if (c.message) body.appendChild(msg);
+    // Message last (still useful for context)
+    if (c.message) {
+      body.appendChild(el('div', { class: 'sf-section-title', text: 'Commit message' }));
+      body.appendChild(el('div', { class: 'sf-message', text: safeText(c.message || '') }));
+    }
 
     details.appendChild(summary);
     details.appendChild(body);
