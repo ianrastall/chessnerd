@@ -1,0 +1,1149 @@
+{
+  "month": "2018-03",
+  "commits": [
+    {
+      "commit_num": 2616,
+      "hash": "f2681232",
+      "short": "f2681232",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-31T21:10:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f2681232e516da164196d7238482729da038ae1e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f2681232e516da164196d7238482729da038ae1e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f2681232e516da164196d7238482729da038ae1e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Refine SEE threshold for capture pruning.\n\neloDoc suggests that this part of search is worth ~18 Elo.\nThis patch refines the depth dependence of the SEE threshold.\n\npassed STC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 21398 W: 4474 L: 4245 D: 12679\nhttp://tests.stockfishchess.org/tests/view/5abfb0630ebc591a560aae07\n\npassed LTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 9028 W: 1439 L: 1285 D: 6304\nhttp://tests.stockfishchess.org/tests/view/5abfbff30ebc591a560aae11\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1527\n\nBench: 6036915\n",
+      "subject": "Refine SEE threshold for capture pruning."
+    },
+    {
+      "commit_num": 2617,
+      "hash": "c8ef80f4",
+      "short": "c8ef80f4",
+      "author": "Ondrej Mosnáček <omosnacek@gmail.com>",
+      "date": "2018-03-30T08:47:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c8ef80f466a95ee54e032b289094db0f22a2b956",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c8ef80f466a95ee54e032b289094db0f22a2b956.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c8ef80f466a95ee54e032b289094db0f22a2b956.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use per-thread dynamic contempt\n\nWe now use per-thread dynamic contempt. This patch has the following\neffects:\n\n * for Threads=1: **non-functional**\n * for Threads>1:\n   * with MultiPV=1: **no regression, little to no ELO gain**\n   * with MultiPV>1: **clear improvement over master**\n\nFirst, I tried testing at standard MultiPV=1 play with [0,5] bounds.\nThis yielded 2 yellow and 1 red test:\n\n5+0.05, Threads=5:\nLLR: -2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 82689 W: 16439 L: 16190 D: 50060\nhttp://tests.stockfishchess.org/tests/view/5aa93a5a0ebc5902952892e6\n\n5+0.05, Threads=8:\nLLR: -2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 27164 W: 4974 L: 4983 D: 17207\nhttp://tests.stockfishchess.org/tests/view/5ab2639b0ebc5902a6fbefd5\n\n5+0.5, Threads=16:\nLLR: -2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 41396 W: 7127 L: 7082 D: 27187\nhttp://tests.stockfishchess.org/tests/view/5ab124220ebc59029516cb62\n\nThen, I tested with Skill Level=17 (implicitly MutliPV=4), showing\na clear improvement:\n\n5+0.05, Threads=5:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 3498 W: 1316 L: 1135 D: 1047\nhttp://tests.stockfishchess.org/tests/view/5ab4b6580ebc5902932aeca2\n\nNext, I tested the patch with MultiPV=1 again, this time checking for\nnon-regression ([-3, 1]):\n\n5+0.5, Threads=5:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 65575 W: 12786 L: 12745 D: 40044\nhttp://tests.stockfishchess.org/tests/view/5ab4e8500ebc5902932aecb3\n\nFinally, I ran some tests with fixed number of games, checking if\nreverting dynamic contempt gains more elo with Skill Level=17 (i.e.\nMultiPV) than applying the \"prevScore\" fix and this patch. These tests\nshowed, that this patch gains 15 ELO when playing with Skill Level=17:\n\n5+0.05, Threads=3, \"revert dynamic contempt\" vs. \"WITHOUT this patch\":\nELO: -11.43 +-4.1 (95%) LOS: 0.0%\nTotal: 20000 W: 7085 L: 7743 D: 5172\nhttp://tests.stockfishchess.org/tests/view/5ab636450ebc590295d88536\n\n5+0.05, Threads=3, \"revert dynamic contempt\" vs. \"WITH this patch\":\nELO: -26.42 +-4.1 (95%) LOS: 0.0%\nTotal: 20000 W: 6661 L: 8179 D: 5160\nhttp://tests.stockfishchess.org/tests/view/5ab62e680ebc590295d88524\n\n---\n***FAQ***\n\n**Why should this be commited?**\nI believe that the gain for multi-thread MultiPV search is a sufficient\njustification for this otherwise neutral change. I also believe this\nimplementation of dynamic contempt is more logical, although this may\nbe just my opinion.\n\n**Why is per-thread contempt better at MultiPV?**\nA likely explanation for the gain in MultiPV mode is that during\nsearch each thread independently switches between rootMoves and via\nthe shared contempt score skews each other's evaluation.\n\n**Why were the tests done with Skill Level=17?**\nThis was originally suggested by @Hanamuke and the idea is that with\nSkill Level Stockfish sometimes plays also moves it thinks are slightly\nsub-optimal and thus the quality of all moves offered by the MultiPV\nsearch is checked by the test.\n\n**Why are the ELO differences so huge?**\nThis is most likely because of the nature of Skill Level mode --\nsince it slower and weaker than normal mode, bugs in evaluation have\nmuch greater effect.\n\n---\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1515.\n\nNo functional change -- in single thread mode.\n",
+      "subject": "Use per-thread dynamic contempt"
+    },
+    {
+      "commit_num": 2618,
+      "hash": "c959871a",
+      "short": "c959871a",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-30T08:21:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c959871a59d106aa0294916890c31c475aa195ea",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c959871a59d106aa0294916890c31c475aa195ea.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c959871a59d106aa0294916890c31c475aa195ea.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Integrate syzygy in automated testing (v2).\n\nExtends valgrind/sanitizer testing to cover syzygy code.\n\nThe script downloads 4 man syzygy as needed. The time needed for the\nadditional testing is small (in fact hard to see a difference compared\nto the large fluctuations in testing time in travis).\n\nPossible follow-ups:\n\n * include more TB sensitive positions in bench.\n * include the test script of recent commit \"Refactor tbprobe.cpp\".\n * verify unchanged bench with TB (with a long run).\n * make the TB part of the continuation integration tests optional.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1518\nand    https://github.com/official-stockfish/Stockfish/pull/1490\n\nNo functional change.\n",
+      "subject": "Integrate syzygy in automated testing (v2)."
+    },
+    {
+      "commit_num": 2619,
+      "hash": "d5e3e7d2",
+      "short": "d5e3e7d2",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2018-03-29T11:59:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d5e3e7d207538fe3ff0c86df9d9f95912f5266e9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d5e3e7d207538fe3ff0c86df9d9f95912f5266e9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d5e3e7d207538fe3ff0c86df9d9f95912f5266e9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Candidate Passed Pawn\n\nInclude some not fully supported levers in the (candidate) passed pawns\nbitboard, if otherwise unblocked. Maybe levers are usually very short\nlived, and some inaccuracy in the lever balance for the definition of\ncandidate passed pawns just triggers a deeper search.\n\nHere is a example of a case where the patch has an effect on the definition\nof candidate passers: White c5/e5 pawns, against Black d6 pawn. Let's say\nwe want to test if e5 is a candidate passer. The previous master looks\nonly at files d, e and f (which is already very good) and reject e5 as\na candidate. However, the lever d6 is challenged by 2 pawns, so it should\nnot fully count. Indirectly, this patch will view such case (and a few more)\nto be scored as candidates.\n\nSTC\nhttp://tests.stockfishchess.org/tests/view/5abcd55d0ebc5902926cf1e1\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 16492 W: 3419 L: 3198 D: 9875\n\nLTC\nhttp://tests.stockfishchess.org/tests/view/5abce1360ebc5902926cf1e6\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 21156 W: 3201 L: 2990 D: 14965\n\nThis was inspired by this test of Jerry Donald Watson, except the case of\nzero supporting pawns against two levers is excluded, and it seems that\nnot excluding that case is bad, while excluding is it beneficial. See the\nfollowing tests on fishtest:\n\nhttps://github.com/official-stockfish/Stockfish/pull/1519\nhttp://tests.stockfishchess.org/tests/view/5abccd850ebc5902926cf1dd\nhttp://tests.stockfishchess.org/tests/view/5abcdd490ebc5902926cf1e4\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1521\n\nBench: 5568461\n\n----\n\nComments by Jerry Donald Watson:\n\n> My thinking as to why this works:\n>\n> The evaluation is either called in an interior node or in the qsearch.\n> The calls at the end of the qsearch are the more important as they\n> ultimately determine the scoring of each move, whereas the internal\n> values are mainly used for pruning decisions with a margin. Some strong\n> engines don't even call the eval at all nodes. Now the whole point of\n> the qsearch is to find quiet positions where captures do not change the\n> evaluation of the position with regards to the search bounds - i.e. if\n> there were good captures they would be tried.* So when a candidate lever\n> appears in the evaluation at the end of the qsearch, the qsearch has\n> guaranteed that it cannot just be captured, or if it can, this does not\n> take the score past the search bounds. Practically this may mean that\n> the side with the candidate lever has the turn, or perhaps the stopping\n> lever pawn is pinned, or that side is forced for other reasons to make\n> some other move (e.g. d6 can only take one of the pawns in the example\n> above).\n>\n> Hence granting the full score for only one lever defender makes some\n> sense, at least, to me.\n>\n> IMO this is also why huge bonuses for possible captures in the evaluation\n> (e.g. threat on queen and our turn), etc. don't tend to work. Such things\n> are best left to the search to figure out.\n",
+      "subject": "Candidate Passed Pawn"
+    },
+    {
+      "commit_num": 2620,
+      "hash": "9953bfff",
+      "short": "9953bfff",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-03-27T22:31:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9953bfff621b287f5e08139f51d6663c2620db1e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9953bfff621b287f5e08139f51d6663c2620db1e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9953bfff621b287f5e08139f51d6663c2620db1e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Change reduction/improving interaction\n\nAdjust criterion for applying extra reduction if not improving.\nWe now add an extra ply of reduction if r > 1.0, instead of the\nprevious condition Reductions[NonPV][imp][d][mc] >= 2.\n\nWhy does this work? Previously, reductions when not improving had\na discontinuity as the depth and/or move count increases due to the\nReductions[NonPV][imp][d][mc] >= 2 condition. Hence, values of r\nsuch that 0.5 < r < 1.5 would be mapped to a reduction of 1, while\n1.5 < r < 2.5 would be mapped to a reduction of 3. This patch allows\nvalues of r satisfying 1.0 < r < 1.5 to be mapped to a reduction of 2,\nmaking the reduction formula more continuous.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 35908 W: 7382 L: 7087 D: 21439\nhttp://tests.stockfishchess.org/tests/view/5aba723a0ebc5902a4743e8f\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 23087 W: 3584 L: 3378 D: 16125\nhttp://tests.stockfishchess.org/tests/view/5aba89070ebc5902a4743ea9\n\nIdeas for future work:\n- We could look at retuning the LMR formula.\n- We could look at adjusting the reductions in PV nodes if not improving.\n\nBench: 5326261\n",
+      "subject": "Change reduction/improving interaction"
+    },
+    {
+      "commit_num": 2621,
+      "hash": "5ce63058",
+      "short": "5ce63058",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-27T15:51:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ce630584ca243ad0f4739bb7615702f36b9f818",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ce630584ca243ad0f4739bb7615702f36b9f818.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ce630584ca243ad0f4739bb7615702f36b9f818.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak queen values for midgame and endgame\n\nQueen midgame value: -1%\nQueen endgame value: +1%\n\nThis patch failed STC, but was exceptionally tested at LTC,\nwhere it passed two independant SPRT tests with bounds [0..4]:\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 20651 W: 3191 L: 2980 D: 14480\nhttp://tests.stockfishchess.org/tests/view/5ab73faa0ebc5902932cbdca\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 89111 W: 13647 L: 13233 D: 62231\nhttp://tests.stockfishchess.org/tests/view/5ab8c0e50ebc5902932cbeae\n\nSee https://github.com/official-stockfish/Stockfish/pull/1511\nfor the discussion of this patch.\n\nHow to continue from there?\n• there is probably some more Elo gains to get from the tuning\nof the queen value.\n\nBench: 5460229\n",
+      "subject": "Tweak queen values for midgame and endgame"
+    },
+    {
+      "commit_num": 2622,
+      "hash": "29070bd0",
+      "short": "29070bd0",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-03-27T15:29:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/29070bd01a5a8e37658866ead1fbdeacc60ce9a6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/29070bd01a5a8e37658866ead1fbdeacc60ce9a6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/29070bd01a5a8e37658866ead1fbdeacc60ce9a6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplification: remove pawn shelter/storm masks\n\nEncode the pawn shelter/storm masks into the danger score\n\nThis highly specialized rule directly contradicts the VERY high\ndanger score for blocked pawns. Reducing the danger score for\nblocked pawns and removing this rule is apparently an effective\ncompromise.\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 36597 W: 7522 L: 7429 D: 21646\nhttp://tests.stockfishchess.org/tests/view/5ab935f30ebc5902932cc016\n\nLTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 100690 W: 15373 L: 15372 D: 69945\nhttp://tests.stockfishchess.org/tests/view/5ab9501f0ebc5902932cc042\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1514\n\nBench: 5980822\n",
+      "subject": "Simplification: remove pawn shelter/storm masks"
+    },
+    {
+      "commit_num": 2623,
+      "hash": "280022ba",
+      "short": "280022ba",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2018-03-27T14:44:47Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/280022baf78a52e9a5c34ef2aec6927aace3e83f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/280022baf78a52e9a5c34ef2aec6927aace3e83f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/280022baf78a52e9a5c34ef2aec6927aace3e83f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix indentation in movepicker.cpp\n\nFix indentation in movepicker.cpp and evaluate.cpp. Also move\nthe PickType enum out of global space.\n\nNo functional change\n",
+      "subject": "Fix indentation in movepicker.cpp"
+    },
+    {
+      "commit_num": 2624,
+      "hash": "a03e98dc",
+      "short": "a03e98dc",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-27T14:22:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a03e98dcd33c91c47e4a06282bfb582e582671b7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a03e98dcd33c91c47e4a06282bfb582e582671b7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a03e98dcd33c91c47e4a06282bfb582e582671b7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Switch time management to 64 bits\n\nThis is a patch to fix issue #1498, switching the time management variables\nto 64 bits to avoid overflow of time variables after 25 days.\n\nThere was a bug in Stockfish 9 causing the output to be wrong after\n2^31 milliseconds search. Here is a long run from the starting position:\n\ninfo depth 64 seldepth 87 multipv 1 score cp 23 nodes 13928920239402\nnps 0 tbhits 0 time -504995523 pv g1f3 d7d5 d2d4 g8f6 c2c4 d5c4 e2e3 e7e6 f1c4\nc7c5 e1g1 b8c6 d4c5 d8d1 f1d1 f8c5 c4e2 e8g8 a2a3 c5e7 b2b4 f8d8 b1d2 b7b6 c1b2\nc8b7 a1c1 a8c8 c1c2 c6e5 d1c1 c8c2 c1c2 e5f3 d2f3 a7a5 b4b5 e7c5 f3d4 d8c8 d4b3\nc5d6 c2c8 b7c8 b3d2 c8b7 d2c4 d6c5 e2f3 b7d5 f3d5 e6d5 c4e5 a5a4 e5d3 f6e4 d3c5\ne4c5 b2d4 c5e4 d4b6 e4d6 g2g4 d6b5 b6c5 b5c7 g1g2 c7e6 c5d6 g7g6\n\nWe check at compile time that the TimePoint type is exactly 64 bits long for\nthe compiler (TimePoint is our alias in Stockfish for std::chrono::milliseconds\n-- it is a signed integer type of at least 45 bits according to the C++ standard,\nbut will most probably be implemented as a 64 bits signed integer on modern\ncompilers), and we use this TimePoint type consistently across the code.\n\nBug report by user \"fischerandom\" on the TCEC chat (thanks), and the\npatch includes code and suggestions by user \"WOnder93\" and Ronald de Man.\n\nFixes issue:          https://github.com/official-stockfish/Stockfish/issues/1498\nCloses pull request:  https://github.com/official-stockfish/Stockfish/pull/1510\n\nNo functional change.\n",
+      "subject": "Switch time management to 64 bits"
+    },
+    {
+      "commit_num": 2625,
+      "hash": "f0f6da2d",
+      "short": "f0f6da2d",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-03-26T07:26:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f0f6da2d30fc005fd0fa126ee1eefd11fe10a604",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f0f6da2d30fc005fd0fa126ee1eefd11fe10a604.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f0f6da2d30fc005fd0fa126ee1eefd11fe10a604.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make kingRing always 8 squares\n\nMake kingRing always eight squares, extending the bitboard to the\nF file if the king is on the H file, and to the C file if the king\nis on the A file. This may deal with cases where Stockfish (like\nmany other engines) would shift the king around on the back rank\nlike g1h1, not because there is some imminent threat, but because\nit makes king safety look a little better just because the king ring\nhad a smaller area.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 34000 W: 7167 L: 6877 D: 19956\nhttp://tests.stockfishchess.org/tests/view/5ab8216d0ebc5902932cbe64\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 22574 W: 3576 L: 3370 D: 15628\nhttp://tests.stockfishchess.org/tests/view/5ab84e6a0ebc5902932cbe72\n\nHow to continue from there?\n\nThis patch probably makes it easier to tune the king safety evaluation,\nbecause the new regularity of the king ring size will make the king\nsafety function more continuous.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1512\n\nBench: 5934103\n",
+      "subject": "Make kingRing always 8 squares"
+    },
+    {
+      "commit_num": 2626,
+      "hash": "62937d10",
+      "short": "62937d10",
+      "author": "Chess13234 <37609326+Chess13234@users.noreply.github.com>",
+      "date": "2018-03-23T18:39:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/62937d1007e0f97e629f376adca4f4ad738e95d1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/62937d1007e0f97e629f376adca4f4ad738e95d1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/62937d1007e0f97e629f376adca4f4ad738e95d1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "IID margin reduced to 128\n\nChange the internal iterative deepening margin from +256 to +128.\n\nPassed STC:\nLLR: 3.26 (-2.94,2.94) [0.00,5.00]\nTotal: 22006 W: 4646 L: 4400 D: 12960\nhttp://tests.stockfishchess.org/tests/view/5ab54a240ebc590295d8847d\n\nPassed LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 46665 W: 7187 L: 6898 D: 32580\nhttp://tests.stockfishchess.org/tests/view/5ab5ba690ebc590295d884b4\n\nPossible work in this area after this change:\n\n• Reduce even more the margin?\n• Try to do IID for smaller depths too?\n\nBench: 5851102\n",
+      "subject": "IID margin reduced to 128"
+    },
+    {
+      "commit_num": 2627,
+      "hash": "d40e7ee2",
+      "short": "d40e7ee2",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-21T00:48:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d40e7ee20903257cb0126f1945d63257ded022c3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d40e7ee20903257cb0126f1945d63257ded022c3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d40e7ee20903257cb0126f1945d63257ded022c3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Join refutation stages in the movepicker\n\nUnifies a bit further the three refuation stages in the MovePicker\nclass. Also treat the skipping of TT move now always via select_move(),\nas discussed in pull request #1454.\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 16608 W: 3461 L: 3331 D: 9816\nhttp://tests.stockfishchess.org/tests/view/5ab0aaf00ebc59029fb6f6c3\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1502\n\nNo functional change.\n",
+      "subject": "Join refutation stages in the movepicker"
+    },
+    {
+      "commit_num": 2628,
+      "hash": "ed26d713",
+      "short": "ed26d713",
+      "author": "DU-jdto <SNP_Tiranasta@hotmail.com>",
+      "date": "2018-03-21T00:26:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ed26d71354c3ab1a1419975430258b6e961787a7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed26d71354c3ab1a1419975430258b6e961787a7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed26d71354c3ab1a1419975430258b6e961787a7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a few minor code style inconsistencies\n\nNo functional change.\n",
+      "subject": "Fix a few minor code style inconsistencies"
+    },
+    {
+      "commit_num": 2629,
+      "hash": "bd595604",
+      "short": "bd595604",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-18T23:56:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bd59560480cc4f43a4ba75dc827ba27bcebb92dd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd59560480cc4f43a4ba75dc827ba27bcebb92dd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd59560480cc4f43a4ba75dc827ba27bcebb92dd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Join common code in the stages of next_move()\n\nRewrite the MovePicker class using lambda expressions for move filtering.\nIncludes code style changes by @mcostalba.\n\nVerified for speed, passed STC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 43191 W: 9391 L: 9312 D: 24488\nhttp://tests.stockfishchess.org/tests/view/5a99b9df0ebc590297cc8f04\n\nThis rewrite of MovePicker.cpp seems to trigger less random crashes on Ryzen\nmachines than the version in previous master (reported by Bojun Guo).\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1454\n\nNo functional change.\n",
+      "subject": "Join common code in the stages of next_move()"
+    },
+    {
+      "commit_num": 2630,
+      "hash": "19404850",
+      "short": "19404850",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-18T23:16:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/194048503020ad35e221c36fd8817f569b728310",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/194048503020ad35e221c36fd8817f569b728310.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/194048503020ad35e221c36fd8817f569b728310.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify razoring logic\n\npassed STC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 36574 W: 7523 L: 7430 D: 21621\nhttp://tests.stockfishchess.org/tests/view/5aae11450ebc590299abf52f\n\nNo functional change.\n",
+      "subject": "Simplify razoring logic"
+    },
+    {
+      "commit_num": 2631,
+      "hash": "759b3c79",
+      "short": "759b3c79",
+      "author": "Ronald de Man <ronalddeman@gmail.com>",
+      "date": "2018-03-18T22:38:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/759b3c79cf94d101163f646b1eb2a9f9c64293ab",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/759b3c79cf94d101163f646b1eb2a9f9c64293ab.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/759b3c79cf94d101163f646b1eb2a9f9c64293ab.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Mark all compile-time constants as constexpr.\n\nTo more clearly distinguish them from \"const\" local variables, this patch\ndefines compile-time local constants as constexpr. This is consistent with\nthe definition of PvNode as constexpr in search() and qsearch(). It also\nmakes the code more robust, since the compiler will now check that those\nconstants are indeed compile-time constants.\n\nWe can go even one step further and define all the evaluation and search\ncompile-time constants as constexpr.\n\nIn generate_castling() I replaced \"K\" with \"step\", since K was incorrectly\ncapitalised (in the Chess960 case).\n\nIn timeman.cpp I had to make the non-local constants MaxRatio and StealRatio\nconstepxr, since otherwise gcc would complain when calculating TMaxRatio and\nTStealRatio. (Strangely, I did not have to make Is64Bit constexpr even though\nit is used in ucioption.cpp in the calculation of constexpr MaxHashMB.)\n\nI have renamed PieceCount to pieceCount in material.h, since the values of\nthe array are not compile-time constants.\n\nSome compile-time constants in tbprobe.cpp were overlooked. Sides and MaxFile\nare not compile-time constants, so were renamed to sides and maxFile.\n\nNon-functional change.\n",
+      "subject": "Mark all compile-time constants as constexpr."
+    },
+    {
+      "commit_num": 2632,
+      "hash": "350dff44",
+      "short": "350dff44",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2018-03-16T04:34:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/350dff446481b9e274e54dc727141f0dbfec0b23",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/350dff446481b9e274e54dc727141f0dbfec0b23.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/350dff446481b9e274e54dc727141f0dbfec0b23.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix an MSVC 2017 error and warnings.\n\nImproved version by @mcostalba.\n\nNo functional change.\n",
+      "subject": "Fix an MSVC 2017 error and warnings."
+    },
+    {
+      "commit_num": 2633,
+      "hash": "96362fe3",
+      "short": "96362fe3",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-15T09:44:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/96362fe3df141eeead4bdb863d2bb2d891886abf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/96362fe3df141eeead4bdb863d2bb2d891886abf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/96362fe3df141eeead4bdb863d2bb2d891886abf.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Renaming some variables in code\n\nImplements renaming suggestions by Marco Costalba, Günther Demetz,\nGontran Lemaire, Ronald de Man, Stéphane Nicolet, Alain Savard,\nJoost VandeVondele, Jerry Donald Watson, Mike Whiteley, xoto10,\nand I hope that I haven't forgotten anybody.\n\nPerpetual renaming thread for suggestions:\nhttps://github.com/official-stockfish/Stockfish/issues/1426\n\nNo functional change.\n",
+      "subject": "Renaming some variables in code"
+    },
+    {
+      "commit_num": 2634,
+      "hash": "8ab12c90",
+      "short": "8ab12c90",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-15T08:21:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8ab12c901258064f1a9bc531477e1b706bc974fb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8ab12c901258064f1a9bc531477e1b706bc974fb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8ab12c901258064f1a9bc531477e1b706bc974fb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make using quiescence search implicit\n\nIf search depth is less than ONE_PLY call qsearch(), no need to check the\ndepth condition at various call sites of search().\n\nPassed STC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 14568 W: 3011 L: 2877 D: 8680\nhttp://tests.stockfishchess.org/tests/view/5aa846190ebc59029781015b\n\nAlso helps gcc to find some optimizations (smaller binary, some speedup).\nThanks to Aram and Stefan for identifying an oversight in an early version.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1487\n\nNo functional change.\n",
+      "subject": "Make using quiescence search implicit"
+    },
+    {
+      "commit_num": 2635,
+      "hash": "8db75dd9",
+      "short": "8db75dd9",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-14T20:35:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8db75dd9ec05410136898aa2f8c6dc720b755eb8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8db75dd9ec05410136898aa2f8c6dc720b755eb8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8db75dd9ec05410136898aa2f8c6dc720b755eb8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Check the clock every 1024 nodes\n\nThis patch checks the clock every 1024, instead of 4096 in current master.\n\nThis is a step towards a solution to alleviate the problem reported by\nGian-Carlo Pascutto in pull request #1471, about a situation where SF\nwould sometimes lose on time in endgames at time control 1min+1sec when\nusing Syzygy EGTB on a spinning drive.\n\nWe made four tests called \"Estimate the Elo cost of calling now() every\nN nodes\", with N in {256,1024} and time control in {STC,LTC}. Each test\nwas 40000 games with auto-purge off, against master branch.\n\nhttp://tests.stockfishchess.org/tests/view/5aa4f37c0ebc59029780ff2d\nhttp://tests.stockfishchess.org/tests/view/5aa4f3080ebc59029780ff2b\nhttp://tests.stockfishchess.org/tests/view/5aa5cbb50ebc59029780ffce\nhttp://tests.stockfishchess.org/tests/view/5aa5cb730ebc59029780ffcc\n\nHere is a summary of the results (speed-up and Elo gain against master):\n\n|   Time   |       N=256       |      N=1024      |\n|:--------:|:-----------------:|:----------------:|\n| Speed-up |    0.1% slower    |   0.2% faster    |\n|   STC    |  -0.33 +-2.2 Elo  |  1.33 +-2.2 Elo  |\n|   LTC    |   1.08 +-2.3 Elo  |  2.34 +-2.2 Elo  |\n\nBased on these results, we tested N=1024 as a non-regression against\nmaster at LTC:\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 80746 W: 12430 L: 12399 D: 55917\nhttp://tests.stockfishchess.org/tests/view/5aa7ba660ebc590297810116\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1482\n\nNo functional change.\n",
+      "subject": "Check the clock every 1024 nodes"
+    },
+    {
+      "commit_num": 2636,
+      "hash": "367304e9",
+      "short": "367304e9",
+      "author": "Ondrej Mosnáček <omosnacek@gmail.com>",
+      "date": "2018-03-14T15:47:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/367304e930e967d90523025b34f25c2a9b60de8f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/367304e930e967d90523025b34f25c2a9b60de8f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/367304e930e967d90523025b34f25c2a9b60de8f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix dynamic contempt for MultiPV\n\nUse rootMoves[PVIdx].previousScore instead of bestValue for\ndynamic contempt. This is equivalent for MultiPV=1 (bench remained the\nsame, even for higher depths), but more correct for MultiPV.\n\nSTC (MultiPV=3):\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 2657 W: 1079 L: 898 D: 680\nhttp://tests.stockfishchess.org/tests/view/5aaa47cb0ebc590297330403\n\nLTC (MultiPV=3):\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 2390 W: 874 L: 706 D: 810\nhttp://tests.stockfishchess.org/tests/view/5aaa593a0ebc59029733040b\n\nVLTC 240+2.4 (MultiPV=3):\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 2399 W: 861 L: 694 D: 844\nhttp://tests.stockfishchess.org/tests/view/5aaf983e0ebc5902a182131f\n\nLTC (MultiPV=4, Skill Level=17):\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 747 W: 333 L: 175 D: 239\nhttp://tests.stockfishchess.org/tests/view/5aabccee0ebc5902997ff006\n\nNote: although the ELO differences seem huge, they are inflated by the\nnature of Skill Level / MultiPV search, so I don't think they can be\nreasonably compared with classic ELO strength.\n\nSee https://github.com/official-stockfish/Stockfish/pull/1491 for some\nverifications searches with MultiPV = 10 at depths 12 and 24 from the\nstarting position and the position after 1.e4, comparing the outputs\nof the full PV by the old master and by this patch.\n\nNo functional change for MultiPV=1\n",
+      "subject": "Fix dynamic contempt for MultiPV"
+    },
+    {
+      "commit_num": 2637,
+      "hash": "c5f6bd51",
+      "short": "c5f6bd51",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-03-13T22:19:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c5f6bd517c68e16c3ead7892e1d83a6b1bb89b69",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5f6bd517c68e16c3ead7892e1d83a6b1bb89b69.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5f6bd517c68e16c3ead7892e1d83a6b1bb89b69.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak probcut margin with 'improving' flag\n\nAdjust ProbCut rBeta by whether the score is improving, and also\nset improving to false when in check. More precisely, this patch\nhas two parts:\n\n1) the increased beta threshold for ProbCut is now adjusted based\n   on whether the score is improving\n2) when in check, improving is always set to false.\n\nCo-authored by Joost VandeVondele (@vondele) and Bill Henry (@VoyagerOne).\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 13480 W: 2840 L: 2648 D: 7992\nhttp://tests.stockfishchess.org/tests/view/5aa693fe0ebc59029781004c\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 25895 W: 4099 L: 3880 D: 17916\nhttp://tests.stockfishchess.org/tests/view/5aa6ac940ebc59029781006e\n\nIn terms of opportunities for future work opened up by this patch,\nthe ProbCut rBeta formula could probably be tuned to gain more Elo.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1485\n\nBench: 5328254\n",
+      "subject": "Tweak probcut margin with 'improving' flag"
+    },
+    {
+      "commit_num": 2638,
+      "hash": "b605103a",
+      "short": "b605103a",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-03-13T09:15:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b605103a34be5bea7815ab3f6d4a21d487d0182b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b605103a34be5bea7815ab3f6d4a21d487d0182b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b605103a34be5bea7815ab3f6d4a21d487d0182b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify condition for ProbCut move count pruning\n\nWe retire depth-dependence in ProbCut move count pruning,\nthe move count limit condition is now : \"probCutCount < 3\"\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 33895 W: 6995 L: 6897 D: 20003\nhttp://tests.stockfishchess.org/tests/view/5aa6eaba0ebc59029781009d\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 28959 W: 4441 L: 4333 D: 20185\nhttp://tests.stockfishchess.org/tests/view/5aa73dfa0ebc5902978100be\n\nIdeas for future work:\n\n• Is a flat move count limit in ProbCut ideal? Depth dependence, or\n  dependence on some other variable, could possibly be reintroduced.\n\n• The move count limit 3 is untuned and a better value may exist.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1486\n\nBench: 5741807\n",
+      "subject": "Simplify condition for ProbCut move count pruning"
+    },
+    {
+      "commit_num": 2639,
+      "hash": "b2961ade",
+      "short": "b2961ade",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2018-03-13T07:20:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b2961aded6cd2807a8c4899e090e28fcb2161310",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b2961aded6cd2807a8c4899e090e28fcb2161310.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b2961aded6cd2807a8c4899e090e28fcb2161310.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use quiescence search for Probcut\n\nPerform qsearch for the preliminary search in Probcut\n\nPassed STC with sprt[-3..1] bounds:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 31090 W: 6386 L: 6283 D: 18421\nhttp://tests.stockfishchess.org/tests/view/5aa598ed0ebc59029780ff9f\n\nPassed LTC with sprt[0..4] bounds:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 104056 W: 15990 L: 15531 D: 72535\nhttp://tests.stockfishchess.org/tests/view/5aa5b0f30ebc59029780ffa9\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1483\n\nBench: 5404567\n",
+      "subject": "Use quiescence search for Probcut"
+    },
+    {
+      "commit_num": 2640,
+      "hash": "efe702e9",
+      "short": "efe702e9",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-13T07:10:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/efe702e9f5a05f61dd73cb589821712f64c56fbb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/efe702e9f5a05f61dd73cb589821712f64c56fbb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/efe702e9f5a05f61dd73cb589821712f64c56fbb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "qsearch(): remove inCheck as a template parameter\n\nSimplifies a bit, and avoids bugs as in #1478\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 104862 W: 21302 L: 21337 D: 62223\nhttp://tests.stockfishchess.org/tests/view/5aa6de1b0ebc590297810097\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1484\n\nNo functional change\n",
+      "subject": "qsearch(): remove inCheck as a template parameter"
+    },
+    {
+      "commit_num": 2641,
+      "hash": "840605c1",
+      "short": "840605c1",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-03-12T09:09:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/840605c14e30c58806690ca9b87a44108fa37913",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/840605c14e30c58806690ca9b87a44108fa37913.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/840605c14e30c58806690ca9b87a44108fa37913.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Adjust initiative in pure pawn endgames\n\nKing and pawn endgames are typically decisive, and a small\nadvantage is often sufficient to win. Therefore we now take\nthis into account when computing the initiative adjustment.\n\nThis idea came from a series of patches by Gian-Carlo Pascutto.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 48770 W: 10203 L: 9845 D: 28722\nhttp://tests.stockfishchess.org/tests/view/5aa58cce0ebc59029780ff8d\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 22252 W: 3572 L: 3366 D: 15314\nhttp://tests.stockfishchess.org/tests/view/5aa5b27c0ebc59029780ffad\n\nIdeas for future developement:\n\n- There have been a number of changes to the initiative\n  calculation lately. Perhaps the coefficients could be\n  tuned again.\n\n- It may be possible to add special knowledge for other\n  endgames in the initiative calculation.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1481\n\nBench: 5750110\n",
+      "subject": "Adjust initiative in pure pawn endgames"
+    },
+    {
+      "commit_num": 2642,
+      "hash": "6e9337b1",
+      "short": "6e9337b1",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-03-12T01:47:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6e9337b10799a65f15db141ff612537185396ea5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e9337b10799a65f15db141ff612537185396ea5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e9337b10799a65f15db141ff612537185396ea5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "MovePicker: combine countermove with killers.\n\nHandle the countermove in the same way we use stages to progress\nthrough the killer moves, using a common array called \"refutations\".\nRemoves some lines of code and simplifies a bit the jump table.\n\nSTC: LLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 71707 W: 14622 L: 14595 D: 42490\nhttp://tests.stockfishchess.org/tests/view/5aa003cf0ebc590297cb6276\n\nLTC: LLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 22320 W: 3470 L: 3352 D: 15498\nhttp://tests.stockfishchess.org/tests/view/5aa051020ebc590297cb62ba\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1468\n\nNo functional change.\n",
+      "subject": "MovePicker: combine countermove with killers."
+    },
+    {
+      "commit_num": 2643,
+      "hash": "c3af52c4",
+      "short": "c3af52c4",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-03-12T00:51:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c3af52c43bc91ef15fea6c0bedd556754412f737",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c3af52c43bc91ef15fea6c0bedd556754412f737.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c3af52c43bc91ef15fea6c0bedd556754412f737.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Connectivity Score S(3,1) is stronger than S(2,2)\n\nI believe my tests were conclusive enough to demonstrate\nthat a connectivity score of S(3,1) is stronger than S(2,2).\n\nSTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 16175 W: 3386 L: 3165 D: 9624\nhttp://tests.stockfishchess.org/tests/view/5aa48b150ebc59029780fef6\n\nLTC\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 98685 W: 15209 L: 14765 D: 68711\nhttp://tests.stockfishchess.org/tests/view/5aa496f50ebc59029780fefa\n\nBench 5601228\n",
+      "subject": "Connectivity Score S(3,1) is stronger than S(2,2)"
+    },
+    {
+      "commit_num": 2644,
+      "hash": "edf4c07d",
+      "short": "edf4c07d",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2018-03-11T22:56:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/edf4c07d251f1d6c709d47969bfe1452194d9430",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/edf4c07d251f1d6c709d47969bfe1452194d9430.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/edf4c07d251f1d6c709d47969bfe1452194d9430.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use intrinsics only for LSB/MSB\n\nThe NO_BSF does not cover any real life use-case today. The only compilers that\ncan compile SF today, with the current Makefile and no source code changes, are\neither GCC compatible (define __GNUC__) or MSVC compatible (define _MSC_VER). So\nthey all support LSB/MSB intrinsics.\n\nThis patch simplifies away the software fall-backs of LSB/MSB that were still\nin Stockfish code, but unused in any of the officially supported compilers.\n\nNote the (legacy) MSVC/WIN32 case, where we use a 32-bit BSF/BSR solution, as\n64-bit intrinsics aren't available there.\n\nDiscussed in: https://github.com/official-stockfish/Stockfish/pull/1447\nand:          https://github.com/official-stockfish/Stockfish/pull/1479\n\nNo functional change.\n",
+      "subject": "Use intrinsics only for LSB/MSB"
+    },
+    {
+      "commit_num": 2645,
+      "hash": "8ff2fcf2",
+      "short": "8ff2fcf2",
+      "author": "Ondrej Mosnáček <omosnacek@gmail.com>",
+      "date": "2018-03-10T13:37:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8ff2fcf299ac621779dc167ce750ba73aaae90a4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8ff2fcf299ac621779dc167ce750ba73aaae90a4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8ff2fcf299ac621779dc167ce750ba73aaae90a4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Refactor tbprobe.cpp\n\nThis involves:\n * replacing the union hacks with simply reusing the EntryPiece arrays\n   for the no-pawns case\n * merging the PairsData structure with the EntryPiece/-Pawn structs\n   (with credit to Marco: @mcostalba)\n * simplifying some HashTable functions\n * thanks to previous changes, removing the ugly memsets\n * simplifying the template logic for WDL/DTZ distinction\n   (now we distinguish based on an enum type, not the entry classes)\n * removing the unneeded Atomic wrapper\n\n-----------------------------\n\nFor reference, here is a manual way to check that patches concerning\ntable bases code are non-functional changes:\n\n0) Download the Syzygy table bases (up to 6 men).\n1) Make sure you have branches master and the pull request pointing to\n   the right commits.\n2) Download the bench calculation scripts from the following URL:\n\n        https://gist.github.com/WOnder93/b5fcf9c989b4a1715684d5c82367cdbe\n\n   and copy into src inside your Stockfish repo.\n3) Make the scripts executable (chmod +x *.sh).\n4) Run the following command to use TBs located at <path>:\n\n       export SYZYGY_PATH='<path>'\n\n5) After that, run this (it will take a long time, this is a deep bench):\n\n       BENCH_ARGS='128 1 22' ./check_benches.sh master tbprobe_cleanup 2>/dev/null`\n\n==> You should see two equal numbers printed.\n    (Of course, now we have to trust that the script itself is correct :)\n\n-----------------------------\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1477\n\nNo functional change.\n",
+      "subject": "Refactor tbprobe.cpp"
+    },
+    {
+      "commit_num": 2646,
+      "hash": "5dc381a5",
+      "short": "5dc381a5",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-03-10T10:46:44Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5dc381a56692a378674fe61e9ee2d64900aa3aa6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5dc381a56692a378674fe61e9ee2d64900aa3aa6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5dc381a56692a378674fe61e9ee2d64900aa3aa6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Implement an old Russian proverb\n\n\"Loose pieces drop, in blitz keep everything protected\"\n\nAdding a small S(2,2) bonus for knights, bishops, rooks, and\nqueens that are \"connected\" to each other (in the sense that\nthey are under attack by our own pieces) apparently is a good\nthing. It probably helps the pieces work together a bit better.\n\nSTC\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 12317 W: 2655 L: 2467 D: 7195\nhttp://tests.stockfishchess.org/tests/view/5aa2d86b0ebc590297cb6474\n\nLTC\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 35725 W: 5516 L: 5263 D: 24946\nhttp://tests.stockfishchess.org/tests/view/5aa2fc6f0ebc590297cb64a8\n\nHow to continue from there (by Stefan Geschwentner)?\n\n• First we should identify all other eval terms which have an overlap\n  with new connectivity bonus (like the outpost bonus). A simple way\n  would be subtract the connectivity bonus from them and look if this\n  better, or use a SPSA session for these terms.\n\n• Tuning Connectivity himself with SPSA seems not so promising because\n  of the small range which is useful. Here manual testing changes of\n  Connectivity like +-1 seems better.\n\n• The eg value is more important because in endgame the position gets\n  more open and so attacks on pieces are easier. Another important point\n  is that when defending/fortress-like positions each defending piece\n  needs a protection, otherwise attacks on them can break defense.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1474\n\nBench: 5318575\n",
+      "subject": "Implement an old Russian proverb"
+    },
+    {
+      "commit_num": 2647,
+      "hash": "2c5dfb31",
+      "short": "2c5dfb31",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2018-03-10T09:35:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2c5dfb312205de03239cb15e79b501789c4cd067",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2c5dfb312205de03239cb15e79b501789c4cd067.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2c5dfb312205de03239cb15e79b501789c4cd067.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Assign improving only once\n\nAvoid duplicated code after recent commit \"Use evaluation trend\nto adjust futility margin\". We initialize the improving variable\nto true in the check case, which allows to avoid redundant code\nin the general case.\n\nTested for speed by snicolet, patch seems about 0.4% faster.\n\nNo functional change.\n\nNote: initializing the improving variable to false in the check\ncase was tested as a functional change, ending yellow in both STC\nand LTC. This change is not included in the commit, but it is an\ninteresting result that could become part of a future patch about\nimproving or LMR. Reference of the LTC yellow test:\nhttp://tests.stockfishchess.org/tests/view/5aa131560ebc590297cb636e\n",
+      "subject": "Assign improving only once"
+    },
+    {
+      "commit_num": 2648,
+      "hash": "1093047e",
+      "short": "1093047e",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2018-03-09T01:04:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1093047e7d72ed0c82e143c2cc0af9ef7b0380ed",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1093047e7d72ed0c82e143c2cc0af9ef7b0380ed.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1093047e7d72ed0c82e143c2cc0af9ef7b0380ed.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Two steps slider threats on queen\n\nAllow a potential slider threat from a square currently occupied\nby a harmless attacker, just as the recent \"knight on queen\" patch.\nAlso from not completely safe squares, use the mobilityArea instead\nof excluding all pawns for both SlidersOnQueen and KnightOnQueen\n\nWe now compute the potential sliders threat on queen only if opponent\nhas one queen.\n\nRun as SPRT [0,4] since it is some kind of simplification but maybe\nnot clearly one.\n\nSTC:\nhttp://tests.stockfishchess.org/tests/view/5aa1ddf10ebc590297cb63d8\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 22997 W: 4817 L: 4570 D: 13610\n\nLTC:\nhttp://tests.stockfishchess.org/tests/view/5aa1fe6b0ebc590297cb63e5\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 11926 W: 1891 L: 1705 D: 8330\n\nAfter this patch is committed, we may try to:\n\n• re-introduce some \"threat by queen\" bonus to make Stockfish's queen\n  more aggressive (attacking aspect)\n\n• introduce a concept of \"queen overload\" to force the opponent queen\n  into passivity and protecting duties (defensive aspect)\n\n• more generally, re-tune the queen mobility array since patches in the\n  last three months have affected a lot the location/activity of queens.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1473\n\nbench: 5788691\n",
+      "subject": "Two steps slider threats on queen"
+    },
+    {
+      "commit_num": 2649,
+      "hash": "65c3bb85",
+      "short": "65c3bb85",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-03-07T21:31:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/65c3bb8586eba11277f8297ef0f55c121772d82c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/65c3bb8586eba11277f8297ef0f55c121772d82c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/65c3bb8586eba11277f8297ef0f55c121772d82c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use evaluation trend to adjust futility margin\n\nAdjust futility margin in the child node based on whether the\nstatic evaluation is improving.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 15271 W: 3157 L: 2958 D: 9156\nhttp://tests.stockfishchess.org/tests/view/5a9f2f8c0ebc590297cb6216\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 6617 W: 1053 L: 908 D: 4656\nhttp://tests.stockfishchess.org/tests/view/5a9f98390ebc590297cb6241\n\nIdeas for future work:\n\n- Tune the new margins.\n- Try to get this idea to work for futility pruning in parent\n  nodes as well.\n\nBench: 5779242\n",
+      "subject": "Use evaluation trend to adjust futility margin"
+    },
+    {
+      "commit_num": 2650,
+      "hash": "6d8f583a",
+      "short": "6d8f583a",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-07T21:12:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6d8f583af26daa1c158324d5c13cf01b17c746a5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6d8f583af26daa1c158324d5c13cf01b17c746a5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6d8f583af26daa1c158324d5c13cf01b17c746a5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Knight threats on Queen\n\nWe give a S(21,11) bonus for knight threats on the next moves\nagainst enemy queen. The threats are from squares which are\n\"not strongly protected\" and which may be empty, contain enemy\npieces or even one of our piece at the moment (N,B,Q,R) -- hence\nbe two-steps threats in the later case because we will have to\nmove our piece and *then* attack the enemy queen with the knight.\n\nSTC: http://tests.stockfishchess.org/tests/view/5a9e442e0ebc590297cb6162\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 35129 W: 7346 L: 7052 D: 20731\n\nLTC: http://tests.stockfishchess.org/tests/view/5a9e6e620ebc590297cb617f\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 42442 W: 6695 L: 6414 D: 29333\n\nHow to continue from there?\n\n• Trying to refine the threat condition (\"not strongly protected\")\n• Trying the two-steps idea for bishops or rooks threats against queen\n\nBench: 6051247\n",
+      "subject": "Knight threats on Queen"
+    },
+    {
+      "commit_num": 2651,
+      "hash": "d42e6338",
+      "short": "d42e6338",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-06T21:11:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d42e6338ea2ac347e682475473dbc7b088b6985e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d42e6338ea2ac347e682475473dbc7b088b6985e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d42e6338ea2ac347e682475473dbc7b088b6985e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a warning in GCC for Windows\n\nNo functional change\n",
+      "subject": "Fix a warning in GCC for Windows"
+    },
+    {
+      "commit_num": 2652,
+      "hash": "3192b09f",
+      "short": "3192b09f",
+      "author": "Chris Cain <chricainogithub@gmail.com>",
+      "date": "2018-03-06T00:32:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3192b09fe0258ec7654aa2c13bbc17b8417e6964",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3192b09fe0258ec7654aa2c13bbc17b8417e6964.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3192b09fe0258ec7654aa2c13bbc17b8417e6964.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce variadic make_bitboard()\n\nAdds a helper function to make a bitboard from a list of squares.\n\nNo functional change\n",
+      "subject": "Introduce variadic make_bitboard()"
+    },
+    {
+      "commit_num": 2653,
+      "hash": "82697f11",
+      "short": "82697f11",
+      "author": "IIvec <ivan.ivec@gmail.com>",
+      "date": "2018-03-05T21:24:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/82697f1193cc8c99c99c282361a3ada25c758243",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82697f1193cc8c99c99c282361a3ada25c758243.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82697f1193cc8c99c99c282361a3ada25c758243.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplification: use Arctan for the optimism S-curve\n\nThis was an idea of Gontran Lemaire (gonlem), but the graphs\nhe published did not seem accurate to me. I did my own graphs,\ngot my own constants and here is the result:\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 42179 W: 8704 L: 8622 D: 24853\nhttp://tests.stockfishchess.org/tests/view/5a9db6270ebc590297cb611b\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 17737 W: 2702 L: 2577 D: 12458\nhttp://tests.stockfishchess.org/tests/view/5a9eb5b20ebc590297cb61b2\n\nNote: we are now back to 70% draw rate in selfplay mode!\n\nBench: 5544908\n",
+      "subject": "Simplification: use Arctan for the optimism S-curve"
+    },
+    {
+      "commit_num": 2654,
+      "hash": "56a104e2",
+      "short": "56a104e2",
+      "author": "Torsten Franz <torsten_franz@agilent.com>",
+      "date": "2018-03-05T13:10:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/56a104e2e0c3ec8b156ca1bee0e26c1378459550",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/56a104e2e0c3ec8b156ca1bee0e26c1378459550.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/56a104e2e0c3ec8b156ca1bee0e26c1378459550.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove popcount trick from space evaluation\n\nSimilar removal of superposition code trick as in the\n\"Simplify tropism computation\" patch. This simplification\nof the space() function will allow us to specify space\nmasks which can reach into enemy territory.\n\npassed STC:\nLLR: 3.38 (-2.94,2.94) [-3.00,1.00]\nTotal: 184630 W: 40581 L: 40758 D: 103291\nhttp://tests.stockfishchess.org/tests/view/5a8433360ebc590297cc80c5\n\npassed LTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 231799 W: 37647 L: 37858 D: 156294\nhttp://tests.stockfishchess.org/tests/view/5a96a34a0ebc590297cc8cfd\n\nNo functional change.\n",
+      "subject": "Remove popcount trick from space evaluation"
+    },
+    {
+      "commit_num": 2655,
+      "hash": "450f0496",
+      "short": "450f0496",
+      "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
+      "date": "2018-03-04T15:50:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/450f04969c5699fb9a4b39b883c2f37d122de290",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/450f04969c5699fb9a4b39b883c2f37d122de290.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/450f04969c5699fb9a4b39b883c2f37d122de290.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Using a S-curve for the optimism measure\n\nAdd a logarithmic term in the optimism computation, increase\nthe maximal optimism and lower the contempt offset.\n\nThis increases the dynamics of the optimism aspects, giving\na boost for balanced positions without skewing too much on\nunbalanced positions (but this version will enter panic mode\nfaster than previous master when behind, trying to draw faster\nwhen slightly behind). This helps, since optimism is in general\na good thing, for instance at LTC, but too high optimism\nrapidly contaminates play.\n\npassed STC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 159343 W: 34489 L: 33588 D: 91266\nhttp://tests.stockfishchess.org/tests/view/5a8db9340ebc590297cc85b6\n\npassed LTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 47491 W: 7825 L: 7517 D: 32149\nhttp://tests.stockfishchess.org/tests/view/5a9456a80ebc590297cc8a89\n\nIt must be mentioned that a version of the PR with contempt 0\ndid not pass STC [0,5]. The version in the patch, which uses\ndefault contempt 12, was found to be as strong as current master\non different matches against SF7 and SF8, both at STC and LTC.\n\nOne drawback maybe is that it raises the draw rate in self-play\nfrom 56% to 59%, giving a little bit less sensitivity for SF\ndeveloppers to find evaluation improvements by selfplay tests\nin fishtest.\n\nPossible further work:\n\n• tune the values accurately, while keeping in mind the drawrate issue\n• check whether it is possible to remove linear and offset term\n• try to simplify the S-shape curve\n\nBench: 5934644\n",
+      "subject": "Using a S-curve for the optimism measure"
+    },
+    {
+      "commit_num": 2656,
+      "hash": "b8730869",
+      "short": "b8730869",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2018-03-03T11:03:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b87308692a434d6725da72bbbb38a38d3cac1d5f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b87308692a434d6725da72bbbb38a38d3cac1d5f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b87308692a434d6725da72bbbb38a38d3cac1d5f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do move-count pruning in probcut\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 4928 W: 1163 L: 1007 D: 2758\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 20368 W: 3441 L: 3238 D: 13689\nhttp://tests.stockfishchess.org/tests/view/5a98bea40ebc590297cc8e5d\n\nBench: 6361568\n",
+      "subject": "Do move-count pruning in probcut"
+    },
+    {
+      "commit_num": 2657,
+      "hash": "f35e52f0",
+      "short": "f35e52f0",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2018-03-03T10:29:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f35e52f030af837ed8a89eecd67a6f746ee2e897",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f35e52f030af837ed8a89eecd67a6f746ee2e897.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f35e52f030af837ed8a89eecd67a6f746ee2e897.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge Stats tables\n\nUse a recursive std::array with variadic template\nparameters to get rid of the last redundacy.\n\nThe first template T parameter is the base type of\nthe array, the W parameter is the weight applied to\nthe bonuses when we update values with the << operator,\nthe D parameter limits the range of updates (range is\n[-W * D, W * D]), and the last parameters (Size and\nSizes) encode the dimensions of the array.\n\nThis allows greater flexibility because we can now tweak\nthe range [-W * D, W * D] for each table.\n\nPatch removes more lines than what adds and streamlines\nthe Stats soup in movepick.h\n\nCloses PR#1422 and PR#1421\n\nNo functional change.\n",
+      "subject": "Merge Stats tables"
+    },
+    {
+      "commit_num": 2658,
+      "hash": "94b3cdd9",
+      "short": "94b3cdd9",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-03-03T10:07:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/94b3cdd908f68e20a09f67dba40103fd671f5f17",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/94b3cdd908f68e20a09f67dba40103fd671f5f17.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/94b3cdd908f68e20a09f67dba40103fd671f5f17.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Better indentation in Makefile\n\nNo functional change\n",
+      "subject": "Better indentation in Makefile"
+    },
+    {
+      "commit_num": 2659,
+      "hash": "43682d08",
+      "short": "43682d08",
+      "author": "joergoster <osterj165@googlemail.com>",
+      "date": "2018-03-02T10:38:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/43682d08f7a85a997ff71fdb68ee6392c5d49b21",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43682d08f7a85a997ff71fdb68ee6392c5d49b21.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43682d08f7a85a997ff71fdb68ee6392c5d49b21.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Code style in Razoring and ProbCut\n\nNo functional change.\n",
+      "subject": "Code style in Razoring and ProbCut"
+    }
+  ]
+}

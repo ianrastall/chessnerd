@@ -1,0 +1,421 @@
+{
+  "month": "2015-11",
+  "commits": [
+    {
+      "commit_num": 3182,
+      "hash": "52eac1e5",
+      "short": "52eac1e5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-11-28T09:57:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/52eac1e53512f4388bb310cb4d653ce18c9c4c63",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/52eac1e53512f4388bb310cb4d653ce18c9c4c63.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/52eac1e53512f4388bb310cb4d653ce18c9c4c63.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify outpost code\n\nAlso inline defintions of SpaceMask and CenterBindMask.\n\nVerified from assembly that compiler computes the values\nat compile time, so it is also theoretical faster.\n\nWhile there factor out scale factor evaluation.\n\nNo functional change.\n",
+      "subject": "Simplify outpost code"
+    },
+    {
+      "commit_num": 3183,
+      "hash": "5a42427c",
+      "short": "5a42427c",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2015-11-26T09:15:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5a42427cb882f8adcfe65d41f4fabac5d2ac4a5b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5a42427cb882f8adcfe65d41f4fabac5d2ac4a5b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5a42427cb882f8adcfe65d41f4fabac5d2ac4a5b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce new Threats weights = {350, 256}\n\nRaise the midgame threats weight by 37%.\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 8165 W: 1675 L: 1487 D: 5003\n\nand LTC:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 28181 W: 4141 L: 3912 D: 20128\n\nBench: 7824961\n\nResolves #512\n",
+      "subject": "Introduce new Threats weights = {350, 256}"
+    },
+    {
+      "commit_num": 3184,
+      "hash": "5339ab57",
+      "short": "5339ab57",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2015-11-25T01:24:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5339ab57d80b19de3cb664b62fd40b626bc1634b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5339ab57d80b19de3cb664b62fd40b626bc1634b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5339ab57d80b19de3cb664b62fd40b626bc1634b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Allow cross compilation of Windows binaries on a Linux system\"\n\nThis reverts commit 388630ae285b3f9f0c8ee4f30e754bde6688c57c.\n\nConfuses fishtest build system\n",
+      "subject": "Revert \"Allow cross compilation of Windows binaries on a Linux system\""
+    },
+    {
+      "commit_num": 3185,
+      "hash": "328098d0",
+      "short": "328098d0",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2015-11-21T07:23:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/328098d027e7c35625acbb28e42732137c02d0c1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/328098d027e7c35625acbb28e42732137c02d0c1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/328098d027e7c35625acbb28e42732137c02d0c1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix TT comment and static_assert()\n\nComment is based on a misunderstanding of what unaligned memory access is. Here\nis an article that explains it very clearly:\nhttps://www.kernel.org/doc/Documentation/unaligned-memory-access.txt\n\nNo matter how we define TTEntry or TTCluster, there will never be any unaligned\nmemory access. This is because the complier knows the alignment rules, and does\nthe necessary adjustments to make sure unaligned memory access does not occur.\n\nThe issue being adressed here has nothing to do with unaligned memory access. It\nis about cache performance. In order to achieve best cache performance:\n- we prefetch the cacheline as soon as possible.\n- we ensure that TT clusters do not spread across two cachelines. If they did,\n  we would need to prefetch 2 cachelines, which could hurt cache performance.\n\nTherefore the true conditions to achieve this are:\n1/ start adress of TT is cache line aligned. void TranspositionTable::resize()\nenforces this.\n2/ TT cluster size should *divide* the cache line size. Currently, we pack 2\nclusters per cache lines. It used to be 1 before \"TT sardines\". Does not matter\nwhat the ratio is, all we want is to fit an integer number of clusters per cache\nline.\n\nNo functional change.\n\nResolves #506\n",
+      "subject": "Fix TT comment and static_assert()"
+    },
+    {
+      "commit_num": 3186,
+      "hash": "93195555",
+      "short": "93195555",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-11-21T06:48:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/93195555ed230df1d29933de6236d6847ae88310",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93195555ed230df1d29933de6236d6847ae88310.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93195555ed230df1d29933de6236d6847ae88310.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rewrite how threads are spawned\n\nInstead of creating a running std::thread and\nreturning, wait in Thread c'tor that the native\nthread of execution goes to sleep in idle_loop().\n\nIn this way we can simplify how search is started,\nbecause when main thread is idle we are sure also\nall other threads will be idle, in any case, even\nat thread creation and startup.\n\nAfter lazy smp went in, we can simpify and rewrite\na lot of logic that is now no more needed. This is\nhopefully the final big cleanup.\n\nTested for no regression at 5+0.1 with 3 threads:\nLLR: 2.95 (-2.94,2.94) [-5.00,0.00]\nTotal: 17411 W: 3248 L: 3198 D: 10965\n\nNo functional change.\n",
+      "subject": "Rewrite how threads are spawned"
+    },
+    {
+      "commit_num": 3187,
+      "hash": "388630ae",
+      "short": "388630ae",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-11-17T08:37:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/388630ae285b3f9f0c8ee4f30e754bde6688c57c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/388630ae285b3f9f0c8ee4f30e754bde6688c57c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/388630ae285b3f9f0c8ee4f30e754bde6688c57c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Allow cross compilation of Windows binaries on a Linux system\n\nthat are PGO, LTO, and statically linked.\nCredit: pasquale....@gmail.com\n\nNo functional change\n\nResolves #505\n",
+      "subject": "Allow cross compilation of Windows binaries on a Linux system"
+    },
+    {
+      "commit_num": 3188,
+      "hash": "79f39308",
+      "short": "79f39308",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-11-16T23:39:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/79f393084af73655c869af126281bb2a7c2cc396",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/79f393084af73655c869af126281bb2a7c2cc396.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/79f393084af73655c869af126281bb2a7c2cc396.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Clean up RootMove less operator\n\nThis is used by std::stable_sort() to sort moves from highest score to lowest score.\n\n1) The comment is incorrect since highest to lowest means descending.\n2) It's more natural to implement a less operator using another less operator rather than a greater operator.\n\nNo functional change.\n\nResolves #504\n",
+      "subject": "Clean up RootMove less operator"
+    },
+    {
+      "commit_num": 3189,
+      "hash": "07e0741d",
+      "short": "07e0741d",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2015-11-16T04:38:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/07e0741dfbca07097f38e46f3f7752b48675a515",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/07e0741dfbca07097f38e46f3f7752b48675a515.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/07e0741dfbca07097f38e46f3f7752b48675a515.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "History Pruning: Don't prune the main killer move.\n\nAlso increased pruned depth to 4.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 23380 W: 4581 L: 4350 D: 14449\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 28934 W: 4329 L: 4105 D: 20500\n\nBench: 8369743\n\nResolves #498\n",
+      "subject": "History Pruning: Don't prune the main killer move."
+    },
+    {
+      "commit_num": 3190,
+      "hash": "cccf3c81",
+      "short": "cccf3c81",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2015-11-14T14:30:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cccf3c815c2f2be884fac4248a2be91b6823df8a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cccf3c815c2f2be884fac4248a2be91b6823df8a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cccf3c815c2f2be884fac4248a2be91b6823df8a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Bonus for reachable outpost\n\nGive a bonus for outpost squares which in reach of a bishop or knight.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 22725 W: 4570 L: 4339 D: 13816\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 15019 W: 2333 L: 2157 D: 10529\n\nBench: 8503181\n\nResolves #495\n",
+      "subject": "Bonus for reachable outpost"
+    },
+    {
+      "commit_num": 3191,
+      "hash": "27ca89d4",
+      "short": "27ca89d4",
+      "author": "Ken T Takusagawa <kenta@mit.edu>",
+      "date": "2015-11-10T10:30:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/27ca89d4794162d6d3c9d59ed62b3543d0d8e9e0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27ca89d4794162d6d3c9d59ed62b3543d0d8e9e0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27ca89d4794162d6d3c9d59ed62b3543d0d8e9e0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not conceal the invocation of the benchmark program\n\nIt is better to be able to see what arguments it is being called with.\n\nNo functional change\n\nResolves #497\n",
+      "subject": "Do not conceal the invocation of the benchmark program"
+    },
+    {
+      "commit_num": 3192,
+      "hash": "ce84ab6e",
+      "short": "ce84ab6e",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-11-09T08:50:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ce84ab6e9dc64e0c137c2785a36e4a345a8a5a95",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ce84ab6e9dc64e0c137c2785a36e4a345a8a5a95.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ce84ab6e9dc64e0c137c2785a36e4a345a8a5a95.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix broken UCI 'wait for stop'\n\nWhen we reach the maximum depth, we can finish the\nsearch without a raise of Signals.stop. However, if\nwe are pondering or in an infinite search, the UCI\nprotocol states that we shouldn't print the best move\nbefore the GUI sends a \"stop\" or \"ponderhit\" command.\n\nIt was broken by lazy smp. Fix it by moving the stopping\nof the threads after waiting for GUI.\n\nNo functional change.\n",
+      "subject": "Fix broken UCI 'wait for stop'"
+    },
+    {
+      "commit_num": 3193,
+      "hash": "fca8dbc0",
+      "short": "fca8dbc0",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2015-11-08T06:26:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/fca8dbc0295c27ee8b2e3ee8cc217edd36f20127",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fca8dbc0295c27ee8b2e3ee8cc217edd36f20127.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fca8dbc0295c27ee8b2e3ee8cc217edd36f20127.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid friend\n\noperator<<(os, pos) does not need to access any private members of pos.\n\nNo functional change.\n\nResolves #492\n",
+      "subject": "Avoid friend"
+    },
+    {
+      "commit_num": 3194,
+      "hash": "e6eeb17a",
+      "short": "e6eeb17a",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2015-11-07T04:19:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e6eeb17aa6a79ab49b6c70fb783f54318d63add7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e6eeb17aa6a79ab49b6c70fb783f54318d63add7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e6eeb17aa6a79ab49b6c70fb783f54318d63add7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Ensure that rootDepth < DEPTH_MAX\n\nIndeed, if we use a depth >= DEPTH_MAX, we start having negative depth in the\nTT (due to int8_t cast).\n\nNo functional change in single thread mode\n\nResolves #490\n",
+      "subject": "Ensure that rootDepth < DEPTH_MAX"
+    },
+    {
+      "commit_num": 3195,
+      "hash": "76ed0ab5",
+      "short": "76ed0ab5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-11-05T07:40:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/76ed0ab5015f41715453a7efcedd57a7a5c962da",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/76ed0ab5015f41715453a7efcedd57a7a5c962da.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/76ed0ab5015f41715453a7efcedd57a7a5c962da.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire ThreadBase\n\nNow that we don't have anymore TimerThread, there is\nno need of this long class hierarchy.\n\nAlso assorted reformatting while there.\n\nTo verify no regression, passed at STC with 7 threads:\nLLR: 2.97 (-2.94,2.94) [-5.00,0.00]\nTotal: 30990 W: 4945 L: 4942 D: 21103\n\nNo functional change.\n",
+      "subject": "Retire ThreadBase"
+    },
+    {
+      "commit_num": 3196,
+      "hash": "9c920586",
+      "short": "9c920586",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-11-03T10:15:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9c9205860c5ab0e4f3180298e3f7082be259772c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9c9205860c5ab0e4f3180298e3f7082be259772c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9c9205860c5ab0e4f3180298e3f7082be259772c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Get rid of timer thread\n\nUnfortunately std::condition_variable::wait_for()\nis not accurate in general case and the timer thread\ncan wake up also after tens or even hundreds of\nmillisecs after time has elapsded. CPU load, process\npriorities, number of concurrent threads, even from\nother processes, will have effect upon it.\n\nEven official documentation says: \"This function may\nblock for longer than timeout_duration due to scheduling\nor resource contention delays.\"\n\nSo retire timer and use a polling scheme based on a\nlocal thread counter that counts search() calls and\na small trick to keep polling frequency constant,\nindependently from the number of threads.\n\nTested for no regression at very fast TC 2+0.05 th 7:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 32969 W: 6720 L: 6620 D: 19629\n\nTC 2+0.05 th 1:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 7765 W: 1917 L: 1765 D: 4083\n\nAnd at STC TC, both single thread\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 15587 W: 3036 L: 2905 D: 9646\n\nAnd with 7 threads\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 8149 W: 1367 L: 1227 D: 5555\n\nbench: 8639247\n",
+      "subject": "Get rid of timer thread"
+    },
+    {
+      "commit_num": 3197,
+      "hash": "27c5cb59",
+      "short": "27c5cb59",
+      "author": "mbootsector <mbootsector@gmail.com>",
+      "date": "2015-11-02T09:58:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/27c5cb59127101d834636d4faa0062d4e7bd05ce",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27c5cb59127101d834636d4faa0062d4e7bd05ce.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27c5cb59127101d834636d4faa0062d4e7bd05ce.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Pick bestmove from the deepest thread.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 26930 W: 4441 L: 4214 D: 18275\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 7783 W: 1017 L: 876 D: 5890\n\nNo functional change in single thread mode\n\nResolves #485\n",
+      "subject": "Pick bestmove from the deepest thread."
+    }
+  ]
+}

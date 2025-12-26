@@ -1,0 +1,239 @@
+{
+  "month": "2015-09",
+  "commits": [
+    {
+      "commit_num": 3221,
+      "hash": "3c0fe1d9",
+      "short": "3c0fe1d9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-09-27T12:49:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3c0fe1d9b252acca8107b7bece636e2bc20d6411",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c0fe1d9b252acca8107b7bece636e2bc20d6411.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c0fe1d9b252acca8107b7bece636e2bc20d6411.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rework lock protecting\n\nWhen changing 'search' and 'splitPointsSize' we have to\nuse thread locks, not split point ones, because can_join()\nis called under the formers.\n\nVerified succesfully with 24 hours toruture tests with 20\ncores machine by Louis Zulli: it does not hangs.\n\nVerifyed for no regressions with STC, 7 threads:\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 52804 W: 8159 L: 8087 D: 36558\n\nNo functional change.\n",
+      "subject": "Rework lock protecting"
+    },
+    {
+      "commit_num": 3222,
+      "hash": "ca383585",
+      "short": "ca383585",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-09-27T08:53:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ca3835857435590865fd41aac9bf4c1cda76dfc3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ca3835857435590865fd41aac9bf4c1cda76dfc3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ca3835857435590865fd41aac9bf4c1cda76dfc3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Run PVS-STUDIO analyzer\n\nFix issues after a run of PVS-STUDIO analyzer.\nMainly false positives but warnings are anyhow\nuseful to point out not very readable code.\n\nNoteworthy is the memset() one, where PVS prefers ss-2\ninstead of stack. This is because memeset() could\nbe optimized away by the compiler when using 'stack',\ndue to stack being a local variable no more used after\nmemset. This should normally not happen, but when\nit happens it leads to very sublte and difficult\nto find bug, so better to be safe than sorry.\n\nNo functional change.\n",
+      "subject": "Run PVS-STUDIO analyzer"
+    },
+    {
+      "commit_num": 3223,
+      "hash": "77b4f4c2",
+      "short": "77b4f4c2",
+      "author": "Jonathan Calovski <jonoface@live.com.au>",
+      "date": "2015-09-18T22:28:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/77b4f4c2e735a3f1173d74ce904db9dae262a682",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/77b4f4c2e735a3f1173d74ce904db9dae262a682.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/77b4f4c2e735a3f1173d74ce904db9dae262a682.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Refine ranks and increase resulting bonus.\n\nSTC:\nLLR: 2.94 (-2.94,2.94) [0.00,4.00]\nTotal: 272379 W: 51773 L: 50658 D: 169948\n\nLTC:\nLLR: 3.06 (-2.94,2.94) [0.00,4.00]\nTotal: 41504 W: 6555 L: 6273 D: 28676\n\nbench: 7658406\n\nResolves #430\n",
+      "subject": "Refine ranks and increase resulting bonus."
+    },
+    {
+      "commit_num": 3224,
+      "hash": "01fab4d4",
+      "short": "01fab4d4",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-09-18T00:13:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/01fab4d432b50f95f9def1b757d854fd0c385224",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01fab4d432b50f95f9def1b757d854fd0c385224.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01fab4d432b50f95f9def1b757d854fd0c385224.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove unnecessary generation check in TT save\n\nChecking for generation is unnecessary because if the key matches then the entry was probed and refreshed earlier.\n\nSTC 2MB\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 57391 W: 10671 L: 10613 D: 36107\nhttp://tests.stockfishchess.org/tests/view/55ef59fa0ebc5976a2d6da5d\n\nLTC 8MB\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 60732 W: 9260 L: 9199 D: 42273\nhttp://tests.stockfishchess.org/tests/view/55ef8fe60ebc5976a2d6da6b\n\nSTC 16MB\nLLR: 2.95 (-2.94,2.94) [-4.00,0.00]\nTotal: 23443 W: 4369 L: 4293 D: 14781\nhttp://tests.stockfishchess.org/tests/view/55ef8fe60ebc5976a2d6da6b\n\nNo functional change\n\nResolves #427\n",
+      "subject": "Remove unnecessary generation check in TT save"
+    },
+    {
+      "commit_num": 3225,
+      "hash": "68fbb1e0",
+      "short": "68fbb1e0",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-09-15T20:28:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/68fbb1e0522056e0ab8062fe68c26b3af5cffed3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/68fbb1e0522056e0ab8062fe68c26b3af5cffed3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/68fbb1e0522056e0ab8062fe68c26b3af5cffed3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reduce writes in TT::probe().\n\nOnly refresh TT entry when it's really necessary.\nThis should give a small speed boost for some machines.\nAnd it's a risk-free change.\n\nNo functional change.\n\nResolves #429\n",
+      "subject": "Reduce writes in TT::probe()."
+    },
+    {
+      "commit_num": 3226,
+      "hash": "660c38f7",
+      "short": "660c38f7",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2015-09-15T12:55:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/660c38f781060f1382b4b0b6e9a8b25658559820",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/660c38f781060f1382b4b0b6e9a8b25658559820.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/660c38f781060f1382b4b0b6e9a8b25658559820.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Scales the endgame score by the number of pawns.\n\nCredits goes also to Stephane Nicolet for his great idea of scaling by pawns.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 9994 W: 1929 L: 1760 D: 6305\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 11240 W: 1789 L: 1626 D: 7825\n\nbench 7298564\n\nResolves #423\n",
+      "subject": "Scales the endgame score by the number of pawns."
+    },
+    {
+      "commit_num": 3227,
+      "hash": "3e2591d8",
+      "short": "3e2591d8",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-09-07T19:17:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3e2591d83c285597a7400c79b61ab9dc38875163",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3e2591d83c285597a7400c79b61ab9dc38875163.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3e2591d83c285597a7400c79b61ab9dc38875163.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Minor clean up of some function parameters\n\nNo function change\n\nResolves #416\n",
+      "subject": "Minor clean up of some function parameters"
+    },
+    {
+      "commit_num": 3228,
+      "hash": "613dc66c",
+      "short": "613dc66c",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2015-09-06T20:36:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/613dc66c12b9bf357ae38129fb745dd8c2c035b1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/613dc66c12b9bf357ae38129fb745dd8c2c035b1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/613dc66c12b9bf357ae38129fb745dd8c2c035b1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Careful SMP locking - Fix very occasional hangs\n\nLouis Zulli reported that Stockfish suffers from very occasional hangs with his 20 cores machine.\n\nCareful SMP debugging revealed that this was caused by \"a ghost split point slave\", where thread\nwas marked as a split point slave, but wasn't actually working on it.\n\nThe only logical explanation for this was double booking, where due to SMP race, the same thread\nis booked for two different split points simultaneously.\n\nDue to very intermittent nature of the problem, we can't say exactly how this happens.\n\nThe current handling of Thread specific variables is risky though. Volatile variables are in some\ncases changed without spinlock being hold. In this case standard doesn't give us any kind of\nguarantees about how the updated values are propagated to other threads.\n\nWe resolve the situation by enforcing very strict locking rules:\n- Values for key thread variables (splitPointsSize, activeSplitPoint, searching)\ncan only be changed when the thread specific spinlock is held.\n- Structural changes for splitPoints[] are only allowed when the thread specific spinlock is held.\n- Thread booking decisions (per split point) can only be done when the thread specific spinlock is held.\n\nWith these changes hangs didn't occur anymore during 2 days torture testing on Zulli's machine.\n\nWe probably have a slight performance penalty in SMP mode due to more locking.\n\nSTC (7 threads):\nELO: -1.00 +-2.2 (95%) LOS: 18.4%\nTotal: 30000 W: 4538 L: 4624 D: 20838\n\nHowever stability is worth more than 1-2 ELO points in this case.\n\nNo functional change\n\nResolves #422\n",
+      "subject": "Careful SMP locking - Fix very occasional hangs"
+    },
+    {
+      "commit_num": 3229,
+      "hash": "46b5a5f0",
+      "short": "46b5a5f0",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-09-02T00:36:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/46b5a5f0db5a65bc88da373f87b3280bcf0875e1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/46b5a5f0db5a65bc88da373f87b3280bcf0875e1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/46b5a5f0db5a65bc88da373f87b3280bcf0875e1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix syzygy en passant issue\n\nv = value without ep capture being considered\nv1 = value of the ep capture\n\nThe correct logic is:\nif without e.p. capture we are losing, and the value of e.p is either draw, or win or \"loss, but 50 move rule saves us\", then we should use the value of ep capture.\n\nCredit and thanks to syzygy1 and lantonov !\n\nNo functional change (except with syzygy bases)\n\nResolves #415\nResolves #394\n",
+      "subject": "Fix syzygy en passant issue"
+    }
+  ]
+}

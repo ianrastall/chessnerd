@@ -1,0 +1,629 @@
+{
+  "month": "2016-10",
+  "commits": [
+    {
+      "commit_num": 2990,
+      "hash": "c43146ed",
+      "short": "c43146ed",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-10-31T20:47:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c43146edb7383c9a52e22d849c9ea75a7e6940d5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c43146edb7383c9a52e22d849c9ea75a7e6940d5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c43146edb7383c9a52e22d849c9ea75a7e6940d5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Travis-ci: integrate perft checking\n\nmakes verifying perft numbers for a few positions\npart of travis-ci. Adds <5s testing time.\n\nNo functional change.\n",
+      "subject": "Travis-ci: integrate perft checking"
+    },
+    {
+      "commit_num": 2991,
+      "hash": "67d19447",
+      "short": "67d19447",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-10-31T20:10:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/67d19447f45fbfb01a359530549b0fffeb11f61f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/67d19447f45fbfb01a359530549b0fffeb11f61f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/67d19447f45fbfb01a359530549b0fffeb11f61f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Makefile fix for sanitize\n\nSmall fixes for compilation with sanitize=yes optimize=no,\nby always adding -fsanitize=undefined to the LDFLAGS as required.\nUpdates config-sanity to check&report the status of the flag.\n\nNo functional change.\n",
+      "subject": "Makefile fix for sanitize"
+    },
+    {
+      "commit_num": 2992,
+      "hash": "344616e9",
+      "short": "344616e9",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2016-10-27T10:56:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/344616e917ccec2b53a2f06ad788122440efed35",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/344616e917ccec2b53a2f06ad788122440efed35.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/344616e917ccec2b53a2f06ad788122440efed35.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Bonus for attacked passed pawn promotion path\n\nBonus for each attacked square on the promotion path\nof an enemy passed pawn.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 141511 W: 25295 L: 24579 D: 91637\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 23161 W: 3022 L: 2831 D: 17308\n\nBench: 5926706\n",
+      "subject": "Bonus for attacked passed pawn promotion path"
+    },
+    {
+      "commit_num": 2993,
+      "hash": "e18e557e",
+      "short": "e18e557e",
+      "author": "syzygy <syzygy@server.fake>",
+      "date": "2016-10-26T21:01:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e18e557e77ece5afaa3aee2d982f23685526bc1b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e18e557e77ece5afaa3aee2d982f23685526bc1b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e18e557e77ece5afaa3aee2d982f23685526bc1b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Output PV if last iteration does not complete\n\nInstead of outputting \"info nodes ... time ...\" when the last\niteration is interrupted, simply call UCI::pv() to output the PV.\n\nI thought about calling UCI:pv() with bounds -VALUE_INFINITE, VALUE_INFINITE\nto avoid \"lowerbound\" or \"upperbound\" appearing in it, but I'm not sure that\nwould be any better.\n\nThis patch fixes rare inconsistencies between the first move of\nthe last PV output and the bestmove played. It also makes sure\nthat all the latest statistics are sent to the GUI (not only nodes\nand time but also nps, tbhits, hashfull).\n\nNo functional change.\n",
+      "subject": "Output PV if last iteration does not complete"
+    },
+    {
+      "commit_num": 2994,
+      "hash": "bf51b479",
+      "short": "bf51b479",
+      "author": "Joost VandeVondele <Joost.VandeVondele@mat.ethz.ch>",
+      "date": "2016-10-26T19:24:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bf51b4796abd400648ba751fe545fd1785232a6b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf51b4796abd400648ba751fe545fd1785232a6b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf51b4796abd400648ba751fe545fd1785232a6b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "travis-ci: Enable undefined behavior checking\n",
+      "subject": "travis-ci: Enable undefined behavior checking"
+    },
+    {
+      "commit_num": 2995,
+      "hash": "818b4a12",
+      "short": "818b4a12",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-10-24T20:09:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/818b4a126d16a209112fd64308447ba37071900d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/818b4a126d16a209112fd64308447ba37071900d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/818b4a126d16a209112fd64308447ba37071900d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Endgame malus for having a king in a pawnless flank\n\nOriginal idea by \"ElbertoOne\", while \"FauziAkram\" suggested to put a\nsmall midgame penalty too.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 71808 W: 13038 L: 12610 D: 46160\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 150874 W: 19828 L: 19221 D: 111825\n\nBench: 6077005\n",
+      "subject": "Endgame malus for having a king in a pawnless flank"
+    },
+    {
+      "commit_num": 2996,
+      "hash": "e77f38c4",
+      "short": "e77f38c4",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-10-24T14:05:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e77f38c43102634139287b067a8079af36678bdb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e77f38c43102634139287b067a8079af36678bdb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e77f38c43102634139287b067a8079af36678bdb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "History Stat Comparison\n\nAdjust LMR by comparing history stats\nwith opponent (prior ply).\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 27754 W: 5066 L: 4824 D: 17864\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 216596 W: 28157 L: 27343 D: 161096\n\nBench: 5437729\n",
+      "subject": "History Stat Comparison"
+    },
+    {
+      "commit_num": 2997,
+      "hash": "e18321f5",
+      "short": "e18321f5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-10-22T06:21:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e18321f55a2f51a2bf1775200241381b63daf181",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e18321f55a2f51a2bf1775200241381b63daf181.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e18321f55a2f51a2bf1775200241381b63daf181.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Correcty resey TB hit counter\n\nRestore original behaviour to reset\nthe counter before a new move search.\n\nAlso fixed some warnings and added const\nqualifier to a couple of functions, as\nsuggested by m_stembera.\n\nThanks to Werner Bergmans for reporting\nthe regression.\n\nNo functional change.\n",
+      "subject": "Correcty resey TB hit counter"
+    },
+    {
+      "commit_num": 2998,
+      "hash": "40b1b271",
+      "short": "40b1b271",
+      "author": "Joost Vandevondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-10-21T04:48:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/40b1b2717827b5516c7d3978bdc341e801a650e7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/40b1b2717827b5516c7d3978bdc341e801a650e7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/40b1b2717827b5516c7d3978bdc341e801a650e7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a series of undefined behaviours\n\nAvoid shifting negative signed integers and use typed\nenum to avoids decrementing a variable beyond its defined\nrange, like:\n       for (Rank r = RANK_8; r >= RANK_1; --r)\n\nChanges were tested individually and passed SPRT[-3, 1].\n\nWith this patch gcc --sanitize builds cleanly.\n\nNo functional change.\n",
+      "subject": "Fix a series of undefined behaviours"
+    },
+    {
+      "commit_num": 2999,
+      "hash": "ca677526",
+      "short": "ca677526",
+      "author": "syzygy <syzygy@server.fake>",
+      "date": "2016-10-20T19:16:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ca677526452823d1fe89543762edb66684e7bdc7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ca677526452823d1fe89543762edb66684e7bdc7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ca677526452823d1fe89543762edb66684e7bdc7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Per-thread TB hit counters\n\nUse a per-thread counter to reduce contention\nwith many cores and endgame positions.\n\nMeasured around 1% speed-up on a 12 core and 8%\non 28 cores with 6-men, searching on:\n 7R/1p3k2/2p2P2/3nR1P1/8/3b1P2/7K/r7 b - - 3 38\n\nAlso retire the unused set_nodes_searched() and fix\na couple of return types and naming conventions.\n\nNo functional change.\n",
+      "subject": "Per-thread TB hit counters"
+    },
+    {
+      "commit_num": 3000,
+      "hash": "9893e7fd",
+      "short": "9893e7fd",
+      "author": "Joost Vandevondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-10-19T19:29:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9893e7fd5394bf5d835d7e538964a577c82aaf1f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9893e7fd5394bf5d835d7e538964a577c82aaf1f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9893e7fd5394bf5d835d7e538964a577c82aaf1f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make valgrind testing part of travis ci.\n",
+      "subject": "Make valgrind testing part of travis ci."
+    },
+    {
+      "commit_num": 3001,
+      "hash": "3686e719",
+      "short": "3686e719",
+      "author": "Joost Vandevondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-10-16T13:20:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3686e719a14a49f54bff00b3df153e044a0206ab",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3686e719a14a49f54bff00b3df153e044a0206ab.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3686e719a14a49f54bff00b3df153e044a0206ab.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify next_move by always scoring evasions\n\nFor a default bench, this fixes the last valgrind\nerror (jump on uninitialised value).\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 187869 W: 33303 L: 33463 D: 121103\n\nNo functional change.\n",
+      "subject": "Simplify next_move by always scoring evasions"
+    },
+    {
+      "commit_num": 3002,
+      "hash": "e27d3bb8",
+      "short": "e27d3bb8",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-10-15T21:35:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e27d3bb884dc17027010c1ea8f7e7d9efb383d4c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e27d3bb884dc17027010c1ea8f7e7d9efb383d4c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e27d3bb884dc17027010c1ea8f7e7d9efb383d4c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use explicit logic for pruning\n\nAlso a speedup since we don't need to recalculate SEE\nfor extensions...as it already determined to be positive.\n\nResults for 12 tests for each version:\n\n        Base      Test      Diff\nMean    2132395   2191002   -58607\nStDev   128058    85917     134239\np-value: 0.669\nspeedup: 0.027\n\nNon functional change.\n",
+      "subject": "Use explicit logic for pruning"
+    },
+    {
+      "commit_num": 3003,
+      "hash": "99f3ad68",
+      "short": "99f3ad68",
+      "author": "ajithcj <achajo@yahoo.co.in>",
+      "date": "2016-10-15T07:29:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/99f3ad6858889bbc40c016c96c9f7e53a773e49e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/99f3ad6858889bbc40c016c96c9f7e53a773e49e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/99f3ad6858889bbc40c016c96c9f7e53a773e49e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove useless assignments to currentMove\n\nWe reference (ss-1)->currentMove, i.e. we peek\ncurrent move of the parent node, so currentMove\nshould be valid in the main move loop, when we\nsearch() the subtree, but outside of main loop\nit is useless.\n\nNo functional change.\n",
+      "subject": "Remove useless assignments to currentMove"
+    },
+    {
+      "commit_num": 3004,
+      "hash": "e1f600f1",
+      "short": "e1f600f1",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-10-13T06:36:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e1f600f1860ccf4c3da61a7b41666f15555bb06c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e1f600f1860ccf4c3da61a7b41666f15555bb06c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e1f600f1860ccf4c3da61a7b41666f15555bb06c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Fixes for ARM compilation\"\n\nThis reverts commit a3fe80c36ac8ee7677d1f6b7df9b2497e3f755c5.\n\nBreak compilation on mingw for me.\n",
+      "subject": "Revert \"Fixes for ARM compilation\""
+    },
+    {
+      "commit_num": 3005,
+      "hash": "fdf3a51c",
+      "short": "fdf3a51c",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-10-10T15:36:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/fdf3a51c68cb778af445bf6dafbfecf375fc2ee8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fdf3a51c68cb778af445bf6dafbfecf375fc2ee8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fdf3a51c68cb778af445bf6dafbfecf375fc2ee8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "AppVeyor: run bench after build\n\nAnd show resulting bench signature.\n\nThe run is very slow becuase optimizations\nare all disabled by default /Od /RTC1\n\nNo functional change.\n",
+      "subject": "AppVeyor: run bench after build"
+    },
+    {
+      "commit_num": 3006,
+      "hash": "e61f7b1e",
+      "short": "e61f7b1e",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-10-10T12:21:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e61f7b1e6d0273ef9447efa01e90578adef4613e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e61f7b1e6d0273ef9447efa01e90578adef4613e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e61f7b1e6d0273ef9447efa01e90578adef4613e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add AppVeyor integration\n\nIt is like Trevis CI but for Windows platform.\n\nCurrently just compile builds, wthouth benching\nthe resulting executable.\n\nNo functional change.\n",
+      "subject": "Add AppVeyor integration"
+    },
+    {
+      "commit_num": 3007,
+      "hash": "16e18811",
+      "short": "16e18811",
+      "author": "Jacques <jacques.bachellerie@mfglabs.com>",
+      "date": "2016-10-08T10:15:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/16e1881126f939383ceaaa3ec45163e760353b26",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16e1881126f939383ceaaa3ec45163e760353b26.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16e1881126f939383ceaaa3ec45163e760353b26.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fixes for ARM compilation: take 2\n\nThe target:\n\nOdroid U3 (http://www.hardkernel.com/main/products/prdt_info.php?g_code=g138745696275)\nDebian Jessie\nAs listed in #550 and #638 three modifications are needed for compilation to work:\n\nfloat-abi flag for GCC If an FPU is present and supported by the installed os then passed value need to be hard.\nI didn't find any better solution than using readelf to check for the availibilty of Tag_ABI_VFP_args which sould indicate support for the FPU. The check is only done if the arch is arm and if readelf is not present\non the system, there will be an error (/bin/sh: 1: readelf: not found) but it will not break and will continue with the default softfp value. Outputing the error is not really acceptable but I wanted some feedback on the\ncheck itself.\n\n-lpthread is needed on armv7 outside of Android\nI replaced UNAME with KERNEL and OS to allow to differentiate Android.\n\nm32 flag\nMy understanding is that outside of Android the flag is generating errors on armv7.\n\nThese modifications should introduce change only for non Android armv7 build.\n\nNo functional change.\n",
+      "subject": "Fixes for ARM compilation: take 2"
+    },
+    {
+      "commit_num": 3008,
+      "hash": "a3fe80c3",
+      "short": "a3fe80c3",
+      "author": "Jacques <jacques.bachellerie@mfglabs.com>",
+      "date": "2016-10-08T10:15:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a3fe80c36ac8ee7677d1f6b7df9b2497e3f755c5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a3fe80c36ac8ee7677d1f6b7df9b2497e3f755c5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a3fe80c36ac8ee7677d1f6b7df9b2497e3f755c5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fixes for ARM compilation\n\nThe target:\n\nOdroid U3 (http://www.hardkernel.com/main/products/prdt_info.php?g_code=g138745696275)\nDebian Jessie\nAs listed in #550 and #638 three modifications are needed for compilation to work:\n\nfloat-abi flag for GCC If an FPU is present and supported by the installed os then passed value need to be hard.\nI didn't find any better solution than using readelf to check for the availibilty of Tag_ABI_VFP_args which sould indicate support for the FPU. The check is only done if the arch is arm and if readelf is not present\non the system, there will be an error (/bin/sh: 1: readelf: not found) but it will not break and will continue with the default softfp value. Outputing the error is not really acceptable but I wanted some feedback on the\ncheck itself.\n\n-lpthread is needed on armv7 outside of Android\nI replaced UNAME with KERNEL and OS to allow to differentiate Android.\n\nm32 flag\nMy understanding is that outside of Android the flag is generating errors on armv7.\n\nThese modifications should introduce change only for non Android armv7 build.\n\nNo functional change.\n",
+      "subject": "Fixes for ARM compilation"
+    },
+    {
+      "commit_num": 3009,
+      "hash": "f799610d",
+      "short": "f799610d",
+      "author": "ajithcj <achajo@yahoo.co.in>",
+      "date": "2016-10-08T05:06:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f799610d4bb48bc280ea7f58cd5f78ab21028bf5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f799610d4bb48bc280ea7f58cd5f78ab21028bf5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f799610d4bb48bc280ea7f58cd5f78ab21028bf5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify futility pruning return value\n\nReturn eval as it is while doing futility pruning.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 167687 W: 29778 L: 29904 D: 108005\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 26905 W: 3503 L: 3390 D: 20012\n\nBench: 5936728\n",
+      "subject": "Simplify futility pruning return value"
+    },
+    {
+      "commit_num": 3010,
+      "hash": "01d97521",
+      "short": "01d97521",
+      "author": "IIvec <ivan.ivec@gmail.com>",
+      "date": "2016-10-07T16:12:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/01d97521fd675ed157ff7d61e6057916abbcc56c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01d97521fd675ed157ff7d61e6057916abbcc56c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01d97521fd675ed157ff7d61e6057916abbcc56c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Time management simplification\n\nSTC (http://tests.stockfishchess.org/tests/view/598188a40ebc5916ff64a21b):\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 25363 W: 4658 L: 4545 D: 16160\n\nLTC (http://tests.stockfishchess.org/tests/view/5981d59a0ebc5916ff64a229):\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 75356 W: 9690 L: 9640 D: 56026\n\n40/10 TC (http://tests.stockfishchess.org/tests/view/5980c5780ebc5916ff64a1ed):\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 19377 W: 3650 L: 3526 D: 12201\n\n15+0 TC (http://tests.stockfishchess.org/tests/view/5982cb730ebc5916ff64a25d):\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 5913 W: 1217 L: 1069 D: 3627\n\nThis time management handles base time and movestogo cases separatelly. One can test one case without affecting the other. Also, increment usage can be tested separately without (necessarily) affecting sudden death or x moves in y seconds performance.\n\nOn stable machines there are no time losses on 0.1+0.001 time control (tested on i7 + Windows 10 platform).\n\nBench 5608839\n",
+      "subject": "Time management simplification"
+    },
+    {
+      "commit_num": 3011,
+      "hash": "073eed59",
+      "short": "073eed59",
+      "author": "atumanian <1>",
+      "date": "2016-10-06T17:55:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/073eed590edf992ed3aeb6c754cb0b3b394fe79d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/073eed590edf992ed3aeb6c754cb0b3b394fe79d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/073eed590edf992ed3aeb6c754cb0b3b394fe79d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Optimisation of Position::see and Position::see_sign\n\nStephane's patch removes the only usage of Position::see, where the\nreturned value isn't immediately compared with a value. So I replaced\nthis function by its optimised and more specific version see_ge. This\nfunction also supersedes the function Position::see_sign.\n\nbool Position::see_ge(Move m, Value v) const;\n\nThis function tests if the SEE of a move is greater or equal than a\ngiven value. We use forward iteration on captures instread of backward\none, therefore we don't need the swapList array. Also we stop as soon\nas we have enough information to obtain the result, avoiding unnecessary\ncalls to the min_attacker function.\n\nSpeed tests (Windows 7), 20 runs for each engine:\nTest engine: mean 866648, st. dev. 5964\nBase engine: mean 846751, st. dev. 22846\nSpeedup: 1.023\n\nSpeed test by Stephane Nicolet\n\nFishtest STC test:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 26040 W: 4675 L: 4442 D: 16923\nhttp://tests.stockfishchess.org/tests/view/57f648990ebc59038170fa03\n\nNo functional change.\n",
+      "subject": "Optimisation of Position::see and Position::see_sign"
+    },
+    {
+      "commit_num": 3012,
+      "hash": "1e586288",
+      "short": "1e586288",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-10-05T22:00:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1e586288ca4a0ae567c8d9b9b77e804f25fe6719",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e586288ca4a0ae567c8d9b9b77e804f25fe6719.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e586288ca4a0ae567c8d9b9b77e804f25fe6719.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not use SEE in evasion scoring\n\nIdea by Aram Tumanian (atumanian)\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 43889 W: 7849 L: 7767 D: 28273\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 29333 W: 3809 L: 3700 D: 21824\n\nBench: 6421663\n",
+      "subject": "Do not use SEE in evasion scoring"
+    },
+    {
+      "commit_num": 3013,
+      "hash": "ab26c619",
+      "short": "ab26c619",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-10-03T13:36:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ab26c61971c2f73d312b003e6d024373fbacf8e6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab26c61971c2f73d312b003e6d024373fbacf8e6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab26c61971c2f73d312b003e6d024373fbacf8e6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Allow inCheck pruning\n\nThis is a bit tricky because we don't want\nto prune the only legal evasions, even if\nwith negative SEE. So add an assert to avoid\nthis subtle bug to slip in later.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 14140 W: 2625 L: 2421 D: 9094\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 11558 W: 1555 L: 1379 D: 8624\n\nbench: 5256717\n",
+      "subject": "Allow inCheck pruning"
+    }
+  ]
+}

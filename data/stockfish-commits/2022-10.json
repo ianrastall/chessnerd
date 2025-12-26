@@ -1,0 +1,1170 @@
+{
+  "month": "2022-10",
+  "commits": [
+    {
+      "commit_num": 1348,
+      "hash": "ad2aa8c0",
+      "short": "ad2aa8c0",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2022-10-31T19:36:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/win64bmi2/stockfish_22110508_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/win64avx2/stockfish_22110508_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/win64modern/stockfish_22110508_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/win64ssse/stockfish_22110508_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/win64/stockfish_22110508_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/linux64bmi2/stockfish_22110508_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/linux64avx2/stockfish_22110508_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/linux64modern/stockfish_22110508_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/linux64ssse/stockfish_22110508_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/ad2aa8c06f438de8b8bb7b7c8726430e3f2a5685/linux64/stockfish_22110508_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Normalize evaluation\n\nNormalizes the internal value as reported by evaluate or search\nto the UCI centipawn result used in output. This value is derived from\nthe win_rate_model() such that Stockfish outputs an advantage of\n\"100 centipawns\" for a position if the engine has a 50% probability to win\nfrom this position in selfplay at fishtest LTC time control.\n\nThe reason to introduce this normalization is that our evaluation is, since NNUE,\nno longer related to the classical parameter PawnValueEg (=208). This leads to\nthe current evaluation changing quite a bit from release to release, for example,\nthe eval needed to have 50% win probability at fishtest LTC (in cp and internal Value):\n\nJune 2020  :   113cp (237)\nJune 2021  :   115cp (240)\nApril 2022 :   134cp (279)\nJuly 2022  :   167cp (348)\n\nWith this patch, a 100cp advantage will have a fixed interpretation,\ni.e. a 50% win chance. To keep this value steady, it will be needed to update the win_rate_model()\nfrom time to time, based on fishtest data. This analysis can be performed with\na set of scripts currently available at https://github.com/vondele/WLD_model\n\nfixes https://github.com/official-stockfish/Stockfish/issues/4155\ncloses https://github.com/official-stockfish/Stockfish/pull/4216\n\nNo functional change\n",
+      "subject": "Normalize evaluation"
+    },
+    {
+      "commit_num": 1349,
+      "hash": "d09653df",
+      "short": "d09653df",
+      "author": "kurt22i <streamratings2@gmail.com>",
+      "date": "2022-10-30T13:02:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/win64bmi2/stockfish_22103015_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/win64avx2/stockfish_22103015_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/win64modern/stockfish_22103015_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/win64ssse/stockfish_22103015_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/win64/stockfish_22103015_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/linux64bmi2/stockfish_22103015_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/linux64avx2/stockfish_22103015_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/linux64modern/stockfish_22103015_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/linux64ssse/stockfish_22103015_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/d09653df0d1bfec0af05ab2e8975e0d8e5cccba8/linux64/stockfish_22103015_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Adjust reduction less at medium depths\n\nThis patch dampens the reduction increase/decrease from statScore at mid-range depths.\nInspired by patterns noticed in this tune: https://tests.stockfishchess.org/tests/view/635188930e5f47a8d0ffe8f5\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/63599dfd6b27ef94d9ec04af\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 87464 W: 23519 L: 23134 D: 40811\nPtnml(0-2): 319, 9599, 23524, 9958, 332\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/635a73046b27ef94d9ec2313\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 154792 W: 41746 L: 41214 D: 71832\nPtnml(0-2): 79, 15181, 46349, 15703, 84\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4213\n\nBench 4271738\n",
+      "subject": "Adjust reduction less at medium depths"
+    },
+    {
+      "commit_num": 1350,
+      "hash": "f154ed7a",
+      "short": "f154ed7a",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2022-10-29T06:23:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f154ed7a2d4176670cc971611b1b32e8d3d18b4b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f154ed7a2d4176670cc971611b1b32e8d3d18b4b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f154ed7a2d4176670cc971611b1b32e8d3d18b4b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/win64bmi2/stockfish_22103015_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/win64avx2/stockfish_22103015_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/win64modern/stockfish_22103015_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/win64ssse/stockfish_22103015_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/win64/stockfish_22103015_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/linux64bmi2/stockfish_22103015_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/linux64avx2/stockfish_22103015_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/linux64modern/stockfish_22103015_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/linux64ssse/stockfish_22103015_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f154ed7a2d4176670cc971611b1b32e8d3d18b4b/linux64/stockfish_22103015_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Update MacOS CI\n\nmove to 12 following actions runner update deprecation\n(see https://github.com/actions/runner-images/issues/5583)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4212\n\nNo functional change\n",
+      "subject": "Update MacOS CI"
+    },
+    {
+      "commit_num": 1351,
+      "hash": "a5500edc",
+      "short": "a5500edc",
+      "author": "dav1312 <63931154+dav1312@users.noreply.github.com>",
+      "date": "2022-10-25T09:15:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a5500edc555f6d4429b3b697392f5f27215cb1db",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a5500edc555f6d4429b3b697392f5f27215cb1db.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a5500edc555f6d4429b3b697392f5f27215cb1db.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/win64bmi2/stockfish_22102618_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/win64avx2/stockfish_22102618_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/win64modern/stockfish_22102618_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/win64ssse/stockfish_22102618_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/win64/stockfish_22102618_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/linux64bmi2/stockfish_22102618_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/linux64avx2/stockfish_22102618_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/linux64modern/stockfish_22102618_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/linux64ssse/stockfish_22102618_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/a5500edc555f6d4429b3b697392f5f27215cb1db/linux64/stockfish_22102618_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Add issue template\n\nAdd an issue template using GitHub's form schema\nhttps://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4210\n\nNo functional change.\n",
+      "subject": "Add issue template"
+    },
+    {
+      "commit_num": 1352,
+      "hash": "8333b2a9",
+      "short": "8333b2a9",
+      "author": "Clausable <97650056+Clausable@users.noreply.github.com>",
+      "date": "2022-10-24T20:00:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8333b2a94c7c7e6e13822153f35899b64a690ac2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8333b2a94c7c7e6e13822153f35899b64a690ac2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8333b2a94c7c7e6e13822153f35899b64a690ac2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix README typos, update AUTHORS\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4208\n\nNo functional change\n",
+      "subject": "Fix README typos, update AUTHORS"
+    },
+    {
+      "commit_num": 1353,
+      "hash": "4ec8945e",
+      "short": "4ec8945e",
+      "author": "Michael Chaly <Vizvezdenec@gmail.com>",
+      "date": "2022-10-21T14:10:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4ec8945eafc5b271d1c9d276fab590fa26c24901",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4ec8945eafc5b271d1c9d276fab590fa26c24901.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4ec8945eafc5b271d1c9d276fab590fa26c24901.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/win64bmi2/stockfish_22102318_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/win64avx2/stockfish_22102318_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/win64modern/stockfish_22102318_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/win64ssse/stockfish_22102318_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/win64/stockfish_22102318_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/linux64bmi2/stockfish_22102318_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/linux64avx2/stockfish_22102318_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/linux64modern/stockfish_22102318_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/linux64ssse/stockfish_22102318_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/4ec8945eafc5b271d1c9d276fab590fa26c24901/linux64/stockfish_22102318_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Use TT moves more often in qsearch\n\nDuring the recapture phase of quiescence search (where we limit the generated moves to recaptures on the last seen capture square),\nthe move picker will now emit the tt move, even if the tt move is not a recapture.\n\nPassed STC :\nhttps://tests.stockfishchess.org/tests/view/6350df2928d3a71cb1eef838\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 90280 W: 24001 L: 23845 D: 42434\nPtnml(0-2): 273, 9779, 24941, 9813, 334\n\nPassed LTC :\nhttps://tests.stockfishchess.org/tests/view/6351308b28d3a71cb1ef06ce\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 104504 W: 27937 L: 27807 D: 48760\nPtnml(0-2): 54, 10378, 31260, 10504, 56\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4206\n\nBench: 4540268\n",
+      "subject": "Use TT moves more often in qsearch"
+    },
+    {
+      "commit_num": 1354,
+      "hash": "5604b255",
+      "short": "5604b255",
+      "author": "Clement <clement@starfivetech.com>",
+      "date": "2022-10-21T02:29:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5604b255e6012ed44eb03e2e93949d904fc7279b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5604b255e6012ed44eb03e2e93949d904fc7279b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5604b255e6012ed44eb03e2e93949d904fc7279b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/win64bmi2/stockfish_22102318_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/win64avx2/stockfish_22102318_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/win64modern/stockfish_22102318_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/win64ssse/stockfish_22102318_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/win64/stockfish_22102318_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/linux64bmi2/stockfish_22102318_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/linux64avx2/stockfish_22102318_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/linux64modern/stockfish_22102318_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/linux64ssse/stockfish_22102318_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/5604b255e6012ed44eb03e2e93949d904fc7279b/linux64/stockfish_22102318_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Add RISC-V 64-bit support\n\nadds a riscv64 target architecture to the Makefile to support RISC-V 64-bit.\nCompiled and tested on VisionFive 2 board.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4205\n\nNo functional change.\n",
+      "subject": "Add RISC-V 64-bit support"
+    },
+    {
+      "commit_num": 1355,
+      "hash": "234d2156",
+      "short": "234d2156",
+      "author": "MinetaS <skdty87@gmail.com>",
+      "date": "2022-10-16T15:03:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/234d2156fdf011a7bb850e3d6172ed2290ab3ad2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/234d2156fdf011a7bb850e3d6172ed2290ab3ad2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/234d2156fdf011a7bb850e3d6172ed2290ab3ad2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/win64bmi2/stockfish_22102317_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/win64avx2/stockfish_22102317_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/win64modern/stockfish_22102317_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/win64ssse/stockfish_22102317_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/win64/stockfish_22102317_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/linux64bmi2/stockfish_22102317_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/linux64avx2/stockfish_22102317_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/linux64modern/stockfish_22102317_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/linux64ssse/stockfish_22102317_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/234d2156fdf011a7bb850e3d6172ed2290ab3ad2/linux64/stockfish_22102317_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Apply -flto-partition=one / -flto=full\n\nThis patch fixes a potential bug derived from an incompatibility between LTO and top-level assembly code (INCBIN).\n\nPassed non-regression STC (master e90341f):\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 119352 W: 31986 L: 31862 D: 55504\nPtnml(0-2): 439, 12624, 33400, 12800, 413\nhttps://tests.stockfishchess.org/tests/view/634aacf84bc7650f0755188b\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4201\n\nNo functional change\n",
+      "subject": "Apply -flto-partition=one / -flto=full"
+    },
+    {
+      "commit_num": 1356,
+      "hash": "804394b9",
+      "short": "804394b9",
+      "author": "disservin <disservin.social@gmail.com>",
+      "date": "2022-10-16T12:37:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/804394b939614ca6ac99e31be236c019db365bb7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/804394b939614ca6ac99e31be236c019db365bb7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/804394b939614ca6ac99e31be236c019db365bb7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/win64bmi2/stockfish_22102318_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/win64avx2/stockfish_22102318_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/win64modern/stockfish_22102318_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/win64ssse/stockfish_22102318_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/win64/stockfish_22102318_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/linux64bmi2/stockfish_22102318_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/linux64avx2/stockfish_22102318_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/linux64modern/stockfish_22102318_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/linux64ssse/stockfish_22102318_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/804394b939614ca6ac99e31be236c019db365bb7/linux64/stockfish_22102318_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "enable bit manipulation instruction set 1\n\nbmi1 enables the use of _blsr_u64 for pop_lsb, and is availabe when avx2 is.\n\nverified a small speedup (0.2 - 0.6%)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4202\n\nNo functional change\n",
+      "subject": "enable bit manipulation instruction set 1"
+    },
+    {
+      "commit_num": 1357,
+      "hash": "93f71ecf",
+      "short": "93f71ecf",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2022-10-14T21:41:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/93f71ecfe1d26e5ccc813318f420b8363cd26003",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93f71ecfe1d26e5ccc813318f420b8363cd26003.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93f71ecfe1d26e5ccc813318f420b8363cd26003.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/win64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/win64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/win64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/win64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/win64/stockfish_22101609_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/linux64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/linux64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/linux64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/linux64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/93f71ecfe1d26e5ccc813318f420b8363cd26003/linux64/stockfish_22101609_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Optimize make_index() using templates and lookup tables.\n\nhttps://tests.stockfishchess.org/tests/view/634517e54bc7650f07542f99\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 642672 W: 171819 L: 170658 D: 300195\nPtnml(0-2): 2278, 68077, 179416, 69336, 2229\n\nthis also introduces `-flto-partition=one` as suggested by MinetaS (Syine Mineta)\nto avoid linking errors due to LTO on 32 bit mingw. This change was tested in isolation as well\n\nhttps://tests.stockfishchess.org/tests/view/634aacf84bc7650f0755188b\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 119352 W: 31986 L: 31862 D: 55504\nPtnml(0-2): 439, 12624, 33400, 12800, 413\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4199\n\nNo functional change\n",
+      "subject": "Optimize make_index() using templates and lookup tables."
+    },
+    {
+      "commit_num": 1358,
+      "hash": "d6b6360f",
+      "short": "d6b6360f",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2022-10-08T22:27:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/win64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/win64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/win64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/win64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/win64/stockfish_22101609_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/linux64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/linux64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/linux64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/linux64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/d6b6360ff5dcdffa141f50d0a81d0be7c6324c71/linux64/stockfish_22101609_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak the formula for NNUE complexity\n\nJoint work by Ofek Shochat and Stéphane Nicolet.\n\npassed STC:\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 93288 W: 24996 L: 24601 D: 43691\nPtnml(0-2): 371, 10263, 24989, 10642, 379\nhttps://tests.stockfishchess.org/tests/view/63448f4f4bc7650f07541987\n\npassed LTC:\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 84168 W: 22771 L: 22377 D: 39020\nPtnml(0-2): 47, 8181, 25234, 8575, 47\nhttps://tests.stockfishchess.org/tests/view/6345186d4bc7650f07542fbd\n\n================\n\nIt seems there are two effects with this patch:\n\neffect A :\n\nIf Stockfish is winning at root, we have optimism > 0 for all leaves in\nthe search tree where Stockfish is to move. There, if (psq - nnue) > 0\n(ie if the advantage is more materialistic than positional), then the\nproduct D = optimism * (psq - nnue) will be positive, nnueComplexity will\nincrease, and the eval will increase from SF point of view.\n\nSo the effect A is that if Stockfish is winning at root, she will slightly\nfavor in the search tree (in other words, search more) the positions where\nshe can convert her advantage via materialist means.\n\neffect B :\n\nIf Stockfish is losing at root, we have optimism > 0 for all leaves in\nthe search tree where the opponent is to move. There, if (psq - nnue) < 0\n(ie if the opponent advantage is more positional than materialistic), then\nthe product D = optimism * (psq-nnue) will be negative, nnueComplexity will\ndecrease, and the eval will decrease from the opponent point of view.\n\nSo the effect B is that Stockfish will slightly favor in the search tree\n(search more) the branches where she can defend by slowly reducing the\nopponent positional advantage.\n\n=================\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4195\n\nbench: 4673898\n",
+      "subject": "Tweak the formula for NNUE complexity"
+    },
+    {
+      "commit_num": 1359,
+      "hash": "9be2977d",
+      "short": "9be2977d",
+      "author": "xoto10 <you@example.com>",
+      "date": "2022-10-08T13:53:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9be2977da7921aedfd3215f1f4b5f522359effa0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9be2977da7921aedfd3215f1f4b5f522359effa0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9be2977da7921aedfd3215f1f4b5f522359effa0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/win64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/win64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/win64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/win64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/win64/stockfish_22101609_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/linux64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/linux64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/linux64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/linux64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/9be2977da7921aedfd3215f1f4b5f522359effa0/linux64/stockfish_22101609_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Adjust timeman constants\n\nAdjust timeman constants to use more time in early part of game.\n\nSTC @ 10+0.1 th 1 :\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 93984 W: 25177 L: 24787 D: 44020\nPtnml(0-2): 350, 10096, 25729, 10448, 369\nhttps://tests.stockfishchess.org/tests/live_elo/6339077135f43d649ff6162a\n\nLTC @ 60+0.6 th 1 :\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 329368 W: 88953 L: 88093 D: 152322\nPtnml(0-2): 170, 31457, 100594, 32269, 194\nhttps://tests.stockfishchess.org/tests/live_elo/6339baed35f43d649ff63142\n\nSudden death 10+0 :\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 20400 W: 5908 L: 5588 D: 8904\nPtnml(0-2): 177, 2252, 5128, 2360, 283\nhttps://tests.stockfishchess.org/tests/live_elo/6347c9384bc7650f07549ba7\n\nSudden death 10+0, no adjudication :\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 17920 W: 4755 L: 4442 D: 8723\nPtnml(0-2): 137, 1985, 4466, 2172, 200\nhttps://tests.stockfishchess.org/tests/live_elo/634806e84bc7650f0754a639\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4188\n\nNo functional change\n",
+      "subject": "Adjust timeman constants"
+    },
+    {
+      "commit_num": 1360,
+      "hash": "79c5f3a6",
+      "short": "79c5f3a6",
+      "author": "Rodrigo Roim <roim.rodrigo@gmail.com>",
+      "date": "2022-10-07T23:55:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/win64bmi2/stockfish_22101610_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/win64avx2/stockfish_22101610_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/win64modern/stockfish_22101610_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/win64ssse/stockfish_22101610_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/win64/stockfish_22101610_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/linux64bmi2/stockfish_22101610_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/linux64avx2/stockfish_22101610_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/linux64modern/stockfish_22101610_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/linux64ssse/stockfish_22101610_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/79c5f3a69247b44ee6362a3d9236cd9bc048c5f5/linux64/stockfish_22101610_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix tablebase probe for dtz >1000 w/o 50 move rule\n\nFor qn4N1/6R1/3K4/8/B2k4/8/8/8 w - - 0 1, white loses with DTZ 1034.\nSee https://syzygy-tables.info/?fen=qn4N1/6R1/3K4/8/B2k4/8/8/8_w_-_-_0_1\n\nPrior to this fix, due to a too small hard-coded value, Stockfish interpreted this as winning.\nThe new value picked (1<<18) is large enough to deal with the largest DTZ values that can be stored in the current syzygy format.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4187\n\nNo functional change.\n",
+      "subject": "Fix tablebase probe for dtz >1000 w/o 50 move rule"
+    },
+    {
+      "commit_num": 1361,
+      "hash": "f97a86e2",
+      "short": "f97a86e2",
+      "author": "Dubslow <bunslow@gmail.com>",
+      "date": "2022-10-07T10:44:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f97a86e213fd352a1a7017e5c98608cefc3ef1fa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f97a86e213fd352a1a7017e5c98608cefc3ef1fa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f97a86e213fd352a1a7017e5c98608cefc3ef1fa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/win64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/win64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/win64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/win64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/win64/stockfish_22101609_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/linux64bmi2/stockfish_22101609_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/linux64avx2/stockfish_22101609_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/linux64modern/stockfish_22101609_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/linux64ssse/stockfish_22101609_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f97a86e213fd352a1a7017e5c98608cefc3ef1fa/linux64/stockfish_22101609_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove depth condition from razoring\n\nThe eval condition depends on depth anyways, so this patch is nearly (not quite) non-functional\n\npassed STC:\nhttps://tests.stockfishchess.org/tests/view/63428169fb7ccb2ea9be2629\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 185992 W: 49612 L: 49558 D: 86822\nPtnml(0-2): 618, 19956, 51842, 19914, 666\n\npassed LTC:\nhttps://tests.stockfishchess.org/tests/view/634418b14bc7650f07540760\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 126816 W: 34147 L: 34043 D: 58626\nPtnml(0-2): 74, 11941, 39281, 12031, 81\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4196\n\nbench 4148700\n",
+      "subject": "Remove depth condition from razoring"
+    },
+    {
+      "commit_num": 1362,
+      "hash": "da937e21",
+      "short": "da937e21",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2022-10-05T20:59:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/da937e219ee7981966ac29fc11c43470a505ff18",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/da937e219ee7981966ac29fc11c43470a505ff18.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/da937e219ee7981966ac29fc11c43470a505ff18.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/win64bmi2/stockfish_22100520_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/win64avx2/stockfish_22100520_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/win64modern/stockfish_22100520_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/win64ssse/stockfish_22100520_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/win64/stockfish_22100520_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/linux64bmi2/stockfish_22100520_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/linux64avx2/stockfish_22100520_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/linux64modern/stockfish_22100520_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/linux64ssse/stockfish_22100520_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/da937e219ee7981966ac29fc11c43470a505ff18/linux64/stockfish_22100520_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Mix alpha and statScore for reduction\"\n\nThis reverts commit 8bab09749dd00951bfa9c5f89f6e35bded76c8a9.\n\nIn this form the patch reduces mate finding effectiveness, as the large alpha value has negative influence on the reductions.\n\nsee also https://github.com/official-stockfish/Stockfish/pull/4183\n\nBench: 4114228\n",
+      "subject": "Revert \"Mix alpha and statScore for reduction\""
+    },
+    {
+      "commit_num": 1363,
+      "hash": "d5271af0",
+      "short": "d5271af0",
+      "author": "Giacomo Lorenzetti <g.lorenz9@protonmail.com>",
+      "date": "2022-10-05T11:08:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d5271af0ee28cb52e1033f183f3b34754aa5efa0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d5271af0ee28cb52e1033f183f3b34754aa5efa0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d5271af0ee28cb52e1033f183f3b34754aa5efa0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/win64bmi2/stockfish_22100816_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/win64avx2/stockfish_22100816_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/win64modern/stockfish_22100816_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/win64ssse/stockfish_22100816_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/win64/stockfish_22100816_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/linux64bmi2/stockfish_22100816_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/linux64avx2/stockfish_22100816_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/linux64modern/stockfish_22100816_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/linux64ssse/stockfish_22100816_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/d5271af0ee28cb52e1033f183f3b34754aa5efa0/linux64/stockfish_22100816_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove old line in \"Futility pruning for captures\"\n\nThe line is no longer needed after https://github.com/official-stockfish/Stockfish/commit/910cf8b21839eb9f1991934a5436eea112021723.\nThis patch incidentally applies \"Futility Pruning for Captures\" also in case of en-passant, changing the bench signature.\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6332c1f1208c26088697b731\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 68760 W: 18440 L: 18256 D: 32064\nPtnml(0-2): 267, 7530, 18595, 7728, 260\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/633312e9208c26088697c59b\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 455552 W: 121910 L: 122123 D: 211519\nPtnml(0-2): 253, 45439, 136600, 45236, 248\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4185\n\nBench: 4374521\n",
+      "subject": "Remove old line in \"Futility pruning for captures\""
+    },
+    {
+      "commit_num": 1364,
+      "hash": "e90341f9",
+      "short": "e90341f9",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2022-10-04T16:16:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/win64bmi2/stockfish_22100816_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/win64avx2/stockfish_22100816_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/win64modern/stockfish_22100816_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/win64ssse/stockfish_22100816_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/win64/stockfish_22100816_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/linux64bmi2/stockfish_22100816_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/linux64avx2/stockfish_22100816_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/linux64modern/stockfish_22100816_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/linux64ssse/stockfish_22100816_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/e90341f9c9cd24e75aba2485b2ab1e445f4a5b70/linux64/stockfish_22100816_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak history initialization\n\nSimplify initialization of continuation history by using everywhere the same starting value.\n\nSTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 90952 W: 24312 L: 24153 D: 42487\nPtnml(0-2): 356, 10168, 24290, 10285, 377\nhttps://tests.stockfishchess.org/tests/view/633948f235f43d649ff61fd0\n\nLTC:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 162416 W: 43540 L: 43466 D: 75410\nPtnml(0-2): 77, 16289, 48417, 16333, 92\nhttps://tests.stockfishchess.org/tests/view/6339ee8a35f43d649ff63986\n\ncloses  https://github.com/official-stockfish/Stockfish/pull/4186\n\nBench: 4156027\n",
+      "subject": "Tweak history initialization"
+    },
+    {
+      "commit_num": 1365,
+      "hash": "8bab0974",
+      "short": "8bab0974",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2022-10-03T14:45:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8bab09749dd00951bfa9c5f89f6e35bded76c8a9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8bab09749dd00951bfa9c5f89f6e35bded76c8a9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8bab09749dd00951bfa9c5f89f6e35bded76c8a9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/win64bmi2/stockfish_22100323_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/win64avx2/stockfish_22100323_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/win64modern/stockfish_22100323_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/win64ssse/stockfish_22100323_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/win64/stockfish_22100323_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/linux64bmi2/stockfish_22100323_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/linux64avx2/stockfish_22100323_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/linux64modern/stockfish_22100323_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/linux64ssse/stockfish_22100323_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/8bab09749dd00951bfa9c5f89f6e35bded76c8a9/linux64/stockfish_22100323_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Mix alpha and statScore for reduction\n\nIdea by @xoto10, and tuning by @FauziAkram.\n\nPassed STC:\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 57832 W: 15540 L: 15199 D: 27093\nPtnml(0-2): 207, 6343, 15477, 6680, 209\nhttps://tests.stockfishchess.org/tests/view/6338db6f35f43d649ff60fdc\n\npassed LTC:\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 50968 W: 13770 L: 13440 D: 23758\nPtnml(0-2): 25, 4905, 15306, 5211, 37\nhttps://tests.stockfishchess.org/tests/view/6339777035f43d649ff62686\n\nLinks to the tuning sessions:\nhttps://tests.stockfishchess.org/tests/view/63345725a004bed9a2e47b28\nhttps://tests.stockfishchess.org/tests/view/63345728a004bed9a2e47b2a\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4183\n\nBench: 4426602\n",
+      "subject": "Mix alpha and statScore for reduction"
+    }
+  ]
+}

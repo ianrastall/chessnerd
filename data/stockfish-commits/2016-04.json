@@ -1,0 +1,473 @@
+{
+  "month": "2016-04",
+  "commits": [
+    {
+      "commit_num": 3106,
+      "hash": "8f934dff",
+      "short": "8f934dff",
+      "author": "Krgp <panditrao@gmail.com>",
+      "date": "2016-04-30T10:38:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8f934dff9a8644c38aaa31fc0ae90c0fab30934a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8f934dff9a8644c38aaa31fc0ae90c0fab30934a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8f934dff9a8644c38aaa31fc0ae90c0fab30934a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove useless -mbmi flag in Makefile\n\nI could not find anything documented that is necessary that prepending -mbmi to -mbmi2 gives some benefit.\nInstead at\nhttps://gcc.gnu.org/onlinedocs/gcc/x86-Built-in-Functions.html#x86-Built-in-Functions\n\nThe following built-in functions are available when -mbmi is used. All of them generate the machine instruction that is part of the name.\nunsigned int __builtin_ia32_bextr_u32(unsigned int, unsigned int);\nunsigned long long __builtin_ia32_bextr_u64 (unsigned long long, unsigned long long);\n\nThe following built-in functions are available when -mbmi2 is used. All of them generate the machine instruction that is part of the name.\nunsigned int _bzhi_u32 (unsigned int, unsigned int)\nunsigned int _pdep_u32 (unsigned int, unsigned int)\nunsigned int _pext_u32 (unsigned int, unsigned int)\nunsigned long long _bzhi_u64 (unsigned long long, unsigned long long)\nunsigned long long _pdep_u64 (unsigned long long, unsigned long long)\nunsigned long long _pext_u64 (unsigned long long, unsigned long long)\n\nand at\nhttps://gcc.gnu.org/ml/gcc/2014-02/msg00204.html\n\n( \"... The real optimization comes from being able to use pext\n(parallel bit extract), which can implement several bextr expressions in\nparallel.\")\n\nApart from that we don't use all -msse -msse2 -msse3 -msse4.2 etc. but just -msse3 (or -msse4.2) only.\n\nAs regards to the speedup within noise level - this pull request is actually reversal of mcostalba#198 wherein prepending -mbmi to -mbmi2 was claimed to be 0.3% faster and here (removing -mbmi) gives 0.4% speed gain.\n",
+      "subject": "Remove useless -mbmi flag in Makefile"
+    },
+    {
+      "commit_num": 3107,
+      "hash": "dc0030de",
+      "short": "dc0030de",
+      "author": "joergoster <osterj165@googlemail.com>",
+      "date": "2016-04-30T08:56:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dc0030de4fdece2851dd0072c9aea53695ed90ce",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dc0030de4fdece2851dd0072c9aea53695ed90ce.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dc0030de4fdece2851dd0072c9aea53695ed90ce.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix LazySMP when searching to a fixed depth.\n\nCurrently, helper threads will only search up to the\nspecified depth limit. Now let them search until the\nmain thread has finished the specified depth.\n\nOn the other hand, we don't want to pick a thread with\na higher search depth.\n\nThis may be considered cheating. ;-)\n\nNo functional change.\n",
+      "subject": "Fix LazySMP when searching to a fixed depth."
+    },
+    {
+      "commit_num": 3108,
+      "hash": "0784bd54",
+      "short": "0784bd54",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2016-04-28T19:13:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0784bd542bf17679febd9d9d87858fd0fd0424f9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0784bd542bf17679febd9d9d87858fd0fd0424f9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0784bd542bf17679febd9d9d87858fd0fd0424f9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a multiPV bug in lazy SMP\n\nWhere the helper threads were not doing multiPV at all.\n\nRegression tested sprt @ 5+0.05 th 7\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 73918 W: 11891 L: 11853 D: 50174\n\nbench: 8716243\n",
+      "subject": "Fix a multiPV bug in lazy SMP"
+    },
+    {
+      "commit_num": 3109,
+      "hash": "2694ef23",
+      "short": "2694ef23",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-04-28T16:57:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2694ef23c3ca66a0a55e467750e79ef2cd5e5315",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2694ef23c3ca66a0a55e467750e79ef2cd5e5315.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2694ef23c3ca66a0a55e467750e79ef2cd5e5315.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Isolated pawn simplification\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 117822 W: 21697 L: 21744 D: 74381\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 92307 W: 12330 L: 12305 D: 67672\n\nBench: 8813983\n\nResolves #659\n",
+      "subject": "Isolated pawn simplification"
+    },
+    {
+      "commit_num": 3110,
+      "hash": "4048bae4",
+      "short": "4048bae4",
+      "author": "erbsenzaehler <erbsenzaehler@users.noreply.github.com>",
+      "date": "2016-04-23T23:55:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4048bae47bf29f431b1c6c9629675ff6cffde28f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4048bae47bf29f431b1c6c9629675ff6cffde28f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4048bae47bf29f431b1c6c9629675ff6cffde28f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use -O3 for all compilers (including ICC)\n\nThere seems to be no benefit from using -fast over -O3 with icc.\nSo use -O3 everywhere.\n\nNo functional change\n\nResolves #652\n",
+      "subject": "Use -O3 for all compilers (including ICC)"
+    },
+    {
+      "commit_num": 3111,
+      "hash": "c7370624",
+      "short": "c7370624",
+      "author": "DU-jdto <SNP_Tiranasta@hotmail.com>",
+      "date": "2016-04-21T04:23:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c73706243672bf36b0fef58e817f843cb341d8ca",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c73706243672bf36b0fef58e817f843cb341d8ca.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c73706243672bf36b0fef58e817f843cb341d8ca.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove some pointless micro-optimizations\n\nSeems to give around 1% speed-up for CPUs with popcnt support.\nSeems to give a very minor speed-up for CPUs without popcnt.\n\nNo functional change\n\nResolves #646\n",
+      "subject": "Remove some pointless micro-optimizations"
+    },
+    {
+      "commit_num": 3112,
+      "hash": "e082112c",
+      "short": "e082112c",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-04-18T00:04:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e082112cfeb6a40ca592a15983cdedb0210daf3a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e082112cfeb6a40ca592a15983cdedb0210daf3a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e082112cfeb6a40ca592a15983cdedb0210daf3a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use FMHs to assist with LMR formula.\n\nSTC:\nLLR: 2.99 (-2.94,2.94) [0.00,5.00]\nTotal: 52232 W: 9654 L: 9304 D: 33274\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 115988 W: 15550 L: 15049 D: 85389\n\nBench: 7890808\n\nResolves #651\n",
+      "subject": "Use FMHs to assist with LMR formula."
+    },
+    {
+      "commit_num": 3113,
+      "hash": "94e41274",
+      "short": "94e41274",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-04-17T19:31:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/94e41274bba2d8a2f2d58aaa711df5872309d66c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/94e41274bba2d8a2f2d58aaa711df5872309d66c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/94e41274bba2d8a2f2d58aaa711df5872309d66c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix incorrect draw detection\n\nIn this position we should have draw for repetition:\n\nposition fen rnbqkbnr/2pppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 moves g1f3 g8f6 f3g1\ngo infinite\n\nBut latest patch broke it.\n\nActually we had two(!) very subtle bugs, the first is that Position::set()\nclears the passed state and in particular 'previous' member, so\nthat on passing setupStates, 'previous' pointer was reset.\n\nSecond bug is even more subtle: SetupStates was based on std::vector\nas container, but when vector grows, std::vector copies all its contents\nto a new location invalidating all references to its entries. Because\nall StateInfo records are linked by 'previous' pointer, this made pointers\ngo stale upon adding more element to setupStates. So revert to use a\nstd::deque that ensures references are preserved when pushing back new\nelements.\n\nNo functional change.\n",
+      "subject": "Fix incorrect draw detection"
+    },
+    {
+      "commit_num": 3114,
+      "hash": "ec6aab01",
+      "short": "ec6aab01",
+      "author": "loco-loco <loco-loco@users.noreply.github.com>",
+      "date": "2016-04-17T14:14:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ec6aab01366ba1d2de27084d3cc7415a31aa5a24",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ec6aab01366ba1d2de27084d3cc7415a31aa5a24.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ec6aab01366ba1d2de27084d3cc7415a31aa5a24.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add a second level of follow-up moves\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 6438 W: 1229 L: 1077 D: 4132\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 4000 W: 605 L: 473 D: 2922\n\nbench: 7378965\n\nResolves #636\n",
+      "subject": "Add a second level of follow-up moves"
+    },
+    {
+      "commit_num": 3115,
+      "hash": "7eaea384",
+      "short": "7eaea384",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-04-11T14:45:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7eaea3848c9e8a388c0b79cee6fba6bf3cd32108",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7eaea3848c9e8a388c0b79cee6fba6bf3cd32108.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7eaea3848c9e8a388c0b79cee6fba6bf3cd32108.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "StateInfo is usually allocated on the stack by search()\n\nAnd passed in do_move(), this ensures maximum efficiency and\nspeed and at the same time unlimited move numbers.\n\nThe draw back is that to handle Position init we need to\nreserve a StateInfo inside Position itself and use at\ninit time and when copying from another Position.\n\nAfter lazy SMP we don't need anymore this gimmick and we can\nget rid of this special case and always pass an external\nStateInfo to Position object.\n\nAlso rewritten and simplified Position constructors.\n\nVerified it does not regress with a 3 threads SMP test:\nELO: -0.00 +-12.7 (95%) LOS: 50.0%\nTotal: 1000 W: 173 L: 173 D: 654\n\nNo functional change.\n",
+      "subject": "StateInfo is usually allocated on the stack by search()"
+    },
+    {
+      "commit_num": 3116,
+      "hash": "bd04f9a0",
+      "short": "bd04f9a0",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-04-09T06:58:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bd04f9a0f1238c396e5503e07375ae90d7b5cfa8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd04f9a0f1238c396e5503e07375ae90d7b5cfa8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd04f9a0f1238c396e5503e07375ae90d7b5cfa8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix Travis Cl\n\nBroken after \"32-bit/64-bit Makefile fix\" commit.\n\nUbuntu \"Precise\" 12.04.5 supports multilib only until\ng++ 4.6 that is not enough to compile Stockfish.\n\nSo move to Ubuntu 14.04.4 LTS (Trusty Tahr)\n\nNo functional change.\n",
+      "subject": "Fix Travis Cl"
+    },
+    {
+      "commit_num": 3117,
+      "hash": "e9e5f72c",
+      "short": "e9e5f72c",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-04-08T18:19:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e9e5f72c7440e6c9162a9578ae59fa2b75faf5f4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e9e5f72c7440e6c9162a9578ae59fa2b75faf5f4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e9e5f72c7440e6c9162a9578ae59fa2b75faf5f4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Undefended King Ring\n\nThere was already a penalty for squares only defended by King (undefended)\n\nThis test records a penalty for completely undefended squares in the so called extended king-ring\n(so if we exclude squares defended by a Kg8 for example, we only look at h6 g6 and f6)\n\nWe also exclude squares occupied by opponent pieces in this computation,\nbased on the following results\n\nWas yellow at STC\nLLR: -2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 112499 W: 20649 L: 20293 D: 71557\n\nand passed LTC\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 36805 W: 5100 L: 4857 D: 26848\n\nBench: 8430233\n\nResolves: #619\n",
+      "subject": "Undefended King Ring"
+    },
+    {
+      "commit_num": 3118,
+      "hash": "29b5842d",
+      "short": "29b5842d",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-04-08T18:05:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/29b5842da8d5477c0aea924cfd364c9e619456a2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/29b5842da8d5477c0aea924cfd364c9e619456a2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/29b5842da8d5477c0aea924cfd364c9e619456a2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Backward simplication\n\nOn top of the usual conditions\na) some opponent in front (but no lever)\nb) some neighbours (in front) (but no neighbour behind or same rank)\nc) < rank_5\n\nto find out if a pawn is backward we look at the squares in front of this pawn to reach the same rank as the next neighbour.\n\nIn current master, a pawn is backward if any of those squares is controlled by an enemy pawn on an adjacent file\n\nIn this version, a pawn is ALSO backward if any of those squares is occupied by an enemy pawn.\n\nSTC:\nhttp://tests.stockfishchess.org/tests/view/56fe7efd0ebc59301a3541f1\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 19051 W: 3557 L: 3433 D: 12061\n\nLTC:\nhttp://tests.stockfishchess.org/tests/view/56febc2d0ebc59301a354209\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 40810 W: 5619 L: 5526 D: 29665\n\nBench: 7525245\n\nResolves #614\n",
+      "subject": "Backward simplication"
+    },
+    {
+      "commit_num": 3119,
+      "hash": "8fb45caa",
+      "short": "8fb45caa",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2016-04-08T17:52:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8fb45caadef67fb2ccc27857c15ade987d9f5e2f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8fb45caadef67fb2ccc27857c15ade987d9f5e2f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8fb45caadef67fb2ccc27857c15ade987d9f5e2f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify popcnt\n\nAlso a speedup(about 1%) on 64-bit w/o hardware popcnt\n\nRetire Max15 and Full template parameters\n(Contributed by Marco Costalba)\n\nNow that we have just SW and HW versions, use\ntemplate default parameter to get rid of explicit\ntemplate parameters.\n\nRetire bitcount.h and move the only defined\nfunction to bitboard.h\n\nNo functional change\n\nResolves #620\n",
+      "subject": "Simplify popcnt"
+    },
+    {
+      "commit_num": 3120,
+      "hash": "900279a0",
+      "short": "900279a0",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2016-04-08T17:47:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/900279a06f432fbba63b5a320028830b40e06e3e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/900279a06f432fbba63b5a320028830b40e06e3e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/900279a06f432fbba63b5a320028830b40e06e3e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "32-bit/64-bit Makefile fix\n\nCounter intuitively, make build ARCH=x86-32 does NOT produce a 32-bit compile\nwhen running a 64-bit OS. Nor would ARCH=x86-64 produce a 64-bit compile when\nrunning a 32-bit OS (assuming it compiled w/o errors).\n\nNo functional change\n\nResolves #621\n",
+      "subject": "32-bit/64-bit Makefile fix"
+    },
+    {
+      "commit_num": 3121,
+      "hash": "ee7a68ea",
+      "short": "ee7a68ea",
+      "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
+      "date": "2016-04-08T15:20:47Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ee7a68ea5fc07e331df462b10f35dc770e9409c5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ee7a68ea5fc07e331df462b10f35dc770e9409c5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ee7a68ea5fc07e331df462b10f35dc770e9409c5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix last search info carried over to mate position\n\nWhen starting search in a mate or stalemate position, Stockfish does not\neven care to reinitialize and start worker threads. However after search\nall threads are checked for the best move.\n\nThis can lead to bestmove and info beeing carried over from the last\nsearch.\n\nExample session:\n\n    setoption name threads value 7\n    go movetime 4000\n    position startpos moves f2f3 e7e5 g2g4 d8h4\n    go movetime 4000\n\nActual output is like (almost always):\n\n    [...]\n    bestmove e2e4\n    info depth 0 score mate 0\n    info depth 20 seldepth 29 multipv 1 score cp 28 [...] pv e2e4\n    bestmove e2e4\n\nExpected output / output after fix:\n\n    [...]\n    bestmove e2e4 ponder e7e6\n    info depth 0 score mate 0\n    bestmove (none)\n\nResolves #623\n",
+      "subject": "Fix last search info carried over to mate position"
+    },
+    {
+      "commit_num": 3122,
+      "hash": "d30994ec",
+      "short": "d30994ec",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-04-07T06:55:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d30994ecd54bf96db88016fb6d92ff2c4614bc2e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d30994ecd54bf96db88016fb6d92ff2c4614bc2e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d30994ecd54bf96db88016fb6d92ff2c4614bc2e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Hide global visibility when not needed\n\nAlso move PieceValue definition in psqt.cpp,\nwhere it is initialized.\n\nFix a warning in popcount16() with Intel compiler\n\nNo functional change.\n",
+      "subject": "Hide global visibility when not needed"
+    },
+    {
+      "commit_num": 3123,
+      "hash": "1cbba8d6",
+      "short": "1cbba8d6",
+      "author": "DU-jdto <SNP_Tiranasta@hotmail.com>",
+      "date": "2016-04-06T00:46:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1cbba8d6fadaae2c6e6df5c541c4e2b8a8bf5a0a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1cbba8d6fadaae2c6e6df5c541c4e2b8a8bf5a0a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1cbba8d6fadaae2c6e6df5c541c4e2b8a8bf5a0a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small passed pawn simplification\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 21993 W: 4197 L: 4078 D: 13718\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 67213 W: 9135 L: 9077 D: 49001\n\nBench: 7482426\n\nResolves #622\n",
+      "subject": "Small passed pawn simplification"
+    }
+  ]
+}

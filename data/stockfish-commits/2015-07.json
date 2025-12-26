@@ -1,0 +1,239 @@
+{
+  "month": "2015-07",
+  "commits": [
+    {
+      "commit_num": 3242,
+      "hash": "a2410227",
+      "short": "a2410227",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2015-07-29T16:50:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a2410227cc8df5373d6970bfe63bbd3df5287c8c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a2410227cc8df5373d6970bfe63bbd3df5287c8c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a2410227cc8df5373d6970bfe63bbd3df5287c8c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "PV refutation penalty\n\nExtra penalty for PV move in previous ply when it gets refuted.\n\nSTC:\nLLR: 4.49 (-2.94,2.94) [-1.50,4.50]\nTotal: 41094 W: 7889 L: 7620 D: 25585\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 12304 W: 1967 L: 1811 D: 8526\n\nBench: 8373608\n\nResolves #386\n",
+      "subject": "PV refutation penalty"
+    },
+    {
+      "commit_num": 3243,
+      "hash": "4a6d59c6",
+      "short": "4a6d59c6",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2015-07-29T16:47:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4a6d59c6c7caa8a9055197280ea7bdcd072feeaa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4a6d59c6c7caa8a9055197280ea7bdcd072feeaa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4a6d59c6c7caa8a9055197280ea7bdcd072feeaa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "MobilityArea (simplified)\n\nBased off of Pull request #383:\n\nInclude squares occupied by some pawns in the MobilityArea\na) not blocked\nb) on rank 4 and above\nc) or captures\n\nPassed STC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 8157 W: 1644 L: 1516 D: 4997\n\nAnd LTC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 26086 W: 4274 L: 4051 D: 17761\n\n-----------\n\nThen, a simplification test failed, trying to remove b and c)\nLLR: -2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 6048 W: 1117 L: 1288 D: 3643\n\nAnother simplification test, was run to remove just (c)\nPassed STC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 28073 W: 5364 L: 5255 D: 17454\n\nAnd LTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 34652 W: 5448 L: 5348 D: 23856\n\nA parameter tweak test showed that changing b) for \"on rank 3 and above\"\ndoes not work\nLLR: -2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 5233 W: 937 L: 1077 D: 3219\n\nFinally, a small rewrite, and we have this version\n\nInclude squares occupied by some pawns in the MobilityArea which are\na) not blocked\nb) on rank 4 and above\n\nBench: 8977899\n\nResolves #385\n",
+      "subject": "MobilityArea (simplified)"
+    },
+    {
+      "commit_num": 3244,
+      "hash": "68d61b80",
+      "short": "68d61b80",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-07-28T10:53:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/68d61b80c60a81055a2ffb2e251a237b979e9b31",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/68d61b80c60a81055a2ffb2e251a237b979e9b31.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/68d61b80c60a81055a2ffb2e251a237b979e9b31.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify IID depth formula\n\nRestore original formula messed up during\nhalf-ply removal.\n\nSTC\nLLR: 4.11 (-2.94,2.94) [-3.00,1.00]\nTotal: 21349 W: 4091 L: 3909 D: 13349\n\nLTC\nLLR: 5.42 (-2.94,2.94) [-3.00,1.00]\nTotal: 52819 W: 8321 L: 8122 D: 36376\n\nbench: 8040572\n",
+      "subject": "Simplify IID depth formula"
+    },
+    {
+      "commit_num": 3245,
+      "hash": "51330414",
+      "short": "51330414",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-07-24T16:33:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/51330414c4a773a9c3d1dd562fdc8536344a67b8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/51330414c4a773a9c3d1dd562fdc8536344a67b8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/51330414c4a773a9c3d1dd562fdc8536344a67b8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tuned version of TT replacement policy\n\nIf the used multiplier of 8 was any number larger than DEPTH_MAX\nthis would be a non functional patch.\n\nSTC 2MB\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 16353 W: 3216 L: 3066 D: 10071\nhttp://tests.stockfishchess.org/tests/view/55a6d0630ebc590abbe1babd\n\nLTC 8MB\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 134618 W: 21276 L: 20716 D: 92626\nhttp://tests.stockfishchess.org/tests/view/55a74d760ebc590abbe1bad6\n\nSTC 16MB\nLLR: 2.96 (-2.94,2.94) [-4.00,0.00]\nTotal: 22549 W: 4257 L: 4178 D: 14114\nhttp://tests.stockfishchess.org/tests/view/55a9a2f90ebc590abbe1bb16\n\nBench: 7372460\n\nResolves #380\n",
+      "subject": "Tuned version of TT replacement policy"
+    },
+    {
+      "commit_num": 3246,
+      "hash": "42b77ea7",
+      "short": "42b77ea7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-07-19T09:25:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/42b77ea7eecaf5f31bf87c7075945273685aa4f5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/42b77ea7eecaf5f31bf87c7075945273685aa4f5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/42b77ea7eecaf5f31bf87c7075945273685aa4f5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tidy up in movepick.cpp\n\nSome formattng after recent changes.\n\nNo functional change.\n",
+      "subject": "Tidy up in movepick.cpp"
+    },
+    {
+      "commit_num": 3247,
+      "hash": "4095ff0e",
+      "short": "4095ff0e",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-07-16T06:17:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4095ff0ee51bdc76c247bd11d5f3a7008974e2ad",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4095ff0ee51bdc76c247bd11d5f3a7008974e2ad.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4095ff0ee51bdc76c247bd11d5f3a7008974e2ad.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix formatting of previous patch\n\nNo functional change.\n",
+      "subject": "Fix formatting of previous patch"
+    },
+    {
+      "commit_num": 3248,
+      "hash": "d8aeaab7",
+      "short": "d8aeaab7",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2015-07-15T19:15:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d8aeaab79ca6809f8ad6a650611e827a7cba8978",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d8aeaab79ca6809f8ad6a650611e827a7cba8978.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d8aeaab79ca6809f8ad6a650611e827a7cba8978.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Consistent TT replace policy\n\nThis fixes an inconsistency bug where TT entries were valued differently\ndepending on which pointer they were accessed through.\n\nSTC 2MB\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 11301 W: 2176 L: 2038 D: 7087\n\nLTC 8MB\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 17732 W: 2870 L: 2745 D: 12117\n\nSTC 16MB\nLLR: 2.96 (-2.94,2.94) [-4.00,0.00]\nTotal: 17401 W: 3324 L: 3227 D: 10850\n\nBench: 8248164\n\nResolves #377\n",
+      "subject": "Consistent TT replace policy"
+    },
+    {
+      "commit_num": 3249,
+      "hash": "1d977aa7",
+      "short": "1d977aa7",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2015-07-13T22:19:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1d977aa79ecaf410f4b2065eb8f11e0a5e689db4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1d977aa79ecaf410f4b2065eb8f11e0a5e689db4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1d977aa79ecaf410f4b2065eb8f11e0a5e689db4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "LMR Simplification: Remove countermove condition\n\nRemoved countermove condition for decreasing reduction.\n\nLTC:\nLLR: 3.01 (-2.94,2.94) [-3.00,1.00]\nTotal: 32410 W: 5092 L: 4986 D: 22332\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 24450 W: 4632 L: 4517 D: 15301\n\nBench: 6943812\n\nResolves #378\n",
+      "subject": "LMR Simplification: Remove countermove condition"
+    },
+    {
+      "commit_num": 3250,
+      "hash": "3054db98",
+      "short": "3054db98",
+      "author": "joergoster <osterj165@googlemail.com>",
+      "date": "2015-07-08T11:48:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3054db989d28bee4c491811ba81a7933eb37ba14",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3054db989d28bee4c491811ba81a7933eb37ba14.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3054db989d28bee4c491811ba81a7933eb37ba14.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use distance<file>() function in endgame.cpp\n\nThis one occurance of distance function was most likely overlooked.\n\nNo functional change.\n\nResolves #376\n",
+      "subject": "Use distance<file>() function in endgame.cpp"
+    }
+  ]
+}

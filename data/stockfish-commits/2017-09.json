@@ -1,0 +1,317 @@
+{
+  "month": "2017-09",
+  "commits": [
+    {
+      "commit_num": 2757,
+      "hash": "07b5a28a",
+      "short": "07b5a28a",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-09-30T14:16:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/07b5a28a68b4cc67f1447fce85fc910aa209b319",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/07b5a28a68b4cc67f1447fce85fc910aa209b319.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/07b5a28a68b4cc67f1447fce85fc910aa209b319.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Decrease reduction for exact PV nodes\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 59004 W: 10621 L: 10249 D: 38134\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 25801 W: 3306 L: 3108 D: 19387\n\nBench: 5742466\n",
+      "subject": "Decrease reduction for exact PV nodes"
+    },
+    {
+      "commit_num": 2758,
+      "hash": "c33af32d",
+      "short": "c33af32d",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-09-29T14:39:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c33af32dada1be9f6aed851e8cf87599203e2eb2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c33af32dada1be9f6aed851e8cf87599203e2eb2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c33af32dada1be9f6aed851e8cf87599203e2eb2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Measure nodes after search finished.\n\nOnly affects nmpsec in the multithreaded case.\n\nNo functional change.\n",
+      "subject": "Measure nodes after search finished."
+    },
+    {
+      "commit_num": 2759,
+      "hash": "0e949ac2",
+      "short": "0e949ac2",
+      "author": "GuardianRM <strimr25@mail.ru>",
+      "date": "2017-09-21T06:58:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0e949ac2c956dc5ac03dc9da7050d895b3fb964a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0e949ac2c956dc5ac03dc9da7050d895b3fb964a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0e949ac2c956dc5ac03dc9da7050d895b3fb964a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak statScore condition\n\nThe first change (ss->statScore >= 0) does nothing.\n\nThe second change ((ss-1)->statScore >= 0 ) has a massive change.\n(ss-1)->statScore is not set until (ss-1) begins to apply LMR to moves.\nSo we now increase the reduction for bad quiets when our opponent is\nrunning through the first captures and the hash move.\n\nSTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 57762 W: 10533 L: 10181 D: 37048\n\nLTC\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 19973 W: 2662 L: 2480 D: 14831\n\nBench: 5037819\n",
+      "subject": "Tweak statScore condition"
+    },
+    {
+      "commit_num": 2760,
+      "hash": "ba4e2154",
+      "short": "ba4e2154",
+      "author": "syzygy <syzygy@server.fake>",
+      "date": "2017-09-16T19:49:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ba4e215493de31263b9bd352af79d00193e545bf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ba4e215493de31263b9bd352af79d00193e545bf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ba4e215493de31263b9bd352af79d00193e545bf.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Let ss->ply denote the number of plies from the root to the current node\n\nThis patch lets ss->ply be equal to 0 at the root of the search.\n\nCurrently, the root has ss->ply == 1, which is less intuitive:\n\n- Setting the rootNode bool has to check (ss-1)->ply == 0.\n\n- All mate values are off by one: the code seems to assume that mated-in-0\n  is -VALUE_MATE, mate-1-in-ply is VALUE_MATE-1, mated-in-2-ply is VALUE_MATE+2, etc.\n  But the mate_in() and mated_in() functions are called with ss->ply, which is 1 in\n  at the root.\n\n- The is_draw() function currently needs to explain why it has \"ply - 1 > i\" instead\n  of simply \"ply > i\".\n\n- The ss->ply >= MAX_PLY tests in search() and qsearch() already assume that\n  ss->ply == 0 at the root. If we start at ss->ply == 1, it would make more sense to\n  go up to and including ss->ply == MAX_PLY, so stop at ss->ply > MAX_PLY. See also\n  the asserts testing for 0 <= ss->ply && ss->ply < MAX_PLY.\n\nThe reason for ss->ply == 1 at the root is the line \"ss->ply = (ss-1)->ply + 1\" at\nthe start for search() and qsearch(). By replacing this with \"(ss+1)->ply = ss->ply + 1\"\nwe keep ss->ply == 0 at the root. Note that search() already clears killers in (ss+2),\nso there is no danger in accessing ss+1.\n\nI have NOT changed pv[MAX_PLY + 1] to pv[MAX_PLY + 2] in search() and qsearch().\nIt seems to me that MAX_PLY + 1 is exactly right:\n\n- MAX_PLY entries for ss->ply running from 0 to MAX_PLY-1, and 1 entry for the\n  final MOVE_NONE.\n\nI have verified that mate scores are reported correctly. (They were already reported\ncorrectly due to the extra ply being rounded down when converting to moves.)\n\nThe value of seldepth output to the user should probably not change, so I add 1 to it.\n(Humans count from 1, computers from 0.)\n\nA small optimisation I did not include: instead of setting ss->ply in every invocation\nof search() and qsearch(), it could be set once for all plies at the start of\nThread::search(). This saves a couple of instructions per node.\n\nNo functional change (unless the search searches a branch MAX_PLY deep), so bench\ndoes not change.\n",
+      "subject": "Let ss->ply denote the number of plies from the root to the current node"
+    },
+    {
+      "commit_num": 2761,
+      "hash": "043a469f",
+      "short": "043a469f",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2017-09-16T12:07:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/043a469f83b4c81f94ab991029b4cd49fb05452e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/043a469f83b4c81f94ab991029b4cd49fb05452e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/043a469f83b4c81f94ab991029b4cd49fb05452e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Score unopposed weak pawns only if majors\n\nDo not use the opposed flag for scoring backward and isolated pawns\nin pawns.cpp, instead give a S(5,25) bonus for each opponent unopposed\nweak pawns when we have a rook or a queen on the board.\n\nSTC run stopped after 113188 games:\nLLR: 1.63 (-2.94,2.94) [0.00,5.00]\nTotal: 113188 W: 20804 L: 20251 D: 72133\nhttp://tests.stockfishchess.org/tests/view/59b58e4d0ebc5916ff64b12e\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 66673 W: 8672 L: 8341 D: 49660\nhttp://tests.stockfishchess.org/tests/view/59b902580ebc5916ff64b231\n\nThis is Alain Savard's idea, just with a different bonus.\nOriginal patch there:\n\ngreen STC, http://tests.stockfishchess.org/tests/view/597dcd2b0ebc5916ff64a09b\nyellow LTC, http://tests.stockfishchess.org/tests/view/597ea69e0ebc5916ff64a0e6\n\nBench: 6259498\n",
+      "subject": "Score unopposed weak pawns only if majors"
+    },
+    {
+      "commit_num": 2762,
+      "hash": "21926ce2",
+      "short": "21926ce2",
+      "author": "IIvec <ivan.ivec@gmail.com>",
+      "date": "2017-09-06T20:55:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/21926ce2d82b225b06005022b5fd8b4f0c1945c1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/21926ce2d82b225b06005022b5fd8b4f0c1945c1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/21926ce2d82b225b06005022b5fd8b4f0c1945c1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Higher Move Overhead\n\nThis shoudl reduce time losses experienced by\nusers after new time management code.\n\nVerified for no regression in very short TC (4sec + 0.1)\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 35262 W: 7426 L: 7331 D: 20505\n\nBench 5322108\n",
+      "subject": "Higher Move Overhead"
+    },
+    {
+      "commit_num": 2763,
+      "hash": "ed8286eb",
+      "short": "ed8286eb",
+      "author": "ianfab <ianfab@users.noreply.github.com>",
+      "date": "2017-09-06T06:12:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ed8286eb1bbbbd577f176f5b4407466b90b15146",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed8286eb1bbbbd577f176f5b4407466b90b15146.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed8286eb1bbbbd577f176f5b4407466b90b15146.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Extend ShelterWeakness array by dimension isKingFile\n\nUse different penalties for weaknesses in the pawn shelter\ndepending on whether it is on the king's file or not.\n\nSTC\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 71617 W: 13471 L: 13034 D: 45112\n\nLTC\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 48708 W: 6463 L: 6187 D: 36058\n\nBench: 5322108\n",
+      "subject": "Extend ShelterWeakness array by dimension isKingFile"
+    },
+    {
+      "commit_num": 2764,
+      "hash": "3ac47c84",
+      "short": "3ac47c84",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-09-04T20:27:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3ac47c84d35b7cdeea50ecbcf3ad0f73fa848668",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3ac47c84d35b7cdeea50ecbcf3ad0f73fa848668.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3ac47c84d35b7cdeea50ecbcf3ad0f73fa848668.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Streamlline reduction based on movecount\n\nUse MoveCount History only at quiet moves and simply reduce\nreduction by one depth instead of increasing moveCount in formula.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 27511 W: 5171 L: 4919 D: 17421\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 92337 W: 12135 L: 11748 D: 68454\n\nBench: 6351176\n",
+      "subject": "Streamlline reduction based on movecount"
+    },
+    {
+      "commit_num": 2765,
+      "hash": "741523ed",
+      "short": "741523ed",
+      "author": "syzygy <syzygy@server.fake>",
+      "date": "2017-09-03T20:02:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/741523eda8e0d1fb418d579c7cda9a73040b8914",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/741523eda8e0d1fb418d579c7cda9a73040b8914.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/741523eda8e0d1fb418d579c7cda9a73040b8914.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small simplication of see_ge()\n\nTwo simplifications:\n\n- Remove the initialisation to 0 of occupied, which is now unnecessary.\n- Remove the initial check for nextVictim == KING\n\nIf nextVictim == KING, then PieceValue[MG][nextVictim] will be 0, so that\nbalance >= threshold is true. So see_ge() returns true anyway.\n\nNo functional change.\n",
+      "subject": "Small simplication of see_ge()"
+    },
+    {
+      "commit_num": 2766,
+      "hash": "04eb87fd",
+      "short": "04eb87fd",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2017-09-03T07:25:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/04eb87fd081c0a77d3a261b07cea4808d4ced9cc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/04eb87fd081c0a77d3a261b07cea4808d4ced9cc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/04eb87fd081c0a77d3a261b07cea4808d4ced9cc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Travis CI: Make all warnings into errors\n\nCompile with -Werror flag. To make debugging easier\nalso show compile ourput.\n\nThis flag is enabled only in Travis CI, not in the shipped\nMakefile becuase we can't test on every possible platform.\n",
+      "subject": "Travis CI: Make all warnings into errors"
+    },
+    {
+      "commit_num": 2767,
+      "hash": "5ba43735",
+      "short": "5ba43735",
+      "author": "syzygy <syzygy@server.fake>",
+      "date": "2017-09-02T02:14:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ba43735221105108ea0a5d8204e9a2925b6aa7e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ba43735221105108ea0a5d8204e9a2925b6aa7e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ba43735221105108ea0a5d8204e9a2925b6aa7e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Prevent Stockfish from exiting if DTZ table is not present\n\nDuring TB initialisation, Stockfish checks for the presence of WDL\ntables but not for the presence of DTZ tables. When attempting to probe\na DTZ table, it is therefore possible that the table is not present.\nIn that case, Stockfish should neither exit nor report an error.\n\nTo verify the bug:\n$ ./stockfish\nsetoption name SyzygyTable value <path_to_WDL_dir>\nposition fen 8/8/4r3/4k3/8/1K2P3/3P4/6R1 w - -\ngo infinite\nCould not mmap() /opt/tb/regular/KRPPvKR.rtbz\n$\n\n(On my system, the WDL tables are in one directory and the DTZ tables\nin another. If they are in the same directory, it will be difficult\nto trigger the bug.)\n\nThe fix is trivial: check the file descriptor/handle after opening\nthe file.\n\nNo functional change.\n",
+      "subject": "Prevent Stockfish from exiting if DTZ table is not present"
+    },
+    {
+      "commit_num": 2768,
+      "hash": "323925b9",
+      "short": "323925b9",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-09-01T19:24:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/323925b91c49449ec2f0eee8d85b7a51d6472ea3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/323925b91c49449ec2f0eee8d85b7a51d6472ea3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/323925b91c49449ec2f0eee8d85b7a51d6472ea3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove unneeded compile options.\n\nIn light of issue #1232, a test was performed about the value of '-fno-exceptions' and a second one of the combination '-fno-exceptions -fno-rtti'. It turns out these options are can be removed without introducing slowdown.\n\nSTC for removing '-fno-exceptions'\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 13678 W: 2572 L: 2439 D: 8667\n\nSTC for removing '-fno-exceptions -fno-rtti' (current patch)\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 32557 W: 6074 L: 5973 D: 20510\n\nNo functional change.\n",
+      "subject": "Remove unneeded compile options."
+    }
+  ]
+}

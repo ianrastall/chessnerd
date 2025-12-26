@@ -1,0 +1,1131 @@
+{
+  "month": "2018-08",
+  "commits": [
+    {
+      "commit_num": 2474,
+      "hash": "f923dc0f",
+      "short": "f923dc0f",
+      "author": "Rocky640 <support@multicim.com>",
+      "date": "2018-08-31T13:30:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f923dc0fe5ec831c8cb682e1a856122c8964519f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f923dc0fe5ec831c8cb682e1a856122c8964519f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f923dc0fe5ec831c8cb682e1a856122c8964519f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/win64bmi2/stockfish_18090104_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/win64modern/stockfish_18090104_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/win64/stockfish_18090104_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/win32/stockfish_18090104_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/linux64bmi2/stockfish_18090104_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/linux64modern/stockfish_18090104_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f923dc0fe5ec831c8cb682e1a856122c8964519f/linux64/stockfish_18090104_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Long Diagonal Tweaks\n\na) Reduce PSQT values along the long diagonals on non-central squares\nand increase the LongDiagonal bonus accordingly. The effect is to penalise\nbishops on the long diagonal which can not \"see\" the 2 central squares.\nThe \"good\" bishops still have more or less the same bonus as current master.\n\nb) For a bishop on a central square, because of the \"| s\" term in the code,\nthe LongDiagonalBonus was always given. So while being there, remove the \"| s\"\nand compensate the central Bishop PSQT accordingly.\n\nPassed STC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 44498 W: 9658 L: 9323 D: 25517\nhttp://tests.stockfishchess.org/tests/view/5b8992770ebc592cf2748942\n\nPassed LTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 63092 W: 10324 L: 9975 D: 42793\nhttp://tests.stockfishchess.org/tests/view/5b89a17a0ebc592cf2748b59\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1760\n\nbench: 4693901\n",
+      "subject": "Long Diagonal Tweaks"
+    },
+    {
+      "commit_num": 2475,
+      "hash": "e846a930",
+      "short": "e846a930",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-08-29T00:48:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e846a9306d6108fb24cb216689867777ac2b0c4f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e846a9306d6108fb24cb216689867777ac2b0c4f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e846a9306d6108fb24cb216689867777ac2b0c4f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove PawnsOnBothFlanks\n\nIt looks like PawnsOnBothFlanks can be removed from initiative().\nA barrage of tests seem to confirm that the adjustment to -110\ndoes not gain elo to offset any potential loss by removing\nPawnsOnBothFlanks.\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 22014 W: 4760 L: 4639 D: 12615\nhttp://tests.stockfishchess.org/tests/view/5b7f50cc0ebc5902bdbb3a3e\n\nLTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 40561 W: 6667 L: 6577 D: 27317\nhttp://tests.stockfishchess.org/tests/view/5b801f9f0ebc5902bdbb4467\n\nThe barrage of 0,4 tests on the -136 value are in my ps_tunetests branch.\nhttp://tests.stockfishchess.org/tests/user/protonspring\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1751\n\nBench: 4413173\n\n-------------\n\nHow to continue from there?\n\nThe fact that endgames with all the pawns on only one flank are\ndrawish is a well-known chess idea, so it seems quite strange that\nthis can be removed so easily without losing Elo.\n\nIn the past there had been attempts to improve on PawnsOnBothFlanks\nwith similar concepts (for instance using the pawn span value), but\nthe tests were at best neutral. Maybe Stockfish is now mature enough\nthat these refined ideas would work to replace PawnsOnBothFlanks?\n",
+      "subject": "Remove PawnsOnBothFlanks"
+    },
+    {
+      "commit_num": 2476,
+      "hash": "10bb2e6c",
+      "short": "10bb2e6c",
+      "author": "MJZ1977 <37274752+MJZ1977@users.noreply.github.com>",
+      "date": "2018-08-29T00:27:47Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/win64bmi2/stockfish_18082902_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/win64modern/stockfish_18082902_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/win64/stockfish_18082902_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/win32/stockfish_18082902_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/linux64bmi2/stockfish_18082902_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/linux64modern/stockfish_18082902_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/10bb2e6cdb5c8e7a34f1f1fbf3dd0cc0d0cf63ed/linux64/stockfish_18082902_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix bug with \"excludedMove\" for probcut\n\nBugfix: \"excludedMove\" has to be skipped in the probcut loop too.\nIf it is not skipped, the probcut can exit quickly with a wrong return\nvalue corresponding to the excluded move. See the following forum\nthread for a discussion:\nhttps://groups.google.com/forum/?fromgroups=#!topic/fishcooking/GGithf_VwSU\n\nSTC :\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 17130 W: 3747 L: 3617 D: 9766\nhttp://tests.stockfishchess.org/tests/view/5b8460c40ebc5902bdbb999a\n\nLTC :\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 12387 W: 2064 L: 1930 D: 8393\nhttp://tests.stockfishchess.org/tests/view/5b8466f90ebc5902bdbb9a21\n\nTo go further : it can be perhaps useful to tune the singular extension\nsearch parameters.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1754\n\nBench: 4308541\n",
+      "subject": "Fix bug with \"excludedMove\" for probcut"
+    },
+    {
+      "commit_num": 2477,
+      "hash": "166bf90e",
+      "short": "166bf90e",
+      "author": "Steinar H. Gunderson <sgunderson@bigfoot.com>",
+      "date": "2018-08-29T00:00:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/166bf90e4172b77aa0c420ed271fa55e92301a70",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/166bf90e4172b77aa0c420ed271fa55e92301a70.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/166bf90e4172b77aa0c420ed271fa55e92301a70.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/win64bmi2/stockfish_18082902_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/win64modern/stockfish_18082902_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/win64/stockfish_18082902_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/win32/stockfish_18082902_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/linux64bmi2/stockfish_18082902_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/linux64modern/stockfish_18082902_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/166bf90e4172b77aa0c420ed271fa55e92301a70/linux64/stockfish_18082902_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Shrink the hash table of tablebases back to 4096 entries\n\nThere is no need to make this as large as 65536 just for the sake of the\nsingle 7-man tablebase that happens to have the key 0xf9247fff. Idea for the\nfix by Ronald de Man, who suggested simply to allow more buckets past the end.\n\nWe also implement Robin Hood hashing for the hash table, which takes the worst\n-case search for full 7-man tablebases down from 68 to 11 probes (Also takes\nthe average probe length from 2.06 to 2.05). For a table with 8K entries, the\ncorresponding numbers would be worst-case from 9 to 4, with average from 1.30\nto 1.29.\n\nhttps://github.com/official-stockfish/Stockfish/pull/1747\n\nNo functional change\n",
+      "subject": "Shrink the hash table of tablebases back to 4096 entries"
+    },
+    {
+      "commit_num": 2478,
+      "hash": "4aa091cf",
+      "short": "4aa091cf",
+      "author": "Ondrej Mosnacek <omosnacek@gmail.com>",
+      "date": "2018-08-28T23:22:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/win64bmi2/stockfish_18082901_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/win64modern/stockfish_18082901_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/win64/stockfish_18082901_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/win32/stockfish_18082901_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/linux64bmi2/stockfish_18082901_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/linux64modern/stockfish_18082901_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/4aa091cf4486b0f03d0026eee5a1b48c04dbad8e/linux64/stockfish_18082901_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Refactor pure static eval code\n\nThis commit tries to make the new pure static eval code more readable by\nsplitting up the nested assignments into separate lines and making a few\nmore cosmetic tweaks.\n\nNo functional change.\n",
+      "subject": "Refactor pure static eval code"
+    },
+    {
+      "commit_num": 2479,
+      "hash": "6307fd08",
+      "short": "6307fd08",
+      "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
+      "date": "2018-08-28T22:50:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6307fd08e6e8c315802301fd35b22ca2a67071a9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6307fd08e6e8c315802301fd35b22ca2a67071a9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6307fd08e6e8c315802301fd35b22ca2a67071a9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/win64bmi2/stockfish_18082900_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/win64modern/stockfish_18082900_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/win64/stockfish_18082900_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/win32/stockfish_18082900_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/linux64bmi2/stockfish_18082900_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/linux64modern/stockfish_18082900_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/6307fd08e6e8c315802301fd35b22ca2a67071a9/linux64/stockfish_18082900_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak stat bonus formula\n\nTweak stat bonus formula on top of latest elo gain by @snicolet\n\nSTC\nhttp://tests.stockfishchess.org/tests/view/5b830a810ebc5902bdbb7e9c\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 27797 W: 6113 L: 5842 D: 15842\n\nLTC\nhttp://tests.stockfishchess.org/tests/view/5b831f2c0ebc5902bdbb8038\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 13655 W: 2294 L: 2099 D: 9262\n\nI think that more elo can be found in tweaks of this parameters so I plan\nto further try some \"hand-tuning\", including increasing/decreasing ratio of\ntwo constants and making bonus assimetric to 0. Thx to @AndyGrant for helping\nwith github and @jerrydonaldwatson for original idea.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1748\n\nBench: 4172767\n",
+      "subject": "Tweak stat bonus formula"
+    },
+    {
+      "commit_num": 2480,
+      "hash": "3ac3b685",
+      "short": "3ac3b685",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2018-08-22T19:51:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3ac3b68540e93770e5a806196537c0e9a2d81a67",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3ac3b68540e93770e5a806196537c0e9a2d81a67.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3ac3b68540e93770e5a806196537c0e9a2d81a67.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/win64bmi2/stockfish_18082900_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/win64modern/stockfish_18082900_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/win64/stockfish_18082900_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/win32/stockfish_18082900_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/linux64bmi2/stockfish_18082900_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/linux64modern/stockfish_18082900_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/3ac3b68540e93770e5a806196537c0e9a2d81a67/linux64/stockfish_18082900_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't modify Eval with search stats at ttHits\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 28344 W: 6148 L: 6040 D: 16156\nhttp://tests.stockfishchess.org/tests/view/5b7d6b4e0ebc5902bdbb1914\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 41084 W: 6769 L: 6680 D: 27635\nhttp://tests.stockfishchess.org/tests/view/5b7d7f5b0ebc5902bdbb1b85\n\nBench: 4457440\n",
+      "subject": "Don't modify Eval with search stats at ttHits"
+    },
+    {
+      "commit_num": 2481,
+      "hash": "8a482192",
+      "short": "8a482192",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-08-20T16:29:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8a4821923ac6860c791185a6d25c60ad0391739f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8a4821923ac6860c791185a6d25c60ad0391739f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8a4821923ac6860c791185a6d25c60ad0391739f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/win64bmi2/stockfish_18082901_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/win64modern/stockfish_18082901_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/win64/stockfish_18082901_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/win32/stockfish_18082901_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/linux64bmi2/stockfish_18082901_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/linux64modern/stockfish_18082901_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/8a4821923ac6860c791185a6d25c60ad0391739f/linux64/stockfish_18082901_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "make DistanceRing more consistent\n\nThis is a non-functional change. By pre-incrementing minKingPawnDistance\ninstead of post-incrementing, we can remove this -1.\n\nThis also makes DistanceRing more consistent with the rest of stockfish\nsince it now holds an actual \"distance\" instead of a less natural distance-1.\n\nIn current master, PseudoAttacks[KING][ksq] == DistanceRingBB[ksq][0]\nWith this patch, it will be PseudoAttacks[KING][ksq] == DistanceRingBB[ksq][1]\nie squares at distance 1 from the king. This is more natural use of distance.\n\nThe current array size DistanceRingBB[SQUARE_NB][8] is still OK with the new\ndefinition, because maximum distance between two squares on a chess board is\nseven (for example Kh1 and a8).\n\nNo functional change.\n",
+      "subject": "make DistanceRing more consistent"
+    },
+    {
+      "commit_num": 2482,
+      "hash": "28543cdd",
+      "short": "28543cdd",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2018-08-20T10:06:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/28543cddc647771658d5521398b725881a839c1c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/28543cddc647771658d5521398b725881a839c1c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/28543cddc647771658d5521398b725881a839c1c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/win64bmi2/stockfish_18082021_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/win64modern/stockfish_18082021_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/win64/stockfish_18082021_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/win32/stockfish_18082021_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/linux64bmi2/stockfish_18082021_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/linux64modern/stockfish_18082021_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/28543cddc647771658d5521398b725881a839c1c/linux64/stockfish_18082021_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Store only unchanged static evaluations in TT\n\nA recent commit introduced a decrease of the static evaluation of\nan inner node dependent on the previous stat score, which finally\nwas also stored in the transposition table. Now only the unchanged\nstatic evaluation are stored there.\n\nRemark:\nFor the case that a static evaluation can be retrieved from the\ntransposition table the value is now used unchanged. Another test\nwhich also applies the modification in this case failed:\nhttp://tests.stockfishchess.org/tests/view/5b7af6df0ebc5902bdbae2f6\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 6707 W: 1547 L: 1383 D: 3777\nhttp://tests.stockfishchess.org/tests/view/5b7a92df0ebc5902bdbadcf3\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 36203 W: 6046 L: 5781 D: 24376\nhttp://tests.stockfishchess.org/tests/view/5b7abaa10ebc5902bdbadfa9\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1742\n\nBench: 4457440\n",
+      "subject": "Store only unchanged static evaluations in TT"
+    },
+    {
+      "commit_num": 2483,
+      "hash": "f3b8a699",
+      "short": "f3b8a699",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-08-17T23:23:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f3b8a699194515e0b74f5349cf84175a97f824e8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f3b8a699194515e0b74f5349cf84175a97f824e8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f3b8a699194515e0b74f5349cf84175a97f824e8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win64bmi2/stockfish_18081801_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win64modern/stockfish_18081801_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win64/stockfish_18081801_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win32/stockfish_18081801_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/linux64bmi2/stockfish_18081801_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/linux64modern/stockfish_18081801_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/linux64/stockfish_18081801_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Use an affine formula to mix stats and eval\n\nFollow-up for the previous patch: we use an affine formula to mix stats\nand evaluation in search. The idea is to give a bonus if the previous\nmove of the opponent was historically bad, and a malus if the previous\nmove of the opponent was historically good.\n\nMore precisely, if x is the stat score of the previous move by the opponent,\nwe implement the following formulas to tweak the evaluation at an internal\nnode of the tree for our pruning decisions at this node:\n\nif x = 0, use v' = eval(P)\nif x > 0, use v' = eval(P) - 5 - x/1024\nif x < 0, use v' = eval(P) + 5 - x/1024\n\nFor reference, the previous master had this simpler rule:\n\nif x > 0, use v' = eval(P) - 10\nif x <= 0, use v' = eval(P)\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 29322 W: 6359 L: 6088 D: 16875\nhttp://tests.stockfishchess.org/tests/view/5b76a5980ebc5902bdba957f\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 30893 W: 5154 L: 4910 D: 20829\nhttp://tests.stockfishchess.org/tests/view/5b76ca6d0ebc5902bdba9914\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1740\n\nBench: 4592766\n",
+      "subject": "Use an affine formula to mix stats and eval"
+    },
+    {
+      "commit_num": 2484,
+      "hash": "d0f09de2",
+      "short": "d0f09de2",
+      "author": "protonspring <mike@whiteley.org>",
+      "date": "2018-08-17T08:19:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d0f09de2d24f53ccab09928eb776423c813d6580",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d0f09de2d24f53ccab09928eb776423c813d6580.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d0f09de2d24f53ccab09928eb776423c813d6580.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/win64bmi2/stockfish_18081710_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/win64modern/stockfish_18081710_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/win64/stockfish_18081710_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/win32/stockfish_18081710_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/linux64bmi2/stockfish_18081710_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/linux64modern/stockfish_18081710_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/d0f09de2d24f53ccab09928eb776423c813d6580/linux64/stockfish_18081710_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify king file dependancy in evaluate_shelter()\n\nRemove the special value we used for the file of the king in the\nevaluate_shelter() function, and compensate by tweaking some of\nthe ShelterStrength[] array values.\n\nSTC\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 17069 W: 3782 L: 3652 D: 9635\nhttp://tests.stockfishchess.org/tests/view/5b75eb0d0ebc5902bdba8f3d\n\nLTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 42639 W: 6973 L: 6887 D: 28779\nhttp://tests.stockfishchess.org/tests/view/5b75fd7f0ebc5902bdba906b\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1739\n\nBench: 4639508\n",
+      "subject": "Simplify king file dependancy in evaluate_shelter()"
+    },
+    {
+      "commit_num": 2485,
+      "hash": "96c3a1f2",
+      "short": "96c3a1f2",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2018-08-16T21:58:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/win64bmi2/stockfish_18081711_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/win64modern/stockfish_18081711_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/win64/stockfish_18081711_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/win32/stockfish_18081711_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/linux64bmi2/stockfish_18081711_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/linux64modern/stockfish_18081711_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/96c3a1f2eca1dfb96fdddc03630e6d984c358a2b/linux64/stockfish_18081711_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Mix search stats with evaluation\n\nMix search stats with evaluation: if the opponent's move has a good historyStat,\nthen decrease the evaluation of the internal node a bit for the pruning decisions\nduring search.\n\nSTC;\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 72083 W: 15683 L: 15203 D: 41197\nhttp://tests.stockfishchess.org/tests/view/5b74c3ea0ebc5902bdba7d41\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 29104 W: 4867 L: 4630 D: 19607\nhttp://tests.stockfishchess.org/tests/view/5b7565000ebc5902bdba851b\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1738\n\nBench: 4514101\n\n-----------\n\nHow to continue from there?\n\n• the use of the previous stat score can probably be simplified in lines 587 and 716\n• we could try to use a continuous bonus based on the previous stat score, instead\n  of just a fixed offset of -10 when the opponent previous move was good.\n\n----------\n\nComments by Stefan Geschwentner:\n\nInteresting idea. Because only the eval in search is tweak this should only\ninfluence the eval and static eval used at inner nodes, and not on the return\nsearch value (which comes in the end from quiescence search), except through\nsaving in TT followed by a TT cutoff.\n\nSo essentialy this effects diverse pruning/reduction parts -- eval and static\neval  are lowered for good opponent moves:\n\n• tt cutoff (ttValue)\n• improving (static eval)\n• more razoring (eval)\n• less futility pruning (eval)\n• less null move pruning (eval + static eval) (but with little more depth)\n• more probcut (static eval)\n• more move futility pruning (static eval)\n",
+      "subject": "Mix search stats with evaluation"
+    },
+    {
+      "commit_num": 2486,
+      "hash": "881cab25",
+      "short": "881cab25",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2018-08-14T07:24:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/881cab252530c8711e942f7936a3eb41b2956a6b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/881cab252530c8711e942f7936a3eb41b2956a6b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/881cab252530c8711e942f7936a3eb41b2956a6b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win64bmi2/stockfish_18081410_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win64modern/stockfish_18081410_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win64/stockfish_18081410_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win32/stockfish_18081410_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/linux64bmi2/stockfish_18081410_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/linux64modern/stockfish_18081410_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/linux64/stockfish_18081410_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Double weight of capture history\n\nWe double in this patch the weight of the capture history table in the\nlocal scoring of captures for move ordering.\n\nThe capture history table is indexed by the triplet (capturing piece,\ncapture square, captured piece) and gets information like \"it seems to\nhave been historically good in that part of the search tree to capture\na pawn with a rook on g3, even if it seems to lose material\", and affect\nthe normaly pure « Most Valuable Victim » ordering of captures.\n\nFinished yellow at STC after 228842 games (posting a +1.36 Elo gain):\nLLR: -2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 228842 W: 50894 L: 50152 D: 127796\nhttp://tests.stockfishchess.org/tests/view/5b714bb00ebc5902bdba332d\n\nPassed LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 43251 W: 7425 L: 7131 D: 28695\nhttp://tests.stockfishchess.org/tests/view/5b71c7d40ebc5902bdba3e51\n\nThanks to user Vizvezdenec for running the LTC test.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1736\n\nBench: 4272361\n",
+      "subject": "Double weight of capture history"
+    },
+    {
+      "commit_num": 2487,
+      "hash": "4d22d3e5",
+      "short": "4d22d3e5",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2018-08-14T06:31:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/win64bmi2/stockfish_18081408_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/win64modern/stockfish_18081408_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/win64/stockfish_18081408_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/win32/stockfish_18081408_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/linux64bmi2/stockfish_18081408_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/linux64modern/stockfish_18081408_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/4d22d3e52d561b9c0c7aeacee3df5d1b762f0a38/linux64/stockfish_18081408_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove pawncount array in imbalance\n\nThis is a natural follow up to last commit where values on the\nQuadraticOurs diagonal and some piece value deltas were changed.\n@Stefano80 tried to simplify the newly introduced pawncount array\nusing QuadraticOurs[1][1] =52 and a -30 adjustment on pawn values\n\nHis STC [-3,1] was green\nhttp://tests.stockfishchess.org/tests/view/5b707f5b0ebc5902bdba2745\nbut not his LTC[-3,1]\nhttp://tests.stockfishchess.org/tests/view/5b7095700ebc5902bdba2a49\n\nSo I started a 80000 30+0.3 SPSA on the QuadraticOurs diagonal and\non the piece values using @Stefano80 start values.\n\nSPSA gave the new values QuadraticOurs[1][1] =38 and a -33 on pawn\nvalues (the other changes on QuadraticOurs were kept, but were not\nignificant according to this test\nhttp://tests.stockfishchess.org/tests/view/5b710ccb0ebc5902bdba2f27)\n\nSTC\nhttp://tests.stockfishchess.org/tests/view/5b710b220ebc5902bdba2f19\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 50902 W: 11214 L: 11150 D: 28538\n\nLTC\nhttp://tests.stockfishchess.org/tests/view/5b7124ef0ebc5902bdba3106\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 34271 W: 5852 L: 5753 D: 22666\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1735\n\nbench: 4738555\n",
+      "subject": "Remove pawncount array in imbalance"
+    },
+    {
+      "commit_num": 2488,
+      "hash": "41cc4eb9",
+      "short": "41cc4eb9",
+      "author": "GuardianRM <strimr25@mail.ru>",
+      "date": "2018-08-12T16:40:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/41cc4eb953b2574ea8858c6d52f09fb1574179c8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/41cc4eb953b2574ea8858c6d52f09fb1574179c8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/41cc4eb953b2574ea8858c6d52f09fb1574179c8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/win64bmi2/stockfish_18081218_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/win64modern/stockfish_18081218_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/win64/stockfish_18081218_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/win32/stockfish_18081218_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/linux64bmi2/stockfish_18081218_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/linux64modern/stockfish_18081218_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/41cc4eb953b2574ea8858c6d52f09fb1574179c8/linux64/stockfish_18081218_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Non-linear bonus for pawn count\n\nThis patch introduces a non-linear bonus for pawns, along with some\n(linear) corrections for the other pieces types.\n\nThe original values were obtained by a massive non-linear tuning of both\npawns and other pieces by GuardianRM, while Alain Savard and Chris Cain\nlater simplified the patch by observing that, apart from the pawn case, the\ntuned corrections were in fact almost affine and could be incorporated in\nour current code base via the piece values in types.h (offset) and the diagonal\nof the quadratic matrix (slope). See discussion in PR#1725 :\nhttps://github.com/official-stockfish/Stockfish/pull/1725\n\nSTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 42948 W: 9662 L: 9317 D: 23969\nhttp://tests.stockfishchess.org/tests/view/5b6ff6e60ebc5902bdba1d87\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 19683 W: 3409 L: 3206 D: 13068\nhttp://tests.stockfishchess.org/tests/view/5b702dbd0ebc5902bdba216b\n\nHow to continue from there?\n- Maybe the non-linearity for the pawn value could be somewhat tempered\n  again and a simpler linear correction for pawns would work?\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1734\n\nBench: 4681496\n",
+      "subject": "Non-linear bonus for pawn count"
+    },
+    {
+      "commit_num": 2489,
+      "hash": "b5581b77",
+      "short": "b5581b77",
+      "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
+      "date": "2018-08-12T08:02:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b5581b7779b6e286fa2277625572996477d74b10",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b5581b7779b6e286fa2277625572996477d74b10.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b5581b7779b6e286fa2277625572996477d74b10.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/win64bmi2/stockfish_18081210_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/win64modern/stockfish_18081210_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/win64/stockfish_18081210_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/win32/stockfish_18081210_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/linux64bmi2/stockfish_18081210_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/linux64modern/stockfish_18081210_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/b5581b7779b6e286fa2277625572996477d74b10/linux64/stockfish_18081210_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Combo of several promising parameter tweaks\n\nCombo of several tuning patches which finished yellow at LTC.\n\n[STC](http://tests.stockfishchess.org/tests/view/5b6ead340ebc5902bdba14ce)\nLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 10668 W: 2445 L: 2239 D: 5984\nElo: 6.25 [1.76,10.69] (95%)\n\n[LTC](http://tests.stockfishchess.org/tests/view/5b6eb50e0ebc5902bdba151f)\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 23761 W: 4155 L: 3923 D: 15683\nElo: 3.02 [0.29,5.67] (95%)\n\nOriginal patches:\n- [Piece values](http://tests.stockfishchess.org/tests/view/5b6d2cc00ebc5902bdba02d5) by Stefano Cardanobile\n- [Stat bonus](http://tests.stockfishchess.org/tests/view/5b6adbc90ebc5902bdb9da73) by Stefan Geschwentner\n- [Rook on pawn](http://tests.stockfishchess.org/tests/view/5b62a95b0ebc5902bdb961c0) by Mark Tenzer\n- [Hanging bonus](http://tests.stockfishchess.org/tests/view/5b5d2fa00ebc5902bdb90855) by Ivan Ilvec\n- [ss tweak](http://tests.stockfishchess.org/tests/view/5b58b7240ebc5902bdb89025) by miguel-l\n\nBench: 4694813\n",
+      "subject": "Combo of several promising parameter tweaks"
+    },
+    {
+      "commit_num": 2490,
+      "hash": "348cd5ed",
+      "short": "348cd5ed",
+      "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
+      "date": "2018-08-12T07:47:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/348cd5ed74e808733545c392d1bd80965a379617",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/348cd5ed74e808733545c392d1bd80965a379617.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/348cd5ed74e808733545c392d1bd80965a379617.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/win64bmi2/stockfish_18081209_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/win64modern/stockfish_18081209_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/win64/stockfish_18081209_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/win32/stockfish_18081209_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/linux64bmi2/stockfish_18081209_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/linux64modern/stockfish_18081209_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/348cd5ed74e808733545c392d1bd80965a379617/linux64/stockfish_18081209_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Simple razoring: depth 1 only, no distinction between PV / NonPV\n\nWe simplify the razoring logic by applying it to all nodes at depth 1 only.\nAn added advantage is that only one razor margin is needed now, and we treat\nPV and Non-PV nodes in the same manner.\n\nHow to continue?\n- There may be some conditions in which depth 2 razoring is beneficial.\n- We can see whether the razor margin can be tuned, perhaps even with a\n  different value for PV nodes.\n- Perhaps we can unify the treatment of PV and Non-PV nodes in other parts\n  of the search as well.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 5474 W: 1281 L: 1127 D: 3066\nhttp://tests.stockfishchess.org/tests/view/5b6de3b20ebc5902bdba0d1e\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 62670 W: 10749 L: 10697 D: 41224\nhttp://tests.stockfishchess.org/tests/view/5b6dee340ebc5902bdba0eb0\n\nIn addition, we ran a fixed LTC test against a similar patch which also\npassed SPRT [-3, 1]:\n\nELO: 0.23 +-2.1 (95%) LOS: 58.6%\nTotal: 36412 W: 6168 L: 6144 D: 24100\nhttp://tests.stockfishchess.org/tests/view/5b6e83940ebc5902bdba1485\n\nWe are opting for this patch as the more logical and simple of the two,\nand it appears to be no less strong. Thanks in particular to @DU-jdto\nfor input into this patch.\n\nBench: 4476945\n",
+      "subject": "Simple razoring: depth 1 only, no distinction between PV / NonPV"
+    },
+    {
+      "commit_num": 2491,
+      "hash": "f1088c98",
+      "short": "f1088c98",
+      "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
+      "date": "2018-08-09T14:04:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f1088c98228ff5b992d6cdadfc678d36bf44f41b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f1088c98228ff5b992d6cdadfc678d36bf44f41b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f1088c98228ff5b992d6cdadfc678d36bf44f41b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/win64bmi2/stockfish_18081006_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/win64modern/stockfish_18081006_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/win64/stockfish_18081006_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/win32/stockfish_18081006_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/linux64bmi2/stockfish_18081006_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/linux64modern/stockfish_18081006_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f1088c98228ff5b992d6cdadfc678d36bf44f41b/linux64/stockfish_18081006_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove Condition For Passed Pawns\n\nCurrently, we do not consider pawns passed if there is another pawn of\nthe same color in front of them. It appears that this condition is not\nnecessary. The idea is that the doubled pawns are likely to be weak and\none of them will be likely captured anyway. On the other hand, if we do\nsomehow manage to promote a pawn, then the pawn behind it becomes passed\nas well. In any case, the end result is we end up with an extra\npotentially passed pawn. The current evaluation for passed pawns already\nhandles this case by also scaling down this effect.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 28291 W: 6287 L: 6178 D: 15826\nhttp://tests.stockfishchess.org/tests/view/5b6c4b960ebc5902bdb9f256\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 30717 W: 5256 L: 5151 D: 20310\nhttp://tests.stockfishchess.org/tests/view/5b6c82980ebc5902bdb9f863\n\nBench: 4938285\n",
+      "subject": "Remove Condition For Passed Pawns"
+    },
+    {
+      "commit_num": 2492,
+      "hash": "c569cf26",
+      "short": "c569cf26",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2018-08-08T15:48:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c569cf263dbd5294d3649def74dc65ed3130895a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c569cf263dbd5294d3649def74dc65ed3130895a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c569cf263dbd5294d3649def74dc65ed3130895a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/win64bmi2/stockfish_18080817_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/win64modern/stockfish_18080817_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/win64/stockfish_18080817_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/win32/stockfish_18080817_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/linux64bmi2/stockfish_18080817_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/linux64modern/stockfish_18080817_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/c569cf263dbd5294d3649def74dc65ed3130895a/linux64/stockfish_18080817_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "King Psqt Tuning\n\nAfter a session of tuning for King Psqt I got some new values, which was later\ntweaked manually by me Fauzi, to result in an Elo-gain patch which seems to scale\npretty well:\n\nSTC: LLR: -2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 100653 W: 22550 L: 22314 D: 55789 [Yellow patch]\n\nLTC: LLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 147079 W: 25584 L: 24947 D: 96548 [Green Patch]\n\nBench: 4669050\n",
+      "subject": "King Psqt Tuning"
+    },
+    {
+      "commit_num": 2493,
+      "hash": "bd4d2b05",
+      "short": "bd4d2b05",
+      "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
+      "date": "2018-08-08T12:27:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bd4d2b0576ec320367769d5720c7a5b4d094ceef",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd4d2b0576ec320367769d5720c7a5b4d094ceef.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd4d2b0576ec320367769d5720c7a5b4d094ceef.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/win64bmi2/stockfish_18080817_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/win64modern/stockfish_18080817_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/win64/stockfish_18080817_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/win32/stockfish_18080817_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/linux64bmi2/stockfish_18080817_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/linux64modern/stockfish_18080817_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/bd4d2b0576ec320367769d5720c7a5b4d094ceef/linux64/stockfish_18080817_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "First check threshold in space evaluation\n\nCurrently, we first calculate some bitboards at the top of Evaluation::space()\nand then check whether we actually need them. Invert the ordering. Of course this\ndoes not make a difference in current master because the constexpr bitboard\ncalculations are in fact done at compile time by any decent compiler, but I find\nmy version a bit healthier since it will always meet or exceed current implementation\neven if we eventually change the spaceMask to something not contsexpr.\n\nNo functional change.\n",
+      "subject": "First check threshold in space evaluation"
+    },
+    {
+      "commit_num": 2494,
+      "hash": "198418ee",
+      "short": "198418ee",
+      "author": "Stefan Geschwentner <Stefan-Geschwentner@web.de>",
+      "date": "2018-08-08T07:45:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/198418ee67895817f2fad63f4935540e17cd7117",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/198418ee67895817f2fad63f4935540e17cd7117.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/198418ee67895817f2fad63f4935540e17cd7117.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/win64bmi2/stockfish_18080914_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/win64modern/stockfish_18080914_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/win64/stockfish_18080914_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/win32/stockfish_18080914_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/linux64bmi2/stockfish_18080914_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/linux64modern/stockfish_18080914_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/198418ee67895817f2fad63f4935540e17cd7117/linux64/stockfish_18080914_x64.zip"
+          }
+        ],
+        "github_actions_artifacts": []
+      },
+      "message": "LMR simplification\n\nUnify the \"quiet\" and \"non-quiet\" reduction rules for use at any kind of moves.\nThe idea behind it was that both rules reduce at similiar cases in master:\none directly for late previous moves and the other indirectly by using a\nbad stat score which is used for most move sorting and so approximates the\nlate move condition.\n\nFor captures/promotions the old rule was triggered in 25% but the new\nrule only for 3% of all cases (so now more reductions are done, whereas\nfor quiet moves reductions keep the same level).\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 162327 W: 35976 L: 36134 D: 90217\nhttp://tests.stockfishchess.org/tests/view/5b6a9a430ebc5902bdb9d5c1\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 29570 W: 5083 L: 4976 D: 19511\nhttp://tests.stockfishchess.org/tests/view/5b6bc5d00ebc5902bdb9e9d6\n\nBench: 4526980\n",
+      "subject": "LMR simplification"
+    }
+  ]
+}

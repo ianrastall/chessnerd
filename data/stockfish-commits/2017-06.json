@@ -1,0 +1,473 @@
+{
+  "month": "2017-06",
+  "commits": [
+    {
+      "commit_num": 2819,
+      "hash": "b40e45c1",
+      "short": "b40e45c1",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-06-30T15:20:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b40e45c1cc51bd228898314264d6d241478b23d8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b40e45c1cc51bd228898314264d6d241478b23d8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b40e45c1cc51bd228898314264d6d241478b23d8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove Stack/thread dependence in movepick\n\nas a lower level routine, movepicker should not depend on the\nsearch stack or the thread class, removing a circular dependency.\nInstead of copying the search stack into the movepicker object,\nas well as accessing the thread class for one of the histories,\npass the required fields explicitly to the constructor (removing\nthe need for thread.h and implicitly search.h in movepick.cpp).\nThe signature is thus longer, but more explicit:\n\nAlso some renaming of histories structures while there.\n\npassed STC [-3,1], suggesting a small elo impact:\n\nLLR: 3.13 (-2.94,2.94) [-3.00,1.00]\nTotal: 381053 W: 68071 L: 68551 D: 244431\nelo =   -0.438 +-    0.660 LOS:    9.7%\n\nNo functional change.\n",
+      "subject": "Remove Stack/thread dependence in movepick"
+    },
+    {
+      "commit_num": 2820,
+      "hash": "69eb391c",
+      "short": "69eb391c",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2017-06-29T00:11:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/69eb391cd779223c331fb0de80392cbd323055a9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/69eb391cd779223c331fb0de80392cbd323055a9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/69eb391cd779223c331fb0de80392cbd323055a9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Magic::index()\n\nMake magic_index() a member of Magic since it uses all it's members\nand keep us from having to pass the function pointer around to\ninit_magics().\n\nNo functional change\n\nCloses #1146\n",
+      "subject": "Magic::index()"
+    },
+    {
+      "commit_num": 2821,
+      "hash": "fa1e3427",
+      "short": "fa1e3427",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2017-06-24T10:36:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/fa1e3427bdf7f6347326015a381014564e8fb337",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fa1e3427bdf7f6347326015a381014564e8fb337.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fa1e3427bdf7f6347326015a381014564e8fb337.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify pos_is_ok()\n\nNow we don't need anymore the tricky pointer to\nshow the failed test. Added some few tests too.\n\nAlso small rename in see_ge() while there.\n\nNo functional change\n\nCloses #1151\n",
+      "subject": "Simplify pos_is_ok()"
+    },
+    {
+      "commit_num": 2822,
+      "hash": "05513a66",
+      "short": "05513a66",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2017-06-24T05:15:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/05513a66410f96959f3a6e70be9aea72425cf7c7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/05513a66410f96959f3a6e70be9aea72425cf7c7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/05513a66410f96959f3a6e70be9aea72425cf7c7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Only main thread checks time\n\nThe main change of the patch is that now time check\nis done only by main thread. In the past, before lazy\nSMP, we needed all the threds to check for available\ntime because main thread could have been blocked on\na split point, now this is no more the case and main\nthread can do the job alone, greatly simplifying the logic.\n\nVerified for regression testing on STC with 7 threads:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 11895 W: 1741 L: 1608 D: 8546\n\nNo functional change.\n\nCloses #1152\n",
+      "subject": "Only main thread checks time"
+    },
+    {
+      "commit_num": 2823,
+      "hash": "7e897a64",
+      "short": "7e897a64",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-06-23T16:23:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7e897a64f2b97c88503997c8e2acb11452bb780b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7e897a64f2b97c88503997c8e2acb11452bb780b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7e897a64f2b97c88503997c8e2acb11452bb780b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove race suppression.\n\nPull #1134 fixed another race, so that can be removed from the thread sanitizer suppressions.\n\nNo functional change.\n\nCloses #1150\n",
+      "subject": "Remove race suppression."
+    },
+    {
+      "commit_num": 2824,
+      "hash": "6d24ef85",
+      "short": "6d24ef85",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2017-06-23T04:03:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6d24ef8585c2ed5618eb9b4ab1d8ee35a05ce2cd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6d24ef8585c2ed5618eb9b4ab1d8ee35a05ce2cd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6d24ef8585c2ed5618eb9b4ab1d8ee35a05ce2cd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tidy up\n\nNo functional change\n\nCloses #1148\n",
+      "subject": "Tidy up"
+    },
+    {
+      "commit_num": 2825,
+      "hash": "77342126",
+      "short": "77342126",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-06-21T21:05:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/77342126d8417469bd6a398cfc6c0594b1f02f82",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/77342126d8417469bd6a398cfc6c0594b1f02f82.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/77342126d8417469bd6a398cfc6c0594b1f02f82.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Increase reduction if tt-move is a capture\n\nThe idea is that chances are the tt-move is best and will be difficult to raise alpha when playing a quiet move.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 7582 W: 1415 L: 1259 D: 4908\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 59553 W: 7885 L: 7573 D: 44095\n\nBench: 5725676\n\nCloses #1147\n",
+      "subject": "Increase reduction if tt-move is a capture"
+    },
+    {
+      "commit_num": 2826,
+      "hash": "612d9323",
+      "short": "612d9323",
+      "author": "snicolet <cassio@free.fr>",
+      "date": "2017-06-21T21:01:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/612d93234bdfbac77bba9c7a5756a92b76181ddf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/612d93234bdfbac77bba9c7a5756a92b76181ddf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/612d93234bdfbac77bba9c7a5756a92b76181ddf.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Improve readability of evaluation functions\n\nThis patch puts the evaluation helper functions inside EvalInfo struct, which simplifies a bit their signature and (most importantly, IMHO) makes their C++ code much cleaner and simpler to read (by removing the \"ei.\" qualifiers all around in evaluate.cpp).\n\nAlso rename the EvalInfo struct into Evaluation class to get a natural invocation v = Evaluation(p).value() to evaluation position p.\n\nThe downside is an increase of 20 lines in evaluate.cpp (for the prototypes of the helper functions). The upsides are better readability and a speed-up of 0.6% (by generating all the helpers for the NO_TRACE case together, which helps the instruction cache).\n\nNo functional change\n\nCloses #1135\n",
+      "subject": "Improve readability of evaluation functions"
+    },
+    {
+      "commit_num": 2827,
+      "hash": "336901fd",
+      "short": "336901fd",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2017-06-21T20:44:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/336901fdb02dcd473e99be1e13df5725895616b0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/336901fdb02dcd473e99be1e13df5725895616b0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/336901fdb02dcd473e99be1e13df5725895616b0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Prefetch earlier in qsearch()\"\n\nThis reverts commit b73016bb41d4c2fad3126b2e0018d71a36e78331.\n\nNo functional change\n\nCloses #1144\n",
+      "subject": "Revert \"Prefetch earlier in qsearch()\""
+    },
+    {
+      "commit_num": 2828,
+      "hash": "3cb02004",
+      "short": "3cb02004",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-06-21T20:36:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3cb02004596f868ae405b09fbf3a2038a680a989",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3cb02004596f868ae405b09fbf3a2038a680a989.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3cb02004596f868ae405b09fbf3a2038a680a989.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix four data races.\n\nthe nodes, tbHits, rootDepth and lastInfoTime variables are read by multiple threads, but not declared atomic, leading to data races as found by -fsanitize=thread. This patch fixes this issue. It is based on top of the CI-threading branch (PR #1129), and should fix the corresponding CI error messages.\n\nThe patch passed an STC check for no regression:\n\nhttp://tests.stockfishchess.org/tests/view/5925d5590ebc59035df34b9f\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 169597 W: 29938 L: 30066 D: 109593\n\nWhereas rootDepth and lastInfoTime are not performance critical, nodes and tbHits are. Indeed, an earlier version using relaxed atomic updates on the latter two variables failed STC testing (http://tests.stockfishchess.org/tests/view/592001700ebc59035df34924), which can be shown to be due to x86-32 (http://tests.stockfishchess.org/tests/view/592330ac0ebc59035df34a89). Indeed, the latter have no instruction to atomically update a 64bit variable. The proposed solution thus uses a variable in Position that is accessed only by one thread, which is copied every few thousand nodes to the shared variable in Thread.\n\nNo functional change.\n\nCloses #1130\nCloses #1129\n",
+      "subject": "Fix four data races."
+    },
+    {
+      "commit_num": 2829,
+      "hash": "0149a4c3",
+      "short": "0149a4c3",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-06-18T19:03:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0149a4c3d667ab6b7e37f88a597881e51be5f4f1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0149a4c3d667ab6b7e37f88a597881e51be5f4f1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0149a4c3d667ab6b7e37f88a597881e51be5f4f1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Update Top CPU - Bench:  6599721\n\nCloses #1145\n",
+      "subject": "Update Top CPU - Bench:  6599721"
+    },
+    {
+      "commit_num": 2830,
+      "hash": "b73016bb",
+      "short": "b73016bb",
+      "author": "snicolet <cassio@free.fr>",
+      "date": "2017-06-17T02:52:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b73016bb41d4c2fad3126b2e0018d71a36e78331",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b73016bb41d4c2fad3126b2e0018d71a36e78331.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b73016bb41d4c2fad3126b2e0018d71a36e78331.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Prefetch earlier in qsearch()\n\nCloses #1139\n",
+      "subject": "Prefetch earlier in qsearch()"
+    },
+    {
+      "commit_num": 2831,
+      "hash": "f907d5b7",
+      "short": "f907d5b7",
+      "author": "Brian Sheppard <sheppardco@aol.com>",
+      "date": "2017-06-17T02:27:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f907d5b7d93a161bc88aeaec403631de9de092f9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f907d5b7d93a161bc88aeaec403631de9de092f9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f907d5b7d93a161bc88aeaec403631de9de092f9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move depth calculation in probCut\n\nThe change passed an STC regression:\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 59350 W: 10793 L: 10738 D: 37819\n\nI verified that there was no change in performance on my machine, but of course YMMV:\n\nResults for 40 tests for each version:\n\n                Base      Test      Diff\n        Mean    2014338   2016121   -1783\n        StDev   62655     63441     3860\n\np-value: 0.678\nspeedup: 0.001\n\nNo functional change.\n\nCloses #1137\n",
+      "subject": "Move depth calculation in probCut"
+    },
+    {
+      "commit_num": 2832,
+      "hash": "2c237da5",
+      "short": "2c237da5",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2017-06-11T21:31:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2c237da54647bb7526f3512bea183eb44919cdda",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2c237da54647bb7526f3512bea183eb44919cdda.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2c237da54647bb7526f3512bea183eb44919cdda.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Misc coding style fixes\n\na few comment and blank fixes.\n\nNo functional change\n\nCloses #1141\n",
+      "subject": "Misc coding style fixes"
+    },
+    {
+      "commit_num": 2833,
+      "hash": "659990b4",
+      "short": "659990b4",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2017-06-06T17:20:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/659990b43ff1a089be9878561048fa4c60ba2705",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/659990b43ff1a089be9878561048fa4c60ba2705.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/659990b43ff1a089be9878561048fa4c60ba2705.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reordering magic data\n\nGather all magic relevant data into a struct.\n\nThis changes memory layout putting everything necessary for processing a single square\nin the same memory location thus speeding up access.\n\nOriginal patch by @snicolet\n\nNo functional change.\n\nCloses #1127\nCloses #1128\n",
+      "subject": "Reordering magic data"
+    },
+    {
+      "commit_num": 2834,
+      "hash": "6d89d0b6",
+      "short": "6d89d0b6",
+      "author": "atumanian <1>",
+      "date": "2017-06-06T17:13:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6d89d0b64a99003576d3e0ed616b43333c9eca01",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6d89d0b64a99003576d3e0ed616b43333c9eca01.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6d89d0b64a99003576d3e0ed616b43333c9eca01.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't score as an immediate draw 2-fold repetitions of the root position\n\nIn the current version a search stops when the current position is the same as\nany position earlier in the search stack,\nincluding the root position but excluding positions before the root.\nThe new version makes an exception for repeating the root position.\n\nThis gives correct scores for moves in the MultiPV > 1 mode.\n\nFixes #948 (see it for the detailed description of the bug).\n\nLTC: http://tests.stockfishchess.org/tests/view/587910bc0ebc5915193f754b\nELO: 0.38 +-1.7 (95%) LOS: 66.8%\nTotal: 40000 W: 5166 L: 5122 D: 29712\n\nSTC: http://tests.stockfishchess.org/tests/view/5922e6230ebc59035df34a50\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 94622 W: 17059 L: 17064 D: 60499\n\n LTC: http://tests.stockfishchess.org/tests/view/59273a000ebc59035df34c03\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 61259 W: 7965 L: 7897 D: 45397\n\nBench: 6599721\n\nCloses #1126\n",
+      "subject": "Don't score as an immediate draw 2-fold repetitions of the root position"
+    },
+    {
+      "commit_num": 2835,
+      "hash": "ebc56305",
+      "short": "ebc56305",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-06-06T07:48:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ebc563059c5fc103ca6d79edb04bb6d5f182eaf5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ebc563059c5fc103ca6d79edb04bb6d5f182eaf5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ebc563059c5fc103ca6d79edb04bb6d5f182eaf5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Call TT.new_search() earlier.\n\nTT.new_search() was being called by mainThread in Thread::search(). However, mainThread is the last to start searching, and helper threads could reach a measured rootDepth 10 (on 64 cores) before mainThread increments the TT generation. Fixed by moving the call to MaintThread::search() before helper threads start searching.\n\nNo functional change.\n\nCloses #1134\n",
+      "subject": "Call TT.new_search() earlier."
+    },
+    {
+      "commit_num": 2836,
+      "hash": "27ba611a",
+      "short": "27ba611a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2017-06-04T09:03:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/27ba611a3da37423a3502e49beeebe11c9a11d8e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27ba611a3da37423a3502e49beeebe11c9a11d8e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27ba611a3da37423a3502e49beeebe11c9a11d8e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Better naming in endgame code\n\nAnd small clean-up of magic bitboards code.\n\nNo functional change.\n\nCloses #1138\n",
+      "subject": "Better naming in endgame code"
+    }
+  ]
+}

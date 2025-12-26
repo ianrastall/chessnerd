@@ -1,0 +1,291 @@
+{
+  "month": "2015-06",
+  "commits": [
+    {
+      "commit_num": 3251,
+      "hash": "b2edac70",
+      "short": "b2edac70",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-06-30T11:50:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b2edac7075ca238326378cb2c5ef09f7cdb2fd9e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b2edac7075ca238326378cb2c5ef09f7cdb2fd9e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b2edac7075ca238326378cb2c5ef09f7cdb2fd9e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove useless razoring condition\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 20626 W: 3977 L: 3855 D: 12794\n\nLTC:\nLLR: 3.10 (-2.94,2.94) [-3.00,1.00]\nTotal: 87334 W: 13675 L: 13648 D: 60011\n\nRetire also the now unused pawn_on_7th() helper.\n\nbench: 8248166\n",
+      "subject": "Remove useless razoring condition"
+    },
+    {
+      "commit_num": 3252,
+      "hash": "112607bf",
+      "short": "112607bf",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-06-28T08:24:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/112607bf490ccdeaf3446996c6c4f09a11778c7b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/112607bf490ccdeaf3446996c6c4f09a11778c7b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/112607bf490ccdeaf3446996c6c4f09a11778c7b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Correctly check for no-makefile compile\n\nUnder Windows with MSVC we use the IDE to compile,\nin this case we infer some compiler flags usually\nset by Makefile.\n\nThe condition to check this was wrong, namely when compiling\nwith mingw under Windows 64 bit we always set IS_64BIT and\nUSE_BSFQ even if compiled with ARCH=x86-32 (this is how I\nfound it).\n\nSmall code style touches while there.\n\nNo functional change.\n",
+      "subject": "Correctly check for no-makefile compile"
+    },
+    {
+      "commit_num": 3253,
+      "hash": "aa0dc16b",
+      "short": "aa0dc16b",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2015-06-27T16:19:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/aa0dc16b754f65e5f5b84c7500732476ca1f035b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aa0dc16b754f65e5f5b84c7500732476ca1f035b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aa0dc16b754f65e5f5b84c7500732476ca1f035b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "CMH Fix: Exclude captures for TT move refutation penalty\n\nThis will make sure we store only quiet moves for TT Penalty.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 34748 W: 6617 L: 6420 D: 21711\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 19975 W: 3259 L: 3137 D: 13579\n\nBench: 8063826\n\nResolves #373\n",
+      "subject": "CMH Fix: Exclude captures for TT move refutation penalty"
+    },
+    {
+      "commit_num": 3254,
+      "hash": "7e9f776f",
+      "short": "7e9f776f",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2015-06-27T08:41:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7e9f776fcafe0121c7449f4339b26d77c14adf50",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7e9f776fcafe0121c7449f4339b26d77c14adf50.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7e9f776fcafe0121c7449f4339b26d77c14adf50.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "LMR Tweak: Decrease reduction if cmh>0 && history>0.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 9627 W: 1879 L: 1748 D: 6000\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 21543 W: 3433 L: 3234 D: 14876\n\nBench: 8646407\n\nResolves #370 #371\n",
+      "subject": "LMR Tweak: Decrease reduction if cmh>0 && history>0."
+    },
+    {
+      "commit_num": 3255,
+      "hash": "3f1bc9e0",
+      "short": "3f1bc9e0",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-06-25T03:15:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3f1bc9e01301d617f530b05207c4067df92543f0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3f1bc9e01301d617f530b05207c4067df92543f0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3f1bc9e01301d617f530b05207c4067df92543f0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix compile on icc\n\nError is:\n\n  a value of type \"int\" cannot be assigned to an entity of type \"Value\"\n\nAlso retire the now unused squares_of_color() function.\n\nNo functional change.\n",
+      "subject": "Fix compile on icc"
+    },
+    {
+      "commit_num": 3256,
+      "hash": "e8cc5c99",
+      "short": "e8cc5c99",
+      "author": "joergoster <osterj165@googlemail.com>",
+      "date": "2015-06-17T14:02:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e8cc5c996818c7e128bd8db7947d1c4c43be865f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8cc5c996818c7e128bd8db7947d1c4c43be865f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8cc5c996818c7e128bd8db7947d1c4c43be865f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small coding style fix for Outpost array\n\nNo functional change\n\nResolves #367\n",
+      "subject": "Small coding style fix for Outpost array"
+    },
+    {
+      "commit_num": 3257,
+      "hash": "00563be5",
+      "short": "00563be5",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2015-06-08T12:47:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/00563be5cc647a02f2300b5acb0647889f58e0fd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/00563be5cc647a02f2300b5acb0647889f58e0fd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/00563be5cc647a02f2300b5acb0647889f58e0fd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire -Wno-long-long\n\nlong long is part of the C++11 standard.\n\nNo functional change.\n\nResolves #364\n",
+      "subject": "Retire -Wno-long-long"
+    },
+    {
+      "commit_num": 3258,
+      "hash": "ad87d707",
+      "short": "ad87d707",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2015-06-07T08:49:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ad87d707fffeeac9aa1ae3e3e8d6fa2449ea1df9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ad87d707fffeeac9aa1ae3e3e8d6fa2449ea1df9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ad87d707fffeeac9aa1ae3e3e8d6fa2449ea1df9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify outpost evaluation\n\nSTC\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 114149 W: 21986 L: 22032 D: 70131\n\nLTC\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 52232 W: 8468 L: 8396 D: 35368\n\nBench: 6716940\n\nNo functional change\n\nResolves #363\n",
+      "subject": "Simplify outpost evaluation"
+    },
+    {
+      "commit_num": 3259,
+      "hash": "c1d3bd2d",
+      "short": "c1d3bd2d",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2015-06-04T10:25:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c1d3bd2dbaa5bd29c28551baafe526a977e1f733",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c1d3bd2dbaa5bd29c28551baafe526a977e1f733.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c1d3bd2dbaa5bd29c28551baafe526a977e1f733.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rename stages\n\nHopefully more clear.\n\nNo functional change.\n",
+      "subject": "Rename stages"
+    },
+    {
+      "commit_num": 3260,
+      "hash": "5ebdf2f8",
+      "short": "5ebdf2f8",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2015-06-02T19:08:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ebdf2f8c857681309e60d831f4f56452fb81235",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ebdf2f8c857681309e60d831f4f56452fb81235.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ebdf2f8c857681309e60d831f4f56452fb81235.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tune pawn shelter/storm\n\nSTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 31679 W: 6183 L: 5912 D: 19584\n\nLTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 43550 W: 6885 L: 6602 D: 30063\n\nBench: 9219343\n\nResolves #360\n",
+      "subject": "Tune pawn shelter/storm"
+    },
+    {
+      "commit_num": 3261,
+      "hash": "4502a193",
+      "short": "4502a193",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2015-06-02T19:06:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4502a1934f2d624288b635b5901ecda8cefa342c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4502a1934f2d624288b635b5901ecda8cefa342c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4502a1934f2d624288b635b5901ecda8cefa342c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak backward pawns definition\n\nAdvanced pawns cannot be backward. Also lower the backward penalty in\nendgame.\n\nPassed STC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 18534 W: 3588 L: 3433 D: 11513\n\nand LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 21319 W: 3415 L: 3217 D: 14687\n\nBench: 7271152\n\nResolves #359\n",
+      "subject": "Tweak backward pawns definition"
+    }
+  ]
+}

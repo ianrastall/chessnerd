@@ -1,0 +1,577 @@
+{
+  "month": "2016-08",
+  "commits": [
+    {
+      "commit_num": 3041,
+      "hash": "5cffc032",
+      "short": "5cffc032",
+      "author": "ajithcj <achajo@yahoo.co.in>",
+      "date": "2016-08-31T05:51:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5cffc032da8402df79cf6cba4238b83ff5d29f7e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5cffc032da8402df79cf6cba4238b83ff5d29f7e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5cffc032da8402df79cf6cba4238b83ff5d29f7e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Optimize order of a few conditions in search\n\nAlso fix size of KingDanger array to reduce memory footprint.\n\nSmall speed up of around 0.5%\n\nNo functional change.\n",
+      "subject": "Optimize order of a few conditions in search"
+    },
+    {
+      "commit_num": 3042,
+      "hash": "7f2eb10e",
+      "short": "7f2eb10e",
+      "author": "Stefano80 <stefano.cardanobile@gmail.com>",
+      "date": "2016-08-30T18:15:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7f2eb10e93879bc569c7ddf6fb51d6f812cc477c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7f2eb10e93879bc569c7ddf6fb51d6f812cc477c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7f2eb10e93879bc569c7ddf6fb51d6f812cc477c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire linear imbalance\n\nRetire linear imbalance and compensate\nin piece values enumeration.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 43596 W: 8105 L: 8023 D: 27468\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 24482 W: 3352 L: 3237 D: 17893\n\nBench: 7777707\n",
+      "subject": "Retire linear imbalance"
+    },
+    {
+      "commit_num": 3043,
+      "hash": "13b4444d",
+      "short": "13b4444d",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2016-08-30T12:27:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/13b4444d9e3a3ac5a71f256145904d13754f9e7f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/13b4444d9e3a3ac5a71f256145904d13754f9e7f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/13b4444d9e3a3ac5a71f256145904d13754f9e7f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Change exclusion key setup\n\nShould depend on which move is excluded. This\nallow us to remove the dedicated Position::exclusion_key().\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 59814 W: 11136 L: 11083 D: 37595\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 31023 W: 4187 L: 4080 D: 22756\n\nbench 7553379\n",
+      "subject": "Change exclusion key setup"
+    },
+    {
+      "commit_num": 3044,
+      "hash": "5c58d1f5",
+      "short": "5c58d1f5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-08-29T07:11:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5c58d1f5cb4871595c07e6c2f6931780b5ac05b5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5c58d1f5cb4871595c07e6c2f6931780b5ac05b5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5c58d1f5cb4871595c07e6c2f6931780b5ac05b5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use per-thread counterMoveHistory\n\nDrops a scalability bottleneck due to memory contention\nof a single shared table across threads. The effect starts\nto be sensible with a high number of threads. Specifically\nwe have a small regression with 7 threads both at 60 and\n180 seconds TC:\n\n10000 @ 60+0.6 th 7\nELO: -2.46 +-3.2 (95%) LOS: 6.5%\nTotal: 9896 W: 1037 L: 1107 D: 7752\n\n5000 @ 180+0.6 th 7\nELO: -1.95 +-4.1 (95%) LOS: 17.7%\nTotal: 5000 W: 444 L: 472 D: 4084\n\nWe have a regression because counterMoveHistory table is\nquite big and it takes time for a single thread to fill it.\nSharing the table yields to a higher fill rate and better\nquality of moves and up to 7 threads the benefits of sharing\nmore then compensate the loss in speed due to contention.\nInterestingly even with a 3X longer TC, so with more time\nfor the single thread to catch up, the improvment is quite\nlimited and below noise level. It seems we really need much\nlonger TC to saturate the table.\n\nWhen we move to high threads number it's another story:\n\n5000 @ 60+0.6 th 22\nELO: 3.49 +-4.3 (95%) LOS: 94.6%\nTotal: 4880 W: 490 L: 441 D: 3949\n\n2000 @ 60+0.6 th 32\nELO: 8.34 +-6.9 (95%) LOS: 99.1%\nTotal: 2000 W: 229 L: 181 D: 1590\n\nAs expected the speed-up more than compensates the filling\nrate, and we expect that with tournament TC, where single\nthread is able to saturate the table, the difference will\nbe even stronger. For instance for TCEC 9 super-final time\ncontrol will be 180 minutes + 15 seconds and this scalability\nimprovement seems definitely the way to go.\n\nSo, summarizing:\n\nGOOD:\n\nMeasured big improvement in high core scenario\n\nSuitable for TCEC 9 superfinal (big hardware, very long TC)\n\nConsistent and natural patch that extends to counterMoveHistory\nwhat we already do for remaining history tables, that are all per-thread\n\nNon functional change for the common case of a single core\n\nVery simple (just 6 lines modified, no added ones)\n\nBAD:\n\nSmall regression (within 2-3 ELO) with few threads and short TC\n\nbench: 5341477\n",
+      "subject": "Use per-thread counterMoveHistory"
+    },
+    {
+      "commit_num": 3045,
+      "hash": "6aa9308f",
+      "short": "6aa9308f",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2016-08-28T10:39:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6aa9308f08bc76b0e3615dde65de7782a6761fa3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6aa9308f08bc76b0e3615dde65de7782a6761fa3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6aa9308f08bc76b0e3615dde65de7782a6761fa3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak probcut threshold\n\nUse better threshold for capture move generation.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 23265 W: 4415 L: 4188 D: 14662\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 36618 W: 5083 L: 4836 D: 26699\n\nbench: 7030088\n",
+      "subject": "Tweak probcut threshold"
+    },
+    {
+      "commit_num": 3046,
+      "hash": "b4f6728e",
+      "short": "b4f6728e",
+      "author": "Andrew Grant <do57053@umbc.edu>",
+      "date": "2016-08-28T07:23:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b4f6728e610848b202cee47af28fa3bb0a251e3c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b4f6728e610848b202cee47af28fa3bb0a251e3c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b4f6728e610848b202cee47af28fa3bb0a251e3c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Removed an extra space\n\nNo functional change.\n",
+      "subject": "Removed an extra space"
+    },
+    {
+      "commit_num": 3047,
+      "hash": "2b57b61c",
+      "short": "2b57b61c",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-08-27T22:16:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2b57b61cb1a9f72fa83ab33ee1212544d5c170f6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2b57b61cb1a9f72fa83ab33ee1212544d5c170f6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2b57b61cb1a9f72fa83ab33ee1212544d5c170f6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move king tropism to evaluate_king\n\nNo functional change.\n",
+      "subject": "Move king tropism to evaluate_king"
+    },
+    {
+      "commit_num": 3048,
+      "hash": "2731bbaf",
+      "short": "2731bbaf",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-08-27T17:21:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2731bbaf6b4bed23abaae8de5c1fa9f373e30e57",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2731bbaf6b4bed23abaae8de5c1fa9f373e30e57.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2731bbaf6b4bed23abaae8de5c1fa9f373e30e57.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove condition on killers in history pruning\n\nNow allows main killer to be history prune.\n\nSTC:\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 15852 W: 2910 L: 2781 D: 10161\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 56428 W: 7610 L: 7537 D: 41281\n\nBench: 8032058\n",
+      "subject": "Remove condition on killers in history pruning"
+    },
+    {
+      "commit_num": 3049,
+      "hash": "0b944c71",
+      "short": "0b944c71",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-08-27T10:16:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0b944c718631cdbdd8fae46eaf96a099f48ad5a4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0b944c718631cdbdd8fae46eaf96a099f48ad5a4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0b944c718631cdbdd8fae46eaf96a099f48ad5a4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Silence some warnings with MSVC 2013\n\nNo functional change.\n",
+      "subject": "Silence some warnings with MSVC 2013"
+    },
+    {
+      "commit_num": 3050,
+      "hash": "1ee28382",
+      "short": "1ee28382",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-08-27T08:05:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1ee2838214fcbadc352fb17c8c6fa1142ae5dcb0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1ee2838214fcbadc352fb17c8c6fa1142ae5dcb0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1ee2838214fcbadc352fb17c8c6fa1142ae5dcb0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire CheckInfo\n\nMove its content directly under StateInfo.\n\nVerified for no speed regression.\n\nNo functional change.\n",
+      "subject": "Retire CheckInfo"
+    },
+    {
+      "commit_num": 3051,
+      "hash": "9bd856e2",
+      "short": "9bd856e2",
+      "author": "hxim <hxim.jo@gmail.com>",
+      "date": "2016-08-26T17:47:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9bd856e28ec93a16a5db78b24f9579c607541def",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9bd856e28ec93a16a5db78b24f9579c607541def.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9bd856e28ec93a16a5db78b24f9579c607541def.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify stats update\n\nSimplify code by moving countermove and follow-up move\nhistory update into procedure.\n\nNo functional change.\n",
+      "subject": "Simplify stats update"
+    },
+    {
+      "commit_num": 3052,
+      "hash": "13380885",
+      "short": "13380885",
+      "author": "gamander <gamander@gmail.com>",
+      "date": "2016-08-24T21:37:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/133808851dc172e0e2cbdb116e34592db6b19deb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/133808851dc172e0e2cbdb116e34592db6b19deb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/133808851dc172e0e2cbdb116e34592db6b19deb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fixed wrong definition of WhiteCamp and BlackCamp\n\nNo functional change.\n",
+      "subject": "Fixed wrong definition of WhiteCamp and BlackCamp"
+    },
+    {
+      "commit_num": 3053,
+      "hash": "3e739f88",
+      "short": "3e739f88",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-08-24T14:52:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3e739f883fb766f965ed434507c9c8fbcf18a855",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3e739f883fb766f965ed434507c9c8fbcf18a855.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3e739f883fb766f965ed434507c9c8fbcf18a855.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reformat stats update\n\nRewritten in a way to have explicit in the search\nthe bonus/penalty we apply: hopefully this will lead\nto further simplification/fix of current rather messy\nstats update code.\n\nNo functional change.\n",
+      "subject": "Reformat stats update"
+    },
+    {
+      "commit_num": 3054,
+      "hash": "0b4f6e56",
+      "short": "0b4f6e56",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-08-23T13:57:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0b4f6e562b76a7a7fb581ad117927748371fe790",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0b4f6e562b76a7a7fb581ad117927748371fe790.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0b4f6e562b76a7a7fb581ad117927748371fe790.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Refutation penalty on captures\n\nApply refutation penalty for prior PV quiet move on captures\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 8208 W: 1153 L: 1008 D: 6047\nhttp://tests.stockfishchess.org/tests/view/57bc5a9f0ebc59030fbe47b5\n\nOnly LTC because a very similar patch already passed STC + LTC\n\nbench: 7038730\n",
+      "subject": "Refutation penalty on captures"
+    },
+    {
+      "commit_num": 3055,
+      "hash": "4c5cbb1b",
+      "short": "4c5cbb1b",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-08-19T10:17:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4c5cbb1b14b283679e3e0096b7973c97b75088f3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4c5cbb1b14b283679e3e0096b7973c97b75088f3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4c5cbb1b14b283679e3e0096b7973c97b75088f3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make engine ONE_PLY value independent\n\nThis non-functional change patch is a deep work to allow SF to be independent\nfrom the actual value of ONE_PLY (currently set to 1). I have verified SF is\nnow independent for ONE_PLY values 1, 2, 4, 8, 16, 32 and 256.\n\nThis patch gives consistency to search code and enables future work, opening\nthe door to safely tweaking the ONE_PLY value for any reason.\n\nVerified for no speed regression at STC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 95643 W: 17728 L: 17737 D: 60178\n\nNo functional change.\n",
+      "subject": "Make engine ONE_PLY value independent"
+    },
+    {
+      "commit_num": 3056,
+      "hash": "e3af4921",
+      "short": "e3af4921",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-08-18T08:40:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e3af492142c8aff71f50dbec025722d69b84f85e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e3af492142c8aff71f50dbec025722d69b84f85e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e3af492142c8aff71f50dbec025722d69b84f85e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove a stale assignment\n\nNo more used after previous patch.\n\nSpotted by Jekaa .\n\nNo functional change.\n",
+      "subject": "Remove a stale assignment"
+    },
+    {
+      "commit_num": 3057,
+      "hash": "8493c8c6",
+      "short": "8493c8c6",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-08-16T13:53:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8493c8c6b8da07a454adcaa160af8e8aa3d6b525",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8493c8c6b8da07a454adcaa160af8e8aa3d6b525.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8493c8c6b8da07a454adcaa160af8e8aa3d6b525.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do LMR on captures\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 5361 W: 1086 L: 936 D: 3339\nhttp://tests.stockfishchess.org/tests/view/57b31b0f0ebc591c761f643d\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 54694 W: 7591 L: 7287 D: 39816\nhttp://tests.stockfishchess.org/tests/view/57b3442b0ebc591c761f6450\n\nbench: 6881120\n",
+      "subject": "Do LMR on captures"
+    },
+    {
+      "commit_num": 3058,
+      "hash": "5596492f",
+      "short": "5596492f",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-08-15T15:19:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5596492f6ed72ebc52a4d0f65bed483568e48918",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5596492f6ed72ebc52a4d0f65bed483568e48918.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5596492f6ed72ebc52a4d0f65bed483568e48918.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify IID\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 30468 W: 5687 L: 5582 D: 19199\nhttp://tests.stockfishchess.org/tests/view/57b1ddd80ebc591c761f63e2\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 87406 W: 11756 L: 11725 D: 63925\nhttp://tests.stockfishchess.org/tests/view/57b212590ebc591c761f63f9\n\nbench: 6554900\n",
+      "subject": "Simplify IID"
+    },
+    {
+      "commit_num": 3059,
+      "hash": "9585f8ef",
+      "short": "9585f8ef",
+      "author": "Stefano80 <stefano.cardanobile@gmail.com>",
+      "date": "2016-08-15T10:24:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9585f8ef582bc317f61534503a76563dedd247fa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9585f8ef582bc317f61534503a76563dedd247fa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9585f8ef582bc317f61534503a76563dedd247fa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire pawn span\n\nRetire pawn span and replace with pawn count in evaluate_scale_factor.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 26482 W: 4929 L: 4818 D: 16735\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 61938 W: 8400 L: 8335 D: 45203\n\nBench: 7662861\n",
+      "subject": "Retire pawn span"
+    },
+    {
+      "commit_num": 3060,
+      "hash": "7396c08b",
+      "short": "7396c08b",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-08-12T17:55:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7396c08b795191d954528d687e84d7ff6dbe7a3b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7396c08b795191d954528d687e84d7ff6dbe7a3b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7396c08b795191d954528d687e84d7ff6dbe7a3b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use predicted depth for history pruning\n\nSTC: (Yellow)\nLLR: -2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 69115 W: 12880 L: 12797 D: 43438\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 124163 W: 16923 L: 16442 D: 90798\n\nNote: Note based off past experiments / patches... history pruning\nis quite TC sensitive. I believe the reason for this TC dependency\nis that the CMH/FMH is a very large table that takes time to fill\nup with. In addition having more time for will increase the accuracy\nof the stats' value.\n\nBench: 7351698\n",
+      "subject": "Use predicted depth for history pruning"
+    },
+    {
+      "commit_num": 3061,
+      "hash": "3d10cfcd",
+      "short": "3d10cfcd",
+      "author": "Luca Brivio <luca@camillo>",
+      "date": "2016-08-11T23:48:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3d10cfcdd22b16d6bd2801eeecbe16f280eb6e27",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3d10cfcdd22b16d6bd2801eeecbe16f280eb6e27.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3d10cfcdd22b16d6bd2801eeecbe16f280eb6e27.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Cap space evaluation bonus\n\nWhen computing space evaluation, limit the bonus square count to 16.\n\nSTC @ 10+0.1 th 1:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 30793 W: 5910 L: 5648 D: 19235\n\nLTC @ 60+0.6 th 1:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 31361 W: 4410 L: 4184 D: 22767\n\nBench: 7165385\n",
+      "subject": "Cap space evaluation bonus"
+    },
+    {
+      "commit_num": 3062,
+      "hash": "8abb9845",
+      "short": "8abb9845",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-08-05T14:09:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8abb98455f6fa78092f650b8bae9c166f1b5a315",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8abb98455f6fa78092f650b8bae9c166f1b5a315.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8abb98455f6fa78092f650b8bae9c166f1b5a315.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify space formula\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 16868 W: 3260 L: 3132 D: 10476\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 16910 W: 2381 L: 2255 D: 12274\n\nbench: 6663531\n",
+      "subject": "Simplify space formula"
+    }
+  ]
+}

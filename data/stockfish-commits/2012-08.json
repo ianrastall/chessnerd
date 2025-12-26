@@ -1,0 +1,733 @@
+{
+  "month": "2012-08",
+  "commits": [
+    {
+      "commit_num": 4494,
+      "hash": "831f91b8",
+      "short": "831f91b8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-31T13:19:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/831f91b859c43a5fa895ef0c955516ec8b7a8212",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/831f91b859c43a5fa895ef0c955516ec8b7a8212.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/831f91b859c43a5fa895ef0c955516ec8b7a8212.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire Time::restart()\n\nSimplify API.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire Time::restart()"
+    },
+    {
+      "commit_num": 4495,
+      "hash": "1258c7aa",
+      "short": "1258c7aa",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-31T12:21:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1258c7aabee27bed0fc48bab80a374d004012c36",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1258c7aabee27bed0fc48bab80a374d004012c36.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1258c7aabee27bed0fc48bab80a374d004012c36.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't need to memset HashTable\n\nDefault c'tor Entry() already initializes\nto zero all its POD members.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Don't need to memset HashTable"
+    },
+    {
+      "commit_num": 4496,
+      "hash": "8dcb4bc3",
+      "short": "8dcb4bc3",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-29T14:43:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8dcb4bc3cce1f487cfac65ed20d21378d0f39b2e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8dcb4bc3cce1f487cfac65ed20d21378d0f39b2e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8dcb4bc3cce1f487cfac65ed20d21378d0f39b2e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Terminate threads before to exit main()\n\nIt is very difficult and risky to assure\nthat a running thread doesn't access a global\nvariable. This is currently true, but could\nchange in the future and we don't want to rely\non code that works 'by accident'. The threads\nare still running when ThreadPool destructor is\ncalled (after main() returns) and this could\nlead to crashes if a thread accesses a global\nthat has been already freed. The solution is to\nuse an exit() function and call it while we are\nstill in main(), ensuring global variables are\nstill alive at threads termination time.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Terminate threads before to exit main()"
+    },
+    {
+      "commit_num": 4497,
+      "hash": "0a003d3b",
+      "short": "0a003d3b",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-29T11:28:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0a003d3ba1e3082132606d06159693aaa805a138",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0a003d3ba1e3082132606d06159693aaa805a138.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0a003d3ba1e3082132606d06159693aaa805a138.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Convert to sync_cout and sync_endl\n\nSerialize access to std::cout all over the code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Convert to sync_cout and sync_endl"
+    },
+    {
+      "commit_num": 4498,
+      "hash": "92e759a6",
+      "short": "92e759a6",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-29T09:25:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/92e759a676b5f2886160fc8f43744f137a0a19b1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/92e759a676b5f2886160fc8f43744f137a0a19b1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/92e759a676b5f2886160fc8f43744f137a0a19b1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce serialization of accesses to std::cout\n\nWhen many threds concurrently print you need to serialize\nthe access to std::cout to avoid output lines are intermixed\nwith the contents of each thread.\n\nThis is not strictly needed at the moment because\nonly main thread prints out, although some ad-hoc\ntest could trigger UCI::loop() printing while searching.\n\nAnyhow we want to lift this pretty avoidable constrain\nalso as a prerequisite for future work.\n\nThis patch just introduces the support, next one will enable\nthe serialization.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Introduce serialization of accesses to std::cout"
+    },
+    {
+      "commit_num": 4499,
+      "hash": "3df2c01b",
+      "short": "3df2c01b",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-27T12:39:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3df2c01b5769c7ae996fb5b992c06e4a5428ad35",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3df2c01b5769c7ae996fb5b992c06e4a5428ad35.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3df2c01b5769c7ae996fb5b992c06e4a5428ad35.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Correctly handle handover of setup states\n\nBefore the search we setup the starting position doing all the\nmoves (sent by GUI) from start position to the position just\nbefore to start searching.\n\nTo do this we use a set of StateInfo records used by each\ndo_move() call. These records shall be kept valid during all\nthe search because repetition draw detection uses them to back\ntrack all the earlier positions keys. The problem is that, while\nsearching, the GUI could send another 'position' command, this\ncalls set_position() that clears the states! Of course a crash\nfollows shortly.\n\nBefore searching all the relevant parameters are copied in\nstart_searching() just for this reason: to fully detach data\naccessed during the search from the UCI protocol handling.\nSo the natural solution would be to copy also the setup states.\nUnfortunatly this approach does not work because StateInfo\ncontains a pointer to the previous record, so naively copying and\nthen freeing the original memory leads to a crash.\n\nThat's why we use two std::auto_ptr (one belonging to UCI and another\nto Search) to safely transfer ownership of the StateInfo records to\nthe search, after we have setup the root position.\n\nAs a nice side-effect all the possible memory leaks are magically\nsorted out for us by std::auto_ptr semantic.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Correctly handle handover of setup states"
+    },
+    {
+      "commit_num": 4500,
+      "hash": "8991a6f0",
+      "short": "8991a6f0",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-26T16:07:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8991a6f0057ff8e9abf8989426f97753405bb301",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8991a6f0057ff8e9abf8989426f97753405bb301.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8991a6f0057ff8e9abf8989426f97753405bb301.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use std::deque to store setup states\n",
+      "subject": "Use std::deque to store setup states"
+    },
+    {
+      "commit_num": 4501,
+      "hash": "16f380e5",
+      "short": "16f380e5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-25T17:48:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/16f380e5c1c427b55a733446450868a93c9c62cd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16f380e5c1c427b55a733446450868a93c9c62cd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16f380e5c1c427b55a733446450868a93c9c62cd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Document PolyGlotRandoms[] offsets\n\nShould be more clear from where the 'magic' numbers\ncome from.\n\nAlso bit of reformat while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Document PolyGlotRandoms[] offsets"
+    },
+    {
+      "commit_num": 4502,
+      "hash": "cbd7ce46",
+      "short": "cbd7ce46",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-24T11:40:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cbd7ce468c97ac74efcd497e5196f011b5a646c9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cbd7ce468c97ac74efcd497e5196f011b5a646c9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cbd7ce468c97ac74efcd497e5196f011b5a646c9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Explicitly use threads.size()\n\nInstead of just size(). Although code is longer,\nshould be more immediate to understand when reading.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Explicitly use threads.size()"
+    },
+    {
+      "commit_num": 4503,
+      "hash": "b6883c87",
+      "short": "b6883c87",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-24T09:59:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b6883c872d267cf464c575d2a901e117f6a97a84",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b6883c872d267cf464c575d2a901e117f6a97a84.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b6883c872d267cf464c575d2a901e117f6a97a84.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce struct Mutex and ConditionVariable\n\nTo mimics C++11 std::mutex and std::condition_variable,\nalso rename locks and condition variables to be more\nuniform across the classes.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Introduce struct Mutex and ConditionVariable"
+    },
+    {
+      "commit_num": 4504,
+      "hash": "fde0b9e7",
+      "short": "fde0b9e7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-24T08:30:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/fde0b9e701a6bfac05e56f6bffdc29943be56120",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fde0b9e701a6bfac05e56f6bffdc29943be56120.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fde0b9e701a6bfac05e56f6bffdc29943be56120.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Slightly microptimize SEE\n\nReduce of one instruction. It seems a tad faster on\nthe profiler now. Very slightly but anyhow it is a\ncode semplification.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Slightly microptimize SEE"
+    },
+    {
+      "commit_num": 4505,
+      "hash": "7a282505",
+      "short": "7a282505",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-22T10:44:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7a2825053e3eb5204e6b45d0cadb9264e77ac69f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7a2825053e3eb5204e6b45d0cadb9264e77ac69f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7a2825053e3eb5204e6b45d0cadb9264e77ac69f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use size_t as operator[] argument type\n\nThis better mimics std::vector::operator[] and\nfixes a warning with MSVC 64bit.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use size_t as operator[] argument type"
+    },
+    {
+      "commit_num": 4506,
+      "hash": "4e619a13",
+      "short": "4e619a13",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-22T09:13:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4e619a13d6671db198bc9c39d54dd7f243ef5873",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4e619a13d6671db198bc9c39d54dd7f243ef5873.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4e619a13d6671db198bc9c39d54dd7f243ef5873.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge generate_direct_checks() in generate_moves()\n\nFurther reduce redundancy in move generation.\nVeirifed no speed regression on MSVC, Clang and gcc.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Merge generate_direct_checks() in generate_moves()"
+    },
+    {
+      "commit_num": 4507,
+      "hash": "0de92576",
+      "short": "0de92576",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-22T07:29:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0de92576100bba948cae854ebb9cd5a7a9502b43",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0de92576100bba948cae854ebb9cd5a7a9502b43.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0de92576100bba948cae854ebb9cd5a7a9502b43.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Streamline generate_moves()\n\nGreatly simplify these very performace critical functions.\nAmazingly we don't have any speed regression actually under\nMSVC we have the same assembly for generate_moves() !\n\nIn generate_direct_checks() 'target' is calculated only\nonce being a loop invariant.\n\nOn Clang there is even a slight speed up.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Streamline generate_moves()"
+    },
+    {
+      "commit_num": 4508,
+      "hash": "b84af67f",
+      "short": "b84af67f",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-20T17:41:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b84af67f4c88f3e3f7b61bf2035475f79fb3e62e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b84af67f4c88f3e3f7b61bf2035475f79fb3e62e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b84af67f4c88f3e3f7b61bf2035475f79fb3e62e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reformat piece values arrays\n\nAnd rename stuff while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Reformat piece values arrays"
+    },
+    {
+      "commit_num": 4509,
+      "hash": "7c8b7222",
+      "short": "7c8b7222",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-20T17:09:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7c8b7222f5eea024ab480abb2d9289fd1e42da9c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c8b7222f5eea024ab480abb2d9289fd1e42da9c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c8b7222f5eea024ab480abb2d9289fd1e42da9c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move zobrist keys out of Position\n\nAre used by Position but do not belong to that class,\nthere is only one instance of them (that's why were\ndefined as static), so move to a proper namespace instead.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Move zobrist keys out of Position"
+    },
+    {
+      "commit_num": 4510,
+      "hash": "ec9038b7",
+      "short": "ec9038b7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-20T13:44:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ec9038b7b4cb2701c3a3b8be56632e7f08e461ac",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ec9038b7b4cb2701c3a3b8be56632e7f08e461ac.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ec9038b7b4cb2701c3a3b8be56632e7f08e461ac.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire copy c'tor from class Position\n\nNot needed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire copy c'tor from class Position"
+    },
+    {
+      "commit_num": 4511,
+      "hash": "ab65d3fd",
+      "short": "ab65d3fd",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-20T06:54:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ab65d3fd0ecf340842408548bc7f3e6c28ad4c85",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab65d3fd0ecf340842408548bc7f3e6c28ad4c85.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab65d3fd0ecf340842408548bc7f3e6c28ad4c85.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Prefer a reference to a pointer\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Prefer a reference to a pointer"
+    },
+    {
+      "commit_num": 4512,
+      "hash": "e8b7109e",
+      "short": "e8b7109e",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-19T23:04:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e8b7109efffd95c8f8f3c030d41952d103b3e0fc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8b7109efffd95c8f8f3c030d41952d103b3e0fc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8b7109efffd95c8f8f3c030d41952d103b3e0fc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use enums instead of constants for piece values\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use enums instead of constants for piece values"
+    },
+    {
+      "commit_num": 4513,
+      "hash": "0c6ed592",
+      "short": "0c6ed592",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-19T13:12:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0c6ed5929cb875e1507569424ab13036c5214f9b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0c6ed5929cb875e1507569424ab13036c5214f9b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0c6ed5929cb875e1507569424ab13036c5214f9b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Document De Bruijn sequences\n\nInsted of raw magic numbers.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Document De Bruijn sequences"
+    },
+    {
+      "commit_num": 4514,
+      "hash": "2f4a9a14",
+      "short": "2f4a9a14",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-19T12:06:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2f4a9a140ae7882365f64ac11cf263bd505418e6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2f4a9a140ae7882365f64ac11cf263bd505418e6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2f4a9a140ae7882365f64ac11cf263bd505418e6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid wake up master thread when useless\n\nCheck we are the last slave of the split point\nbefore to wake up the master. This should avoid\nspurious wakes up.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Avoid wake up master thread when useless"
+    },
+    {
+      "commit_num": 4515,
+      "hash": "dba1bc35",
+      "short": "dba1bc35",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-19T10:20:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dba1bc354a74bf7774c453ac779b3ce462c2b8e2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dba1bc354a74bf7774c453ac779b3ce462c2b8e2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dba1bc354a74bf7774c453ac779b3ce462c2b8e2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify idle_loop() signature\n\nWe can detect the split point master also from within idle_loop,\nso we can call the function without parameters and remove an\noverloaded member hack in Thread class.\n\nNote that we don't need to take a lock around curSplitPoint\nwhen entering idle_loop() because if we are the master then\ncurSplitPoint cannot change under our feet (because is_searching\nis set and so we cannot be reallocated), if we are a slave\nwe enter idle_loop() only upon Thread creation and in that case\nis always splitPointsCnt == 0. This is true even in the very rare\ncase that curSplitPoint != NULL, if we have been already allocated\neven before entering idle_loop().\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Simplify idle_loop() signature"
+    },
+    {
+      "commit_num": 4516,
+      "hash": "4b194301",
+      "short": "4b194301",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-19T09:20:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4b19430103ac75b574a6b269db447d359814b603",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4b19430103ac75b574a6b269db447d359814b603.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4b19430103ac75b574a6b269db447d359814b603.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Prefer size_t over int for array sizes\n\nAlign to standard library conventions.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Prefer size_t over int for array sizes"
+    },
+    {
+      "commit_num": 4517,
+      "hash": "7c1f8dbd",
+      "short": "7c1f8dbd",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-18T12:04:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7c1f8dbde93267c7958a4de5e167a43e38c9e1e9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c1f8dbde93267c7958a4de5e167a43e38c9e1e9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c1f8dbde93267c7958a4de5e167a43e38c9e1e9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce namespace Bitbases\n\nLet's continue this namespace galore...\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Introduce namespace Bitbases"
+    },
+    {
+      "commit_num": 4518,
+      "hash": "2c1ba2ab",
+      "short": "2c1ba2ab",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-18T10:50:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2c1ba2ab0dad2421b8ed1bd3c049634f1f00dfc3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2c1ba2ab0dad2421b8ed1bd3c049634f1f00dfc3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2c1ba2ab0dad2421b8ed1bd3c049634f1f00dfc3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce namespace UCI\n\nAter previous patch it comes naturally to take this\nextra step.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Introduce namespace UCI"
+    },
+    {
+      "commit_num": 4519,
+      "hash": "b0118189",
+      "short": "b0118189",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-18T10:23:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b011818917fc6fddb3b4e4210f4a408eb4779d59",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b011818917fc6fddb3b4e4210f4a408eb4779d59.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b011818917fc6fddb3b4e4210f4a408eb4779d59.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire struct OptionsMap\n\nDirectly use the underlying std::map instead and avoid\na useless inheritance.\n\nAs a nice side-effect Options global object has now a\ndefault c'tor avoiding possible issues with globals\ninitializations.\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire struct OptionsMap"
+    },
+    {
+      "commit_num": 4520,
+      "hash": "bc4de9ed",
+      "short": "bc4de9ed",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-18T10:00:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bc4de9edaec0a618279092abbf465f47720736b8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bc4de9edaec0a618279092abbf465f47720736b8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bc4de9edaec0a618279092abbf465f47720736b8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Explicitly qualify STL functions\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Explicitly qualify STL functions"
+    },
+    {
+      "commit_num": 4521,
+      "hash": "9de4ee6d",
+      "short": "9de4ee6d",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-08-18T09:43:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9de4ee6d329b6da4f6bda0387a8ce6918c4e5a99",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9de4ee6d329b6da4f6bda0387a8ce6918c4e5a99.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9de4ee6d329b6da4f6bda0387a8ce6918c4e5a99.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire MovePickerExt struct\n\nTempletize MovePicker::next_move() member function instead. It\nis easier and we also avoid the forwarding of MovePicker() c'tor\narguments in the common case.\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire MovePickerExt struct"
+    }
+  ]
+}

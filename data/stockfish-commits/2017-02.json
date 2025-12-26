@@ -1,0 +1,369 @@
+{
+  "month": "2017-02",
+  "commits": [
+    {
+      "commit_num": 2891,
+      "hash": "1810c4d7",
+      "short": "1810c4d7",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-02-27T00:41:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1810c4d758674dc4de288ca782851e52874f8908",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1810c4d758674dc4de288ca782851e52874f8908.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1810c4d758674dc4de288ca782851e52874f8908.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify skipping of plies with helper threads\n\nReplaces the HalfDensity array with an equivalent, compact implementation.\nIncludes suggestions by mcostalba & snicolet.\n\nNo functional change\n\nCloses #1004\n",
+      "subject": "Simplify skipping of plies with helper threads"
+    },
+    {
+      "commit_num": 2892,
+      "hash": "8f7e032b",
+      "short": "8f7e032b",
+      "author": "snicolet <cassio@free.fr>",
+      "date": "2017-02-26T01:43:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8f7e032b8c8c2c19e37ece09eecb589fe2342daa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8f7e032b8c8c2c19e37ece09eecb589fe2342daa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8f7e032b8c8c2c19e37ece09eecb589fe2342daa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Change definition of \"weak\" in threats calculation\n\nBy defining \"strongly protected\" as \"protected by a pawn, or protected\nby two pieces and not attacked by two enemy pieces\".\n\nPassed STC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 17050 W: 3128 L: 2931 D: 10991\n\nPassed LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 120995 W: 15852 L: 15343 D: 89800\n\nBench : 6269229\n\nCloses #1016\n",
+      "subject": "Change definition of \"weak\" in threats calculation"
+    },
+    {
+      "commit_num": 2893,
+      "hash": "f1e3dfea",
+      "short": "f1e3dfea",
+      "author": "mstembera <MissingEmail@email>",
+      "date": "2017-02-24T05:33:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f1e3dfea748eef8ba443dace21c1663ac8bd5119",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f1e3dfea748eef8ba443dace21c1663ac8bd5119.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f1e3dfea748eef8ba443dace21c1663ac8bd5119.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reorder members of Material::Entry\n\nThis eliminates alignment padding and reduces size from 48 to 40 bytes.\nThis makes the material HashTable smaller and more cache friendly.\n\nNo functional change\n\nCloses #1013\n",
+      "subject": "Reorder members of Material::Entry"
+    },
+    {
+      "commit_num": 2894,
+      "hash": "9f48e1ec",
+      "short": "9f48e1ec",
+      "author": "GuardianRM <strimr25@mail.ru>",
+      "date": "2017-02-24T05:26:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9f48e1ec15b8bec038338e2c4404a234af8c6364",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9f48e1ec15b8bec038338e2c4404a234af8c6364.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9f48e1ec15b8bec038338e2c4404a234af8c6364.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Pieces protecting king\n\nInitial protective idea by Snicolet for knight, for other pieces too\nPatch add penalties and bonuses for pieces, depending on the distance from the own king\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 21192 W: 3919 L: 3704 D: 13569\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 26177 W: 3642 L: 3435 D: 19100\n\nBench : 6687377\n\nCloses #1012\n",
+      "subject": "Pieces protecting king"
+    },
+    {
+      "commit_num": 2895,
+      "hash": "eefbe967",
+      "short": "eefbe967",
+      "author": "snicolet <cassio@free.fr>",
+      "date": "2017-02-19T22:25:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/eefbe967c2a1ea1f1e39e5cfff1c38e451a9be2e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/eefbe967c2a1ea1f1e39e5cfff1c38e451a9be2e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/eefbe967c2a1ea1f1e39e5cfff1c38e451a9be2e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Keep pawns on both flanks\n\nPositions with pawns on only one flank tend to be more drawish. We add\na term to the initiative bonus to help the attacking player keep pawns\non both flanks.\n\nSTC: yellowish run stopped after 257137 games\nLLR: -0.92 (-2.94,2.94) [0.00,5.00]\nTotal: 257137 W: 46560 L: 45511 D: 165066\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 15602 W: 2125 L: 1956 D: 11521\n\nBench : 6976310\n\nCloses #1009\n",
+      "subject": "Keep pawns on both flanks"
+    },
+    {
+      "commit_num": 2896,
+      "hash": "c243cd5f",
+      "short": "c243cd5f",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2017-02-19T21:56:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c243cd5f4a8a2cd37896eff1dbc705bc69aade1f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c243cd5f4a8a2cd37896eff1dbc705bc69aade1f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c243cd5f4a8a2cd37896eff1dbc705bc69aade1f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Variable tuning\n\nA tuning patch which cover the following changes:\n\nincrease the importance of queen and rook mobility in endgame and\ndecrease it in mg, since if we use the heavy pieces too early in the game\nwe will just make opponent develop their pieces by threatening ours.\n\nKing Psqt:\n1)King will be encouraged more to stay in the first ranks in the MG\n2)and will be encouraged more to go to the middle of the board/last ranks in the EG\n\nBishop scale better in EG\nLogical changes on various psqt tables\n1/6 of the changes of the last tuning session on mobility tables\n\nSTC: LLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 227879 W: 41240 L: 40313 D: 146326\nLTC : LLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 167047 W: 21871 L: 21291 D: 123885\n\nBench: 5695960\n\nCloses #1008\n",
+      "subject": "Variable tuning"
+    },
+    {
+      "commit_num": 2897,
+      "hash": "05cf45f2",
+      "short": "05cf45f2",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-02-19T06:48:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/05cf45f2d137600387d5e560e22a464a84ad7b0d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/05cf45f2d137600387d5e560e22a464a84ad7b0d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/05cf45f2d137600387d5e560e22a464a84ad7b0d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Razor Simplification\n\nRemove code that restrict using tt-moves for razoring.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 67442 W: 12039 L: 11997 D: 43406\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 38541 W: 5044 L: 4947 D: 28550\n\nBench: 5667216\n\nCloses #1002\n",
+      "subject": "Razor Simplification"
+    },
+    {
+      "commit_num": 2898,
+      "hash": "faedcf08",
+      "short": "faedcf08",
+      "author": "torfranz <tfranzer@gmx.de>",
+      "date": "2017-02-15T05:26:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/faedcf08a8e1ed7516698eb7ab83081695b0f441",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/faedcf08a8e1ed7516698eb7ab83081695b0f441.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/faedcf08a8e1ed7516698eb7ab83081695b0f441.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire loose enemies bonus\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 44727 W: 7943 L: 7862 D: 28922\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 148343 W: 19044 L: 19088 D: 110211\n\nBench: 5669076\n\nCloses #1005\n",
+      "subject": "Retire loose enemies bonus"
+    },
+    {
+      "commit_num": 2899,
+      "hash": "83fb4547",
+      "short": "83fb4547",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-02-15T05:20:37Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/83fb4547f640c63c2dbbf0d5637bd8d1cf216a60",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/83fb4547f640c63c2dbbf0d5637bd8d1cf216a60.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/83fb4547f640c63c2dbbf0d5637bd8d1cf216a60.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "search(): Move nullValue variable into local scope\n\nNo functional change\n\nCloses #1003\n",
+      "subject": "search(): Move nullValue variable into local scope"
+    },
+    {
+      "commit_num": 2900,
+      "hash": "1e814e0c",
+      "short": "1e814e0c",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-02-15T05:11:44Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1e814e0ca01458c1084862087af0374b043b5cd8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e814e0ca01458c1084862087af0374b043b5cd8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e814e0ca01458c1084862087af0374b043b5cd8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix makefile: 32 bit builds without optimization.\n\nFixes failing build for\n\nmake ARCH=x86-32 clean && make ARCH=x86-32 optimize=no build\n\nby passing -m32 also to the link step.\n\nExtend travis testing accordingly.\n\nNo functional change.\n\nCloses #999\n",
+      "subject": "Fix makefile: 32 bit builds without optimization."
+    },
+    {
+      "commit_num": 2901,
+      "hash": "e0d91f4c",
+      "short": "e0d91f4c",
+      "author": "torfranz <tfranzer@gmx.de>",
+      "date": "2017-02-11T00:52:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e0d91f4c44c10c1f46ef95234ce15e9123866fe1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e0d91f4c44c10c1f46ef95234ce15e9123866fe1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e0d91f4c44c10c1f46ef95234ce15e9123866fe1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire small bonus in passed pawn evaluation\n\nSTC: http://tests.stockfishchess.org/tests/view/5899824d0ebc59099759f3ee\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 33370 W: 6061 L: 5961 D: 21348\n\nLTC: http://tests.stockfishchess.org/tests/view/5899e3820ebc59099759f415\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 36206 W: 4664 L: 4563 D: 26979\n\nBench: 6072262\n\nCloses #998\n",
+      "subject": "Retire small bonus in passed pawn evaluation"
+    },
+    {
+      "commit_num": 2902,
+      "hash": "a753e20b",
+      "short": "a753e20b",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2017-02-11T00:42:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a753e20bd4fc1e916f7e99884c01bb63fd7c1326",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a753e20bd4fc1e916f7e99884c01bb63fd7c1326.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a753e20bd4fc1e916f7e99884c01bb63fd7c1326.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "A small tweak in doEasyMove()\n\nTime.elapsed() > Time.optimum() * 5 / 44\ninstaed of:\nTime.elapsed() > Time.optimum() * 5 / 42\n\nThis was yellow on STC:\nLLR: -2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 156856 W: 28317 L: 27942 D: 100597\n\nPassed on LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 36909 W: 4926 L: 4682 D: 27301\n\nNote: Patch was originally submitted by user GuardianRM.\nHowever his repo was deleted before merge.\n\nNo functional change\n\nCloses #995\n",
+      "subject": "A small tweak in doEasyMove()"
+    },
+    {
+      "commit_num": 2903,
+      "hash": "5205d44f",
+      "short": "5205d44f",
+      "author": "Stefano80 <stefano.cardanobile@gmail.com>",
+      "date": "2017-02-06T00:02:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5205d44f878fc93be5cb634a920545bc2f4dd370",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5205d44f878fc93be5cb634a920545bc2f4dd370.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5205d44f878fc93be5cb634a920545bc2f4dd370.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify scale factor computation\n\nMinor non-functional simplifications in computing the scale factor.\n\nIn my opinion, the code is now slightly more readable:\n\n- remove one condition which can never be satisfied.\n- immediately return instead of assigning the sf variable.\n\nTested for non-regression:\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 62162 W: 11166 L: 11115 D: 39881\n\nNo functional change\n\nCloses #992\n",
+      "subject": "Simplify scale factor computation"
+    },
+    {
+      "commit_num": 2904,
+      "hash": "0553b468",
+      "short": "0553b468",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2017-02-05T23:39:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0553b46829156bb0c9efb0c9bdaaedc2045e997c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0553b46829156bb0c9efb0c9bdaaedc2045e997c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0553b46829156bb0c9efb0c9bdaaedc2045e997c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify Queen Mobility\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 85997 W: 15550 L: 15540 D: 54907\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 25333 W: 3370 L: 3256 D: 18707\n\nBench: 6459194\n\nCloses #991\n",
+      "subject": "Simplify Queen Mobility"
+    }
+  ]
+}

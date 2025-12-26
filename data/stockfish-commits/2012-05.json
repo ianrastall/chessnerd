@@ -1,0 +1,395 @@
+{
+  "month": "2012-05",
+  "commits": [
+    {
+      "commit_num": 4554,
+      "hash": "0412f4a1",
+      "short": "0412f4a1",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-27T13:13:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0412f4a1ee1b738441490dd6f3d324c21ee75987",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0412f4a1ee1b738441490dd6f3d324c21ee75987.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0412f4a1ee1b738441490dd6f3d324c21ee75987.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix an issue when adding a book during the game\n\nCurrently when we fail to open a book file, for instance\nif it doesn't exsist, we leave Book::open() with ifstream\nfailbit set. If then the book file is added, we correctly\nopen it at next attempt, but failbit is still set so that\nafter opening we exit because ifstream::good() returns false.\n\nThe fix is to reset failbit upon exiting.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix an issue when adding a book during the game"
+    },
+    {
+      "commit_num": 4555,
+      "hash": "68283258",
+      "short": "68283258",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-27T12:43:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6828325881eb823ddfb2e6ea72122c3a4576d240",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6828325881eb823ddfb2e6ea72122c3a4576d240.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6828325881eb823ddfb2e6ea72122c3a4576d240.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire PieceOffset[] in book.cpp\n\nAnd calculate piece offset on the fly. Also\nimprove comments.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire PieceOffset[] in book.cpp"
+    },
+    {
+      "commit_num": 4556,
+      "hash": "61a054b1",
+      "short": "61a054b1",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-26T22:14:37Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/61a054b17002a167a09ce09eb9a7d820d792c680",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/61a054b17002a167a09ce09eb9a7d820d792c680.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/61a054b17002a167a09ce09eb9a7d820d792c680.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a possible 'Division by zero'\n\nIn case a book entry has 'count' field set to 0\nwe crash. Spotted by Clang's static analyzer.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix a possible 'Division by zero'"
+    },
+    {
+      "commit_num": 4557,
+      "hash": "3361ad42",
+      "short": "3361ad42",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-26T21:43:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3361ad42420e578362dcafb94b639738609bf7d7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3361ad42420e578362dcafb94b639738609bf7d7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3361ad42420e578362dcafb94b639738609bf7d7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rename psq_score in ReducedStateInfo\n\nSo to be fully in sync with StateInfo, and move struct\nto position.h, just below StateInfo.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Rename psq_score in ReducedStateInfo"
+    },
+    {
+      "commit_num": 4558,
+      "hash": "6c9c6dd9",
+      "short": "6c9c6dd9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-26T09:11:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6c9c6dd989b037992f789ea182cafb630ca77f7c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6c9c6dd989b037992f789ea182cafb630ca77f7c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6c9c6dd989b037992f789ea182cafb630ca77f7c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix book file regression\n\nRevision 2aac860db3d04881103a3b0d0 of 27 / 4 / 2012\nchanged can_castle() signatures from bool to int and\nthis broke the code that calculates polyglot hash key\nin book.cpp\n\nInstead of directly fixing the code we prefer to change\ncastling rights definitions to align to the polyglot ones\n(as we did in previous patch). After this step we can simply\ntake internal castle rights as they are and use them\ndirectly to calculate polyglot book hash key, as we do\nin this patch that fixes the regression.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix book file regression"
+    },
+    {
+      "commit_num": 4559,
+      "hash": "a358dfe9",
+      "short": "a358dfe9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-26T08:51:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a358dfe934eeefc00ea9adb20d4a83c4cf4d4e1e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a358dfe934eeefc00ea9adb20d4a83c4cf4d4e1e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a358dfe934eeefc00ea9adb20d4a83c4cf4d4e1e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Redefine enum CastleRight\n\nTo be aligned with PolyGlot book castle right definitions.\n\nThis will be used by next patch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Redefine enum CastleRight"
+    },
+    {
+      "commit_num": 4560,
+      "hash": "0ecc920a",
+      "short": "0ecc920a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-19T07:38:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0ecc920a09f479cb9b568716597e0756da557174",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0ecc920a09f479cb9b568716597e0756da557174.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0ecc920a09f479cb9b568716597e0756da557174.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add a known draw case in kpk bitbase generation\n\nEarly classify as known draws the positions\nwhere white king is trapped on the rook file.\n\nSuggested by Dan Honeycutt.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Add a known draw case in kpk bitbase generation"
+    },
+    {
+      "commit_num": 4561,
+      "hash": "f86182e7",
+      "short": "f86182e7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-12T10:35:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f86182e791d0ff9d490556a06f9ae3f8770ff55d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f86182e791d0ff9d490556a06f9ae3f8770ff55d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f86182e791d0ff9d490556a06f9ae3f8770ff55d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify Position::print()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Simplify Position::print()"
+    },
+    {
+      "commit_num": 4562,
+      "hash": "c19a6ef8",
+      "short": "c19a6ef8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-12T08:57:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c19a6ef82d97840f3d5f06d587bce4f8b861b86d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c19a6ef82d97840f3d5f06d587bce4f8b861b86d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c19a6ef82d97840f3d5f06d587bce4f8b861b86d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Don't split if reduced below min_split_depth\"\n\nAfter extensive testing (I was off line this week and let\nthe test go on) it seems this change is useless:\n\nAfter 33968 games on a QUAD (4 threads) at 15\"+0.05\nMod vs Orig 5425 - 5550 - 22993 ELO -1 (+-2.1)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Revert \"Don't split if reduced below min_split_depth\""
+    },
+    {
+      "commit_num": 4563,
+      "hash": "ecb84464",
+      "short": "ecb84464",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-12T08:21:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ecb84464f927f9a0a96b8a6f95943786df2107b1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ecb84464f927f9a0a96b8a6f95943786df2107b1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ecb84464f927f9a0a96b8a6f95943786df2107b1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Improve previous patch\n\nOnly in case of promotion we care about an upper case\npromotion piece char, so std::transform() is overkill\nfor the task.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Improve previous patch"
+    },
+    {
+      "commit_num": 4564,
+      "hash": "1b2af05e",
+      "short": "1b2af05e",
+      "author": "Balint Pfliegel <balint.pfliegel@gmail.com>",
+      "date": "2012-05-11T23:01:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1b2af05ea69abffff432f7f20685e144bd24055e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1b2af05ea69abffff432f7f20685e144bd24055e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1b2af05ea69abffff432f7f20685e144bd24055e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Junior promotion patch\n\nAssumption: Junior sends promotions according to the side to move (ucase/lcase).\nFact: Stockfish generally handles promotion lcase.\nPatch: Handling position fen input moves always with lcase promotions.\n\nPorted back by Portfish. No functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Junior promotion patch"
+    },
+    {
+      "commit_num": 4565,
+      "hash": "caef3192",
+      "short": "caef3192",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-09T07:33:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/caef31921900e092616c56193e37201b08baa875",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/caef31921900e092616c56193e37201b08baa875.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/caef31921900e092616c56193e37201b08baa875.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix compilation with Android NDK\n\nIt seems ADL lookup is broken with the STLPort library. Peter says:\n\nThe compiler is gcc 4.4.3, but I don't know how many patches they\nhave applied to it. I think gcc has had support for Koenig lookup\na long time. I think the problem is the type of the vector iterator.\nFor example, line 272 in search.cpp:\n\n if (bookMove && count(RootMoves.begin(), RootMoves.end(), bookMove))\n\ngives the error:\n\njni/stockfish/search.cpp:272: error: 'count' was not declared in this scope\n\nHere RootMoves is:\n\n std::vector<RootMove> RootMoves;\n\nIf std::vector<T>::iterator is implemented as T*, then Koenig lookup\nwould fail because RootMove* is not in namespace std.\n\nI compile with the stlport implementation of STL, which in its vector\nclass has:\n\n typedef value_type* iterator;\n\nI'm not sure if this is allowed by the C++ standard. I did not find\nanything that says the iterator type must belong to namespace std.\nThe consensus in this thread\n\nhttp://compgroups.net/comp.lang.c++.moderated/argument-dependent-lookup/433395\n\nis that the stlport iterator type is allowed.\n\nReport and patch by Peter Osterlund.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix compilation with Android NDK"
+    },
+    {
+      "commit_num": 4566,
+      "hash": "2f47844c",
+      "short": "2f47844c",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-01T11:17:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2f47844c7cb34c7de5b5d41cda10b7d8736a20bc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2f47844c7cb34c7de5b5d41cda10b7d8736a20bc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2f47844c7cb34c7de5b5d41cda10b7d8736a20bc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify attacks_bb()\n\nAnd some formatting while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Simplify attacks_bb()"
+    },
+    {
+      "commit_num": 4567,
+      "hash": "b9bc6e82",
+      "short": "b9bc6e82",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-01T11:01:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b9bc6e823f061753419e563c4f923e60bd8c6193",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b9bc6e823f061753419e563c4f923e60bd8c6193.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b9bc6e823f061753419e563c4f923e60bd8c6193.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Change pos.pieces() argument order\n\nLet first argument to be the 'color'. This allows to align\npos.pieces() signatures with piece_list(), piece_count() and\nall the other functions where 'color' argument is passed as\nfirst one.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Change pos.pieces() argument order"
+    },
+    {
+      "commit_num": 4568,
+      "hash": "5e905800",
+      "short": "5e905800",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2012-05-01T10:33:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5e905800887da94d481978d3bddd9539b2111458",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5e905800887da94d481978d3bddd9539b2111458.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5e905800887da94d481978d3bddd9539b2111458.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Convert constants to decimal representation\n\nHex representation doesn't add any value in those cases.\nPreserve hex representation where more self-documenting\nfor instance for binary masks values.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Convert constants to decimal representation"
+    }
+  ]
+}

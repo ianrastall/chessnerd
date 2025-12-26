@@ -1,0 +1,369 @@
+{
+  "month": "2016-05",
+  "commits": [
+    {
+      "commit_num": 3092,
+      "hash": "3549d98d",
+      "short": "3549d98d",
+      "author": "joergoster <osterj165@googlemail.com>",
+      "date": "2016-05-30T20:42:47Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3549d98d07a6f0d04e4d020e009903dd82d0fadf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3549d98d07a6f0d04e4d020e009903dd82d0fadf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3549d98d07a6f0d04e4d020e009903dd82d0fadf.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tuned values for piece check and attack unit factors\n\nA middle ground patch of two successful tuning patches,\none at STC, the other at LTC, which now passed both.\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 67893 W: 12777 L: 12384 D: 42732\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 30165 W: 4189 L: 3960 D: 22016\n\nbench: 9209507\n",
+      "subject": "Tuned values for piece check and attack unit factors"
+    },
+    {
+      "commit_num": 3093,
+      "hash": "6e2ca97d",
+      "short": "6e2ca97d",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-05-29T08:10:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6e2ca97d93812b2f630f8b4ec1042105557abaec",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e2ca97d93812b2f630f8b4ec1042105557abaec.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e2ca97d93812b2f630f8b4ec1042105557abaec.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix syzygy DTZ bug\n\nIn this position: 3K4/8/3k4/8/4p3/4B3/5P2/8 w - - 0 5\n\nCurrent DTZ probe returns 1 instead of 15\n\nWhat happens is that the double push f4 is erroneously detected as a win move.\n\nAfter the push we have:\n\n[D]3K4/8/3k4/8/4pP2/4B3/8/8 b - f3 0 5\n\nAnd here the code misses the possible ep capture exf3.\n\nThe bug is in probe_dtz_no_ep() where is used probe_ab() that is\nblind to ep captures so it returns v == 2 (win) for position\n\n3K4/8/3k4/8/4pP2/4B3/8/8 b - f3 0 5\n\nNote that at the caller site the original position did not have any\npossible ep capture, so probe_dtz() returns immediately after calling\nprobe_dtz_no_ep().\n\nThe fix is to call the ep-aware probe_wdl() instead of probe_ab()\n\nI have verified that DTZ is correct now and also there are no more\nmistmatches compared to the new 'syzygy' branch. Tested on a set of\nmore than 600 endgame positions, included some tricky ones.\n\nFor people interested to redo the test or doing additional tests\nplease pull branch tb_dbg from https://github.com/mcostalba/Stockfish repo.\n\nbench: 8450534 (bench unaffected because syzygy is not exercized during bench)\n",
+      "subject": "Fix syzygy DTZ bug"
+    },
+    {
+      "commit_num": 3094,
+      "hash": "ab0f4c03",
+      "short": "ab0f4c03",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-05-24T06:09:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ab0f4c03539b151f07d99a5336e47e8dbdc63c6e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab0f4c03539b151f07d99a5336e47e8dbdc63c6e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab0f4c03539b151f07d99a5336e47e8dbdc63c6e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify doubled pawn\n\nOnly use doubled pawn malus when the doubled pawns are on consecutive squares.\n\nPassed STC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 7678 W: 1469 L: 1325 D: 4884\n\nAnd LTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 26739 W: 3562 L: 3449 D: 19728\n\nBench: 8211685\n",
+      "subject": "Simplify doubled pawn"
+    },
+    {
+      "commit_num": 3095,
+      "hash": "07b247f9",
+      "short": "07b247f9",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-05-21T08:05:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/07b247f9434f3633570aa124539ed5d2fc4f904f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/07b247f9434f3633570aa124539ed5d2fc4f904f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/07b247f9434f3633570aa124539ed5d2fc4f904f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Pins or discovered attacks on the opponent's queen\n\nBonus for pins or discovered attacks on the opponent's queen\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 32020 W: 5914 L: 5652 D: 20454\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 10946 W: 1530 L: 1375 D: 8041\n\nBench: 7031649\n",
+      "subject": "Pins or discovered attacks on the opponent's queen"
+    },
+    {
+      "commit_num": 3096,
+      "hash": "abac509c",
+      "short": "abac509c",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-05-21T08:05:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/abac509ccb1f197da1159ce02daaf4fa737c32e5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/abac509ccb1f197da1159ce02daaf4fa737c32e5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/abac509ccb1f197da1159ce02daaf4fa737c32e5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Teach check_blockers to check also non-king pieces\n\nThis is a prerequisite for next patch\n\nNo functional change.\n",
+      "subject": "Teach check_blockers to check also non-king pieces"
+    },
+    {
+      "commit_num": 3097,
+      "hash": "7cb8cbb4",
+      "short": "7cb8cbb4",
+      "author": "loco-loco <loco-loco@users.noreply.github.com>",
+      "date": "2016-05-18T06:46:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7cb8cbb403160c8436385149cf1d6949665b4924",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7cb8cbb403160c8436385149cf1d6949665b4924.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7cb8cbb403160c8436385149cf1d6949665b4924.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Assorted pruning tweaks\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 38257 W: 5206 L: 4961 D: 28090\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 16550 W: 3110 L: 2914 D: 10526\n\nBench: 8428997\n",
+      "subject": "Assorted pruning tweaks"
+    },
+    {
+      "commit_num": 3098,
+      "hash": "71bfbb22",
+      "short": "71bfbb22",
+      "author": "Leonid Pechenik <lp@home>",
+      "date": "2016-05-16T20:30:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/71bfbb22fce23f56b57d69b59a5cec1ff4b5aa03",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/71bfbb22fce23f56b57d69b59a5cec1ff4b5aa03.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/71bfbb22fce23f56b57d69b59a5cec1ff4b5aa03.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "More detailed dependence of time allocation on the magnitude of score change\n\n10+0.1:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 5657 W: 1130 L: 979 D: 3548\n\n60+0.6:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 36884 W: 5002 L: 4762 D: 27120\n\nbench: 8428997\n",
+      "subject": "More detailed dependence of time allocation on the magnitude of score change"
+    },
+    {
+      "commit_num": 3099,
+      "hash": "16c603ce",
+      "short": "16c603ce",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-05-11T04:48:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/16c603ce9baa464c2f59cbd001987ec3a7cbc01f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16c603ce9baa464c2f59cbd001987ec3a7cbc01f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16c603ce9baa464c2f59cbd001987ec3a7cbc01f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Double pawn simplification\n\nTry doubled pawn simplification, with psq\ntable compensation.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 36094 W: 6558 L: 6463 D: 23073\n\nLTC:\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 102352 W: 13417 L: 13404 D: 75531\n\nBench: 8716243\n",
+      "subject": "Double pawn simplification"
+    },
+    {
+      "commit_num": 3100,
+      "hash": "4b9ed656",
+      "short": "4b9ed656",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-05-06T13:40:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4b9ed6566a7ed026160fc79b778f95e62fde22a1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4b9ed6566a7ed026160fc79b778f95e62fde22a1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4b9ed6566a7ed026160fc79b778f95e62fde22a1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Unsafe checks\n\nIntroducing a new multi-purpose penalty related to King safety, which\nincludes all kind of potential checks (from unsafe or unavailable\nsquares currently occupied by some other piece)\n\nThis will indirectly detect and reward some pins, discovered checks, and\nmotifs such as square vacation, or rook behind its pawn and aligned with\nKing (example Black Rg8, g7 against Kg1),\nand penalize some pawn blockers (if they move, it allows a discovered\ncheck by the pawn).\n\nAnd since it looks also at protected squares, it detects some potential\ndefense overloading.\n\nFinally, the rook contact checks had been removed some time ago. This\ntest will give a small bonus for them, as well as for bishop contact\nchecks.\n\nPassed STC\nhttp://tests.stockfishchess.org/tests/view/5729ec740ebc59301a354b36\nLLR: 2.94 (-2.94,2.94) [0.00,5.00]\nTotal: 13306 W: 2477 L: 2296 D: 8533\n\nand LTC\nhttp://tests.stockfishchess.org/tests/view/572a5be00ebc59301a354b65\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 20369 W: 2750 L: 2565 D: 15054\n\nbench: 9298175\n",
+      "subject": "Unsafe checks"
+    },
+    {
+      "commit_num": 3101,
+      "hash": "96998240",
+      "short": "96998240",
+      "author": "loco-loco <loco-loco@users.noreply.github.com>",
+      "date": "2016-05-06T03:56:47Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/969982406ce85e38b88d15768ae2d3ee31fe82bb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/969982406ce85e38b88d15768ae2d3ee31fe82bb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/969982406ce85e38b88d15768ae2d3ee31fe82bb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge good and bad quiets\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 58613 W: 10779 L: 10723 D: 37111\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 33608 W: 4539 L: 4436 D: 24633\n\nBench: 9441294\n",
+      "subject": "Merge good and bad quiets"
+    },
+    {
+      "commit_num": 3102,
+      "hash": "5e4cd3fc",
+      "short": "5e4cd3fc",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-05-01T16:18:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5e4cd3fc0d4b88eeb09ae458b9cb9f73db8c4ae7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5e4cd3fc0d4b88eeb09ae458b9cb9f73db8c4ae7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5e4cd3fc0d4b88eeb09ae458b9cb9f73db8c4ae7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire __popcnt64 intrinsic\n\nJust use _mm_popcnt_u64() that is available\nboth for MSVC abd Intel compiler.\n\nVerified on MSVC that the produced assembly\nhas the hardware 'popcnt' instruction.\n\nNo functional change.\n",
+      "subject": "Retire __popcnt64 intrinsic"
+    },
+    {
+      "commit_num": 3103,
+      "hash": "3487eb9f",
+      "short": "3487eb9f",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-05-01T13:10:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3487eb9f9ee910ab18d1a5e23f5fc3e507366c09",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3487eb9f9ee910ab18d1a5e23f5fc3e507366c09.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3487eb9f9ee910ab18d1a5e23f5fc3e507366c09.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a warning with MSVC\n\nIntroduced by 2dd24dc4e618dc7b (\"Use popcount intrinsic with Intel\")\n\nNo functional change.\n",
+      "subject": "Fix a warning with MSVC"
+    },
+    {
+      "commit_num": 3104,
+      "hash": "2dd24dc4",
+      "short": "2dd24dc4",
+      "author": "erbsenzaehler <erbsenzaehler@users.noreply.github.com>",
+      "date": "2016-05-01T08:57:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2dd24dc4e618dc7b83799890fe7e84b09b6456b4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2dd24dc4e618dc7b83799890fe7e84b09b6456b4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2dd24dc4e618dc7b83799890fe7e84b09b6456b4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use popcount intrinsic with Interl compiler\n\nIt seems that icc used our fallback version of popcount.\nNow use intrinsics.\n\nicc version 16.0.2 (gcc version 5.3.0 compatibility)\nbmi2 compile\nuname -r 4.5.1-1-ARCH\n\n20xbench gives a nice speedup\n./stockfish-icc-master 2161515 +- 34462\n./stockfish-icc-sse42 2260857 +- 50349\n",
+      "subject": "Use popcount intrinsic with Interl compiler"
+    },
+    {
+      "commit_num": 3105,
+      "hash": "5486911e",
+      "short": "5486911e",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-05-01T03:23:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5486911e019c8be689e75462e2fc36ef7eb2c84a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5486911e019c8be689e75462e2fc36ef7eb2c84a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5486911e019c8be689e75462e2fc36ef7eb2c84a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify History LMR Formula\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 41713 W: 7589 L: 7504 D: 26620\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 41353 W: 5484 L: 5391 D: 30478\n\nBench: 8946983\n",
+      "subject": "Simplify History LMR Formula"
+    }
+  ]
+}

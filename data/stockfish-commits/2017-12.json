@@ -1,0 +1,421 @@
+{
+  "month": "2017-12",
+  "commits": [
+    {
+      "commit_num": 2717,
+      "hash": "1c50d8cb",
+      "short": "1c50d8cb",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-12-26T09:40:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1c50d8cbf554733c0db6ab423b413d75cc0c1928",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1c50d8cbf554733c0db6ab423b413d75cc0c1928.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1c50d8cbf554733c0db6ab423b413d75cc0c1928.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Upon changing the number of threads, make sure all threads are bound\n\nThe heuristic to avoid thread binding if less than 8 threads are requested resulted in the first 7 threads not being bound.\n\nThe branch was verified to yield a roughly 13% speedup by @CoffeeOne on the appropriate hardware and OS, and an earlier version of this patch tested well on his machine:\n\n\n\nhttp://tests.stockfishchess.org/tests/view/5a3693480ebc590ccbb8be5a\n\nELO: 9.24 +-4.6 (95%) LOS: 100.0%\n\nTotal: 5000 W: 634 L: 501 D: 3865\n\n\n\nTo make sure all threads (including mainThread) are bound as soon as the total number exceeds 7, recreate all threads on a change of thread number.\n\nTo do this, unify Threads::init, Threads::exit and Threads::set are unified in a single Threads::set function that goes through the needed steps.\n\nThe code includes several suggestions from @joergoster.\n\n\n\nFixes issue #1312 \n\n\n\nNo functional change\n",
+      "subject": "Upon changing the number of threads, make sure all threads are bound"
+    },
+    {
+      "commit_num": 2718,
+      "hash": "7d4d3a2c",
+      "short": "7d4d3a2c",
+      "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
+      "date": "2017-12-22T10:50:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7d4d3a2c3a4c6ce96bdbcfecf373934fdccc9b07",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7d4d3a2c3a4c6ce96bdbcfecf373934fdccc9b07.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7d4d3a2c3a4c6ce96bdbcfecf373934fdccc9b07.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Include x-ray attacks through all queens independently of the color.\n\nWhen calculating attacks from rooks/bishops current master includes\nx-rays through own queen. This patch includes also x-rays through\nopponent queen.\n\nCredits go to Brian who inspired for this idea\nhttps://groups.google.com/forum/?fromgroups=#!topic/fishcooking/Z3APRYpQeMU\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 41549 W: 7544 L: 7244 D: 26761\nElo\t2.05 [-0.29,4.19] (95%)\nhttp://tests.stockfishchess.org/tests/view/5a3b5fe50ebc590ccbb8bf9a\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 110010 W: 14208 L: 13739 D: 82063\nElo\t1.20 [-0.27,2.55] (95%)\nhttp://tests.stockfishchess.org/tests/view/5a3b8e7c0ebc590ccbb8bfad\n\nbench: 5544445\n",
+      "subject": "Include x-ray attacks through all queens independently of the color."
+    },
+    {
+      "commit_num": 2719,
+      "hash": "2198cd05",
+      "short": "2198cd05",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-12-18T15:32:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2198cd0524574f0d9df8c0ec9aaf14ad8c94402b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2198cd0524574f0d9df8c0ec9aaf14ad8c94402b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2198cd0524574f0d9df8c0ec9aaf14ad8c94402b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Allow for general transposition table sizes. (#1341)\n\nFor efficiency reasons current master only allows for transposition table sizes that are N = 2^k in size, the index computation can be done efficiently as (hash % N) can be written instead as (hash & 2^k - 1). On a typical computer (with 4, 8... etc Gb of RAM), this implies roughly half the RAM is left unused in analysis.\n\n\n\nThis issue was mentioned on fishcooking by Mindbreaker:\n\nhttp://tests.stockfishchess.org/tests/view/5a3587de0ebc590ccbb8be04\n\n\n\nRecently a neat trick was proposed to map a hash into the range [0,N[ more efficiently than (hash % N) for general N, nearly as efficiently as (hash % 2^k):\n\n\n\nhttps://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/\n\n\n\nnamely computing (hash * N / 2^32) for 32 bit hashes. This patch implements this trick and now allows for general hash sizes. Note that for N = 2^k this just amounts to using a different subset of bits from the hash. Master will use the lower k bits, this trick will use the upper k bits (of the 32 bit hash).\n\n\n\nThere is no slowdown as measured with [-3, 1] test:\n\n\n\nhttp://tests.stockfishchess.org/tests/view/5a3587de0ebc590ccbb8be04\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 128498 W: 23332 L: 23395 D: 81771\n\n\n\nThere are two (smaller) caveats:\n\n\n\n1) the patch is implemented for a 32 bit hash (so that a 64 bit multiply can be used), this effectively limits the number of clusters that can be used to 2^32 or to 128Gb of transpostion table. That's a change in the maximum allowed TT size, which could bother those using 256Gb or more regularly.\n\n\n\n2) Already in master, an excluded move is hashed into the position key in rather simple way, essentially only affecting the lower 16 bits of the key. This is OK in master, since bits 0-15 end up in the index, but not in the new scheme, which picks the higher bits. This is 'fixed' by shifting the excluded move a few bits up. Eventually a better hashing scheme seems wise.\n\n\n\nDespite these two caveats, I think this is a nice improvement in usability.\n\n\n\nBench: 5346341\n",
+      "subject": "Allow for general transposition table sizes. (#1341)"
+    },
+    {
+      "commit_num": 2720,
+      "hash": "b53239d6",
+      "short": "b53239d6",
+      "author": "Günther Demetz <guenther.demetz@wuerth-phoenix.com>",
+      "date": "2017-12-18T15:30:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b53239d6410cfc87bf454370671390b04879ef05",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b53239d6410cfc87bf454370671390b04879ef05.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b53239d6410cfc87bf454370671390b04879ef05.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Enhanced verify search (#1338)\n\nby disabling null-move-pruning for the side to move for first part of\n\nthe remaining search tree. This helps to better recognize zugzwang.\n\n\n\nSTC:\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 18220 W: 3379 L: 3253 D: 11588\n\nhttp://tests.stockfishchess.org/tests/view/5a2fa6460ebc590ccbb8bc2f\n\n\n\nLTC:\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 41899 W: 5359 L: 5265 D: 31275\n\nhttp://tests.stockfishchess.org/tests/view/5a2fcf440ebc590ccbb8bc47\n\n\n\nFor further detail see commit notes and discussion at \n\nhttps://github.com/pb00068/Stockfish/commit/6401a80ab91df5c54390ac357409fef2e51ff5bb\n\n\n\nbench: 5776193\n",
+      "subject": "Enhanced verify search (#1338)"
+    },
+    {
+      "commit_num": 2721,
+      "hash": "be6fafd0",
+      "short": "be6fafd0",
+      "author": "Rocky640 <Rocky640@users.noreply.github.com>",
+      "date": "2017-12-17T07:50:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/be6fafd0793d934c31925832b4bde569b5abd5b9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/be6fafd0793d934c31925832b4bde569b5abd5b9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/be6fafd0793d934c31925832b4bde569b5abd5b9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify other checks (#1337)\n\nReplace an intricate definition with a more natural one.\n\n\n\nMaster was excluding squares occupied by a pawn which was blocked by a pawn.\n\nThis version excludes any squares occupied by a pawn which is blocked by \"something\"\n\n\n\nPassed STC\n\nhttp://tests.stockfishchess.org/tests/view/5a2f557b0ebc590ccbb8bc0d\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 44211 W: 8009 L: 7928 D: 28274\n\n\n\nand LTC\n\nhttp://tests.stockfishchess.org/tests/view/5a301d440ebc590ccbb8bc80\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 31958 W: 4108 L: 4002 D: 23848\n\n\n\nBench 5000136\n",
+      "subject": "Simplify other checks (#1337)"
+    },
+    {
+      "commit_num": 2722,
+      "hash": "f6981b13",
+      "short": "f6981b13",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-12-10T15:46:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f6981b1321357866e7aff688572e1d0e1fe57c08",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f6981b1321357866e7aff688572e1d0e1fe57c08.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f6981b1321357866e7aff688572e1d0e1fe57c08.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make staticEval independent of the search path\n\nCurrent master can yield different staticEvals depending on the path\nused to reach the position. The reason for this is that the evaluation after a\nnull move is always computed subtracting 2 * Eval::Tempo, while this is not\nthe case for lazy or specialized evals. This patch always adds tempo to evals,\nwhich doesn't affect playing strength:\n\nLTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 59911 W: 7616 L: 7545 D: 44750\n\nSTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 104947 W: 18897 L: 18919 D: 67131\n\nFixes issue #1335\n\nBench: 5208264\n",
+      "subject": "Make staticEval independent of the search path"
+    },
+    {
+      "commit_num": 2723,
+      "hash": "020dd69a",
+      "short": "020dd69a",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2017-12-10T15:13:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/020dd69a3512d01c7f189b1aea64fa75c7e1b7cd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/020dd69a3512d01c7f189b1aea64fa75c7e1b7cd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/020dd69a3512d01c7f189b1aea64fa75c7e1b7cd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify other checks #1334\n\nSimplify the other check penalty computation. Compared to current master,\n\na) it uses a 143 kingDanger penalty instead of S(10, 10) for the \"otherCheck\"\n(credits to ElbertoOne for finding a suitable kingDanger range to replace the score\nand to Guardian for showing this could also be a neutral change at LTC).\nThis makes our king safety model more consistent and simpler.\n\nb) it might also score more than one \"otherCheck\" penalty for a given piece type instead of just one\n\nc) it might score many pinned penalties instead of just one.\n\nd) It also remove 3 conditionals and uses simpler expressions.\nSo it was tested as a SPRT[-3, 1]\n\nPassed STC\nhttp://tests.stockfishchess.org/tests/view/5a2b560b0ebc590ccbb8ba6b\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 11705 W: 2217 L: 2080 D: 7408\n\nAnd LTC\nhttp://tests.stockfishchess.org/tests/view/5a2bfd0d0ebc590ccbb8bab0\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 26812 W: 3575 L: 3463 D: 19774\n\nTrying to improve on b) another attempt was made to score also the\n\"otherchecks\" for piece types which had some safe checks, but this\nfailed STC http://tests.stockfishchess.org/tests/view/5a2c79e60ebc590ccbb8badd\n\nbench: 5149133\n",
+      "subject": "Simplify other checks #1334"
+    },
+    {
+      "commit_num": 2724,
+      "hash": "70262f20",
+      "short": "70262f20",
+      "author": "Ben Koshy <benkoshy@hotmail.com>",
+      "date": "2017-12-10T12:46:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/70262f20274a50389ab8a84531a0832d17851255",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/70262f20274a50389ab8a84531a0832d17851255.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/70262f20274a50389ab8a84531a0832d17851255.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add Resources to understand code base (#1332)\n\nNo functional change.\n",
+      "subject": "Add Resources to understand code base (#1332)"
+    },
+    {
+      "commit_num": 2725,
+      "hash": "196ae7c3",
+      "short": "196ae7c3",
+      "author": "Günther Demetz <guenther.demetz@wuerth-phoenix.com>",
+      "date": "2017-12-06T13:23:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/196ae7c38b99e5e885d319b18a3b2538319de939",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/196ae7c38b99e5e885d319b18a3b2538319de939.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/196ae7c38b99e5e885d319b18a3b2538319de939.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't consider defending queen as check blocker (#1328)\n\nSTC:\n\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\n\nTotal: 22636 W: 4212 L: 3990 D: 14434\n\nhttp://tests.stockfishchess.org/tests/view/5a2506140ebc590ccbb8b75a\n\n\n\nLTC:\n\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\n\nTotal: 63448 W: 8287 L: 7965 D: 47196\n\nhttp://tests.stockfishchess.org/tests/view/5a253a610ebc590ccbb8b776\n\n\n\nbench: 5767699\n",
+      "subject": "Don't consider defending queen as check blocker (#1328)"
+    },
+    {
+      "commit_num": 2726,
+      "hash": "be382bb0",
+      "short": "be382bb0",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2017-12-05T06:25:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/be382bb0cf5927dc10ff9be882f6980a78d1484a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/be382bb0cf5927dc10ff9be882f6980a78d1484a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/be382bb0cf5927dc10ff9be882f6980a78d1484a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "A better contempt implementation for Stockfish (#1325)\n\n* A better contempt implementation for Stockfish\n\n\n\nThe round 2 of TCEC season 10 demonstrated the benefit of having a nice contempt implementation: it gives the strongest programs in the tournament the ability to slow down the game when they feel the position is slightly worse, prefering to stay in a complicated (even if slightly risky) middle game rather than simplifying by force into a drawn endgame.\n\n\n\nThe current contempt implementation of Stockfish is inadequate, and this patch is an attempt to provide a better one.\n\n\n\nPassed STC non-regression test against master:\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 83360 W: 15089 L: 15075 D: 53196\n\nhttp://tests.stockfishchess.org/tests/view/5a1bf2de0ebc590ccbb8b370\n\n\n\nThis contempt implementation is showing promising results in certains situations. For instance, it obtained a nice +30 Elo gain when playing with contempt=40 against Stockfish 7, compared to current master:\n\n\n\n• master against SF 7 (20000 games at LTC): +121.2 Elo\n\n• this patch with contempt=40 (20000 games at LTC): +154.11 Elo\n\n\n\nThis was the result of real cooperative work from the Stockfish team, with key ideas coming from Stefan Geschwentner (locutus2) and Chris Cain (ceebo) while most of the community helped with feedback and computer time.\n\n\n\nIn this commit the bench is unchanged by default, but you can test at home with the new contempt in the UCI options. The style of play will change a lot when using contempt different of zero (I repeat: not done in this version by default, however)!\n\n\n\nThe Stockfish team is still deliberating over the best default contempt value in self-play and the best contempt modeling strategy, to help users choosing a contempt value when playing against much weaker programs. These informations will be given in future commits when available :-)\n\n\n\nBench: 5051254\n\n\n\n* Remove the prefetch\n\n\n\nNo functional change.\n",
+      "subject": "A better contempt implementation for Stockfish (#1325)"
+    },
+    {
+      "commit_num": 2727,
+      "hash": "822695d4",
+      "short": "822695d4",
+      "author": "syzygy1 <ronalddeman@yahoo.com>",
+      "date": "2017-12-04T16:52:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/822695d4d3a9336dc54bfabd0996e75865358ae2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/822695d4d3a9336dc54bfabd0996e75865358ae2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/822695d4d3a9336dc54bfabd0996e75865358ae2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use a Direction enum for Square deltas\n\nCurrently the NORTH/WEST/SOUTH/EAST values are of type Square, but conceptually they are not squares but directions. This patch separates these values into a Direction enum and overloads addition and subtraction to allow adding a Square to a Direction (to get a new Square).\n\n\n\nI have also slightly trimmed the possible overloadings to improve type safety. For example, it would normally not make sense to add a Color to a Color or a Piece to a Piece, or to multiply or divide them by an integer. It would also normally not make sense to add a Square to a Square.\n\n\n\nThis is a non-functional change.\n",
+      "subject": "Use a Direction enum for Square deltas"
+    },
+    {
+      "commit_num": 2728,
+      "hash": "54f6ce70",
+      "short": "54f6ce70",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2017-12-04T16:01:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/54f6ce70fd68b38f053cd7d338bed1a74d92bb8b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/54f6ce70fd68b38f053cd7d338bed1a74d92bb8b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/54f6ce70fd68b38f053cd7d338bed1a74d92bb8b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid warnings by the Clang compiler\n\nClang gave a couple of warnings for unused parameters after the recnet commit \"Use constexpr when makes sense\".\n\nNo functional change.\n",
+      "subject": "Avoid warnings by the Clang compiler"
+    },
+    {
+      "commit_num": 2729,
+      "hash": "2acda1fd",
+      "short": "2acda1fd",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-12-03T17:29:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2acda1fde3e1542a0b1bfc5a0885559e6daf142a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2acda1fde3e1542a0b1bfc5a0885559e6daf142a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2acda1fde3e1542a0b1bfc5a0885559e6daf142a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use bool(Bitboard b) instead of !!b (#1321)\n\nThe idiom !!b is confusing newcomers (e.g. Stefan needs explaining here https://groups.google.com/d/msg/fishcooking/vYqnsRI4brY/Gaf60QuACwAJ).\n\n\n\nNo functional change.\n",
+      "subject": "Use bool(Bitboard b) instead of !!b (#1321)"
+    },
+    {
+      "commit_num": 2730,
+      "hash": "d1934822",
+      "short": "d1934822",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2017-12-03T11:49:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d19348221395a5939603bbd1364fda60e4ffd2ee",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d19348221395a5939603bbd1364fda60e4ffd2ee.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d19348221395a5939603bbd1364fda60e4ffd2ee.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Pawn endgames directly skip early pruning.\n\nInstead of checking individual steps. Idea by @Stefano80.\n\npassed STC\nhttp://tests.stockfishchess.org/tests/view/5a23e5d20ebc590ccbb8b6d5\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 37445 W: 6866 L: 6773 D: 23806\n\npassed LTC\nhttp://tests.stockfishchess.org/tests/view/5a24260c0ebc590ccbb8b716\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 38780 W: 4946 L: 4848 D: 28986\n\nBench: 5466219\n",
+      "subject": "Pawn endgames directly skip early pruning."
+    },
+    {
+      "commit_num": 2731,
+      "hash": "a87a1005",
+      "short": "a87a1005",
+      "author": "Stefan Geschwentner <locutus2@users.noreply.github.com>",
+      "date": "2017-12-03T09:41:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a87a1005ad63c8076a79ea3b2648f87fea49cfc5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a87a1005ad63c8076a79ea3b2648f87fea49cfc5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a87a1005ad63c8076a79ea3b2648f87fea49cfc5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Attack threats\n\nGive bonus for safe attack threats from bishops and rooks on opponent queen\n\n\n\nSTC:\n\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\n\nTotal: 8629 W: 1599 L: 1438 D: 5592\n\nhttp://tests.stockfishchess.org/tests/view/5a1ad4490ebc590ccbb8b30d\n\n\n\nLTC:\n\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\n\nTotal: 7093 W: 987 L: 846 D: 5260\n\nhttp://tests.stockfishchess.org/tests/view/5a1aec5d0ebc590ccbb8b317\n\n\n\nBench: 5051254\n",
+      "subject": "Attack threats"
+    },
+    {
+      "commit_num": 2732,
+      "hash": "83e829c9",
+      "short": "83e829c9",
+      "author": "Gontran Lemaire <gontran.lemaire@gmail.com>",
+      "date": "2017-12-01T22:02:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/83e829c9dc900dcb00d673417062f4193481ff36",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/83e829c9dc900dcb00d673417062f4193481ff36.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/83e829c9dc900dcb00d673417062f4193481ff36.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove QueenMinorsImbalance array #1340\n\nRemove QMI array and adjust bishop, knight and queen coefficients\nin QuadraticOurs and QuadraticTheirs arrays in compensation of\nthis removal.\n\nSTC : http://tests.stockfishchess.org/tests/view/5a21d8350ebc590ccbb8b5fe\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 49659 W: 9029 L: 8957 D: 31673\n\nLTC : http://tests.stockfishchess.org/tests/view/5a33c0dd0ebc590ccbb8bd7e\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 45905 W: 5834 L: 5745 D: 34326\n\nBench: 5176807\n",
+      "subject": "Remove QueenMinorsImbalance array #1340"
+    }
+  ]
+}

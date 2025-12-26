@@ -1,0 +1,1253 @@
+{
+  "month": "2013-09",
+  "commits": [
+    {
+      "commit_num": 3967,
+      "hash": "bd1c3ed7",
+      "short": "bd1c3ed7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-29T07:43:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bd1c3ed7e32d3df0ceb29cb6959599e3cac2057c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd1c3ed7e32d3df0ceb29cb6959599e3cac2057c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd1c3ed7e32d3df0ceb29cb6959599e3cac2057c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add more depth/positions to bench\n\nIncrease bench default depth from 12 to 13 and\nadd 15 new endgame positions to have broader\ncoverage and also more reliable nps calulcation\nused for fishtest framework.\n\nDue to the new endgame positions, where nps is higher,\nthe total nps is increased of about 15%.\n\nThanks to Lucas and Jörg for the suggestions.\n\nNo functional change, but bench number is now:\n\nbench: 8336338\n",
+      "subject": "Add more depth/positions to bench"
+    },
+    {
+      "commit_num": 3968,
+      "hash": "cca34e23",
+      "short": "cca34e23",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-28T12:43:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cca34e234cc98ed4b61e75a25f8cd0d917c2a3fa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cca34e234cc98ed4b61e75a25f8cd0d917c2a3fa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cca34e234cc98ed4b61e75a25f8cd0d917c2a3fa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Drop 'is' prefix from query functions\n\nMost but not all.\n\nNo functional change.\n",
+      "subject": "Drop 'is' prefix from query functions"
+    },
+    {
+      "commit_num": 3969,
+      "hash": "ed95ad1c",
+      "short": "ed95ad1c",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-28T11:14:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ed95ad1c0eab8a27d1866a3f4532c2793a53ca36",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed95ad1c0eab8a27d1866a3f4532c2793a53ca36.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed95ad1c0eab8a27d1866a3f4532c2793a53ca36.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix build on Mac OS X\n\nFor some users -stack_size,0x4000 does not work,\nso revert for now.\n\nosX 10.6.8\ngcc version 4.7.3 (MacPorts gcc47 4.7.3_2)\n\ng++: error: unrecognized command line option '-stack_size,0x4000'\nmake[2]: *** [stockfish] Error 1\nmake[1]: *** [gcc-profile-make] Error 2\nmake: *** [profile-build] Error 2\n\nNo functional change.\n",
+      "subject": "Fix build on Mac OS X"
+    },
+    {
+      "commit_num": 3970,
+      "hash": "c65d67fe",
+      "short": "c65d67fe",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-28T07:59:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c65d67feb53895a34423cc2043edc69741f2ba92",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c65d67feb53895a34423cc2043edc69741f2ba92.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c65d67feb53895a34423cc2043edc69741f2ba92.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Use a per-thread array\"\n\nThis reverts commit 800410eef1c0811 and instead increases\nstack size.\n\nI went through the old emails with Daylen that reported the\ncrash issue on Mac OS X and was fixed by 0049d3f337b6f3a66a0.\n\nIt was reported default stack size for a thread in Mac OS X is 8\nmegabytes while the patch that we are reverting allows to reduce\nstack size at max of about 217KB, so the reason for the crash was\nonly marginal in MAX_MOVES value. On those emails Daylen also\nhinted how to increase stack size for Mac OS X to 16MB.\n\nSo prefer to increase stack size to 16MB instad of re-inventing\nthe wheel and do our home grown stack as we did with the patch\nthat we are now reverting (it will remain anyhow in git history\nfor documentation purposes).\n\nNo functional change.\n",
+      "subject": "Revert \"Use a per-thread array\""
+    },
+    {
+      "commit_num": 3971,
+      "hash": "b742a3f2",
+      "short": "b742a3f2",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-27T06:50:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b742a3f29aac762616537eb032db4a2455df6b96",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b742a3f29aac762616537eb032db4a2455df6b96.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b742a3f29aac762616537eb032db4a2455df6b96.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Increase MAX_MOVES to 256\n\nThis should be enough for any legal position, even\nthe handcrafted ones, like the one presented by Reuven:\n\n1Q5R/4Q1K1/B1Q5/B4Q2/N2Q4/pQ4Q1/pn2Q3/krQ4R w - -\n\nWhere currently we crash. This reverts the patch\n0049d3f337b6f3a66a06503c of 8/4/2012 where stack\nwas shrinked due to crashes while in deep analysys.\n\nNo functional change.\n",
+      "subject": "Increase MAX_MOVES to 256"
+    },
+    {
+      "commit_num": 3972,
+      "hash": "800410ee",
+      "short": "800410ee",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-26T17:25:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/800410eef1c0811d046ee2332b3afda21284b876",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/800410eef1c0811d046ee2332b3afda21284b876.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/800410eef1c0811d046ee2332b3afda21284b876.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use a per-thread array for generated moves\n\nThis greately reduces stack usage and is a\nprerequisite for next patch.\n\nVerified with 40K games both in single and SMP\ncase that there are no regressions.\n\nNo functional change.\n",
+      "subject": "Use a per-thread array for generated moves"
+    },
+    {
+      "commit_num": 3973,
+      "hash": "bc6faf63",
+      "short": "bc6faf63",
+      "author": "Lucas Braesch <lucas.braesch@gmail.com>",
+      "date": "2013-09-26T10:25:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bc6faf633e7f4d2c998f434a41ecfc9b80047607",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bc6faf633e7f4d2c998f434a41ecfc9b80047607.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bc6faf633e7f4d2c998f434a41ecfc9b80047607.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify extensions\n\nUnify extensions between PV and not PV nodes\nand remove all but check extensions.\n\nThis is a simplification so tested at fixed number\nof games where proved to not regress.\n\nAbout 45k games at 15+0.05\nELO: 1.23 +-2.0 (95%) LOS: 88.5%\nTotal: 45643 W: 9107 L: 8946 D: 27590\n\nAbout 45k games at 60+0.05\nELO: 1.07 +-1.8 (95%) LOS: 87.8%\nTotal: 46786 W: 7728 L: 7584 D: 31474\n\nbench: 3172206\n",
+      "subject": "Simplify extensions"
+    },
+    {
+      "commit_num": 3974,
+      "hash": "e6542092",
+      "short": "e6542092",
+      "author": "Raminder Singh <romi_ssk@yahoo.co.in>",
+      "date": "2013-09-25T13:17:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e654209211a1bcd40a0ff00c5bdba284890ea857",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e654209211a1bcd40a0ff00c5bdba284890ea857.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e654209211a1bcd40a0ff00c5bdba284890ea857.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix best move lookup bug\n\nIf the uci option 'Best Book Move' is set to true the lookup still\nreturns a move at random instead of the move with the highest\nweight.\n\nNo functional change.\n",
+      "subject": "Fix best move lookup bug"
+    },
+    {
+      "commit_num": 3975,
+      "hash": "8d1c1074",
+      "short": "8d1c1074",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-25T11:04:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8d1c1074d5d85a87e69f75cd13a0f2bf11626666",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8d1c1074d5d85a87e69f75cd13a0f2bf11626666.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8d1c1074d5d85a87e69f75cd13a0f2bf11626666.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify tte use condition\n\nNo functional change.\n",
+      "subject": "Simplify tte use condition"
+    },
+    {
+      "commit_num": 3976,
+      "hash": "d7f5f15d",
+      "short": "d7f5f15d",
+      "author": "Ralph Stößer <ralph.stoesser@ralph_stoesser.(none)>",
+      "date": "2013-09-23T06:03:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d7f5f15d69564ef8399235e0c24806fdf84413f1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d7f5f15d69564ef8399235e0c24806fdf84413f1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d7f5f15d69564ef8399235e0c24806fdf84413f1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reduce negative quiets by ONE_PLY / 2\n\nPassed both short TC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 3402 W: 708 L: 593 D: 2101\n\nAnd long TC:\nLLR: 2.93 (-2.94,2.94) [0.00,6.00]\nTotal: 23379 W: 3972 L: 3759 D: 15648\n\nbench: 3529630\n",
+      "subject": "Reduce negative quiets by ONE_PLY / 2"
+    },
+    {
+      "commit_num": 3977,
+      "hash": "84906b83",
+      "short": "84906b83",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-23T05:59:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/84906b83ec26f5065dc5b4262efe3d6354f3ec06",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/84906b83ec26f5065dc5b4262efe3d6354f3ec06.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/84906b83ec26f5065dc5b4262efe3d6354f3ec06.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Final time management setup\n\nThis is an even safer setup proposed and tested\nby Alexandre Meirelles.\n\nRegression testing of 40K games at 10+0.05 show\nresult is stable both against current master:\n\nELO: -0.29 +-2.2 (95%) LOS: 39.7%\nTotal: 40000 W: 8010 L: 8043 D: 23947\n\nand again original master (the one with smallest\ntime parameters):\n\nELO: 1.71 +-2.2 (95%) LOS: 93.8%\nTotal: 40000 W: 8325 L: 8128 D: 23547\n\nAlexandre verified with LittleBlitzer time losses are\ngreately reduced with this setup:\n\nGames Completed = 2100 of 3000 (Avg game length = 35.745 sec)\n\nSettings = RR/128MB/15000ms+50ms/M 1000cp for 12 moves, D 150 moves/\nTime = 39200 sec elapsed, 16800 sec remaining\n 1.  Stockfish 190913             1091.5/2100    803-720-577      (L: m=313 t=1 i=0 a=406)    (D: r=278 i=91 f=136 s=8 a=64)    (tpm=212.5 d=14.75 nps=925427)\n 2.  Houdini 2.0 w32              1008.5/2100    720-803-577      (L: m=250 t=299 i=0 a=254)    (D: r=278 i=91 f=136 s=8 a=64)    (tpm=204.1 d=12.04 nps=1326351)\n\nNo functional change.\n",
+      "subject": "Final time management setup"
+    },
+    {
+      "commit_num": 3978,
+      "hash": "7b2cda95",
+      "short": "7b2cda95",
+      "author": "Jean-Francois Romang <jeanfrancois.romang@gmail.com>",
+      "date": "2013-09-22T16:10:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7b2cda95d9d697a047ac8df33d3805ba77590a8f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7b2cda95d9d697a047ac8df33d3805ba77590a8f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7b2cda95d9d697a047ac8df33d3805ba77590a8f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Update disabled warnings for Intel compiler\n\nNo functional change.\n",
+      "subject": "Update disabled warnings for Intel compiler"
+    },
+    {
+      "commit_num": 3979,
+      "hash": "c2cefa6d",
+      "short": "c2cefa6d",
+      "author": "Jean-Francois Romang <jeanfrancois.romang@gmail.com>",
+      "date": "2013-09-22T16:02:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c2cefa6de0807e389709a1a12591eb3a86017d08",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c2cefa6de0807e389709a1a12591eb3a86017d08.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c2cefa6de0807e389709a1a12591eb3a86017d08.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Replace -O3 with -fast for intel compiler\n\nNo functional change.\n",
+      "subject": "Replace -O3 with -fast for intel compiler"
+    },
+    {
+      "commit_num": 3980,
+      "hash": "27407999",
+      "short": "27407999",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-19T05:26:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/274079990a1981bedaf46d976de66d86475a40d6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/274079990a1981bedaf46d976de66d86475a40d6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/274079990a1981bedaf46d976de66d86475a40d6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Increase Emergency Move Time to 20\n\nGoes in the direction of avoiding time losses and seems\nequivalent after almost 40K games at super fast TC of 10+0.05\n\nELO: 2.61 +-2.2 (95%) LOS: 99.1%\nTotal: 39869 W: 8258 L: 7959 D: 23652\n\nNo functional change.\n",
+      "subject": "Increase Emergency Move Time to 20"
+    },
+    {
+      "commit_num": 3981,
+      "hash": "10cb19d5",
+      "short": "10cb19d5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-17T06:02:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/10cb19d5348b33079ceecba1b47f8d17c87231c9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/10cb19d5348b33079ceecba1b47f8d17c87231c9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/10cb19d5348b33079ceecba1b47f8d17c87231c9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Increase Emergency Move Time to 10\n\nGoes in the direction of avoiding time losses and seems\nequivalent after almost 40K games at super fast TC of 10+0.05\n\nELO: 2.41 +-2.3 (95%) LOS: 98.1%\nTotal: 37222 W: 7843 L: 7585 D: 21794\n\nNo functional change.\n",
+      "subject": "Increase Emergency Move Time to 10"
+    },
+    {
+      "commit_num": 3982,
+      "hash": "d50b33ca",
+      "short": "d50b33ca",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-16T21:59:37Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d50b33cacd25483998a4bdc99038f4d1666c5d53",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d50b33cacd25483998a4bdc99038f4d1666c5d53.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d50b33cacd25483998a4bdc99038f4d1666c5d53.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a silly unstoppable eval bug\n\nThe logic is broken for black side because we get more bonus\nfor pawn in 7th rank than for pawn in 2nd rank!\n\nSpotted by Reuven Peleg\n\nbench:3884409\n",
+      "subject": "Fix a silly unstoppable eval bug"
+    },
+    {
+      "commit_num": 3983,
+      "hash": "77b5ee01",
+      "short": "77b5ee01",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2013-09-15T19:54:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/77b5ee0117e86736817cf90f64055dce1ddbc55e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/77b5ee0117e86736817cf90f64055dce1ddbc55e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/77b5ee0117e86736817cf90f64055dce1ddbc55e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix time parameters for blitz games\n\nThe ideal setting for super-blitz might be something like:\n\n    \"Emergency Base Time\" = 50\n    \"Emergency Move Time\" = 5\n\nThis would give a total emergency time buffer of:\n\n    50 + 40 * 5 = 250 ms\n\nThis setup replaces the previous half cooked hack\n\"Don't blunder under extreme time pressure\".\n\nTest results are very good at super blitz, but keep good even\nat 60 secs.\n\nAt 5+0.05\nELO: 24.30 +-2.4 (95%) LOS: 100.0%\nTotal: 37802 W: 10060 L: 7420 D: 20322\n\nAt 15+0.05\nELO: 13.41 +-2.9 (95%) LOS: 100.0%\nTotal: 22271 W: 4853 L: 3994 D: 13424\n\nAt 60+0.05\nELO: 5.30 +-3.2 (95%) LOS: 99.9%\nTotal: 16000 W: 2897 L: 2653 D: 10450\n\nNo functional change.\n",
+      "subject": "Fix time parameters for blitz games"
+    },
+    {
+      "commit_num": 3984,
+      "hash": "21cbfafc",
+      "short": "21cbfafc",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-15T12:14:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/21cbfafc0362ff83895226f318580f766f8d35f4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/21cbfafc0362ff83895226f318580f766f8d35f4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/21cbfafc0362ff83895226f318580f766f8d35f4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Code style at passed pawn eval\n\nNo functional change.\n",
+      "subject": "Code style at passed pawn eval"
+    },
+    {
+      "commit_num": 3985,
+      "hash": "d3947b2f",
+      "short": "d3947b2f",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-15T12:01:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d3947b2f3e4121db67aef6845b59562b1cec0665",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d3947b2f3e4121db67aef6845b59562b1cec0665.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d3947b2f3e4121db67aef6845b59562b1cec0665.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Nicer operator declerations\n\nNo functional change.\n",
+      "subject": "Nicer operator declerations"
+    },
+    {
+      "commit_num": 3986,
+      "hash": "a7120986",
+      "short": "a7120986",
+      "author": "Kojirion <kojirion@tursh.com>",
+      "date": "2013-09-15T07:11:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a71209868bdd8361d0607acf7725f70e9d1f2019",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a71209868bdd8361d0607acf7725f70e9d1f2019.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a71209868bdd8361d0607acf7725f70e9d1f2019.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use pre-increment also for native types\n\nNow that we use pre-increment on enums, it\nmake sense, for code style uniformity, to\nswith to pre-increment also for native types,\nalthough there is no speed difference.\n\nNo functional change.\n",
+      "subject": "Use pre-increment also for native types"
+    },
+    {
+      "commit_num": 3987,
+      "hash": "7a1ff6d8",
+      "short": "7a1ff6d8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-15T07:02:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7a1ff6d8ff39bb9e6844d24467899d47e942486f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7a1ff6d8ff39bb9e6844d24467899d47e942486f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7a1ff6d8ff39bb9e6844d24467899d47e942486f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix operator++ definition\n\nENABLE_OPERATORS_ON has incorrect definitions of\npost-increment and post-decrement operators.\n\nIn particularly the returned value is the variable\nalready incremented/decremented, while instead they\nshould return the variable _before_ inc/dec.\n\nThis has no real effect because are only used in loops\nand where the returned value is never used, neverthless\nit is wrong. The fix would be to copy the variable to a\ndummy, then inc/dec the variable, then return the dummy.\n\nSo instead, rename to pre-increment that can be implemented\nwithout the dummy, actually the current implementation\nit is already the correct pre-increment, with the only change\nto return a reference (an l-value) and not a copy, so\nto properly mimic the pre-increment on native integers.\n\nSpotted by Kojirion.\n\nNo functional change.\n",
+      "subject": "Fix operator++ definition"
+    },
+    {
+      "commit_num": 3988,
+      "hash": "3abccdc8",
+      "short": "3abccdc8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-14T10:49:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3abccdc82df5e3acc32cde07712f1365b8f84022",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3abccdc82df5e3acc32cde07712f1365b8f84022.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3abccdc82df5e3acc32cde07712f1365b8f84022.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move classify_leaf() to c'tor in bitbases\n\nNo functional change.\n",
+      "subject": "Move classify_leaf() to c'tor in bitbases"
+    },
+    {
+      "commit_num": 3989,
+      "hash": "8d6d0223",
+      "short": "8d6d0223",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-14T08:37:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8d6d0223bfe357001208147bede5029a857e5180",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8d6d0223bfe357001208147bede5029a857e5180.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8d6d0223bfe357001208147bede5029a857e5180.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small touches to bitbase.cpp\n\nInspired by Lucas's code:\n\nhttps://github.com/lucasart/chess/blob/master/src/kpk.cc\n\nNo functional change.\n",
+      "subject": "Small touches to bitbase.cpp"
+    },
+    {
+      "commit_num": 3990,
+      "hash": "82f6779c",
+      "short": "82f6779c",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-14T07:46:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/82f6779c2e549a264dbfc76d4c668f4c2ea831cd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82f6779c2e549a264dbfc76d4c668f4c2ea831cd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82f6779c2e549a264dbfc76d4c668f4c2ea831cd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't blunder under extreme time pressure\n\nWe always attempt to keep at least this emergencyBaseTime\nat clock. But if available time is very low it means that\nwe will force ourself to play immediately to satisfy the\nemergencyBaseTime constrain and so leading to blunders.\n\nPatch is good at short and very short TC (15secs and 5secs respectively)\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 26590 W: 5426 L: 5245 D: 15919\n\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 5767 W: 1397 L: 1268 D: 3102\n\nInstead seems has no influence at longer TC (60 secs)\nLLR: -2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 79862 W: 13623 L: 13339 D: 52900\n\nSo it is committed to have a broader testing but is\nto be consider still EXPERIMENTAL and can be reverted\neasily.\n\nNo functional change.\n",
+      "subject": "Don't blunder under extreme time pressure"
+    },
+    {
+      "commit_num": 3991,
+      "hash": "fc17d0de",
+      "short": "fc17d0de",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-12T13:20:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/fc17d0de7748b68bddc5cd7f97a6c15ebc7adaac",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fc17d0de7748b68bddc5cd7f97a6c15ebc7adaac.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fc17d0de7748b68bddc5cd7f97a6c15ebc7adaac.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Increase passed bonus for having more pieces\n\nPassed both short TC:\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 36463 W: 7575 L: 7365 D: 21523\n\nAnd long TC:\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 2953 W: 564 L: 446 D: 1943\n\nbench: 3846852\n",
+      "subject": "Increase passed bonus for having more pieces"
+    },
+    {
+      "commit_num": 3992,
+      "hash": "27f2ce8f",
+      "short": "27f2ce8f",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-12T06:41:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/27f2ce8f6e8462bd9be4b201dd95fc2df17aafe6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27f2ce8f6e8462bd9be4b201dd95fc2df17aafe6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27f2ce8f6e8462bd9be4b201dd95fc2df17aafe6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Move draw by material check\"\n\nPossible regression\n\nbench: 4554579\n",
+      "subject": "Revert \"Move draw by material check\""
+    },
+    {
+      "commit_num": 3993,
+      "hash": "45b0aea8",
+      "short": "45b0aea8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-12T06:37:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/45b0aea875860e9f0fe2d0435ee6163906639194",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/45b0aea875860e9f0fe2d0435ee6163906639194.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/45b0aea875860e9f0fe2d0435ee6163906639194.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Fix random moves when time < 10ms\"\n\nPossible regression.\n\nNo functional change.\n",
+      "subject": "Revert \"Fix random moves when time < 10ms\""
+    },
+    {
+      "commit_num": 3994,
+      "hash": "4803d577",
+      "short": "4803d577",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-11T07:22:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4803d5772c120121dad6bad78cc2b6be5c24fb1f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4803d5772c120121dad6bad78cc2b6be5c24fb1f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4803d5772c120121dad6bad78cc2b6be5c24fb1f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Extend checks more when below alpha\n\nPassed both short TC:\nLLR: 2.97 (-2.94,2.94) [-1.50,4.50]\nTotal: 8739 W: 1830 L: 1698 D: 5211\n\nAnd long TC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 6716 W: 1238 L: 1101 D: 4377\n\nbench: 4554576\n",
+      "subject": "Extend checks more when below alpha"
+    },
+    {
+      "commit_num": 3995,
+      "hash": "49e110c5",
+      "short": "49e110c5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-10T19:14:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/49e110c52b19f5c99954d4797b8e991b0b60007c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/49e110c52b19f5c99954d4797b8e991b0b60007c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/49e110c52b19f5c99954d4797b8e991b0b60007c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix random moves when time < 10ms\n\nIn case we have less then 10ms to think as soon as\nwe wake up the timer, it immediately fires and calls\ncheck_time() where due to condition:\n\nelapsed > TimeMgr.maximum_time() - 2 * TimerResolution\n\nthe stop flag is set and search returns immediately, without\nactually search anything.\n\nHere the somewhat hacky fix is to start the timer after\nat least one iteration as been completed.\n\nNo functional change.\n",
+      "subject": "Fix random moves when time < 10ms"
+    },
+    {
+      "commit_num": 3996,
+      "hash": "bebd6e16",
+      "short": "bebd6e16",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-10T18:39:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bebd6e16f6e8be116419632635baf9c0d8b7ba4e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bebd6e16f6e8be116419632635baf9c0d8b7ba4e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bebd6e16f6e8be116419632635baf9c0d8b7ba4e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify unstoppable pawns evaluation\n\nNo functional change\n",
+      "subject": "Simplify unstoppable pawns evaluation"
+    },
+    {
+      "commit_num": 3997,
+      "hash": "4d90aeb0",
+      "short": "4d90aeb0",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-10T11:54:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4d90aeb0ab962e6a0b4b53bf11f5003bcc813251",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d90aeb0ab962e6a0b4b53bf11f5003bcc813251.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d90aeb0ab962e6a0b4b53bf11f5003bcc813251.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "More readable space mask\n\nNo functional change.\n",
+      "subject": "More readable space mask"
+    },
+    {
+      "commit_num": 3998,
+      "hash": "af750bd2",
+      "short": "af750bd2",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-10T09:41:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/af750bd2ef919ba8aca8986c40f06cd58f0aef05",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/af750bd2ef919ba8aca8986c40f06cd58f0aef05.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/af750bd2ef919ba8aca8986c40f06cd58f0aef05.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rewrite unstoppable pawns evaluation\n\nInstead of current code, give a bonus according to the frontmost\nsquare among candidate + passed pawns.\n\nThis is a big simplification that removes a lot of accurate code\nsubstituting it with a statistically based one using the common\n'bonus' scheme, leaving to the search to sort out the details.\n\nResults are equivalent but code is much less and, as an added bonus,\nwe now store candidates bitboard in pawns hash and allow this\ninfo to be used in evaluation. This paves the way to possible\ncandidate pawns evaluations together with all the other pieces,\nas we do for passed.\n\nPatch passed short TC\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 16927 W: 3462 L: 3308 D: 10157\n\nThen failed (quite quickly) at long TC\nLLR: -2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 8451 W: 1386 L: 1448 D: 5617\n\nBut when ran with a conclusive 40K fixed games at 60 secs it proved\nalmost equivalent to original one.\n\nELO: 1.08 +-2.0 (95%) LOS: 85.8%\nTotal: 40000 W: 6739 L: 6615 D: 26646\n\nbench: 3884003\n",
+      "subject": "Rewrite unstoppable pawns evaluation"
+    },
+    {
+      "commit_num": 3999,
+      "hash": "738c5595",
+      "short": "738c5595",
+      "author": "Uri Blass <uriblass@gmail.com>",
+      "date": "2013-09-10T06:37:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/738c5595adefe397d8389fb315908e7d2f6ab40c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/738c5595adefe397d8389fb315908e7d2f6ab40c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/738c5595adefe397d8389fb315908e7d2f6ab40c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Extend checks more in losing positions\n\nPassed both short TC:\nLLR: 2.98 (-2.94,2.94) [-1.50,4.50]\nTotal: 3974 W: 860 L: 741 D: 2373\n\nAnd long TC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 16807 W: 2917 L: 2733 D: 11157\n\nbench: 3767999\n",
+      "subject": "Extend checks more in losing positions"
+    },
+    {
+      "commit_num": 4000,
+      "hash": "03cd049c",
+      "short": "03cd049c",
+      "author": "homoSapiensSapiens <reuvenpe2005@gmail.com>",
+      "date": "2013-09-09T19:12:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/03cd049c6858f5d1c4b7e50f08d7ddc45e0a029e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/03cd049c6858f5d1c4b7e50f08d7ddc45e0a029e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/03cd049c6858f5d1c4b7e50f08d7ddc45e0a029e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Change condition to use relative rank\n\nNo functional change\n",
+      "subject": "Change condition to use relative rank"
+    },
+    {
+      "commit_num": 4001,
+      "hash": "6ab8b9b6",
+      "short": "6ab8b9b6",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-08T13:28:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6ab8b9b6c6244ee8137c8f683c6b4e5cfa0d6f3e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6ab8b9b6c6244ee8137c8f683c6b4e5cfa0d6f3e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6ab8b9b6c6244ee8137c8f683c6b4e5cfa0d6f3e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix some comments in position.cpp\n\nNo functional change.\n",
+      "subject": "Fix some comments in position.cpp"
+    },
+    {
+      "commit_num": 4002,
+      "hash": "490f67a3",
+      "short": "490f67a3",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-08T12:49:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/490f67a3f89449e243c3e85feb13679f388d9e22",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/490f67a3f89449e243c3e85feb13679f388d9e22.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/490f67a3f89449e243c3e85feb13679f388d9e22.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move draw by material check\n\nIt is more natural to test this case among\nothers material distributions.\n\nNo functional change.\n",
+      "subject": "Move draw by material check"
+    },
+    {
+      "commit_num": 4003,
+      "hash": "0515ad0f",
+      "short": "0515ad0f",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-07T16:25:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0515ad0fb0f2d46ee60288b0541cea495e6c90ef",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0515ad0fb0f2d46ee60288b0541cea495e6c90ef.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0515ad0fb0f2d46ee60288b0541cea495e6c90ef.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove unreachable values in mobility table\n\nThe possible maximum mobility cardinality (plus one in case of\nzero squares available) is:\n\n- Knights: max. 8  squares -> max. 9  entries\n- Bishops: max. 13 squares -> max. 14 entries\n- Rooks:   max. 14 squares -> max. 15 entries\n- Queen:   max. 27 squares -> max. 28 entries\n\nSo remove the extra entries in the table.\n\nSpotted by Dariusz Orzechowski.\n\nNo functional change.\n",
+      "subject": "Remove unreachable values in mobility table"
+    },
+    {
+      "commit_num": 4004,
+      "hash": "bf51db25",
+      "short": "bf51db25",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-07T10:29:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bf51db2526c2abf4f8d9297615aa933045c68e67",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf51db2526c2abf4f8d9297615aa933045c68e67.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf51db2526c2abf4f8d9297615aa933045c68e67.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix warning: double to float truncation\n\nMSVC 2013 says:\nwarning C4305: '*=' : truncation from 'double' to 'float'\n\nNo functional change.\n",
+      "subject": "Fix warning: double to float truncation"
+    },
+    {
+      "commit_num": 4005,
+      "hash": "59702aca",
+      "short": "59702aca",
+      "author": "Lucas Braesch <lucas.braesch@gmail.com>",
+      "date": "2013-09-07T07:32:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/59702aca0d0aa322a3260e31feeae22a1a8f8341",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/59702aca0d0aa322a3260e31feeae22a1a8f8341.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/59702aca0d0aa322a3260e31feeae22a1a8f8341.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Singular extension at 8 plies also for PV nodes\n\nPassed both short TC:\nLLR: 2.96 (-2.94,2.94)\nTotal: 11451 W: 2455 L: 2282 D: 6714\n\nAnd long TC\nLLR: 2.96 (-2.94,2.94)\nTotal: 15813 W: 2907 L: 2723 D: 10183\n\nbench: 3864419\n",
+      "subject": "Singular extension at 8 plies also for PV nodes"
+    },
+    {
+      "commit_num": 4006,
+      "hash": "c86eee39",
+      "short": "c86eee39",
+      "author": "Lucas Braesch <lucas.braesch@gmail.com>",
+      "date": "2013-09-07T07:20:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c86eee391830c9c74bc11be9c537ccbbf6cb412e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c86eee391830c9c74bc11be9c537ccbbf6cb412e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c86eee391830c9c74bc11be9c537ccbbf6cb412e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Union of 2 changes\n\nUnion of\n\n- LMR >= 3 plies from Gary tests.stockfishchess.org/tests/view/522522960ebc595d328fcafd\n\n- allows() tweak from Reuven tests.stockfishchess.org/tests/view/5225fa1c0ebc595d328fcb53\n\nBoth passed Step I and failed Step II.\n\nInstead this union passed both short TC:\nLLR: 2.95 (-2.94,2.94)\nTotal: 14525 W: 3063 L: 2874 D: 8588\n\nAnd long TC\nLLR: 2.94 (-2.94,2.94)\nTotal: 31075 W: 5566 L: 5308 D: 20201\n\nbench: 4238160\n",
+      "subject": "Union of 2 changes"
+    },
+    {
+      "commit_num": 4007,
+      "hash": "a30d3571",
+      "short": "a30d3571",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-05T04:34:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a30d3571ca07aab94675c3652f6bde15c339dfcf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a30d3571ca07aab94675c3652f6bde15c339dfcf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a30d3571ca07aab94675c3652f6bde15c339dfcf.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Fix check for bishop pair in material imbalance\"\n\nIdea is sound but implementation is partial. Ryan and Joona noticed that\n    we leave an hole in material table. Also we got another report by an user\n    of an odd behaviour. Namely, if you start stockfish and from the prompt\n    give 'bench' you get 3453941, then if you run again bench you get 3453940.\n\n    The reason is that two different positions with the same number of pieces,\n    but one with a bishop pair and another without have the same material key.\n    But after Eelco patch also different material imbalance and this yields\n    to this issue.\n\n    Restesting at long TC shows the patch does not really contribute at\n    ELO improvement. Actually patch failed at long TC.\n\n    LLR: -2.97 (-2.94,2.94)\n    Total: 23109 W: 4104 L: 4092 D: 14913\n\n    So revert.\n\n    bench: 3453945\n",
+      "subject": "Revert \"Fix check for bishop pair in material imbalance\""
+    },
+    {
+      "commit_num": 4008,
+      "hash": "10b53e1c",
+      "short": "10b53e1c",
+      "author": "Lucas Braesch <lucas.braesch@gmail.com>",
+      "date": "2013-09-04T23:26:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/10b53e1c5e6aeba156eb5c02afccfd7db1f84d16",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/10b53e1c5e6aeba156eb5c02afccfd7db1f84d16.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/10b53e1c5e6aeba156eb5c02afccfd7db1f84d16.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not prune useless checks in QS\n\nPassed both SPRT tests in \"simplification mode\", so with\nelo0: -3.00 alpha: 0.05 elo1: 3.00 beta: 0.05\n\nShort TC:\nLLR: 2.96 (-2.94,2.94)\nTotal: 6243 W: 1302 L: 1195 D: 3746\n\nLong TC\nLLR: 2.96 (-2.94,2.94)\nTotal: 22972 W: 4124 L: 4020 D: 14828\n\nbench: 4633330\n",
+      "subject": "Do not prune useless checks in QS"
+    },
+    {
+      "commit_num": 4009,
+      "hash": "457ac26d",
+      "short": "457ac26d",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2013-09-03T16:05:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/457ac26de5e2925c87bdc0169478d138074c50f8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/457ac26de5e2925c87bdc0169478d138074c50f8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/457ac26de5e2925c87bdc0169478d138074c50f8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rewrite backward pawn detection\n\nUse the new backmost_sq() instead of a loop.\n\nNo functional change.\n",
+      "subject": "Rewrite backward pawn detection"
+    },
+    {
+      "commit_num": 4010,
+      "hash": "679c2ea2",
+      "short": "679c2ea2",
+      "author": "Eelco de Groot <eelcogro@gmail.com>",
+      "date": "2013-09-02T20:50:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/679c2ea2275d6a978cea10e4260ee0598e044c82",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/679c2ea2275d6a978cea10e4260ee0598e044c82.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/679c2ea2275d6a978cea10e4260ee0598e044c82.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix check for bishop pair in material imbalance\n\nPrefer pos.bishop_pair() to pos.count<BISHOP>(WHITE) > 1\nbecause the first checks that the two bishops are on\ndifferent color squares.\n\nAlthough the change seems to kick in only in very rare cases,\nquite surprisingly it was able to pass SPRT test at short TC.\n\nLLR: 2.95 (-2.94,2.94)\nTotal: 39818 W: 8174 L: 7956 D: 23688\n\nbench: 3453941\n",
+      "subject": "Fix check for bishop pair in material imbalance"
+    },
+    {
+      "commit_num": 4011,
+      "hash": "9ff594c3",
+      "short": "9ff594c3",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-02T09:03:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9ff594c3a9e3517eb12f0abfced6baa2ac58e4c1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9ff594c3a9e3517eb12f0abfced6baa2ac58e4c1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9ff594c3a9e3517eb12f0abfced6baa2ac58e4c1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rewrite KBBKN endgame\n\nThis was thought to be a draw but the bishops generally win. However,\nit takes up to 66 moves. The position in the diagram was thought to be\na draw for over one hundred years, but tablebases show that White wins\nin 45 moves. All of the long wins go through this type of semi-fortress\nposition. It takes several moves to force Black out of the temporary\nfortress in the corner; then precise play with the bishops prevents Black\nfrom forming the temporary fortress in another corner (Nunn 1995:265ff).\n\nBefore computer analysis, Speelman listed this position as unresolved,\nbut \"probably a draw\" (Speelman 1981:109).\n\nbench: 3453945\n",
+      "subject": "Rewrite KBBKN endgame"
+    },
+    {
+      "commit_num": 4012,
+      "hash": "849b089a",
+      "short": "849b089a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-01T20:37:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/849b089a63cb40833006704fb6e3fc66e8010dfa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/849b089a63cb40833006704fb6e3fc66e8010dfa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/849b089a63cb40833006704fb6e3fc66e8010dfa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't use lpthread for Android\n\nThanks to Peter Osterlund for the feedback.\n\nNo functional change.\n",
+      "subject": "Don't use lpthread for Android"
+    },
+    {
+      "commit_num": 4013,
+      "hash": "aee404f5",
+      "short": "aee404f5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-01T16:16:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/aee404f53269c79ec42eb4d54b0bc6e2d8b1c340",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aee404f53269c79ec42eb4d54b0bc6e2d8b1c340.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aee404f53269c79ec42eb4d54b0bc6e2d8b1c340.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Improve ARM compatibility\n\nSTANDALONE-TOOLCHAIN.html in Android NDK says:\n\nIt is recommended to use the -mthumb compiler flag to force the generation\nof 16-bit Thumb-1 instructions (the default being 32-bit ARM ones).\n\nIf you want to target the 'armeabi-v7a' ABI, you will need ensure that the\nfollowing two flags are being used:\n\n  CFLAGS='-march=armv7-a -mfloat-abi=softfp'\n\nNote: The first flag enables Thumb-2 instructions, and the second one\n      enables H/W FPU instructions while ensuring that floating-point\n      parameters are passed in core registers, which is critical for\n      ABI compatibility. Do *not* use these flags separately!\n\nThanks to Peter Osterlund for pointout this doc and for showing me\nan example Makefile to follow.\n\nNo functional change.\n",
+      "subject": "Improve ARM compatibility"
+    },
+    {
+      "commit_num": 4014,
+      "hash": "5e8bc6ac",
+      "short": "5e8bc6ac",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2013-09-01T13:58:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5e8bc6ac2adf76b25042194717b04218d7ac2390",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5e8bc6ac2adf76b25042194717b04218d7ac2390.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5e8bc6ac2adf76b25042194717b04218d7ac2390.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Assorted clean up in endgames\n\nNo functional change.\n",
+      "subject": "Assorted clean up in endgames"
+    }
+  ]
+}

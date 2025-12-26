@@ -1,0 +1,525 @@
+{
+  "month": "2016-01",
+  "commits": [
+    {
+      "commit_num": 3144,
+      "hash": "4f6aa152",
+      "short": "4f6aa152",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-01-30T09:33:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4f6aa152284e80094467ea0051bb58b004042555",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4f6aa152284e80094467ea0051bb58b004042555.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4f6aa152284e80094467ea0051bb58b004042555.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Document HalfDensityMap\n\nNo functional change.\n\nResolves #584\n",
+      "subject": "Document HalfDensityMap"
+    },
+    {
+      "commit_num": 3145,
+      "hash": "8c3a5bbc",
+      "short": "8c3a5bbc",
+      "author": "Joona Kiiski <zamar@meripeto.(none)>",
+      "date": "2016-01-20T15:24:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8c3a5bbc5284897cb944e4bb5748c58813687ba9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8c3a5bbc5284897cb944e4bb5748c58813687ba9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8c3a5bbc5284897cb944e4bb5748c58813687ba9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not probe syzygy bases when castling is possible\n\nAlmost no functional change. Bench is unchanged.\n\nResolves #230\nResolves #573\n",
+      "subject": "Do not probe syzygy bases when castling is possible"
+    },
+    {
+      "commit_num": 3146,
+      "hash": "28933a58",
+      "short": "28933a58",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2016-01-18T22:20:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/28933a580eeb4b9a2d717f06c789a6c13dfef19c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/28933a580eeb4b9a2d717f06c789a6c13dfef19c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/28933a580eeb4b9a2d717f06c789a6c13dfef19c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire RootNode template\n\nThere is no reason to compile 3 different copies of search(). PV nodes are on\nthe cold path, and PvNode is a template parameter, so there is no cost in\ncomputing:\n\nconst bool RootNode = PvNode && (ss-1)->ply == 0;\n\nAnd this simplifies code a tiny bit as well.\n\nSpeed impact is negligible on my machine (i7-3770k, linux 4.2, gcc 5.2):\n\n            nps   +/-\ntest    2378605  3118\nmaster  2383128  2793\ndiff      -4523  2746\n\nBench: 7751425\n\nNo functional change.\n\nResolves #568\n",
+      "subject": "Retire RootNode template"
+    },
+    {
+      "commit_num": 3147,
+      "hash": "aedebe35",
+      "short": "aedebe35",
+      "author": "Leonid Pechenik <lp@home>",
+      "date": "2016-01-18T16:56:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/aedebe35cfa38b543041bae97e91e8194738b202",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aedebe35cfa38b543041bae97e91e8194738b202.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aedebe35cfa38b543041bae97e91e8194738b202.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Time management simplification\n\n10+0.1:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 41963 W: 7967 L: 7883 D: 26113\n\n60+0.6:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 132314 W: 17939 L: 17969 D: 96406\n\nResolves #580\n",
+      "subject": "Time management simplification"
+    },
+    {
+      "commit_num": 3148,
+      "hash": "9a10313a",
+      "short": "9a10313a",
+      "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
+      "date": "2016-01-18T09:41:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9a10313a9d72c16c90b46187ee41988abdfe1d86",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9a10313a9d72c16c90b46187ee41988abdfe1d86.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9a10313a9d72c16c90b46187ee41988abdfe1d86.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "rotating symmetric patterns with increasing skipsize\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00] sprt @ 5+0.1 th 21\nTotal: 7068 W: 1121 L: 975 D: 4972\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00] sprt @ 12+0.12 th 21\nTotal: 26691 W: 3594 L: 3481 D: 19616\n\nNo functional change with a single thread\n\nResolves #574\n",
+      "subject": "rotating symmetric patterns with increasing skipsize"
+    },
+    {
+      "commit_num": 3149,
+      "hash": "ebec2fa4",
+      "short": "ebec2fa4",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2016-01-17T15:43:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ebec2fa48e8e36e02951f48cbe2298f85b630e0f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ebec2fa48e8e36e02951f48cbe2298f85b630e0f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ebec2fa48e8e36e02951f48cbe2298f85b630e0f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove redundant -std=c++0x flag\n\nThis flag is functionally identical to '-std=c++11' flag which\nis part of standard flags.\n\nNo functional change\n\nResolves #571\n",
+      "subject": "Remove redundant -std=c++0x flag"
+    },
+    {
+      "commit_num": 3150,
+      "hash": "552b3ccb",
+      "short": "552b3ccb",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2016-01-17T15:24:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/552b3ccb662826ab2e15b954e7717eeace829560",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/552b3ccb662826ab2e15b954e7717eeace829560.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/552b3ccb662826ab2e15b954e7717eeace829560.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Makefile: Allow specifying compiler executable\n\nNo functional change\n\nResolves #570\n",
+      "subject": "Makefile: Allow specifying compiler executable"
+    },
+    {
+      "commit_num": 3151,
+      "hash": "89723339",
+      "short": "89723339",
+      "author": "Lyudmil Antonov <lantonov.here@gmail.com>",
+      "date": "2016-01-16T21:34:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/89723339d93c87f52e148080d5b1dc101ee76685",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/89723339d93c87f52e148080d5b1dc101ee76685.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/89723339d93c87f52e148080d5b1dc101ee76685.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Assorted English grammar changes\n\nNo functional change\n\nResolves #567\n",
+      "subject": "Assorted English grammar changes"
+    },
+    {
+      "commit_num": 3152,
+      "hash": "356147d9",
+      "short": "356147d9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-01-16T08:03:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/356147d99ae6783d79861c32f128a98685024c58",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/356147d99ae6783d79861c32f128a98685024c58.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/356147d99ae6783d79861c32f128a98685024c58.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rewrite time formula\n\nTime management is really too complex, our aim is\nto simplify it, but for time being at least rewrite\nin an understandable way.\n\nNo functional change.\n",
+      "subject": "Rewrite time formula"
+    },
+    {
+      "commit_num": 3153,
+      "hash": "74e2fa97",
+      "short": "74e2fa97",
+      "author": "Stefano80 <stefano.cardanobile@gmail.com>",
+      "date": "2016-01-13T16:05:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/74e2fa97b7ce49722b908f35988f3c75dee9bf36",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/74e2fa97b7ce49722b908f35988f3c75dee9bf36.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/74e2fa97b7ce49722b908f35988f3c75dee9bf36.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Adjust reductions based on history and cmh tables\n\nSTC:\nLLR: 4.06 (-2.94,2.94) [0.00,5.00]\nTotal: 149395 W: 28029 L: 27208 D: 94158\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 9628 W: 1368 L: 1217 D: 7043\n\nbench: 8076724\n\nResolves #565\n",
+      "subject": "Adjust reductions based on history and cmh tables"
+    },
+    {
+      "commit_num": 3154,
+      "hash": "dcd8ce70",
+      "short": "dcd8ce70",
+      "author": "Stefano80 <stefano.cardanobile@gmail.com>",
+      "date": "2016-01-13T16:02:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dcd8ce70941e9b8d5180eb43865bb9819e424c19",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dcd8ce70941e9b8d5180eb43865bb9819e424c19.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dcd8ce70941e9b8d5180eb43865bb9819e424c19.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Update comments in LMR step\n\nNo functional change\n\nResolves #564\n",
+      "subject": "Update comments in LMR step"
+    },
+    {
+      "commit_num": 3155,
+      "hash": "12eb345e",
+      "short": "12eb345e",
+      "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
+      "date": "2016-01-13T13:24:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/12eb345ebd9d93114ce26b8bdc6095245e8149c4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/12eb345ebd9d93114ce26b8bdc6095245e8149c4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/12eb345ebd9d93114ce26b8bdc6095245e8149c4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Depth margin parameter-tweak in TT-save\n\nVerified that is improvement with multiple threads:\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00] sprt @ 30+0.3 th 3\nTotal: 14817 W: 2103 L: 1915 D: 10799\n\nLLR: 2.96 (-2.94,2.94) [0.00,4.00] sprt @ 15+0.15 th 7\nTotal: 10264 W: 1498 L: 1321 D: 7445\n\nVerified that is not a significant regression with a single thread:\n\nLLR: 2.96 (-2.94,2.94) [-4.00,0.00] sprt @ 60+0.6 th 1\nTotal: 23975 W: 3294 L: 3210 D: 17471\n\nResolves #575\n",
+      "subject": "Depth margin parameter-tweak in TT-save"
+    },
+    {
+      "commit_num": 3156,
+      "hash": "4d1220d6",
+      "short": "4d1220d6",
+      "author": "Leonid Pechenik <lp@home>",
+      "date": "2016-01-04T03:31:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4d1220d672d5f0b9cf1b0908cd685d685f1a26eb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d1220d672d5f0b9cf1b0908cd685d685f1a26eb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d1220d672d5f0b9cf1b0908cd685d685f1a26eb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tune time management for LTC\n\n60+0.6:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 102533 W: 14270 L: 13842 D: 74421\n\nResolves #558\n",
+      "subject": "Tune time management for LTC"
+    },
+    {
+      "commit_num": 3157,
+      "hash": "1de97337",
+      "short": "1de97337",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-01-03T14:15:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1de97337c2d53bdff0f1c3f362d232028ef736a5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1de97337c2d53bdff0f1c3f362d232028ef736a5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1de97337c2d53bdff0f1c3f362d232028ef736a5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fine tuning of unsupported pawn penalty\n\nAdjust the unsupported pawn penalty when the pawn is supporting 2 pawns\n(for example g7 in f6-g7-h6)\n\nPassed STC\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 23833 W: 4384 L: 4158 D: 15291\n\nPassed LTC\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 42711 W: 5918 L: 5655 D: 31138\n\nBench: 8390233\n\nResolves #549\n",
+      "subject": "Fine tuning of unsupported pawn penalty"
+    },
+    {
+      "commit_num": 3158,
+      "hash": "9eceb894",
+      "short": "9eceb894",
+      "author": "Leonid Pechenik <lp@home>",
+      "date": "2016-01-03T14:00:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9eceb894ac91b9b4a88d1972778705304666ac33",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9eceb894ac91b9b4a88d1972778705304666ac33.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9eceb894ac91b9b4a88d1972778705304666ac33.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Adjust time used for move based on previous score\n\nUse less time if evaluation is not worse than for previous move and even less time if in addition no fail low encountered for current iteration.\n\nSTC: 10+0.1\nELO: 5.37 +-2.9 (95%) LOS: 100.0%\nTotal: 20000 W: 3832 L: 3523 D: 12645\n\nSTC: 10+0.1\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 17527 W: 3334 L: 3132 D: 11061\n\nLTC: 60+0.6\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 28233 W: 3939 L: 3725 D: 20569\n\nLTC: 60+0.6\nELO: 2.43 +-1.4 (95%) LOS: 100.0%\nTotal: 60000 W: 8266 L: 7847 D: 43887\n\nLTC: 60+0.06\nLLR: 2.95 (-2.94,2.94) [-1.00,3.00]\nTotal: 38932 W: 5408 L: 5207 D: 28317\n\nResolves #547\n",
+      "subject": "Adjust time used for move based on previous score"
+    },
+    {
+      "commit_num": 3159,
+      "hash": "5972c4a6",
+      "short": "5972c4a6",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2016-01-03T13:52:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5972c4a678dfd50648e222fcf2f029330ed9de8a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5972c4a678dfd50648e222fcf2f029330ed9de8a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5972c4a678dfd50648e222fcf2f029330ed9de8a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Restore development version\n",
+      "subject": "Restore development version"
+    },
+    {
+      "commit_num": 3160,
+      "hash": "dd9cf305",
+      "short": "dd9cf305",
+      "author": "Joona Kiiski <joona@zoox.com>",
+      "date": "2016-01-02T20:26:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dd9cf305816c84c2acfa11cae09a31c4d77cc5a5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dd9cf305816c84c2acfa11cae09a31c4d77cc5a5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dd9cf305816c84c2acfa11cae09a31c4d77cc5a5.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Stockfish 7\n\nBench: 8355485\n\nNo functional change\n",
+      "subject": "Stockfish 7"
+    },
+    {
+      "commit_num": 3161,
+      "hash": "d4af15f6",
+      "short": "d4af15f6",
+      "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
+      "date": "2016-01-02T09:43:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d4af15f682c1967450233ab62cba1a6c5d601df6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d4af15f682c1967450233ab62cba1a6c5d601df6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d4af15f682c1967450233ab62cba1a6c5d601df6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Update AUTHORS and copyright notice\n\nNo functional change\n\nResolves #555\n",
+      "subject": "Update AUTHORS and copyright notice"
+    },
+    {
+      "commit_num": 3162,
+      "hash": "aa31f7f0",
+      "short": "aa31f7f0",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2016-01-02T01:10:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/aa31f7f096adef50fe119b41d4e7834c41fec310",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aa31f7f096adef50fe119b41d4e7834c41fec310.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aa31f7f096adef50fe119b41d4e7834c41fec310.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire CenterBind\n\nAnd compensate in the PSQT.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 27714 W: 5161 L: 5052 D: 17501\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 36354 W: 5008 L: 4909 D: 26437\n\nBench: 8603285\n\nResolves #556\n",
+      "subject": "Retire CenterBind"
+    },
+    {
+      "commit_num": 3163,
+      "hash": "9742fb10",
+      "short": "9742fb10",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2016-01-01T09:47:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9742fb10fd83e82ad760e4cac5cef3d6dff670ed",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9742fb10fd83e82ad760e4cac5cef3d6dff670ed.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9742fb10fd83e82ad760e4cac5cef3d6dff670ed.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Update Copyright year\n\nNo functional change.\n\nResolves #554\n",
+      "subject": "Update Copyright year"
+    }
+  ]
+}

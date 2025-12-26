@@ -1,0 +1,1175 @@
+{
+  "month": "2014-06",
+  "commits": [
+    {
+      "commit_num": 3624,
+      "hash": "6b354305",
+      "short": "6b354305",
+      "author": "Ajith <achajo@yahoo.co.in>",
+      "date": "2014-06-30T14:55:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6b354305e1ff27fcfa65c57ed92bd03160c3d5ca",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6b354305e1ff27fcfa65c57ed92bd03160c3d5ca.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6b354305e1ff27fcfa65c57ed92bd03160c3d5ca.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add bonuses for Minors attacking enemy pieces(except pawns) even when they are protected by enemy pawns.\n\nPatch passed STC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 8206 W: 1426 L: 1304 D: 5476\n\nand LTC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 19534 W: 2821 L: 2640 D: 14073\n\nBench: 9942172\n",
+      "subject": "Add bonuses for Minors attacking enemy pieces(except pawns) even when they are protected by enemy pawns."
+    },
+    {
+      "commit_num": 3625,
+      "hash": "ffedfa33",
+      "short": "ffedfa33",
+      "author": "joergoster <osterj165@googlemail.com>",
+      "date": "2014-06-29T19:17:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ffedfa33542a7de7d87fd545ea0a4b2fef8f8c6e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ffedfa33542a7de7d87fd545ea0a4b2fef8f8c6e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ffedfa33542a7de7d87fd545ea0a4b2fef8f8c6e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix Singular extension condition to handle mate scores\n\nWith Eelco's patch \"Don't special case for abs(beta) >= VALUE_MATE_IN_MAX_PLY\" condition \"abs(ttValue) < VALUE_KNOWN_WIN\" has been removed from singular extension search, and condition \"abs(beta) < VALUE_KNOWN_WIN\" was added to the SingularExtensionNode definition.\nThis might lead to problems, especially in positions, where a mate is due.\nFor example, this position 5rk1/4K1pp/8/5PPP/8/8/8/1R6 w - - 12 1 triggers an assert.\nstockfish: search.cpp:434: Value {anonymous}::search(Position&, Search::Stack*, Value, Value, Depth, bool) [with {anonymous}::NodeType NT = (<unnamed>::NodeType)2u; bool SpNode = false]: Assertion `-VALUE_INFINITE <= alpha && alpha < beta && beta <= VALUE_INFINITE' failed.\n\nSo let's re-insert the removed condition.\nFirst spotted by Uri Blass, fix by me.\n\nBench: 8759675\n",
+      "subject": "Fix Singular extension condition to handle mate scores"
+    },
+    {
+      "commit_num": 3626,
+      "hash": "e4e423bb",
+      "short": "e4e423bb",
+      "author": "Joseph R. Prostko <joe.prostko@gmail.com>",
+      "date": "2014-06-29T14:15:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e4e423bb05fb870ad25a2beaa30324d079f7f60a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4e423bb05fb870ad25a2beaa30324d079f7f60a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4e423bb05fb870ad25a2beaa30324d079f7f60a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Change the install prefix for Haiku\n\n* /boot/common was removed from Haiku\n* The equivalent path now that package management has been implemented is /boot/system/non-packaged\n\nNo functional change\n\nBench: 8759681\n",
+      "subject": "Change the install prefix for Haiku"
+    },
+    {
+      "commit_num": 3627,
+      "hash": "ccd823a4",
+      "short": "ccd823a4",
+      "author": "Ron Britvich <ron@britvich.com>",
+      "date": "2014-06-28T18:05:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ccd823a4ffd2ed3e60cb03ab49a841742bae1994",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ccd823a4ffd2ed3e60cb03ab49a841742bae1994.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ccd823a4ffd2ed3e60cb03ab49a841742bae1994.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Pack 3 TT entries in 32 bytes cluster\n\nIdea from Ron Britvich\n\nCode reworked by Marco Costalba and Joona Kiiski\n\nBench: 8095369\n\nResolves #3\nResolves #10\n",
+      "subject": "Pack 3 TT entries in 32 bytes cluster"
+    },
+    {
+      "commit_num": 3628,
+      "hash": "7ff865b9",
+      "short": "7ff865b9",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-26T19:21:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7ff865b924a5027ab3ecb5a6525ad165262fe3c2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7ff865b924a5027ab3ecb5a6525ad165262fe3c2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7ff865b924a5027ab3ecb5a6525ad165262fe3c2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge pull request #9 from glinscott/pawnspan\n\nScale down endgames with pawns on one or two adjacent files\n\n\n\nPassed STC\n\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\n\nTotal: 16081 W: 2745 L: 2604 D: 10732\n\n\n\nPassed LTC\n\nLLR: 2.95 (-2.94,2.94) [1.00,6.00]\n\nTotal: 123832 W: 17292 L: 16584 D: 89956\n\n\n\n128k games to measure ELO at 15+0.05:\n\nELO: 2.07 +-1.1 (95%) LOS: 100.0%\n\nTotal: 128000 W: 21632 L: 20869 D: 85499\n\n\n\nNew bench: 8028792\n",
+      "subject": "Merge pull request #9 from glinscott/pawnspan"
+    },
+    {
+      "commit_num": 3629,
+      "hash": "ec627911",
+      "short": "ec627911",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-26T19:20:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ec627911f05268f57c21d8d15c63434a299380c6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ec627911f05268f57c21d8d15c63434a299380c6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ec627911f05268f57c21d8d15c63434a299380c6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "A bit more cleanup\n",
+      "subject": "A bit more cleanup"
+    },
+    {
+      "commit_num": 3630,
+      "hash": "22ffb588",
+      "short": "22ffb588",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-26T15:20:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/22ffb588e59b63cae82641a9a19cc859f50c64f4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/22ffb588e59b63cae82641a9a19cc859f50c64f4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/22ffb588e59b63cae82641a9a19cc859f50c64f4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge pull request #8 from glinscott/revert_ce1c260\n\nRevert \"Check for an available slave early on\"\n",
+      "subject": "Merge pull request #8 from glinscott/revert_ce1c260"
+    },
+    {
+      "commit_num": 3631,
+      "hash": "e6a8d03d",
+      "short": "e6a8d03d",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-26T15:16:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e6a8d03dd87573d71fb3c3d72f6ef07af6bf0d68",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e6a8d03dd87573d71fb3c3d72f6ef07af6bf0d68.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e6a8d03dd87573d71fb3c3d72f6ef07af6bf0d68.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Check for an available slave early on\"\n\nThis reverts commit ce1c260ea97c14eea996d0a2638f4876ccbc412b.\n",
+      "subject": "Revert \"Check for an available slave early on\""
+    },
+    {
+      "commit_num": 3632,
+      "hash": "747e035c",
+      "short": "747e035c",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-25T20:45:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/747e035c7df830c064e87abb75d73060eeca7d2b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/747e035c7df830c064e87abb75d73060eeca7d2b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/747e035c7df830c064e87abb75d73060eeca7d2b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Original version of shane's patch\n",
+      "subject": "Original version of shane's patch"
+    },
+    {
+      "commit_num": 3633,
+      "hash": "6c9f4cf3",
+      "short": "6c9f4cf3",
+      "author": "shane31 <shane_booth@acslink.net.au>",
+      "date": "2014-06-25T20:01:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6c9f4cf36f54a2437c843ebe0184a3356da9d82a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6c9f4cf36f54a2437c843ebe0184a3356da9d82a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6c9f4cf36f54a2437c843ebe0184a3356da9d82a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Scale down endgames with pawns on one or two adjacent files\n",
+      "subject": "Scale down endgames with pawns on one or two adjacent files"
+    },
+    {
+      "commit_num": 3634,
+      "hash": "ab580106",
+      "short": "ab580106",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-23T16:14:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ab580106fd995c23aaa7c297e9cbd210cfd33f11",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab580106fd995c23aaa7c297e9cbd210cfd33f11.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab580106fd995c23aaa7c297e9cbd210cfd33f11.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge pull request #5 from glinscott/authors\n\nAdd AUTHORS\n",
+      "subject": "Merge pull request #5 from glinscott/authors"
+    },
+    {
+      "commit_num": 3635,
+      "hash": "aa23eb44",
+      "short": "aa23eb44",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-21T12:32:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/aa23eb444046bce30533da8834a185e07b757811",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aa23eb444046bce30533da8834a185e07b757811.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/aa23eb444046bce30533da8834a185e07b757811.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Some reformatting in pawns.cpp\n\nNo functional change.\n",
+      "subject": "Some reformatting in pawns.cpp"
+    },
+    {
+      "commit_num": 3636,
+      "hash": "e8baf2b7",
+      "short": "e8baf2b7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-21T11:07:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e8baf2b772ba8b5eacccd2a64f33faa3b0efa7a8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8baf2b772ba8b5eacccd2a64f33faa3b0efa7a8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8baf2b772ba8b5eacccd2a64f33faa3b0efa7a8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Ensure ttValue != VALUE_NONE in singular extension search\n\nThe assert:\n\n  assert(ttValue != VALUE_NONE);\n\nCould fire for multiple reasons (although is very rare),\nfor instance after an IID we can have ttMove != MOVE_NONE\nwhile ttValue is still set at VALUE_NONE.\n\nBut not only this, actually SMP is a source of corrupted\nttValue and anyhow we can detect the condition:\n\n ttMove != MOVE_NONE && ttValue == VALUE_NONE\n\neven north of IID.\n\nReported by Ronald de Man.\n\nIt is so rare that bench didn't change.\n\nbench: 7710548\n",
+      "subject": "Ensure ttValue != VALUE_NONE in singular extension search"
+    },
+    {
+      "commit_num": 3637,
+      "hash": "58bb23d0",
+      "short": "58bb23d0",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-21T04:49:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/58bb23d0c3a7ef85c0f70a1c33890b1e6bc9ba2a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/58bb23d0c3a7ef85c0f70a1c33890b1e6bc9ba2a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/58bb23d0c3a7ef85c0f70a1c33890b1e6bc9ba2a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove some duplicates\n",
+      "subject": "Remove some duplicates"
+    },
+    {
+      "commit_num": 3638,
+      "hash": "bbacff5e",
+      "short": "bbacff5e",
+      "author": "Gary Linscott <glinscott@gmail.com>",
+      "date": "2014-06-21T01:35:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bbacff5e01e757fba685e71726dbd383f25efa8f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bbacff5e01e757fba685e71726dbd383f25efa8f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bbacff5e01e757fba685e71726dbd383f25efa8f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add AUTHORS\n",
+      "subject": "Add AUTHORS"
+    },
+    {
+      "commit_num": 3639,
+      "hash": "43efd7fa",
+      "short": "43efd7fa",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-20T22:02:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/43efd7fad77eb6a84305b0e2b25e62a6f1ce5fed",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43efd7fad77eb6a84305b0e2b25e62a6f1ce5fed.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43efd7fad77eb6a84305b0e2b25e62a6f1ce5fed.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Better value clipping in game_phase()\n\nNo functional change.\n",
+      "subject": "Better value clipping in game_phase()"
+    },
+    {
+      "commit_num": 3640,
+      "hash": "3b315c9a",
+      "short": "3b315c9a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-20T21:40:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3b315c9adab141830a81afbdff70c18336763e51",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3b315c9adab141830a81afbdff70c18336763e51.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3b315c9adab141830a81afbdff70c18336763e51.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move game_phase() to Position\n\nIt seems a more natural to place this\nfunction there.\n\nNo functional change.\n",
+      "subject": "Move game_phase() to Position"
+    },
+    {
+      "commit_num": 3641,
+      "hash": "f7926ea4",
+      "short": "f7926ea4",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-20T21:15:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f7926ea41e65d2f687623904550771b7ee8f52a3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f7926ea41e65d2f687623904550771b7ee8f52a3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f7926ea41e65d2f687623904550771b7ee8f52a3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small renaming in material weights\n\nAlso dropped some temporary variable: compiler\nis more than able to push on stack temp values\nby itself (verified).\n\nNo functional change.\n",
+      "subject": "Small renaming in material weights"
+    },
+    {
+      "commit_num": 3642,
+      "hash": "264c8637",
+      "short": "264c8637",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-19T13:44:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/264c8637a30247f1054f60b7b728fb4340185efa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/264c8637a30247f1054f60b7b728fb4340185efa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/264c8637a30247f1054f60b7b728fb4340185efa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify a condition in is_KXK()\n\nNo functional change.\n",
+      "subject": "Simplify a condition in is_KXK()"
+    },
+    {
+      "commit_num": 3643,
+      "hash": "55a3e0af",
+      "short": "55a3e0af",
+      "author": "Eelco de Groot <eelcogro@gmail.com>",
+      "date": "2014-06-16T19:46:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/55a3e0af8d0d1e169cc8b16541ffeb41e157b66e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/55a3e0af8d0d1e169cc8b16541ffeb41e157b66e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/55a3e0af8d0d1e169cc8b16541ffeb41e157b66e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't special case for abs(beta) >= VALUE_MATE_IN_MAX_PLY\n\nRemove from the search this special case and apply\nnull search and razoring also in mate positions.\n\nTested in no-regression mode and passed both\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 65431 W: 10860 L: 10810 D: 43761\n\nand LTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 34928 W: 4814 L: 4713 D: 25401\n\nThis patch kicks in only in mate positions and in\nthese cases it seems beneficial in finding mates\nfaster as Yery Spark measured on the Chest mate suite:\n\nTotal number of positions 6425\nFixed nodes 200K per position\n\nmaster: 1049\nnew:    1154\n\nAnd also the 5446 'hard' positions again with 2000K nodes\n(those not found by both engines in 200K nodes):\n\nmaster: 1069\nnew:    1395\n\nbench: 7710548\n",
+      "subject": "Don't special case for abs(beta) >= VALUE_MATE_IN_MAX_PLY"
+    },
+    {
+      "commit_num": 3644,
+      "hash": "66c93245",
+      "short": "66c93245",
+      "author": "Leonid Pechenik <lp@home>",
+      "date": "2014-06-16T10:32:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/66c93245e08e812ea2491a12b0341fb2e270066f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/66c93245e08e812ea2491a12b0341fb2e270066f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/66c93245e08e812ea2491a12b0341fb2e270066f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify unstoppable pawns\n\nTested in no-regression mode and passed both\n\nSTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 17919 W: 3103 L: 2978 D: 11838\n\nand LTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 31460 W: 4414 L: 4308 D: 22738\n\nbench: 7709279\n",
+      "subject": "Simplify unstoppable pawns"
+    },
+    {
+      "commit_num": 3645,
+      "hash": "73ca93f3",
+      "short": "73ca93f3",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-15T08:29:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/73ca93f3c07867d16318d469b1054c45ddca79bf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/73ca93f3c07867d16318d469b1054c45ddca79bf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/73ca93f3c07867d16318d469b1054c45ddca79bf.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove -ansi flag for Clang\n\nIt seems this flag is only for gcc and\nyields a warning under OSX Mavericks:\n\nclang: warning: argument unused during compilation: '-ansi'\n\nNo functional change.\n",
+      "subject": "Remove -ansi flag for Clang"
+    },
+    {
+      "commit_num": 3646,
+      "hash": "c6fc51c5",
+      "short": "c6fc51c5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-14T10:46:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c6fc51c5ea769098a11d14680e611ac88eec94ad",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c6fc51c5ea769098a11d14680e611ac88eec94ad.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c6fc51c5ea769098a11d14680e611ac88eec94ad.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a warning with MSVC in 'analyze' mode\n\nHere MSVC is worried that\n\nStepAttacksBB[PAWN][psq]\n\ncould overflow, so change psq initialization\nto clarify psq is always less than 64.\n\nNo functional change.\n",
+      "subject": "Fix a warning with MSVC in 'analyze' mode"
+    },
+    {
+      "commit_num": 3647,
+      "hash": "2cb4c705",
+      "short": "2cb4c705",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-14T10:26:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2cb4c7052efa55d14a66aace65625d02acc044a3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2cb4c7052efa55d14a66aace65625d02acc044a3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2cb4c7052efa55d14a66aace65625d02acc044a3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Triviality in UCI::loop\n\nCode style paranoid in action here :-)\n\nNo functional change.\n",
+      "subject": "Triviality in UCI::loop"
+    },
+    {
+      "commit_num": 3648,
+      "hash": "3c1201c2",
+      "short": "3c1201c2",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-14T10:16:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3c1201c20c6adceceff764a56aa80e615ca80c64",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c1201c20c6adceceff764a56aa80e615ca80c64.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c1201c20c6adceceff764a56aa80e615ca80c64.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Factor out pawn attacks in 'lever'\n\nImproves readibility and possibly speed.\n\nNo functional change.\n",
+      "subject": "Factor out pawn attacks in 'lever'"
+    },
+    {
+      "commit_num": 3649,
+      "hash": "84dabe59",
+      "short": "84dabe59",
+      "author": "Ajith <achajo@yahoo.co.in>",
+      "date": "2014-06-11T23:31:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/84dabe5982dab5ee65770eeb77c4f966db9514f8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/84dabe5982dab5ee65770eeb77c4f966db9514f8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/84dabe5982dab5ee65770eeb77c4f966db9514f8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify pawn threats and merge into ThreatenedByPawn[]\n\nTested in no-regression mode,\n\npassed STC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 14477 W: 2493 L: 2362 D: 9622\n\nand LTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 51964 W: 7091 L: 7013 D: 37860\n\nbench: 7875814\n",
+      "subject": "Simplify pawn threats and merge into ThreatenedByPawn[]"
+    },
+    {
+      "commit_num": 3650,
+      "hash": "2312c267",
+      "short": "2312c267",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2014-06-11T14:36:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2312c2672299d6e13b2f509bf5b1a6e330662f09",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2312c2672299d6e13b2f509bf5b1a6e330662f09.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2312c2672299d6e13b2f509bf5b1a6e330662f09.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add bonus for advanced lever\n\nPassed both STC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 15413 W: 2670 L: 2530 D: 10213\n\nAnd LTC:\nLLR: 2.95 (-2.94,2.94) [1.00,6.00]\nTotal: 66908 W: 9398 L: 8960 D: 48550\n\nBench : 7859385\n",
+      "subject": "Add bonus for advanced lever"
+    },
+    {
+      "commit_num": 3651,
+      "hash": "e10276f4",
+      "short": "e10276f4",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2014-06-09T10:45:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e10276f45d33c39085bb2c1435155d9cf9a57681",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e10276f45d33c39085bb2c1435155d9cf9a57681.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e10276f45d33c39085bb2c1435155d9cf9a57681.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak outpost name\n\nThis name is more accurate, since that function evaluates only one\noutpost in every call.\nNo functional change.\n",
+      "subject": "Tweak outpost name"
+    },
+    {
+      "commit_num": 3652,
+      "hash": "b6cd89ae",
+      "short": "b6cd89ae",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-08T20:30:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b6cd89aeafaa8b8a6d057f59bac83ac2a0474323",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b6cd89aeafaa8b8a6d057f59bac83ac2a0474323.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b6cd89aeafaa8b8a6d057f59bac83ac2a0474323.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small renaming in Tracing\n\nNo functional change.\n",
+      "subject": "Small renaming in Tracing"
+    },
+    {
+      "commit_num": 3653,
+      "hash": "ce1c260e",
+      "short": "ce1c260e",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-08T19:56:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ce1c260ea97c14eea996d0a2638f4876ccbc412b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ce1c260ea97c14eea996d0a2638f4876ccbc412b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ce1c260ea97c14eea996d0a2638f4876ccbc412b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Check for an available slave early on\n\nDon't take the split lock if we don't have\navailable slaves (about 30-40% of times).\n\nThis new condition allows to retire the now\nredundant one on number of threads.\n\nNo functional change.\n",
+      "subject": "Check for an available slave early on"
+    },
+    {
+      "commit_num": 3654,
+      "hash": "4d30126e",
+      "short": "4d30126e",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-06T23:16:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4d30126e4b0a64c517fb52ec4c24afdc2645663b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d30126e4b0a64c517fb52ec4c24afdc2645663b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d30126e4b0a64c517fb52ec4c24afdc2645663b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use unsigned char as argument of std::isspace\n\nAlthough signature allows an int:\n\nint isspace( int ch );\n\nThe behavior is undefined if the value of ch is\nnot representable as unsigned char and is not\nequal to EOF.\n\nSee\n\nhttp://en.cppreference.com/w/cpp/string/byte/isspace\nhttp://www.greenend.org.uk/rjk/tech/cfu.html\n\nThis is really a tricky corner case of C standard!\n\nSpotted and reported by Ron Britvich.\n\nNo functional change.\n",
+      "subject": "Use unsigned char as argument of std::isspace"
+    },
+    {
+      "commit_num": 3655,
+      "hash": "7f56d294",
+      "short": "7f56d294",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-06T09:12:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7f56d2949d4244c9d2e6796adc721582e9d85804",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7f56d2949d4244c9d2e6796adc721582e9d85804.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7f56d2949d4244c9d2e6796adc721582e9d85804.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid to use nullChild\n\nUse instead:\n\n(ss-1)->currentMove == MOVE_NULL\n\nNo functional change.\n",
+      "subject": "Avoid to use nullChild"
+    },
+    {
+      "commit_num": 3656,
+      "hash": "d10ae90d",
+      "short": "d10ae90d",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-06T09:10:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d10ae90dea62794de96a6bd756e3b73a51bb8909",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d10ae90dea62794de96a6bd756e3b73a51bb8909.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d10ae90dea62794de96a6bd756e3b73a51bb8909.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove 'update gains' hack\n\nUse (move != MOVE_NONE) condition to\nfiltering out updating gains at root.\n\nbench: 8454456\n",
+      "subject": "Remove 'update gains' hack"
+    },
+    {
+      "commit_num": 3657,
+      "hash": "2f756394",
+      "short": "2f756394",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-06T09:07:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2f756394857332da79d92972088fccefa7260406",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2f756394857332da79d92972088fccefa7260406.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2f756394857332da79d92972088fccefa7260406.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Temporary revert previous patch\n\nSplit previous patch in 2 steps: first remove\nthe MOVE_NULL hack, then retire nullChild.\n\nThe first step is a prerequisite\nfor second one and affects bench.\n\nThe second step (next patch) just removes nullChild\nwithout affecting bench.\n\nbench: 8205159\n",
+      "subject": "Temporary revert previous patch"
+    },
+    {
+      "commit_num": 3658,
+      "hash": "ad1167c4",
+      "short": "ad1167c4",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-06T07:58:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ad1167c482bdda850a83c28d3938553d813e46b9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ad1167c482bdda850a83c28d3938553d813e46b9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ad1167c482bdda850a83c28d3938553d813e46b9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid to use nullChild\n\nShould be a non functional change, but\nfor some reason bench is changed.\n\nbench: 8454456\n",
+      "subject": "Avoid to use nullChild"
+    },
+    {
+      "commit_num": 3659,
+      "hash": "08753771",
+      "short": "08753771",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-06T07:35:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/08753771fc800ce85b8f3218219e5db8c7ef7817",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/08753771fc800ce85b8f3218219e5db8c7ef7817.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/08753771fc800ce85b8f3218219e5db8c7ef7817.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Move Tempo to evaluation\n\nNo functional change.\n",
+      "subject": "Move Tempo to evaluation"
+    },
+    {
+      "commit_num": 3660,
+      "hash": "69ac45d9",
+      "short": "69ac45d9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-05T21:55:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/69ac45d903a809bb80cabf87181958e1311c3fcc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/69ac45d903a809bb80cabf87181958e1311c3fcc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/69ac45d903a809bb80cabf87181958e1311c3fcc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Score extractors\"\n\nAre broken for big-endian case and\nI have verified with MSVC 2013 Premium\nbench is correct and there is no\nmiscompilation, so the main reason\nto change the original code drops.\n\nNo functional change.\n",
+      "subject": "Revert \"Score extractors\""
+    },
+    {
+      "commit_num": 3661,
+      "hash": "323a0066",
+      "short": "323a0066",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-05T21:46:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/323a006666ed4843299e24351f29282947dea7f0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/323a006666ed4843299e24351f29282947dea7f0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/323a006666ed4843299e24351f29282947dea7f0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a warning with MSVC Premium 2013\n\nReported by Ron Britvich.\n\nNo functional change.\n",
+      "subject": "Fix a warning with MSVC Premium 2013"
+    },
+    {
+      "commit_num": 3662,
+      "hash": "16e170d1",
+      "short": "16e170d1",
+      "author": "pellanda <pellanda@gmail.com>",
+      "date": "2014-06-04T13:56:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/16e170d105f66ab2a1e8ff1572bacde7463c2dce",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16e170d105f66ab2a1e8ff1572bacde7463c2dce.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/16e170d105f66ab2a1e8ff1572bacde7463c2dce.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Update Readme.md\n\nRetire line about polyglot.ini and\nbook as they are not used anymore.\n\nNo functional change.\n",
+      "subject": "Update Readme.md"
+    },
+    {
+      "commit_num": 3663,
+      "hash": "adeded29",
+      "short": "adeded29",
+      "author": "Lucas Braesch <lucas.braesch@gmail.com>",
+      "date": "2014-06-03T12:48:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/adeded29fb6ce483bbbafaa0f67aa086cad968f9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/adeded29fb6ce483bbbafaa0f67aa086cad968f9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/adeded29fb6ce483bbbafaa0f67aa086cad968f9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Symmetric King Safety: take 2\n\nAnother attempt at retiring current asymmetric\nking evaluation and use a much simpler symmetric\none. As a good side effect we can avoid recalculating\neval after a null move.\n\nTested in no-regression mode and passed\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 21580 W: 3752 L: 3632 D: 14196\n\nLTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 18253 W: 2593 L: 2469 D: 13191\n\nAnd a LTC regression test against SF DD to\nverify we don't have regression against\nweaker engines due to some kind of 'contempt'\neffect:\n\nELO: 54.69 +-2.1 (95%) LOS: 100.0%\nTotal: 40000 W: 11072 L: 4827 D: 24101\n\nbench: 8205159\n",
+      "subject": "Symmetric King Safety: take 2"
+    },
+    {
+      "commit_num": 3664,
+      "hash": "187a9fe5",
+      "short": "187a9fe5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-03T10:38:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/187a9fe5e7b8349b9eacf23e11cb801a32bb6b12",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/187a9fe5e7b8349b9eacf23e11cb801a32bb6b12.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/187a9fe5e7b8349b9eacf23e11cb801a32bb6b12.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use see() instead of see_sign() in previous patch\n\nBefore it was working by accident in case of\nsee_sign() and failing with see() due to how\ncastle moves are coded (king captures the rook).\n\nBetter to explicitly filter out castling moves\nand use see() without any surprise/trick.\n\nNo functional case.\n",
+      "subject": "Use see() instead of see_sign() in previous patch"
+    },
+    {
+      "commit_num": 3665,
+      "hash": "83a574ff",
+      "short": "83a574ff",
+      "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
+      "date": "2014-06-03T09:32:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/83a574ff271ec5924976b48cf65ac62278f87558",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/83a574ff271ec5924976b48cf65ac62278f87558.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/83a574ff271ec5924976b48cf65ac62278f87558.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Decrease reduction for moves that escape a capture\n\nPassed both STC\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 10094 W: 1833 L: 1704 D: 6557\n\nand LTC\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 27738 W: 4147 L: 3928 D: 19663\n\nbench : 8599236\n",
+      "subject": "Decrease reduction for moves that escape a capture"
+    },
+    {
+      "commit_num": 3666,
+      "hash": "6f483670",
+      "short": "6f483670",
+      "author": "kinderchocolate <WongMingYin@gmail.com>",
+      "date": "2014-06-03T05:45:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6f48367094082ad03526f6ffe24d7c3873ff7386",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6f48367094082ad03526f6ffe24d7c3873ff7386.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6f48367094082ad03526f6ffe24d7c3873ff7386.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add some const qualifier\n\nNo functional change.\n",
+      "subject": "Add some const qualifier"
+    },
+    {
+      "commit_num": 3667,
+      "hash": "f4dcec0b",
+      "short": "f4dcec0b",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-01T13:29:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f4dcec0b942703cf0e9bad1da7e64dfa252e915d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f4dcec0b942703cf0e9bad1da7e64dfa252e915d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f4dcec0b942703cf0e9bad1da7e64dfa252e915d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire Polyglot Book management\n\nBook handling belongs to GUI, we kept this code\nfor historical reasons, but nowdays there is\nreally no need of this old, (mostly) unused\nand especially incorrect designed functionality.\n\nIt is up to the GUI to choose the book (far easier for\nthe user) and to select the book parameters. In no\nplace, including fishtest, TCEC, rating lists, etc.\nthe \"own book\" is used, moreover currently SF is\nreleased without any book and even if in the future we\nbundle a book in the release package, it will be the GUI\nthat will take care of it.\n\nThis corrects a wrong design decision that Galurung\nand later Stockfish inherited from what was common\npractice many yeas ago.\n\nNo functional change.\n",
+      "subject": "Retire Polyglot Book management"
+    },
+    {
+      "commit_num": 3668,
+      "hash": "e4fc9d84",
+      "short": "e4fc9d84",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2014-06-01T11:37:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e4fc9d84d7bf854c07b791573a0c5377e8393279",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4fc9d84d7bf854c07b791573a0c5377e8393279.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4fc9d84d7bf854c07b791573a0c5377e8393279.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire eval weights UCI options\n\nThere is really little that user can achieve (apart\nfrom a weakened engine) tweaking these parameters\nthat are already tuned and have no immediate or visible\neffect.\n\nSo better do not expose them to the user and avoid the\ntypical \"What is the best setup for my machine?\" kind of\nquestion (by far the most common, by far the most useless).\n\nNo functional change.\n",
+      "subject": "Retire eval weights UCI options"
+    }
+  ]
+}

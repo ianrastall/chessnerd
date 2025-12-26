@@ -1,0 +1,2293 @@
+{
+  "month": "2010-01",
+  "commits": [
+    {
+      "commit_num": 5901,
+      "hash": "3941e4bd",
+      "short": "3941e4bd",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-31T10:08:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3941e4bdb3e4871a3081fbae0036e65704363409",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3941e4bdb3e4871a3081fbae0036e65704363409.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3941e4bdb3e4871a3081fbae0036e65704363409.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Some code style triviality in root search\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Some code style triviality in root search"
+    },
+    {
+      "commit_num": 5902,
+      "hash": "d7d2c1b7",
+      "short": "d7d2c1b7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-30T18:18:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d7d2c1b7e31f5b680ebb44e2ffcbfc4bcb2aecfd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d7d2c1b7e31f5b680ebb44e2ffcbfc4bcb2aecfd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d7d2c1b7e31f5b680ebb44e2ffcbfc4bcb2aecfd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Add hardware POPCNT support for gcc\n\nWith new target 'make gcc-popcnt' it is now\npossible to compile with enabled hardware POPCNT\nsupport also with gcc. Until now was possible only\nfor Intel and MSVC compilers.\n\nWhen this instruction is supported by CPU, for instance\non Intel i7 or i5 family, produced binary is a bit faster.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Add hardware POPCNT support for gcc"
+    },
+    {
+      "commit_num": 5903,
+      "hash": "17502a56",
+      "short": "17502a56",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-30T09:35:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/17502a56592ffddb05e9a8e647197625157ae23a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/17502a56592ffddb05e9a8e647197625157ae23a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/17502a56592ffddb05e9a8e647197625157ae23a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Revert \"Remove pointless gcc flag when generating dependencies\"\n\nThis reverts commit c43c5fe9e0c9a99947b940133df2cb2bbb57c3f9.\n\nProduces following build error after 'make clean', 'make icc' under Mandriva\nwith icc version 11.0\n\nMakefile:306: .depend: No such file or directory\nIn file included from tt.cpp:28:\n/usr/lib/gcc/i586-manbo-linux-gnu/4.3.2/include/xmmintrin.h:35:3: error: #error \"SSE instruction set not enabled\"\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Revert \"Remove pointless gcc flag when generating dependencies\""
+    },
+    {
+      "commit_num": 5904,
+      "hash": "252844e8",
+      "short": "252844e8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-29T15:47:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/252844e899515d48c0db1153ef5e91bdd8c6679f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/252844e899515d48c0db1153ef5e91bdd8c6679f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/252844e899515d48c0db1153ef5e91bdd8c6679f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid search tree explosion in qsearch\n\nUnder some rare cases we can have a search tree explosion\ndue to a perpetual check or to a very long non-capture TT\nsequence.\n\nThis avoids the tree explosion not following TT moves that\nare not captures or promotions when we are below the\n'generate checks' depth.\n\nIdea suggested by Richard Vida.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Avoid search tree explosion in qsearch"
+    },
+    {
+      "commit_num": 5905,
+      "hash": "b651e533",
+      "short": "b651e533",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-29T08:13:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b651e5334bd94af6358c5e8ca0e282a20997a77c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b651e5334bd94af6358c5e8ca0e282a20997a77c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b651e5334bd94af6358c5e8ca0e282a20997a77c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Correct qsearch() TT save\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Correct qsearch() TT save"
+    },
+    {
+      "commit_num": 5906,
+      "hash": "e84488ed",
+      "short": "e84488ed",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-28T23:16:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e84488ed6bef17ed3914a272a4a2622a2db44cc9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e84488ed6bef17ed3914a272a4a2622a2db44cc9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e84488ed6bef17ed3914a272a4a2622a2db44cc9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire captures pruning\n\nFutility captures alone does not seem an improvment.\n\nPerhaps is a combination of stand pat + futility that is winning,\nso revert for now and continue testing starting from a standard\nbase until we find the correct receipe.\n\nAfter 999 games at 1+0\nMod vs Orig +231 0506 -201  +10 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire captures pruning"
+    },
+    {
+      "commit_num": 5907,
+      "hash": "e4d3a156",
+      "short": "e4d3a156",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-28T11:47:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e4d3a15656ac5cf7b9687a5d755fc61c402207b7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4d3a15656ac5cf7b9687a5d755fc61c402207b7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4d3a15656ac5cf7b9687a5d755fc61c402207b7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use float instead of double in reduction parameters\n\nThis is faster on 32 bit CPU and precision is enough.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use float instead of double in reduction parameters"
+    },
+    {
+      "commit_num": 5908,
+      "hash": "1d7a3f26",
+      "short": "1d7a3f26",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-28T11:39:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1d7a3f26e0ac0d0dabe91806b236f4f411e6344a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1d7a3f26e0ac0d0dabe91806b236f4f411e6344a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1d7a3f26e0ac0d0dabe91806b236f4f411e6344a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Micro optimize reduction_parameters()\n\nAt ply == OnePly (common case) we avoid some useless\nfloating point computation.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Micro optimize reduction_parameters()"
+    },
+    {
+      "commit_num": 5909,
+      "hash": "a0005ba4",
+      "short": "a0005ba4",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-28T11:14:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a0005ba45f7d5c97a096b79065c0b83ae3d81afa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a0005ba45f7d5c97a096b79065c0b83ae3d81afa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a0005ba45f7d5c97a096b79065c0b83ae3d81afa.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid to calculate reduction for each move\n\nThis is slow because some floating point operation is\ninvolved.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Avoid to calculate reduction for each move"
+    },
+    {
+      "commit_num": 5910,
+      "hash": "bdd61b17",
+      "short": "bdd61b17",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T22:02:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bdd61b174452f13336159fab6954bc37589a4c06",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bdd61b174452f13336159fab6954bc37589a4c06.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bdd61b174452f13336159fab6954bc37589a4c06.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove useless variable 'PostFutilityValueMargin'\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Remove useless variable 'PostFutilityValueMargin'"
+    },
+    {
+      "commit_num": 5911,
+      "hash": "973e574e",
+      "short": "973e574e",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T21:54:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/973e574e1f0952b80cebc634d7cebc05f27fc9ec",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/973e574e1f0952b80cebc634d7cebc05f27fc9ec.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/973e574e1f0952b80cebc634d7cebc05f27fc9ec.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Precalculate FutilityMargins\n\nThis way we don't need to copy+paste formula everywhere\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Precalculate FutilityMargins"
+    },
+    {
+      "commit_num": 5912,
+      "hash": "27393eba",
+      "short": "27393eba",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T21:24:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/27393ebae2e689c86f77777d3ba9aae39b9c89b8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27393ebae2e689c86f77777d3ba9aae39b9c89b8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/27393ebae2e689c86f77777d3ba9aae39b9c89b8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use calculate_reduction() function to simplify code\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use calculate_reduction() function to simplify code"
+    },
+    {
+      "commit_num": 5913,
+      "hash": "3c7eebb4",
+      "short": "3c7eebb4",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T20:59:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3c7eebb48d5239cf363c54e082686f5559174518",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c7eebb48d5239cf363c54e082686f5559174518.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c7eebb48d5239cf363c54e082686f5559174518.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Bugfix: reduction was not set to zero in full depth search\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Bugfix: reduction was not set to zero in full depth search"
+    },
+    {
+      "commit_num": 5914,
+      "hash": "548bae80",
+      "short": "548bae80",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T20:56:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/548bae80bd1f04526667ddeeaf8f5f065c53b096",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/548bae80bd1f04526667ddeeaf8f5f065c53b096.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/548bae80bd1f04526667ddeeaf8f5f065c53b096.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Implement calculate_reduction function\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Implement calculate_reduction function"
+    },
+    {
+      "commit_num": 5915,
+      "hash": "c83fd08f",
+      "short": "c83fd08f",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T18:46:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c83fd08fd4fa91702ef0f727bc777c613524403d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c83fd08fd4fa91702ef0f727bc777c613524403d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c83fd08fd4fa91702ef0f727bc777c613524403d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Aspiration window rewrite\n\nJoona new aspiration window. Main idea is to always\nresearch aspiration fail highs/low at the same\nply and use much smaller aspiration window than previously.\n\nTesting result is very positive.\n\n1CPU:\n953-1149\n\n4CPU:\n545 - 656\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Aspiration window rewrite"
+    },
+    {
+      "commit_num": 5916,
+      "hash": "62b43130",
+      "short": "62b43130",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T18:23:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/62b43130e27e4322c5edde976d0827840b9deee4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/62b43130e27e4322c5edde976d0827840b9deee4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/62b43130e27e4322c5edde976d0827840b9deee4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Be sure we exit while loop with lock held\n\nThis fixes an hang introduced by recent locking\nrewrite patch.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Be sure we exit while loop with lock held"
+    },
+    {
+      "commit_num": 5917,
+      "hash": "cd112ee8",
+      "short": "cd112ee8",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T17:49:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cd112ee8eb33e69dc0e1aa3cf1b6e6516718c9de",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cd112ee8eb33e69dc0e1aa3cf1b6e6516718c9de.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cd112ee8eb33e69dc0e1aa3cf1b6e6516718c9de.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix capture pruning\n\nWe forgot to update bestValue previously\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix capture pruning"
+    },
+    {
+      "commit_num": 5918,
+      "hash": "307909be",
+      "short": "307909be",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T16:57:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/307909bed8e86cc90e03ae8b66884d7b73beb814",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/307909bed8e86cc90e03ae8b66884d7b73beb814.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/307909bed8e86cc90e03ae8b66884d7b73beb814.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Temporary revert \"captures pruning\" due to an assert\n\nIn debug run with 2 threads it happens to be following\nassert after some minutes:\n\nassert(value > -VALUE_INFINITE && value < VALUE_INFINITE);\n\nin search(), line 1615.\n\nI am not able to understand why, anyhow reverted for the moment.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Temporary revert \"captures pruning\" due to an assert"
+    },
+    {
+      "commit_num": 5919,
+      "hash": "bb968fd4",
+      "short": "bb968fd4",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T16:29:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bb968fd42a6e3c14755332f5a4c4829faaf4f9de",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb968fd42a6e3c14755332f5a4c4829faaf4f9de.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb968fd42a6e3c14755332f5a4c4829faaf4f9de.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify locking in sp_search and sp_search_pv\n\nAvoid to take the lock two times in a tight sequence, the first\nin get_next_move() and the second to update sp->moves.\n\nDo all with one lock and so retire the now useless locked version\nof get_next_move().\n\nAlso fix some theorical race due to comparison sp->bestValue < sp->beta\nis done out of lock protection. Finally fix another (harmless but time\nwaster) race that coudl occur because thread_should_stop() is also\ncalled outside of lock protection.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Simplify locking in sp_search and sp_search_pv"
+    },
+    {
+      "commit_num": 5920,
+      "hash": "bd358533",
+      "short": "bd358533",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T11:05:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bd358533a4ac2296a6cf7f89ae0f288d91f68029",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd358533a4ac2296a6cf7f89ae0f288d91f68029.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bd358533a4ac2296a6cf7f89ae0f288d91f68029.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Stricter conditions in main search stand pat\n\nNot a biggie but is a reduced pruned patch that doesn't\nseems to hurt, so it is welcomed ;-)\n\nAfter 999 games at 1+0\nMod vs Orig +207 =601 -191  +6 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Stricter conditions in main search stand pat"
+    },
+    {
+      "commit_num": 5921,
+      "hash": "b95ba7b3",
+      "short": "b95ba7b3",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T10:49:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b95ba7b37ea278837c83cb65c1b7ad0e71e8d9f2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b95ba7b37ea278837c83cb65c1b7ad0e71e8d9f2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b95ba7b37ea278837c83cb65c1b7ad0e71e8d9f2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Added some FIXME to track needed tests\n\nThis avoid us to forget some very needed tests now that\nfutility has changed in a whole big chunk we need to fine\ntuning every splitted change.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Added some FIXME to track needed tests"
+    },
+    {
+      "commit_num": 5922,
+      "hash": "f37741cc",
+      "short": "f37741cc",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T10:19:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f37741cc83e620588d49bbb3a2349c9505e87f61",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f37741cc83e620588d49bbb3a2349c9505e87f61.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f37741cc83e620588d49bbb3a2349c9505e87f61.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Integrate gains table in History\n\nThis will be useful to use gains table in move\nordering along with history table.\n\nNo functional change and big code remove.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Integrate gains table in History"
+    },
+    {
+      "commit_num": 5923,
+      "hash": "54b3d441",
+      "short": "54b3d441",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-27T09:55:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/54b3d44194fb0d36a2b4c3cd6d473ec50a4c1ef1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/54b3d44194fb0d36a2b4c3cd6d473ec50a4c1ef1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/54b3d44194fb0d36a2b4c3cd6d473ec50a4c1ef1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce update_gains() and refactor some code\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Introduce update_gains() and refactor some code"
+    },
+    {
+      "commit_num": 5924,
+      "hash": "2360c8aa",
+      "short": "2360c8aa",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-27T08:37:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2360c8aa2fb852a7999b9716406e650423f5e4a4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2360c8aa2fb852a7999b9716406e650423f5e4a4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2360c8aa2fb852a7999b9716406e650423f5e4a4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Standardize set_option function\n\nPreviously input like \"setoption name Use Search Log value true \"\n(note space at the end of the line) didn't work.\n\nNow parse value same way as option name. This way we implicitly\nleft- and right-trim value.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Standardize set_option function"
+    },
+    {
+      "commit_num": 5925,
+      "hash": "32bd6e44",
+      "short": "32bd6e44",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-26T18:22:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/32bd6e44f02a8e0c254376ab0791bd82a85d3cfe",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/32bd6e44f02a8e0c254376ab0791bd82a85d3cfe.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/32bd6e44f02a8e0c254376ab0791bd82a85d3cfe.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not initialize RootPosition at startup\n\nInitializing high-level object at startup is very dangerous,\nbecause low-level snippets are not yet initialized.\n\nFor example Position's constructor calls find_checkers() which\ncalls attackers_to() which depends on various global bitboard arrays\nwhich are not yet initialized. I think we are lucky not to crash.\n\nRootPosition.from_fen(StartPosition); is called immediately after\nall initializations are made at uci_main_loop() which is the\ncorrect behaviour\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Do not initialize RootPosition at startup"
+    },
+    {
+      "commit_num": 5926,
+      "hash": "c43c5fe9",
+      "short": "c43c5fe9",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-26T17:06:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c43c5fe9e0c9a99947b940133df2cb2bbb57c3f9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c43c5fe9e0c9a99947b940133df2cb2bbb57c3f9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c43c5fe9e0c9a99947b940133df2cb2bbb57c3f9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove pointless gcc flag when generating dependencies\n\nWhen generating dependencies there is absolutely no point\nto pass -msse flag to gcc, so remove it.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Remove pointless gcc flag when generating dependencies"
+    },
+    {
+      "commit_num": 5927,
+      "hash": "d0daa167",
+      "short": "d0daa167",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-26T17:05:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d0daa16769256c304aaa83c3c56fa8926cf5216d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d0daa16769256c304aaa83c3c56fa8926cf5216d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d0daa16769256c304aaa83c3c56fa8926cf5216d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove InfiniteSearch hack\n\nWith current search control system, I can see absolutely no\nreason to classify fixed time search as infinite search.\n\nSo remove old dated hack\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Remove InfiniteSearch hack"
+    },
+    {
+      "commit_num": 5928,
+      "hash": "87303d7e",
+      "short": "87303d7e",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-26T16:55:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/87303d7ed307766b51908541512f9a209dc99032",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/87303d7ed307766b51908541512f9a209dc99032.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/87303d7ed307766b51908541512f9a209dc99032.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove last use of uip.eof()\n\nValue of uip.eof() should not be trusted.\ninput like \"go infinite searchmoves \" (note space in the end of line)\ncauses problems.\n\nCheck the return value of (uip >> token) instead\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Remove last use of uip.eof()"
+    },
+    {
+      "commit_num": 5929,
+      "hash": "cf9bf4e5",
+      "short": "cf9bf4e5",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-26T11:05:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cf9bf4e58fba6f478f3263412d224a4499f3fad6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cf9bf4e58fba6f478f3263412d224a4499f3fad6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cf9bf4e58fba6f478f3263412d224a4499f3fad6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Reduce lock contention in sp_search_pv()\n\nIn less then 1% of cases value > sp->bestValue, so avoid\nan useless lock in the common case. This is the same change\nalready applied to sp_search().\n\nAlso SplitPoint futilityValue is not volatile because\nnever changes after has been assigned in split()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Reduce lock contention in sp_search_pv()"
+    },
+    {
+      "commit_num": 5930,
+      "hash": "5ca42840",
+      "short": "5ca42840",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T21:18:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ca428402793b07b432b006056a1368f359c4ea0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ca428402793b07b432b006056a1368f359c4ea0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ca428402793b07b432b006056a1368f359c4ea0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a possible crash in thread_is_available()\n\nWhen we have more then 2 threads then we do an array\naccess with index 'Threads[slave].activeSplitPoints - 1'\nThis should be >= 0 because we tested the variable just\nfew statements before, but because is a shared variable\nit could be that the 'slave' thread set the value to zero\njust after we test it, so that when we use the decremented\nvariable for array access we crash.\n\nBug spotted by Bruno Causse.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix a possible crash in thread_is_available()"
+    },
+    {
+      "commit_num": 5931,
+      "hash": "dac1bcab",
+      "short": "dac1bcab",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T18:48:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dac1bcab9007e0fe4c73fda4d6e5ac5b9add435c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dac1bcab9007e0fe4c73fda4d6e5ac5b9add435c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dac1bcab9007e0fe4c73fda4d6e5ac5b9add435c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small split() cleanup\n\nUnify start loop for master and slave threads. Also guarantee\nthat all the 'stop' flags are set to false before first slave\nis started, should be no harm because only master thread can\nreset 'stop' flag of slaves to true, so should be no race but\nbetter safe then sorry.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Small split() cleanup"
+    },
+    {
+      "commit_num": 5932,
+      "hash": "d844a75d",
+      "short": "d844a75d",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T15:22:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d844a75d2c12e4888443e47cb7b0effd78d81bb8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d844a75d2c12e4888443e47cb7b0effd78d81bb8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d844a75d2c12e4888443e47cb7b0effd78d81bb8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid copy a Position to get a move's san notation\n\nIn move_to_san() we create by copy a new position just\nto detect if move gives check. This could be very costly in\nline_to_san() that calls move_to_san() for every move, so\ncreate the position only once and pass a reference to move_to_san()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Avoid copy a Position to get a move's san notation"
+    },
+    {
+      "commit_num": 5933,
+      "hash": "c5e71f51",
+      "short": "c5e71f51",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T14:01:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c5e71f515045029f4d89f1302277217b878fa7a4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5e71f515045029f4d89f1302277217b878fa7a4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5e71f515045029f4d89f1302277217b878fa7a4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a race in idle_loop() exiting\n\nWhen pondering threads are put to sleep, but when thinking\nthe threads are parked in idle_loop in a tight polling loop\nchecking for workIsWaiting falg.\n\nSo before we set the slave's flag workIsWaiting we have to\nguarantee that all the slave data is already setup because\nslave can start in any moment from there.\n\nRearrange the last loop to fix this race.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix a race in idle_loop() exiting"
+    },
+    {
+      "commit_num": 5934,
+      "hash": "c5858ff9",
+      "short": "c5858ff9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T13:06:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c5858ff9aef05c4b6f8423d9a9060296bb826fde",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5858ff9aef05c4b6f8423d9a9060296bb826fde.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5858ff9aef05c4b6f8423d9a9060296bb826fde.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "In split() release the lock before slow search stack copy\n\nOnce we have allocated our slave threads and we have removed\nmaster from available threads we can safely remove the lock\nso that the lenghty search stack copy operation will not\nimpact lock contention.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "In split() release the lock before slow search stack copy"
+    },
+    {
+      "commit_num": 5935,
+      "hash": "0ff91e16",
+      "short": "0ff91e16",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T11:44:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0ff91e16da5d66d7b47274203d460ff0144f1e39",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0ff91e16da5d66d7b47274203d460ff0144f1e39.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0ff91e16da5d66d7b47274203d460ff0144f1e39.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not copy master position in split()\n\nA pointer is enough because after a split point has been\nsetup master and slaves thread end up calling sp_search() or\nsp_search_pv() and here a full copy of split point position is\ndone again, note that even master does another copy (of itself)\nand this is done before any do_move() call so that master Position\nis never updated between split() and sp_search().\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Do not copy master position in split()"
+    },
+    {
+      "commit_num": 5936,
+      "hash": "c2df6004",
+      "short": "c2df6004",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T11:07:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c2df60048e8fbbca5dff66b98e4e0f4bf1413821",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c2df60048e8fbbca5dff66b98e4e0f4bf1413821.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c2df60048e8fbbca5dff66b98e4e0f4bf1413821.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use fast_copy() instead of full copy in sp_search\n\nAnd detach splitPoint Position from the master one.\n\nSo we duplicate StateInfo only once in split() instead\nof one for each thread in sp_search\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use fast_copy() instead of full copy in sp_search"
+    },
+    {
+      "commit_num": 5937,
+      "hash": "84ec1f73",
+      "short": "84ec1f73",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T11:04:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/84ec1f7331f402f4ab2e2201b72b3ee378cce659",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/84ec1f7331f402f4ab2e2201b72b3ee378cce659.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/84ec1f7331f402f4ab2e2201b72b3ee378cce659.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Better document how Position c'tor works\n\nRenamed a bit the functions to be more clear what\nwe actually are doing when we craete a Position object\nand explained how StateInfo works.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Better document how Position c'tor works"
+    },
+    {
+      "commit_num": 5938,
+      "hash": "b1ac6c69",
+      "short": "b1ac6c69",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T10:18:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b1ac6c69a077c95c122a82d5b757adf9470fb308",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b1ac6c69a077c95c122a82d5b757adf9470fb308.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b1ac6c69a077c95c122a82d5b757adf9470fb308.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a couple of MSVC casting warnings\n\nAlso removed some trailing whitespaces and aligned\nindentation to current standard.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix a couple of MSVC casting warnings"
+    },
+    {
+      "commit_num": 5939,
+      "hash": "56e09b4c",
+      "short": "56e09b4c",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-25T10:07:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/56e09b4cc82c1cda42815482967670499fc64b61",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/56e09b4cc82c1cda42815482967670499fc64b61.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/56e09b4cc82c1cda42815482967670499fc64b61.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Copy only the search stack tail in split()\n\nOnly the previous, the current and the next ply SearchStack\nare copied.\n\nThis reduces split overhead especially at low depth (high ply)\nand with many threads.\n\nPossibly no functional change (it is not easy to prove in SMP)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Copy only the search stack tail in split()"
+    },
+    {
+      "commit_num": 5940,
+      "hash": "5ed0a602",
+      "short": "5ed0a602",
+      "author": "Tord Romstad <tord@cm-84.215.101.133.getinternet.no>",
+      "date": "2010-01-24T15:09:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ed0a60203c1c93c5630894b4eca1f801241fe27",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ed0a60203c1c93c5630894b4eca1f801241fe27.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ed0a60203c1c93c5630894b4eca1f801241fe27.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Merge branch 'master' of ssh://free2.projectlocker.com/sf\n",
+      "subject": "Merge branch 'master' of ssh://free2.projectlocker.com/sf"
+    },
+    {
+      "commit_num": 5941,
+      "hash": "1588a4e8",
+      "short": "1588a4e8",
+      "author": "Tord Romstad <tord@cm-84.215.101.133.getinternet.no>",
+      "date": "2010-01-24T15:09:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1588a4e84695e48e47c5c8b83d14ead285530c45",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1588a4e84695e48e47c5c8b83d14ead285530c45.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1588a4e84695e48e47c5c8b83d14ead285530c45.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fixes a Chess960 bug when playing with more than one search thread.\n\nThe init_eval() function corrupted the static array castleRightsMask[]\nin the Position class, resulting in instant crashes in most Chess960\ngames. Fixed by repairing the damage directly after the function is\ncalled. Also modified the Position::to_fen() function to display\ncastle rights correctly for Chess960 positions, and added sanity checks\nfor uncastled rook files in Position::is_ok().\n",
+      "subject": "Fixes a Chess960 bug when playing with more than one search thread."
+    },
+    {
+      "commit_num": 5942,
+      "hash": "3975a2b9",
+      "short": "3975a2b9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-24T12:46:27Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3975a2b94f00dc9f3ead1589436256a39120368a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3975a2b94f00dc9f3ead1589436256a39120368a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3975a2b94f00dc9f3ead1589436256a39120368a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix some races in SMP code\n\nWhen a search fails high then sp->alpha is increased and\nslave threads are requested to stop.\n\nSo we have to check for a stop request before to start a search\notherwise we could end up with sp->alpha >= sp->beta\nleading to an assert in debug run in search_pv().\n\nThis patch fixes the assert and get rid of some of possible races.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix some races in SMP code"
+    },
+    {
+      "commit_num": 5943,
+      "hash": "5894c759",
+      "short": "5894c759",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-24T11:24:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5894c759cd20bac8183f8c53cb833eee23e6b4eb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5894c759cd20bac8183f8c53cb833eee23e6b4eb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5894c759cd20bac8183f8c53cb833eee23e6b4eb.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Check for thread creation successful completion\n\nIt is a good programming practice to verify a system\ncall has indeed succeed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Check for thread creation successful completion"
+    },
+    {
+      "commit_num": 5944,
+      "hash": "ea53006a",
+      "short": "ea53006a",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-22T20:54:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ea53006a9ded671c5f9deb27c1262d77f9722177",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ea53006a9ded671c5f9deb27c1262d77f9722177.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ea53006a9ded671c5f9deb27c1262d77f9722177.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix some silly bugs\n\nSelectiveDepth was ignored\n\nTest results for the whole futility pruning series:\n\n4CPU:\nOrig - Mod: 959 - 1027 (+12 elo)\n\n1CPU:\nOrig - Mod: 763 - 830 (+15 elo)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix some silly bugs"
+    },
+    {
+      "commit_num": 5945,
+      "hash": "eb6ddd54",
+      "short": "eb6ddd54",
+      "author": "Tord Romstad <tord@glaurungchess.com>",
+      "date": "2010-01-22T12:42:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/eb6ddd54f11700ac523792a6411c11d2fba1a511",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/eb6ddd54f11700ac523792a6411c11d2fba1a511.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/eb6ddd54f11700ac523792a6411c11d2fba1a511.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make sure we make a move at the end of the search when reaching\nmaximum depth during a \"go movetime ...\" search. This prevents\nStockfish from hanging forever after finding a mate in two or\nthree while running a test suite at a level of a few seconds\nper move.\n\nNo functional change when playing games at normal time controls.\n",
+      "subject": "Make sure we make a move at the end of the search when reaching"
+    },
+    {
+      "commit_num": 5946,
+      "hash": "6247f27a",
+      "short": "6247f27a",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-21T20:45:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6247f27a0548562c122f658082d31f535208d603",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6247f27a0548562c122f658082d31f535208d603.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6247f27a0548562c122f658082d31f535208d603.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "MaxGain based futility pruning for captures\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "MaxGain based futility pruning for captures"
+    },
+    {
+      "commit_num": 5947,
+      "hash": "5b2fc1e1",
+      "short": "5b2fc1e1",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-21T20:13:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5b2fc1e1c06d8348efb4bf45bac9c8f4916fd01c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5b2fc1e1c06d8348efb4bf45bac9c8f4916fd01c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5b2fc1e1c06d8348efb4bf45bac9c8f4916fd01c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "MaxGain based pruning\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "MaxGain based pruning"
+    },
+    {
+      "commit_num": 5948,
+      "hash": "05a8c318",
+      "short": "05a8c318",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-21T17:03:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/05a8c318b8cfc284906f6077fd934d35d891028c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/05a8c318b8cfc284906f6077fd934d35d891028c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/05a8c318b8cfc284906f6077fd934d35d891028c.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Implement post futility pruning\n\nand prevent futility pruning from pruning\ncastling moves\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Implement post futility pruning"
+    },
+    {
+      "commit_num": 5949,
+      "hash": "22b8dc8c",
+      "short": "22b8dc8c",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-21T15:58:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/22b8dc8c98156045c0e7987646c85503100b000b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/22b8dc8c98156045c0e7987646c85503100b000b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/22b8dc8c98156045c0e7987646c85503100b000b.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Collect MaxGain statistics\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Collect MaxGain statistics"
+    },
+    {
+      "commit_num": 5950,
+      "hash": "cfe59de2",
+      "short": "cfe59de2",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-21T14:50:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cfe59de27ddc42ac555187ae68879f2bc7bd7936",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cfe59de27ddc42ac555187ae68879f2bc7bd7936.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cfe59de27ddc42ac555187ae68879f2bc7bd7936.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Implement MaxGain table\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Implement MaxGain table"
+    },
+    {
+      "commit_num": 5951,
+      "hash": "285df57a",
+      "short": "285df57a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-20T17:43:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/285df57a9ae6e86bc957a4f43d74fb05fc8998d6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/285df57a9ae6e86bc957a4f43d74fb05fc8998d6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/285df57a9ae6e86bc957a4f43d74fb05fc8998d6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire LMRPVMoves and LMRNonPVMoves\n\nAre no used anymore.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire LMRPVMoves and LMRNonPVMoves"
+    },
+    {
+      "commit_num": 5952,
+      "hash": "81cfd813",
+      "short": "81cfd813",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-20T10:40:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/81cfd81366cf06dc403476a4782ef34703346c61",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/81cfd81366cf06dc403476a4782ef34703346c61.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/81cfd81366cf06dc403476a4782ef34703346c61.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Prune evasions with negative SEE in qsearch\n\nOnly pure blocking evasions are candidate\nfor pruning.\n\nAfter 998 games at 1+0\n\nMod vs Orig +215 =596 -187  +10 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Prune evasions with negative SEE in qsearch"
+    },
+    {
+      "commit_num": 5953,
+      "hash": "806c1d87",
+      "short": "806c1d87",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-19T22:30:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/806c1d87233a98d52db16e4633b92884ce68fee9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/806c1d87233a98d52db16e4633b92884ce68fee9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/806c1d87233a98d52db16e4633b92884ce68fee9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix enum Value issue with gcc 4.4\n\nLouis Zulli reports a miscompile with g++-4.4 from MacPorts.\n\nNamely enum Value is compiled as unsigned instead of signed integer\nand this yields an issue in score_string() where float(v) is incorrectly\ncasted when Value v is negative.\n\nThis patch ensure that compiler choses a signed variable to store a Value.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix enum Value issue with gcc 4.4"
+    },
+    {
+      "commit_num": 5954,
+      "hash": "01ebb3d9",
+      "short": "01ebb3d9",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-19T14:24:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/01ebb3d99688cf4ac3d3b9b4ea95e8b431d0b8c1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01ebb3d99688cf4ac3d3b9b4ea95e8b431d0b8c1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01ebb3d99688cf4ac3d3b9b4ea95e8b431d0b8c1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "If near beta generate checks at -OnePly\n\nIn qsearch() try to get a cutoff with the help of an\nextra check if we are already very near.\n\nSmall increase in actual games but a good result in tactical\ntest sets where this patch makes SF more tactical.\n\nMod vs Orig +197 =620 -181 +6 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "If near beta generate checks at -OnePly"
+    },
+    {
+      "commit_num": 5955,
+      "hash": "a1b8c810",
+      "short": "a1b8c810",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-19T10:48:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a1b8c8109b464abd9d026b1ef740f1bace814b29",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a1b8c8109b464abd9d026b1ef740f1bace814b29.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a1b8c8109b464abd9d026b1ef740f1bace814b29.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small lnArray[] cleanup\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Small lnArray[] cleanup"
+    },
+    {
+      "commit_num": 5956,
+      "hash": "c01af567",
+      "short": "c01af567",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-18T18:50:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c01af5676913cbb8a522bd080b6d8559c7450f3a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c01af5676913cbb8a522bd080b6d8559c7450f3a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c01af5676913cbb8a522bd080b6d8559c7450f3a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Silence some silly MSVC warnings\n\nValue is never used un-initialized, but MSVC is not\nsmart enough to detect itself :-(\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Silence some silly MSVC warnings"
+    },
+    {
+      "commit_num": 5957,
+      "hash": "0edad63b",
+      "short": "0edad63b",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-18T14:47:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0edad63b440a81f764efd168b0bd5733850095ae",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0edad63b440a81f764efd168b0bd5733850095ae.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0edad63b440a81f764efd168b0bd5733850095ae.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Avoid an useless evaluate() call\n\nNow that we have position static score we don't\nneed to call evaluate() a second time.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Avoid an useless evaluate() call"
+    },
+    {
+      "commit_num": 5958,
+      "hash": "b833c824",
+      "short": "b833c824",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-18T09:01:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b833c8247afcfd4a5404b0473f31ebddb23f57d6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b833c8247afcfd4a5404b0473f31ebddb23f57d6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b833c8247afcfd4a5404b0473f31ebddb23f57d6.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Allow SearchStack to link an EvalInfo object\n\nThis will allow to have wider access to attack\ninformation, for instance from MovePicker.\n\nNote that 'eval' field become obsolete, it is kept\njust becasue when we get a position score from TT\nwe update 'eval' even without an EvalInfo object.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Allow SearchStack to link an EvalInfo object"
+    },
+    {
+      "commit_num": 5959,
+      "hash": "419c5b69",
+      "short": "419c5b69",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-17T17:14:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/419c5b69caa2918f9cb74d6ec71d790bc276b424",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/419c5b69caa2918f9cb74d6ec71d790bc276b424.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/419c5b69caa2918f9cb74d6ec71d790bc276b424.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Make reduction search code SMP-friendly\n\nIn sp_search_pv() we do a LMR search using sp->alpha, at the end\nwe detect a fail high with condition (value > sp->alpha), but if\nanother thread has increased sp->alpha during our LMR search we\ncould miss to detect a fail high event becasue value will be equal\nto old alpha and so smaller then new one.\n\nThis patch fixes this SMP-bug and changes also the non SMP versions\nof the search to keep code style in sync.\n\nBug spotted by Bruno Causse.\n\nNo functional change (for single CPU case)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Make reduction search code SMP-friendly"
+    },
+    {
+      "commit_num": 5960,
+      "hash": "66d5c13a",
+      "short": "66d5c13a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-17T13:55:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/66d5c13a88f041247adf2ba62acdf936a6d6224e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/66d5c13a88f041247adf2ba62acdf936a6d6224e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/66d5c13a88f041247adf2ba62acdf936a6d6224e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Order check moves used in qsearch\n\nUse the same scoring system used for evasions. Small if any\nincrease, but should be in at least for completeness.\n\nAfter 999 games at 1+0\nMod vs Orig +208 =601 -190 +6 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Order check moves used in qsearch"
+    },
+    {
+      "commit_num": 5961,
+      "hash": "72e1e9b9",
+      "short": "72e1e9b9",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-17T13:05:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/72e1e9b986fc4c656c3a3db24e5504e3edbb63cc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/72e1e9b986fc4c656c3a3db24e5504e3edbb63cc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/72e1e9b986fc4c656c3a3db24e5504e3edbb63cc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small cleanup of unused code in sp_search\n\nfutilityValue is now calculated immediately after\nstaticValue, so remove small bunch of unused code\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Small cleanup of unused code in sp_search"
+    },
+    {
+      "commit_num": 5962,
+      "hash": "10624590",
+      "short": "10624590",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-17T12:54:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1062459029ff2ae5a717106a8634c8a1ffc15671",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1062459029ff2ae5a717106a8634c8a1ffc15671.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1062459029ff2ae5a717106a8634c8a1ffc15671.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix silly MSVC warning\n\nMSVC raises an \"use of partially uninitialized variable\" for futilityValue\nand staticValue but this is not rue becasue when !isCheck variables\nare never used, anyhow silence the warning.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix silly MSVC warning"
+    },
+    {
+      "commit_num": 5963,
+      "hash": "b5d38ad1",
+      "short": "b5d38ad1",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-17T12:22:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b5d38ad1e5cc7ad4c350b3ef4d1db5241bad8b93",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b5d38ad1e5cc7ad4c350b3ef4d1db5241bad8b93.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b5d38ad1e5cc7ad4c350b3ef4d1db5241bad8b93.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Initialize futilityMargin in EvalInfo c'tor\n\nThis is less prone to bugs because now it's up to the\ncompiler don't forget this important initialization.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Initialize futilityMargin in EvalInfo c'tor"
+    },
+    {
+      "commit_num": 5964,
+      "hash": "000a975e",
+      "short": "000a975e",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-17T11:55:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/000a975eafc9f509f16ebb75f3dc2c655adf84b1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/000a975eafc9f509f16ebb75f3dc2c655adf84b1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/000a975eafc9f509f16ebb75f3dc2c655adf84b1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire quick_evaluate()\n\nNo change in functionality signature\n\nThe only functional change is that when we reach PLY_MAX,\nwe now return VALUE_DRAW instead of evaluating position.\n\nBut we reach PLY_MAX only when position is dead drawn and\ntransposition table is filled with draw scores, so this\nshouldn't matter at all.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire quick_evaluate()"
+    },
+    {
+      "commit_num": 5965,
+      "hash": "d4575941",
+      "short": "d4575941",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-14T20:58:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d4575941974ade5135971b87ff663ef4ff000de9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d4575941974ade5135971b87ff663ef4ff000de9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d4575941974ade5135971b87ff663ef4ff000de9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Razor at depth one, but do razoring only when not in check\n\nThis way razoring is always based on exact evaluation and\nfollows simple formula.\n\nJoona's test results are positive:\n\n32-bit 1CPU:\n\nMod - Orig: 1073 - 993\n\n64-bit 4CPU:\n\nMod - Orig: 759 - 721\n\nFunctionality Signature: 11448962\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Razor at depth one, but do razoring only when not in check"
+    },
+    {
+      "commit_num": 5966,
+      "hash": "942c18ef",
+      "short": "942c18ef",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-12T17:21:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/942c18ef6620967921049ba24f25e08d710c947e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/942c18ef6620967921049ba24f25e08d710c947e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/942c18ef6620967921049ba24f25e08d710c947e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Allow negative history values\n\nDon't clamp to zero if a move continues to fail.\n\nAfter 946 games at 1+0\nMod vs Orig +208 =562 -176 +12 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Allow negative history values"
+    },
+    {
+      "commit_num": 5967,
+      "hash": "638f3d31",
+      "short": "638f3d31",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-11T10:15:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/638f3d31cc9a61ce3df2b685fef96f15e0afb940",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/638f3d31cc9a61ce3df2b685fef96f15e0afb940.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/638f3d31cc9a61ce3df2b685fef96f15e0afb940.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Do not wait when AbortSearch is set\n\nIt means we have already received \"stop\" or \"quit\" commands.\n\nThis fixes an hang in tactical test in Fritz GUI. Bug\nintroduced by previous bug fix :-(\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Do not wait when AbortSearch is set"
+    },
+    {
+      "commit_num": 5968,
+      "hash": "007285be",
+      "short": "007285be",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-10T16:19:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/007285be2da7b77916d74f092e07de73bd1655ed",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/007285be2da7b77916d74f092e07de73bd1655ed.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/007285be2da7b77916d74f092e07de73bd1655ed.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Store node evaluation in SearchStack\n\nThis info will be used by future patches.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Store node evaluation in SearchStack"
+    },
+    {
+      "commit_num": 5969,
+      "hash": "55745f41",
+      "short": "55745f41",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-10T11:38:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/55745f410547f22b1edce873b38cc3ce5f3ace5f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/55745f410547f22b1edce873b38cc3ce5f3ace5f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/55745f410547f22b1edce873b38cc3ce5f3ace5f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix sending of best move during an infinite search\n\nAccording to UCI standard once engine receives 'go infinite'\ncommand it should search until the \"stop\" command and do not exit\nthe search without being told so, even if PLY_MAX has been reached.\n\nPatch is quite invasive because it cleanups some hacks used\nby fixed depth and fixed nodes modes, mainly during benchmarks.\n\nBug found by Pascal Georges.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix sending of best move during an infinite search"
+    },
+    {
+      "commit_num": 5970,
+      "hash": "e817a55b",
+      "short": "e817a55b",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-10T00:12:15Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e817a55bc6cc60b831f74ce5c180ec8b07c41d8a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e817a55bc6cc60b831f74ce5c180ec8b07c41d8a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e817a55bc6cc60b831f74ce5c180ec8b07c41d8a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Decrease NullMoveMargin and adjust razoring\n\nAlso retire razoring margins vector and use\na simpler formula instead.\n\nNow that we use a more accurate static evaluation\ntry to avoid useless null searches when we are well\nbelow beta. And for teh same reason increase a bit\nthe razoring.\n\nAfter 972 games at 1+0\nMod vs Orig +224 =558 -190 +12 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Decrease NullMoveMargin and adjust razoring"
+    },
+    {
+      "commit_num": 5971,
+      "hash": "968c3de8",
+      "short": "968c3de8",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-09T15:45:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/968c3de8e0acd46a8b55225dda1ed607ce24f380",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/968c3de8e0acd46a8b55225dda1ed607ce24f380.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/968c3de8e0acd46a8b55225dda1ed607ce24f380.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix threads count setting\n\nWas broken after \"Optimal tune for 8 cores\" patch.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix threads count setting"
+    },
+    {
+      "commit_num": 5972,
+      "hash": "6a6facc0",
+      "short": "6a6facc0",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-08T11:51:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6a6facc058e5f08ccd07815a6e619eb0d2451000",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6a6facc058e5f08ccd07815a6e619eb0d2451000.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6a6facc058e5f08ccd07815a6e619eb0d2451000.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Optimal tune for 8 cores\n\nAfter deep tests Louis Zulli found on his OCTAL machine that\nbest setup for an 8 core CPU is as following\n\n\"Threads\" = 8\n\"Minimum Split Depth\" = 6 or 7 (mSD)\n\"Maximum Number of Threads per Split Point\" = not important (MNTpSP)\n\nHere are testing results:\n\nmSD7 (8 threads) vs mSD4 (8 threads): 291 - 120 - 589\nmSD6 vs mSD7: 168 - 188 - 644\nmSD6-MNTpSP5 vs mSD6-MNTpSP6: 172 - 172 - 656\nSF-7threads vs SF-8threads: 179 - 204 - 617\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Optimal tune for 8 cores"
+    },
+    {
+      "commit_num": 5973,
+      "hash": "5b21c10a",
+      "short": "5b21c10a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-08T10:45:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5b21c10afba744f2a984fbe4546701e7ffeee241",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5b21c10afba744f2a984fbe4546701e7ffeee241.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5b21c10afba744f2a984fbe4546701e7ffeee241.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Sync qsearch with search\n\nSo to have the same layout and be as much similar as\npossible. The only functional change is that now we\ntry ttMove as first also in PV nodes and at the end\nwe save the ttMove, as it happens in search. This\nshould have almost zero impact on ELO but it seems\nthe correct thing to do.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Sync qsearch with search"
+    },
+    {
+      "commit_num": 5974,
+      "hash": "7c0679ad",
+      "short": "7c0679ad",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-07T10:59:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7c0679ad61d7787dc3a3326551acbdf6658db0b0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c0679ad61d7787dc3a3326551acbdf6658db0b0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c0679ad61d7787dc3a3326551acbdf6658db0b0.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix 'position ..... moves ' parsing bug\n\nIf after 'moves' there is a space then we crash.\n\nThe problem is that operator>>() trims whitespaces so that\nafter 'moves' has been extract we are still not at eof()\nbut remaining string contains only spaces. So that the next\nextarction operation uip >> token ends up with unchanged token\nvalue that remains 'moves', this garbage value is then feeded\nto RootPosition.do_move() through move_from_string() that does\nnot detect the invalid move value leading to a crash.\n\nThis bug is triggered by Shredder 12 interface under Mac that\nputs a space after 'moves' without any actual move list.\n\nBug fixed by Justin Blanchard\n\nAfter reviewing UCI parsing code I spotted other possible weak\npoints due to the fact that we don't test if the last extract\noperation has been succesful. So I have extended Justing patch\nto fix the remaining possible holes in uci.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix 'position ..... moves ' parsing bug"
+    },
+    {
+      "commit_num": 5975,
+      "hash": "cc974fa7",
+      "short": "cc974fa7",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-06T08:58:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cc974fa7a4ffc5511ca6c4bc9ae1ef40c2827772",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cc974fa7a4ffc5511ca6c4bc9ae1ef40c2827772.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cc974fa7a4ffc5511ca6c4bc9ae1ef40c2827772.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix en-passant parsing from fen string\n\nAccording to standard en-passant is recorded in fen string regardless\nof whether there is a pawn in position to make an en passant capture.\n\nInstead internally we set ep square only if the pawn can be captured.\nSo teach from_fen() to correctly handle this difference.\n\nBug reported and fixed by Justin Blanchard.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix en-passant parsing from fen string"
+    },
+    {
+      "commit_num": 5976,
+      "hash": "dba072c4",
+      "short": "dba072c4",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-05T08:57:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dba072c449061654201c606dc198d0dcae50e567",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dba072c449061654201c606dc198d0dcae50e567.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dba072c449061654201c606dc198d0dcae50e567.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use full evaluation in null search\n\nThis is an important design change because we know\ncompute evaluation in each node.\n\nThis is a 2.0 type change!\n\nAfter 977 games at 1+0\n\nMod vs Orig +236 =538 -202 51.74%  +12 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use full evaluation in null search"
+    },
+    {
+      "commit_num": 5977,
+      "hash": "e2e360fc",
+      "short": "e2e360fc",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-04T16:41:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e2e360fcbc02e0ca3329a36766239e7175501103",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e2e360fcbc02e0ca3329a36766239e7175501103.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e2e360fcbc02e0ca3329a36766239e7175501103.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Slow down reductions\n\nAfter testing on Joona QUAD the whole LMR series:\n\nOrig - Mod: 335 - 405 (+33 elo)\n\nFunctionality Signature: 12581900\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Slow down reductions"
+    },
+    {
+      "commit_num": 5978,
+      "hash": "d11af1de",
+      "short": "d11af1de",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-04T16:17:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d11af1de11aa1b93e970f96105516e7c9b342fa4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d11af1de11aa1b93e970f96105516e7c9b342fa4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d11af1de11aa1b93e970f96105516e7c9b342fa4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix a compile error under gcc\n\nAnd some warnings on the picky icc.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Fix a compile error under gcc"
+    },
+    {
+      "commit_num": 5979,
+      "hash": "721d5576",
+      "short": "721d5576",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-04T11:39:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/721d5576811e5b641f73c07bdeb122d114cae7ca",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/721d5576811e5b641f73c07bdeb122d114cae7ca.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/721d5576811e5b641f73c07bdeb122d114cae7ca.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Last round of search.cpp cleanup\n\nThe most interesting thing is a bit of rewrite\nand semplification in connected_moves()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Last round of search.cpp cleanup"
+    },
+    {
+      "commit_num": 5980,
+      "hash": "49b1c5dc",
+      "short": "49b1c5dc",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-04T06:46:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/49b1c5dccd476229c06fd4a4b8dd94403c602396",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/49b1c5dccd476229c06fd4a4b8dd94403c602396.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/49b1c5dccd476229c06fd4a4b8dd94403c602396.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use logarithmic LMR also at root\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Use logarithmic LMR also at root"
+    },
+    {
+      "commit_num": 5981,
+      "hash": "0e15b0f1",
+      "short": "0e15b0f1",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-03T20:30:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0e15b0f1d3837d9203b562fe698d223143882501",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0e15b0f1d3837d9203b562fe698d223143882501.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0e15b0f1d3837d9203b562fe698d223143882501.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Space inflate bottom part of search.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Space inflate bottom part of search.cpp"
+    },
+    {
+      "commit_num": 5982,
+      "hash": "c99d963f",
+      "short": "c99d963f",
+      "author": "Joona Kiiski <joona.kiiski@gmail.com>",
+      "date": "2010-01-03T19:58:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c99d963fa54ad1af375c796632ada34bd0cf2a29",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c99d963fa54ad1af375c796632ada34bd0cf2a29.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c99d963fa54ad1af375c796632ada34bd0cf2a29.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Logarithmic LMR\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Logarithmic LMR"
+    },
+    {
+      "commit_num": 5983,
+      "hash": "9e6d38d2",
+      "short": "9e6d38d2",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-03T14:35:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9e6d38d224e35e509521d9dced4a46cde021fd83",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9e6d38d224e35e509521d9dced4a46cde021fd83.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9e6d38d224e35e509521d9dced4a46cde021fd83.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rename MaxActiveSplitPoints\n\nAnd move in thread.h togheter with THREAD_MAX\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Rename MaxActiveSplitPoints"
+    },
+    {
+      "commit_num": 5984,
+      "hash": "c8af7a86",
+      "short": "c8af7a86",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-03T12:27:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c8af7a867e91e833f76b564f6f430c96829760bc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c8af7a867e91e833f76b564f6f430c96829760bc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c8af7a867e91e833f76b564f6f430c96829760bc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire 'finished' from MovePicker\n\nIt is not useful becasue it is safe to call\nget_next_move() multiple times when phase == PH_STOP\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire 'finished' from MovePicker"
+    },
+    {
+      "commit_num": 5985,
+      "hash": "5c8f5714",
+      "short": "5c8f5714",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-03T09:19:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5c8f571459fd4812543ead27d3644dcf46a5682d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5c8f571459fd4812543ead27d3644dcf46a5682d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5c8f571459fd4812543ead27d3644dcf46a5682d.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Rename SingleReplyExtension in SingleEvasionExtension\n\nBecause that's the correct meaning. Note that also the\ncorresponding UCI option has been renamed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Rename SingleReplyExtension in SingleEvasionExtension"
+    },
+    {
+      "commit_num": 5986,
+      "hash": "0256db2a",
+      "short": "0256db2a",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-03T09:00:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0256db2a1161561383d29a6d27b314608178e8e3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0256db2a1161561383d29a6d27b314608178e8e3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0256db2a1161561383d29a6d27b314608178e8e3.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small cleanup in search.cpp\n\nAlso clarify some comments.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Small cleanup in search.cpp"
+    },
+    {
+      "commit_num": 5987,
+      "hash": "12d8f742",
+      "short": "12d8f742",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-02T09:27:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/12d8f74242a0a24ac16cf5ee52447103c5c79900",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/12d8f74242a0a24ac16cf5ee52447103c5c79900.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/12d8f74242a0a24ac16cf5ee52447103c5c79900.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Retire approximateEval field from SplitPoint\n\nIt is not used anymore after the futility pruning\nrewrite in a66f31f12.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Retire approximateEval field from SplitPoint"
+    },
+    {
+      "commit_num": 5988,
+      "hash": "807844ea",
+      "short": "807844ea",
+      "author": "Marco Costalba <mcostalba@gmail.com>",
+      "date": "2010-01-01T13:28:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/807844eab194adc7c5378575f81d28ce9ca66287",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/807844eab194adc7c5378575f81d28ce9ca66287.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/807844eab194adc7c5378575f81d28ce9ca66287.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Introduce refine_eval()\n\nTry to get a position evaluation better then\nthe quick one with the help of the TT table.\n\nThis allows the null search conditions and\nchosen reductions to be more accurate.\n\nAfter 908 games at 1+0\nMod vs Orig +209 =526 -173 +14 ELO\n\nFunctionality Signature: 16627355\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
+      "subject": "Introduce refine_eval()"
+    }
+  ]
+}

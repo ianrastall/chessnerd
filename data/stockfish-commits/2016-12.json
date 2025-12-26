@@ -1,0 +1,525 @@
+{
+  "month": "2016-12",
+  "commits": [
+    {
+      "commit_num": 2934,
+      "hash": "1052ce74",
+      "short": "1052ce74",
+      "author": "Jonathan Calovski <jonoface@live.com.au>",
+      "date": "2016-12-31T15:09:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1052ce74f65479e5d583d349227dc101f8483a85",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1052ce74f65479e5d583d349227dc101f8483a85.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1052ce74f65479e5d583d349227dc101f8483a85.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Tweak best thread selection logic\n\nSTC 7 threads:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 26881 W: 4161 L: 3941 D: 18779\nhttp://tests.stockfishchess.org/tests/view/58667a830ebc5903140c632f\n\nLTC 7 threads:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 22988 W: 2767 L: 2583 D: 17638\nhttp://tests.stockfishchess.org/tests/view/586722690ebc5903140c636d\n\nbench: 5468995\n",
+      "subject": "Tweak best thread selection logic"
+    },
+    {
+      "commit_num": 2935,
+      "hash": "ab4f498b",
+      "short": "ab4f498b",
+      "author": "lucasart <lucas.braesch@gmail.com>",
+      "date": "2016-12-31T12:52:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ab4f498bbcf6f263bf3a355c3fff4ccaa8dea1d8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab4f498bbcf6f263bf3a355c3fff4ccaa8dea1d8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ab4f498bbcf6f263bf3a355c3fff4ccaa8dea1d8.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove SafeCheck (#946)\n\nIt was a bit of a hack, without intrinsic value, but rather compensating for the\n\nfact that checks were mistuned.\n\n\n\nSTC:\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 88308 W: 15553 L: 15545 D: 57210\n\n\n\nLTC:\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 53115 W: 6741 L: 6662 D: 39712\n\n\n\nbench 5468995\n",
+      "subject": "Remove SafeCheck (#946)"
+    },
+    {
+      "commit_num": 2936,
+      "hash": "43f6b33e",
+      "short": "43f6b33e",
+      "author": "Alain SAVARD <support@multicim.com>",
+      "date": "2016-12-28T22:14:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/43f6b33e50c4bea354b963b0e1e47445c8298299",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43f6b33e50c4bea354b963b0e1e47445c8298299.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43f6b33e50c4bea354b963b0e1e47445c8298299.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Small eval cleanup and renaming\n\nNon-functional changes\n\na) splitting the threat array to avoid using an enum\nb) reorder the scores according to functions where they are used.\nc) declarations in evaluate_pieces after the const(s) like elsewhere\nd) more compact definitions of KingFlank,\nnow that we need it also for the PanwLessFlank penalty.\ne) reuse CenterFiles in evaluate_space\nf) move one line inside next popcount\n\nNo functional change.\n",
+      "subject": "Small eval cleanup and renaming"
+    },
+    {
+      "commit_num": 2937,
+      "hash": "8765f9ce",
+      "short": "8765f9ce",
+      "author": "Jörg Oster <osterj165@googlemail.com>",
+      "date": "2016-12-25T09:44:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8765f9ce168b129b3283fc1e458eae2f8871b1d4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8765f9ce168b129b3283fc1e458eae2f8871b1d4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8765f9ce168b129b3283fc1e458eae2f8871b1d4.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Further simplify unstoppable (#938)\n\nBy finally moving it into passed pawns eval.\n\n\n\nTested for no regression:\n\nSTC\n\nLLR: 3.25 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 57109 W: 10023 L: 9947 D: 37139\n\n\n\nLTC\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 21511 W: 2800 L: 2680 D: 16031\n\n\n\nBench: 5255881\n",
+      "subject": "Further simplify unstoppable (#938)"
+    },
+    {
+      "commit_num": 2938,
+      "hash": "3728e833",
+      "short": "3728e833",
+      "author": "hxim <hxim.jo@gmail.com>",
+      "date": "2016-12-25T09:40:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3728e833aaeca780f17217700d00b2bab8c8cde9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3728e833aaeca780f17217700d00b2bab8c8cde9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3728e833aaeca780f17217700d00b2bab8c8cde9.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Fix psqt format and use smaller numbers in king psqt (#940)\n\nFix minus sign in pawn psqt and use smaller numbers in king psqt.\n\n\n\nNo functional change.\n",
+      "subject": "Fix psqt format and use smaller numbers in king psqt (#940)"
+    },
+    {
+      "commit_num": 2939,
+      "hash": "af7412e5",
+      "short": "af7412e5",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-12-25T09:34:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/af7412e58a4ce374b5035d9bb1e8c47a108ff352",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/af7412e58a4ce374b5035d9bb1e8c47a108ff352.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/af7412e58a4ce374b5035d9bb1e8c47a108ff352.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Explicitly use alpha+1 for beta in NonPV search (#939)\n\nFixes the only exception, in razoring.\n\n\n\nThe code already does assert(PvNode || (alpha == beta - 1)), and it can be verified by studying the program flow that this is indeed the case, also for the modified line.\n\n\n\nNo functional change.\n",
+      "subject": "Explicitly use alpha+1 for beta in NonPV search (#939)"
+    },
+    {
+      "commit_num": 2940,
+      "hash": "1ceaea70",
+      "short": "1ceaea70",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-12-22T15:02:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1ceaea701baaa79f378b0842ff0fb5d2a1f53ef7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1ceaea701baaa79f378b0842ff0fb5d2a1f53ef7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1ceaea701baaa79f378b0842ff0fb5d2a1f53ef7.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify threshold handling for probcut. (#936)\n\nJust use greater equal as this is what see_ge does now.\n\n\n\npassed STC\n\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 226506 W: 39755 L: 39978 D: 146773\n\n\n\npassed LTC\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 138483 W: 17450 L: 17479 D: 103554\n\n\n\nBench: 5212921\n",
+      "subject": "Simplify threshold handling for probcut. (#936)"
+    },
+    {
+      "commit_num": 2941,
+      "hash": "b7b9d7c9",
+      "short": "b7b9d7c9",
+      "author": "Aram Tumanian <aram_tumanian@ukr.net>",
+      "date": "2016-12-21T11:40:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b7b9d7c9c72a987bb497ec2b629d885a06238aa2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b7b9d7c9c72a987bb497ec2b629d885a06238aa2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b7b9d7c9c72a987bb497ec2b629d885a06238aa2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Don't clear EasyMove in search()\n\nEasyMove is cleared after every iteration of the\nsearch if the 3rd move in the PV of the main thread\nchanges from the previous iteration. Therefore,\nclearing EasyMove during a search iteration may be\nexcessive. The tests show that this is indeed unnecessary.\nIn the new version the EasyMove variable is used only in\nthe Thread::search function.\n\nSTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 47719 W: 8438 L: 8362 D: 30919\n\nLTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 122841 W: 15448 L: 15457 D: 91936\n\nbench: 5468995\n",
+      "subject": "Don't clear EasyMove in search()"
+    },
+    {
+      "commit_num": 2942,
+      "hash": "f72b7dc9",
+      "short": "f72b7dc9",
+      "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
+      "date": "2016-12-20T10:18:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f72b7dc99af07c4f012ef229f9d3dcc490d6d69f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f72b7dc99af07c4f012ef229f9d3dcc490d6d69f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f72b7dc99af07c4f012ef229f9d3dcc490d6d69f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "piecesCount (#932)\n\nAll counts in search.cpp are of the form xxxCount. Conform piecesCnt to this unwritten rule.\n\n\n\nNo functional change.\n",
+      "subject": "piecesCount (#932)"
+    },
+    {
+      "commit_num": 2943,
+      "hash": "ee22b61f",
+      "short": "ee22b61f",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-12-20T10:17:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ee22b61f5e90a180af942828feb83cef90ea5683",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ee22b61f5e90a180af942828feb83cef90ea5683.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ee22b61f5e90a180af942828feb83cef90ea5683.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Use DEPTH_ZERO initializer for depth in qsearch (#931)\n\nSimplifies the main search function.\n\n\n\nNo functional change.\n",
+      "subject": "Use DEPTH_ZERO initializer for depth in qsearch (#931)"
+    },
+    {
+      "commit_num": 2944,
+      "hash": "8c61bbda",
+      "short": "8c61bbda",
+      "author": "VoyagerOne <excelgeek@gmail.com>",
+      "date": "2016-12-16T16:05:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8c61bbda54b0ec06cb05b89db4342d890dd21798",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8c61bbda54b0ec06cb05b89db4342d890dd21798.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8c61bbda54b0ec06cb05b89db4342d890dd21798.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Another simplification for SEE pruning\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 29310 W: 5225 L: 5118 D: 18967\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 128454 W: 16424 L: 16442 D: 95588\n\nBench: 4556848\n",
+      "subject": "Another simplification for SEE pruning"
+    },
+    {
+      "commit_num": 2945,
+      "hash": "881a9dfb",
+      "short": "881a9dfb",
+      "author": "Sergei Antonov <saproj@gmail.com>",
+      "date": "2016-12-12T15:04:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/881a9dfb0a8fec3b1472791e2d98415e4a9a182a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/881a9dfb0a8fec3b1472791e2d98415e4a9a182a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/881a9dfb0a8fec3b1472791e2d98415e4a9a182a.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Threefold repetition detection\n\nImplement a threefold repetition detection. Below are the examples of\nproblems fixed by this change.\n\n    Loosing move in a drawn position.\n    position fen 8/k7/3p4/p2P1p2/P2P1P2/8/8/K7 w - - 0 1 moves a1a2 a7a8 a2a1\n    The old code suggested a loosing move \"bestmove a8a7\", the new code suggests \"bestmove a8b7\" leading to a draw.\n\n    Incorrect evaluation (happened in a real game in TCEC Season 9).\n    position fen 4rbkr/1q3pp1/b3pn2/7p/1pN5/1P1BBP1P/P1R2QP1/3R2K1 w - - 5 31 moves e3d4 h8h6 d4e3\n    The old code evaluated it as \"cp 0\", the new code evaluation is around \"cp -50\" which is adequate.\n\nBrings 0.5-1 ELO gain. Passes [-3.00,1.00].\n\nSTC: http://tests.stockfishchess.org/tests/view/584ece040ebc5903140c5aea\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 47744 W: 8537 L: 8461 D: 30746\n\nLTC: http://tests.stockfishchess.org/tests/view/584f134d0ebc5903140c5b37\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 36775 W: 4739 L: 4639 D: 27397\n\nPatch has been rewritten into current form for simplification and\nlogic slightly changed so that return a draw score if the position\nrepeats once earlier but after or at the root, or repeats twice\nstrictly before the root. In its original form, repetition at root\nwas not returned as an immediate draw.\n\nAfter retestimng testing both version with SPRT[-3, 1], both passed\nsuccesfully, but this version was chosen becuase more natural. There is\nan argument about MultiPV in which an extended draw at root may be sensible.\nSee discussion here:\n\n   https://github.com/official-stockfish/Stockfish/pull/925\n\nFor documentation, current version passed both at STC and LTC:\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 51562 W: 9314 L: 9245 D: 33003\n\nLTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 115663 W: 14904 L: 14906 D: 85853\n\nbench: 5468995\n",
+      "subject": "Threefold repetition detection"
+    },
+    {
+      "commit_num": 2946,
+      "hash": "847bc0e8",
+      "short": "847bc0e8",
+      "author": "Stefan Geschwentner <Stefan-Geschwentner@web.de>",
+      "date": "2016-12-12T11:01:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/847bc0e80fa78a81b028515da03a90ea4dd40458",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/847bc0e80fa78a81b028515da03a90ea4dd40458.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/847bc0e80fa78a81b028515da03a90ea4dd40458.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify pruning\n\nSTC: http://tests.stockfishchess.org/tests/view/5842be140ebc5903140c5619\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 16014 W: 2839 L: 2710 D: 10465\n\n\n\nLTC: http://tests.stockfishchess.org/tests/view/584316a50ebc5903140c5638\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 182360 W: 22830 L: 22914 D: 136616\n\n\n\nRetested at LTC\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 45502 W: 5821 L: 5732 D: 33949\n\n\n\nBench: 4684146\n",
+      "subject": "Simplify pruning"
+    },
+    {
+      "commit_num": 2947,
+      "hash": "1b62d413",
+      "short": "1b62d413",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-12-11T19:05:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1b62d413c137bfa669922b6d52b92262d60020f1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1b62d413c137bfa669922b6d52b92262d60020f1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1b62d413c137bfa669922b6d52b92262d60020f1.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Clean-up skipEarlyPruning (#921)\n\nmake skipEarlyPruning a search argument instead of managing this by hand.\n\n\n\nVerified for no regression at STC:\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 96754 W: 17089 L: 17095 D: 62570\n\n\n\nNo functional change.\n",
+      "subject": "Clean-up skipEarlyPruning (#921)"
+    },
+    {
+      "commit_num": 2948,
+      "hash": "589049a0",
+      "short": "589049a0",
+      "author": "Jonathan Calovski <jonoface@live.com.au>",
+      "date": "2016-12-11T18:57:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/589049a0e58f5cde377e620e1669d7ce17ff5ddd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/589049a0e58f5cde377e620e1669d7ce17ff5ddd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/589049a0e58f5cde377e620e1669d7ce17ff5ddd.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Simplify unstoppable condition\n\nSTC:\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 86389 W: 15165 L: 15153 D: 56071\n\n\n\nLTC:\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 98143 W: 12311 L: 12288 D: 73544\n\n\n\nBench: 5437987\n",
+      "subject": "Simplify unstoppable condition"
+    },
+    {
+      "commit_num": 2949,
+      "hash": "a47bbca0",
+      "short": "a47bbca0",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-12-05T17:58:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a47bbca0ea40ac007d64682c3ba51fa4158b2d3f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a47bbca0ea40ac007d64682c3ba51fa4158b2d3f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a47bbca0ea40ac007d64682c3ba51fa4158b2d3f.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Refactor bonus and penalty calculation (#917)\n\n* Refactor bonus and penalty calculation\n\n\n\nCompute common terms in a helper function.\n\n\n\nNo functional change.\n\n\n\n* Further refactoring\n\n\n\nRemove some parenthesis that are now useless.\n\nDefine prevSq once, use repeatedly.\n\n\n\nNo functional change.\n\n\n\nbench: 5884767 (bench of previous patch is wrong)\n",
+      "subject": "Refactor bonus and penalty calculation (#917)"
+    },
+    {
+      "commit_num": 2950,
+      "hash": "0d33466b",
+      "short": "0d33466b",
+      "author": "Stéphane Nicolet <cassio@free.fr>",
+      "date": "2016-12-05T17:49:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0d33466bcd84d9d58ea7049b224f375ba6a51221",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0d33466bcd84d9d58ea7049b224f375ba6a51221.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0d33466bcd84d9d58ea7049b224f375ba6a51221.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Pawn flank attacks\n\nThis patch tweaks some pawn values to favor flank attacks.\n\n\n\nThe first part of the patch increases the midgame psqt values of external pawns to launch more attacks (credits to user GuardianRM for this idea), while the second part increases the endgame connection values for pawns on upper ranks.\n\n\n\nPassed STC:\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\n\nTotal: 34997 W: 6328 L: 6055 D: 22614\n\n\n\nand LTC:\n\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\n\nTotal: 13844 W: 1832 L: 1650 D: 10362\n\n\n\nBench: 5884767\n",
+      "subject": "Pawn flank attacks"
+    },
+    {
+      "commit_num": 2951,
+      "hash": "46d066b0",
+      "short": "46d066b0",
+      "author": "ElbertoOne <ElbertoOne@users.noreply.github.com>",
+      "date": "2016-12-04T08:28:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/46d066b04190763339d5ede87018422a1ab7c7dc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/46d066b04190763339d5ede87018422a1ab7c7dc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/46d066b04190763339d5ede87018422a1ab7c7dc.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Remove piece condition in decrease lmr reduction check\n\nSTC: http://tests.stockfishchess.org/tests/view/584154780ebc5903140c55cf\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 40866 W: 7251 L: 7164 D: 26451\n\n\n\nLTC: http://tests.stockfishchess.org/tests/view/5841e6e50ebc5903140c5605\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 62413 W: 7948 L: 7881 D: 46584\n\n\n\nBench: 5807913\n",
+      "subject": "Remove piece condition in decrease lmr reduction check"
+    },
+    {
+      "commit_num": 2952,
+      "hash": "bf8b45fe",
+      "short": "bf8b45fe",
+      "author": "Andrey Neporada <neporada@gmail.com>",
+      "date": "2016-12-03T08:37:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bf8b45fe6305c89a9a30f660de34164cf3bdcdf2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf8b45fe6305c89a9a30f660de34164cf3bdcdf2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf8b45fe6305c89a9a30f660de34164cf3bdcdf2.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "Help GCC to optimize msb() to single instruction\n\nGCC compiles builtin_clzll to “63 ^ BSR”. BSR is processor instruction \"Bit Scan Reverse\".\n\nSo old msb() function is basically 63 - 63 ^ BSR.\n\nUnfortunately, GCC fails to simplify this expression.\n\n\n\nOld function compiles to\n\n\n\n    bsrq    %rdi, %rdi\n\n    movl    $63, %eax\n\n    xorq    $63, %rdi\n\n    subl    %edi, %eax\n\n    ret\n\n\n\nNew function compiles to\n\n\n\n    bsrq    %rdi, %rax\n\n    ret\n\n\n\nBTW, Clang compiles both function to the same (optimal) code.\n\n\n\nNo functional change.\n",
+      "subject": "Help GCC to optimize msb() to single instruction"
+    },
+    {
+      "commit_num": 2953,
+      "hash": "1e76ba7c",
+      "short": "1e76ba7c",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2016-12-01T13:55:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1e76ba7cec535e431a8d7486bfd41b3efbfad68e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e76ba7cec535e431a8d7486bfd41b3efbfad68e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e76ba7cec535e431a8d7486bfd41b3efbfad68e.tar.gz"
+        }
+      ],
+      "downloads": {
+        "abrok_eu": [],
+        "github_actions_artifacts": []
+      },
+      "message": "WeakQueen Parameter tweak\n\nNew tuned values.\n\n\n\npassed STC\n\nhttp://tests.stockfishchess.org/tests/view/5834573c0ebc5903140c507b\n\nLLR: 3.16 (-2.94,2.94) [0.00,4.00]\n\nTotal: 157415 W: 27917 L: 27227 D: 102271\n\n\n\npassed LTC\n\nhttp://tests.stockfishchess.org/tests/view/58388d2b0ebc5903140c523b\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\n\nTotal: 95405 W: 12350 L: 11959 D: 71096\n\n\n\nBench: 4912054\n",
+      "subject": "WeakQueen Parameter tweak"
+    }
+  ]
+}
