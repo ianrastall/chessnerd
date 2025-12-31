@@ -2,7 +2,7 @@
   "month": "2023-07",
   "commits": [
     {
-      "commit_num": 1085,
+      "commit_num": 1093,
       "hash": "4c43e1e2",
       "short": "4c43e1e2",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -69,7 +69,7 @@
       "subject": "Add new CPU archs in CI Tests workflow"
     },
     {
-      "commit_num": 1086,
+      "commit_num": 1094,
       "hash": "002a5045",
       "short": "002a5045",
       "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
@@ -136,7 +136,7 @@
       "subject": "Identify NEON_DOTPROD in compiler_info()"
     },
     {
-      "commit_num": 1087,
+      "commit_num": 1095,
       "hash": "f84eb1f3",
       "short": "f84eb1f3",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -203,7 +203,7 @@
       "subject": "Improve some comments"
     },
     {
-      "commit_num": 1088,
+      "commit_num": 1096,
       "hash": "a4fedd81",
       "short": "a4fedd81",
       "author": "Shahin M. Shahin <41402573+peregrineshahin@users.noreply.github.com>",
@@ -222,55 +222,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/win64bmi2/stockfish_23102108_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/win64avx2/stockfish_23102108_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/win64modern/stockfish_23102108_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/win64ssse/stockfish_23102108_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/win64/stockfish_23102108_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/linux64bmi2/stockfish_23102108_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/linux64avx2/stockfish_23102108_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/linux64modern/stockfish_23102108_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/linux64ssse/stockfish_23102108_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/a4fedd8152e717a37ec8b8ddda0658364c1f5ee4/linux64/stockfish_23102108_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix greater than TB scores in null move pruning.\n\nThis patch is a simplification and a fix to dealing with null moves scores that returns proven mates or TB scores by preventing 'null move pruning' if the nullvalue is in that range.\n\nCurrent solution downgrades nullValues on the non-PV node but the value can be used in a transposed PV-node to the same position afterwards (Triangulation), the later is prone to propagate a wrong score (96.05) to root that will not be refuted unless we search further.\n\nScore of (96.05) can be obtained be two methods,\n\nmaxim static-eval returned on Pv update (mostly qSearch)\nthis downgrade (clamp) in NMP\nand theoretically can happen with or without TBs but the second scenario is more dangerous than the first.\nThis fixes the reproducible case in very common scenarios with TBs as shown in the debugging at discord.\n\nFixes: #4699\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/64c1eca8dc56e1650abba6f9\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 670048 W: 171132 L: 171600 D: 327316\nPtnml(0-2): 2134, 75687, 179820, 75279, 2104\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/64c5e130dc56e1650abc0438\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 92868 W: 23642 L: 23499 D: 45727\nPtnml(0-2): 52, 9509, 27171, 9648, 54\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4715\n\nBench: 1327410\n",
       "subject": "Fix greater than TB scores in null move pruning."
     },
     {
-      "commit_num": 1089,
+      "commit_num": 1097,
       "hash": "65ece7d9",
       "short": "65ece7d9",
       "author": "rn5f107s2 <clemens.lerchl@gmail.com>",
@@ -337,7 +296,7 @@
       "subject": "Malus during move ordering for putting pieces en prise"
     },
     {
-      "commit_num": 1090,
+      "commit_num": 1098,
       "hash": "2667316f",
       "short": "2667316f",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -404,7 +363,7 @@
       "subject": "Simplify one multicut extension"
     },
     {
-      "commit_num": 1091,
+      "commit_num": 1099,
       "hash": "cb22520a",
       "short": "cb22520a",
       "author": "mstembera <MissingEmail@email>",
@@ -423,55 +382,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/win64bmi2/stockfish_23072821_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/win64avx2/stockfish_23072821_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/win64modern/stockfish_23072821_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/win64ssse/stockfish_23072821_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/win64/stockfish_23072821_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/linux64bmi2/stockfish_23072821_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/linux64avx2/stockfish_23072821_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/linux64modern/stockfish_23072821_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/linux64ssse/stockfish_23072821_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/cb22520a9c7e1d716a56f08390aa638a23a597b2/linux64/stockfish_23072821_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove unused return type from propagate()\n\nAlso make two get_weight_index() static methods constexpr, for\nconsistency with the other static get_hash_value() method right above.\nTested for speed by user Torom (thanks).\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4708\n\nNo functional change\n",
       "subject": "Remove unused return type from propagate()"
     },
     {
-      "commit_num": 1092,
+      "commit_num": 1100,
       "hash": "027713c4",
       "short": "027713c4",
       "author": "Stephen Touset <stephen@touset.org>",
@@ -538,7 +456,7 @@
       "subject": "Remove Zobrist::noPawns"
     },
     {
-      "commit_num": 1093,
+      "commit_num": 1101,
       "hash": "0ad9b51d",
       "short": "0ad9b51d",
       "author": "Linmiao Xu <linmiao.xu@gmail.com>",
@@ -605,7 +523,7 @@
       "subject": "Remove classical psqt"
     },
     {
-      "commit_num": 1094,
+      "commit_num": 1102,
       "hash": "78e3d2ad",
       "short": "78e3d2ad",
       "author": "windfishballad <windfishballadtcec@gmail.com>",
@@ -672,7 +590,7 @@
       "subject": "Simplify some qsearch conditions"
     },
     {
-      "commit_num": 1095,
+      "commit_num": 1103,
       "hash": "4b297976",
       "short": "4b297976",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -739,7 +657,7 @@
       "subject": "Check clock more often"
     },
     {
-      "commit_num": 1096,
+      "commit_num": 1104,
       "hash": "76e1e8fd",
       "short": "76e1e8fd",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -806,7 +724,7 @@
       "subject": "Simplify TT cutoff"
     },
     {
-      "commit_num": 1097,
+      "commit_num": 1105,
       "hash": "5ea1cbc7",
       "short": "5ea1cbc7",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -873,7 +791,7 @@
       "subject": "Do more futility pruning for cutNodes that are not in TT"
     },
     {
-      "commit_num": 1098,
+      "commit_num": 1106,
       "hash": "3fe0d5c5",
       "short": "3fe0d5c5",
       "author": "Cody Ho <codyho@stanford.edu>",
@@ -892,14 +810,55 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/win64bmi2/stockfish_23071919_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/win64avx2/stockfish_23071919_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/win64modern/stockfish_23071919_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/win64ssse/stockfish_23071919_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/win64/stockfish_23071919_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/linux64bmi2/stockfish_23071919_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/linux64avx2/stockfish_23071919_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/linux64modern/stockfish_23071919_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/linux64ssse/stockfish_23071919_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/3fe0d5c53389b3d548cf1fbbba3f6c978e9f02ae/linux64/stockfish_23071919_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Unused code cleanup\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4696\n\nNo functional change\n",
       "subject": "Unused code cleanup"
     },
     {
-      "commit_num": 1099,
+      "commit_num": 1107,
       "hash": "14448378",
       "short": "14448378",
       "author": "mstembera <MissingEmail@email>",
@@ -966,7 +925,7 @@
       "subject": "Remove inline assembly"
     },
     {
-      "commit_num": 1100,
+      "commit_num": 1108,
       "hash": "42d28424",
       "short": "42d28424",
       "author": "rn5f107s2 <clemens.lerchl@gmail.com>",
@@ -1033,7 +992,7 @@
       "subject": "Removes a few Bitboards and functions"
     },
     {
-      "commit_num": 1101,
+      "commit_num": 1109,
       "hash": "6a31f54d",
       "short": "6a31f54d",
       "author": "Robert Nurnberg @ elitebook <robert.nurnberg@gmx.de>",
@@ -1100,7 +1059,7 @@
       "subject": "remove evalType from bench"
     },
     {
-      "commit_num": 1102,
+      "commit_num": 1110,
       "hash": "34d0c1b5",
       "short": "34d0c1b5",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1167,7 +1126,7 @@
       "subject": "Switch to macos 13 for CI"
     },
     {
-      "commit_num": 1103,
+      "commit_num": 1111,
       "hash": "d70a905c",
       "short": "d70a905c",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1234,7 +1193,7 @@
       "subject": "Deprecate the x86-64-modern arch"
     },
     {
-      "commit_num": 1104,
+      "commit_num": 1112,
       "hash": "913574f4",
       "short": "913574f4",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -1301,7 +1260,7 @@
       "subject": "Remove improvement variable"
     },
     {
-      "commit_num": 1105,
+      "commit_num": 1113,
       "hash": "e8a5c649",
       "short": "e8a5c649",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1368,7 +1327,7 @@
       "subject": "Consolidate to centipawns conversion"
     },
     {
-      "commit_num": 1106,
+      "commit_num": 1114,
       "hash": "e8946992",
       "short": "e8946992",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1435,7 +1394,7 @@
       "subject": "Remove some CI parts not yet working"
     },
     {
-      "commit_num": 1107,
+      "commit_num": 1115,
       "hash": "a42ab95e",
       "short": "a42ab95e",
       "author": "AndrovT <31534597+AndrovT@users.noreply.github.com>",
@@ -1502,7 +1461,7 @@
       "subject": "remove large input specialization"
     },
     {
-      "commit_num": 1108,
+      "commit_num": 1116,
       "hash": "acdbf451",
       "short": "acdbf451",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1569,7 +1528,7 @@
       "subject": "Use more expressive names for bonus1 and bonus2"
     },
     {
-      "commit_num": 1109,
+      "commit_num": 1117,
       "hash": "a3a91f3f",
       "short": "a3a91f3f",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1636,7 +1595,7 @@
       "subject": "Build and test more binaries in CI"
     },
     {
-      "commit_num": 1110,
+      "commit_num": 1118,
       "hash": "18fdc2df",
       "short": "18fdc2df",
       "author": "maxim <mmo@2021.ai>",
@@ -1703,7 +1662,7 @@
       "subject": "Remove pawnKey from StateInfo"
     },
     {
-      "commit_num": 1111,
+      "commit_num": 1119,
       "hash": "f9729474",
       "short": "f9729474",
       "author": "Sebastian Buchwald <UniQP@web.de>",
@@ -1770,7 +1729,7 @@
       "subject": "Cleanup code after removal of classical evaluation"
     },
     {
-      "commit_num": 1112,
+      "commit_num": 1120,
       "hash": "f5ab5832",
       "short": "f5ab5832",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1837,7 +1796,7 @@
       "subject": "Generate binaries for more advanced architectures"
     },
     {
-      "commit_num": 1113,
+      "commit_num": 1121,
       "hash": "529d3be8",
       "short": "529d3be8",
       "author": "mstembera <MissingEmail@email>",
@@ -1904,7 +1863,7 @@
       "subject": "More simplifications and cleanup in affine_transform_sparse_input.h"
     },
     {
-      "commit_num": 1114,
+      "commit_num": 1122,
       "hash": "6a8767a0",
       "short": "6a8767a0",
       "author": "Muzhen Gaming <61100393+XInTheDark@users.noreply.github.com>",
@@ -1971,7 +1930,7 @@
       "subject": "Simplify PvNode reduction"
     },
     {
-      "commit_num": 1115,
+      "commit_num": 1123,
       "hash": "ee023d7f",
       "short": "ee023d7f",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -2038,7 +1997,7 @@
       "subject": "Fix CI output"
     },
     {
-      "commit_num": 1116,
+      "commit_num": 1124,
       "hash": "19e2a885",
       "short": "19e2a885",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -2105,7 +2064,7 @@
       "subject": "Revise extract bench from git log in CI"
     },
     {
-      "commit_num": 1117,
+      "commit_num": 1125,
       "hash": "9ba24912",
       "short": "9ba24912",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -2172,7 +2131,7 @@
       "subject": "Add armv8-dotprod to CI binaries"
     },
     {
-      "commit_num": 1118,
+      "commit_num": 1126,
       "hash": "f8e65d82",
       "short": "f8e65d82",
       "author": "mstembera <MissingEmail@email>",
@@ -2239,7 +2198,7 @@
       "subject": "Simplify away lookup_count."
     },
     {
-      "commit_num": 1119,
+      "commit_num": 1127,
       "hash": "e87e103c",
       "short": "e87e103c",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -2306,7 +2265,7 @@
       "subject": "Remove leftover braces for if conditional in CI"
     },
     {
-      "commit_num": 1120,
+      "commit_num": 1128,
       "hash": "6abd0bd9",
       "short": "6abd0bd9",
       "author": "Jorge <46056498+jorgectf@users.noreply.github.com>",
@@ -2373,7 +2332,7 @@
       "subject": "Add CodeQL workflow"
     },
     {
-      "commit_num": 1121,
+      "commit_num": 1129,
       "hash": "8634717c",
       "short": "8634717c",
       "author": "disservin <45608332+Disservin@users.noreply.github.com>",
@@ -2440,7 +2399,7 @@
       "subject": "Add bmi2 to CI generated binaries"
     },
     {
-      "commit_num": 1122,
+      "commit_num": 1130,
       "hash": "80564bcf",
       "short": "80564bcf",
       "author": "mstembera <MissingEmail@email>",
@@ -2507,7 +2466,7 @@
       "subject": "Simplify lookup_count and clean up pieces()."
     },
     {
-      "commit_num": 1123,
+      "commit_num": 1131,
       "hash": "ee53f8ed",
       "short": "ee53f8ed",
       "author": "Linmiao Xu <linmiao.xu@gmail.com>",
@@ -2574,7 +2533,7 @@
       "subject": "Reintroduce nnue eval pawn count multipliers again"
     },
     {
-      "commit_num": 1124,
+      "commit_num": 1132,
       "hash": "9a2d50ec",
       "short": "9a2d50ec",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -2641,7 +2600,7 @@
       "subject": "Make posix and msys2 shells consistent in CI"
     },
     {
-      "commit_num": 1125,
+      "commit_num": 1133,
       "hash": "0fd186fb",
       "short": "0fd186fb",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",

@@ -2,7 +2,7 @@
   "month": "2022-11",
   "commits": [
     {
-      "commit_num": 1334,
+      "commit_num": 1342,
       "hash": "d60f5de9",
       "short": "d60f5de9",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -69,7 +69,7 @@
       "subject": "Fix bestThread selection"
     },
     {
-      "commit_num": 1335,
+      "commit_num": 1343,
       "hash": "6a6faac0",
       "short": "6a6faac0",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -136,7 +136,7 @@
       "subject": "Remove PvNode Parameter for cutoff LMR"
     },
     {
-      "commit_num": 1336,
+      "commit_num": 1344,
       "hash": "85ae65db",
       "short": "85ae65db",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -203,7 +203,7 @@
       "subject": "Skip full depth search in LMR depending on depth"
     },
     {
-      "commit_num": 1337,
+      "commit_num": 1345,
       "hash": "f5a31b7e",
       "short": "f5a31b7e",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -270,7 +270,7 @@
       "subject": "Correctly output lowerbound/upperbound in threaded searches"
     },
     {
-      "commit_num": 1338,
+      "commit_num": 1346,
       "hash": "34116311",
       "short": "34116311",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -337,7 +337,7 @@
       "subject": "Update WDL model for current SF"
     },
     {
-      "commit_num": 1339,
+      "commit_num": 1347,
       "hash": "d756d97a",
       "short": "d756d97a",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -404,7 +404,7 @@
       "subject": "Fix a missing conversion"
     },
     {
-      "commit_num": 1340,
+      "commit_num": 1348,
       "hash": "d8f3209f",
       "short": "d8f3209f",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -471,7 +471,7 @@
       "subject": "Update Top CPU Contributors"
     },
     {
-      "commit_num": 1341,
+      "commit_num": 1349,
       "hash": "219fa2f0",
       "short": "219fa2f0",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -490,55 +490,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/win64bmi2/stockfish_22111908_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/win64avx2/stockfish_22111908_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/win64modern/stockfish_22111908_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/win64ssse/stockfish_22111908_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/win64/stockfish_22111908_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/linux64bmi2/stockfish_22111908_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/linux64avx2/stockfish_22111908_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/linux64modern/stockfish_22111908_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/linux64ssse/stockfish_22111908_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/219fa2f0a79381d35d9eb1240781cc598e74f647/linux64/stockfish_22111908_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do shallower search in case of lmr being not successful enough\n\nIn case of a move passing LMR but it results being not too far from\nthe current best search result produce a full depth search with reduced depth.\n\nOriginal idea by lonfom169 .\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6373409b54d69a2f33913fbd\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 169504 W: 45351 L: 44848 D: 79305\nPtnml(0-2): 598, 18853, 45353, 19344, 604\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/6374c58528e3405283eb8d2d\nLLR: 2.96 (-2.94,2.94) <0.50,2.50>\nTotal: 51144 W: 13802 L: 13471 D: 23871\nPtnml(0-2): 19, 4928, 15362, 5229, 34\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4230\n\nbench 4277005\n",
       "subject": "Do shallower search in case of lmr being not successful enough"
     },
     {
-      "commit_num": 1342,
+      "commit_num": 1350,
       "hash": "41c6a74d",
       "short": "41c6a74d",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -605,7 +564,7 @@
       "subject": "Simplification away Cutoff Reset"
     },
     {
-      "commit_num": 1343,
+      "commit_num": 1351,
       "hash": "1370127f",
       "short": "1370127f",
       "author": "peregrineshahin <peregrineshahin@gmail.com>",
@@ -672,7 +631,7 @@
       "subject": "Simplify both quiet check evasions' conditions"
     },
     {
-      "commit_num": 1344,
+      "commit_num": 1352,
       "hash": "6c1df553",
       "short": "6c1df553",
       "author": "disservin <disservin.social@gmail.com>",
@@ -739,7 +698,7 @@
       "subject": "speedup CI"
     },
     {
-      "commit_num": 1345,
+      "commit_num": 1353,
       "hash": "e048d118",
       "short": "e048d118",
       "author": "disservin <disservin.social@gmail.com>",
@@ -806,7 +765,7 @@
       "subject": "Change versioning and save binaries as CI artifacts"
     },
     {
-      "commit_num": 1346,
+      "commit_num": 1354,
       "hash": "61a2cb84",
       "short": "61a2cb84",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -873,7 +832,7 @@
       "subject": "Mark variable as potentially unused"
     },
     {
-      "commit_num": 1347,
+      "commit_num": 1355,
       "hash": "a4139007",
       "short": "a4139007",
       "author": "disservin <disservin.social@gmail.com>",

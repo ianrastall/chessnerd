@@ -2,7 +2,7 @@
   "month": "2020-06",
   "commits": [
     {
-      "commit_num": 1969,
+      "commit_num": 1977,
       "hash": "c5b2a92c",
       "short": "c5b2a92c",
       "author": "protonspring <mike@whiteley.org>",
@@ -57,7 +57,7 @@
       "subject": "denormalize KRKP."
     },
     {
-      "commit_num": 1970,
+      "commit_num": 1978,
       "hash": "69d3be42",
       "short": "69d3be42",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -112,7 +112,7 @@
       "subject": "Tweak single queen endgame scaling."
     },
     {
-      "commit_num": 1971,
+      "commit_num": 1979,
       "hash": "c7194bd9",
       "short": "c7194bd9",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -167,7 +167,7 @@
       "subject": "Scale down eval for queen imbalance"
     },
     {
-      "commit_num": 1972,
+      "commit_num": 1980,
       "hash": "16836f39",
       "short": "16836f39",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -222,7 +222,7 @@
       "subject": "Scale down eval for drawish rook endgames."
     },
     {
-      "commit_num": 1973,
+      "commit_num": 1981,
       "hash": "2810a1ea",
       "short": "2810a1ea",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -277,7 +277,7 @@
       "subject": "Increase value of pawns on fifth rank"
     },
     {
-      "commit_num": 1974,
+      "commit_num": 1982,
       "hash": "11006880",
       "short": "11006880",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -332,7 +332,7 @@
       "subject": "Provide WDL statistics"
     },
     {
-      "commit_num": 1975,
+      "commit_num": 1983,
       "hash": "ca41ee66",
       "short": "ca41ee66",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -387,7 +387,7 @@
       "subject": "Revert LTO for mingw on windows."
     },
     {
-      "commit_num": 1976,
+      "commit_num": 1984,
       "hash": "de24fceb",
       "short": "de24fceb",
       "author": "mstembera <MissingEmail@email>",
@@ -406,14 +406,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/win64bmi2/stockfish_20062821_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/win64modern/stockfish_20062821_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/win64/stockfish_20062821_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/win32/stockfish_20062821_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/linux64bmi2/stockfish_20062821_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/linux64modern/stockfish_20062821_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/de24fcebc873ce2d65b30e039745dbc2e851f443/linux64/stockfish_20062821_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Fix fragile code to use proper random 64 bit keys.\n\nThis fixes an old issue where we want to make a position unique but only\nchange a small number of bits in the key instead of all 64 of them randomly.\nThis is fragile and can lead to non uniqueness issues in the TT.\n\nKey make_key(uint64_t seed) takes any integer and produces a unique random 64 bit key.\nIt is computationally efficient and is based on a congruential pseudo random number\ngenerator using well tested constants by Donald Knuth\n(see https://en.wikipedia.org/wiki/Linear_congruential_generator)\n\nSTC https://tests.stockfishchess.org/tests/view/5ef6c78f761b685b4c724bb6\nLLR: 2.95 (-2.94,2.94) {-1.50,0.50}\nTotal: 154320 W: 29343 L: 29376 D: 95601\nPtnml(0-2): 2543, 18170, 35891, 17889, 2667\n\nLTC https://tests.stockfishchess.org/tests/view/5ef7d1a9020eec13834a940e\nLLR: 2.95 (-2.94,2.94) {-1.50,0.50}\nTotal: 53488 W: 6629 L: 6584 D: 40275\nPtnml(0-2): 372, 4878, 16183, 4955, 356\n\ncloses https://github.com/official-stockfish/Stockfish/pull/2773\n\nbench: 4626776\n",
       "subject": "Fix fragile code to use proper random 64 bit keys."
     },
     {
-      "commit_num": 1977,
+      "commit_num": 1985,
       "hash": "547c4a21",
       "short": "547c4a21",
       "author": "mstembera <MissingEmail@email>",
@@ -468,7 +497,7 @@
       "subject": "Remove old zobrist trick for castling rights"
     },
     {
-      "commit_num": 1978,
+      "commit_num": 1986,
       "hash": "aecfca2d",
       "short": "aecfca2d",
       "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
@@ -523,7 +552,7 @@
       "subject": "support popcnt on armv8"
     },
     {
-      "commit_num": 1979,
+      "commit_num": 1987,
       "hash": "a84e3ac2",
       "short": "a84e3ac2",
       "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
@@ -578,7 +607,7 @@
       "subject": "Simplify use_time_management() and allow composing"
     },
     {
-      "commit_num": 1980,
+      "commit_num": 1988,
       "hash": "ab5cd834",
       "short": "ab5cd834",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -633,7 +662,7 @@
       "subject": "Small cleanups"
     },
     {
-      "commit_num": 1981,
+      "commit_num": 1989,
       "hash": "208c53df",
       "short": "208c53df",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -688,7 +717,7 @@
       "subject": "Remove 'Minimum Thinking Time' UCI option."
     },
     {
-      "commit_num": 1982,
+      "commit_num": 1990,
       "hash": "11483fe6",
       "short": "11483fe6",
       "author": "UnaiCorzo <corzounai@gmail.com>",
@@ -743,7 +772,7 @@
       "subject": "Makefile: support lto on mingw, default to 64bits"
     },
     {
-      "commit_num": 1983,
+      "commit_num": 1991,
       "hash": "bbe98576",
       "short": "bbe98576",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -798,7 +827,7 @@
       "subject": "Do less futility pruning for captures."
     },
     {
-      "commit_num": 1984,
+      "commit_num": 1992,
       "hash": "527d832a",
       "short": "527d832a",
       "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
@@ -853,7 +882,7 @@
       "subject": "Support ARCH=armv8 in Makefile (#2355)"
     },
     {
-      "commit_num": 1985,
+      "commit_num": 1993,
       "hash": "e9966d9a",
       "short": "e9966d9a",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -908,7 +937,7 @@
       "subject": "Introduce bonus for queen infiltration"
     },
     {
-      "commit_num": 1986,
+      "commit_num": 1994,
       "hash": "6f15e7fa",
       "short": "6f15e7fa",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -963,7 +992,7 @@
       "subject": "small cleanups"
     },
     {
-      "commit_num": 1987,
+      "commit_num": 1995,
       "hash": "8a3f155b",
       "short": "8a3f155b",
       "author": "protonspring <mike@whiteley.org>",
@@ -1018,7 +1047,7 @@
       "subject": "Make endgames consistent"
     },
     {
-      "commit_num": 1988,
+      "commit_num": 1996,
       "hash": "bc3c2154",
       "short": "bc3c2154",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -1073,7 +1102,7 @@
       "subject": "More reduction for evading pawn moves."
     },
     {
-      "commit_num": 1989,
+      "commit_num": 1997,
       "hash": "4c72c953",
       "short": "4c72c953",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -1128,7 +1157,7 @@
       "subject": "Small bonus to favor thorn pawns"
     },
     {
-      "commit_num": 1990,
+      "commit_num": 1998,
       "hash": "1ea488d3",
       "short": "1ea488d3",
       "author": "mstembera <MissingEmail@email>",
@@ -1183,7 +1212,7 @@
       "subject": "Use 128 bit multiply for TT index"
     },
     {
-      "commit_num": 1991,
+      "commit_num": 1999,
       "hash": "995ee4b3",
       "short": "995ee4b3",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -1238,7 +1267,7 @@
       "subject": "Retuned values after eval quantize patch."
     },
     {
-      "commit_num": 1992,
+      "commit_num": 2000,
       "hash": "42b7dbcb",
       "short": "42b7dbcb",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -1293,7 +1322,7 @@
       "subject": "Tuned values for search constants"
     },
     {
-      "commit_num": 1993,
+      "commit_num": 2001,
       "hash": "c44c62ef",
       "short": "c44c62ef",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -1348,7 +1377,7 @@
       "subject": "Adjust history threshold for quiet moves futility pruning"
     },
     {
-      "commit_num": 1994,
+      "commit_num": 2002,
       "hash": "4d657618",
       "short": "4d657618",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1367,43 +1396,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/win64bmi2/stockfish_20061307_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/win64modern/stockfish_20061307_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/win64/stockfish_20061307_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/win32/stockfish_20061307_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/linux64bmi2/stockfish_20061307_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/linux64modern/stockfish_20061307_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/4d657618e956decdd51bceca77c2c5489dfcf6af/linux64/stockfish_20061307_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Quantize eval to multiples of 16\n\nRemoves some excess precision, helps searchs.\n\nEffectively reintroduces evaluation grain, with a slightly different context.\nhttps://github.com/official-stockfish/Stockfish/commit/45dbd9cd0303d0db469670af8ec3598731a4eace\n\npassed STC\nLLR: 2.97 (-2.94,2.94) {-0.50,1.50}\nTotal: 197032 W: 37938 L: 37462 D: 121632\nPtnml(0-2): 3359, 22994, 45446, 23246, 3471\nhttps://tests.stockfishchess.org/tests/view/5ee0c228f29b40b0fc95ae53\n\npassed LTC\nLLR: 2.94 (-2.94,2.94) {0.25,1.75}\nTotal: 77696 W: 9970 L: 9581 D: 58145\nPtnml(0-2): 530, 7075, 23311, 7340, 592\nhttps://tests.stockfishchess.org/tests/view/5ee21426f29b40b0fc95af43\n\npassed LTC SMP\nLLR: 2.96 (-2.94,2.94) {0.25,1.75}\nTotal: 64136 W: 7425 L: 7091 D: 49620\nPtnml(0-2): 345, 5416, 20228, 5718, 361\nhttps://tests.stockfishchess.org/tests/view/5ee387bbf29b40b0fc95b04c\n\ncloses https://github.com/official-stockfish/Stockfish/pull/2733\n\nBench: 4939103\n",
       "subject": "Quantize eval to multiples of 16"
     },
     {
-      "commit_num": 1995,
+      "commit_num": 2003,
       "hash": "3af083a7",
       "short": "3af083a7",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -1458,7 +1458,7 @@
       "subject": "Improve the anti-shuffling policy"
     },
     {
-      "commit_num": 1996,
+      "commit_num": 2004,
       "hash": "b081e522",
       "short": "b081e522",
       "author": "nguyenpham <axchess@yahoo.com>",
@@ -1513,7 +1513,7 @@
       "subject": "Improve Readme.md about compiling"
     },
     {
-      "commit_num": 1997,
+      "commit_num": 2005,
       "hash": "d0cb9b28",
       "short": "d0cb9b28",
       "author": "NguyenPham <phhnguyen@gmail.com>",
@@ -1568,7 +1568,7 @@
       "subject": "show coordinates when displaying board"
     },
     {
-      "commit_num": 1998,
+      "commit_num": 2006,
       "hash": "b0eb5a1b",
       "short": "b0eb5a1b",
       "author": "protonspring <mike@whiteley.org>",
@@ -1623,7 +1623,7 @@
       "subject": "Wrap all access to LineBB and add assert"
     },
     {
-      "commit_num": 1999,
+      "commit_num": 2007,
       "hash": "15e190e9",
       "short": "15e190e9",
       "author": "pb00067 <pb00067@PHXL0356.wp.lan>",
@@ -1678,7 +1678,7 @@
       "subject": "Use lowply-history also on low depths"
     },
     {
-      "commit_num": 2000,
+      "commit_num": 2008,
       "hash": "4b10578a",
       "short": "4b10578a",
       "author": "Sami Kiminki <skiminki@users.noreply.github.com>",
@@ -1733,7 +1733,7 @@
       "subject": "Increase the maximum hash size by a factor of 256"
     },
     {
-      "commit_num": 2001,
+      "commit_num": 2009,
       "hash": "fd8e8842",
       "short": "fd8e8842",
       "author": "protonspring <mike@whiteley.org>",
@@ -1788,7 +1788,7 @@
       "subject": "small speed-up in movegen"
     },
     {
-      "commit_num": 2002,
+      "commit_num": 2010,
       "hash": "90230902",
       "short": "90230902",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -1807,14 +1807,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/win64bmi2/stockfish_20060918_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/win64modern/stockfish_20060918_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/win64/stockfish_20060918_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/win32/stockfish_20060918_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/linux64bmi2/stockfish_20060918_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/linux64modern/stockfish_20060918_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/902309020a8ebf97a649cacfdc2dc2881b630966/linux64/stockfish_20060918_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "join scale_factor, initiative and mg+eg reduction\n\nMerging this code into one function `winnable()`.\nShould allow common concepts used to adjust the eg value,\neither by addition or scaling, to be combined more effectively.\n\nImprove trace function.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/2710\n\nNo functional change.\n",
       "subject": "join scale_factor, initiative and mg+eg reduction"
     },
     {
-      "commit_num": 2003,
+      "commit_num": 2011,
       "hash": "16566a8f",
       "short": "16566a8f",
       "author": "Moez Jellouli <37274752+MJZ1977@users.noreply.github.com>",
@@ -1869,7 +1898,7 @@
       "subject": "Singular quiet LMR"
     },
     {
-      "commit_num": 2004,
+      "commit_num": 2012,
       "hash": "1c65310c",
       "short": "1c65310c",
       "author": "protonspring <mike@whiteley.org>",

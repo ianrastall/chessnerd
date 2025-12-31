@@ -2,7 +2,7 @@
   "month": "2021-07",
   "commits": [
     {
-      "commit_num": 1597,
+      "commit_num": 1605,
       "hash": "a0fca67d",
       "short": "a0fca67d",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -73,7 +73,7 @@
       "subject": "CMH Pruning Tweak"
     },
     {
-      "commit_num": 1598,
+      "commit_num": 1606,
       "hash": "26edf953",
       "short": "26edf953",
       "author": "Tomasz Sobczyk <tomasz.sobczyk1997@gmail.com>",
@@ -92,14 +92,59 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/win64bmi2/stockfish_21073017_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/win64avx2/stockfish_21073017_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/win64modern/stockfish_21073017_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/win64ssse/stockfish_21073017_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/win64/stockfish_21073017_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/win32/stockfish_21073017_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/linux64bmi2/stockfish_21073017_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/linux64avx2/stockfish_21073017_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/linux64modern/stockfish_21073017_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/linux64ssse/stockfish_21073017_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/26edf9534ad571a6d26bf9db47d21776cbf45d54/linux64/stockfish_21073017_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Avoid unnecessary stores in the affine transform\n\nThis patch improves the codegen in the AffineTransform::forward function for architectures >=SSSE3. Current code works directly on memory and the compiler cannot see that the stores through outptr do not alias the loads through weights and input32. The solution implemented is to perform the affine transform with local variables as accumulators and only store the result to memory at the end. The number of accumulators required is OutputDimensions / OutputSimdWidth, which means that for the 1024->16 affine transform it requires 4 registers with SSSE3, 2 with AVX2, 1 with AVX512. It also cuts the number of stores required by NumRegs * 256 for each node evaluated. The local accumulators are expected to be assigned to registers, but even if this cannot be done in some case due to register pressure it will help the compiler to see that there is no aliasing between the loads and stores and may still result in better codegen.\n\nSee https://godbolt.org/z/59aTKbbYc for codegen comparison.\n\npassed STC:\nLLR: 2.94 (-2.94,2.94) <-0.50,2.50>\nTotal: 140328 W: 10635 L: 10358 D: 119335\nPtnml(0-2): 302, 8339, 52636, 8554, 333\n\ncloses https://github.com/official-stockfish/Stockfish/pull/3634\n\nNo functional change\n",
       "subject": "Avoid unnecessary stores in the affine transform"
     },
     {
-      "commit_num": 1599,
+      "commit_num": 1607,
       "hash": "e973eee9",
       "short": "e973eee9",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -170,7 +215,7 @@
       "subject": "Update default net to nn-56a5f1c4173a.nnue"
     },
     {
-      "commit_num": 1600,
+      "commit_num": 1608,
       "hash": "d61d3858",
       "short": "d61d3858",
       "author": "Tomasz Sobczyk <tomasz.sobczyk1997@gmail.com>",
@@ -241,7 +286,7 @@
       "subject": "New NNUE architecture and net"
     },
     {
-      "commit_num": 1601,
+      "commit_num": 1609,
       "hash": "237ed1ef",
       "short": "237ed1ef",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -312,7 +357,7 @@
       "subject": "Update default net to nn-26abeed38351.nnue"
     },
     {
-      "commit_num": 1602,
+      "commit_num": 1610,
       "hash": "910d26b5",
       "short": "910d26b5",
       "author": "Giacomo Lorenzetti <g.lorenz9@protonmail.com>",
@@ -383,7 +428,7 @@
       "subject": "Simplification in LMR"
     },
     {
-      "commit_num": 1603,
+      "commit_num": 1611,
       "hash": "b939c805",
       "short": "b939c805",
       "author": "MichaelB7 <michaelbyrne1978@gmail.com>",
@@ -454,7 +499,7 @@
       "subject": "Update the default net to nn-76a8a7ffb820.nnue."
     },
     {
-      "commit_num": 1604,
+      "commit_num": 1612,
       "hash": "bc654257",
       "short": "bc654257",
       "author": "Liam Keegan <liam@keegan.ch>",
@@ -525,7 +570,7 @@
       "subject": "Add macOS and windows to CI"
     },
     {
-      "commit_num": 1605,
+      "commit_num": 1613,
       "hash": "a85928e7",
       "short": "a85928e7",
       "author": "Giacomo Lorenzetti <g.lorenz9@protonmail.com>",
@@ -596,7 +641,7 @@
       "subject": "Apply good/bad history reduction also when inCheck"
     },
     {
-      "commit_num": 1606,
+      "commit_num": 1614,
       "hash": "d957179d",
       "short": "d957179d",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -667,7 +712,7 @@
       "subject": "Prune illegal moves in qsearch earlier"
     },
     {
-      "commit_num": 1607,
+      "commit_num": 1615,
       "hash": "760b7462",
       "short": "760b7462",
       "author": "pb00067 <pb00067@PHXL0356.wp.lan>",
@@ -738,7 +783,7 @@
       "subject": "Simplify lowply-history scoring logic"
     },
     {
-      "commit_num": 1608,
+      "commit_num": 1616,
       "hash": "36f8d380",
       "short": "36f8d380",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -809,7 +854,7 @@
       "subject": "Don't save excluded move eval in TT"
     },
     {
-      "commit_num": 1609,
+      "commit_num": 1617,
       "hash": "dbd7f602",
       "short": "dbd7f602",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -880,7 +925,7 @@
       "subject": "Remove second futility pruning depth limit"
     },
     {
-      "commit_num": 1610,
+      "commit_num": 1618,
       "hash": "f4986f45",
       "short": "f4986f45",
       "author": "pb00067 <pb00067@PHXL0356.wp.lan>",
@@ -951,7 +996,7 @@
       "subject": "SEE: simplify stm variable initialization"
     },
     {
-      "commit_num": 1611,
+      "commit_num": 1619,
       "hash": "09b6d283",
       "short": "09b6d283",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -1022,7 +1067,7 @@
       "subject": "Remove futility pruning depth limit"
     },
     {
-      "commit_num": 1612,
+      "commit_num": 1620,
       "hash": "7cfc1f9b",
       "short": "7cfc1f9b",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1093,7 +1138,7 @@
       "subject": "Restore development version"
     },
     {
-      "commit_num": 1613,
+      "commit_num": 1621,
       "hash": "8fc297c5",
       "short": "8fc297c5",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -1164,7 +1209,7 @@
       "subject": "Update default net to nn-9e3c6298299a.nnue"
     },
     {
-      "commit_num": 1614,
+      "commit_num": 1622,
       "hash": "ec8dfe73",
       "short": "ec8dfe73",
       "author": "candirufish <38038147+candirufish@users.noreply.github.com>",

@@ -2,7 +2,7 @@
   "month": "2022-02",
   "commits": [
     {
-      "commit_num": 1445,
+      "commit_num": 1453,
       "hash": "174b038b",
       "short": "174b038b",
       "author": "Tomasz Sobczyk <tomasz.sobczyk1997@gmail.com>",
@@ -69,7 +69,7 @@
       "subject": "Use dynamic allocation for evaluation scratch TLS buffer."
     },
     {
-      "commit_num": 1446,
+      "commit_num": 1454,
       "hash": "5f781d36",
       "short": "5f781d36",
       "author": "mstembera <MissingEmail@email>",
@@ -136,7 +136,7 @@
       "subject": "Clean up and simplify some nnue code."
     },
     {
-      "commit_num": 1447,
+      "commit_num": 1455,
       "hash": "abef3e86",
       "short": "abef3e86",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -203,7 +203,7 @@
       "subject": "Fix clang warning on unused variable"
     },
     {
-      "commit_num": 1448,
+      "commit_num": 1456,
       "hash": "27139ded",
       "short": "27139ded",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -270,7 +270,7 @@
       "subject": "Adjust usage of LMR for 2nd move in move ordering"
     },
     {
-      "commit_num": 1449,
+      "commit_num": 1457,
       "hash": "84b1940f",
       "short": "84b1940f",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -337,7 +337,7 @@
       "subject": "Tune search at very long time control"
     },
     {
-      "commit_num": 1450,
+      "commit_num": 1458,
       "hash": "3ec6e1d2",
       "short": "3ec6e1d2",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -404,7 +404,7 @@
       "subject": "Big search tuning (version 2)"
     },
     {
-      "commit_num": 1451,
+      "commit_num": 1459,
       "hash": "b0b31558",
       "short": "b0b31558",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -471,7 +471,7 @@
       "subject": "Big search tuning"
     },
     {
-      "commit_num": 1452,
+      "commit_num": 1460,
       "hash": "08ac4e9d",
       "short": "08ac4e9d",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -538,7 +538,7 @@
       "subject": "Do less depth reduction in null move pruning for complex positions"
     },
     {
-      "commit_num": 1453,
+      "commit_num": 1461,
       "hash": "2da1d1bf",
       "short": "2da1d1bf",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -557,14 +557,55 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/win64bmi2/stockfish_22022022_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/win64avx2/stockfish_22022022_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/win64modern/stockfish_22022022_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/win64ssse/stockfish_22022022_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/win64/stockfish_22022022_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/linux64bmi2/stockfish_22022022_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/linux64avx2/stockfish_22022022_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/linux64modern/stockfish_22022022_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/linux64ssse/stockfish_22022022_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/2da1d1bf571e3fd2e1d6cf56b76a7504de1a9453/linux64/stockfish_22022022_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Add ARM NDK to Github Actions matrix\n\n- set the variable only for the required tests to keep simple the yml file\n- use NDK 21.x until will be fixed the Stockfish static build problem\n  with NDK 23.x\n- set the test for armv7, armv7-neon, armv8 builds:\n  - use armv7a-linux-androideabi21-clang++ compiler for armv7 armv7-neon\n  - enforce a static build\n  - silence the Warning for the unused compilation flag \"-pie\" with\n    the static build, otherwise the Github workflow stops\n  - use qemu to bench the build and get the signature\n\nMany thanks to @pschneider1968 that made all the hard work with NDK :)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/3924\n\nNo functional change\n",
       "subject": "Add ARM NDK to Github Actions matrix"
     },
     {
-      "commit_num": 1454,
+      "commit_num": 1462,
       "hash": "004ea2c2",
       "short": "004ea2c2",
       "author": "Giacomo Lorenzetti <g.lorenz9@protonmail.com>",
@@ -631,7 +672,7 @@
       "subject": "Small cleanups"
     },
     {
-      "commit_num": 1455,
+      "commit_num": 1463,
       "hash": "4d3950c6",
       "short": "4d3950c6",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -698,7 +739,7 @@
       "subject": "Reintroduce razoring"
     },
     {
-      "commit_num": 1456,
+      "commit_num": 1464,
       "hash": "95d7369e",
       "short": "95d7369e",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",

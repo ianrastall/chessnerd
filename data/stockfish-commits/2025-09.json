@@ -2,7 +2,7 @@
   "month": "2025-09",
   "commits": [
     {
-      "commit_num": 85,
+      "commit_num": 93,
       "hash": "e5c2dc5e",
       "short": "e5c2dc5e",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -69,7 +69,7 @@
       "subject": "remove clang-format workaround"
     },
     {
-      "commit_num": 86,
+      "commit_num": 94,
       "hash": "a82e2a4c",
       "short": "a82e2a4c",
       "author": "Sebastian Buchwald <UniQP@web.de>",
@@ -136,7 +136,7 @@
       "subject": "Replace deprecated macOS 13 runner image"
     },
     {
-      "commit_num": 87,
+      "commit_num": 95,
       "hash": "9b164d95",
       "short": "9b164d95",
       "author": "Timothy Herchen <timothy.herchen@gmail.com>",
@@ -155,51 +155,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/win64avx2/stockfish_25092819_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/win64modern/stockfish_25092819_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/win64ssse/stockfish_25092819_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/win64/stockfish_25092819_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/linux64bmi2/stockfish_25092819_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/linux64avx2/stockfish_25092819_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/linux64modern/stockfish_25092819_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/linux64ssse/stockfish_25092819_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/9b164d952061213da4fc0f7ac8646e44e8a77cd5/linux64/stockfish_25092819_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Shave some instructions off a hot loop in affine transform\n\nOn x86, GCC generates highly suboptimal code for this loop in its old form,\nabout 2x as many instructions as necessary. This decreases throughput\nespecially in an SMT setting. Clang does a better job but this change still has\nsome improvement. Note that the std::ptrdiff_t type is not optional; using an\nunsigned type brings back the bad assembly. (Not sure why, but it seems\nreliable on all the GCC versions I tested.)\n\npassed STC:\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 44672 W: 11841 L: 11527 D: 21304\nPtnml(0-2): 165, 4625, 12415, 4993, 138\nhttps://tests.stockfishchess.org/tests/view/68d8111efa806e2e8393b10e\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6331\n\nNo functional change\n",
       "subject": "Shave some instructions off a hot loop in affine transform"
     },
     {
-      "commit_num": 88,
+      "commit_num": 96,
       "hash": "4f4f78f8",
       "short": "4f4f78f8",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -262,7 +225,7 @@
       "subject": "Extend nodes pre qsearch only with deep enough tt entries"
     },
     {
-      "commit_num": 89,
+      "commit_num": 97,
       "hash": "6fa42d97",
       "short": "6fa42d97",
       "author": "Nonlinear2 <131959792+Nonlinear2@users.noreply.github.com>",
@@ -329,7 +292,7 @@
       "subject": "Simplify RFP return value"
     },
     {
-      "commit_num": 90,
+      "commit_num": 98,
       "hash": "fc54d873",
       "short": "fc54d873",
       "author": "Syine Mineta <skdty87@gmail.com>",
@@ -348,14 +311,55 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/win64bmi2/stockfish_25091306_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/win64avx2/stockfish_25091306_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/win64modern/stockfish_25091306_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/win64ssse/stockfish_25091306_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/win64/stockfish_25091306_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/linux64bmi2/stockfish_25091306_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/linux64avx2/stockfish_25091306_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/linux64modern/stockfish_25091306_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/linux64ssse/stockfish_25091306_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/fc54d8730174cdb5cfc4f7074b90128e706e4040/linux64/stockfish_25091306_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Adjustment of the aspiration window after fail high/low.\"\n\nThis reverts commit bfc7000597b8b5b0899e99bc911f6120a75c6297.\n\nFixes https://github.com/official-stockfish/Stockfish/issues/6296\n\nAfter this commit a bug has been reported when the position is close to\nmate or being mated. Since no workarounds have been suggested yet, it\nis best to revert this commit until a better solution is found.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6309\n\nBench: 2493363\n",
       "subject": "Revert \"Adjustment of the aspiration window after fail high/low.\""
     },
     {
-      "commit_num": 91,
+      "commit_num": 99,
       "hash": "5895f47d",
       "short": "5895f47d",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -422,7 +426,7 @@
       "subject": "Further simplify low ply history in evasions"
     },
     {
-      "commit_num": 92,
+      "commit_num": 100,
       "hash": "3073d82c",
       "short": "3073d82c",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -489,7 +493,7 @@
       "subject": "Simplify use of low-ply history in evasions"
     },
     {
-      "commit_num": 93,
+      "commit_num": 101,
       "hash": "c62e71e7",
       "short": "c62e71e7",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -552,7 +556,7 @@
       "subject": "Simplify a separate term in low ply history bonus formula"
     },
     {
-      "commit_num": 94,
+      "commit_num": 102,
       "hash": "bbad001a",
       "short": "bbad001a",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -615,7 +619,7 @@
       "subject": "Double PawnHistory size and update formula"
     },
     {
-      "commit_num": 95,
+      "commit_num": 103,
       "hash": "a47a1c18",
       "short": "a47a1c18",
       "author": "Syine Mineta <skdty87@gmail.com>",
@@ -682,7 +686,7 @@
       "subject": "Penalty to TT move history on MultiCut"
     },
     {
-      "commit_num": 96,
+      "commit_num": 104,
       "hash": "40aeb5a4",
       "short": "40aeb5a4",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -749,7 +753,7 @@
       "subject": "Simplify away conthist 0"
     },
     {
-      "commit_num": 97,
+      "commit_num": 105,
       "hash": "f922fb5d",
       "short": "f922fb5d",
       "author": "Robert Nurnberg @ elitebook <robert.nurnberg@gmx.de>",
@@ -816,7 +820,7 @@
       "subject": "add multithreaded matetrack runs to CI"
     },
     {
-      "commit_num": 98,
+      "commit_num": 106,
       "hash": "1a3a9c90",
       "short": "1a3a9c90",
       "author": "Disservin <disservin.social@gmail.com>",
@@ -879,7 +883,7 @@
       "subject": "simplify upload_binaries ci"
     },
     {
-      "commit_num": 99,
+      "commit_num": 107,
       "hash": "d5f152b5",
       "short": "d5f152b5",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -946,7 +950,7 @@
       "subject": "Reintroduce #6259"
     },
     {
-      "commit_num": 100,
+      "commit_num": 108,
       "hash": "7a36c0e9",
       "short": "7a36c0e9",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1013,7 +1017,7 @@
       "subject": "Remove quiet move streak"
     },
     {
-      "commit_num": 101,
+      "commit_num": 109,
       "hash": "415a1ad4",
       "short": "415a1ad4",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1072,7 +1076,7 @@
       "subject": "Simplify Probcut Clamp Further"
     },
     {
-      "commit_num": 102,
+      "commit_num": 110,
       "hash": "adfddd2c",
       "short": "adfddd2c",
       "author": "Shawn Xu <xu107288696@gmail.com>",
