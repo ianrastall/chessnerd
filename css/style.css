@@ -574,6 +574,7 @@ input[type="checkbox"], input[type="radio"] {
     overflow: hidden;
     background: var(--bg-primary);
     user-select: none;
+    touch-action: none;
 }
 
 .square {
@@ -602,7 +603,22 @@ input[type="checkbox"], input[type="radio"] {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+}
+
+.piece.drag-ghost {
+    position: fixed;
     pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    opacity: 0.9;
+    cursor: grabbing;
+}
+
+.piece.drag-source {
+    opacity: 0.35;
 }
 
 .square.highlight {

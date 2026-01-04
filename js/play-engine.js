@@ -20,6 +20,7 @@
     const engineSideLabel = document.getElementById('engineSideLabel');
     const engineLogEl = document.getElementById('engineLog');
     const analyzeGameBtn = document.getElementById('analyzeGameBtn');
+    const dragThreshold = 6;
 
     if (!boardEl) return;
 
@@ -43,6 +44,8 @@
     let analysisResults = [];
     let analysisCurrent = null;
     let analysisMoveTime = 0;
+    let dragState = null;
+    let suppressPieceClick = false;
 
     function setStatus(msg, type = 'success') {
         statusMessage.textContent = msg;
@@ -336,6 +339,149 @@
         if (ranksRightEl) ranksRightEl.innerHTML = ranks.map((r) => `<span>${r}</span>`).join('');
     }
 
+    function updateSelectionIndicators() {
+        const targetSet = new Set(legalTargets);
+        boardEl.querySelectorAll('.square').forEach((sq) => {
+            const coord = sq.dataset.coord;
+            sq.classList.toggle('selected', coord === selectedSquare);
+            sq.classList.toggle('target', targetSet.has(coord));
+        });
+    }
+
+    function getSquareFromPoint(x, y) {
+        const el = document.elementFromPoint(x, y);
+        return el ? el.closest('.square') : null;
+    }
+
+    function canDragFrom(square) {
+        if (game.game_over()) return false;
+        if (activePly !== game.history().length) return false;
+        if (engineThinking && game.turn() === engineSide) return false;
+        const piece = game.get(square);
+        if (!piece) return false;
+        if (piece.color === engineSide) return false;
+        return piece.color === game.turn();
+    }
+
+    function createDragGhost(pieceEl) {
+        const ghost = pieceEl.cloneNode(true);
+        ghost.classList.add('drag-ghost');
+        const rect = pieceEl.getBoundingClientRect();
+        ghost.style.width = `${rect.width}px`;
+        ghost.style.height = `${rect.height}px`;
+        document.body.appendChild(ghost);
+        return ghost;
+    }
+
+    function positionDragGhost(ghost, x, y) {
+        ghost.style.left = `${x}px`;
+        ghost.style.top = `${y}px`;
+    }
+
+    function clearDragVisuals(state) {
+        if (state?.ghost) state.ghost.remove();
+        if (state?.pieceEl) state.pieceEl.classList.remove('drag-source');
+    }
+
+    function resetSuppressClick() {
+        if (!suppressPieceClick) return;
+        setTimeout(() => {
+            suppressPieceClick = false;
+        }, 0);
+    }
+
+    function detachDragListeners() {
+        window.removeEventListener('pointermove', handleDragMove);
+        window.removeEventListener('pointerup', handleDragEnd);
+        window.removeEventListener('pointercancel', handleDragCancel);
+    }
+
+    function beginDrag(ev, square, pieceEl) {
+        if (ev.button !== 0) return;
+        if (!canDragFrom(square)) return;
+        dragState = {
+            from: square,
+            pointerId: ev.pointerId,
+            startX: ev.clientX,
+            startY: ev.clientY,
+            pieceEl,
+            ghost: null,
+            started: false
+        };
+        window.addEventListener('pointermove', handleDragMove);
+        window.addEventListener('pointerup', handleDragEnd);
+        window.addEventListener('pointercancel', handleDragCancel);
+    }
+
+    function handleDragMove(ev) {
+        if (!dragState || ev.pointerId !== dragState.pointerId) return;
+        const dx = ev.clientX - dragState.startX;
+        const dy = ev.clientY - dragState.startY;
+        if (!dragState.started) {
+            if (Math.hypot(dx, dy) < dragThreshold) return;
+            dragState.started = true;
+            suppressPieceClick = true;
+            selectedSquare = dragState.from;
+            legalTargets = game.moves({ square: dragState.from, verbose: true }).map((m) => m.to);
+            updateSelectionIndicators();
+            dragState.ghost = createDragGhost(dragState.pieceEl);
+            dragState.pieceEl.classList.add('drag-source');
+        }
+        if (dragState.ghost) {
+            positionDragGhost(dragState.ghost, ev.clientX, ev.clientY);
+        }
+        ev.preventDefault();
+    }
+
+    function handleDragEnd(ev) {
+        if (!dragState || ev.pointerId !== dragState.pointerId) return;
+        const state = dragState;
+        dragState = null;
+        detachDragListeners();
+
+        if (!state.started) {
+            return;
+        }
+
+        clearDragVisuals(state);
+        resetSuppressClick();
+
+        const dropSquareEl = getSquareFromPoint(ev.clientX, ev.clientY);
+        const target = dropSquareEl?.dataset.coord;
+        if (!target || !legalTargets.includes(target)) {
+            if (target) {
+                setStatus('Illegal move.', 'error');
+            }
+            selectedSquare = null;
+            legalTargets = [];
+            renderBoard();
+            return;
+        }
+
+        attemptMove(state.from, target);
+    }
+
+    function handleDragCancel(ev) {
+        if (!dragState || (ev && ev.pointerId !== dragState.pointerId)) return;
+        const state = dragState;
+        dragState = null;
+        detachDragListeners();
+        clearDragVisuals(state);
+        resetSuppressClick();
+        selectedSquare = null;
+        legalTargets = [];
+        renderBoard();
+    }
+
+    function cancelActiveDrag() {
+        if (!dragState) return;
+        const state = dragState;
+        dragState = null;
+        detachDragListeners();
+        clearDragVisuals(state);
+        suppressPieceClick = false;
+    }
+
     function renderBoard() {
         boardEl.innerHTML = '';
         boardEl.dataset.orientation = orientation;
@@ -371,6 +517,16 @@
                     const pieceEl = document.createElement('div');
                     pieceEl.className = 'piece';
                     pieceEl.dataset.piece = piece.color + piece.type.toUpperCase();
+                    pieceEl.addEventListener('pointerdown', (ev) => beginDrag(ev, square, pieceEl));
+                    pieceEl.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        if (suppressPieceClick) {
+                            ev.preventDefault();
+                            suppressPieceClick = false;
+                            return;
+                        }
+                        handleSquareClick(square);
+                    });
                     squareEl.appendChild(pieceEl);
                 }
 
@@ -418,6 +574,7 @@
     }
 
     function refreshUI() {
+        cancelActiveDrag();
         renderBoard();
         renderMoveList();
         syncPgn();
