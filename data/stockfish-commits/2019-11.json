@@ -2,7 +2,7 @@
   "month": "2019-11",
   "commits": [
     {
-      "commit_num": 2153,
+      "commit_num": 2162,
       "hash": "f0047ce0",
       "short": "f0047ce0",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -57,7 +57,7 @@
       "subject": "King proximity tweak for passed pawns"
     },
     {
-      "commit_num": 2154,
+      "commit_num": 2163,
       "hash": "97a0e4e8",
       "short": "97a0e4e8",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -112,7 +112,7 @@
       "subject": "UnblockedStorm tuned"
     },
     {
-      "commit_num": 2155,
+      "commit_num": 2164,
       "hash": "54253bcc",
       "short": "54253bcc",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -167,7 +167,7 @@
       "subject": "Extend bench to static evaluations"
     },
     {
-      "commit_num": 2156,
+      "commit_num": 2165,
       "hash": "df340a83",
       "short": "df340a83",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -222,7 +222,7 @@
       "subject": "Simplify king danger"
     },
     {
-      "commit_num": 2157,
+      "commit_num": 2166,
       "hash": "53125902",
       "short": "53125902",
       "author": "Moez Jellouli <37274752+MJZ1977@users.noreply.github.com>",
@@ -277,7 +277,7 @@
       "subject": "Extend last non-pawn captures"
     },
     {
-      "commit_num": 2158,
+      "commit_num": 2167,
       "hash": "87ed9fac",
       "short": "87ed9fac",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",
@@ -332,7 +332,7 @@
       "subject": "King danger: retire attacked-by-bishop defense"
     },
     {
-      "commit_num": 2159,
+      "commit_num": 2168,
       "hash": "3f419139",
       "short": "3f419139",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -387,7 +387,7 @@
       "subject": "Do lmr for more captures"
     },
     {
-      "commit_num": 2160,
+      "commit_num": 2169,
       "hash": "1fdf1f1f",
       "short": "1fdf1f1f",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -442,7 +442,7 @@
       "subject": "Simplify endgame factor for opposite colored bishops"
     },
     {
-      "commit_num": 2161,
+      "commit_num": 2170,
       "hash": "e0f42aa9",
       "short": "e0f42aa9",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -497,7 +497,7 @@
       "subject": "Simplify advanced pawn push pruning"
     },
     {
-      "commit_num": 2162,
+      "commit_num": 2171,
       "hash": "37698b03",
       "short": "37698b03",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -552,7 +552,7 @@
       "subject": "Outpost Endgame values"
     },
     {
-      "commit_num": 2163,
+      "commit_num": 2172,
       "hash": "34681382",
       "short": "34681382",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -571,43 +571,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win64bmi2/stockfish_19111617_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win64modern/stockfish_19111617_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win64/stockfish_19111617_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win32/stockfish_19111617_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/linux64bmi2/stockfish_19111617_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/linux64modern/stockfish_19111617_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/linux64/stockfish_19111617_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce king flank defenders\n\nThis patch implements what we have been trying for quite some time -\ndependance of kingdanger on balance of attackers and defenders of king\nflank, to avoid overestimate attacking power if the opponent has enough\ndefenders of king position. We already have some form of it in bishop\nand knight defenders - this is further work in this direction.\n\nWhat to do based on this?\n\n1) constant 4 is arbitrary, maybe it is not optimal\n2) maybe we can use quadratic formula as in kingflankattack\n3) simplification into alrealy existing terms is always a possibility :)\n4) overall kingdanger tuning always can be done.\n\npassed STC:\nhttp://tests.stockfishchess.org/tests/view/5dcf40560ebc590256325f30\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 26298 W: 5819 L: 5632 D: 14847\n\npassed LTC:\nhttp://tests.stockfishchess.org/tests/view/5dcfa5760ebc590256326464\nLLR: 2.96 (-2.94,2.94) [0.00,3.50]\nTotal: 30600 W: 5042 L: 4784 D: 20774\n\nCloses https://github.com/official-stockfish/Stockfish/pull/2415\n\nBench: 4496847\n",
       "subject": "Introduce king flank defenders"
     },
     {
-      "commit_num": 2164,
+      "commit_num": 2173,
       "hash": "fe124896",
       "short": "fe124896",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -662,7 +633,7 @@
       "subject": "Use exploration rate for reductions"
     },
     {
-      "commit_num": 2165,
+      "commit_num": 2174,
       "hash": "a00a3369",
       "short": "a00a3369",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -717,7 +688,7 @@
       "subject": "Prune before extension"
     },
     {
-      "commit_num": 2166,
+      "commit_num": 2175,
       "hash": "0256416b",
       "short": "0256416b",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -772,7 +743,7 @@
       "subject": "Remove unneeded & incorrect check."
     },
     {
-      "commit_num": 2167,
+      "commit_num": 2176,
       "hash": "a1319751",
       "short": "a1319751",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -827,7 +798,7 @@
       "subject": "Rank-based outposts"
     },
     {
-      "commit_num": 2168,
+      "commit_num": 2177,
       "hash": "9ab25909",
       "short": "9ab25909",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -882,7 +853,7 @@
       "subject": "Shallow depth pruning on NonPV advanced pawn push"
     },
     {
-      "commit_num": 2169,
+      "commit_num": 2178,
       "hash": "44b6697f",
       "short": "44b6697f",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -937,7 +908,7 @@
       "subject": "Remove explicit moveCount pruning"
     },
     {
-      "commit_num": 2170,
+      "commit_num": 2179,
       "hash": "9f312c80",
       "short": "9f312c80",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -992,7 +963,7 @@
       "subject": "Revert \"Rook PSQT Tuned\""
     },
     {
-      "commit_num": 2171,
+      "commit_num": 2180,
       "hash": "3804effb",
       "short": "3804effb",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -1047,7 +1018,7 @@
       "subject": "Rook PSQT Tuned"
     },
     {
-      "commit_num": 2172,
+      "commit_num": 2181,
       "hash": "ef38046e",
       "short": "ef38046e",
       "author": "MichaelB7 <michaelbyrne1978@gmail.com>",
@@ -1066,14 +1037,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/win64bmi2/stockfish_19110500_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/win64modern/stockfish_19110500_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/win64/stockfish_19110500_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/win32/stockfish_19110500_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/linux64bmi2/stockfish_19110500_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/linux64modern/stockfish_19110500_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/ef38046e734490499e4b6254dbf4fc434bf37fc9/linux64/stockfish_19110500_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Remove shuffle extension\n\nIt was noted in an earlier patch that all of the positions below needed the\nShuffle Detection idea to be solved:\n\n3r4/p3r1pk/PpBb1pRp/1KpPpP1P/2P1P1R1/8/8/8 b - - 32 86\n8/8/8/1k6/2p5/p1K5/N2B2r1/8 b - - 59 109\n1r4k1/1r1bq3/4p1p1/3pPpPp/pNpN1P1P/P1PnQ3/1PK5/1R3R2 b - - 13 82\n5k2/3b4/5p2/p1p1pPp1/PpPpP1Pp/1P1P3P/8/3R1K2 w - - 20 1\n\nBut Stockfish has envolved a bit since the Shuffle Detection patch introduction,\nand this patch proves Stockfish is able to solves these drawn positions without it,\neven on single core without EGTB.\n\nPassed STC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 14231 W: 3114 L: 2978 D: 8139\nhttp://tests.stockfishchess.org/tests/view/5dbe1a610ebc5925b64f09d9\n\nPassed LTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 42781 W: 6917 L: 6831 D: 29033\nhttp://tests.stockfishchess.org/tests/view/5dbe24c20ebc5925b64f0a7a\n\nPassed VLTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 32556 W: 4573 L: 4469 D: 23514\nhttp://tests.stockfishchess.org/tests/view/5dbec3830ebc5925b64f11aa\n\nCloses https://github.com/official-stockfish/Stockfish/pull/2394\n\nBench: 4362323\n\n----------------------------\n\nExample of search by Michael Byrne for the FEN position:\nq1B5/1P1q4/8/8/8/6R1/8/1K1k4 w - - 0 1\n\nThis position is win for white and the only moves that wins is Rg1 - all other moves\neither draw or lose. With single core and 1024M hash, it is solved without shuffle\ndetection in 38 seconds on my machine (with no EGTB). This was the position that was\nlocked in a loop in the initial shuffle detection patch!\n\n```\ndep\tscore\tnodes\ttime\t(not shown:  tbhits\tknps\tseldep)\n 50\t+1.71 \t298.9M\t2:43.63\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke5 Kb2 Kf4 Bd1 Qe5+ Kb1 Qe4+ Ka2 Qd5+ Rb3 Qd2+ Ka3 Qc1+ Kb4 Qc7 Ka4 Qb8 Rb6 Ke5 Kb3 Qg8+ Kb4 Qf8+ Ka5 Qb8 Bb3 Kd4 Kb4 Qf8+ Ka4 Qb8 Ka5 K\n<snip>\n 49\t+1.68 \t288.5M\t2:38.35\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke5 Kb2 Kf4 Bd1 Qe5+ Kb1 Qe4+ Ka2 Qd5+ Rb3 Qd2+ Ka3 Qc1+ Kb4 Qc7 Ka4 Qb8 Rb6 Ke5 Kb3 Qg8+ Kb4 Qf8+ Ka5 Qb8 Bb3 Kd4 Kb4 Ke3 Be6 Ke4 Bc4 Ke\n<snip>\n 48\t+1.78 \t228.5M\t2:01.93\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke5 Kb2 Kf4 Bd1 Qe5+ Kb1 Qe4+ Ka2 Qd5+ Rb3 Qd2+ Ka3 Qa5+ Kb2 Qe5+ Ka2 Qb8 Rb5 Ke3 Kb1 Ke4 Bb3 Kf4 Be6 Ke3 Rb4 Kd3 Kb2 Ke3 Bd5 Qe5+ Kc2 Qh\n<snip>\n 46\t+1.49 \t198.4M\t1:44.89\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke5 Kb2 Kf4 Bd1 Qe5+ Kb1 Qe4+ Ka2 Qd5+ Rb3 Qd2+ Ka3 Qc1+ Kb4 Qc7 Ka4 Qb8 Rb6 Qe8+ Rb5 Qb8 Bc2 Qa7+ Kb3 Qe3+ Kc4 Qe6+ Kb4 Qd6+ Kb3 Qb8 Rb4\n<snip>\n 45\t+1.45 \t154.5M\t1:20.75\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke3 Bg2 Kd4 Rb5 Kc4 Bf1+ Kd4 Kb2 Qh2+ Kb3 Qg3+ Ka4 Qb8 Be2 Ke3 Bc4 Kf4 Kb4 Qd6+ Kc3 Qb8 Kc2 Ke4 Be6 Qh2+ Kb3 Qg3+ Ka4 Qb8 Bb3 Kd4 Bd5 Ke3\n<snip>\n 44\t+1.36 \t141.9M\t1:14.40\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Qd6 Rc2+ Kd3 Be2+ Ke3 Rb2 Qb8 Bd1 Ke4 Rb5 Kd4 Bf3 Kc4 Be2+ Kc3 Rb6 Kd2 Bc4 Kc3 Bd5 Kd4 Bg2 Ke5 Kb2 Kd4 Rb5 Kc4 Bf1+ Kd4 Be2 Ke4 Bc4 Qh2+ Kb3 Qg3+ Ka4 Qb8 Bd5+ Kd4 Be6 Ke4\n<snip>\n 43\t+1.36 \t134.1M\t1:10.46\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Qd6 Rc2+ Kd3 Be2+ Ke3 Rb2 Qb8 Bd1 Ke4 Rb5 Kd4 Bf3 Kc4 Be2+ Kc3 Rb6 Kd2 Bc4 Kc3 Be6 Kd4 Rb5 Kc3 Bf7 Kd4 Kb2 Ke4 Kb3 Kf4 Kc3 Ke4 Kb2 Qh2+ Kb3 Qg3+ Ka4 Qb8 Rb4+ Ke5 Rb6 Kf4\n<snip>\n 42\t+1.36 \t118.7M\t1:01.60\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Qd6 Rc2+ Kd3 Be2+ Ke3 Rb2 Qb8 Bd1 Ke4 Rb5 Kd4 Bf3 Kc4 Be2+ Kc3 Rb6 Kd2 Bc4 Kc3 Be6 Kd4 Rb5 Kc3 Bf7 Kd4 Kb2 Ke4 Bc4 Qh2+ Kb3 Qg3+ Ka4 Qb8 Bd5+ Kd4 Bb3 Qa7+ Kb4 Qb8 Bc4 Ke4\n<snip>\n 41\t+1.38 \t110.3M\t0:56.80\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Qd6 Rc2+ Kd3 Be2+ Ke3 Rb2 Qb8 Bd1 Ke4 Rb5 Kd4 Bf3 Kc4 Be2+ Kc3 Rb6 Kd2 Bc4 Kc3 Be6 Kd4 Rb5 Kc3 Bd5 Kd4 Ba2 Ke4 Be6 Kd4 Kb2 Qh2+ Kb3 Qb8 Bc4 Ke3 Kc3 Qh8+ Kb4 Qb2+ Ka4 Qa1+\n <snip>\n 39\t+1.25 \t87.3M  \t0:44.48\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke5 Kb2 Kf4 Bd1 Kg5 Kb1 Kf5 Bb3 Ke5 Kb2 Kd4 Rb5 Qh2+ Bc2 Qb8 Bd1 Kc4 Be2+ Kd4 Kc2 Ke3 Bd1 Kd4 Kb3 Qg3+ Ka4 Qb8 Bb3 Kc3 Rb6 Kd4 Kb5 Ke5 K\n 38\t+1.25 \t82.0M  \t0:41.90\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kd4 Rb5 Kc4 Be2+ Kc3 Rb6 Kd4 Bf3 Ke5 Kb2 Kf4 Bd1 Kg5 Kb1 Kf5 Bb3 Ke5 Kb2 Kd4 Rb5 Qh2+ Bc2 Qb8 Kb3 Qg3+ Ka4 Qb8 Bb3 Kc3 Rb6 Kd4 Kb5 Ke5 Kb4 Kd4 Be6 Kd3 Bd5 Kd4 Bf3 Ke5 Be\n<snip>\n 37\t+0.13 \t79.3M  \t0:40.44\tRg1+ Kd2 Rg2+ Kc3 Rc2+ Kb3 Rb2+ Kc3 Bxd7 Qf8 Ba4 Qb8 Bd1 Kc4 Bf3 Kd4 Rb5 Kc4 Rb6 Kd4 Rb2 Ke5 Rb3 Kd6 Rb5 Ke6 Rb4 Kd6 Kc2 Kc5 Kb3 Kd6 Be4 Ke7 Kc3 Qc7+ Kd3 Qg3+ Kc2 Qf2+ Kb3 Qe3+ Ka2 Qa7+ Kb2 Qb8 Kb3 Kd6 Bf3 Qg8+ Ka3 Kc7 b8=R Qx\n 37\t+0.67!\t78.3M  \t0:39.90\tRg1+!\n 37\t+0.47!\t77.0M  \t0:39.18\tRg1+!\n 37\t+0.32!\t76.8M  \t0:39.11\tRg1+!\n 37\t+0.23!\t76.8M  \t0:39.07\tRg1+!\n 36\t+0.57!\t76.1M  \t0:38.72\tRg1+!\n 36\t+0.37!\t75.8M  \t0:38.59\tRg1+!\n 36\t+0.23!\t75.7M  \t0:38.51\tRg1+!\n 36\t+0.13!\t75.6M  \t0:38.49\tRg1+!\n 35\t+0.03?\t58.0M  \t0:29.84\tbxa8=Q Qb5+?\n```\n",
       "subject": "Remove shuffle extension"
     },
     {
-      "commit_num": 2173,
+      "commit_num": 2182,
       "hash": "474d1335",
       "short": "474d1335",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -1128,7 +1128,7 @@
       "subject": "Combo of Parameter Tweaks"
     },
     {
-      "commit_num": 2174,
+      "commit_num": 2183,
       "hash": "cff9a867",
       "short": "cff9a867",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",

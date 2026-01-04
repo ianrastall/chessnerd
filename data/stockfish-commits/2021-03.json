@@ -2,7 +2,7 @@
   "month": "2021-03",
   "commits": [
     {
-      "commit_num": 1720,
+      "commit_num": 1729,
       "hash": "c489df6f",
       "short": "c489df6f",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -73,7 +73,7 @@
       "subject": "Simplify King Evasion"
     },
     {
-      "commit_num": 1721,
+      "commit_num": 1730,
       "hash": "62a0b65f",
       "short": "62a0b65f",
       "author": "mstembera <MissingEmail@email>",
@@ -144,7 +144,7 @@
       "subject": "Simplify and unify FRC cornered bishop."
     },
     {
-      "commit_num": 1722,
+      "commit_num": 1731,
       "hash": "b862c8d4",
       "short": "b862c8d4",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -215,7 +215,7 @@
       "subject": "Small clean-up"
     },
     {
-      "commit_num": 1723,
+      "commit_num": 1732,
       "hash": "83eac08e",
       "short": "83eac08e",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -286,7 +286,7 @@
       "subject": "Small cleanups (march 2021)"
     },
     {
-      "commit_num": 1724,
+      "commit_num": 1733,
       "hash": "93939572",
       "short": "93939572",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -357,7 +357,7 @@
       "subject": "Introduce least_significant_square_bb()"
     },
     {
-      "commit_num": 1725,
+      "commit_num": 1734,
       "hash": "830f5971",
       "short": "830f5971",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -428,7 +428,7 @@
       "subject": "Simplify move generation (2/2)"
     },
     {
-      "commit_num": 1726,
+      "commit_num": 1735,
       "hash": "4b509559",
       "short": "4b509559",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -499,7 +499,7 @@
       "subject": "Simplify move generation (1/2)"
     },
     {
-      "commit_num": 1727,
+      "commit_num": 1736,
       "hash": "50890616",
       "short": "50890616",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -570,7 +570,7 @@
       "subject": "Change definition of between_bb()"
     },
     {
-      "commit_num": 1728,
+      "commit_num": 1737,
       "hash": "ace9632c",
       "short": "ace9632c",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -589,14 +589,59 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/win64bmi2/stockfish_21031911_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/win64avx2/stockfish_21031911_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/win64modern/stockfish_21031911_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/win64ssse/stockfish_21031911_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/win64/stockfish_21031911_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/win32/stockfish_21031911_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/linux64bmi2/stockfish_21031911_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/linux64avx2/stockfish_21031911_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/linux64modern/stockfish_21031911_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/linux64ssse/stockfish_21031911_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/ace9632c6713e346ccca73b3e2edc046c1f5527c/linux64/stockfish_21031911_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Add a specific FRC correction from classical to NNUE\n\nour net currently is not trained on FRC games, and so doesn't know about the important pattern of a bishop that is cornered in FRC.\nThis patch introduces a term we have in the classical evaluation for this case, and adds it to the NNUE eval.\n\nSince fishtest doesn't support FRC right now, the patch was tested locally at STC conditions,\nstarting from the book of FRC starting positions.\n\nScore of master vs patch: 993 - 2226 - 6781  [0.438] 10000\n\nWhich corresponds to approximately 40 Elo\n\nThe patch passes non-regression testing for traditional chess (where it adds one branch).\n\npassed STC:\nhttps://tests.stockfishchess.org/tests/view/604fa2532433018de7a38b67\nLLR: 2.95 (-2.94,2.94) {-1.25,0.25}\nTotal: 30560 W: 2701 L: 2636 D: 25223\nPtnml(0-2): 88, 2056, 10921, 2133, 82\n\npassed STC also in an earlier version:\nhttps://tests.stockfishchess.org/tests/view/604f61282433018de7a38b4d\n\ncloses https://github.com/official-stockfish/Stockfish/pull/3398\n\nNo functional change\n",
       "subject": "Add a specific FRC correction from classical to NNUE"
     },
     {
-      "commit_num": 1729,
+      "commit_num": 1738,
       "hash": "ec42154e",
       "short": "ec42154e",
       "author": "Guy Vreuls <guyvreuls@gmail.com>",
@@ -667,7 +712,7 @@
       "subject": "Use reference instead of pointer for pop_lsb() signature"
     },
     {
-      "commit_num": 1730,
+      "commit_num": 1739,
       "hash": "d58e8369",
       "short": "d58e8369",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -738,7 +783,7 @@
       "subject": "Remove advanced_pawn_push()"
     },
     {
-      "commit_num": 1731,
+      "commit_num": 1740,
       "hash": "f3b296c2",
       "short": "f3b296c2",
       "author": "Topologist <thelisting@web.de>",
@@ -809,7 +854,7 @@
       "subject": "Change advanced pawn push threshold"
     },
     {
-      "commit_num": 1732,
+      "commit_num": 1741,
       "hash": "b7427462",
       "short": "b7427462",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -880,7 +925,7 @@
       "subject": "Use Bitboard over Square in movegen"
     },
     {
-      "commit_num": 1733,
+      "commit_num": 1742,
       "hash": "d4b864ff",
       "short": "d4b864ff",
       "author": "noobpwnftw <guo.bojun@gmail.com>",

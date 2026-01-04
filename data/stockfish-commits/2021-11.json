@@ -2,7 +2,7 @@
   "month": "2021-11",
   "commits": [
     {
-      "commit_num": 1517,
+      "commit_num": 1526,
       "hash": "4b86ef8c",
       "short": "4b86ef8c",
       "author": "Michael Ortmann <41313082+michaelortmann@users.noreply.github.com>",
@@ -69,7 +69,7 @@
       "subject": "Fix typos in comments, adjust readme"
     },
     {
-      "commit_num": 1518,
+      "commit_num": 1527,
       "hash": "ca3c1c5f",
       "short": "ca3c1c5f",
       "author": "noobpwnftw <guo.bojun@gmail.com>",
@@ -136,7 +136,7 @@
       "subject": "Enable compilation on older Windows systems"
     },
     {
-      "commit_num": 1519,
+      "commit_num": 1528,
       "hash": "c1f9a359",
       "short": "c1f9a359",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -203,7 +203,7 @@
       "subject": "Correctly reset bestMoveChanges"
     },
     {
-      "commit_num": 1520,
+      "commit_num": 1529,
       "hash": "95a2ac1e",
       "short": "95a2ac1e",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -270,7 +270,7 @@
       "subject": "Simplify reduction on rootNode when bestMoveChanges is high"
     },
     {
-      "commit_num": 1521,
+      "commit_num": 1530,
       "hash": "e4a0c6c7",
       "short": "e4a0c6c7",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -337,7 +337,7 @@
       "subject": "Update default net to nn-4f56ecfca5b7.nnue"
     },
     {
-      "commit_num": 1522,
+      "commit_num": 1531,
       "hash": "af050e5e",
       "short": "af050e5e",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -404,7 +404,7 @@
       "subject": "Refine futility pruning for parent nodes"
     },
     {
-      "commit_num": 1523,
+      "commit_num": 1532,
       "hash": "cb9c2594",
       "short": "cb9c2594",
       "author": "Tomasz Sobczyk <tomasz.sobczyk1997@gmail.com>",
@@ -471,7 +471,7 @@
       "subject": "Update architecture to \"SFNNv4\". Update network to nn-6877cd24400e.nnue."
     },
     {
-      "commit_num": 1524,
+      "commit_num": 1533,
       "hash": "8bb5a436",
       "short": "8bb5a436",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -490,14 +490,55 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/win64bmi2/stockfish_21112714_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/win64avx2/stockfish_21112714_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/win64modern/stockfish_21112714_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/win64ssse/stockfish_21112714_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/win64/stockfish_21112714_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/linux64bmi2/stockfish_21112714_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/linux64avx2/stockfish_21112714_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/linux64modern/stockfish_21112714_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/linux64ssse/stockfish_21112714_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/8bb5a436b240d22e3e9729a1cd094169941afd7c/linux64/stockfish_21112714_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Adjust usage of history in futility pruning\n\nThis patch refines 0ac8aca893dd2052f8433e0b4a3d65073266b00f that uses history heuristics in futility pruning.\nNow it adds main history of the move to in and also increases effect by factor of 2.\n\npassed STC\nhttps://tests.stockfishchess.org/tests/view/61a156829e83391467a2b2c9\nLLR: 2.94 (-2.94,2.94) <0.00,2.50>\nTotal: 68464 W: 17920 L: 17587 D: 32957\nPtnml(0-2): 239, 7711, 18025, 7992, 265\n\npassed LTC\nhttps://tests.stockfishchess.org/tests/view/61a1bde99e83391467a2b305\nLLR: 2.95 (-2.94,2.94) <0.50,3.00>\nTotal: 26088 W: 6926 L: 6674 D: 12488\nPtnml(0-2): 18, 2619, 7531, 2845, 31\n\ncloses https://github.com/official-stockfish/Stockfish/pull/3812\n\nbench 6804653\n",
       "subject": "Adjust usage of history in futility pruning"
     },
     {
-      "commit_num": 1525,
+      "commit_num": 1534,
       "hash": "4bb11e82",
       "short": "4bb11e82",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -564,7 +605,7 @@
       "subject": "Tune NNUE scaling params"
     },
     {
-      "commit_num": 1526,
+      "commit_num": 1535,
       "hash": "64f21ecd",
       "short": "64f21ecd",
       "author": "hengyu <hengyu@outlook.com>",
@@ -631,7 +672,7 @@
       "subject": "Small clean-up"
     },
     {
-      "commit_num": 1527,
+      "commit_num": 1536,
       "hash": "282644f1",
       "short": "282644f1",
       "author": "pb00067 <pb00067@PHXL0356.wp.lan>",
@@ -698,7 +739,7 @@
       "subject": "Remove depth dependence and use same limit (2000) as stat_bonus"
     },
     {
-      "commit_num": 1528,
+      "commit_num": 1537,
       "hash": "0ac8aca8",
       "short": "0ac8aca8",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -765,7 +806,7 @@
       "subject": "Use fraction of history heuristics in futility pruning"
     },
     {
-      "commit_num": 1529,
+      "commit_num": 1538,
       "hash": "9ee58dc7",
       "short": "9ee58dc7",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -832,7 +873,7 @@
       "subject": "Update default net to nn-3678835b1d3d.nnue"
     },
     {
-      "commit_num": 1530,
+      "commit_num": 1539,
       "hash": "092b27a6",
       "short": "092b27a6",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -899,7 +940,7 @@
       "subject": "Less futility pruning."
     },
     {
-      "commit_num": 1531,
+      "commit_num": 1540,
       "hash": "a943b1d2",
       "short": "a943b1d2",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -966,7 +1007,7 @@
       "subject": "Remove appveyor CI"
     },
     {
-      "commit_num": 1532,
+      "commit_num": 1541,
       "hash": "7218ec4d",
       "short": "7218ec4d",
       "author": "noobpwnftw <guo.bojun@gmail.com>",
@@ -1033,7 +1074,7 @@
       "subject": "Revert and fix earlier windows NUMA patch"
     },
     {
-      "commit_num": 1533,
+      "commit_num": 1542,
       "hash": "a5a89b27",
       "short": "a5a89b27",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -1100,7 +1141,7 @@
       "subject": "Introduce Optimism"
     },
     {
-      "commit_num": 1534,
+      "commit_num": 1543,
       "hash": "f5df5171",
       "short": "f5df5171",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -1167,7 +1208,7 @@
       "subject": "Simplify Pv nodes related logic in LMR"
     },
     {
-      "commit_num": 1535,
+      "commit_num": 1544,
       "hash": "9048ac00",
       "short": "9048ac00",
       "author": "noobpwnftw <guo.bojun@gmail.com>",
@@ -1234,7 +1275,7 @@
       "subject": "Fix processor group binding under Windows."
     },
     {
-      "commit_num": 1536,
+      "commit_num": 1545,
       "hash": "c4a1390f",
       "short": "c4a1390f",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
@@ -1301,7 +1342,7 @@
       "subject": "Simplify away the Reverse Move penalty"
     },
     {
-      "commit_num": 1537,
+      "commit_num": 1546,
       "hash": "1a5c21dc",
       "short": "1a5c21dc",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1368,7 +1409,7 @@
       "subject": "Tune a few NNUE related scaling parameters"
     },
     {
-      "commit_num": 1538,
+      "commit_num": 1547,
       "hash": "7b278aab",
       "short": "7b278aab",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1435,7 +1476,7 @@
       "subject": "Reduce use of lazyEval"
     },
     {
-      "commit_num": 1539,
+      "commit_num": 1548,
       "hash": "a0259d8a",
       "short": "a0259d8a",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -1502,7 +1543,7 @@
       "subject": "Tweak initial aspiration window."
     },
     {
-      "commit_num": 1540,
+      "commit_num": 1549,
       "hash": "c2b9134c",
       "short": "c2b9134c",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -1569,7 +1610,7 @@
       "subject": "Do more reductions at Pv nodes with low delta"
     },
     {
-      "commit_num": 1541,
+      "commit_num": 1550,
       "hash": "45e5e65a",
       "short": "45e5e65a",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1636,7 +1677,7 @@
       "subject": "do not store qsearch positions in TT as exact."
     },
     {
-      "commit_num": 1542,
+      "commit_num": 1551,
       "hash": "5a223afe",
       "short": "5a223afe",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",

@@ -2,7 +2,7 @@
   "month": "2018-10",
   "commits": [
     {
-      "commit_num": 2459,
+      "commit_num": 2468,
       "hash": "4a0db9ea",
       "short": "4a0db9ea",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -57,7 +57,7 @@
       "subject": "Combo"
     },
     {
-      "commit_num": 2460,
+      "commit_num": 2469,
       "hash": "3cbb05b1",
       "short": "3cbb05b1",
       "author": "protonspring <mike@whiteley.org>",
@@ -112,7 +112,7 @@
       "subject": "Replace the PassedDanger array by an equation"
     },
     {
-      "commit_num": 2461,
+      "commit_num": 2470,
       "hash": "3f1eb85a",
       "short": "3f1eb85a",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -167,7 +167,7 @@
       "subject": "Fix issues from using adjustedDepth too broadly"
     },
     {
-      "commit_num": 2462,
+      "commit_num": 2471,
       "hash": "b9f1c9bf",
       "short": "b9f1c9bf",
       "author": "Nooby <>",
@@ -186,14 +186,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/win64bmi2/stockfish_18111909_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/win64modern/stockfish_18111909_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/win64/stockfish_18111909_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/win32/stockfish_18111909_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/linux64bmi2/stockfish_18111909_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/linux64modern/stockfish_18111909_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/b9f1c9bf3f5ba240423a4f1ca8a2fb0f975a775e/linux64/stockfish_18111909_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Clear TableBase mappings in Search::clear()\n\nThis patch will make possible to free mapped TB files with \"ucinewgame\" command.\n\nWe wrote this patch specifically to address a problem that arose while\nrunning Stockfish with 7-piece tablebases as a kibitzer at TCEC for\nextended periods of time across multiple games. It was noted that after\nsome time, the NPS of the kibitzing Stockfish (which is usually 3x faster\nthan the Stockfish actually competing) would drop precipitously, eventually\nfalling to preposterously low numbers until restarted.\n\nTheir eval bot basically inputs FEN, go infinite, stop and loop, it probably\ndidn't do ucinewgame either. As time goes it gradually slowed down and OS\nstarts to use swap, this is not reasonable since the engine only uses 16GB\nhash and the machine has 1TB physical RAM and does nothing else.\n\nAuthor : noobpwnftw\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1790\n\nNo functional change.\n",
       "subject": "Clear TableBase mappings in Search::clear()"
     },
     {
-      "commit_num": 2463,
+      "commit_num": 2472,
       "hash": "7a613689",
       "short": "7a613689",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -248,7 +277,7 @@
       "subject": "Tweak of knight PSQT and mobility bonuses"
     },
     {
-      "commit_num": 2464,
+      "commit_num": 2473,
       "hash": "9fff2722",
       "short": "9fff2722",
       "author": "Günther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -303,7 +332,7 @@
       "subject": "Revert Pull Request #1771, see issue #1785 (#1786)"
     },
     {
-      "commit_num": 2465,
+      "commit_num": 2474,
       "hash": "081af908",
       "short": "081af908",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -358,7 +387,7 @@
       "subject": "On main thread: reduce depth after fail high"
     },
     {
-      "commit_num": 2466,
+      "commit_num": 2475,
       "hash": "542a2b39",
       "short": "542a2b39",
       "author": "mstembera <MissingEmail@email>",
@@ -377,43 +406,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/win64bmi2/stockfish_18102108_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/win64modern/stockfish_18102108_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/win64/stockfish_18102108_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/win32/stockfish_18102108_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/linux64bmi2/stockfish_18102108_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/linux64modern/stockfish_18102108_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/542a2b39ed811a3795cdce2416896ffaf2a485cf/linux64/stockfish_18102108_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small simplification in castling rights\n\nThere is no need for a special struct with a static member\nto generate castling rights.\n\nNo functional change.\n",
       "subject": "Small simplification in castling rights"
     },
     {
-      "commit_num": 2467,
+      "commit_num": 2476,
       "hash": "97d2cc9a",
       "short": "97d2cc9a",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -468,7 +468,7 @@
       "subject": "Randomize draw eval"
     },
     {
-      "commit_num": 2468,
+      "commit_num": 2477,
       "hash": "489357d7",
       "short": "489357d7",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",
@@ -523,7 +523,7 @@
       "subject": "Combo"
     },
     {
-      "commit_num": 2469,
+      "commit_num": 2478,
       "hash": "d615f15f",
       "short": "d615f15f",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -578,7 +578,7 @@
       "subject": "small ttCapture simplification."
     },
     {
-      "commit_num": 2470,
+      "commit_num": 2479,
       "hash": "738a6dfd",
       "short": "738a6dfd",
       "author": "ElbertoOne <lubvdberg@gmail.com>",

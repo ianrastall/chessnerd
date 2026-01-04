@@ -2,7 +2,7 @@
   "month": "2021-09",
   "commits": [
     {
-      "commit_num": 1574,
+      "commit_num": 1583,
       "hash": "21ad356c",
       "short": "21ad356c",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -73,7 +73,7 @@
       "subject": "Extend quiet tt moves at PvNodes"
     },
     {
-      "commit_num": 1575,
+      "commit_num": 1584,
       "hash": "919da65d",
       "short": "919da65d",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -92,14 +92,59 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/win64bmi2/stockfish_21092522_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/win64avx2/stockfish_21092522_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/win64modern/stockfish_21092522_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/win64ssse/stockfish_21092522_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/win64/stockfish_21092522_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/win32/stockfish_21092522_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/linux64bmi2/stockfish_21092522_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/linux64avx2/stockfish_21092522_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/linux64modern/stockfish_21092522_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/linux64ssse/stockfish_21092522_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/919da65d70f0041abbb0102133ed0abbf25b1af0/linux64/stockfish_21092522_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Reduction instead of cutoff\n\nIn master, during singular move analysis, when both the transposition value\nand a reduced search for the other moves seem to indicate a fail high, we\nheuristically prune the whole subtree and return an fail high score.\n\nThis patch is a little bit more cautious in this case, and instead of the\nrisky cutoff, we now search the ttMove with a reduced depth (by two plies).\n\nSTC:\nhttps://tests.stockfishchess.org/tests/view/614dafe07bdc23e77ceb8a89\nLLR: 2.94 (-2.94,2.94) <-0.50,2.50>\nTotal: 46728 W: 11909 L: 11666 D: 23153\nPtnml(0-2): 181, 5288, 12168, 5561, 166\n\nLTC:\nhttps://tests.stockfishchess.org/tests/view/614dc84abe4c07e0ecac3c95\nLLR: 2.94 (-2.94,2.94) <0.50,3.50>\nTotal: 74520 W: 18809 L: 18450 D: 37261\nPtnml(0-2): 45, 7735, 21346, 8084, 50\n\ncloses https://github.com/official-stockfish/Stockfish/pull/3718\n\nBench: 5499262\n",
       "subject": "Reduction instead of cutoff"
     },
     {
-      "commit_num": 1576,
+      "commit_num": 1585,
       "hash": "73018a03",
       "short": "73018a03",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -170,7 +215,7 @@
       "subject": "Detect search explosions"
     },
     {
-      "commit_num": 1577,
+      "commit_num": 1586,
       "hash": "00e34a75",
       "short": "00e34a75",
       "author": "OfekShochat <o@shoch.at>",
@@ -241,7 +286,7 @@
       "subject": "Range reductions"
     },
     {
-      "commit_num": 1578,
+      "commit_num": 1587,
       "hash": "ff3fa0c6",
       "short": "ff3fa0c6",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -312,7 +357,7 @@
       "subject": "Tweak doubly singular condition (Topo's patch)"
     },
     {
-      "commit_num": 1579,
+      "commit_num": 1588,
       "hash": "e8788d1b",
       "short": "e8788d1b",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -383,7 +428,7 @@
       "subject": "Combo of various parameter tweaks"
     },
     {
-      "commit_num": 1580,
+      "commit_num": 1589,
       "hash": "5b47b4e6",
       "short": "5b47b4e6",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -454,7 +499,7 @@
       "subject": "Increase optimumTime by 10%"
     },
     {
-      "commit_num": 1581,
+      "commit_num": 1590,
       "hash": "723f48de",
       "short": "723f48de",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -525,7 +570,7 @@
       "subject": "Update default net to nn-13406b1dcbe0.nnue"
     },
     {
-      "commit_num": 1582,
+      "commit_num": 1591,
       "hash": "fd5e7795",
       "short": "fd5e7795",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -596,7 +641,7 @@
       "subject": "Update 2 search parameters after tune."
     },
     {
-      "commit_num": 1583,
+      "commit_num": 1592,
       "hash": "30fdbf43",
       "short": "30fdbf43",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -667,7 +712,7 @@
       "subject": "Decrease depth for cutnodes with no tt move"
     },
     {
-      "commit_num": 1584,
+      "commit_num": 1593,
       "hash": "b7b6b4ba",
       "short": "b7b6b4ba",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -738,7 +783,7 @@
       "subject": "Further improve history updates"
     },
     {
-      "commit_num": 1585,
+      "commit_num": 1594,
       "hash": "c31fc8d1",
       "short": "c31fc8d1",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -809,7 +854,7 @@
       "subject": "Improve history updates"
     },
     {
-      "commit_num": 1586,
+      "commit_num": 1595,
       "hash": "e404a7d9",
       "short": "e404a7d9",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -880,7 +925,7 @@
       "subject": "Extend captures and promotions"
     },
     {
-      "commit_num": 1587,
+      "commit_num": 1596,
       "hash": "be63ce1b",
       "short": "be63ce1b",
       "author": "SFisGOD <jonathandumale@gmail.com>",
