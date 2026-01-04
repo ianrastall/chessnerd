@@ -21,9 +21,6 @@
   const mainStats = document.getElementById('mainStats');
   const datasetMeta = document.getElementById('datasetMeta');
 
-  const calendarHost = document.getElementById('calendar');
-  const clearDayFilterBtn = document.getElementById('clearDayFilter');
-
   const commitList = document.getElementById('commitList');
 
   const firstPageBtn = document.getElementById('firstPage');
@@ -52,7 +49,6 @@
   let monthCommits = [];       // full month
   let filteredCommits = [];    // after search + toggles + day filter
 
-  let selectedDay = null;      // 'YYYY-MM-DD'
   let page = 1;
 
   function setMainStats(text) {
@@ -191,11 +187,6 @@
       if (!wantArtifacts && hasG && !hasA) return false;
       if (!wantAbrok && !wantArtifacts && (hasA || hasG)) return false; // user disabled both
 
-      if (selectedDay) {
-        const d = safeText(c.date).slice(0, 10);
-        if (d !== selectedDay) return false;
-      }
-
       if (!q) return true;
 
       const hay = [
@@ -285,74 +276,6 @@
       console.error(e);
       setStatus('Clipboard copy failed (browser permissions?).', 'error');
     }
-  }
-
-  function renderCalendar() {
-    clearNode(calendarHost);
-
-    if (!monthCommits.length || !currentMonth) return;
-
-    const [yy, mm] = currentMonth.split('-').map(x => parseInt(x, 10));
-    if (!yy || !mm) return;
-
-    // Count commits per day
-    const counts = new Map();
-    for (const c of monthCommits) {
-      const day = safeText(c.date).slice(0, 10);
-      if (day.startsWith(currentMonth)) {
-        counts.set(day, (counts.get(day) || 0) + 1);
-      }
-    }
-
-    const first = new Date(Date.UTC(yy, mm - 1, 1));
-    const last = new Date(Date.UTC(yy, mm, 0));
-    const daysInMonth = last.getUTCDate();
-
-    const dowNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    const header = el('div', { class: 'sf-calendar-header' }, [
-      el('div', { text: `${currentMonth} (click a day to filter)` }),
-      el('div', { class: 'sf-muted', text: selectedDay ? `Day filter: ${selectedDay}` : 'No day filter' })
-    ]);
-
-    const grid = el('div', { class: 'sf-calendar-grid' });
-
-    // DOW row
-    for (const n of dowNames) grid.appendChild(el('div', { class: 'sf-cal-dow', text: n }));
-
-    // Leading blanks
-    const startDow = first.getUTCDay(); // 0..6
-    for (let i = 0; i < startDow; i++) {
-      grid.appendChild(el('div', { class: 'sf-cal-cell is-empty', text: '' }));
-    }
-
-    // Days
-    for (let d = 1; d <= daysInMonth; d++) {
-      const dayStr = `${currentMonth}-${String(d).padStart(2, '0')}`;
-      const cnt = counts.get(dayStr) || 0;
-
-      const cell = el('div', { class: `sf-cal-cell ${selectedDay === dayStr ? 'is-selected' : ''}` });
-      const btn = el('button', {}, [
-        el('div', { text: String(d) }),
-        el('div', { class: 'sf-cal-count', text: cnt ? `${cnt} commits` : '' })
-      ]);
-
-      if (cnt) {
-        btn.addEventListener('click', () => {
-          selectedDay = (selectedDay === dayStr) ? null : dayStr;
-          clearDayFilterBtn.style.display = selectedDay ? '' : 'none';
-          applyFilters();
-        });
-      } else {
-        cell.classList.add('is-empty');
-      }
-
-      cell.appendChild(btn);
-      grid.appendChild(cell);
-    }
-
-    const wrap = el('div', { class: 'sf-calendar' }, [header, grid]);
-    calendarHost.appendChild(wrap);
   }
 
   function renderCommit(c) {
@@ -559,13 +482,11 @@
   }
 
   function renderAll() {
-    renderCalendar();
     renderCommitList();
 
     const total = filteredCommits.length;
     const monthTotal = monthCommits.length;
-    const dayLabel = selectedDay ? ` | day=${selectedDay}` : '';
-    document.getElementById('toolStats').textContent = `Month: ${monthTotal} commits | Filtered: ${total}${dayLabel}`;
+    document.getElementById('toolStats').textContent = `Month: ${monthTotal} commits | Filtered: ${total}`;
   }
 
   function populateYearMonth(index) {
@@ -630,9 +551,6 @@
     if (!yyyyMm) return;
 
     currentMonth = yyyyMm;
-    selectedDay = null;
-    clearDayFilterBtn.style.display = 'none';
-
     setStatus(`Loading ${yyyyMm}…`, 'success');
     setMainStats('Loading…');
 
@@ -664,12 +582,6 @@
   showAbrok.addEventListener('change', () => applyFilters());
   showArtifacts.addEventListener('change', () => applyFilters());
   pageSizeSel.addEventListener('change', () => applyFilters());
-
-  clearDayFilterBtn.addEventListener('click', () => {
-    selectedDay = null;
-    clearDayFilterBtn.style.display = 'none';
-    applyFilters();
-  });
 
   firstPageBtn.addEventListener('click', () => { page = 1; renderAll(); });
   prevPageBtn.addEventListener('click', () => { page -= 1; renderAll(); });
