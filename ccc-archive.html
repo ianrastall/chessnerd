@@ -241,16 +241,16 @@
         let rowsPerPage = 100;
 
         // MODIFIED FUNCTION: Now properly formats 6-digit codes with hyphens
-        function toIsoDate(code) {
-            // Only format if we have a 6-digit numeric string
-            if (code.length === 6 && /^\d+$/.test(code)) {
-                const year = `20${code.slice(0, 2)}`;
-                const month = code.slice(2, 4);
-                const day = code.slice(4, 6);
-                return `${year}-${month}-${day}`;
-            }
-            return code;
-        }
+		function toIsoDate(code) {
+			// Only format if we have an 8-digit numeric string (YYYYMMDD)
+			if (code.length === 8 && /^\d+$/.test(code)) {
+				const year = code.slice(0, 4);
+				const month = code.slice(4, 6);
+				const day = code.slice(6, 8);
+				return `${year}-${month}-${day}`;
+			}
+			return code;
+		}
 
         function buildEventMap(text) {
             const map = {};
