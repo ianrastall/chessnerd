@@ -261,20 +261,20 @@
     let currentPage = 1;
     let rowsPerPage = 100;
 
-    // Extract date and session from ZIP filename (e.g., "titled-tuesday-2021-05-04.zip")
-    function extractDateAndSession(zipFilename) {
-        const withoutExt = zipFilename.replace('.zip', '');
-        
-        // Extract date in YYYY-MM-DD format
-        const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})/);
-        const date = dateMatch ? dateMatch[0] : '';
-        
-        // Extract session (a/b) if present - look for a/b after the date
-        const sessionMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})([ab])/);
-        const session = sessionMatch ? sessionMatch[2] : '';
-        
-        return { date, session };
-    }
+		// Extract date and session from ZIP filename (e.g., "titled-tuesday-2021-05-04.zip")
+	function extractDateAndSession(zipFilename) {
+		const withoutExt = zipFilename.replace('.zip', '');
+		
+		// Extract date in YYYY-MM-DD format
+		const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})/);
+		const date = dateMatch ? dateMatch[0] : '';
+		
+		// Extract session (a/b) if present
+		const sessionMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})([ab])?$/);
+		const session = sessionMatch ? sessionMatch[2] || '' : '';
+		
+		return { date, session };
+	}
 
     function buildEventMap(text) {
         const map = {};
@@ -314,73 +314,65 @@
         return map;
     }
 
-    function buildEntries(linksText, eventsMap, gameCountsMap) {
-        const entries = [];
-        const lines = linksText.split(/\r?\n/).filter(Boolean);
-        
-        console.log(`Processing ${lines.length} links`);
-        console.log('Game counts map has', Object.keys(gameCountsMap).length, 'entries');
-        
-        for (const url of lines) {
-            const zipFileName = url.split('/').pop();
-            const baseName = zipFileName.replace('.zip', '');
-            
-            console.log(`Processing: ${zipFileName}, Base: ${baseName}`);
-            
-            const { date, session } = extractDateAndSession(zipFileName);
-            
-            // Try to find the game count - exact match first
-            let games = gameCountsMap[baseName];
-            
-            // If not found, try without the session indicator
-            if (games === undefined && session) {
-                const baseWithoutSession = baseName.replace(/[ab]$/, '');
-                games = gameCountsMap[baseWithoutSession];
-            }
-            
-            // If still not found, log it
-            if (games === undefined) {
-                console.log(`Warning: No game count found for ${baseName}`);
-            }
-            
-            const eventName = eventsMap[baseName] || `Titled Tuesday ${date}`;
+	function buildEntries(linksText, eventsMap, gameCountsMap) {
+		return linksText
+			.split(/\r?\n/)
+			.filter(Boolean)
+			.map(url => {
+				// Fix for URLs with tabs (incorrect path separators)
+				let zipFileName = url.split('/').pop();
+				
+				// If there's a tab in the filename, extract the part after the tab
+				if (zipFileName.includes('\t')) {
+					const parts = zipFileName.split('\t');
+					zipFileName = parts[1]; // Get the filename part after the tab/year
+				}
+				
+				const baseName = zipFileName.replace('.zip', '');
+				const pgnBaseName = baseName + '.pgn';
+				
+				console.log(`Processing URL: ${url}`);
+				console.log(`Extracted filename: ${zipFileName}`);
+				console.log(`Base name: ${baseName}`);
+				console.log(`PGN base name: ${pgnBaseName}`);
+				
+				const { date, session } = extractDateAndSession(zipFileName);
+				
+				// Look up event and game count
+				const eventName = eventsMap[pgnBaseName] || eventsMap[baseName] || `Titled Tuesday ${date}`;
+				const games = gameCountsMap[pgnBaseName] || gameCountsMap[baseName] || null;
+				
+				console.log(`Found games: ${games}`);
+				
+				// Determine session display
+				let sessionDisplay = '';
+				let sessionClass = '';
+				if (session === 'a') {
+					sessionDisplay = 'Early';
+					sessionClass = 'session-early';
+				} else if (session === 'b') {
+					sessionDisplay = 'Late';
+					sessionClass = 'session-late';
+				}
 
-            // Determine session display
-            let sessionDisplay = '';
-            let sessionClass = '';
-            if (session === 'a') {
-                sessionDisplay = 'Early';
-                sessionClass = 'session-early';
-            } else if (session === 'b') {
-                sessionDisplay = 'Late';
-                sessionClass = 'session-late';
-            }
+				return {
+					eventName,
+					date,
+					session,
+					sessionDisplay,
+					sessionClass,
+					url,
+					zipFileName,
+					games,
+					eventLower: eventName.toLowerCase(),
+					fileLower: zipFileName.toLowerCase(),
+					sortKey: date + (session || '')
+				};
+			})
+			.sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+	}
 
-            entries.push({
-                eventName,
-                date,
-                session,
-                sessionDisplay,
-                sessionClass,
-                url,
-                zipFileName,
-                games,
-                eventLower: eventName.toLowerCase(),
-                fileLower: zipFileName.toLowerCase(),
-                sortKey: date + (session || 'z') // 'z' for no session so it sorts last
-            });
-        }
-        
-        // Sort by date descending (newest first), then by session (a before b)
-        return entries.sort((a, b) => {
-            if (a.date !== b.date) {
-                return b.date.localeCompare(a.date);
-            }
-            return (a.session || 'z').localeCompare(b.session || 'z');
-        });
-    }
-
-    function formatNumber(val) {
+   function formatNumber(val) {
         if (val === null || val === undefined) return '—';
         const num = Number(val);
         if (Number.isNaN(num)) return '—';
