@@ -72,6 +72,28 @@
             font-size: 0.85rem;
         }
 
+        .session-badge {
+            display: inline-block;
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 0.25rem;
+        }
+
+        .session-early {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .session-late {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
         .table-note {
             margin-top: 0.75rem;
             color: var(--text-secondary);
@@ -159,7 +181,7 @@
                         </div>
 
                         <div class="search-box">
-                            <input type="text" id="ttSearch" placeholder="Filter by date or filename..." aria-label="Search Titled Tuesday archive">
+                            <input type="text" id="ttSearch" placeholder="Filter by date, session, or filename..." aria-label="Search Titled Tuesday archive">
                         </div>
 
                         <div style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
@@ -239,16 +261,19 @@
         let currentPage = 1;
         let rowsPerPage = 100;
 
-        // Extract date from filename (e.g., "titled-tuesday-2021-05-04.pgn")
-        function extractDateFromFilename(filename) {
-            // Remove .pgn extension
+        // Extract date and session from filename (e.g., "titled-tuesday-2021-05-04a.pgn")
+        function extractDateAndSession(filename) {
             const withoutExt = filename.replace('.pgn', '');
-            // Look for YYYY-MM-DD pattern
-            const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})$/);
-            if (dateMatch) {
-                return dateMatch[1];
-            }
-            return '';
+            
+            // Extract date in YYYY-MM-DD format
+            const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})/);
+            const date = dateMatch ? dateMatch[0] : '';
+            
+            // Extract session (a/b) if present
+            const sessionMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})([ab])?$/);
+            const session = sessionMatch ? sessionMatch[2] || '' : '';
+            
+            return { date, session };
         }
 
         function buildEventMap(text) {
@@ -274,9 +299,14 @@
                 if (separatorIndex === -1) return;
                 const filePart = line.slice(0, separatorIndex).trim();
                 const trailing = line.slice(separatorIndex + 1).trim();
-                const numString = trailing.split(/\s+/)[0];
-                const num = parseInt(numString, 10);
+                
+                // Extract number from string like "123 games" or just "123"
+                const numMatch = trailing.match(/(\d+)/);
+                if (!numMatch) return;
+                
+                const num = parseInt(numMatch[0], 10);
                 if (!filePart || Number.isNaN(num)) return;
+                
                 const base = filePart.replace('.pgn', '');
                 map[base] = num;
             });
@@ -291,21 +321,36 @@
                     const fileName = url.split('/').pop();
                     const base = fileName.replace('.pgn', '');
                     
-                    const date = extractDateFromFilename(fileName);
+                    const { date, session } = extractDateAndSession(fileName);
+                    
                     const eventName = eventsMap[base] || `Titled Tuesday ${date}`;
                     const games = gameCountsMap && Object.prototype.hasOwnProperty.call(gameCountsMap, base)
                         ? gameCountsMap[base]
                         : null;
 
+                    // Determine session display
+                    let sessionDisplay = '';
+                    let sessionClass = '';
+                    if (session === 'a') {
+                        sessionDisplay = 'Early';
+                        sessionClass = 'session-early';
+                    } else if (session === 'b') {
+                        sessionDisplay = 'Late';
+                        sessionClass = 'session-late';
+                    }
+
                     return {
                         eventName,
                         date,
+                        session,
+                        sessionDisplay,
+                        sessionClass,
                         url,
                         fileName,
                         games,
                         eventLower: eventName.toLowerCase(),
                         fileLower: fileName.toLowerCase(),
-                        sortKey: date // For sorting
+                        sortKey: date + session // For sorting by date then session
                     };
                 })
                 .sort((a, b) => b.sortKey.localeCompare(a.sortKey)); // Sort by date descending (newest first)
@@ -333,7 +378,10 @@
 
                 ttTableBody.innerHTML = visible.map(entry => `
                     <tr>
-                        <td><span class="date-chip">${entry.date}</span></td>
+                        <td>
+                            <span class="date-chip">${entry.date}</span>
+                            ${entry.sessionDisplay ? `<span class="session-badge ${entry.sessionClass}">${entry.sessionDisplay}</span>` : ''}
+                        </td>
                         <td>
                             <div class="event-name">${entry.eventName}</div>
                             <div class="file-name">${entry.fileName}</div>
@@ -370,7 +418,12 @@
                 !q || 
                 entry.eventLower.includes(q) || 
                 entry.fileLower.includes(q) ||
-                entry.date.includes(q)
+                entry.date.includes(q) ||
+                entry.sessionDisplay.toLowerCase().includes(q) ||
+                (q.includes('early') && entry.session === 'a') ||
+                (q.includes('late') && entry.session === 'b') ||
+                (q.includes('a') && entry.session === 'a') ||
+                (q.includes('b') && entry.session === 'b')
             );
             currentPage = 1;
             renderPage();
