@@ -242,265 +242,286 @@
     </div>
 
     <script src="js/theme.js"></script>
-    <script>
-        document.getElementById('backButton').addEventListener('click', () => {
-            window.location.href = 'index.html';
+<script>
+    document.getElementById('backButton').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+
+    const ttTableBody = document.getElementById('ttTableBody');
+    const ttCount = document.getElementById('ttCount');
+    const searchInput = document.getElementById('ttSearch');
+    const statusMessage = document.getElementById('statusMessage');
+    const prevBtnPage = document.getElementById('ttPrevPage');
+    const nextBtnPage = document.getElementById('ttNextPage');
+    const pageInfoEl = document.getElementById('ttPageInfo');
+    const pageSizeSelect = document.getElementById('ttPageSize');
+
+    let allEntries = [];
+    let filteredEntries = [];
+    let currentPage = 1;
+    let rowsPerPage = 100;
+
+    // Extract date and session from ZIP filename (e.g., "titled-tuesday-2021-05-04.zip")
+    function extractDateAndSession(zipFilename) {
+        const withoutExt = zipFilename.replace('.zip', '');
+        
+        // Extract date in YYYY-MM-DD format
+        const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})/);
+        const date = dateMatch ? dateMatch[0] : '';
+        
+        // Extract session (a/b) if present - look for a/b after the date
+        const sessionMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})([ab])/);
+        const session = sessionMatch ? sessionMatch[2] : '';
+        
+        return { date, session };
+    }
+
+    function buildEventMap(text) {
+        const map = {};
+        text.split(/\r?\n/).forEach(line => {
+            if (!line.trim()) return;
+            const separatorIndex = line.indexOf(':');
+            if (separatorIndex === -1) return;
+            const filePart = line.slice(0, separatorIndex).trim();
+            const eventName = line.slice(separatorIndex + 1).trim();
+            if (!filePart || !eventName) return;
+            const base = filePart.replace('.pgn', '');
+            map[base] = eventName;
         });
+        return map;
+    }
 
-        const ttTableBody = document.getElementById('ttTableBody');
-        const ttCount = document.getElementById('ttCount');
-        const searchInput = document.getElementById('ttSearch');
-        const statusMessage = document.getElementById('statusMessage');
-        const prevBtnPage = document.getElementById('ttPrevPage');
-        const nextBtnPage = document.getElementById('ttNextPage');
-        const pageInfoEl = document.getElementById('ttPageInfo');
-        const pageSizeSelect = document.getElementById('ttPageSize');
-
-        let allEntries = [];
-        let filteredEntries = [];
-        let currentPage = 1;
-        let rowsPerPage = 100;
-
-        // Extract date and session from ZIP filename (e.g., "titled-tuesday-2021-05-04a.zip")
-        function extractDateAndSession(zipFilename) {
-            const withoutExt = zipFilename.replace('.zip', '');
+    function buildGameCountMap(text) {
+        const map = {};
+        text.split(/\r?\n/).forEach(line => {
+            if (!line.trim()) return;
+            const separatorIndex = line.indexOf(':');
+            if (separatorIndex === -1) return;
+            const filePart = line.slice(0, separatorIndex).trim();
+            const trailing = line.slice(separatorIndex + 1).trim();
             
-            // Extract date in YYYY-MM-DD format
-            const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})/);
-            const date = dateMatch ? dateMatch[0] : '';
+            // Extract number - just get the first number in the string
+            const numMatch = trailing.match(/(\d+)/);
+            if (!numMatch) return;
             
-            // Extract session (a/b) if present
-            const sessionMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})([ab])?$/);
-            const session = sessionMatch ? sessionMatch[2] || '' : '';
+            const num = parseInt(numMatch[0], 10);
+            if (!filePart || Number.isNaN(num)) return;
             
-            return { date, session };
-        }
+            // Remove .pgn extension for the key
+            const base = filePart.replace('.pgn', '');
+            map[base] = num;
+        });
+        return map;
+    }
 
-        // Get corresponding PGN filename from ZIP filename
-        function getPgnFilename(zipFilename) {
-            return zipFilename.replace('.zip', '.pgn');
-        }
+    function buildEntries(linksText, eventsMap, gameCountsMap) {
+        const entries = [];
+        const lines = linksText.split(/\r?\n/).filter(Boolean);
+        
+        console.log(`Processing ${lines.length} links`);
+        console.log('Game counts map has', Object.keys(gameCountsMap).length, 'entries');
+        
+        for (const url of lines) {
+            const zipFileName = url.split('/').pop();
+            const baseName = zipFileName.replace('.zip', '');
+            
+            console.log(`Processing: ${zipFileName}, Base: ${baseName}`);
+            
+            const { date, session } = extractDateAndSession(zipFileName);
+            
+            // Try to find the game count - exact match first
+            let games = gameCountsMap[baseName];
+            
+            // If not found, try without the session indicator
+            if (games === undefined && session) {
+                const baseWithoutSession = baseName.replace(/[ab]$/, '');
+                games = gameCountsMap[baseWithoutSession];
+            }
+            
+            // If still not found, log it
+            if (games === undefined) {
+                console.log(`Warning: No game count found for ${baseName}`);
+            }
+            
+            const eventName = eventsMap[baseName] || `Titled Tuesday ${date}`;
 
-        function buildEventMap(text) {
-            const map = {};
-            text.split(/\r?\n/).forEach(line => {
-                if (!line.trim()) return;
-                const separatorIndex = line.indexOf(':');
-                if (separatorIndex === -1) return;
-                const filePart = line.slice(0, separatorIndex).trim();
-                const eventName = line.slice(separatorIndex + 1).trim();
-                if (!filePart || !eventName) return;
-                const base = filePart.replace('.pgn', '');
-                map[base] = eventName;
+            // Determine session display
+            let sessionDisplay = '';
+            let sessionClass = '';
+            if (session === 'a') {
+                sessionDisplay = 'Early';
+                sessionClass = 'session-early';
+            } else if (session === 'b') {
+                sessionDisplay = 'Late';
+                sessionClass = 'session-late';
+            }
+
+            entries.push({
+                eventName,
+                date,
+                session,
+                sessionDisplay,
+                sessionClass,
+                url,
+                zipFileName,
+                games,
+                eventLower: eventName.toLowerCase(),
+                fileLower: zipFileName.toLowerCase(),
+                sortKey: date + (session || 'z') // 'z' for no session so it sorts last
             });
-            return map;
+        }
+        
+        // Sort by date descending (newest first), then by session (a before b)
+        return entries.sort((a, b) => {
+            if (a.date !== b.date) {
+                return b.date.localeCompare(a.date);
+            }
+            return (a.session || 'z').localeCompare(b.session || 'z');
+        });
+    }
+
+    function formatNumber(val) {
+        if (val === null || val === undefined) return '—';
+        const num = Number(val);
+        if (Number.isNaN(num)) return '—';
+        return num.toLocaleString();
+    }
+
+    function renderPage() {
+        const total = filteredEntries.length;
+        const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        if (!total) {
+            ttTableBody.innerHTML = '<tr><td colspan="4">No matching events.</td></tr>';
+            ttCount.textContent = '0 files';
+        } else {
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const visible = filteredEntries.slice(startIndex, startIndex + rowsPerPage);
+
+            ttTableBody.innerHTML = visible.map(entry => `
+                <tr>
+                    <td>
+                        <span class="date-chip">${entry.date}</span>
+                        ${entry.sessionDisplay ? `<span class="session-badge ${entry.sessionClass}">${entry.sessionDisplay}</span>` : ''}
+                    </td>
+                    <td>
+                        <div class="event-name">${entry.eventName}</div>
+                        <div class="file-name">${entry.zipFileName}</div>
+                    </td>
+                    <td style="text-align: center;">${formatNumber(entry.games)}</td>
+                    <td style="text-align: right;">
+                        <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener" download="${entry.zipFileName}">
+                            <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+
+            const label = total === 1 ? 'file' : 'files';
+            ttCount.textContent = `${total} ${label}`;
         }
 
-        function buildGameCountMap(text) {
-            const map = {};
-            text.split(/\r?\n/).forEach(line => {
-                if (!line.trim()) return;
-                const separatorIndex = line.indexOf(':');
-                if (separatorIndex === -1) return;
-                const filePart = line.slice(0, separatorIndex).trim();
-                const trailing = line.slice(separatorIndex + 1).trim();
-                
-                // Extract number from string like "123 games" or just "123"
-                const numMatch = trailing.match(/(\d+)/);
-                if (!numMatch) return;
-                
-                const num = parseInt(numMatch[0], 10);
-                if (!filePart || Number.isNaN(num)) return;
-                
-                const base = filePart.replace('.pgn', '');
-                map[base] = num;
-            });
-            return map;
-        }
-
-        function buildEntries(linksText, eventsMap, gameCountsMap) {
-            return linksText
-                .split(/\r?\n/)
-                .filter(Boolean)
-                .map(url => {
-                    const zipFileName = url.split('/').pop();
-                    const pgnFileName = getPgnFilename(zipFileName);
-                    const baseName = zipFileName.replace('.zip', '');
-                    
-                    const { date, session } = extractDateAndSession(zipFileName);
-                    
-                    const eventName = eventsMap[baseName] || `Titled Tuesday ${date}`;
-                    const games = gameCountsMap && Object.prototype.hasOwnProperty.call(gameCountsMap, baseName)
-                        ? gameCountsMap[baseName]
-                        : null;
-
-                    // Determine session display
-                    let sessionDisplay = '';
-                    let sessionClass = '';
-                    if (session === 'a') {
-                        sessionDisplay = 'Early';
-                        sessionClass = 'session-early';
-                    } else if (session === 'b') {
-                        sessionDisplay = 'Late';
-                        sessionClass = 'session-late';
-                    }
-
-                    return {
-                        eventName,
-                        date,
-                        session,
-                        sessionDisplay,
-                        sessionClass,
-                        url,
-                        zipFileName,
-                        pgnFileName,
-                        games,
-                        eventLower: eventName.toLowerCase(),
-                        fileLower: zipFileName.toLowerCase(),
-                        sortKey: date + session // For sorting by date then session
-                    };
-                })
-                .sort((a, b) => b.sortKey.localeCompare(a.sortKey)); // Sort by date descending (newest first)
-        }
-
-        function formatNumber(val) {
-            if (val === null || val === undefined) return '—';
-            const num = Number(val);
-            if (Number.isNaN(num)) return '—';
-            return num.toLocaleString();
-        }
-
-        function renderPage() {
-            const total = filteredEntries.length;
-            const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
-            if (!total) {
-                ttTableBody.innerHTML = '<tr><td colspan="4">No matching events.</td></tr>';
-                ttCount.textContent = '0 files';
+        const pages = Math.max(1, Math.ceil(total / rowsPerPage));
+        if (pageInfoEl) {
+            if (total === 0) {
+                pageInfoEl.textContent = 'No matching pages';
             } else {
-                const startIndex = (currentPage - 1) * rowsPerPage;
-                const visible = filteredEntries.slice(startIndex, startIndex + rowsPerPage);
-
-                ttTableBody.innerHTML = visible.map(entry => `
-                    <tr>
-                        <td>
-                            <span class="date-chip">${entry.date}</span>
-                            ${entry.sessionDisplay ? `<span class="session-badge ${entry.sessionClass}">${entry.sessionDisplay}</span>` : ''}
-                        </td>
-                        <td>
-                            <div class="event-name">${entry.eventName}</div>
-                            <div class="file-name">${entry.zipFileName}</div>
-                        </td>
-                        <td style="text-align: center;">${formatNumber(entry.games)}</td>
-                        <td style="text-align: right;">
-                            <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener" download="${entry.zipFileName}">
-                                <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
-                            </a>
-                        </td>
-                    </tr>
-                `).join('');
-
-                const label = total === 1 ? 'file' : 'files';
-                ttCount.textContent = `${total} ${label}`;
+                pageInfoEl.textContent = `Page ${currentPage} of ${pages} (${total} shown)`;
             }
-
-            const pages = Math.max(1, Math.ceil(total / rowsPerPage));
-            if (pageInfoEl) {
-                if (total === 0) {
-                    pageInfoEl.textContent = 'No matching pages';
-                } else {
-                    pageInfoEl.textContent = `Page ${currentPage} of ${pages} (${total} shown)`;
-                }
-            }
-
-            if (prevBtnPage) prevBtnPage.disabled = currentPage <= 1 || filteredEntries.length === 0;
-            if (nextBtnPage) nextBtnPage.disabled = currentPage >= pages || filteredEntries.length === 0;
         }
 
-        function applyFilter(query) {
-            const q = query ? query.toLowerCase() : '';
-            filteredEntries = allEntries.filter(entry =>
-                !q || 
-                entry.eventLower.includes(q) || 
-                entry.fileLower.includes(q) ||
-                entry.date.includes(q) ||
-                entry.sessionDisplay.toLowerCase().includes(q) ||
-                (q.includes('early') && entry.session === 'a') ||
-                (q.includes('late') && entry.session === 'b') ||
-                (q.includes('a') && entry.session === 'a') ||
-                (q.includes('b') && entry.session === 'b')
-            );
+        if (prevBtnPage) prevBtnPage.disabled = currentPage <= 1 || filteredEntries.length === 0;
+        if (nextBtnPage) nextBtnPage.disabled = currentPage >= pages || filteredEntries.length === 0;
+    }
+
+    function applyFilter(query) {
+        const q = query ? query.toLowerCase() : '';
+        filteredEntries = allEntries.filter(entry =>
+            !q || 
+            entry.eventLower.includes(q) || 
+            entry.fileLower.includes(q) ||
+            entry.date.includes(q) ||
+            entry.sessionDisplay.toLowerCase().includes(q) ||
+            (q.includes('early') && entry.session === 'a') ||
+            (q.includes('late') && entry.session === 'b') ||
+            (q.includes('a') && entry.session === 'a') ||
+            (q.includes('b') && entry.session === 'b')
+        );
+        currentPage = 1;
+        renderPage();
+    }
+
+    async function loadTTArchive() {
+        try {
+            statusMessage.textContent = 'Loading Titled Tuesday archive...';
+            const [linksRes, eventsRes, countsRes] = await Promise.all([
+                fetch('tt_links.txt'),
+                fetch('tt_events.txt'),
+                fetch('tt_game_counts.txt')
+            ]);
+
+            if (!linksRes.ok || !eventsRes.ok || !countsRes.ok) {
+                throw new Error('Unable to load Titled Tuesday lists.');
+            }
+
+            const [linksText, eventsText, countsText] = await Promise.all([
+                linksRes.text(),
+                eventsRes.text(),
+                countsRes.text()
+            ]);
+
+            console.log('Links text sample:', linksText.substring(0, 200));
+            console.log('Events text sample:', eventsText.substring(0, 200));
+            console.log('Counts text sample:', countsText.substring(0, 200));
+
+            const eventsMap = buildEventMap(eventsText);
+            const gameCountsMap = buildGameCountMap(countsText);
+            allEntries = buildEntries(linksText, eventsMap, gameCountsMap);
+            filteredEntries = allEntries.slice();
+            renderPage();
+            statusMessage.textContent = `Ready - ${allEntries.length} files loaded`;
+        } catch (err) {
+            console.error(err);
+            statusMessage.textContent = 'Error loading Titled Tuesday archive';
+            ttTableBody.innerHTML = `<tr><td colspan="4">${err.message}</td></tr>`;
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+    }
+
+    if (pageSizeSelect) {
+        pageSizeSelect.addEventListener('change', () => {
+            const val = parseInt(pageSizeSelect.value, 10);
+            rowsPerPage = Number.isNaN(val) ? 100 : val;
             currentPage = 1;
             renderPage();
-        }
+        });
+    }
 
-        async function loadTTArchive() {
-            try {
-                statusMessage.textContent = 'Loading Titled Tuesday archive...';
-                const [linksRes, eventsRes, countsRes] = await Promise.all([
-                    fetch('tt_links.txt'),
-                    fetch('tt_events.txt'),
-                    fetch('tt_game_counts.txt')
-                ]);
-
-                if (!linksRes.ok || !eventsRes.ok || !countsRes.ok) {
-                    throw new Error('Unable to load Titled Tuesday lists.');
-                }
-
-                const [linksText, eventsText, countsText] = await Promise.all([
-                    linksRes.text(),
-                    eventsRes.text(),
-                    countsRes.text()
-                ]);
-
-                const eventsMap = buildEventMap(eventsText);
-                const gameCountsMap = buildGameCountMap(countsText);
-                allEntries = buildEntries(linksText, eventsMap, gameCountsMap);
-                filteredEntries = allEntries.slice();
+    if (prevBtnPage) {
+        prevBtnPage.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage -= 1;
                 renderPage();
-                statusMessage.textContent = 'Ready';
-            } catch (err) {
-                console.error(err);
-                statusMessage.textContent = 'Error loading Titled Tuesday archive';
-                ttTableBody.innerHTML = `<tr><td colspan="4">${err.message}</td></tr>`;
             }
-        }
+        });
+    }
 
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
-        }
-
-        if (pageSizeSelect) {
-            pageSizeSelect.addEventListener('change', () => {
-                const val = parseInt(pageSizeSelect.value, 10);
-                rowsPerPage = Number.isNaN(val) ? 100 : val;
-                currentPage = 1;
+    if (nextBtnPage) {
+        nextBtnPage.addEventListener('click', () => {
+            const pages = Math.max(1, Math.ceil(filteredEntries.length / rowsPerPage));
+            if (currentPage < pages) {
+                currentPage += 1;
                 renderPage();
-            });
-        }
+            }
+        });
+    }
 
-        if (prevBtnPage) {
-            prevBtnPage.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage -= 1;
-                    renderPage();
-                }
-            });
-        }
-
-        if (nextBtnPage) {
-            nextBtnPage.addEventListener('click', () => {
-                const pages = Math.max(1, Math.ceil(filteredEntries.length / rowsPerPage));
-                if (currentPage < pages) {
-                    currentPage += 1;
-                    renderPage();
-                }
-            });
-        }
-
-        loadTTArchive();
-    </script>
+    loadTTArchive();
+</script>
 </body>
 </html>
