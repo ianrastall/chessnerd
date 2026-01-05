@@ -261,9 +261,9 @@
         let currentPage = 1;
         let rowsPerPage = 100;
 
-        // Extract date and session from filename (e.g., "titled-tuesday-2021-05-04a.pgn")
-        function extractDateAndSession(filename) {
-            const withoutExt = filename.replace('.pgn', '');
+        // Extract date and session from ZIP filename (e.g., "titled-tuesday-2021-05-04a.zip")
+        function extractDateAndSession(zipFilename) {
+            const withoutExt = zipFilename.replace('.zip', '');
             
             // Extract date in YYYY-MM-DD format
             const dateMatch = withoutExt.match(/(\d{4}-\d{2}-\d{2})/);
@@ -274,6 +274,11 @@
             const session = sessionMatch ? sessionMatch[2] || '' : '';
             
             return { date, session };
+        }
+
+        // Get corresponding PGN filename from ZIP filename
+        function getPgnFilename(zipFilename) {
+            return zipFilename.replace('.zip', '.pgn');
         }
 
         function buildEventMap(text) {
@@ -318,14 +323,15 @@
                 .split(/\r?\n/)
                 .filter(Boolean)
                 .map(url => {
-                    const fileName = url.split('/').pop();
-                    const base = fileName.replace('.pgn', '');
+                    const zipFileName = url.split('/').pop();
+                    const pgnFileName = getPgnFilename(zipFileName);
+                    const baseName = zipFileName.replace('.zip', '');
                     
-                    const { date, session } = extractDateAndSession(fileName);
+                    const { date, session } = extractDateAndSession(zipFileName);
                     
-                    const eventName = eventsMap[base] || `Titled Tuesday ${date}`;
-                    const games = gameCountsMap && Object.prototype.hasOwnProperty.call(gameCountsMap, base)
-                        ? gameCountsMap[base]
+                    const eventName = eventsMap[baseName] || `Titled Tuesday ${date}`;
+                    const games = gameCountsMap && Object.prototype.hasOwnProperty.call(gameCountsMap, baseName)
+                        ? gameCountsMap[baseName]
                         : null;
 
                     // Determine session display
@@ -346,10 +352,11 @@
                         sessionDisplay,
                         sessionClass,
                         url,
-                        fileName,
+                        zipFileName,
+                        pgnFileName,
                         games,
                         eventLower: eventName.toLowerCase(),
-                        fileLower: fileName.toLowerCase(),
+                        fileLower: zipFileName.toLowerCase(),
                         sortKey: date + session // For sorting by date then session
                     };
                 })
@@ -384,12 +391,12 @@
                         </td>
                         <td>
                             <div class="event-name">${entry.eventName}</div>
-                            <div class="file-name">${entry.fileName}</div>
+                            <div class="file-name">${entry.zipFileName}</div>
                         </td>
                         <td style="text-align: center;">${formatNumber(entry.games)}</td>
                         <td style="text-align: right;">
-                            <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
-                                <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                            <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener" download="${entry.zipFileName}">
+                                <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
                             </a>
                         </td>
                     </tr>
