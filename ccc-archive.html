@@ -63,6 +63,7 @@
         .date-chip {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.35rem;
             padding: 0.25rem 0.55rem;
             border-radius: 999px;
@@ -70,6 +71,13 @@
             color: var(--text-primary);
             border: 1px solid var(--border-color);
             font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        /* Center Start/End columns (header + cells) */
+        .ccc-table th.col-date,
+        .ccc-table td.col-date {
+            text-align: center;
         }
 
         .table-note {
@@ -168,8 +176,8 @@
                                     <thead>
                                         <tr>
                                             <th>Event</th>
-                                            <th>Start</th>
-                                            <th>End</th>
+                                            <th class="col-date">Start</th>
+                                            <th class="col-date">End</th>
                                             <th style="text-align: center;">Games</th>
                                             <th style="text-align: right;">Download</th>
                                         </tr>
@@ -240,13 +248,12 @@
         let currentPage = 1;
         let rowsPerPage = 100;
 
-        // Corrected: supports CCC 6-digit YYMMDD codes only (with safe fallback).
-        // Example: "180831" -> "2018-08-31"
+        // CCC uses 6-digit YYMMDD codes in filenames.
+        // Display format: 20YY-MM-DD
         function toIsoDate(code) {
             if (!code) return '';
             const s = String(code).trim();
 
-            // CCC filenames use 6-digit YYMMDD
             if (s.length === 6 && /^\d{6}$/.test(s)) {
                 const yy = s.slice(0, 2);
                 const mm = s.slice(2, 4);
@@ -254,7 +261,7 @@
                 return `20${yy}-${mm}-${dd}`;
             }
 
-            // If something unexpected is present, return as-is (do not break table)
+            // Safe fallback (should not happen in your current workflow)
             return s;
         }
 
@@ -345,8 +352,8 @@
                             <div class="event-name">${entry.eventName}</div>
                             <div class="file-name">${entry.fileName}</div>
                         </td>
-                        <td><span class="date-chip">${entry.startDate}</span></td>
-                        <td><span class="date-chip">${entry.endDate}</span></td>
+                        <td class="col-date"><span class="date-chip">${entry.startDate}</span></td>
+                        <td class="col-date"><span class="date-chip">${entry.endDate}</span></td>
                         <td style="text-align: center;">${formatNumber(entry.games)}</td>
                         <td style="text-align: right;">
                             <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
