@@ -240,17 +240,23 @@
         let currentPage = 1;
         let rowsPerPage = 100;
 
-        // MODIFIED FUNCTION: Now properly formats 6-digit codes with hyphens
-		function toIsoDate(code) {
-			// Only format if we have an 8-digit numeric string (YYYYMMDD)
-			if (code.length === 8 && /^\d+$/.test(code)) {
-				const year = code.slice(0, 4);
-				const month = code.slice(4, 6);
-				const day = code.slice(6, 8);
-				return `${year}-${month}-${day}`;
-			}
-			return code;
-		}
+        // Corrected: supports CCC 6-digit YYMMDD codes only (with safe fallback).
+        // Example: "180831" -> "2018-08-31"
+        function toIsoDate(code) {
+            if (!code) return '';
+            const s = String(code).trim();
+
+            // CCC filenames use 6-digit YYMMDD
+            if (s.length === 6 && /^\d{6}$/.test(s)) {
+                const yy = s.slice(0, 2);
+                const mm = s.slice(2, 4);
+                const dd = s.slice(4, 6);
+                return `20${yy}-${mm}-${dd}`;
+            }
+
+            // If something unexpected is present, return as-is (do not break table)
+            return s;
+        }
 
         function buildEventMap(text) {
             const map = {};
