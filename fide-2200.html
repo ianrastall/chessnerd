@@ -2,319 +2,295 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDE Standard 2200+ - Chess Nerd</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-XQ7B0Z9FK3');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XQ7B0Z9FK3');
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIDE 2200+ - Chess Nerd</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+
     <style>
-        /* Database Table Styles */
-        .db-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-        .db-table th {
-            text-align: left;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            background: var(--bg-tertiary);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .db-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .db-table tr:nth-child(even) {
-            background: var(--bg-secondary);
-        }
-        .db-table tr:nth-child(odd) {
-            background: var(--bg-primary);
-        }
-        .db-table tr:hover {
-            background: var(--bg-tertiary);
+        /* Minimal page-specific styling. Keeps your site’s global style.css intact. */
+        .tool-header .tool-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        /* Filter Controls Area */
         .filters-panel {
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 12px;
             border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            border-radius: 8px;
+            background: var(--panel-bg);
         }
+
         .filter-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
+            gap: 12px;
+            align-items: end;
         }
 
         .input-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        .std-input {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 4px 8px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            min-width: 0;
-        }
-        .std-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        select.std-input {
-            width: 140px;
-        }
-
-        /* Badges */
-        .title-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            white-space: nowrap;
-        }
-        .gm-title {
-            color: #ffd700;
-            background: rgba(255, 215, 0, 0.15);
-        }
-        .im-title {
-            color: #c0c0c0;
-            background: rgba(192, 192, 192, 0.15);
-        }
-        .rating-cell {
-            font-family: "Monaco", monospace;
-            font-weight: bold;
-        }
-
-        .results-count {
-            margin-left: auto;
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.9rem;
+            gap: 6px;
+            min-width: 200px;
+            flex: 1 1 220px;
         }
 
         .filters-footer {
+            margin-top: 10px;
             display: flex;
+            gap: 10px;
             align-items: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
         .copy-btn {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        table.std-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table.std-table th, table.std-table td {
+            padding: 10px 10px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        table.std-table th {
+            font-weight: 600;
+            color: var(--text);
+            background: var(--panel-bg);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .rating-cell {
+            font-weight: 700;
+        }
+
+        .title-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
+
+        .gm-title {
+            border-color: rgba(255, 215, 0, 0.35);
+        }
+        .im-title {
+            border-color: rgba(135, 206, 250, 0.35);
         }
 
         .hide-mobile {
             display: table-cell;
         }
-        @media (max-width: 768px) {
+
+        @media (max-width: 800px) {
             .hide-mobile {
                 display: none;
             }
-            .filters-panel {
-                padding: 1rem;
-            }
-            .filter-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        }
+
+        #loadMoreArea {
+            margin-top: 12px;
+            display: none;
+            text-align: center;
         }
     </style>
 </head>
-<body>
-    <div class="container" style="max-width: 100%; padding: 0 2rem;">
-        <header>
-            <div class="logo">
-                <a href="index.html" style="color: inherit; text-decoration: none;">
-                    <span>Chess Nerd</span>
-                </a>
-            </div>
-            <div class="controls">
-                <div class="accent-selector">
-                    <span class="material-icons">palette</span>
-                    <select id="accentColor" class="color-dropdown">
-                        <option value="#deb887">Burlywood</option>
-                        <option value="#5f9ea0">Cadet Blue</option>
-                        <option value="#6495ed">Cornflower</option>
-                        <option value="#0d9488">Teal</option>
-                        <option value="#8b5cf6">Purple</option>
-                        <option value="#ef4444">Red</option>
-                    </select>
-                </div>
-                <button id="themeToggle" class="btn btn-secondary">
-                    <span class="material-icons">dark_mode</span>
-                </button>
-            </div>
-        </header>
 
-        <main>
-            <div id="toolView">
-                <div class="tool-header">
-                    <div class="tool-title">
-                        <span class="material-icons" id="toolIcon">groups</span>
-                        <div>
-                            <h2 id="toolName" style="margin-bottom: 0;">FIDE 2200+ Players</h2>
-                            <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
-                                FIDE-rated players with Standard, Rapid, or Blitz rating &ge; 2200 (from monthly FIDE players list)
-                            </div>
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <a href="index.html" class="brand-link">
+                <span class="material-icons">extension</span>
+                <span>Chess Nerd</span>
+            </a>
+        </div>
+        <div class="controls">
+            <div class="accent-selector">
+                <span class="material-icons">palette</span>
+                <select id="accentColor" class="color-dropdown">
+                    <option value="#deb887">Burlywood</option>
+                    <option value="#5f9ea0">Cadet Blue</option>
+                    <option value="#6495ed">Cornflower</option>
+                    <option value="#0d9488">Teal</option>
+                    <option value="#8b5cf6">Purple</option>
+                    <option value="#ef4444">Red</option>
+                </select>
+            </div>
+            <button id="themeToggle" class="btn btn-secondary">
+                <span class="material-icons">dark_mode</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div id="toolView">
+            <div class="tool-header">
+                <div class="tool-title">
+                    <span class="material-icons" id="toolIcon">groups</span>
+                    <div>
+                        <h2 id="toolName" style="margin-bottom: 0;">FIDE Standard 2200+ Players</h2>
+                        <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
+                            FIDE-rated players with Standard rating &ge; 2200 (peak standard rating from monthly FIDE lists)
                         </div>
                     </div>
-                    <div class="tool-actions">
-                        <button id="backButton" class="btn btn-secondary">
-                            <span class="material-icons">arrow_back</span>
-                            Back
+                </div>
+                <div class="tool-actions">
+                    <button id="backButton" class="btn btn-secondary">
+                        <span class="material-icons">arrow_back</span>
+                        Back
+                    </button>
+                </div>
+            </div>
+
+            <div class="io-container" style="display: block;">
+                <div class="io-panel" style="width: 100%;">
+                    <div class="filters-panel">
+                        <!-- Single row: Min Elo, Federation, Search -->
+                        <div class="filter-row">
+                            <div class="input-wrapper">
+                                <label>Min Elo (floor 2200):</label>
+                                <input
+                                    type="number"
+                                    id="minElo"
+                                    class="std-input"
+                                    value="2200"
+                                    step="50"
+                                    min="2200"
+                                >
+                            </div>
+                            <div class="input-wrapper">
+                                <label>Federation (3-letter):</label>
+                                <input
+                                    type="text"
+                                    id="countryFilter"
+                                    class="std-input"
+                                    placeholder="e.g., USA"
+                                    maxlength="3"
+                                >
+                            </div>
+                            <div class="input-wrapper" style="flex: 2 1 320px;">
+                                <label>Search (name or FIDE ID):</label>
+                                <input
+                                    type="text"
+                                    id="searchFilter"
+                                    class="std-input"
+                                    placeholder="e.g., Carlsen / 1503014"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="filter-row filters-footer">
+                            <div class="results-count" id="countDisplay">Loading database...</div>
+                            <button id="copyBtn" class="btn btn-secondary copy-btn">
+                                <span class="material-icons" style="font-size: 1.1rem;">content_copy</span>
+                                Copy list
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="std-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 38%;">Player</th>
+                                <th style="width: 16%;">Title(s)</th>
+                                <th style="width: 10%;">FED</th>
+                                <th id="ratingHeader" style="width: 12%;">Standard</th>
+                                <th class="hide-mobile" style="width: 10%;">Year</th>
+                                <th style="width: 14%; text-align: right;">Profile</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- rows injected here -->
+                        </tbody>
+                    </table>
+
+                    <div id="loadMoreArea">
+                        <button id="loadMoreBtn" class="btn btn-secondary">
+                            Load more
                         </button>
                     </div>
                 </div>
-
-                <div class="io-container" style="display: block;">
-                    <div class="io-panel" style="width: 100%;">
-                        <div class="filters-panel">
-                            <!-- Single row: Rating type, Min Elo, Federation, Search -->
-                            <div class="filter-row">
-                                <div class="input-wrapper">
-                                    <label>Rating Type:</label>
-                                    <select id="ratingType" class="std-input">
-                                        <option value="std">Standard</option>
-                                        <option value="rapid">Rapid</option>
-                                        <option value="blitz">Blitz</option>
-                                    </select>
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Min Elo (floor 2200):</label>
-                                    <input
-                                        type="number"
-                                        id="minElo"
-                                        class="std-input"
-                                        value="2200"
-                                        step="50"
-                                        min="2200"
-                                    >
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Federation (3-letter):</label>
-                                    <input
-                                        type="text"
-                                        id="countryFilter"
-                                        class="std-input"
-                                        placeholder="All"
-                                        maxlength="3"
-                                        style="text-transform: uppercase;"
-                                    >
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Search (Name / FIDE ID):</label>
-                                    <input
-                                        type="text"
-                                        id="searchFilter"
-                                        class="std-input"
-                                        placeholder="Type to narrow…"
-                                        style="width: 220px;"
-                                    >
-                                </div>
-                            </div>
-
-                            <!-- Row 2: Count + Copy -->
-                            <div class="filter-row filters-footer">
-                                <div class="results-count" id="countDisplay">Loading database...</div>
-                                <button id="copyBtn" class="btn btn-secondary copy-btn">
-                                    <span class="material-icons" style="font-size: 1.1rem;">content_copy</span>
-                                    Copy
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Results table -->
-                        <div class="output-panel" style="background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden;">
-                            <table class="db-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name / FIDE ID</th>
-                                        <th>Title</th>
-                                        <th>Federation</th>
-                                        <th id="ratingHeader">Standard</th>
-                                        <th class="hide-mobile">Year</th>
-                                        <th style="text-align: right;">Profile</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody"></tbody>
-                            </table>
-                            <div id="loadMoreArea" style="text-align: center; padding: 1rem; display: none;">
-                                <button id="loadMoreBtn" class="btn btn-primary">Show More</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script src="js/theme.js"></script>
     <script>
+        // ---- Data + paging ----
+        let allPlayers = [];
+        let filteredPlayers = [];
+        const BATCH_SIZE = 200;
+        let displayLimit = 100;
+
+        // Minimum allowed threshold
+        const MIN_ELO_FLOOR = 2200;
+
+        // ---- Navigation ----
         document.getElementById('backButton').addEventListener('click', () => {
+            // Adjust if your site uses a different navigation pattern
             window.location.href = 'index.html';
         });
 
-        // --- CONFIG ---
-        const MIN_ELO_FLOOR = 2200;
-
-        // --- DATABASE LOGIC ---
-        let allPlayers = [];
-        let filteredPlayers = [];
-        let displayLimit = 100;
-        const BATCH_SIZE = 100;
-
-        // Load JSON on startup
-        fetch('fide-2200.json')
-            .then(res => {
+        // ---- Load JSON ----
+        async function loadData() {
+            try {
+                const res = await fetch('fide-2200.json', { cache: 'no-store' });
                 if (!res.ok) {
-                    throw new Error('HTTP error ' + res.status);
+                    throw new Error(`HTTP ${res.status} when fetching fide-2200.json`);
                 }
-                return res.json();
-            })
-            .then(data => {
-                allPlayers = data || [];
-                applyFilters();
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('countDisplay').innerText = 'Error loading database file.';
-            });
+                const data = await res.json();
 
+                if (!Array.isArray(data)) {
+                    throw new Error('JSON is not an array of players.');
+                }
+
+                allPlayers = data;
+
+                // initial view
+                applyFilters();
+            } catch (err) {
+                console.error(err);
+                const tbody = document.getElementById('tableBody');
+                tbody.innerHTML = `<tr><td colspan="6" style="padding: 12px; color: var(--danger, #ef4444);">
+                    Failed to load fide-2200.json: ${escapeHtml(err.message)}
+                </td></tr>`;
+                document.getElementById('countDisplay').textContent = 'Error loading database.';
+            }
+        }
+
+        // ---- Filtering helpers ----
         function getCurrentMinElo() {
             const input = document.getElementById('minElo');
             let val = parseInt(input.value || '0', 10) || 0;
@@ -329,7 +305,6 @@
             // reset pagination
             displayLimit = 100;
 
-            const ratingType = document.getElementById('ratingType').value;
             const minElo = getCurrentMinElo();
             const countryFilter = (document.getElementById('countryFilter').value || '').trim().toUpperCase();
             const searchTermRaw = (document.getElementById('searchFilter').value || '').trim();
@@ -337,13 +312,9 @@
 
             filteredPlayers = allPlayers.filter(p => {
                 const std = p.std || 0;
-                const rapid = p.rapid || 0;
-                const blitz = p.blitz || 0;
 
-                // Rating filter
-                const ratingValue = ratingType === 'std' ? std :
-                                    ratingType === 'rapid' ? rapid : blitz;
-                if (ratingValue < minElo) return false;
+                // Rating filter (Standard only)
+                if (std < minElo) return false;
 
                 // Federation filter (3-letter code)
                 if (countryFilter) {
@@ -364,10 +335,10 @@
                 return true;
             });
 
-            // Sort by selected rating type (desc), then name
+            // Sort by standard (desc), then name
             filteredPlayers.sort((a, b) => {
-                const rA = a[ratingType] || 0;
-                const rB = b[ratingType] || 0;
+                const rA = a.std || 0;
+                const rB = b.std || 0;
                 if (rB !== rA) return rB - rA;
 
                 const nameA = (a.name || '').toUpperCase();
@@ -377,25 +348,12 @@
                 return 0;
             });
 
-            updateRatingHeader();
             updateCountDisplay();
             renderTable();
         }
 
-        function updateRatingHeader() {
-            const ratingType = document.getElementById('ratingType').value;
-            const header = document.getElementById('ratingHeader');
-            if (!header) return;
-
-            if (ratingType === 'std') header.textContent = 'Standard';
-            else if (ratingType === 'rapid') header.textContent = 'Rapid';
-            else if (ratingType === 'blitz') header.textContent = 'Blitz';
-            else header.textContent = 'Rating';
-        }
-
         function updateCountDisplay() {
             const countDisplay = document.getElementById('countDisplay');
-            const ratingType = document.getElementById('ratingType').value;
             const minElo = getCurrentMinElo();
 
             if (!filteredPlayers.length) {
@@ -403,17 +361,12 @@
                 return;
             }
 
-            const label = ratingType === 'std' ? 'Standard' :
-                          ratingType === 'rapid' ? 'Rapid' : 'Blitz';
-
-            countDisplay.textContent = `${filteredPlayers.length.toLocaleString()} players ( ${label} ≥ ${minElo} )`;
+            countDisplay.textContent = `${filteredPlayers.length.toLocaleString()} players ( Standard ≥ ${minElo} )`;
         }
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
-
-            const ratingType = document.getElementById('ratingType').value;
 
             const toShow = filteredPlayers.slice(0, displayLimit);
 
@@ -430,7 +383,7 @@
                 if (primaryTitle.includes('GM')) titleClass += ' gm-title';
                 else if (primaryTitle.includes('IM')) titleClass += ' im-title';
 
-                const ratingValue = p[ratingType] || 0;
+                const ratingValue = p.std || 0;
                 const ratingText = ratingValue > 0 ? ratingValue : '-';
                 const yearText = p.year || '';
 
@@ -472,9 +425,7 @@
             if (!filteredPlayers.length) {
                 return;
             }
-            const ratingType = document.getElementById('ratingType').value;
-            const ratingLabel = ratingType === 'std' ? 'Standard' :
-                                ratingType === 'rapid' ? 'Rapid' : 'Blitz';
+            const ratingLabel = 'Standard';
 
             const lines = [];
             lines.push(['Name', 'Title(s)', 'Federation', ratingLabel, 'Year', 'FIDE ID'].join('\t'));
@@ -485,7 +436,7 @@
                 if (p.w_title) titlePieces.push(p.w_title);
                 const titleStr = titlePieces.join(' / ');
 
-                const ratingValue = p[ratingType] || 0;
+                const ratingValue = p.std || 0;
                 const ratingText = ratingValue > 0 ? ratingValue : '';
 
                 lines.push([
@@ -533,10 +484,10 @@
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+                .replace(/'/g, '&#039;');
         }
 
-        // Utility: Debounce to prevent lag while typing
+        // Debounce helper
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -546,7 +497,6 @@
         }
 
         // Event Listeners
-        document.getElementById('ratingType').addEventListener('change', () => applyFilters());
         document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
         document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
         document.getElementById('searchFilter').addEventListener('input', debounce(applyFilters, 300));
@@ -555,6 +505,9 @@
             renderTable();
         });
         document.getElementById('copyBtn').addEventListener('click', () => copyListToClipboard());
+
+        // Kick off
+        loadData();
     </script>
 </body>
 </html>
