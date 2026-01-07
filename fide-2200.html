@@ -1,4 +1,3 @@
-<!-- fide-2200.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -8,156 +7,220 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-XQ7B0Z9FK3');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIDE 2200+ - Chess Nerd</title>
+    <title>FIDE 2200+ Players - Chess Nerd</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="/css/style.css">
     <style>
-        /* Database Table Styles */
-        .db-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-        .db-table th {
-            text-align: left;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            background: var(--bg-tertiary);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .db-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .db-table tr:nth-child(even) {
-            background: var(--bg-secondary);
-        }
-        .db-table tr:nth-child(odd) {
-            background: var(--bg-primary);
-        }
-        .db-table tr:hover {
-            background: var(--bg-tertiary);
+        .container {
+            max-width: 100%;
+            padding: 1rem 2rem;
         }
 
-        /* Filter Controls Area */
         .filters-panel {
             background: var(--bg-tertiary);
             border-radius: 8px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
         }
+
         .filter-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
         }
 
-        .input-wrapper {
+        .filter-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            font-size: 0.85rem;
+            gap: 0.25rem;
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
             color: var(--text-secondary);
         }
-        .std-input {
-            background: var(--bg-primary);
+
+        .input-group input,
+        .input-group select {
+            padding: 0.5rem;
+            background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            padding: 4px 8px;
             color: var(--text-primary);
-            font-size: 0.9rem;
-            min-width: 0;
+            font-size: 0.875rem;
         }
-        .std-input:focus {
+
+        .input-group input:focus,
+        .input-group select:focus {
             outline: none;
             border-color: var(--accent);
         }
-        select.std-input {
-            width: 140px;
+
+        .input-group input[type="number"] {
+            width: 120px;
         }
 
-        /* Badges */
-        .title-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            white-space: nowrap;
-        }
-        .gm-title {
-            color: #ffd700;
-            background: rgba(255, 215, 0, 0.15);
-        }
-        .im-title {
-            color: #c0c0c0;
-            background: rgba(192, 192, 192, 0.15);
-        }
-        .rating-cell {
-            font-family: "Monaco", monospace;
-            font-weight: bold;
+        .input-group input[type="text"] {
+            width: 180px;
         }
 
-        .results-count {
-            margin-left: auto;
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.9rem;
+        .input-group input[type="text"].search {
+            width: 240px;
         }
 
-        .filters-footer {
+        .results-info {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             flex-wrap: wrap;
         }
 
-        .copy-btn {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-left: 10px;
+        .results-count {
+            color: var(--accent);
+            font-weight: 600;
         }
 
-        .hide-mobile {
-            display: table-cell;
+        .table-wrapper {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
         }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .players-table thead {
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .players-table th {
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .players-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .players-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .player-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .player-id {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.125rem;
+        }
+
+        .title-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--bg-primary);
+        }
+
+        .title-gm {
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .title-im {
+            color: #c0c0c0;
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+
+        .title-fm {
+            color: #cd7f32;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+        }
+
+        .title-wgm {
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .title-wim {
+            color: #c0c0c0;
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+
+        .title-wfm {
+            color: #cd7f32;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+        }
+
+        .rating-cell {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .load-more-area {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
         @media (max-width: 768px) {
-            .hide-mobile {
-                display: none;
-            }
-            .filters-panel {
+            .container {
                 padding: 1rem;
             }
+
             .filter-row {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
+            }
+
+            .input-group input,
+            .input-group select {
+                width: 100% !important;
+            }
+
+            .players-table th:nth-child(4),
+            .players-table td:nth-child(4) {
+                display: none;
+            }
+
+            .player-id {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container" style="max-width: 100%; padding: 0 2rem;">
+    <div class="container">
         <header>
             <div class="logo">
                 <a href="index.html" style="color: inherit; text-decoration: none;">
@@ -186,11 +249,11 @@
             <div id="toolView">
                 <div class="tool-header">
                     <div class="tool-title">
-                        <span class="material-icons" id="toolIcon">groups</span>
+                        <span class="material-icons">groups</span>
                         <div>
-                            <h2 id="toolName" style="margin-bottom: 0;">FIDE 2200+ Players</h2>
-                            <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
-                                FIDE-rated players with peak rating &ge; 2200 (Standard; Rapid/Blitz shown only when available)
+                            <h2 style="margin-bottom: 0;">FIDE 2200+ Players</h2>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem;">
+                                FIDE-rated players with peak standard rating ≥ 2200
                             </div>
                         </div>
                     </div>
@@ -202,406 +265,257 @@
                     </div>
                 </div>
 
-                <div class="io-container" style="display: block;">
-                    <div class="io-panel" style="width: 100%;">
-                        <div class="filters-panel">
-                            <!-- Single row: Rating type, Min Elo, Federation, Search -->
-                            <div class="filter-row">
-                                <div class="input-wrapper">
-                                    <label>Rating Type:</label>
-                                    <select id="ratingType" class="std-input">
-                                        <option value="std">Standard</option>
-                                        <option value="rapid">Rapid</option>
-                                        <option value="blitz">Blitz</option>
-                                    </select>
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Min Elo (floor 2200):</label>
-                                    <input
-                                        type="number"
-                                        id="minElo"
-                                        class="std-input"
-                                        value="2200"
-                                        step="50"
-                                        min="2200"
-                                    >
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Federation (3-letter):</label>
-                                    <input
-                                        type="text"
-                                        id="countryFilter"
-                                        class="std-input"
-                                        placeholder="All"
-                                        maxlength="3"
-                                        style="text-transform: uppercase;"
-                                    >
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Search (Name / FIDE ID):</label>
-                                    <input
-                                        type="text"
-                                        id="searchFilter"
-                                        class="std-input"
-                                        placeholder="Type to narrow…"
-                                        style="width: 220px;"
-                                    >
-                                </div>
-                            </div>
-
-                            <!-- Row 2: Count + Copy -->
-                            <div class="filter-row filters-footer">
-                                <div class="results-count" id="countDisplay">Loading database...</div>
-                                <button id="copyBtn" class="btn btn-secondary copy-btn">
-                                    <span class="material-icons" style="font-size: 1.1rem;">content_copy</span>
-                                    Copy
-                                </button>
-                            </div>
+                <div class="filters-panel">
+                    <div class="filter-row">
+                        <div class="input-group">
+                            <label>Min Rating</label>
+                            <input type="number" id="minRating" value="2200" min="2200" step="50">
                         </div>
-
-                        <!-- Results table -->
-                        <div class="output-panel" style="background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden;">
-                            <table class="db-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name / FIDE ID</th>
-                                        <th>Title</th>
-                                        <th>Federation</th>
-                                        <th id="ratingHeader">Standard</th>
-                                        <th class="hide-mobile">Year</th>
-                                        <th style="text-align: right;">Profile</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody"></tbody>
-                            </table>
-                            <div id="loadMoreArea" style="text-align: center; padding: 1rem; display: none;">
-                                <button id="loadMoreBtn" class="btn btn-primary">Show More</button>
-                            </div>
+                        <div class="input-group">
+                            <label>Federation</label>
+                            <input type="text" id="federation" placeholder="e.g. USA" maxlength="3" style="text-transform: uppercase;">
                         </div>
+                        <div class="input-group">
+                            <label>Search Name or ID</label>
+                            <input type="text" id="search" class="search" placeholder="Type to filter...">
+                        </div>
+                    </div>
+                    <div class="filter-row results-info">
+                        <div class="results-count" id="resultsCount">Loading database...</div>
+                        <button id="copyBtn" class="btn btn-secondary">
+                            <span class="material-icons">content_copy</span>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="players-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Title</th>
+                                <th>Federation</th>
+                                <th>Rating</th>
+                                <th>Year</th>
+                                <th style="text-align: right;">Profile</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                                    Loading players...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="loadMoreArea" class="load-more-area" style="display: none;">
+                        <button id="loadMoreBtn" class="btn btn-primary">
+                            Show More
+                        </button>
                     </div>
                 </div>
             </div>
         </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Chess Nerd<br>Contact: moving.form.of.dust@gmail.com</p>
+        </footer>
     </div>
 
-    <script src="js/theme.js" onerror="this.onerror=null; this.src='/js/theme.js';"></script>
+    <script src="js/theme.js"></script>
     <script>
+        // Navigation
         document.getElementById('backButton').addEventListener('click', () => {
             window.location.href = 'index.html';
         });
 
-        // --- CONFIG ---
-        const MIN_ELO_FLOOR = 2200;
-
-        // --- DATABASE LOGIC ---
+        // State
         let allPlayers = [];
         let filteredPlayers = [];
         let displayLimit = 100;
         const BATCH_SIZE = 100;
-// Load JSON on startup (tries a few common filenames)
-const JSON_CANDIDATES = [
-    'fide-2200.json',
-    'fide-2200-std.json',
-    'fide-2200-peak.json'
-];
+        const MIN_RATING = 2200;
 
-async function loadFirstJson(candidates) {
-    let lastErr = null;
-    for (const url of candidates) {
-        try {
-            const res = await fetch(url, { cache: 'no-store' });
-            if (!res.ok) {
-                lastErr = new Error(`HTTP error ${res.status} for ${url}`);
-                continue;
-            }
-            const data = await res.json();
-            return { url, data };
-        } catch (err) {
-            lastErr = err;
-        }
-    }
-    throw lastErr || new Error('Unable to load JSON data.');
-}
-
-function prepareRatingTypeUI() {
-    const select = document.getElementById('ratingType');
-    if (!select) return;
-
-    // Detect whether rapid/blitz exist with non-zero values.
-    // (Fast enough for the 2200+ subset; avoids scanning the full historical dataset.)
-    let hasRapid = false;
-    let hasBlitz = false;
-
-    for (let i = 0; i < allPlayers.length; i++) {
-        const p = allPlayers[i] || {};
-        if ((p.rapid || 0) > 0) hasRapid = true;
-        if ((p.blitz || 0) > 0) hasBlitz = true;
-        if (hasRapid && hasBlitz) break;
-    }
-
-    const rapidOpt = select.querySelector('option[value="rapid"]');
-    const blitzOpt = select.querySelector('option[value="blitz"]');
-
-    if (rapidOpt) {
-        if (!hasRapid) { rapidOpt.disabled = true; rapidOpt.textContent = 'Rapid (n/a)'; }
-        else { rapidOpt.disabled = false; rapidOpt.textContent = 'Rapid'; }
-    }
-    if (blitzOpt) {
-        if (!hasBlitz) { blitzOpt.disabled = true; blitzOpt.textContent = 'Blitz (n/a)'; }
-        else { blitzOpt.disabled = false; blitzOpt.textContent = 'Blitz'; }
-    }
-
-    // If the current selection is unavailable, fall back to Standard.
-    const current = select.value;
-    if ((current === 'rapid' && !hasRapid) || (current === 'blitz' && !hasBlitz)) {
-        select.value = 'std';
-    }
-}
-
-loadFirstJson(JSON_CANDIDATES)
-    .then(({ url, data }) => {
-        allPlayers = Array.isArray(data) ? data : [];
-        prepareRatingTypeUI();
-        applyFilters();
-    })
-    .catch(err => {
-        console.error(err);
-        document.getElementById('countDisplay').innerText = 'Error loading database file.';
-    });
-                }
-                return res.json();
-            })
-            .then(data => {
-                allPlayers = data || [];
+        // Load JSON data
+        async function loadDatabase() {
+            try {
+                const response = await fetch('fide-2200.json');
+                if (!response.ok) throw new Error('Failed to load database');
+                const data = await response.json();
+                allPlayers = Array.isArray(data) ? data : [];
                 applyFilters();
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('countDisplay').innerText = 'Error loading database file.';
-            });
-
-        function getCurrentMinElo() {
-            const input = document.getElementById('minElo');
-            let val = parseInt(input.value || '0', 10) || 0;
-            if (val < MIN_ELO_FLOOR) {
-                val = MIN_ELO_FLOOR;
+            } catch (err) {
+                console.error('Error loading database:', err);
+                document.getElementById('resultsCount').textContent = 'Error loading database';
+                document.getElementById('tableBody').innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--error);">
+                            Failed to load database. Please refresh the page.
+                        </td>
+                    </tr>
+                `;
             }
-            input.value = val;
-            return val;
         }
 
+        // Apply filters
         function applyFilters() {
-            // reset pagination
             displayLimit = 100;
 
-            const ratingType = document.getElementById('ratingType').value;
-            const minElo = getCurrentMinElo();
-            const countryFilter = (document.getElementById('countryFilter').value || '').trim().toUpperCase();
-            const searchTermRaw = (document.getElementById('searchFilter').value || '').trim();
-            const searchTerm = searchTermRaw.toLowerCase();
+            const minRating = Math.max(MIN_RATING, parseInt(document.getElementById('minRating').value) || MIN_RATING);
+            document.getElementById('minRating').value = minRating;
 
-            filteredPlayers = allPlayers.filter(p => {
-                const std = p.std || 0;
-                const rapid = p.rapid || 0;
-                const blitz = p.blitz || 0;
+            const federation = document.getElementById('federation').value.trim().toUpperCase();
+            const searchTerm = document.getElementById('search').value.trim().toLowerCase();
 
+            filteredPlayers = allPlayers.filter(player => {
                 // Rating filter
-                const ratingValue = ratingType === 'std' ? std :
-                                    ratingType === 'rapid' ? rapid : blitz;
-                if (ratingValue < minElo) return false;
+                if ((player.std || 0) < minRating) return false;
 
-                // Federation filter (3-letter code)
-                if (countryFilter) {
-                    if (!p.country || String(p.country).toUpperCase() !== countryFilter) {
-                        return false;
-                    }
-                }
+                // Federation filter
+                if (federation && player.country !== federation) return false;
 
-                // Search filter (name / FIDE ID)
+                // Search filter
                 if (searchTerm) {
-                    const name = (p.name || '').toLowerCase();
-                    const fideid = String(p.fideid || '');
-                    if (!name.includes(searchTerm) && !fideid.includes(searchTermRaw)) {
-                        return false;
-                    }
+                    const name = (player.name || '').toLowerCase();
+                    const id = String(player.fideid || '');
+                    if (!name.includes(searchTerm) && !id.includes(searchTerm)) return false;
                 }
 
                 return true;
             });
 
-            // Sort by selected rating type (desc), then name
+            // Sort by rating descending, then by name
             filteredPlayers.sort((a, b) => {
-                const rA = a[ratingType] || 0;
-                const rB = b[ratingType] || 0;
-                if (rB !== rA) return rB - rA;
-
-                const nameA = (a.name || '').toUpperCase();
-                const nameB = (b.name || '').toUpperCase();
-                if (nameA < nameB) return -1;
-                if (nameA > nameB) return 1;
-                return 0;
+                const ratingDiff = (b.std || 0) - (a.std || 0);
+                if (ratingDiff !== 0) return ratingDiff;
+                return (a.name || '').localeCompare(b.name || '');
             });
 
-            updateRatingHeader();
-            updateCountDisplay();
+            updateDisplay();
+        }
+
+        // Update results count
+        function updateResultsCount() {
+            const count = filteredPlayers.length;
+            const minRating = parseInt(document.getElementById('minRating').value) || MIN_RATING;
+            
+            if (count === 0) {
+                document.getElementById('resultsCount').textContent = 'No players match filters';
+            } else {
+                document.getElementById('resultsCount').textContent = 
+                    `${count.toLocaleString()} player${count === 1 ? '' : 's'} (≥ ${minRating})`;
+            }
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const toShow = filteredPlayers.slice(0, displayLimit);
+
+            if (toShow.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            No players match your filters
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = toShow.map(player => {
+                const titles = [];
+                if (player.title) titles.push(player.title);
+                if (player.w_title) titles.push(player.w_title);
+                
+                const titleHtml = titles.map(title => {
+                    const upper = title.toUpperCase();
+                    let className = 'title-badge';
+                    if (upper === 'GM') className += ' title-gm';
+                    else if (upper === 'IM') className += ' title-im';
+                    else if (upper === 'FM') className += ' title-fm';
+                    else if (upper === 'WGM') className += ' title-wgm';
+                    else if (upper === 'WIM') className += ' title-wim';
+                    else if (upper === 'WFM') className += ' title-wfm';
+                    return `<span class="${className}">${escapeHtml(title)}</span>`;
+                }).join(' ');
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="player-name">${escapeHtml(player.name || '(No name)')}</div>
+                            <div class="player-id">FIDE ID: ${escapeHtml(String(player.fideid || ''))}</div>
+                        </td>
+                        <td>${titleHtml}</td>
+                        <td>${escapeHtml(player.country || '')}</td>
+                        <td class="rating-cell">${player.std || '—'}</td>
+                        <td>${player.year || ''}</td>
+                        <td style="text-align: right;">
+                            <a href="https://ratings.fide.com/profile/${player.fideid}" 
+                               target="_blank" 
+                               rel="noopener"
+                               class="btn btn-secondary"
+                               style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Show/hide load more button
+            const loadMoreArea = document.getElementById('loadMoreArea');
+            loadMoreArea.style.display = filteredPlayers.length > displayLimit ? 'block' : 'none';
+        }
+
+        // Update display
+        function updateDisplay() {
+            updateResultsCount();
             renderTable();
         }
 
-        function updateRatingHeader() {
-            const ratingType = document.getElementById('ratingType').value;
-            const header = document.getElementById('ratingHeader');
-            if (!header) return;
+        // Copy to clipboard
+        function copyToClipboard() {
+            if (filteredPlayers.length === 0) return;
 
-            if (ratingType === 'std') header.textContent = 'Standard';
-            else if (ratingType === 'rapid') header.textContent = 'Rapid';
-            else if (ratingType === 'blitz') header.textContent = 'Blitz';
-            else header.textContent = 'Rating';
-        }
-
-        function updateCountDisplay() {
-            const countDisplay = document.getElementById('countDisplay');
-            const ratingType = document.getElementById('ratingType').value;
-            const minElo = getCurrentMinElo();
-
-            if (!filteredPlayers.length) {
-                countDisplay.textContent = 'No players match the current filters.';
-                return;
-            }
-
-            const label = ratingType === 'std' ? 'Standard' :
-                          ratingType === 'rapid' ? 'Rapid' : 'Blitz';
-
-            countDisplay.textContent = `${filteredPlayers.length.toLocaleString()} players ( ${label} ≥ ${minElo} )`;
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            const ratingType = document.getElementById('ratingType').value;
-
-            const toShow = filteredPlayers.slice(0, displayLimit);
-
-            toShow.forEach(p => {
-                const tr = document.createElement('tr');
-
-                const displayTitlePieces = [];
-                if (p.title) displayTitlePieces.push(p.title);
-                if (p.w_title) displayTitlePieces.push(p.w_title);
-                const displayTitle = displayTitlePieces.join(' / ');
-
-                let titleClass = 'title-badge';
-                const primaryTitle = (p.title || p.w_title || '').toUpperCase();
-                if (primaryTitle.includes('GM')) titleClass += ' gm-title';
-                else if (primaryTitle.includes('IM')) titleClass += ' im-title';
-
-                const ratingValue = p[ratingType] || 0;
-                const ratingText = ratingValue > 0 ? ratingValue : '-';
-                const yearText = p.year || '';
-
-                const profileUrl = `https://ratings.fide.com/profile/${p.fideid}`;
-
-                tr.innerHTML = `
-                    <td>
-                        <div style="font-weight:500;">${escapeHtml(p.name || '(No name)')}</div>
-                        <div class="hide-mobile" style="font-size:0.8rem; color:var(--text-secondary);">
-                            FIDE ID: ${escapeHtml(String(p.fideid || ''))}
-                        </div>
-                    </td>
-                    <td>
-                        ${displayTitle ? `<span class="${titleClass}">${escapeHtml(displayTitle)}</span>` : ''}
-                    </td>
-                    <td>${escapeHtml(p.country || '')}</td>
-                    <td class="rating-cell" style="color: var(--accent);">
-                        ${ratingText}
-                    </td>
-                    <td class="hide-mobile">${yearText ? escapeHtml(String(yearText)) : ''}</td>
-                    <td style="text-align: right;">
-                        <a href="${profileUrl}" target="_blank" rel="noopener" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.8rem;">
-                            View
-                        </a>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            const headers = ['Name', 'Title', 'Federation', 'Rating', 'Year', 'FIDE ID'];
+            const rows = filteredPlayers.map(player => {
+                const titles = [];
+                if (player.title) titles.push(player.title);
+                if (player.w_title) titles.push(player.w_title);
+                
+                return [
+                    player.name || '',
+                    titles.join(' / '),
+                    player.country || '',
+                    player.std || '',
+                    player.year || '',
+                    player.fideid || ''
+                ];
             });
 
-            const loadMoreArea = document.getElementById('loadMoreArea');
-            if (filteredPlayers.length > displayLimit) {
-                loadMoreArea.style.display = 'block';
-            } else {
-                loadMoreArea.style.display = 'none';
-            }
-        }
+            const text = [headers, ...rows].map(row => row.join('\t')).join('\n');
 
-        function copyListToClipboard() {
-            if (!filteredPlayers.length) {
-                return;
-            }
-            const ratingType = document.getElementById('ratingType').value;
-            const ratingLabel = ratingType === 'std' ? 'Standard' :
-                                ratingType === 'rapid' ? 'Rapid' : 'Blitz';
-
-            const lines = [];
-            lines.push(['Name', 'Title(s)', 'Federation', ratingLabel, 'Year', 'FIDE ID'].join('\t'));
-
-            filteredPlayers.forEach(p => {
-                const titlePieces = [];
-                if (p.title) titlePieces.push(p.title);
-                if (p.w_title) titlePieces.push(p.w_title);
-                const titleStr = titlePieces.join(' / ');
-
-                const ratingValue = p[ratingType] || 0;
-                const ratingText = ratingValue > 0 ? ratingValue : '';
-
-                lines.push([
-                    p.name || '',
-                    titleStr,
-                    p.country || '',
-                    ratingText,
-                    p.year || '',
-                    p.fideid || ''
-                ].join('\t'));
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<span class="material-icons">check</span> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
             });
-
-            const text = lines.join('\n');
-
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text)
-                    .then(showCopySuccess)
-                    .catch(err => console.error('Clipboard copy failed:', err));
-            } else {
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.style.position = 'fixed';
-                ta.style.left = '-9999px';
-                document.body.appendChild(ta);
-                ta.select();
-                try { document.execCommand('copy'); } catch (e) { console.error(e); }
-                document.body.removeChild(ta);
-                showCopySuccess();
-            }
         }
 
-        function showCopySuccess() {
-            const btn = document.getElementById('copyBtn');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!`;
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-            }, 2000);
-        }
-
-        // Utility: simple HTML escape
+        // Utilities
         function escapeHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
-        // Utility: Debounce to prevent lag while typing
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -610,16 +524,18 @@ loadFirstJson(JSON_CANDIDATES)
             };
         }
 
-        // Event Listeners
-        document.getElementById('ratingType').addEventListener('change', () => applyFilters());
-        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
-        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
-        document.getElementById('searchFilter').addEventListener('input', debounce(applyFilters, 300));
+        // Event listeners
+        document.getElementById('minRating').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('federation').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('search').addEventListener('input', debounce(applyFilters, 300));
         document.getElementById('loadMoreBtn').addEventListener('click', () => {
             displayLimit += BATCH_SIZE;
             renderTable();
         });
-        document.getElementById('copyBtn').addEventListener('click', () => copyListToClipboard());
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+        // Initialize
+        loadDatabase();
     </script>
 </body>
 </html>
