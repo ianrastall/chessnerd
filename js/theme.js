@@ -4,47 +4,67 @@
 
     const ACCENT_PALETTE = [
         { value: '#0d9488', label: 'Teal' },
+        { value: '#3b82f6', label: 'Blue' },
+        { value: '#8b5cf6', label: 'Purple' },
+        { value: '#10b981', label: 'Emerald' },
+        { value: '#f59e0b', label: 'Amber' },
+        { value: '#ef4444', label: 'Red' },
+        { value: '#ec4899', label: 'Soft Pink' },
+        { value: '#fb7185', label: 'Coral' },
         { value: '#5f9ea0', label: 'Cadet Blue' },
         { value: '#6495ed', label: 'Cornflower' },
-        { value: '#8b5cf6', label: 'Purple' },
-        { value: '#ee82ee', label: 'Violet' },
-        { value: '#9b4d96', label: 'Plum' },
-        { value: '#f9a8d4', label: 'Soft Pink' },
         { value: '#deb887', label: 'Burlywood' },
-        { value: '#ef4444', label: 'Red' }
+        { value: '#60a5fa', label: 'Cornflower Blue' },
+        { value: '#7c3aed', label: 'Violet' }
     ];
     const DEFAULT_ACCENT = '#0d9488';
 
-    // DOM Elements
     const themeToggle = document.getElementById('themeToggle');
     const accentColor = document.getElementById('accentColor');
 
+    function normalizeHexColor(color) {
+        if (typeof color !== 'string') {
+            return DEFAULT_ACCENT;
+        }
+
+        const candidate = color.trim();
+        if (/^#[0-9a-fA-F]{6}$/.test(candidate)) {
+            return candidate.toLowerCase();
+        }
+
+        return DEFAULT_ACCENT;
+    }
+
     function adjustColor(color, amount) {
-        const raw = color.startsWith('#') ? color.slice(1) : color;
-        if (raw.length !== 6) return color;
+        const normalized = normalizeHexColor(color).slice(1);
+        const parsed = parseInt(normalized, 16);
 
-        const num = parseInt(raw, 16);
-        if (Number.isNaN(num)) return color;
+        if (Number.isNaN(parsed)) {
+            return color;
+        }
 
-        let r = (num >> 16) + amount;
-        let g = ((num >> 8) & 0x00FF) + amount;
-        let b = (num & 0x0000FF) + amount;
+        let red = ((parsed >> 16) & 0xFF) + amount;
+        let green = ((parsed >> 8) & 0xFF) + amount;
+        let blue = (parsed & 0xFF) + amount;
 
-        r = Math.min(Math.max(0, r), 255);
-        g = Math.min(Math.max(0, g), 255);
-        b = Math.min(Math.max(0, b), 255);
+        red = Math.min(Math.max(0, red), 255);
+        green = Math.min(Math.max(0, green), 255);
+        blue = Math.min(Math.max(0, blue), 255);
 
-        const adjusted = (r << 16) | (g << 8) | b;
-        return `#${adjusted.toString(16).padStart(6, '0')}`;
+        return `#${((red << 16) | (green << 8) | blue).toString(16).padStart(6, '0')}`;
     }
 
     function applyAccent(color) {
-        document.documentElement.style.setProperty('--accent', color);
-        document.documentElement.style.setProperty('--accent-light', adjustColor(color, 20));
+        const normalized = normalizeHexColor(color);
+        document.documentElement.style.setProperty('--accent', normalized);
+        document.documentElement.style.setProperty('--accent-light', adjustColor(normalized, 20));
+        return normalized;
     }
 
     function populateAccentDropdown(selectedColor) {
-        if (!accentColor) return;
+        if (!accentColor) {
+            return;
+        }
 
         accentColor.innerHTML = '';
 
@@ -55,41 +75,43 @@
             accentColor.appendChild(option);
         });
 
+        const normalizedSelected = normalizeHexColor(selectedColor);
         const hasSavedColor = ACCENT_PALETTE.some(
-            ({ value }) => value.toLowerCase() === selectedColor.toLowerCase()
+            ({ value }) => value.toLowerCase() === normalizedSelected
         );
 
         if (!hasSavedColor) {
             const customOption = document.createElement('option');
-            customOption.value = selectedColor;
+            customOption.value = normalizedSelected;
             customOption.textContent = 'Custom';
             accentColor.appendChild(customOption);
         }
 
-        accentColor.value = selectedColor;
+        accentColor.value = normalizedSelected;
     }
 
     function updateThemeToggleIcon(theme) {
-        if (!themeToggle) return;
+        if (!themeToggle) {
+            return;
+        }
+
         themeToggle.innerHTML = theme === 'dark'
             ? '<span class="material-icons">dark_mode</span>'
             : '<span class="material-icons">light_mode</span>';
     }
 
-    // Initialize theme and colors on load
     function loadPreferences() {
-        // Theme
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const storedTheme = localStorage.getItem('theme');
+        const savedTheme = storedTheme === 'light' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeToggleIcon(savedTheme);
 
-        // Accent color
-        const savedColor = localStorage.getItem('accentColor') || DEFAULT_ACCENT;
-        applyAccent(savedColor);
-        populateAccentDropdown(savedColor);
+        const storedColor = localStorage.getItem('accentColor');
+        const savedColor = normalizeHexColor(storedColor || DEFAULT_ACCENT);
+        const appliedColor = applyAccent(savedColor);
+        populateAccentDropdown(appliedColor);
     }
 
-    // Toggle theme
     function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -98,29 +120,26 @@
         updateThemeToggleIcon(newTheme);
     }
 
-    // Change accent color
     function changeAccentColor(color) {
-        applyAccent(color);
-        localStorage.setItem('accentColor', color);
-        if (accentColor && accentColor.value !== color) {
-            accentColor.value = color;
+        const normalized = applyAccent(color);
+        localStorage.setItem('accentColor', normalized);
+        if (accentColor && accentColor.value !== normalized) {
+            accentColor.value = normalized;
         }
     }
 
-    // Setup event listeners
     function setupEventListeners() {
         if (themeToggle) {
             themeToggle.addEventListener('click', toggleTheme);
         }
 
         if (accentColor) {
-            accentColor.addEventListener('change', (e) => {
-                changeAccentColor(e.target.value);
+            accentColor.addEventListener('change', (event) => {
+                changeAccentColor(event.target.value);
             });
         }
     }
 
-    // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             loadPreferences();
@@ -131,14 +150,15 @@
         setupEventListeners();
     }
 
-    // Export functions for use in other scripts
     window.themeUtils = {
         adjustColor,
         loadPreferences,
         toggleTheme,
-        changeAccentColor
+        changeAccentColor,
+        normalizeHexColor
     };
 })();
+
 (function() {
     // --- Configuration ---
     const STORAGE_KEY = 'holiday_snow_enabled';
@@ -153,21 +173,21 @@
         const now = new Date();
         const month = now.getMonth(); // 0-11
         const date = now.getDate();
-        
+
         // January 1st
         if (month === 0 && date === 1) return true;
-        
+
         // December (All month)
         if (month === 11) return true;
-        
+
         // November (Post-Thanksgiving)
         if (month === 10) {
             // Find Thanksgiving (4th Thursday)
             const firstOfNov = new Date(now.getFullYear(), 10, 1);
             const dayOfWeek = firstOfNov.getDay(); // 0 (Sun) to 6 (Sat)
             let daysToFirstThurs = (4 - dayOfWeek + 7) % 7;
-            const thanksgivingDate = 1 + daysToFirstThurs + 21; 
-            
+            const thanksgivingDate = 1 + daysToFirstThurs + 21;
+
             return date >= thanksgivingDate;
         }
         return false;
@@ -177,12 +197,12 @@
     if (!isHolidaySeason()) {
         // cleanup storage if date passed so it doesn't auto-start next year unexpectedly
         localStorage.removeItem(STORAGE_KEY);
-        return; 
+        return;
     }
 
     // --- Snow Logic ---
     let canvas, ctx, w, h, particles = [], animationId;
-    
+
     function resize() {
         w = canvas.width = window.innerWidth;
         h = canvas.height = window.innerHeight;
@@ -198,12 +218,12 @@
             resize();
         }
         canvas.style.display = 'block';
-        
+
         // Initialize particles - "Light Snowfall" settings
         particles = [];
         // Much lower density: Max 50 flakes, or fewer on mobile
-        const particleCount = Math.min(window.innerWidth / 10, 50); 
-        
+        const particleCount = Math.min(window.innerWidth / 10, 50);
+
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * w,
@@ -213,7 +233,7 @@
                 s: Math.random() * 0.5 + 0.2 // Speed: 0.2 to 0.7 (Very slow/gentle)
             });
         }
-        
+
         if (!animationId) draw();
     }
 
@@ -265,7 +285,7 @@
         btn.className = BTN_CLASS;
         btn.id = BTN_ID;
         btn.style.marginLeft = '0.5rem';
-        
+
         // check persistence
         let isSnowing = localStorage.getItem(STORAGE_KEY) === 'true';
 
@@ -281,7 +301,7 @@
             isSnowing = !isSnowing;
             // Save state to localStorage
             localStorage.setItem(STORAGE_KEY, isSnowing);
-            
+
             if (isSnowing) {
                 btn.innerHTML = BTN_TEXT_ON;
                 createSnow();
