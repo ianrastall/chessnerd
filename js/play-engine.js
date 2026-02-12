@@ -31,7 +31,6 @@
     let engineReady = false;
     let engineThinking = false;
     let skipBestmoveCount = 0;
-    let skipInfoUntilBestmove = false;
     let initialFen = game.fen();
     let initialFenUci = toUciFen(initialFen);
     let moveTime = parseInt(moveTimeInput?.value || '1500', 10);
@@ -105,12 +104,19 @@
     }
 
     function markEngineUnavailable(message) {
+        if (engine) {
+            try {
+                engine.terminate();
+            } catch (err) {
+                // Ignore terminate failures.
+            }
+            engine = null;
+        }
         engineReady = false;
         engineThinking = false;
         analysisActive = false;
         analysisCurrent = null;
         skipBestmoveCount = 0;
-        skipInfoUntilBestmove = false;
         updateEngineStatus('Engine unavailable', '');
         updateAnalyzeButton();
         setStatus(message, 'error');
@@ -136,7 +142,6 @@
 
     function markSearchCanceled() {
         skipBestmoveCount += 1;
-        skipInfoUntilBestmove = true;
     }
 
     function resetEngineLog(message = 'Engine info will appear here during search.') {
@@ -363,6 +368,7 @@
 
     function buildViewGame(ply) {
         const history = game.history({ verbose: true });
+        // For live view we intentionally reuse the canonical game instance.
         if (ply >= history.length) return game;
         const next = new Chess(initialFen);
         const slice = history.slice(0, ply);
@@ -756,10 +762,11 @@
         analysisResults = new Array(history.length).fill(null);
         analysisIndex = 0;
         analysisTotal = analysisPositions.length;
-        analysisMoveTime = moveTime;
+        analysisMoveTime = Math.max(moveTime, 1000);
         analysisCurrent = null;
         analysisActive = true;
 
+        resetEngineLog('Analyzing positions...');
         renderMoveList();
         updateEngineStatus('Analyzing...', 'busy');
         updateAnalyzeButton();
@@ -828,7 +835,9 @@
             .map((m) => m.promotion);
         if (!options.length) return undefined;
 
-        const picked = (prompt('Promote to: q, r, b, n', 'q') || 'q').toLowerCase();
+        const raw = prompt('Promote to: q, r, b, n', 'q');
+        if (raw === null) return null;
+        const picked = (raw.trim() || 'q').toLowerCase();
         return options.includes(picked) ? picked : 'q';
     }
 
@@ -843,6 +852,13 @@
         }
 
         const promotion = resolvePromotionChoice(from, to);
+        if (promotion === null) {
+            selectedSquare = null;
+            legalTargets = [];
+            renderBoard();
+            setStatus('Promotion canceled.', 'warning');
+            return;
+        }
         const move = game.move({ from, to, promotion });
         if (!move) {
             setStatus('Illegal move.', 'error');
@@ -905,7 +921,6 @@
         }
 
         if (line.startsWith('info')) {
-            if (skipInfoUntilBestmove) return;
             if (analysisActive) {
                 const parsed = parseInfoLine(line);
                 if (parsed && (!analysisCurrent || (parsed.depth || 0) >= (analysisCurrent.depth || 0))) {
@@ -919,9 +934,6 @@
         if (line.startsWith('bestmove')) {
             if (skipBestmoveCount > 0) {
                 skipBestmoveCount -= 1;
-                if (skipBestmoveCount === 0) {
-                    skipInfoUntilBestmove = false;
-                }
                 return;
             }
             if (analysisActive) {
@@ -989,7 +1001,7 @@
         renderBoard();
     }
 
-    function newGame(keepOrientation = false) {
+    function newGame(keepOrientation = false, silent = false) {
         stopEngine();
         resetAnalysisResults();
         game = new Chess();
@@ -1005,12 +1017,17 @@
             orientation = engineSide === 'w' ? 'black' : 'white';
         }
         if (engineReady) postEngineCommand('ucinewgame');
-        setStatus('New game started.', 'success');
+        if (!silent) {
+            setStatus('New game started.', 'success');
+        }
         refreshUI();
         maybeQueueEngine();
     }
 
     function jumpToPly(ply) {
+        if (analysisActive) {
+            stopAnalysis(true);
+        }
         stopEngine();
         selectedSquare = null;
         legalTargets = [];
@@ -1118,7 +1135,7 @@
             return;
         }
         engine.onmessage = handleEngineMessage;
-        engine.onerror = (err) => markEngineUnavailable(`Engine error: ${err.message || err}`);
+        engine.onerror = (err) => markEngineUnavailable(`Engine error: ${err?.error?.message || err?.message || err}`);
         if (!postEngineCommand('uci')) {
             return;
         }
@@ -1159,7 +1176,18 @@
         initControls();
         initEngine();
         resetEngineLog();
-        newGame(false);
+        newGame(false, true);
+        window.addEventListener('beforeunload', () => {
+            cancelActiveDrag();
+            if (engine) {
+                try {
+                    engine.terminate();
+                } catch (err) {
+                    // Ignore terminate failures.
+                }
+                engine = null;
+            }
+        });
         setStatus('Initializing Lozza...', 'warning');
     }
 
