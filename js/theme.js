@@ -39,6 +39,14 @@
         }
     }
 
+    function safeStorageRemove(key) {
+        try {
+            localStorage.removeItem(key);
+        } catch (error) {
+            // Ignore storage write errors (privacy mode, quota, etc.).
+        }
+    }
+
     function captureControls() {
         themeToggle = document.getElementById('themeToggle');
         accentColor = document.getElementById('accentColor');
@@ -285,6 +293,7 @@
 
     // Stop execution if not holiday season
     if (!isHolidaySeason()) {
+        safeStorageRemove(STORAGE_KEY);
         return;
     }
 
