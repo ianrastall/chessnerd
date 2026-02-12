@@ -182,9 +182,11 @@ def render_full_file(repo_root: Path, spec: FullFileSpec) -> list[str]:
     return [
         f"## Full File: `{title}`",
         "",
+        "{% raw %}",
         f"```{language}",
         body,
         "```",
+        "{% endraw %}",
         "",
     ]
 
@@ -197,9 +199,11 @@ def render_line_section(repo_root: Path, spec: LineSectionSpec) -> list[str]:
     return [
         f"## Section: `{path.as_posix()}` — {spec.title} (lines {start_line}-{end_line})",
         "",
+        "{% raw %}",
         f"```{language}",
         chunk,
         "```",
+        "{% endraw %}",
         "",
     ]
 
@@ -212,9 +216,11 @@ def render_marker_section(repo_root: Path, spec: MarkerSectionSpec) -> list[str]
     return [
         f"## Section: `{path.as_posix()}` — {spec.title} (lines {start_line}-{end_line})",
         "",
+        "{% raw %}",
         f"```{language}",
         chunk,
         "```",
+        "{% endraw %}",
         "",
     ]
 
@@ -260,4 +266,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
