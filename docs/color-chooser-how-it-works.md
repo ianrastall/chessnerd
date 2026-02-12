@@ -11,10 +11,10 @@ Primary implementation:
 - `js/theme.js`
 
 Representative page integration:
-- `index.html` (header controls + script include)
+- `index.html` (header controls + script include + early theme bootstrap in `<head>`)
 
 Supporting styles:
-- `css/style.css` (theme tokens, header controls, and button styles)
+- `css/style.css` (theme tokens, header controls, focus/reduced-motion styles)
 
 ## High-Level Architecture
 
@@ -23,54 +23,63 @@ Each page that supports the Color Chooser renders:
 - `#accentColor` as a `<select>` dropdown
 - `#themeToggle` as the dark/light mode button
 
-In `index.html`, these controls are in the header (`index.html:39-47`) and `js/theme.js` is loaded (`index.html:61`).
+In `index.html`, these controls are in the header (`index.html:71-80`) and `js/theme.js` is loaded (`index.html:94`).
 
 ### 2. State Sources
 The feature uses:
 - CSS custom properties on `:root` / `document.documentElement`
 - `data-theme` attribute on `<html>`
-- `localStorage` keys:
+- `localStorage` keys (guarded with try/catch wrappers):
   - `theme` (`"dark"` or `"light"`)
   - `accentColor` (hex color like `#0d9488`)
+  - `holiday_snow_enabled` (`"true"` or absent)
 
 ### 3. Styling Model
 `css/style.css` defines:
-- Base dark-theme tokens at `:root` (`css/style.css:1-19`)
-- Light-theme overrides at `[data-theme="light"]` (`css/style.css:21-36`)
-- Header/dropdown/button UI styles used by chooser controls (`css/style.css:69-154`, `css/style.css:264-299`)
+- Base dark-theme tokens at `:root` (`css/style.css:1-20`)
+- Light-theme overrides at `[data-theme="light"]` (`css/style.css:22-38`)
+- Header/dropdown/button UI styles (`css/style.css:70-168`, `css/style.css:272-317`)
 
 `theme.js` updates:
 - `--accent`
 - `--accent-light`
+- `--accent-rgb`
 
-Any CSS using `var(--accent)`/`var(--accent-light)` updates immediately.
+This lets both opaque and transparent accent-based UI (including board highlights) track the selected accent.
 
 ## Runtime Flow
 
-### Boot Sequence
+### Boot Sequence (Theme/Accent IIFE)
 `js/theme.js` starts in an IIFE and does this:
-1. Gets element handles:
-   - `themeToggle = document.getElementById('themeToggle')`
-   - `accentColor = document.getElementById('accentColor')`
+1. Defines helpers and state (`safeStorageGet`, `safeStorageSet`, color functions).
 2. Waits for DOM readiness:
-   - If document is still loading, runs on `DOMContentLoaded`
-   - Otherwise runs immediately
-3. Calls:
-   - `loadPreferences()`
-   - `setupEventListeners()`
+   - If document is loading, runs init on `DOMContentLoaded`.
+   - Otherwise runs init immediately.
+3. In init:
+   - Captures control handles (`#themeToggle`, `#accentColor`).
+   - Calls `loadPreferences()`.
+   - Calls `setupEventListeners()`.
 
-This guarantees controls initialize whether the script is in `<head>` or near the end of `<body>`.
+Because element capture happens inside init, this works whether the script is loaded in `<head>` or near `</body>`.
+
+### Pre-paint Theme Bootstrap (index page)
+`index.html` includes a small inline script in `<head>` that:
+- Reads `theme` and `accentColor` from localStorage (try/catch guarded).
+- Applies `data-theme`, `--accent`, `--accent-light`, and `--accent-rgb` early.
+
+This minimizes dark/light flash before the main script runs.
 
 ### Preference Loading
 `loadPreferences()`:
-1. Reads `localStorage.theme`
-2. Normalizes to either `"light"` or `"dark"` (defaults to `"dark"`)
-3. Sets `document.documentElement.setAttribute('data-theme', savedTheme)`
-4. Updates theme icon via `updateThemeToggleIcon(savedTheme)`
-5. Reads `localStorage.accentColor`
-6. Normalizes/validates color with `normalizeHexColor(...)`
-7. Applies accent variables with `applyAccent(...)`
-8. Populates dropdown options and selected value via `populateAccentDropdown(...)`
+1. Reads `theme` via guarded storage.
+2. Normalizes to `light`/`dark` (default `dark`).
+3. Sets `<html data-theme="...">`.
+4. Updates theme button icon and accessibility state.
+5. Reads `accentColor` via guarded storage.
+6. Normalizes color with `normalizeHexColor(...)`.
+7. Applies accent variables with `applyAccent(...)`.
+8. Rebuilds dropdown options and selected value.
+9. Ensures control accessibility attributes are present.
 
 ### User Interactions
 `setupEventListeners()` wires:
@@ -78,14 +87,14 @@ This guarantees controls initialize whether the script is in `<head>` or near th
 - Accent dropdown change -> `changeAccentColor(event.target.value)`
 
 `toggleTheme()`:
-- Flips `data-theme` between dark/light
-- Persists new value in `localStorage`
-- Swaps icon (`dark_mode`/`light_mode`)
+- Flips `data-theme`.
+- Persists value in localStorage.
+- Updates icon and accessibility state (`aria-pressed`, `aria-label`, `title`).
 
 `changeAccentColor(color)`:
-- Calls `applyAccent(color)` (with normalization)
-- Saves normalized value to `localStorage`
-- Syncs dropdown value if needed
+- Applies normalized accent variables.
+- Persists color.
+- Rebuilds/selects dropdown options (so custom colors stay in sync).
 
 ## Function-Level Behavior
 
@@ -94,80 +103,93 @@ This guarantees controls initialize whether the script is in `<head>` or near th
 - Lowercases valid values
 - Returns `DEFAULT_ACCENT` if invalid
 
-This is the primary guardrail for corrupted or unexpected storage values.
-
 ### `adjustColor(color, amount)`
-- Parses hex color into RGB
+- Parses normalized hex into RGB
 - Adds `amount` to each channel with clamping `[0,255]`
-- Returns a new hex color
+- Returns adjusted hex color
 
-Used to derive `--accent-light` from `--accent`.
+Used to derive `--accent-light`.
+
+### `hexToRgbTuple(color)`
+- Converts normalized hex to `"r, g, b"` string
+- Used for `--accent-rgb`
 
 ### `applyAccent(color)`
 - Normalizes input
 - Writes:
   - `--accent`
   - `--accent-light`
+  - `--accent-rgb`
 - Returns normalized color
 
 ### `populateAccentDropdown(selectedColor)`
-- Rebuilds `<select>` options from `ACCENT_PALETTE`
-- If saved color is not in palette, adds a `Custom` option
-- Sets dropdown value to selected color
-
-This preserves old/custom stored colors without discarding them.
+- Rebuilds options from `ACCENT_PALETTE`
+- Adds `Custom` option if selected color is not in palette
+- Sets dropdown selected value
 
 ### `updateThemeToggleIcon(theme)`
-- Sets Material icon markup on `#themeToggle`
+- Replaces icon using DOM nodes (no `innerHTML`)
 - Uses:
   - `dark_mode` when dark theme active
   - `light_mode` when light theme active
+- Updates:
+  - `aria-pressed`
+  - `aria-label`
+  - `title`
 
-### `window.themeUtils` export
-The script exposes helpers globally:
+### `window.themeUtils`
+The script exposes frozen helper methods globally:
 - `adjustColor`
 - `loadPreferences`
 - `toggleTheme`
 - `changeAccentColor`
 - `normalizeHexColor`
 
-This allows manual triggering from dev tools or other scripts.
+Each exported method re-captures controls before acting.
 
 ## Secondary Module in `theme.js`: Holiday Snow Toggle
 
-`theme.js` contains a second IIFE unrelated to accent/theme choice but loaded from the same file.
+`theme.js` contains a second IIFE for optional holiday snowfall.
 
 What it does:
-- Enables optional snow effect only during holiday season
-- Persists toggle state in `localStorage.holiday_snow_enabled`
-- Injects a `#snowToggle` button into `.controls`
-- Draws animated snow on a full-screen canvas
+- Enables optional snow only during holiday season:
+  - Thanksgiving onward in November
+  - All December
+  - January 1st
+- Persists toggle state in `holiday_snow_enabled`
+- Restores snow on load if preference is enabled
+- Adds a `#snowToggle` button in `.controls` when available
+- Runs animation on a fullscreen canvas
 
-Date gate:
-- Thanksgiving onward in November
-- All December
-- January 1st
-
-If outside season:
-- It clears the stored snow key and exits early.
+Key behavior:
+- Outside holiday season: exits early (does not clear saved preference).
+- Uses guarded storage access.
+- Uses DPR-aware canvas sizing.
+- Cleans up animation frame, resize listener, and canvas on stop.
+- Adds `beforeunload` cleanup.
 
 ## Cross-Page Behavior
 
-Because multiple pages include the same header IDs and `js/theme.js`:
-- A user selection on one page applies site-wide.
-- The next page load restores the same theme/accent from storage.
+Because many pages include shared header controls and `js/theme.js`:
+- Theme/accent preference is site-wide.
+- Preference persists across page loads.
 
 If a page does not include these controls:
-- The script safely no-ops (null checks around element usage).
+- Theme/accent control wiring safely no-ops.
+- If holiday snow was previously enabled, snow can still render without `.controls`.
 
 ## Debug Checklist
 
 If Color Chooser appears broken:
-1. Confirm page has `#themeToggle` and `#accentColor`.
+1. Confirm page has `#themeToggle` and `#accentColor` (if chooser UI is expected).
 2. Confirm `js/theme.js` is loaded on that page.
 3. Inspect `<html data-theme="...">` in dev tools.
-4. Check computed CSS variables (`--accent`, `--accent-light`).
+4. Check computed CSS variables:
+   - `--accent`
+   - `--accent-light`
+   - `--accent-rgb`
 5. Check localStorage values:
    - `theme`
    - `accentColor`
-6. Verify no invalid color values are being written by external scripts.
+   - `holiday_snow_enabled`
+6. Verify no script errors are thrown around storage access in restrictive browser modes.

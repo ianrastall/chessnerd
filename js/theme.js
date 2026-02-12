@@ -19,8 +19,30 @@
     ];
     const DEFAULT_ACCENT = '#0d9488';
 
-    const themeToggle = document.getElementById('themeToggle');
-    const accentColor = document.getElementById('accentColor');
+    let themeToggle = null;
+    let accentColor = null;
+    let listenersBound = false;
+
+    function safeStorageGet(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function safeStorageSet(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            // Ignore storage write errors (privacy mode, quota, etc.).
+        }
+    }
+
+    function captureControls() {
+        themeToggle = document.getElementById('themeToggle');
+        accentColor = document.getElementById('accentColor');
+    }
 
     function normalizeHexColor(color) {
         if (typeof color !== 'string') {
@@ -40,7 +62,7 @@
         const parsed = parseInt(normalized, 16);
 
         if (Number.isNaN(parsed)) {
-            return color;
+            return DEFAULT_ACCENT;
         }
 
         let red = ((parsed >> 16) & 0xFF) + amount;
@@ -54,10 +76,20 @@
         return `#${((red << 16) | (green << 8) | blue).toString(16).padStart(6, '0')}`;
     }
 
+    function hexToRgbTuple(color) {
+        const normalized = normalizeHexColor(color).slice(1);
+        const parsed = parseInt(normalized, 16);
+        const red = (parsed >> 16) & 0xFF;
+        const green = (parsed >> 8) & 0xFF;
+        const blue = parsed & 0xFF;
+        return `${red}, ${green}, ${blue}`;
+    }
+
     function applyAccent(color) {
         const normalized = normalizeHexColor(color);
         document.documentElement.style.setProperty('--accent', normalized);
         document.documentElement.style.setProperty('--accent-light', adjustColor(normalized, 20));
+        document.documentElement.style.setProperty('--accent-rgb', hexToRgbTuple(normalized));
         return normalized;
     }
 
@@ -95,40 +127,63 @@
             return;
         }
 
-        themeToggle.innerHTML = theme === 'dark'
-            ? '<span class="material-icons">dark_mode</span>'
-            : '<span class="material-icons">light_mode</span>';
+        const icon = document.createElement('span');
+        icon.className = 'material-icons';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+        themeToggle.replaceChildren(icon);
+
+        const isDark = theme === 'dark';
+        const label = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+        themeToggle.type = 'button';
+        themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+        themeToggle.setAttribute('aria-label', label);
+        themeToggle.title = label;
+    }
+
+    function applyControlAccessibility() {
+        if (accentColor) {
+            if (!accentColor.hasAttribute('aria-label')) {
+                accentColor.setAttribute('aria-label', 'Accent color');
+            }
+            if (!accentColor.hasAttribute('title')) {
+                accentColor.setAttribute('title', 'Accent color');
+            }
+        }
     }
 
     function loadPreferences() {
-        const storedTheme = localStorage.getItem('theme');
+        const storedTheme = safeStorageGet('theme');
         const savedTheme = storedTheme === 'light' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeToggleIcon(savedTheme);
 
-        const storedColor = localStorage.getItem('accentColor');
+        const storedColor = safeStorageGet('accentColor');
         const savedColor = normalizeHexColor(storedColor || DEFAULT_ACCENT);
         const appliedColor = applyAccent(savedColor);
         populateAccentDropdown(appliedColor);
+        applyControlAccessibility();
     }
 
     function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        safeStorageSet('theme', newTheme);
         updateThemeToggleIcon(newTheme);
     }
 
     function changeAccentColor(color) {
         const normalized = applyAccent(color);
-        localStorage.setItem('accentColor', normalized);
-        if (accentColor && accentColor.value !== normalized) {
-            accentColor.value = normalized;
-        }
+        safeStorageSet('accentColor', normalized);
+        populateAccentDropdown(normalized);
     }
 
     function setupEventListeners() {
+        if (listenersBound) {
+            return;
+        }
+
         if (themeToggle) {
             themeToggle.addEventListener('click', toggleTheme);
         }
@@ -138,35 +193,70 @@
                 changeAccentColor(event.target.value);
             });
         }
+
+        listenersBound = true;
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            loadPreferences();
-            setupEventListeners();
-        });
-    } else {
+    function initThemeControls() {
+        captureControls();
         loadPreferences();
         setupEventListeners();
     }
 
-    window.themeUtils = {
-        adjustColor,
-        loadPreferences,
-        toggleTheme,
-        changeAccentColor,
-        normalizeHexColor
-    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            initThemeControls();
+        });
+    } else {
+        initThemeControls();
+    }
+
+    if (typeof window !== 'undefined') {
+        window.themeUtils = Object.freeze({
+            adjustColor,
+            loadPreferences: () => {
+                captureControls();
+                loadPreferences();
+            },
+            toggleTheme: () => {
+                captureControls();
+                toggleTheme();
+            },
+            changeAccentColor: (color) => {
+                captureControls();
+                changeAccentColor(color);
+            },
+            normalizeHexColor
+        });
+    }
 })();
 
 (function() {
+    'use strict';
+
     // --- Configuration ---
     const STORAGE_KEY = 'holiday_snow_enabled';
     const BTN_CLASS = 'btn btn-secondary';
     const BTN_ID = 'snowToggle';
-    // Using innerHTML for the icons. You can adjust the text here.
-    const BTN_TEXT_ON = '<span class="material-icons">ac_unit</span> Disable Snow';
-    const BTN_TEXT_OFF = '<span class="material-icons">ac_unit</span> Enable Snow';
+    const BTN_TEXT_ON = 'Disable Snow';
+    const BTN_TEXT_OFF = 'Enable Snow';
+    const SNOW_Z_INDEX = 100;
+
+    function safeStorageGet(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function safeStorageSet(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            // Ignore storage write errors (privacy mode, quota, etc.).
+        }
+    }
 
     // --- Date Logic (Thanksgiving to Jan 1st) ---
     function isHolidaySeason() {
@@ -195,34 +285,68 @@
 
     // Stop execution if not holiday season
     if (!isHolidaySeason()) {
-        // cleanup storage if date passed so it doesn't auto-start next year unexpectedly
-        localStorage.removeItem(STORAGE_KEY);
         return;
     }
 
     // --- Snow Logic ---
-    let canvas, ctx, w, h, particles = [], animationId;
+    let canvas = null;
+    let ctx = null;
+    let w = 0;
+    let h = 0;
+    let particles = [];
+    let animationId = null;
+    let resizeAttached = false;
+
+    function attachResizeListener() {
+        if (resizeAttached) {
+            return;
+        }
+        window.addEventListener('resize', resize);
+        resizeAttached = true;
+    }
+
+    function detachResizeListener() {
+        if (!resizeAttached) {
+            return;
+        }
+        window.removeEventListener('resize', resize);
+        resizeAttached = false;
+    }
 
     function resize() {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
+        if (!canvas || !ctx) {
+            return;
+        }
+
+        const dpr = window.devicePixelRatio || 1;
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        canvas.style.width = `${w}px`;
+        canvas.style.height = `${h}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     function createSnow() {
         if (!canvas) {
             canvas = document.createElement('canvas');
-            canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+            canvas.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:${SNOW_Z_INDEX};`;
             document.body.appendChild(canvas);
             ctx = canvas.getContext('2d');
-            window.addEventListener('resize', resize);
-            resize();
+            if (!ctx) {
+                return;
+            }
         }
+
+        attachResizeListener();
+        resize();
         canvas.style.display = 'block';
 
         // Initialize particles - "Light Snowfall" settings
         particles = [];
         // Much lower density: Max 50 flakes, or fewer on mobile
-        const particleCount = Math.min(window.innerWidth / 10, 50);
+        const particleCount = Math.min(Math.floor(window.innerWidth / 10), 50);
 
         for (let i = 0; i < particleCount; i++) {
             particles.push({
@@ -234,10 +358,16 @@
             });
         }
 
-        if (!animationId) draw();
+        if (!animationId) {
+            draw();
+        }
     }
 
     function draw() {
+        if (!ctx) {
+            return;
+        }
+
         ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // Slightly more transparent
         ctx.beginPath();
@@ -266,49 +396,68 @@
     }
 
     function stopSnow() {
-        if (canvas) canvas.style.display = 'none';
         if (animationId) {
             cancelAnimationFrame(animationId);
             animationId = null;
         }
+        detachResizeListener();
+        particles = [];
+        if (canvas) {
+            canvas.remove();
+            canvas = null;
+            ctx = null;
+        }
+    }
+
+    function updateSnowButtonState(button, enabled) {
+        const icon = document.createElement('span');
+        icon.className = 'material-icons';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = 'ac_unit';
+
+        const labelText = enabled ? BTN_TEXT_ON : BTN_TEXT_OFF;
+        button.replaceChildren(icon, document.createTextNode(` ${labelText}`));
+        button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+        button.setAttribute('aria-label', labelText);
+        button.title = labelText;
     }
 
     // --- UI Integration ---
     function init() {
+        let isSnowing = safeStorageGet(STORAGE_KEY) === 'true';
+        if (isSnowing) {
+            createSnow();
+        }
+
         const controls = document.querySelector('.controls');
-        if (!controls) return;
+        if (!controls) {
+            return;
+        }
 
         // Check if button already exists (prevents duplicate if script runs twice)
-        if (document.getElementById(BTN_ID)) return;
+        if (document.getElementById(BTN_ID)) {
+            return;
+        }
 
         const btn = document.createElement('button');
         btn.className = BTN_CLASS;
         btn.id = BTN_ID;
+        btn.type = 'button';
         btn.style.marginLeft = '0.5rem';
-
-        // check persistence
-        let isSnowing = localStorage.getItem(STORAGE_KEY) === 'true';
-
-        // Set initial state
-        if (isSnowing) {
-            btn.innerHTML = BTN_TEXT_ON;
-            createSnow();
-        } else {
-            btn.innerHTML = BTN_TEXT_OFF;
-        }
+        updateSnowButtonState(btn, isSnowing);
 
         btn.addEventListener('click', () => {
             isSnowing = !isSnowing;
             // Save state to localStorage
-            localStorage.setItem(STORAGE_KEY, isSnowing);
+            safeStorageSet(STORAGE_KEY, isSnowing ? 'true' : 'false');
 
             if (isSnowing) {
-                btn.innerHTML = BTN_TEXT_ON;
                 createSnow();
             } else {
-                btn.innerHTML = BTN_TEXT_OFF;
                 stopSnow();
             }
+
+            updateSnowButtonState(btn, isSnowing);
         });
 
         // Add button to header
@@ -321,4 +470,6 @@
     } else {
         init();
     }
+
+    window.addEventListener('beforeunload', stopSnow);
 })();

@@ -13,6 +13,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess Nerd</title>
+    <script>
+      (function() {
+        try {
+          var storedTheme = localStorage.getItem('theme');
+          var theme = storedTheme === 'light' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+
+          var storedAccent = localStorage.getItem('accentColor');
+          if (!storedAccent || !/^#[0-9a-fA-F]{6}$/.test(storedAccent)) {
+            return;
+          }
+
+          var normalized = storedAccent.toLowerCase();
+          document.documentElement.style.setProperty('--accent', normalized);
+
+          var parsed = parseInt(normalized.slice(1), 16);
+          var red = (parsed >> 16) & 255;
+          var green = (parsed >> 8) & 255;
+          var blue = parsed & 255;
+          document.documentElement.style.setProperty('--accent-rgb', red + ', ' + green + ', ' + blue);
+
+          var boost = 20;
+          var redLight = Math.min(Math.max(0, red + boost), 255);
+          var greenLight = Math.min(Math.max(0, green + boost), 255);
+          var blueLight = Math.min(Math.max(0, blue + boost), 255);
+          var accentLight = '#' + ((redLight << 16) | (greenLight << 8) | blueLight).toString(16).padStart(6, '0');
+          document.documentElement.style.setProperty('--accent-light', accentLight);
+        } catch (error) {
+          // Ignore storage access errors.
+        }
+      })();
+    </script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -38,11 +70,12 @@
             </nav>
             <div class="controls">
                 <div class="accent-selector">
-                    <span class="material-icons">palette</span>
-                    <select id="accentColor" class="color-dropdown"></select>
+                    <label for="accentColor" class="visually-hidden">Accent color</label>
+                    <span class="material-icons" aria-hidden="true">palette</span>
+                    <select id="accentColor" class="color-dropdown" aria-label="Accent color"></select>
                 </div>
-                <button id="themeToggle" class="btn btn-secondary">
-                    <span class="material-icons">dark_mode</span>
+                <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true">
+                    <span class="material-icons" aria-hidden="true">dark_mode</span>
                 </button>
             </div>
         </header>
