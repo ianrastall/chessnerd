@@ -30,6 +30,10 @@
     let orientation = 'white';
     let engineReady = false;
     let engineThinking = false;
+    let skipBestmoveCount = 0;
+    let skipInfoUntilBestmove = false;
+    let initialFen = game.fen();
+    let initialFenUci = toUciFen(initialFen);
     let moveTime = parseInt(moveTimeInput?.value || '1500', 10);
     let selectedSquare = null;
     let legalTargets = [];
@@ -55,6 +59,89 @@
     function updateEngineStatus(text, mode = '') {
         engineStatusEl.textContent = text;
         engineStatusEl.className = `engine-chip ${mode}`.trim();
+    }
+
+    function toUciFen(fen) {
+        const parts = (fen || '').trim().split(/\s+/);
+        if (parts.length < 4) return 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
+        return parts.slice(0, 4).join(' ');
+    }
+
+    function normalizeFenInput(fen) {
+        const trimmed = (fen || '').trim();
+        if (!trimmed) return '';
+        const parts = trimmed.split(/\s+/);
+        if (parts.length === 4) {
+            return `${parts.join(' ')} 0 1`;
+        }
+        return trimmed;
+    }
+
+    function setInitialFen(fen) {
+        const candidate = normalizeFenInput(fen);
+        if (candidate) {
+            const test = new Chess();
+            if (test.load(candidate)) {
+                initialFen = test.fen();
+                initialFenUci = toUciFen(initialFen);
+                return;
+            }
+        }
+        const start = new Chess();
+        initialFen = start.fen();
+        initialFenUci = toUciFen(initialFen);
+    }
+
+    function setInitialFenFromHeaders(headers) {
+        const fen = headers?.FEN;
+        setInitialFen(fen || '');
+    }
+
+    function buildPositionCommand(moves) {
+        if (!moves.length) {
+            return `position fen ${initialFenUci}`;
+        }
+        return `position fen ${initialFenUci} moves ${moves.join(' ')}`;
+    }
+
+    function markEngineUnavailable(message) {
+        engineReady = false;
+        engineThinking = false;
+        analysisActive = false;
+        analysisCurrent = null;
+        skipBestmoveCount = 0;
+        skipInfoUntilBestmove = false;
+        updateEngineStatus('Engine unavailable', '');
+        updateAnalyzeButton();
+        setStatus(message, 'error');
+    }
+
+    function postEngineCommand(command, reportError = true) {
+        if (!engine) {
+            if (reportError) {
+                markEngineUnavailable('Engine worker is not available.');
+            }
+            return false;
+        }
+        try {
+            engine.postMessage(command);
+            return true;
+        } catch (err) {
+            if (reportError) {
+                markEngineUnavailable(`Engine communication failed: ${err.message || err}`);
+            }
+            return false;
+        }
+    }
+
+    function markSearchCanceled() {
+        skipBestmoveCount += 1;
+        skipInfoUntilBestmove = true;
+    }
+
+    function resetEngineLog(message = 'Engine info will appear here during search.') {
+        engineLines = [];
+        engineLogEl.textContent = message;
     }
 
     function getUciMoves() {
@@ -213,9 +300,7 @@
             }
         });
 
-        if (!merged.Result) {
-            merged.Result = computeResultTag();
-        } else if (game.game_over()) {
+        if (!merged.Result || game.game_over()) {
             merged.Result = computeResultTag();
         }
 
@@ -265,12 +350,12 @@
 
     function buildAnnotatedPgn() {
         const history = game.history({ verbose: true });
-        if (!history.length) {
-            return '[No moves yet]';
-        }
-
         const headerMap = buildHeaderMap();
         const headers = buildPgnHeaders(headerMap);
+        if (!history.length) {
+            const emptyMovetext = headerMap.Result || '*';
+            return headers ? `${headers}\n\n${emptyMovetext}` : emptyMovetext;
+        }
         const moves = buildAnnotatedMovetext(history, headerMap.Result);
 
         return headers ? `${headers}\n\n${moves}` : moves;
@@ -279,9 +364,11 @@
     function buildViewGame(ply) {
         const history = game.history({ verbose: true });
         if (ply >= history.length) return game;
-        const next = new Chess();
+        const next = new Chess(initialFen);
         const slice = history.slice(0, ply);
-        slice.forEach((m) => next.move({ from: m.from, to: m.to, promotion: m.promotion }));
+        slice.forEach((m) => {
+            next.move({ from: m.from, to: m.to, promotion: m.promotion });
+        });
         return next;
     }
 
@@ -296,7 +383,7 @@
             boardStatsEl.textContent = 'Game over';
         } else {
             const turn = viewGame.turn() === 'w' ? 'White' : 'Black';
-            const inCheck = viewGame.in_check() ? '  Check' : '';
+            const inCheck = viewGame.in_check() ? ' | Check' : '';
             boardStatsEl.textContent = `${turn} to move${inCheck}`;
         }
 
@@ -310,7 +397,7 @@
 
         moveStatsEl.textContent = `${fullHistory.length} move${fullHistory.length === 1 ? '' : 's'}`;
 
-        toolStats.textContent = `Engine: ${engineReady ? 'ready' : 'loading'}  ${engineThinking ? 'thinking' : 'idle'}`;
+        toolStats.textContent = `Engine: ${engineReady ? 'ready' : 'loading'} | ${engineThinking ? 'thinking' : 'idle'}`;
         updateAnalyzeButton();
     }
 
@@ -611,7 +698,10 @@
     }
 
     function stopEngine() {
-        if (engine) engine.postMessage('stop');
+        if (engineThinking) {
+            markSearchCanceled();
+        }
+        postEngineCommand('stop', false);
         engineThinking = false;
     }
 
@@ -621,7 +711,7 @@
         let movesText = '';
         uciMoves.forEach((move) => {
             movesText = movesText ? `${movesText} ${move}` : move;
-            positions.push(`position startpos moves ${movesText}`);
+            positions.push(`position fen ${initialFenUci} moves ${movesText}`);
         });
         return positions;
     }
@@ -636,8 +726,9 @@
         analysisCurrent = null;
         const position = analysisPositions[analysisIndex];
         setStatus(`Analyzing ${analysisIndex + 1}/${analysisTotal}...`, 'warning');
-        engine.postMessage(position);
-        engine.postMessage(`go movetime ${analysisMoveTime}`);
+        if (!postEngineCommand(position) || !postEngineCommand(`go movetime ${analysisMoveTime}`)) {
+            stopAnalysis(true);
+        }
     }
 
     function startAnalysis() {
@@ -657,7 +748,9 @@
         }
 
         stopEngine();
-        engine.postMessage('ucinewgame');
+        if (!postEngineCommand('ucinewgame')) {
+            return;
+        }
 
         analysisPositions = buildAnalysisPositions(history);
         analysisResults = new Array(history.length).fill(null);
@@ -683,9 +776,10 @@
 
     function stopAnalysis(silent = false) {
         if (!analysisActive) return;
+        markSearchCanceled();
         analysisActive = false;
         analysisCurrent = null;
-        engine?.postMessage('stop');
+        postEngineCommand('stop', false);
         updateEngineStatus(engineReady ? 'Lozza ready' : 'Engine unavailable', engineReady ? 'ready' : '');
         updateAnalyzeButton();
         if (!silent) {
@@ -709,15 +803,33 @@
         if (activePly !== game.history().length) return;
         if (game.turn() !== engineSide) return;
         if (engineThinking) return;
+        if (analysisActive) return;
 
         engineThinking = true;
         updateEngineStatus('Lozza thinking...', 'busy');
 
         const moves = getUciMoves();
-        const position = moves.length ? `position startpos moves ${moves.join(' ')}` : 'position startpos';
+        const position = buildPositionCommand(moves);
+        if (!postEngineCommand(position) || !postEngineCommand(`go movetime ${moveTime}`)) {
+            engineThinking = false;
+            updateEngineStatus(engineReady ? 'Lozza ready' : 'Engine unavailable', engineReady ? 'ready' : '');
+        }
+    }
 
-        engine.postMessage(position);
-        engine.postMessage(`go movetime ${moveTime}`);
+    function resolvePromotionChoice(from, to) {
+        const piece = game.get(from);
+        if (!piece || piece.type !== 'p') return undefined;
+
+        const promotionRank = piece.color === 'w' ? '8' : '1';
+        if (to[1] !== promotionRank) return undefined;
+
+        const options = game.moves({ square: from, verbose: true })
+            .filter((m) => m.to === to && m.promotion)
+            .map((m) => m.promotion);
+        if (!options.length) return undefined;
+
+        const picked = (prompt('Promote to: q, r, b, n', 'q') || 'q').toLowerCase();
+        return options.includes(picked) ? picked : 'q';
     }
 
     function attemptMove(from, to) {
@@ -730,7 +842,8 @@
             return;
         }
 
-        const move = game.move({ from, to, promotion: 'q' });
+        const promotion = resolvePromotionChoice(from, to);
+        const move = game.move({ from, to, promotion });
         if (!move) {
             setStatus('Illegal move.', 'error');
             return;
@@ -777,7 +890,7 @@
 
         if (line === 'uciok') {
             updateEngineStatus('Syncing...', 'busy');
-            engine.postMessage('isready');
+            postEngineCommand('isready');
             return;
         }
 
@@ -785,13 +898,14 @@
             engineReady = true;
             updateEngineStatus('Lozza ready', 'ready');
             setStatus('Lozza is ready.', 'success');
-            engine.postMessage('ucinewgame');
+            postEngineCommand('ucinewgame');
             maybeQueueEngine();
             updateAnalyzeButton();
             return;
         }
 
         if (line.startsWith('info')) {
+            if (skipInfoUntilBestmove) return;
             if (analysisActive) {
                 const parsed = parseInfoLine(line);
                 if (parsed && (!analysisCurrent || (parsed.depth || 0) >= (analysisCurrent.depth || 0))) {
@@ -803,6 +917,13 @@
         }
 
         if (line.startsWith('bestmove')) {
+            if (skipBestmoveCount > 0) {
+                skipBestmoveCount -= 1;
+                if (skipBestmoveCount === 0) {
+                    skipInfoUntilBestmove = false;
+                }
+                return;
+            }
             if (analysisActive) {
                 analysisResults[analysisIndex] = analysisCurrent;
                 analysisCurrent = null;
@@ -822,8 +943,12 @@
 
             const parts = line.split(' ');
             const move = parts[1];
-            if (!move || move === '(none)') {
+            if (!move || move === '(none)' || move === 'NULL') {
                 setStatus('No legal moves for engine.', 'warning');
+                return;
+            }
+            if (!/^[a-h][1-8][a-h][1-8][nbrq]?$/.test(move)) {
+                setStatus('Engine returned a malformed move.', 'error');
                 return;
             }
             applyEngineMove(move);
@@ -868,8 +993,10 @@
         stopEngine();
         resetAnalysisResults();
         game = new Chess();
+        setInitialFen(game.fen());
         gameDateTag = formatDateTag(new Date());
         ensureDefaultHeaders();
+        resetEngineLog();
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -877,7 +1004,7 @@
         if (!keepOrientation) {
             orientation = engineSide === 'w' ? 'black' : 'white';
         }
-        engineReady && engine.postMessage('ucinewgame');
+        if (engineReady) postEngineCommand('ucinewgame');
         setStatus('New game started.', 'success');
         refreshUI();
         maybeQueueEngine();
@@ -908,9 +1035,11 @@
         }
 
         game = next;
+        setInitialFenFromHeaders(next.header());
         gameDateTag = next.header().Date || formatDateTag(new Date());
         ensureDefaultHeaders();
         resetAnalysisResults();
+        resetEngineLog();
         redoStack = [];
         selectedSquare = null;
         legalTargets = [];
@@ -918,6 +1047,7 @@
 
         setStatus('PGN loaded.', 'success');
         refreshUI();
+        if (engineReady) postEngineCommand('ucinewgame');
         checkGameEnd();
         maybeQueueEngine();
     }
@@ -935,12 +1065,15 @@
 
     function undoMove() {
         stopEngine();
+        resetAnalysisResults();
         const move = game.undo();
         if (!move) {
             setStatus('Nothing to undo.', 'warning');
             return;
         }
         redoStack.push(move);
+        selectedSquare = null;
+        legalTargets = [];
         activePly = game.history().length;
         setStatus('Move undone.', 'success');
         refreshUI();
@@ -948,12 +1081,16 @@
     }
 
     function redoMove() {
+        stopEngine();
+        resetAnalysisResults();
         const move = redoStack.pop();
         if (!move) {
             setStatus('Nothing to redo.', 'warning');
             return;
         }
         game.move({ from: move.from, to: move.to, promotion: move.promotion });
+        selectedSquare = null;
+        legalTargets = [];
         activePly = game.history().length;
         setStatus('Move redone.', 'success');
         refreshUI();
@@ -972,16 +1109,19 @@
     }
 
     function initEngine() {
+        engineReady = false;
+        engineThinking = false;
         try {
             engine = new Worker('js/lozza.js');
         } catch (err) {
-            setStatus('Failed to start Lozza worker.', 'error');
-            updateEngineStatus('Engine unavailable', '');
+            markEngineUnavailable('Failed to start Lozza worker.');
             return;
         }
         engine.onmessage = handleEngineMessage;
-        engine.onerror = (err) => setStatus(`Engine error: ${err.message || err}`, 'error');
-        engine.postMessage('uci');
+        engine.onerror = (err) => markEngineUnavailable(`Engine error: ${err.message || err}`);
+        if (!postEngineCommand('uci')) {
+            return;
+        }
         updateEngineStatus('Lozza warming up...', 'busy');
     }
 
@@ -1018,7 +1158,7 @@
     function init() {
         initControls();
         initEngine();
-        engineLogEl.textContent = 'Engine info will appear here during search.';
+        resetEngineLog();
         newGame(false);
         setStatus('Initializing Lozza...', 'warning');
     }

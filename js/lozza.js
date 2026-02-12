@@ -1196,7 +1196,10 @@ function go (maxPly) {
       break;
   }
 
-  bestMoveStr = formatMove(statsBestMove);
+  if (statsBestMove === 0)
+    bestMoveStr = '(none)';
+  else
+    bestMoveStr = formatMove(statsBestMove);
 
   //uciSend('info score cp', statsBestScore);
   uciSend('bestmove',bestMoveStr);
@@ -10977,7 +10980,8 @@ function uciExec (commands) {
 
       case 'stop': {
         //{{{  stop
-        
+        statsTimeOut = 1;
+
         break;
         
         //}}}
