@@ -1,3 +1,2848 @@
+# CCC Archive Context Dump
+
+- Generated: 2026-02-12 22:13:33
+- Chess Nerd root: D:\GitHub\chessnerd
+- ccc-archive root: D:\GitHub\ccc-archive
+
+This dump is designed for LLM context sharing.
+It includes full files and selected partial sections spanning both repos.
+
+## Mirror Status (chessnerd <-> ccc-archive)
+
+| File | Status | SHA256 (chessnerd) | SHA256 (ccc-archive) |
+| --- | --- | --- | --- |
+| `ccc_links.txt` | MATCH | `8d6571979ba6c6257e34f83cf2179acf29737e32cb554baab5c98d7da99c0a5c` | `8d6571979ba6c6257e34f83cf2179acf29737e32cb554baab5c98d7da99c0a5c` |
+| `events.txt` | MATCH | `0433cb68328f879646baae0224aaa65827463da2d1dee62749291c652c63c0bd` | `0433cb68328f879646baae0224aaa65827463da2d1dee62749291c652c63c0bd` |
+| `game_counts.txt` | MATCH | `97d37289914a9d5c2da3947541906c0943d5545e8850d1e94e7a0b985e65e3df` | `97d37289914a9d5c2da3947541906c0943d5545e8850d1e94e7a0b985e65e3df` |
+| `ccc_manifest.json` | MATCH | `87aa576aebeb010e0782652d70446ba8b5b91d6d789814ab8a1bae82a61e13b9` | `87aa576aebeb010e0782652d70446ba8b5b91d6d789814ab8a1bae82a61e13b9` |
+
+Note: By default, identical mirror files from ccc-archive are omitted later in this dump.
+
+## Manifest Snapshot (from chessnerd/ccc_manifest.json)
+
+- Entries: 426
+- Year range: 2018 to 2025
+- First zip in order: `180831-180916-cccc-1-rapid-rumble-15-5-stage-1.zip`
+- Last zip in order: `251223-260102-ccc-25-rapid-main.zip`
+
+## Full File: `[chessnerd] docs/ccc-archive-how-it-works.md`
+
+Source: `D:\GitHub\chessnerd\docs\ccc-archive-how-it-works.md`
+
+```markdown
+# CCC Archive Page: Under-the-Hood and Workflow
+
+## Scope
+This document explains:
+
+1. How the CCC Archive page works at runtime on Chess Nerd.
+2. How data is structured across `chessnerd` and `ccc-archive`.
+3. A repeatable update workflow for adding/changing events.
+
+It is written from the current local state as of **February 13, 2026**.
+
+## Repos and Responsibilities
+
+### `chessnerd` (site repo)
+- Hosts the page UI: `ccc-archive.html`.
+- Hosts mirrored metadata files consumed by the page:
+  - `ccc_links.txt`
+  - `events.txt`
+  - `game_counts.txt`
+  - `ccc_manifest.json` (currently not consumed by page JS)
+- Publishes the route through:
+  - `index.html` (tool card registration/routing)
+  - `sitemap.xml`
+
+### `ccc-archive` (data repo)
+- Stores ZIP archives under year folders (`2018/`, `2019/`, ..., `2025/`).
+- Stores metadata files with the same names as above.
+- Provides raw GitHub download URLs referenced by `ccc_links.txt`.
+
+## Current Data Snapshot
+
+From current files:
+- Entries: **426**
+- Year range: **2018-2025**
+- Ordering: defined by line order in `ccc_links.txt`
+- Mirror status (`chessnerd` vs `ccc-archive`): currently byte-identical for:
+  - `ccc_links.txt`
+  - `events.txt`
+  - `game_counts.txt`
+  - `ccc_manifest.json`
+
+## Cross-Repo History Markers
+
+Key commits that explain how this became a two-repo flow:
+
+1. `chessnerd` on **2025-12-16**:
+   - `fa355da` added `ccc-archive.html` + initial CCC files.
+   - `a20a060` added `game_counts.txt` usage to the page.
+2. `ccc-archive` on **2026-01-04**:
+   - `5a10963` added archive metadata files (`ccc_links.txt`, `events.txt`, `game_counts.txt`).
+   - `2806ccb` removed one event and deleted metadata files (later restored).
+3. `ccc-archive` on **2026-01-06**:
+   - `f7aff1b` reran the full archive process.
+   - `fc2b97c` updated `ccc_links.txt` + `ccc_manifest.json`.
+4. `chessnerd` on **2026-01-06**:
+   - `ce0f20b` synced new links and added `ccc_manifest.json`.
+
+## Runtime Architecture (Chess Nerd)
+
+### Page shell and UI
+- Page: `ccc-archive.html`
+- Table/search/pagination controls are all in this single file.
+- The note in UI explicitly states the build inputs: `ccc-archive.html:220`.
+
+### Data loading path
+The page fetches three local files in parallel:
+- `fetch('ccc_links.txt')` at `ccc-archive.html:401`
+- `fetch('events.txt')` at `ccc-archive.html:402`
+- `fetch('game_counts.txt')` at `ccc-archive.html:403`
+
+Important: runtime JS does **not** currently fetch `ccc_manifest.json`.
+
+### In-memory model
+- `allEntries`, `filteredEntries`, `currentPage`, `rowsPerPage`:
+  - `ccc-archive.html:251`
+  - `ccc-archive.html:252`
+  - `ccc-archive.html:253`
+  - `ccc-archive.html:254`
+
+### Parsing and normalization
+1. Date conversion:
+   - `toIsoDate()` converts `YYMMDD -> 20YY-MM-DD`: `ccc-archive.html:258`
+2. Event map from `events.txt`:
+   - `buildEventMap()`: `ccc-archive.html:273`
+3. Game count map from `game_counts.txt`:
+   - `buildGameCountMap()`: `ccc-archive.html:288`
+4. Entry construction from URLs:
+   - `buildEntries()`: `ccc-archive.html:305`
+
+### Rendering and interactions
+- Pagination/render core: `renderPage()` at `ccc-archive.html:341`
+- Search/filter: `applyFilter()` at `ccc-archive.html:388`
+- Full async load flow: `loadCCCArchive()` at `ccc-archive.html:397`
+- Error state writes exception text directly into table body: `ccc-archive.html:425`
+
+## Data Contracts
+
+### `ccc_links.txt`
+- One raw GitHub ZIP URL per line.
+- Filename convention assumed by parser:
+  - `<start>-<end>-<slug>.zip`
+  - `start` and `end` expected as 6-digit `YYMMDD`.
+- Ordering is preserved and drives display order (no date sorting step).
+
+### `events.txt`
+- Format per line:
+  - `<basename>.pgn: <event display name>`
+- Only the first `:` is treated as separator (`indexOf(':')` parsing).
+
+### `game_counts.txt`
+- Format per line:
+  - `<basename>.pgn: <integer>`
+- Parser takes the first whitespace-delimited token after `:` and `parseInt`s it.
+
+### `ccc_manifest.json`
+- Object fields currently present:
+  - `pgn`, `zip`, `year`, `start`, `end`, `event`, `games`, `url`, `sha256`
+- Current frontend page does not use this file, but it is useful for:
+  - consistency checks
+  - future migration to single-source metadata loading
+
+## Site Integration Points
+
+- Tool card registration in homepage list:
+  - `index.html:98` (`id: 'ccc-archive'`)
+- Tool card route convention:
+  - `index.html:198` (`card.href = \`${tool.id}.html\`;`)
+- Sitemap entry:
+  - `sitemap.xml:29` (`https://chessnerd.net/ccc-archive.html`)
+
+## Two-Repo Workflow (Repeatable)
+
+This is the practical workflow to keep both repos aligned.
+
+### Automated path with raw staging (recommended)
+
+Run from `chessnerd`:
+
+```powershell
+python docs/rebuild_ccc_archive_metadata.py
+```
+
+What it does:
+1. Scans raw PGNs in `../ccc-archive/raw` (default behavior).
+2. For each raw PGN, derives canonical archive names:
+   - ZIP: `YYMMDD-YYMMDD-slug.zip`
+   - Internal PGN: `YYMMDD-YYMMDD-slug.pgn`
+   - Dates come from `GameStartTime` / `GameEndTime` (fallback `Date` tags).
+3. Writes ZIPs into `../ccc-archive/<year>/` where `year = 20YY`.
+4. Moves ingested raw PGNs to `../ccc-archive/raw/processed` by default.
+5. Scans `../ccc-archive/<year>/*.zip`.
+6. Parses each ZIP's PGN headers to derive:
+   - event name (first `[Event "..."]`)
+   - game count (number of `[Event "..."]` tags)
+7. Rebuilds in `ccc-archive`:
+   - `ccc_links.txt`
+   - `events.txt`
+   - `game_counts.txt`
+   - `ccc_manifest.json`
+8. Syncs those four files into `chessnerd` root.
+
+Validation-only mode:
+```powershell
+python docs/rebuild_ccc_archive_metadata.py --check
+```
+
+Rare override options:
+- Skip raw ingest for one run:
+  ```powershell
+  python docs/rebuild_ccc_archive_metadata.py --no-ingest-raw
+  ```
+- Skip chessnerd sync for one run:
+  ```powershell
+  python docs/rebuild_ccc_archive_metadata.py --no-sync-chessnerd
+  ```
+- Keep raw files in place (no move to `raw/processed`):
+  ```powershell
+  python docs/rebuild_ccc_archive_metadata.py --raw-archive-mode keep
+  ```
+- Use a different raw folder:
+  ```powershell
+  python docs/rebuild_ccc_archive_metadata.py --raw-root D:\path\to\raw
+  ```
+- Replace an already-existing target ZIP:
+  ```powershell
+  python docs/rebuild_ccc_archive_metadata.py --overwrite-existing-zips
+  ```
+
+SHA behavior:
+- Default: preserves existing `sha256` fields when present in manifest (stable/no churn).
+- Optional full SHA refresh:
+  ```powershell
+  python docs/rebuild_ccc_archive_metadata.py --recompute-sha256
+  ```
+
+### Phase 1: Stage new raw files in `ccc-archive`
+
+1. Place incoming PGNs into `..\ccc-archive\raw\`.
+2. Run:
+   ```powershell
+   python docs/rebuild_ccc_archive_metadata.py
+   ```
+3. Review generated ZIPs under `..\ccc-archive\<year>\`.
+4. Confirm metadata regenerated in `ccc-archive`:
+   - `ccc_links.txt`
+   - `events.txt`
+   - `game_counts.txt`
+   - `ccc_manifest.json`
+
+### Phase 2: Sync metadata into `chessnerd`
+
+1. Verify mirror hashes match (script syncs automatically by default):
+   ```powershell
+   Get-FileHash .\ccc_links.txt -Algorithm SHA256
+   Get-FileHash ..\ccc-archive\ccc_links.txt -Algorithm SHA256
+   ```
+2. Commit + push `ccc-archive`.
+3. Commit + push `chessnerd`.
+
+### Phase 3: Smoke test page behavior
+
+1. Serve `chessnerd` locally (or use deployed preview).
+2. Open `ccc-archive.html`.
+3. Confirm:
+   - status transitions to `Ready`
+   - row count matches expected total
+   - search works
+   - pagination works
+   - latest event appears and downloads correctly
+
+## Known Pitfalls
+
+1. Ordering surprises:
+   - Table order is input-file order, not sorted by start date.
+2. Date assumptions:
+   - JS assumes 6-digit dates map to `20YY-*` (`ccc-archive.html:258`).
+3. Silent metadata drift risk:
+   - Page does not consume manifest; `manifest` can drift without visible UI break.
+4. Format fragility:
+   - `events.txt` and `game_counts.txt` rely on simple `:` split logic.
+5. Cross-repo drift:
+   - If only one repo is updated, site and source archive can diverge.
+
+## Practical Recommendation
+
+Use `ccc-archive` as the canonical ingest/build target with a local raw staging area (`raw` + `raw/processed`), then sync metadata into `chessnerd` as the second step. This keeps your workflow to two repos (`chessnerd`, `ccc-archive`) and removes the third workspace (`D:\chessnerd\ccc`) while preserving the current frontend design.
+
+## LLM Context Dump Tool
+
+Use this helper in `chessnerd`:
+- `docs/build_ccc_archive_context_dump.py`
+- `docs/rebuild_ccc_archive_metadata.py`
+
+Default run:
+```powershell
+python docs/build_ccc_archive_context_dump.py
+```
+
+Default output:
+- `docs/ccc-archive-context.txt`
+
+Behavior:
+- Includes full CCC page/data files.
+- Includes selected partial shared-file sections (routing, sitemap, shared CSS).
+- Checks mirror integrity against sibling `../ccc-archive`.
+- Skips duplicate mirrored full files by default when they are byte-identical.
+
+```
+
+## Full File: `[chessnerd] docs/rebuild_ccc_archive_metadata.py`
+
+Source: `D:\GitHub\chessnerd\docs\rebuild_ccc_archive_metadata.py`
+
+```python
+#!/usr/bin/env python3
+"""
+Rebuild CCC archive metadata from ZIP files, with optional raw PGN ingest.
+
+This script regenerates:
+- ccc_links.txt
+- events.txt
+- game_counts.txt
+- ccc_manifest.json
+
+Source of truth is the local ccc-archive ZIP corpus and PGN headers inside each ZIP.
+
+Default ingest mode imports raw PGNs from a staging folder into canonical
+`YYMMDD-YYMMDD-slug.zip` files in year folders before metadata rebuild.
+
+Usage:
+    python docs/rebuild_ccc_archive_metadata.py
+    python docs/rebuild_ccc_archive_metadata.py --no-ingest-raw
+    python docs/rebuild_ccc_archive_metadata.py --no-sync-chessnerd
+    python docs/rebuild_ccc_archive_metadata.py --check
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import io
+import json
+import re
+import shutil
+import zipfile
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+
+
+ZIP_NAME_RE = re.compile(r"^(?P<start>\d{6})-(?P<end>\d{6})-(?P<slug>.+)\.zip$")
+EVENT_TAG_RE = re.compile(r'^\[Event\s+"(.*)"\]$')
+TAG_LINE_RE = re.compile(r'^\[(?P<tag>[A-Za-z0-9_]+)\s+"(?P<value>.*)"\]$')
+YEAR_DIR_RE = re.compile(r"^\d{4}$")
+SLUG_BAD_CHARS_RE = re.compile(r"[^a-z0-9-]")
+SLUG_MULTI_DASH_RE = re.compile(r"-+")
+
+METADATA_FILES: tuple[str, ...] = (
+    "ccc_links.txt",
+    "events.txt",
+    "game_counts.txt",
+    "ccc_manifest.json",
+)
+
+
+@dataclass(frozen=True)
+class ExistingManifestEntry:
+    sha256: str | None
+
+
+@dataclass(frozen=True)
+class ZipMeta:
+    zip_path: Path
+    year: int
+    start: str
+    end: str
+    slug: str
+    zip_name: str
+    pgn_name: str
+    event: str
+    games: int
+    sha256: str
+    url: str
+
+
+@dataclass(frozen=True)
+class RawPgnMeta:
+    source_path: Path
+    event: str
+    start: str
+    end: str
+    slug: str
+    year: int
+    zip_name: str
+    pgn_name: str
+
+
+@dataclass(frozen=True)
+class RawIngestResult:
+    source_path: Path
+    zip_path: Path
+    pgn_name: str
+    event: str
+    raw_action: str
+    check_only: bool
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        while True:
+            chunk = f.read(1024 * 1024)
+            if not chunk:
+                break
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def choose_pgn_member(zf: zipfile.ZipFile, expected_name: str) -> str:
+    names = zf.namelist()
+    if expected_name in names:
+        return expected_name
+
+    lower_map = {name.lower(): name for name in names}
+    if expected_name.lower() in lower_map:
+        return lower_map[expected_name.lower()]
+
+    pgn_names = [name for name in names if name.lower().endswith(".pgn")]
+    if len(pgn_names) == 1:
+        return pgn_names[0]
+    if len(pgn_names) > 1:
+        raise ValueError(
+            f"ZIP has multiple PGNs and none matched expected '{expected_name}': {pgn_names}"
+        )
+    raise ValueError("ZIP contains no PGN file")
+
+
+def parse_event_and_games_from_zip(zip_path: Path, expected_pgn_name: str) -> tuple[str, int]:
+    first_event: str | None = None
+    games = 0
+
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        pgn_member = choose_pgn_member(zf, expected_pgn_name)
+        with zf.open(pgn_member, "r") as raw:
+            stream = io.TextIOWrapper(raw, encoding="utf-8", errors="replace", newline="")
+            for line in stream:
+                stripped = line.strip()
+                if stripped.startswith('[Event "'):
+                    games += 1
+                    if first_event is None:
+                        m = EVENT_TAG_RE.match(stripped)
+                        first_event = m.group(1) if m else stripped
+
+    if first_event is None:
+        raise ValueError(f"No [Event \"...\"] tags found in {zip_path}")
+    return first_event, games
+
+
+def slugify_event_name(event_name: str) -> str:
+    normalized = event_name.lower().strip().replace(" ", "-")
+    normalized = SLUG_BAD_CHARS_RE.sub("", normalized)
+    normalized = SLUG_MULTI_DASH_RE.sub("-", normalized)
+    normalized = normalized.strip("-")
+    return normalized or "untitled-event"
+
+
+def parse_header_date_to_yymmdd(value: str) -> str | None:
+    raw = value.strip().strip('"')
+    if not raw:
+        return None
+    token = raw.split()[0].replace("/", ".").replace("-", ".")
+
+    for fmt in ("%Y.%m.%d", "%Y%m%d", "%y%m%d"):
+        try:
+            dt = datetime.strptime(token, fmt)
+        except ValueError:
+            continue
+        if fmt == "%y%m%d" and dt.year < 2000:
+            dt = dt.replace(year=dt.year + 100)
+        return dt.strftime("%y%m%d")
+    return None
+
+
+def extract_raw_pgn_meta(path: Path) -> RawPgnMeta:
+    first_event: str | None = None
+    first_start: str | None = None
+    last_end: str | None = None
+    first_date: str | None = None
+    last_date: str | None = None
+
+    with path.open("r", encoding="utf-8", errors="replace", newline="") as f:
+        for line in f:
+            stripped = line.strip()
+            match = TAG_LINE_RE.match(stripped)
+            if not match:
+                continue
+
+            tag = match.group("tag")
+            value = match.group("value")
+
+            if tag == "Event":
+                if first_event is None:
+                    first_event = value.strip()
+                continue
+
+            parsed = parse_header_date_to_yymmdd(value)
+            if parsed is None:
+                continue
+
+            if tag == "GameStartTime":
+                if first_start is None:
+                    first_start = parsed
+            elif tag == "GameEndTime":
+                last_end = parsed
+            elif tag == "Date":
+                if first_date is None:
+                    first_date = parsed
+                last_date = parsed
+
+    if not first_event:
+        raise ValueError(f"Unable to extract first [Event \"...\"] from {path}")
+
+    start = first_start or first_date
+    if not start:
+        raise ValueError(
+            f"Unable to extract start date from {path} "
+            "(expected GameStartTime or Date tags)."
+        )
+
+    end = last_end or last_date or start
+    if end < start:
+        end = start
+
+    slug = slugify_event_name(first_event)
+    year = 2000 + int(start[:2])
+    stem = f"{start}-{end}-{slug}"
+    return RawPgnMeta(
+        source_path=path,
+        event=first_event,
+        start=start,
+        end=end,
+        slug=slug,
+        year=year,
+        zip_name=f"{stem}.zip",
+        pgn_name=f"{stem}.pgn",
+    )
+
+
+def path_is_relative_to(path: Path, parent: Path) -> bool:
+    try:
+        path.relative_to(parent)
+        return True
+    except ValueError:
+        return False
+
+
+def discover_raw_pgn_files(raw_root: Path, recursive: bool, exclude_roots: list[Path]) -> list[Path]:
+    if not raw_root.exists():
+        return []
+    pattern = "**/*.pgn" if recursive else "*.pgn"
+    files = [p for p in raw_root.glob(pattern) if p.is_file()]
+    filtered: list[Path] = []
+    for path in files:
+        if any(path_is_relative_to(path, ex) for ex in exclude_roots):
+            continue
+        filtered.append(path)
+    filtered.sort(key=lambda p: p.as_posix().lower())
+    return filtered
+
+
+def unique_target_path(target: Path) -> Path:
+    if not target.exists():
+        return target
+    base = target.stem
+    suffix = target.suffix
+    idx = 2
+    while True:
+        candidate = target.with_name(f"{base}__{idx}{suffix}")
+        if not candidate.exists():
+            return candidate
+        idx += 1
+
+
+def ingest_raw_pgns(
+    archive_root: Path,
+    raw_root: Path,
+    raw_archive_dir: Path,
+    raw_archive_mode: str,
+    check_only: bool,
+    raw_recursive: bool,
+    overwrite_existing_zips: bool,
+) -> list[RawIngestResult]:
+    exclude_roots = [raw_archive_dir] if raw_archive_mode == "move" else []
+    source_files = discover_raw_pgn_files(
+        raw_root=raw_root,
+        recursive=raw_recursive,
+        exclude_roots=exclude_roots,
+    )
+
+    pending: list[tuple[RawPgnMeta, Path]] = []
+    target_to_source: dict[Path, Path] = {}
+    for source in source_files:
+        meta = extract_raw_pgn_meta(source)
+        zip_path = archive_root / str(meta.year) / meta.zip_name
+        if zip_path in target_to_source:
+            prev = target_to_source[zip_path]
+            raise ValueError(
+                "Two raw PGNs resolve to the same ZIP target:\n"
+                f"- {prev}\n"
+                f"- {source}\n"
+                f"Target: {zip_path}"
+            )
+        target_to_source[zip_path] = source
+        pending.append((meta, zip_path))
+
+    out: list[RawIngestResult] = []
+    for meta, zip_path in pending:
+        if zip_path.exists() and not overwrite_existing_zips:
+            raise FileExistsError(
+                f"ZIP already exists: {zip_path}\n"
+                "Use --overwrite-existing-zips to replace it."
+            )
+
+        if not check_only:
+            zip_path.parent.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(
+                zip_path,
+                "w",
+                compression=zipfile.ZIP_DEFLATED,
+                compresslevel=9,
+            ) as zf:
+                zf.write(meta.source_path, arcname=meta.pgn_name)
+
+        raw_action = "kept"
+        if raw_archive_mode == "move":
+            desired = raw_archive_dir / meta.pgn_name
+            destination = unique_target_path(desired) if not check_only else desired
+            raw_action = f"moved->{destination}"
+            if not check_only:
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(meta.source_path), str(destination))
+
+        out.append(
+            RawIngestResult(
+                source_path=meta.source_path,
+                zip_path=zip_path,
+                pgn_name=meta.pgn_name,
+                event=meta.event,
+                raw_action=raw_action,
+                check_only=check_only,
+            )
+        )
+    return out
+
+
+def discover_zip_files(archive_root: Path) -> list[Path]:
+    year_dirs = [
+        p
+        for p in archive_root.iterdir()
+        if p.is_dir() and YEAR_DIR_RE.match(p.name)
+    ]
+    year_dirs.sort(key=lambda p: int(p.name))
+
+    zip_paths: list[Path] = []
+    for ydir in year_dirs:
+        files = sorted(ydir.glob("*.zip"))
+        zip_paths.extend(files)
+    return zip_paths
+
+
+def parse_zip_filename(zip_name: str) -> tuple[str, str, str]:
+    m = ZIP_NAME_RE.match(zip_name)
+    if not m:
+        raise ValueError(
+            f"Invalid ZIP filename format (expected YYMMDD-YYMMDD-slug.zip): {zip_name}"
+        )
+    return m.group("start"), m.group("end"), m.group("slug")
+
+
+def validate_year_folder(year_folder: int, start: str, zip_name: str) -> None:
+    inferred = 2000 + int(start[:2])
+    if inferred != year_folder:
+        raise ValueError(
+            f"Year folder mismatch for {zip_name}: folder={year_folder}, inferred_from_start={inferred}"
+        )
+
+
+def build_zip_meta(
+    zip_path: Path,
+    archive_root: Path,
+    owner: str,
+    repo: str,
+    branch: str,
+) -> ZipMeta:
+    rel = zip_path.relative_to(archive_root)
+    year_folder = int(rel.parts[0])
+    zip_name = zip_path.name
+    start, end, slug = parse_zip_filename(zip_name)
+    validate_year_folder(year_folder, start, zip_name)
+
+    pgn_name = f"{Path(zip_name).stem}.pgn"
+    event, games = parse_event_and_games_from_zip(zip_path, pgn_name)
+    digest = sha256_file(zip_path)
+
+    url = f"https://github.com/{owner}/{repo}/raw/{branch}/{rel.as_posix()}"
+
+    return ZipMeta(
+        zip_path=zip_path,
+        year=year_folder,
+        start=start,
+        end=end,
+        slug=slug,
+        zip_name=zip_name,
+        pgn_name=pgn_name,
+        event=event,
+        games=games,
+        sha256=digest,
+        url=url,
+    )
+
+
+def render_links(metas: list[ZipMeta]) -> str:
+    return "\n".join(meta.url for meta in metas) + "\n"
+
+
+def render_events(metas: list[ZipMeta]) -> str:
+    return "\n".join(f"{meta.pgn_name}: {meta.event}" for meta in metas) + "\n"
+
+
+def render_game_counts(metas: list[ZipMeta]) -> str:
+    return "\n".join(f"{meta.pgn_name}: {meta.games}" for meta in metas) + "\n"
+
+
+def load_existing_manifest(path: Path) -> dict[str, ExistingManifestEntry]:
+    if not path.exists():
+        return {}
+    try:
+        rows = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    if not isinstance(rows, list):
+        return {}
+    out: dict[str, ExistingManifestEntry] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        zip_name = row.get("zip")
+        if not isinstance(zip_name, str) or not zip_name:
+            continue
+        sha = row.get("sha256")
+        if sha is not None and not isinstance(sha, str):
+            sha = None
+        out[zip_name] = ExistingManifestEntry(sha256=sha)
+    return out
+
+
+def apply_sha_policy(
+    metas: list[ZipMeta],
+    existing_manifest: dict[str, ExistingManifestEntry],
+    recompute_sha256: bool,
+) -> tuple[list[ZipMeta], int]:
+    if recompute_sha256:
+        return metas, 0
+
+    rewritten: list[ZipMeta] = []
+    mismatch_count = 0
+    for meta in metas:
+        existing = existing_manifest.get(meta.zip_name)
+        if existing and existing.sha256:
+            if existing.sha256 != meta.sha256:
+                mismatch_count += 1
+            rewritten.append(
+                ZipMeta(
+                    zip_path=meta.zip_path,
+                    year=meta.year,
+                    start=meta.start,
+                    end=meta.end,
+                    slug=meta.slug,
+                    zip_name=meta.zip_name,
+                    pgn_name=meta.pgn_name,
+                    event=meta.event,
+                    games=meta.games,
+                    sha256=existing.sha256,
+                    url=meta.url,
+                )
+            )
+        else:
+            rewritten.append(meta)
+    return rewritten, mismatch_count
+
+
+def render_manifest_with_rows(metas: list[ZipMeta]) -> str:
+    rows = [
+        {
+            "pgn": meta.pgn_name,
+            "zip": meta.zip_name,
+            "year": meta.year,
+            "start": meta.start,
+            "end": meta.end,
+            "event": meta.event,
+            "games": meta.games,
+            "url": meta.url,
+            "sha256": meta.sha256,
+        }
+        for meta in metas
+    ]
+    # Existing manifest files in these repos are stored without trailing newline.
+    return json.dumps(rows, indent=2, ensure_ascii=False)
+
+
+def read_text_if_exists(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    return path.read_text(encoding="utf-8")
+
+
+def write_if_changed(path: Path, content: str, check_only: bool) -> tuple[bool, str]:
+    existing = read_text_if_exists(path)
+    changed = existing != content
+    if changed and not check_only:
+        path.write_text(content, encoding="utf-8")
+    state = "changed" if changed else "unchanged"
+    if check_only:
+        state = "would-change" if changed else "ok"
+    return changed, state
+
+
+def sync_file(src: Path, dst: Path, check_only: bool) -> tuple[bool, str]:
+    src_text = src.read_text(encoding="utf-8")
+    dst_text = read_text_if_exists(dst)
+    changed = dst_text != src_text
+    if changed and not check_only:
+        dst.write_text(src_text, encoding="utf-8")
+    state = "synced" if changed else "up-to-date"
+    if check_only:
+        state = "would-sync" if changed else "ok"
+    return changed, state
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Rebuild CCC archive metadata from ZIP files. By default this ingests raw "
+            "PGNs from ccc-archive/raw and syncs metadata to chessnerd."
+        )
+    )
+    parser.add_argument(
+        "--archive-root",
+        default=None,
+        help="Path to local ccc-archive repo (default: ../ccc-archive).",
+    )
+    parser.add_argument(
+        "--chessnerd-root",
+        default=None,
+        help="Path to chessnerd repo for sync (default: this script's repo root).",
+    )
+    parser.add_argument(
+        "--owner",
+        default="ianrastall",
+        help="GitHub owner used in generated raw URLs.",
+    )
+    parser.add_argument(
+        "--repo",
+        default="ccc-archive",
+        help="GitHub repo name used in generated raw URLs.",
+    )
+    parser.add_argument(
+        "--branch",
+        default="main",
+        help="GitHub branch used in generated raw URLs.",
+    )
+    parser.add_argument(
+        "--no-sync-chessnerd",
+        dest="sync_chessnerd",
+        action="store_false",
+        help="Do not copy generated metadata files into chessnerd root.",
+    )
+    parser.set_defaults(sync_chessnerd=True)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Do not write files; exit non-zero if files would change.",
+    )
+    parser.add_argument(
+        "--recompute-sha256",
+        action="store_true",
+        help=(
+            "Recompute and rewrite sha256 from local ZIP bytes for all entries. "
+            "Default behavior preserves existing manifest sha256 when present."
+        ),
+    )
+    parser.add_argument(
+        "--no-ingest-raw",
+        dest="ingest_raw",
+        action="store_false",
+        help=(
+            "Skip raw PGN ingest and only rebuild from existing ZIPs."
+        ),
+    )
+    parser.set_defaults(ingest_raw=True)
+    parser.add_argument(
+        "--raw-root",
+        default=None,
+        help=(
+            "Raw PGN staging folder (default: <archive-root>/raw). "
+            "Used when ingest is enabled."
+        ),
+    )
+    parser.add_argument(
+        "--raw-recursive",
+        action="store_true",
+        help="Recursively scan --raw-root for .pgn files during ingest.",
+    )
+    parser.add_argument(
+        "--raw-archive-mode",
+        choices=("move", "keep"),
+        default="move",
+        help=(
+            "After ingest, either move raw files to archive folder or keep them in place "
+            "(default: move)."
+        ),
+    )
+    parser.add_argument(
+        "--raw-archive-dir",
+        default=None,
+        help=(
+            "Archive folder for moved raw PGNs (default: <archive-root>/raw/processed). "
+            "Used when --raw-archive-mode=move and ingest is enabled."
+        ),
+    )
+    parser.add_argument(
+        "--overwrite-existing-zips",
+        action="store_true",
+        help="Allow ingest to overwrite already-existing ZIP targets.",
+    )
+    return parser.parse_args()
+
+
+def resolve_roots(args: argparse.Namespace) -> tuple[Path, Path]:
+    script_repo_root = Path(__file__).resolve().parents[1]
+    chessnerd_root = (
+        Path(args.chessnerd_root).expanduser().resolve()
+        if args.chessnerd_root
+        else script_repo_root
+    )
+    archive_root = (
+        Path(args.archive_root).expanduser().resolve()
+        if args.archive_root
+        else (chessnerd_root.parent / "ccc-archive").resolve()
+    )
+    return chessnerd_root, archive_root
+
+
+def main() -> int:
+    args = parse_args()
+    chessnerd_root, archive_root = resolve_roots(args)
+
+    if not archive_root.exists():
+        raise SystemExit(f"ccc-archive root does not exist: {archive_root}")
+    if not (archive_root / ".git").exists():
+        raise SystemExit(f"Not a git repo: {archive_root}")
+
+    changed_any = False
+
+    if args.ingest_raw:
+        raw_root = (
+            Path(args.raw_root).expanduser().resolve()
+            if args.raw_root
+            else (archive_root / "raw").resolve()
+        )
+        raw_archive_dir = (
+            Path(args.raw_archive_dir).expanduser().resolve()
+            if args.raw_archive_dir
+            else (archive_root / "raw" / "processed").resolve()
+        )
+        if not raw_root.exists():
+            if args.check:
+                print(f"Raw ingest source missing (check mode): {raw_root}")
+            else:
+                raw_root.mkdir(parents=True, exist_ok=True)
+                print(f"Raw ingest source created: {raw_root}")
+
+        ingest_results = ingest_raw_pgns(
+            archive_root=archive_root,
+            raw_root=raw_root,
+            raw_archive_dir=raw_archive_dir,
+            raw_archive_mode=args.raw_archive_mode,
+            check_only=args.check,
+            raw_recursive=args.raw_recursive,
+            overwrite_existing_zips=args.overwrite_existing_zips,
+        )
+        ingest_count = len(ingest_results)
+        changed_any = changed_any or ingest_count > 0
+        print(f"Raw ingest source: {raw_root}")
+        print(f"Raw ingest files: {ingest_count}")
+        for result in ingest_results:
+            action_prefix = "would-ingest" if result.check_only else "ingested"
+            print(
+                f"[ingest] {action_prefix}: {result.source_path.name} -> "
+                f"{result.zip_path} ({result.raw_action})"
+            )
+
+    zip_paths = discover_zip_files(archive_root)
+    if not zip_paths:
+        raise SystemExit(f"No ZIP files found in: {archive_root}")
+
+    metas = [
+        build_zip_meta(
+            zip_path=zp,
+            archive_root=archive_root,
+            owner=args.owner,
+            repo=args.repo,
+            branch=args.branch,
+        )
+        for zp in zip_paths
+    ]
+
+    existing_manifest = load_existing_manifest(archive_root / "ccc_manifest.json")
+    metas_for_manifest, preserved_sha_mismatches = apply_sha_policy(
+        metas,
+        existing_manifest=existing_manifest,
+        recompute_sha256=args.recompute_sha256,
+    )
+
+    outputs = {
+        "ccc_links.txt": render_links(metas),
+        "events.txt": render_events(metas),
+        "game_counts.txt": render_game_counts(metas),
+        "ccc_manifest.json": render_manifest_with_rows(metas_for_manifest),
+    }
+
+    print(f"Archive root: {archive_root}")
+    print(f"Discovered ZIP files: {len(metas)}")
+
+    for name, content in outputs.items():
+        target = archive_root / name
+        changed, state = write_if_changed(target, content, check_only=args.check)
+        changed_any = changed_any or changed
+        print(f"[archive] {name}: {state}")
+
+    if args.sync_chessnerd:
+        if not chessnerd_root.exists():
+            raise SystemExit(f"chessnerd root does not exist: {chessnerd_root}")
+        if not (chessnerd_root / ".git").exists():
+            raise SystemExit(f"Not a git repo: {chessnerd_root}")
+
+        for name in METADATA_FILES:
+            src = archive_root / name
+            dst = chessnerd_root / name
+            changed, state = sync_file(src, dst, check_only=args.check)
+            changed_any = changed_any or changed
+            print(f"[chessnerd] {name}: {state}")
+
+    print(f"First ZIP: {metas[0].zip_name}")
+    print(f"Last ZIP:  {metas[-1].zip_name}")
+    if not args.recompute_sha256:
+        print(
+            "sha256 mode: preserve-existing "
+            f"(local hash mismatches against existing manifest: {preserved_sha_mismatches})"
+        )
+    else:
+        print("sha256 mode: recompute-all")
+
+    if args.check and changed_any:
+        print("Check failed: at least one file would change.")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+```
+
+## Full File: `[chessnerd] ccc-archive.html`
+
+Source: `D:\GitHub\chessnerd\ccc-archive.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XQ7B0Z9FK3');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCC Archive - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .ccc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ccc-table th,
+        .ccc-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .ccc-table th {
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        .ccc-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ccc-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .event-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .file-name {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.15rem;
+        }
+
+        .date-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.55rem;
+            border-radius: 999px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        /* Center Start/End columns (header + cells) */
+        .ccc-table th.col-date,
+        .ccc-table td.col-date {
+            text-align: center;
+        }
+
+        .table-note {
+            margin-top: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .ccc-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .ccc-page-info {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .ccc-page-size {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .ccc-page-size select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
+            </div>
+            <nav class="site-network" aria-label="Network sites">
+                <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer">
+                    <img src="img/text-utils-icon.png" class="site-network-icon" alt="" width="16" height="16">
+                    <span>Text Utilities</span>
+                    <span class="material-icons" aria-hidden="true">open_in_new</span>
+                </a>
+                <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer">
+                    <img src="img/github.png" class="site-network-icon" alt="" width="16" height="16">
+                    <span>GitHub</span>
+                    <span class="material-icons" aria-hidden="true">open_in_new</span>
+                </a>
+            </nav>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown"></select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">folder_zip</span>
+                        <h2 id="toolName">CCC Archive</h2>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div class="io-container" style="display: block;">
+                    <div class="io-panel" style="width: 100%">
+                        <div class="io-label">
+                            <span>Computer Chess Championship files</span>
+                            <span class="stats" id="cccCount">Loading...</span>
+                        </div>
+
+                        <div class="search-box">
+                            <input type="text" id="cccSearch" placeholder="Filter by event or filename..." aria-label="Search CCC archive">
+                        </div>
+
+                        <div style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                            <div style="overflow-x: auto;">
+                                <table class="ccc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Event</th>
+                                            <th class="col-date">Start</th>
+                                            <th class="col-date">End</th>
+                                            <th style="text-align: center;">Games</th>
+                                            <th style="text-align: right;">Download</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cccTableBody">
+                                        <tr>
+                                            <td colspan="5">Loading CCC archive...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="ccc-pagination">
+                            <div class="ccc-page-size">
+                                <label for="cccPageSize">Rows per page:</label>
+                                <select id="cccPageSize">
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100" selected>100</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <button id="cccPrevPage" type="button" class="btn btn-secondary">
+                                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-right: 2px;">chevron_left</span>
+                                    Previous
+                                </button>
+                                <span id="cccPageInfo" class="ccc-page-info">Page 1 of 1</span>
+                                <button id="cccNextPage" type="button" class="btn btn-secondary">
+                                    Next
+                                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-left: 2px;">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-note">
+                            Built automatically from <code>ccc_links.txt</code>, <code>events.txt</code>, and <code>game_counts.txt</code> (ccc-archive repo). Files stay in the order provided.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <div id="statusMessage" class="success">Loading CCC archive...</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; Ian Rastall 2025<br>Contact: moving.form.of.dust@gmail.com<br>Donate: PayPal to merastall@gmail.com</p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        const cccTableBody = document.getElementById('cccTableBody');
+        const cccCount = document.getElementById('cccCount');
+        const searchInput = document.getElementById('cccSearch');
+        const statusMessage = document.getElementById('statusMessage');
+        const prevBtnPage = document.getElementById('cccPrevPage');
+        const nextBtnPage = document.getElementById('cccNextPage');
+        const pageInfoEl = document.getElementById('cccPageInfo');
+        const pageSizeSelect = document.getElementById('cccPageSize');
+
+        let allEntries = [];
+        let filteredEntries = [];
+        let currentPage = 1;
+        let rowsPerPage = 100;
+
+        // CCC uses 6-digit YYMMDD codes in filenames.
+        // Display format: 20YY-MM-DD
+        function toIsoDate(code) {
+            if (!code) return '';
+            const s = String(code).trim();
+
+            if (s.length === 6 && /^\d{6}$/.test(s)) {
+                const yy = s.slice(0, 2);
+                const mm = s.slice(2, 4);
+                const dd = s.slice(4, 6);
+                return `20${yy}-${mm}-${dd}`;
+            }
+
+            // Safe fallback (should not happen in your current workflow)
+            return s;
+        }
+
+        function buildEventMap(text) {
+            const map = {};
+            text.split(/\r?\n/).forEach(line => {
+                if (!line.trim()) return;
+                const separatorIndex = line.indexOf(':');
+                if (separatorIndex === -1) return;
+                const filePart = line.slice(0, separatorIndex).trim();
+                const eventName = line.slice(separatorIndex + 1).trim();
+                if (!filePart || !eventName) return;
+                const base = filePart.replace('.pgn', '');
+                map[base] = eventName;
+            });
+            return map;
+        }
+
+        function buildGameCountMap(text) {
+            const map = {};
+            text.split(/\r?\n/).forEach(line => {
+                if (!line.trim()) return;
+                const separatorIndex = line.indexOf(':');
+                if (separatorIndex === -1) return;
+                const filePart = line.slice(0, separatorIndex).trim();
+                const trailing = line.slice(separatorIndex + 1).trim();
+                const numString = trailing.split(/\s+/)[0];
+                const num = parseInt(numString, 10);
+                if (!filePart || Number.isNaN(num)) return;
+                const base = filePart.replace('.pgn', '');
+                map[base] = num;
+            });
+            return map;
+        }
+
+        function buildEntries(linksText, eventsMap, gameCountsMap) {
+            return linksText
+                .split(/\r?\n/)
+                .filter(Boolean)
+                .map(url => {
+                    const fileName = url.split('/').pop();
+                    const base = fileName.replace('.zip', '');
+                    const parts = base.split('-');
+                    const startCode = parts[0] || '';
+                    const endCode = parts[1] || '';
+
+                    const eventName = eventsMap[base] || base;
+                    const games = gameCountsMap && Object.prototype.hasOwnProperty.call(gameCountsMap, base)
+                        ? gameCountsMap[base]
+                        : null;
+
+                    return {
+                        eventName,
+                        startDate: toIsoDate(startCode),
+                        endDate: toIsoDate(endCode),
+                        url,
+                        fileName,
+                        games,
+                        eventLower: eventName.toLowerCase(),
+                        fileLower: fileName.toLowerCase()
+                    };
+                });
+        }
+
+        function formatNumber(val) {
+            if (val === null || val === undefined) return '—';
+            const num = Number(val);
+            if (Number.isNaN(num)) return '—';
+            return num.toLocaleString();
+        }
+
+        function renderPage() {
+            const total = filteredEntries.length;
+            const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            if (!total) {
+                cccTableBody.innerHTML = '<tr><td colspan="5">No matching events.</td></tr>';
+                cccCount.textContent = '0 files';
+            } else {
+                const startIndex = (currentPage - 1) * rowsPerPage;
+                const visible = filteredEntries.slice(startIndex, startIndex + rowsPerPage);
+
+                cccTableBody.innerHTML = visible.map(entry => `
+                    <tr>
+                        <td>
+                            <div class="event-name">${entry.eventName}</div>
+                            <div class="file-name">${entry.fileName}</div>
+                        </td>
+                        <td class="col-date"><span class="date-chip">${entry.startDate}</span></td>
+                        <td class="col-date"><span class="date-chip">${entry.endDate}</span></td>
+                        <td style="text-align: center;">${formatNumber(entry.games)}</td>
+                        <td style="text-align: right;">
+                            <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                                <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+
+                const label = total === 1 ? 'file' : 'files';
+                cccCount.textContent = `${total} ${label}`;
+            }
+
+            const pages = Math.max(1, Math.ceil(total / rowsPerPage));
+            if (pageInfoEl) {
+                if (total === 0) {
+                    pageInfoEl.textContent = 'No matching pages';
+                } else {
+                    pageInfoEl.textContent = `Page ${currentPage} of ${pages} (${total} shown)`;
+                }
+            }
+
+            if (prevBtnPage) prevBtnPage.disabled = currentPage <= 1 || filteredEntries.length === 0;
+            if (nextBtnPage) nextBtnPage.disabled = currentPage >= pages || filteredEntries.length === 0;
+        }
+
+        function applyFilter(query) {
+            const q = query ? query.toLowerCase() : '';
+            filteredEntries = allEntries.filter(entry =>
+                !q || entry.eventLower.includes(q) || entry.fileLower.includes(q)
+            );
+            currentPage = 1;
+            renderPage();
+        }
+
+        async function loadCCCArchive() {
+            try {
+                statusMessage.textContent = 'Loading CCC archive...';
+                const [linksRes, eventsRes, countsRes] = await Promise.all([
+                    fetch('ccc_links.txt'),
+                    fetch('events.txt'),
+                    fetch('game_counts.txt')
+                ]);
+
+                if (!linksRes.ok || !eventsRes.ok || !countsRes.ok) {
+                    throw new Error('Unable to load CCC lists.');
+                }
+
+                const [linksText, eventsText, countsText] = await Promise.all([
+                    linksRes.text(),
+                    eventsRes.text(),
+                    countsRes.text()
+                ]);
+
+                const eventsMap = buildEventMap(eventsText);
+                const gameCountsMap = buildGameCountMap(countsText);
+                allEntries = buildEntries(linksText, eventsMap, gameCountsMap);
+                filteredEntries = allEntries.slice();
+                renderPage();
+                statusMessage.textContent = 'Ready';
+            } catch (err) {
+                console.error(err);
+                statusMessage.textContent = 'Error loading CCC archive';
+                cccTableBody.innerHTML = `<tr><td colspan="5">${err.message}</td></tr>`;
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+        }
+
+        if (pageSizeSelect) {
+            pageSizeSelect.addEventListener('change', () => {
+                const val = parseInt(pageSizeSelect.value, 10);
+                rowsPerPage = Number.isNaN(val) ? 100 : val;
+                currentPage = 1;
+                renderPage();
+            });
+        }
+
+        if (prevBtnPage) {
+            prevBtnPage.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage -= 1;
+                    renderPage();
+                }
+            });
+        }
+
+        if (nextBtnPage) {
+            nextBtnPage.addEventListener('click', () => {
+                const pages = Math.max(1, Math.ceil(filteredEntries.length / rowsPerPage));
+                if (currentPage < pages) {
+                    currentPage += 1;
+                    renderPage();
+                }
+            });
+        }
+
+        loadCCCArchive();
+    </script>
+</body>
+</html>
+
+```
+
+## Full File: `[chessnerd] ccc_links.txt`
+
+Source: `D:\GitHub\chessnerd\ccc_links.txt`
+
+```text
+https://github.com/ianrastall/ccc-archive/raw/main/2018/180831-180916-cccc-1-rapid-rumble-15-5-stage-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/180917-180925-cccc-1-rapid-rumble-15-5-stage-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/180925-181001-cccc-1-rapid-rumble-15-5-stage-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/181003-181006-cccc-1-rapid-rumble-15-5-bonus-games.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/181008-181031-ccc-2-blitz-battle-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/181031-181110-ccc-2-blitz-battle-5-2-stage-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/181112-181119-ccc-2-blitz-battle-5-2-stage-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/181123-181220-ccc-3-rapid-redux-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2018/181223-190105-ccc-3-rapid-redux-stage-2-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190106-190121-ccc-3-rapid-redux-stage-3-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190127-190130-ccc-4-bullet-brawl-1-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190131-190208-ccc-5-escalation-10-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190208-190210-ccc-5-finals-10-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190216-190224-ccc-6-the-winter-classic-stage-1-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190224-190308-ccc-6-the-winter-classic-playoffs-10-10.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190309-190316-ccc-6-the-winter-classic-final-10-10.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190406-190412-ccc-7-blitz-bonanza-final-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190413-190513-ccc-8-deep-dive-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190513-190522-ccc-8-deep-dive-finals-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190616-190623-ccc-9-the-gauntlet-qualification-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190623-190630-ccc-9-the-gauntlet-quarterfinals-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190630-190707-ccc-9-the-gauntlet-semifinals-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190707-190712-ccc-9-the-gauntlet-final-10-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190903-190911-ccc-10-quarterfinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190911-190919-ccc-10-semifinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/190919-190923-ccc-10-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/191011-191023-ccc-11-qualification-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/191024-191107-ccc-11-round-1-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/191109-191119-ccc-11-round-2-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/191128-191205-ccc-11-round-3-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/191208-191215-ccc-11-semifinals-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2019/191216-191223-ccc-11-finals-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200104-200105-ccc-12-0-houdini-vs-stoofvlees-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200105-200106-ccc-12-1-rubichess-vs-winter-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200106-200106-ccc-12-2-andscacs-vs-ethereal-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200106-200107-ccc-12-3-dark-allie-vs-fire-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200107-200108-ccc-12-8-houdini-vs-lc0-cpu-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200108-200109-ccc-12-8-houdini-vs-lc0-cpu-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200109-200110-ccc-12-72-lc0-vs-rofchade-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200110-200111-ccc-12-6-stoofvlees-vs-komodo-mc-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200111-200112-ccc-12-9-leelenstein-vs-rubichess-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200112-200113-ccc-12-10-stockfish-vs-ethereal-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200113-200114-ccc-12-5-scorpio-vs-xiphos-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200114-200115-ccc-12-4-komodo-vs-laser-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200115-200115-ccc-12-14-stockfish-vs-stoofvlees-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200116-200117-ccc-12-13-fire-vs-leelenstein-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200117-200118-ccc-12-12-houdini-vs-lc0-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200119-200120-ccc-12-11-komodo-vs-scorpio-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200120-200121-ccc-12-15-leelenstein-vs-scorpio-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200121-200122-ccc-12-16-lc0-vs-stockfish-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200122-200123-ccc-12-18-scorpio-vs-stockfish-third-place-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200123-200123-ccc-12-17-lc0-vs-leelenstein-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200307-200310-ccc-13-pool-c-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200314-200318-ccc-13-pool-b-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200318-200320-ccc-13-triangular-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200323-200330-ccc-13-heptagonal-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200401-200408-ccc-13-semifinals-10-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200408-200414-ccc-13-finals-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200603-200610-ccc-14-round-1-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200610-200610-ccc-14-9-winter-vs-ethereal-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200610-200611-ccc-14-11-rofchade-vs-rubi-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200611-200611-ccc-14-12-defenchess-vs-komodo-mc-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200611-200612-ccc-14-10-dark-queen-vs-xiphos-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200612-200612-ccc-14-13-lc0-vs-fire-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200612-200613-ccc-14-14-stockfish-vs-komodo-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200613-200614-ccc-14-17-ethereal-vs-fire-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200614-200614-ccc-14-15-scorpio-vs-stoofvlees-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200614-200614-ccc-14-18-dark-queen-vs-komodo-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200615-200615-ccc-14-19-scorpio-vs-rofchade-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200615-200616-ccc-14-23-fire-vs-komodo-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200623-200623-ccc-14-20-leelenstein-vs-lc0-cpu-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200623-200624-ccc-14-20-lc0-cpu-vs-komodo-mc-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200624-200624-ccc-14-21-lc0-vs-stockfish-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200624-200625-ccc-14-21-lc0-vs-stockfish-ii-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200625-200625-ccc-14-22-stoofvlees-vs-leelenstein-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200625-200625-ccc-14-25-stoofvlees-vs-komodo-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200625-200626-ccc-14-24-scorpio-vs-lc0-cpu-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200626-200626-ccc-14-24-scorpio-vs-lc0-cpu-tiebreak-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200626-200626-ccc-14-26-lc0-vs-lc0-cpu-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200626-200627-ccc-14-27-stockfish-vs-leelenstein-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-ii-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-iii-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-iv-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200627-200627-ccc-14-28-lc0-vs-stoofvlees-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200627-200628-ccc-14-28-lc0-vs-stoofvlees-tiebreak-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200628-200628-ccc-14-29-stockfish-vs-lc0-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200628-200628-ccc-14-29-stockfish-vs-lc0-tiebreak-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200628-200628-ccc-14-29-stockfish-vs-lc0-tiebreak-ii-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200628-200629-ccc-14-30-lc0-vs-leelenstein-i-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200629-200629-ccc-14-30-lc0-vs-leelenstein-i-tiebreak-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200629-200629-ccc-14-30-lc0-vs-leelenstein-i-tiebreak-ii-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200629-200630-ccc-14-31-lc0-vs-leelenstein-ii-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200630-200630-ccc-14-31-lc0-vs-leelenstein-ii-tiebreak-15-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200827-200828-ccc-15-02-komodo-mc-vs-lc0-cpu-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200828-200829-ccc-15-05-fire-vs-ethereal-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200829-200830-ccc-15-08-stockfish-vs-defenchess-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200830-200831-ccc-15-03-stoofvlees-vs-slowchess-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200831-200901-ccc-15-09-leelenstein-vs-rubichess-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200901-200902-ccc-15-06-komodo-vs-xiphos-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/200902-200903-ccc-15-07-stockfish-classic-vs-rofchade-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/201112-201126-ccc-blitz-championship-2020-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/201126-201203-ccc-blitz-championship-2020-semi-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2020/201203-201210-ccc-blitz-championship-2020-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210115-210122-ccc-rapid-2021-qualifiers-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210122-210129-ccc-rapid-2021-nnue-league-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210129-210206-ccc-rapid-2021-main-league-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210206-210217-ccc-rapid-2021-nn-vs-classic-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210217-210303-ccc-rapid-2021-elite-round-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210304-210317-ccc-rapid-2021-finals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210817-210831-ccc-blitz-championship-2021-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210831-210907-ccc-blitz-championship-2021-semifinals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210907-210911-ccc-blitz-championship-2021-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/210924-211009-ccc-chess-960-blitz-championship-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211009-211017-ccc-chess-960-blitz-championship-semifinals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211017-211025-ccc-chess-960-blitz-championship-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211025-211101-ccc-16-rapid-qualification-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211101-211108-ccc-16-rapid-main-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211108-211115-ccc-16-rapid-semifinals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211115-211123-ccc-16-rapid-finals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211123-211201-ccc-16-rapid-runners-up-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211201-211209-ccc-16-bullet-qualification-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211209-211218-ccc-16-bullet-main-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211218-211227-ccc-16-bullet-semifinals-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2021/211227-220106-ccc-16-bullet-finals-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220109-220115-ccc-16-blitz-qualification-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220115-220123-ccc-16-blitz-main-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220123-220130-ccc-16-blitz-semifinals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220131-220208-ccc-16-blitz-challenger-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220208-220215-ccc-16-blitz-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220220-220227-ccc-17-rapid-qualification-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220227-220306-ccc-17-rapid-main-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220306-220314-ccc-17-rapid-semifinals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220314-220322-ccc-17-rapid-challenger-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220322-220330-ccc-17-rapid-finals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220404-220412-ccc-17-bullet-qualification-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220412-220421-ccc-17-bullet-main-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220421-220430-ccc-17-bullet-semifinals-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220430-220509-ccc-17-bullet-challenger-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220509-220518-ccc-17-bullet-finals-2-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220601-220607-ccc-17-blitz-qualification-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220608-220616-ccc-17-blitz-main-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220616-220624-ccc-17-blitz-semifinals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220628-220705-ccc-17-blitz-challenger-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220705-220713-ccc-17-blitz-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220717-220724-ccc-18-rapid-qualification-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220724-220731-ccc-18-rapid-main-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220731-220808-ccc-18-rapid-semifinals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220811-220819-ccc-18-rapid-finals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220822-220831-ccc-18-rapid-challenger-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220908-220910-ccc-19-blitz-newcomers-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220910-220913-ccc-19-blitz-qualifier-1-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220913-220918-ccc-19-blitz-qualifier-2-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220918-220926-ccc-19-blitz-main-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/220926-221001-ccc-19-blitz-semifinals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221001-221006-ccc-19-blitz-challenger-match-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221009-221013-ccc-19-blitz-finals-5-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221013-221015-ccc-19-blitz-revenge-for-leela-5-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221020-221025-ccc-19-rapid-newcomers-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221025-221029-ccc-19-rapid-qualifier-1-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221029-221102-ccc-19-rapid-qualifier-2-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221102-221103-ccc-19-rapid-qualifier-2-tiebreaks-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221103-221110-ccc-19-rapid-main-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221110-221117-ccc-19-rapid-semifinals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221117-221123-ccc-19-rapid-challenger-match-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221127-221202-ccc-19-rapid-finals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221204-221209-ccc-19-rapid-alt-finals-15-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221215-221219-ccc-19-bullet-newcomers-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221220-221224-ccc-19-bullet-qualifier-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221225-221230-ccc-19-bullet-qualifier-2-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2022/221230-230106-ccc-19-bullet-main-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230107-230112-ccc-19-bullet-semifinals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230114-230119-ccc-19-bullet-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230119-230123-ccc-19-bullet-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230124-230124-ccc-19-bullet-alt-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230207-230211-ccc-20-blitz-newcomers-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230211-230215-ccc-20-blitz-qualifier-1-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230216-230221-ccc-20-blitz-qualifier-2-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230221-230304-ccc-20-blitz-main-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230305-230313-ccc-20-blitz-semifinals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230313-230317-ccc-20-blitz-challenger-match-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230317-230319-ccc-20-blitz-fight-for-fourth-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230319-230323-ccc-20-blitz-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230405-230410-ccc-20-rapid-entry-league-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230410-230415-ccc-20-rapid-qualifier-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230415-230420-ccc-20-rapid-qualifier-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230420-230420-ccc-20-rapid-tiebreaker-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230422-230502-ccc-20-rapid-main-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230503-230512-ccc-20-rapid-semifinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230522-230527-ccc-20-rapid-challenger-match-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230527-230601-ccc-20-rapid-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230610-230614-ccc-20-bullet-entry-league-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230614-230619-ccc-20-bullet-qualifier-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230619-230625-ccc-20-bullet-qualifier-2-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230625-230626-ccc-20-bullet-holding-pattern-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230626-230703-ccc-20-bullet-main-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230705-230711-ccc-20-bullet-semifinals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230711-230715-ccc-20-bullet-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230716-230721-ccc-20-bullet-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230721-230725-ccc-21-blitz-entry-league-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230725-230728-ccc-21-blitz-qualifier-1-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230728-230731-ccc-21-blitz-qualifier-2-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230731-230806-ccc-21-blitz-main-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230806-230813-ccc-21-blitz-semifinals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230813-230818-ccc-21-blitz-challenger-match-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230818-230822-ccc-21-blitz-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230823-230827-ccc-21-blitz-alt-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230829-230903-ccc-21-rapid-entry-league-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230903-230908-ccc-21-rapid-qualifier-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230909-230913-ccc-21-rapid-qualifier-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230914-230914-ccc-21-rapid-tiebreaker-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230914-230914-ccc-21-rapid-tiebreaker-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230914-230914-ccc-21-rapid-tiebreaker-3-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230914-230922-ccc-21-rapid-main-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/230922-231001-ccc-21-rapid-semifinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231001-231003-ccc-21-rapid-fight-for-fifth-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231003-231008-ccc-21-rapid-challenger-match-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231008-231013-ccc-21-rapid-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231013-231018-ccc-21-rapid-alt-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231021-231022-classical-cup-1-match-2-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231021-231023-classical-cup-1-match-1-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231022-231022-classical-cup-1-match-3-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231023-231023-classical-cup-1-match-4-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231023-231024-classical-cup-1-match-5-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231024-231024-classical-cup-1-match-6-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231024-231025-classical-cup-1-match-7-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231025-231025-classical-cup-1-match-8-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231025-231026-classical-cup-1-match-9-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231026-231026-classical-cup-1-match-10-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231026-231027-classical-cup-1-match-11-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231027-231027-classical-cup-1-match-12-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231027-231028-classical-cup-1-match-13-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231028-231028-classical-cup-1-match-14-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231028-231029-classical-cup-1-match-15-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231029-231106-rating-brawl-fall-2023-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231106-231110-ccc-21-bullet-entry-league-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231110-231115-ccc-21-bullet-qualifier-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231115-231120-ccc-21-bullet-qualifier-2-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231120-231127-ccc-21-bullet-main-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231127-231202-ccc-21-bullet-semifinals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231203-231207-ccc-21-bullet-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231207-231212-ccc-21-bullet-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231212-231214-ccc-21-bullet-fight-for-4th-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231214-231216-ccc-21-bullet-would-be-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231217-231220-ccc-22-blitz-entry-league-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231220-231223-ccc-22-blitz-qualifier-1-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231224-231227-ccc-22-blitz-qualifier-2-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2023/231227-240102-ccc-22-blitz-main-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240102-240109-ccc-22-blitz-semifinals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240109-240113-ccc-22-blitz-challenger-match-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240113-240117-ccc-22-blitz-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240118-240122-ccc-22-blitz-alt-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240122-240124-ccc-22-blitz-fight-for-fourth-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240125-240130-ccc-22-rapid-entry-league-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240130-240131-ccc-22-rapid-tiebreaker-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240131-240205-ccc-22-rapid-qualifier-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240205-240206-ccc-22-rapid-tiebreaker-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240206-240211-ccc-22-rapid-qualifier-2-10-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240213-240221-ccc-22-rapid-main-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240221-240301-ccc-22-rapid-semifinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240301-240304-ccc-22-rapid-fight-for-sixth-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240304-240309-ccc-22-rapid-challenger-match-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240309-240314-ccc-22-rapid-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240314-240319-ccc-22-rapid-alt-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240320-240321-classical-cup-2-match-1-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240321-240322-classical-cup-2-match-2-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240322-240323-classical-cup-2-match-3-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240323-240324-classical-cup-2-match-4-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240324-240325-classical-cup-2-match-5-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240325-240325-classical-cup-2-tiebreaker-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240325-240326-classical-cup-2-match-6-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240326-240327-classical-cup-2-tiebreaker-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240327-240327-classical-cup-2-match-7-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240327-240328-classical-cup-2-match-8-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240328-240329-classical-cup-2-tiebreaker-3-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240329-240329-classical-cup-2-match-9-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240329-240330-classical-cup-2-match-10-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240330-240331-classical-cup-2-match-11-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240331-240401-classical-cup-2-match-12-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240401-240402-classical-cup-2-match-13-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240402-240403-classical-cup-2-match-14-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240408-240423-rating-brawl-spring-2024-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240423-240426-ccc-22-bullet-entry-league-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240426-240430-ccc-22-bullet-qualifier-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240430-240504-ccc-22-bullet-qualifier-2-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240504-240509-ccc-22-bullet-qualifier-3-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240509-240516-ccc-22-bullet-main-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240516-240521-ccc-22-bullet-semifinals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240521-240525-ccc-22-bullet-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240525-240530-ccc-22-bullet-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240530-240603-ccc-22-bullet-alt-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240603-240608-ccc-22-bullet-would-be-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240608-240609-ccc-23-blitz-entry-league-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240610-240613-ccc-23-blitz-qualifier-1-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240613-240616-ccc-23-blitz-qualifier-2-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240616-240616-ccc-23-blitz-tiebreaker-1-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240616-240620-ccc-23-blitz-qualifier-3-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240620-240625-ccc-23-blitz-main-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240626-240626-ccc-23-blitz-tiebreaker-2-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240626-240626-ccc-23-blitz-tiebreaker-3-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240626-240626-ccc-23-blitz-tiebreaker-4-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240627-240704-ccc-23-blitz-semifinals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240704-240708-ccc-23-blitz-challenger-match-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240708-240713-ccc-23-blitz-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240713-240717-ccc-23-blitz-alt-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240729-240802-ccc-23-rapid-entry-league-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240802-240807-ccc-23-rapid-qualifier-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240807-240812-ccc-23-rapid-qualifier-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240812-240817-ccc-23-rapid-qualifier-3-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240817-240818-ccc-23-rapid-tiebreaker-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240818-240825-ccc-23-rapid-main-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240825-240904-ccc-23-rapid-semifinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240904-240909-ccc-23-rapid-challenger-match-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240909-240914-ccc-23-rapid-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240914-240919-ccc-23-rapid-alt-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240919-240924-ccc-23-rapid-fight-for-fourth-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240925-240926-classical-cup-3-match-1-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240926-240927-classical-cup-3-match-2-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240927-240928-classical-cup-3-match-3-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240928-240929-classical-cup-3-match-4-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240930-240930-classical-cup-3-match-5-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/240930-241001-classical-cup-3-match-6-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241001-241002-classical-cup-3-match-7-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241002-241003-classical-cup-3-match-8-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241003-241003-classical-cup-3-match-8-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241003-241004-classical-cup-3-match-9-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241004-241005-classical-cup-3-match-10-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241006-241007-classical-cup-3-match-11-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241007-241008-classical-cup-3-match-12-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241008-241009-classical-cup-3-match-13-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241009-241009-classical-cup-3-match-13-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241010-241010-classical-cup-3-match-14-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241016-241028-rating-brawl-fall-2024-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241028-241103-ccc-23-bullet-entry-league-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241103-241107-ccc-23-bullet-qualifier-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241107-241111-ccc-23-bullet-qualifier-2-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241112-241116-ccc-23-bullet-qualifier-3-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241116-241116-ccc-23-bullet-tiebreaker-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241117-241124-ccc-23-bullet-main-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241125-241130-ccc-23-bullet-semifinals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241130-241205-ccc-23-bullet-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241205-241210-ccc-23-bullet-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241210-241214-ccc-23-bullet-alt-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241215-241219-ccc-23-bullet-alt-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241219-241223-ccc-24-blitz-entry-league-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241223-241226-ccc-24-blitz-qualifier-1-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241226-241230-ccc-24-blitz-qualifier-2-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2024/241230-250102-ccc-24-blitz-qualifier-3-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250102-250107-ccc-24-blitz-main-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250107-250115-ccc-24-blitz-semifinals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250115-250119-ccc-24-blitz-challenger-match-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250119-250123-ccc-24-blitz-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250123-250128-ccc-24-blitz-alt-finals-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250128-250201-ccc-24-blitz-alt-challenger-3-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250201-250204-ccc-24-rapid-entry-league-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250205-250209-ccc-24-rapid-qualifier-1-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250210-250215-ccc-24-rapid-qualifier-2-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250215-250220-ccc-24-rapid-qualifier-3-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250220-250227-ccc-24-rapid-main-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250227-250309-ccc-24-rapid-semifinals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250309-250314-ccc-24-rapid-challenger-match-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250314-250319-ccc-24-rapid-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250319-250324-ccc-24-rapid-would-be-challenger-match-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250324-250329-ccc-24-rapid-would-be-alt-finals-10-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250329-250330-classical-cup-4-match-1-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250330-250331-classical-cup-4-match-2-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250331-250401-classical-cup-4-match-3-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250401-250401-classical-cup-4-match-4-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250401-250402-classical-cup-4-match-5-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250403-250403-classical-cup-4-match-6-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250403-250404-classical-cup-4-match-7-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250404-250405-classical-cup-4-match-8-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250405-250406-classical-cup-4-match-10-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250406-250407-classical-cup-4-match-9-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250407-250408-classical-cup-4-match-11-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250408-250409-classical-cup-4-match-12-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250409-250410-classical-cup-4-match-13-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250410-250411-classical-cup-4-match-14-30-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250418-250424-bullet-brawl-spring-2025-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250424-250427-ccc-24-bullet-entry-league-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250427-250501-ccc-24-bullet-qualifier-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250501-250506-ccc-24-bullet-qualifier-2-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250506-250511-ccc-24-bullet-qualifier-3-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250511-250511-ccc-24-bullet-tiebreaker-1-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250511-250518-ccc-24-bullet-main-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250518-250523-ccc-24-bullet-semifinals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250523-250528-ccc-24-bullet-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250528-250602-ccc-24-bullet-finals-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250602-250606-ccc-24-bullet-would-be-challenger-match-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250607-250611-ccc-24-bullet-third-place-throwdown-1-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250806-250806-ccc-v2-testing-pt-4.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250806-250806-ccc-v2-testing-pt-5.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250806-250807-ccc-v2-testing-pt-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250806-250807-ccc-v2-testing-pt-6.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250807-250808-ccc-v2-testing-pt-9.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250811-250815-ccc-v2-testing-pt-10.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250818-250823-ccc-v2-testing-pt-11.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250902-250915-rawing-brawl-fall-2025.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250915-250915-ccc-v2-testing-pt-13.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250917-250919-ccc-v2-testing-pt-14.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-16.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-17.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-18.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-19.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-20.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-21.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250922-250922-ccc-v2-testing-pt-22.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250923-250923-ccc-v2-testing-pt-23.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250923-250924-ccc-25-blitz-entry-league.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250924-250927-ccc-25-blitz-qualifier-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/250928-251001-ccc-25-blitz-qualifier-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251001-251004-ccc-25-blitz-qualifier-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251005-251010-ccc-25-blitz-main.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251010-251010-ccc-v2-testing-pt-24.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251010-251017-ccc-25-blitz-semifinals.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251017-251022-ccc-25-blitz-challenger-match.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251026-251030-ccc-25-blitz-finals.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251030-251103-ccc-25-blitz-torch-vs-leela.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251104-251115-rating-brawl-fall-2025.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251119-251129-ccc-25-rapid-qualifier-1.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251129-251206-ccc-25-rapid-qualifier-2.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251208-251216-ccc-25-rapid-qualifier-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251216-251218-main-event-waiting-room.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251218-251218-ccc-v2-testing-leela-update.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251223-251223-ccc-v2-testing-leela-take-3.zip
+https://github.com/ianrastall/ccc-archive/raw/main/2025/251223-260102-ccc-25-rapid-main.zip
+
+```
+
+## Full File: `[chessnerd] events.txt`
+
+Source: `D:\GitHub\chessnerd\events.txt`
+
+```text
+180831-180916-cccc-1-rapid-rumble-15-5-stage-1.pgn: CCCC 1: Rapid Rumble (15|5) Stage 1
+180917-180925-cccc-1-rapid-rumble-15-5-stage-2.pgn: CCCC 1: Rapid Rumble (15|5) Stage 2
+180925-181001-cccc-1-rapid-rumble-15-5-stage-3.pgn: CCCC 1: Rapid Rumble (15|5) Stage 3
+181003-181006-cccc-1-rapid-rumble-15-5-bonus-games.pgn: CCCC 1: Rapid Rumble (15|5) Bonus Games
+181008-181031-ccc-2-blitz-battle-5-2.pgn: CCC 2: Blitz Battle (5|2)
+181031-181110-ccc-2-blitz-battle-5-2-stage-2.pgn: CCC 2: Blitz Battle (5|2) Stage 2
+181112-181119-ccc-2-blitz-battle-5-2-stage-3.pgn: CCC 2: Blitz Battle (5|2) Stage 3
+181123-181220-ccc-3-rapid-redux-30-5.pgn: CCC 3: Rapid Redux (30|5)
+181223-190105-ccc-3-rapid-redux-stage-2-30-5.pgn: CCC 3: Rapid Redux Stage 2 (30|5)
+190106-190121-ccc-3-rapid-redux-stage-3-30-5.pgn: CCC 3: Rapid Redux Stage 3 (30|5)
+190127-190130-ccc-4-bullet-brawl-1-2.pgn: CCC 4: Bullet Brawl (1|2)
+190131-190208-ccc-5-escalation-10-5.pgn: CCC 5: Escalation (10|5)
+190208-190210-ccc-5-finals-10-5.pgn: CCC 5: Finals (10|5)
+190216-190224-ccc-6-the-winter-classic-stage-1-5-2.pgn: CCC 6: The Winter Classic Stage 1 (5|2)
+190224-190308-ccc-6-the-winter-classic-playoffs-10-10.pgn: CCC 6: The Winter Classic Playoffs (10|10)
+190309-190316-ccc-6-the-winter-classic-final-10-10.pgn: CCC 6: The Winter Classic Final (10|10)
+190406-190412-ccc-7-blitz-bonanza-final-5-2.pgn: CCC 7: Blitz Bonanza Final (5|2)
+190413-190513-ccc-8-deep-dive-15-5.pgn: CCC 8: Deep Dive (15|5)
+190513-190522-ccc-8-deep-dive-finals-15-5.pgn: CCC 8: Deep Dive Finals (15|5)
+190616-190623-ccc-9-the-gauntlet-qualification-5-2.pgn: CCC 9: The Gauntlet Qualification (5|2)
+190623-190630-ccc-9-the-gauntlet-quarterfinals-5-2.pgn: CCC 9: The Gauntlet Quarterfinals (5|2)
+190630-190707-ccc-9-the-gauntlet-semifinals-5-2.pgn: CCC 9: The Gauntlet Semifinals (5|2)
+190707-190712-ccc-9-the-gauntlet-final-10-5.pgn: CCC 9: The Gauntlet Final (10|5)
+190903-190911-ccc-10-quarterfinals-10-3.pgn: CCC 10 Quarterfinals (10|3)
+190911-190919-ccc-10-semifinals-10-3.pgn: CCC 10 Semifinals (10|3)
+190919-190923-ccc-10-finals-10-3.pgn: CCC 10 Finals (10|3)
+191011-191023-ccc-11-qualification-30-5.pgn: CCC 11 Qualification (30|5)
+191024-191107-ccc-11-round-1-30-5.pgn: CCC 11 Round 1 (30|5)
+191109-191119-ccc-11-round-2-30-5.pgn: CCC 11 Round 2 (30|5)
+191128-191205-ccc-11-round-3-30-5.pgn: CCC 11 Round 3 (30|5)
+191208-191215-ccc-11-semifinals-30-5.pgn: CCC 11 Semifinals (30|5)
+191216-191223-ccc-11-finals-30-5.pgn: CCC 11 Finals (30|5)
+200104-200105-ccc-12-0-houdini-vs-stoofvlees-1-1.pgn: CCC 12.0: Houdini vs Stoofvlees (1|1)
+200105-200106-ccc-12-1-rubichess-vs-winter-1-1.pgn: CCC 12.1: RubiChess vs. Winter (1|1)
+200106-200106-ccc-12-2-andscacs-vs-ethereal-1-1.pgn: CCC 12.2: Andscacs vs Ethereal (1|1)
+200106-200107-ccc-12-3-dark-allie-vs-fire-1-1.pgn: CCC 12.3: Dark Allie vs Fire (1|1)
+200107-200108-ccc-12-8-houdini-vs-lc0-cpu-1-1.pgn: CCC 12.8: Houdini vs Lc0-CPU (1|1)
+200108-200109-ccc-12-8-houdini-vs-lc0-cpu-1-1.pgn: CCC 12.8: Houdini vs Lc0-CPU! (1|1)
+200109-200110-ccc-12-72-lc0-vs-rofchade-1-1.pgn: CCC 12.72: Lc0 vs Rofchade (1|1)
+200110-200111-ccc-12-6-stoofvlees-vs-komodo-mc-1-1.pgn: CCC 12.6: Stoofvlees vs Komodo MC (1|1)
+200111-200112-ccc-12-9-leelenstein-vs-rubichess-1-1.pgn: CCC 12.9: Leelenstein vs RubiChess (1|1)
+200112-200113-ccc-12-10-stockfish-vs-ethereal-1-1.pgn: CCC 12.10: Stockfish vs Ethereal (1|1)
+200113-200114-ccc-12-5-scorpio-vs-xiphos-1-1.pgn: CCC 12.5: Scorpio vs Xiphos (1|1)
+200114-200115-ccc-12-4-komodo-vs-laser-1-1.pgn: CCC 12.4: Komodo vs Laser (1|1)
+200115-200115-ccc-12-14-stockfish-vs-stoofvlees-1-1.pgn: CCC 12.14: Stockfish vs Stoofvlees (1|1)
+200116-200117-ccc-12-13-fire-vs-leelenstein-1-1.pgn: CCC 12.13: Fire vs Leelenstein (1|1)
+200117-200118-ccc-12-12-houdini-vs-lc0-1-1.pgn: CCC 12.12: Houdini vs Lc0 (1|1)
+200119-200120-ccc-12-11-komodo-vs-scorpio-1-1.pgn: CCC 12.11: Komodo vs Scorpio (1|1)
+200120-200121-ccc-12-15-leelenstein-vs-scorpio-1-1.pgn: CCC 12.15: Leelenstein vs Scorpio (1|1)
+200121-200122-ccc-12-16-lc0-vs-stockfish-1-1.pgn: CCC 12.16: Lc0 vs Stockfish (1|1)
+200122-200123-ccc-12-18-scorpio-vs-stockfish-third-place-match-1-1.pgn: CCC 12.18: Scorpio vs Stockfish (Third-Place Match) (1|1)
+200123-200123-ccc-12-17-lc0-vs-leelenstein-finals-1-1.pgn: CCC 12.17: Lc0 vs Leelenstein (Finals) (1|1)
+200307-200310-ccc-13-pool-c-3-2.pgn: CCC 13: Pool C (3|2)
+200314-200318-ccc-13-pool-b-3-2.pgn: CCC 13: Pool B (3|2)
+200318-200320-ccc-13-triangular-3-2.pgn: CCC 13: Triangular (3|2)
+200323-200330-ccc-13-heptagonal-5-5.pgn: CCC 13: Heptagonal (5|5)
+200401-200408-ccc-13-semifinals-10-5.pgn: CCC 13: Semifinals (10|5)
+200408-200414-ccc-13-finals-15-5.pgn: CCC 13: Finals (15|5)
+200603-200610-ccc-14-round-1-15-5.pgn: CCC 14: Round 1 (15|5)
+200610-200610-ccc-14-9-winter-vs-ethereal-15-5.pgn: CCC 14.9: Winter vs Ethereal (15|5)
+200610-200611-ccc-14-11-rofchade-vs-rubi-15-5.pgn: CCC 14.11: rofChade vs Rubi (15|5)
+200611-200611-ccc-14-12-defenchess-vs-komodo-mc-15-5.pgn: CCC 14.12: Defenchess vs Komodo MC (15|5)
+200611-200612-ccc-14-10-dark-queen-vs-xiphos-15-5.pgn: CCC 14.10: Dark Queen vs Xiphos (15|5)
+200612-200612-ccc-14-13-lc0-vs-fire-15-5.pgn: CCC 14.13: Lc0 vs Fire (15|5)
+200612-200613-ccc-14-14-stockfish-vs-komodo-15-5.pgn: CCC 14.14: Stockfish vs Komodo (15|5)
+200613-200614-ccc-14-17-ethereal-vs-fire-15-5.pgn: CCC 14.17: Ethereal vs Fire (15|5)
+200614-200614-ccc-14-15-scorpio-vs-stoofvlees-15-5.pgn: CCC 14.15: Scorpio vs Stoofvlees (15|5)
+200614-200614-ccc-14-18-dark-queen-vs-komodo-15-5.pgn: CCC 14.18: Dark Queen vs Komodo (15|5)
+200615-200615-ccc-14-19-scorpio-vs-rofchade-15-5.pgn: CCC 14.19: Scorpio vs rofChade (15|5)
+200615-200616-ccc-14-23-fire-vs-komodo-15-5.pgn: CCC 14.23: Fire vs Komodo (15|5)
+200623-200623-ccc-14-20-leelenstein-vs-lc0-cpu-15-5.pgn: CCC 14.20: Leelenstein vs Lc0 CPU (15|5)
+200623-200624-ccc-14-20-lc0-cpu-vs-komodo-mc-15-5.pgn: CCC 14.20: Lc0-CPU vs Komodo MC (15|5)
+200624-200624-ccc-14-21-lc0-vs-stockfish-15-5.pgn: CCC 14.21: Lc0 vs Stockfish (15|5)
+200624-200625-ccc-14-21-lc0-vs-stockfish-ii-15-5.pgn: CCC 14.21: Lc0 vs Stockfish II (15|5)
+200625-200625-ccc-14-22-stoofvlees-vs-leelenstein-15-5.pgn: CCC 14.22: Stoofvlees vs Leelenstein (15|5)
+200625-200625-ccc-14-25-stoofvlees-vs-komodo-15-5.pgn: CCC 14.25: Stoofvlees vs Komodo (15|5)
+200625-200626-ccc-14-24-scorpio-vs-lc0-cpu-15-5.pgn: CCC 14.24: Scorpio vs Lc0-CPU (15|5)
+200626-200626-ccc-14-24-scorpio-vs-lc0-cpu-tiebreak-15-5.pgn: CCC 14.24: Scorpio vs Lc0-CPU (Tiebreak) (15|5)
+200626-200626-ccc-14-26-lc0-vs-lc0-cpu-15-5.pgn: CCC 14.26: Lc0 vs Lc0 CPU (15|5)
+200626-200627-ccc-14-27-stockfish-vs-leelenstein-15-5.pgn: CCC 14.27: Stockfish vs Leelenstein (15|5)
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-15-5.pgn: CCC 14.27: Stockfish vs Leelenstein (Tiebreak) (15|5)
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-ii-5-2.pgn: CCC 14.27: Stockfish vs Leelenstein (Tiebreak II) (5|2)
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-iii-5-2.pgn: CCC 14.27: Stockfish vs Leelenstein (Tiebreak III) (5|2)
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-iv-1-1.pgn: CCC 14.27: Stockfish vs Leelenstein (Tiebreak IV) (1|1)
+200627-200627-ccc-14-28-lc0-vs-stoofvlees-15-5.pgn: CCC 14.28: Lc0 vs Stoofvlees (15|5)
+200627-200628-ccc-14-28-lc0-vs-stoofvlees-tiebreak-15-5.pgn: CCC 14.28: Lc0 vs Stoofvlees (Tiebreak) (15|5)
+200628-200628-ccc-14-29-stockfish-vs-lc0-15-5.pgn: CCC 14.29: Stockfish vs Lc0 (15|5)
+200628-200628-ccc-14-29-stockfish-vs-lc0-tiebreak-15-5.pgn: CCC 14.29: Stockfish vs Lc0 (Tiebreak) (15|5)
+200628-200628-ccc-14-29-stockfish-vs-lc0-tiebreak-ii-5-2.pgn: CCC 14.29: Stockfish vs Lc0 (Tiebreak II) (5|2)
+200628-200629-ccc-14-30-lc0-vs-leelenstein-i-15-5.pgn: CCC 14.30: Lc0 vs Leelenstein I (15|5)
+200629-200629-ccc-14-30-lc0-vs-leelenstein-i-tiebreak-15-5.pgn: CCC 14.30: Lc0 vs Leelenstein I (Tiebreak) (15|5)
+200629-200629-ccc-14-30-lc0-vs-leelenstein-i-tiebreak-ii-5-2.pgn: CCC 14.30: Lc0 vs Leelenstein I (Tiebreak II) (5|2)
+200629-200630-ccc-14-31-lc0-vs-leelenstein-ii-15-5.pgn: CCC 14.31: Lc0 vs Leelenstein II (15|5)
+200630-200630-ccc-14-31-lc0-vs-leelenstein-ii-tiebreak-15-5.pgn: CCC 14.31: Lc0 vs Leelenstein II (Tiebreak) (15|5)
+200827-200828-ccc-15-02-komodo-mc-vs-lc0-cpu-1-1.pgn: CCC 15.02: Komodo MC vs Lc0 CPU (1|1)
+200828-200829-ccc-15-05-fire-vs-ethereal-1-1.pgn: CCC 15.05: Fire vs Ethereal (1|1)
+200829-200830-ccc-15-08-stockfish-vs-defenchess-1-1.pgn: CCC 15.08: Stockfish vs Defenchess (1|1)
+200830-200831-ccc-15-03-stoofvlees-vs-slowchess-1-1.pgn: CCC 15.03: Stoofvlees vs SlowChess (1|1)
+200831-200901-ccc-15-09-leelenstein-vs-rubichess-1-1.pgn: CCC 15.09: Leelenstein vs RubiChess (1|1)
+200901-200902-ccc-15-06-komodo-vs-xiphos-1-1.pgn: CCC 15.06: Komodo vs Xiphos (1|1)
+200902-200903-ccc-15-07-stockfish-classic-vs-rofchade-1-1.pgn: CCC 15.07: Stockfish Classic vs rofChade (1|1)
+201112-201126-ccc-blitz-championship-2020-5-5.pgn: CCC Blitz Championship 2020 (5|5)
+201126-201203-ccc-blitz-championship-2020-semi-finals-5-5.pgn: CCC Blitz Championship 2020: Semi-finals (5|5)
+201203-201210-ccc-blitz-championship-2020-finals-5-5.pgn: CCC Blitz Championship 2020: Finals (5|5)
+210115-210122-ccc-rapid-2021-qualifiers-15-3.pgn: CCC Rapid 2021: Qualifiers (15|3)
+210122-210129-ccc-rapid-2021-nnue-league-15-3.pgn: CCC Rapid 2021: NNUE League (15|3)
+210129-210206-ccc-rapid-2021-main-league-15-3.pgn: CCC Rapid 2021: Main League (15|3)
+210206-210217-ccc-rapid-2021-nn-vs-classic-15-3.pgn: CCC Rapid 2021: NN vs Classic (15|3)
+210217-210303-ccc-rapid-2021-elite-round-15-3.pgn: CCC Rapid 2021: Elite Round (15|3)
+210304-210317-ccc-rapid-2021-finals-15-3.pgn: CCC Rapid 2021: Finals (15|3)
+210817-210831-ccc-blitz-championship-2021-5-5.pgn: CCC Blitz Championship 2021 (5|5)
+210831-210907-ccc-blitz-championship-2021-semifinals-5-5.pgn: CCC Blitz Championship 2021: Semifinals (5|5)
+210907-210911-ccc-blitz-championship-2021-finals-5-5.pgn: CCC Blitz Championship 2021: Finals (5|5)
+210924-211009-ccc-chess-960-blitz-championship-5-5.pgn: CCC Chess 960 Blitz Championship (5|5)
+211009-211017-ccc-chess-960-blitz-championship-semifinals-5-5.pgn: CCC Chess 960 Blitz Championship: Semifinals (5|5)
+211017-211025-ccc-chess-960-blitz-championship-finals-5-5.pgn: CCC Chess 960 Blitz Championship: Finals (5|5)
+211025-211101-ccc-16-rapid-qualification-15-3.pgn: CCC 16 Rapid: Qualification (15|3)
+211101-211108-ccc-16-rapid-main-15-3.pgn: CCC 16 Rapid: Main (15|3)
+211108-211115-ccc-16-rapid-semifinals-15-3.pgn: CCC 16 Rapid: Semifinals (15|3)
+211115-211123-ccc-16-rapid-finals-15-3.pgn: CCC 16 Rapid: Finals (15|3)
+211123-211201-ccc-16-rapid-runners-up-15-3.pgn: CCC 16 Rapid: Runners-up (15|3)
+211201-211209-ccc-16-bullet-qualification-2-1.pgn: CCC 16 Bullet: Qualification (2|1)
+211209-211218-ccc-16-bullet-main-2-1.pgn: CCC 16 Bullet: Main (2|1)
+211218-211227-ccc-16-bullet-semifinals-2-1.pgn: CCC 16 Bullet: Semifinals (2|1)
+211227-220106-ccc-16-bullet-finals-2-1.pgn: CCC 16 Bullet: Finals (2|1)
+220109-220115-ccc-16-blitz-qualification-5-5.pgn: CCC 16 Blitz: Qualification (5|5)
+220115-220123-ccc-16-blitz-main-5-5.pgn: CCC 16 Blitz: Main (5|5)
+220123-220130-ccc-16-blitz-semifinals-5-5.pgn: CCC 16 Blitz: Semifinals (5|5)
+220131-220208-ccc-16-blitz-challenger-5-5.pgn: CCC 16 Blitz: Challenger (5|5)
+220208-220215-ccc-16-blitz-finals-5-5.pgn: CCC 16 Blitz: Finals (5|5)
+220220-220227-ccc-17-rapid-qualification-15-3.pgn: CCC 17 Rapid: Qualification (15|3)
+220227-220306-ccc-17-rapid-main-15-3.pgn: CCC 17 Rapid: Main (15|3)
+220306-220314-ccc-17-rapid-semifinals-15-3.pgn: CCC 17 Rapid: Semifinals (15|3)
+220314-220322-ccc-17-rapid-challenger-15-3.pgn: CCC 17 Rapid: Challenger (15|3)
+220322-220330-ccc-17-rapid-finals-15-3.pgn: CCC 17 Rapid: Finals (15|3)
+220404-220412-ccc-17-bullet-qualification-2-1.pgn: CCC 17 Bullet: Qualification (2|1)
+220412-220421-ccc-17-bullet-main-2-1.pgn: CCC 17 Bullet: Main (2|1)
+220421-220430-ccc-17-bullet-semifinals-2-1.pgn: CCC 17 Bullet: Semifinals (2|1)
+220430-220509-ccc-17-bullet-challenger-2-1.pgn: CCC 17 Bullet: Challenger (2|1)
+220509-220518-ccc-17-bullet-finals-2-1.pgn: CCC 17 Bullet: Finals (2|1)
+220601-220607-ccc-17-blitz-qualification-5-5.pgn: CCC 17 Blitz: Qualification (5|5)
+220608-220616-ccc-17-blitz-main-5-5.pgn: CCC 17 Blitz: Main (5|5)
+220616-220624-ccc-17-blitz-semifinals-5-5.pgn: CCC 17 Blitz: Semifinals (5|5)
+220628-220705-ccc-17-blitz-challenger-5-5.pgn: CCC 17 Blitz: Challenger (5|5)
+220705-220713-ccc-17-blitz-finals-5-5.pgn: CCC 17 Blitz: Finals (5|5)
+220717-220724-ccc-18-rapid-qualification-15-3.pgn: CCC 18 Rapid: Qualification (15|3)
+220724-220731-ccc-18-rapid-main-15-3.pgn: CCC 18 Rapid: Main (15|3)
+220731-220808-ccc-18-rapid-semifinals-15-3.pgn: CCC 18 Rapid: Semifinals (15|3)
+220811-220819-ccc-18-rapid-finals-15-3.pgn: CCC 18 Rapid: Finals (15|3)
+220822-220831-ccc-18-rapid-challenger-15-3.pgn: CCC 18 Rapid: Challenger (15|3)
+220908-220910-ccc-19-blitz-newcomers-5-5.pgn: CCC 19 Blitz: Newcomers (5|5)
+220910-220913-ccc-19-blitz-qualifier-1-5-5.pgn: CCC 19 Blitz: Qualifier #1 (5|5)
+220913-220918-ccc-19-blitz-qualifier-2-5-5.pgn: CCC 19 Blitz: Qualifier #2 (5|5)
+220918-220926-ccc-19-blitz-main-5-5.pgn: CCC 19 Blitz: Main (5|5)
+220926-221001-ccc-19-blitz-semifinals-5-5.pgn: CCC 19 Blitz: Semifinals (5|5)
+221001-221006-ccc-19-blitz-challenger-match-5-5.pgn: CCC 19 Blitz: Challenger Match (5|5)
+221009-221013-ccc-19-blitz-finals-5-5.pgn: CCC 19 Blitz: Finals (5|5)
+221013-221015-ccc-19-blitz-revenge-for-leela-5-2.pgn: CCC 19 Blitz: Revenge for Leela (5|2)
+221020-221025-ccc-19-rapid-newcomers-15-3.pgn: CCC 19 Rapid: Newcomers (15|3)
+221025-221029-ccc-19-rapid-qualifier-1-15-3.pgn: CCC 19 Rapid: Qualifier #1 (15|3)
+221029-221102-ccc-19-rapid-qualifier-2-15-3.pgn: CCC 19 Rapid: Qualifier #2 (15|3)
+221102-221103-ccc-19-rapid-qualifier-2-tiebreaks-15-3.pgn: CCC 19 Rapid: Qualifier #2: Tiebreaks (15|3)
+221103-221110-ccc-19-rapid-main-15-3.pgn: CCC 19 Rapid: Main (15|3)
+221110-221117-ccc-19-rapid-semifinals-15-3.pgn: CCC 19 Rapid: Semifinals (15|3)
+221117-221123-ccc-19-rapid-challenger-match-15-3.pgn: CCC 19 Rapid: Challenger Match (15|3)
+221127-221202-ccc-19-rapid-finals-15-3.pgn: CCC 19 Rapid: Finals (15|3)
+221204-221209-ccc-19-rapid-alt-finals-15-3.pgn: CCC 19 Rapid: Alt Finals (15|3)
+221215-221219-ccc-19-bullet-newcomers-1-1.pgn: CCC 19 Bullet: Newcomers (1|1)
+221220-221224-ccc-19-bullet-qualifier-1-1-1.pgn: CCC 19 Bullet: Qualifier #1 (1|1)
+221225-221230-ccc-19-bullet-qualifier-2-1-1.pgn: CCC 19 Bullet: Qualifier #2 (1|1)
+221230-230106-ccc-19-bullet-main-1-1.pgn: CCC 19 Bullet: Main (1|1)
+230107-230112-ccc-19-bullet-semifinals-1-1.pgn: CCC 19 Bullet: Semifinals (1|1)
+230114-230119-ccc-19-bullet-challenger-match-1-1.pgn: CCC 19 Bullet: Challenger Match (1|1)
+230119-230123-ccc-19-bullet-finals-1-1.pgn: CCC 19 Bullet: Finals (1|1)
+230124-230124-ccc-19-bullet-alt-finals-1-1.pgn: CCC 19 Bullet: Alt Finals (1|1)
+230207-230211-ccc-20-blitz-newcomers-3-2.pgn: CCC 20 Blitz: Newcomers (3|2)
+230211-230215-ccc-20-blitz-qualifier-1-3-2.pgn: CCC 20 Blitz: Qualifier #1 (3|2)
+230216-230221-ccc-20-blitz-qualifier-2-3-2.pgn: CCC 20 Blitz: Qualifier #2 (3|2)
+230221-230304-ccc-20-blitz-main-3-2.pgn: CCC 20 Blitz: Main (3|2)
+230305-230313-ccc-20-blitz-semifinals-3-2.pgn: CCC 20 Blitz: Semifinals (3|2)
+230313-230317-ccc-20-blitz-challenger-match-3-2.pgn: CCC 20 Blitz: Challenger Match (3|2)
+230317-230319-ccc-20-blitz-fight-for-fourth-3-2.pgn: CCC 20 Blitz: Fight for Fourth (3|2)
+230319-230323-ccc-20-blitz-finals-3-2.pgn: CCC 20 Blitz: Finals (3|2)
+230405-230410-ccc-20-rapid-entry-league-10-3.pgn: CCC 20 Rapid: Entry League (10|3)
+230410-230415-ccc-20-rapid-qualifier-1-10-3.pgn: CCC 20 Rapid: Qualifier #1 (10|3)
+230415-230420-ccc-20-rapid-qualifier-2-10-3.pgn: CCC 20 Rapid: Qualifier #2 (10|3)
+230420-230420-ccc-20-rapid-tiebreaker-1-10-3.pgn: CCC 20 Rapid: Tiebreaker #1 (10|3)
+230422-230502-ccc-20-rapid-main-10-3.pgn: CCC 20 Rapid: Main (10|3)
+230503-230512-ccc-20-rapid-semifinals-10-3.pgn: CCC 20 Rapid: Semifinals (10|3)
+230522-230527-ccc-20-rapid-challenger-match-10-3.pgn: CCC 20 Rapid: Challenger Match (10|3)
+230527-230601-ccc-20-rapid-finals-10-3.pgn: CCC 20 Rapid: Finals (10|3)
+230610-230614-ccc-20-bullet-entry-league-1-1.pgn: CCC 20 Bullet: Entry League (1|1)
+230614-230619-ccc-20-bullet-qualifier-1-1-1.pgn: CCC 20 Bullet: Qualifier #1 (1|1)
+230619-230625-ccc-20-bullet-qualifier-2-1-1.pgn: CCC 20 Bullet: Qualifier #2 (1|1)
+230625-230626-ccc-20-bullet-holding-pattern-1-1.pgn: CCC 20 Bullet: Holding Pattern (1|1)
+230626-230703-ccc-20-bullet-main-1-1.pgn: CCC 20 Bullet: Main (1|1)
+230705-230711-ccc-20-bullet-semifinals-1-1.pgn: CCC 20 Bullet: Semifinals (1|1)
+230711-230715-ccc-20-bullet-challenger-match-1-1.pgn: CCC 20 Bullet: Challenger Match (1|1)
+230716-230721-ccc-20-bullet-finals-1-1.pgn: CCC 20 Bullet: Finals (1|1)
+230721-230725-ccc-21-blitz-entry-league-3-2.pgn: CCC 21 Blitz: Entry League (3|2)
+230725-230728-ccc-21-blitz-qualifier-1-3-2.pgn: CCC 21 Blitz: Qualifier #1 (3|2)
+230728-230731-ccc-21-blitz-qualifier-2-3-2.pgn: CCC 21 Blitz: Qualifier #2 (3|2)
+230731-230806-ccc-21-blitz-main-3-2.pgn: CCC 21 Blitz: Main (3|2)
+230806-230813-ccc-21-blitz-semifinals-3-2.pgn: CCC 21 Blitz: Semifinals (3|2)
+230813-230818-ccc-21-blitz-challenger-match-3-2.pgn: CCC 21 Blitz: Challenger Match (3|2)
+230818-230822-ccc-21-blitz-finals-3-2.pgn: CCC 21 Blitz: Finals (3|2)
+230823-230827-ccc-21-blitz-alt-finals-3-2.pgn: CCC 21 Blitz: Alt Finals (3|2)
+230829-230903-ccc-21-rapid-entry-league-10-3.pgn: CCC 21 Rapid: Entry League (10|3)
+230903-230908-ccc-21-rapid-qualifier-1-10-3.pgn: CCC 21 Rapid: Qualifier #1 (10|3)
+230909-230913-ccc-21-rapid-qualifier-2-10-3.pgn: CCC 21 Rapid: Qualifier #2 (10|3)
+230914-230914-ccc-21-rapid-tiebreaker-1-10-3.pgn: CCC 21 Rapid: Tiebreaker #1 (10|3)
+230914-230914-ccc-21-rapid-tiebreaker-2-10-3.pgn: CCC 21 Rapid: Tiebreaker #2 (10|3)
+230914-230914-ccc-21-rapid-tiebreaker-3-10-3.pgn: CCC 21 Rapid: Tiebreaker #3 (10|3)
+230914-230922-ccc-21-rapid-main-10-3.pgn: CCC 21 Rapid: Main (10|3)
+230922-231001-ccc-21-rapid-semifinals-10-3.pgn: CCC 21 Rapid: Semifinals (10|3)
+231001-231003-ccc-21-rapid-fight-for-fifth-10-3.pgn: CCC 21 Rapid: Fight For Fifth (10|3)
+231003-231008-ccc-21-rapid-challenger-match-10-3.pgn: CCC 21 Rapid: Challenger Match (10|3)
+231008-231013-ccc-21-rapid-finals-10-3.pgn: CCC 21 Rapid: Finals (10|3)
+231013-231018-ccc-21-rapid-alt-finals-10-3.pgn: CCC 21 Rapid: Alt Finals (10|3)
+231021-231022-classical-cup-1-match-2-30-5.pgn: Classical Cup #1: Match 2 (30|5)
+231021-231023-classical-cup-1-match-1-30-5.pgn: Classical Cup #1: Match 1 (30|5)
+231022-231022-classical-cup-1-match-3-30-5.pgn: Classical Cup #1: Match 3 (30|5)
+231023-231023-classical-cup-1-match-4-30-5.pgn: Classical Cup #1: Match 4 (30|5)
+231023-231024-classical-cup-1-match-5-30-5.pgn: Classical Cup #1: Match 5 (30|5)
+231024-231024-classical-cup-1-match-6-30-5.pgn: Classical Cup #1: Match 6 (30|5)
+231024-231025-classical-cup-1-match-7-30-5.pgn: Classical Cup #1: Match 7 (30|5)
+231025-231025-classical-cup-1-match-8-30-5.pgn: Classical Cup #1: Match 8 (30|5)
+231025-231026-classical-cup-1-match-9-30-5.pgn: Classical Cup #1: Match 9 (30|5)
+231026-231026-classical-cup-1-match-10-30-5.pgn: Classical Cup #1: Match 10 (30|5)
+231026-231027-classical-cup-1-match-11-30-5.pgn: Classical Cup #1: Match 11 (30|5)
+231027-231027-classical-cup-1-match-12-30-5.pgn: Classical Cup #1: Match 12 (30|5)
+231027-231028-classical-cup-1-match-13-30-5.pgn: Classical Cup #1: Match 13 (30|5)
+231028-231028-classical-cup-1-match-14-30-5.pgn: Classical Cup #1: Match 14 (30|5)
+231028-231029-classical-cup-1-match-15-30-5.pgn: Classical Cup #1: Match 15 (30|5)
+231029-231106-rating-brawl-fall-2023-1-1.pgn: Rating Brawl: Fall 2023 (1|1)
+231106-231110-ccc-21-bullet-entry-league-1-1.pgn: CCC 21 Bullet: Entry League (1|1)
+231110-231115-ccc-21-bullet-qualifier-1-1-1.pgn: CCC 21 Bullet: Qualifier #1 (1|1)
+231115-231120-ccc-21-bullet-qualifier-2-1-1.pgn: CCC 21 Bullet: Qualifier #2 (1|1)
+231120-231127-ccc-21-bullet-main-1-1.pgn: CCC 21 Bullet: Main (1|1)
+231127-231202-ccc-21-bullet-semifinals-1-1.pgn: CCC 21 Bullet: Semifinals (1|1)
+231203-231207-ccc-21-bullet-challenger-match-1-1.pgn: CCC 21 Bullet: Challenger Match (1|1)
+231207-231212-ccc-21-bullet-finals-1-1.pgn: CCC 21 Bullet: Finals (1|1)
+231212-231214-ccc-21-bullet-fight-for-4th-1-1.pgn: CCC 21 Bullet: Fight for 4th (1|1)
+231214-231216-ccc-21-bullet-would-be-challenger-match-1-1.pgn: CCC 21 Bullet: Would-be Challenger Match (1|1)
+231217-231220-ccc-22-blitz-entry-league-3-2.pgn: CCC 22 Blitz: Entry League (3|2)
+231220-231223-ccc-22-blitz-qualifier-1-3-2.pgn: CCC 22 Blitz: Qualifier #1 (3|2)
+231224-231227-ccc-22-blitz-qualifier-2-3-2.pgn: CCC 22 Blitz: Qualifier #2 (3|2)
+231227-240102-ccc-22-blitz-main-3-2.pgn: CCC 22 Blitz: Main (3|2)
+240102-240109-ccc-22-blitz-semifinals-3-2.pgn: CCC 22 Blitz: Semifinals (3|2)
+240109-240113-ccc-22-blitz-challenger-match-3-2.pgn: CCC 22 Blitz: Challenger Match (3|2)
+240113-240117-ccc-22-blitz-finals-3-2.pgn: CCC 22 Blitz: Finals (3|2)
+240118-240122-ccc-22-blitz-alt-finals-3-2.pgn: CCC 22 Blitz: Alt Finals (3|2)
+240122-240124-ccc-22-blitz-fight-for-fourth-3-2.pgn: CCC 22 Blitz: Fight for Fourth (3|2)
+240125-240130-ccc-22-rapid-entry-league-10-3.pgn: CCC 22 Rapid: Entry League (10|3)
+240130-240131-ccc-22-rapid-tiebreaker-1-10-3.pgn: CCC 22 Rapid: Tiebreaker #1 (10|3)
+240131-240205-ccc-22-rapid-qualifier-1-10-3.pgn: CCC 22 Rapid: Qualifier #1 (10|3)
+240205-240206-ccc-22-rapid-tiebreaker-2-10-3.pgn: CCC 22 Rapid: Tiebreaker #2 (10|3)
+240206-240211-ccc-22-rapid-qualifier-2-10-2.pgn: CCC 22 Rapid: Qualifier #2 (10|2)
+240213-240221-ccc-22-rapid-main-10-3.pgn: CCC 22 Rapid: Main (10|3)
+240221-240301-ccc-22-rapid-semifinals-10-3.pgn: CCC 22 Rapid: Semifinals (10|3)
+240301-240304-ccc-22-rapid-fight-for-sixth-10-3.pgn: CCC 22 Rapid: Fight For Sixth (10|3)
+240304-240309-ccc-22-rapid-challenger-match-10-3.pgn: CCC 22 Rapid: Challenger Match (10|3)
+240309-240314-ccc-22-rapid-finals-10-3.pgn: CCC 22 Rapid: Finals (10|3)
+240314-240319-ccc-22-rapid-alt-finals-10-3.pgn: CCC 22 Rapid: Alt Finals (10|3)
+240320-240321-classical-cup-2-match-1-30-5.pgn: Classical Cup #2: Match 1 (30|5)
+240321-240322-classical-cup-2-match-2-30-5.pgn: Classical Cup #2: Match 2 (30|5)
+240322-240323-classical-cup-2-match-3-30-5.pgn: Classical Cup #2: Match 3 (30|5)
+240323-240324-classical-cup-2-match-4-30-5.pgn: Classical Cup #2: Match 4 (30|5)
+240324-240325-classical-cup-2-match-5-30-5.pgn: Classical Cup #2: Match 5 (30|5)
+240325-240325-classical-cup-2-tiebreaker-1-10-3.pgn: Classical Cup #2: Tiebreaker 1 (10|3)
+240325-240326-classical-cup-2-match-6-30-5.pgn: Classical Cup #2: Match 6 (30|5)
+240326-240327-classical-cup-2-tiebreaker-2-10-3.pgn: Classical Cup #2: Tiebreaker 2 (10|3)
+240327-240327-classical-cup-2-match-7-30-5.pgn: Classical Cup #2: Match 7 (30|5)
+240327-240328-classical-cup-2-match-8-30-5.pgn: Classical Cup #2: Match 8 (30|5)
+240328-240329-classical-cup-2-tiebreaker-3-10-3.pgn: Classical Cup #2: Tiebreaker 3 (10|3)
+240329-240329-classical-cup-2-match-9-30-5.pgn: Classical Cup #2: Match 9 (30|5)
+240329-240330-classical-cup-2-match-10-30-5.pgn: Classical Cup #2: Match 10 (30|5)
+240330-240331-classical-cup-2-match-11-30-5.pgn: Classical Cup #2: Match 11 (30|5)
+240331-240401-classical-cup-2-match-12-30-5.pgn: Classical Cup #2: Match 12 (30|5)
+240401-240402-classical-cup-2-match-13-30-5.pgn: Classical Cup #2: Match 13 (30|5)
+240402-240403-classical-cup-2-match-14-30-5.pgn: Classical Cup #2: Match 14 (30|5)
+240408-240423-rating-brawl-spring-2024-1-1.pgn: Rating Brawl: Spring 2024 (1|1)
+240423-240426-ccc-22-bullet-entry-league-1-1.pgn: CCC 22 Bullet: Entry League (1|1)
+240426-240430-ccc-22-bullet-qualifier-1-1-1.pgn: CCC 22 Bullet: Qualifier #1 (1|1)
+240430-240504-ccc-22-bullet-qualifier-2-1-1.pgn: CCC 22 Bullet: Qualifier #2 (1|1)
+240504-240509-ccc-22-bullet-qualifier-3-1-1.pgn: CCC 22 Bullet: Qualifier #3 (1|1)
+240509-240516-ccc-22-bullet-main-1-1.pgn: CCC 22 Bullet: Main (1|1)
+240516-240521-ccc-22-bullet-semifinals-1-1.pgn: CCC 22 Bullet: Semifinals (1|1)
+240521-240525-ccc-22-bullet-challenger-match-1-1.pgn: CCC 22 Bullet: Challenger Match (1|1)
+240525-240530-ccc-22-bullet-finals-1-1.pgn: CCC 22 Bullet: Finals (1|1)
+240530-240603-ccc-22-bullet-alt-finals-1-1.pgn: CCC 22 Bullet: Alt Finals (1|1)
+240603-240608-ccc-22-bullet-would-be-challenger-match-1-1.pgn: CCC 22 Bullet: Would-be Challenger Match (1|1)
+240608-240609-ccc-23-blitz-entry-league-3-2.pgn: CCC 23 Blitz: Entry League (3|2)
+240610-240613-ccc-23-blitz-qualifier-1-3-2.pgn: CCC 23 Blitz: Qualifier #1 (3|2)
+240613-240616-ccc-23-blitz-qualifier-2-3-2.pgn: CCC 23 Blitz: Qualifier #2 (3|2)
+240616-240616-ccc-23-blitz-tiebreaker-1-3-2.pgn: CCC 23 Blitz: Tiebreaker #1 (3|2)
+240616-240620-ccc-23-blitz-qualifier-3-3-2.pgn: CCC 23 Blitz: Qualifier #3 (3|2)
+240620-240625-ccc-23-blitz-main-3-2.pgn: CCC 23 Blitz: Main (3|2)
+240626-240626-ccc-23-blitz-tiebreaker-2-3-2.pgn: CCC 23 Blitz: Tiebreaker #2 (3|2)
+240626-240626-ccc-23-blitz-tiebreaker-3-3-2.pgn: CCC 23 Blitz: Tiebreaker #3 (3|2)
+240626-240626-ccc-23-blitz-tiebreaker-4-3-2.pgn: CCC 23 Blitz: Tiebreaker #4 (3|2)
+240627-240704-ccc-23-blitz-semifinals-3-2.pgn: CCC 23 Blitz: Semifinals (3|2)
+240704-240708-ccc-23-blitz-challenger-match-3-2.pgn: CCC 23 Blitz: Challenger Match (3|2)
+240708-240713-ccc-23-blitz-finals-3-2.pgn: CCC 23 Blitz: Finals (3|2)
+240713-240717-ccc-23-blitz-alt-finals-3-2.pgn: CCC 23 Blitz: Alt Finals (3|2)
+240729-240802-ccc-23-rapid-entry-league-10-3.pgn: CCC 23 Rapid: Entry League (10|3)
+240802-240807-ccc-23-rapid-qualifier-1-10-3.pgn: CCC 23 Rapid: Qualifier #1 (10|3)
+240807-240812-ccc-23-rapid-qualifier-2-10-3.pgn: CCC 23 Rapid: Qualifier #2 (10|3)
+240812-240817-ccc-23-rapid-qualifier-3-10-3.pgn: CCC 23 Rapid: Qualifier #3 (10|3)
+240817-240818-ccc-23-rapid-tiebreaker-1-10-3.pgn: CCC 23 Rapid: Tiebreaker #1 (10|3)
+240818-240825-ccc-23-rapid-main-10-3.pgn: CCC 23 Rapid: Main (10|3)
+240825-240904-ccc-23-rapid-semifinals-10-3.pgn: CCC 23 Rapid: Semifinals (10|3)
+240904-240909-ccc-23-rapid-challenger-match-10-3.pgn: CCC 23 Rapid: Challenger Match (10|3)
+240909-240914-ccc-23-rapid-finals-10-3.pgn: CCC 23 Rapid: Finals (10|3)
+240914-240919-ccc-23-rapid-alt-finals-10-3.pgn: CCC 23 Rapid: Alt Finals (10|3)
+240919-240924-ccc-23-rapid-fight-for-fourth-10-3.pgn: CCC 23 Rapid: Fight for Fourth (10|3)
+240925-240926-classical-cup-3-match-1-30-5.pgn: Classical Cup #3: Match 1 (30|5)
+240926-240927-classical-cup-3-match-2-30-5.pgn: Classical Cup #3: Match 2 (30|5)
+240927-240928-classical-cup-3-match-3-30-5.pgn: Classical Cup #3: Match 3 (30|5)
+240928-240929-classical-cup-3-match-4-30-5.pgn: Classical Cup #3: Match 4 (30|5)
+240930-240930-classical-cup-3-match-5-30-5.pgn: Classical Cup #3: Match 5 (30|5)
+240930-241001-classical-cup-3-match-6-30-5.pgn: Classical Cup #3: Match 6 (30|5)
+241001-241002-classical-cup-3-match-7-30-5.pgn: Classical Cup #3: Match 7 (30|5)
+241002-241003-classical-cup-3-match-8-30-5.pgn: Classical Cup #3: Match 8 (30|5)
+241003-241003-classical-cup-3-match-8-1-10-3.pgn: Classical Cup #3: Match 8.1 (10|3)
+241003-241004-classical-cup-3-match-9-30-5.pgn: Classical Cup #3: Match 9 (30|5)
+241004-241005-classical-cup-3-match-10-30-5.pgn: Classical Cup #3: Match 10 (30|5)
+241006-241007-classical-cup-3-match-11-30-5.pgn: Classical Cup #3: Match 11 (30|5)
+241007-241008-classical-cup-3-match-12-30-5.pgn: Classical Cup #3: Match 12 (30|5)
+241008-241009-classical-cup-3-match-13-30-5.pgn: Classical Cup #3: Match 13 (30|5)
+241009-241009-classical-cup-3-match-13-1-10-3.pgn: Classical Cup #3: Match 13.1 (10|3)
+241010-241010-classical-cup-3-match-14-30-5.pgn: Classical Cup #3: Match 14 (30|5)
+241016-241028-rating-brawl-fall-2024-1-1.pgn: Rating Brawl: Fall 2024 (1|1)
+241028-241103-ccc-23-bullet-entry-league-1-1.pgn: CCC 23 Bullet: Entry League (1|1)
+241103-241107-ccc-23-bullet-qualifier-1-1-1.pgn: CCC 23 Bullet: Qualifier #1 (1|1)
+241107-241111-ccc-23-bullet-qualifier-2-1-1.pgn: CCC 23 Bullet: Qualifier #2 (1|1)
+241112-241116-ccc-23-bullet-qualifier-3-1-1.pgn: CCC 23 Bullet: Qualifier #3 (1|1)
+241116-241116-ccc-23-bullet-tiebreaker-1-1-1.pgn: CCC 23 Bullet: Tiebreaker #1 (1|1)
+241117-241124-ccc-23-bullet-main-1-1.pgn: CCC 23 Bullet: Main (1|1)
+241125-241130-ccc-23-bullet-semifinals-1-1.pgn: CCC 23 Bullet: Semifinals (1|1)
+241130-241205-ccc-23-bullet-challenger-match-1-1.pgn: CCC 23 Bullet: Challenger Match (1|1)
+241205-241210-ccc-23-bullet-finals-1-1.pgn: CCC 23 Bullet: Finals (1|1)
+241210-241214-ccc-23-bullet-alt-finals-1-1.pgn: CCC 23 Bullet: Alt Finals (1|1)
+241215-241219-ccc-23-bullet-alt-challenger-match-1-1.pgn: CCC 23 Bullet: Alt Challenger Match (1|1)
+241219-241223-ccc-24-blitz-entry-league-3-2.pgn: CCC 24 Blitz: Entry League (3|2)
+241223-241226-ccc-24-blitz-qualifier-1-3-2.pgn: CCC 24 Blitz: Qualifier #1 (3|2)
+241226-241230-ccc-24-blitz-qualifier-2-3-2.pgn: CCC 24 Blitz: Qualifier #2 (3|2)
+241230-250102-ccc-24-blitz-qualifier-3-3-2.pgn: CCC 24 Blitz: Qualifier #3 (3|2)
+250102-250107-ccc-24-blitz-main-3-2.pgn: CCC 24 Blitz: Main (3|2)
+250107-250115-ccc-24-blitz-semifinals-3-2.pgn: CCC 24 Blitz: Semifinals (3|2)
+250115-250119-ccc-24-blitz-challenger-match-3-2.pgn: CCC 24 Blitz: Challenger Match (3|2)
+250119-250123-ccc-24-blitz-finals-3-2.pgn: CCC 24 Blitz: Finals (3|2)
+250123-250128-ccc-24-blitz-alt-finals-3-2.pgn: CCC 24 Blitz: Alt Finals (3|2)
+250128-250201-ccc-24-blitz-alt-challenger-3-2.pgn: CCC 24 Blitz: Alt Challenger (3|2)
+250201-250204-ccc-24-rapid-entry-league-10-3.pgn: CCC 24 Rapid: Entry League (10|3)
+250205-250209-ccc-24-rapid-qualifier-1-10-3.pgn: CCC 24 Rapid: Qualifier #1 (10|3)
+250210-250215-ccc-24-rapid-qualifier-2-10-3.pgn: CCC 24 Rapid: Qualifier #2 (10|3)
+250215-250220-ccc-24-rapid-qualifier-3-10-3.pgn: CCC 24 Rapid: Qualifier #3 (10|3)
+250220-250227-ccc-24-rapid-main-10-3.pgn: CCC 24 Rapid: Main (10|3)
+250227-250309-ccc-24-rapid-semifinals-10-3.pgn: CCC 24 Rapid: Semifinals (10|3)
+250309-250314-ccc-24-rapid-challenger-match-10-3.pgn: CCC 24 Rapid: Challenger Match (10|3)
+250314-250319-ccc-24-rapid-finals-10-3.pgn: CCC 24 Rapid: Finals (10|3)
+250319-250324-ccc-24-rapid-would-be-challenger-match-10-3.pgn: CCC 24 Rapid: Would-be Challenger Match (10|3)
+250324-250329-ccc-24-rapid-would-be-alt-finals-10-3.pgn: CCC 24 Rapid: Would-be Alt Finals (10|3)
+250329-250330-classical-cup-4-match-1-30-5.pgn: Classical Cup #4: Match 1 (30|5)
+250330-250331-classical-cup-4-match-2-30-5.pgn: Classical Cup #4: Match 2 (30|5)
+250331-250401-classical-cup-4-match-3-30-5.pgn: Classical Cup #4: Match 3 (30|5)
+250401-250401-classical-cup-4-match-4-30-5.pgn: Classical Cup #4: Match 4 (30|5)
+250401-250402-classical-cup-4-match-5-30-5.pgn: Classical Cup #4: Match 5 (30|5)
+250403-250403-classical-cup-4-match-6-30-5.pgn: Classical Cup #4: Match 6 (30|5)
+250403-250404-classical-cup-4-match-7-30-5.pgn: Classical Cup #4: Match 7 (30|5)
+250404-250405-classical-cup-4-match-8-30-5.pgn: Classical Cup #4: Match 8 (30|5)
+250405-250406-classical-cup-4-match-10-30-5.pgn: Classical Cup #4: Match 10 (30|5)
+250406-250407-classical-cup-4-match-9-30-5.pgn: Classical Cup #4: Match 9 (30|5)
+250407-250408-classical-cup-4-match-11-30-5.pgn: Classical Cup #4: Match 11 (30|5)
+250408-250409-classical-cup-4-match-12-30-5.pgn: Classical Cup #4: Match 12 (30|5)
+250409-250410-classical-cup-4-match-13-30-5.pgn: Classical Cup #4: Match 13 (30|5)
+250410-250411-classical-cup-4-match-14-30-5.pgn: Classical Cup #4: Match 14 (30|5)
+250418-250424-bullet-brawl-spring-2025-1-1.pgn: Bullet Brawl: Spring 2025 (1|1)
+250424-250427-ccc-24-bullet-entry-league-1-1.pgn: CCC 24 Bullet: Entry League (1|1)
+250427-250501-ccc-24-bullet-qualifier-1-1-1.pgn: CCC 24 Bullet: Qualifier #1 (1|1)
+250501-250506-ccc-24-bullet-qualifier-2-1-1.pgn: CCC 24 Bullet: Qualifier #2 (1|1)
+250506-250511-ccc-24-bullet-qualifier-3-1-1.pgn: CCC 24 Bullet: Qualifier #3 (1|1)
+250511-250511-ccc-24-bullet-tiebreaker-1-1-1.pgn: CCC 24 Bullet: Tiebreaker #1 (1|1)
+250511-250518-ccc-24-bullet-main-1-1.pgn: CCC 24 Bullet: Main (1|1)
+250518-250523-ccc-24-bullet-semifinals-1-1.pgn: CCC 24 Bullet: Semifinals (1|1)
+250523-250528-ccc-24-bullet-challenger-match-1-1.pgn: CCC 24 Bullet: Challenger Match (1|1)
+250528-250602-ccc-24-bullet-finals-1-1.pgn: CCC 24 Bullet: Finals (1|1)
+250602-250606-ccc-24-bullet-would-be-challenger-match-1-1.pgn: CCC 24 Bullet: Would-be Challenger Match (1|1)
+250607-250611-ccc-24-bullet-third-place-throwdown-1-1.pgn: CCC 24 Bullet: Third Place Throwdown (1|1)
+250806-250806-ccc-v2-testing-pt-4.pgn: CCC v2 Testing pt. 4
+250806-250806-ccc-v2-testing-pt-5.pgn: CCC v2 Testing pt. 5
+250806-250807-ccc-v2-testing-pt-3.pgn: CCC v2 Testing pt. 3
+250806-250807-ccc-v2-testing-pt-6.pgn: CCC v2 Testing pt. 6
+250807-250808-ccc-v2-testing-pt-9.pgn: CCC v2 Testing pt. 9
+250811-250815-ccc-v2-testing-pt-10.pgn: CCC v2 Testing pt. 10
+250818-250823-ccc-v2-testing-pt-11.pgn: CCC v2 Testing pt. 11
+250902-250915-rawing-brawl-fall-2025.pgn: Rawing Brawl: Fall 2025
+250915-250915-ccc-v2-testing-pt-13.pgn: CCC v2 Testing pt. 13
+250917-250919-ccc-v2-testing-pt-14.pgn: CCC v2 Testing pt. 14
+250922-250922-ccc-v2-testing-pt-16.pgn: CCC v2 Testing pt. 16
+250922-250922-ccc-v2-testing-pt-17.pgn: CCC v2 Testing pt. 17
+250922-250922-ccc-v2-testing-pt-18.pgn: CCC v2 Testing pt. 18
+250922-250922-ccc-v2-testing-pt-19.pgn: CCC v2 Testing pt. 19
+250922-250922-ccc-v2-testing-pt-20.pgn: CCC v2 Testing pt. 20
+250922-250922-ccc-v2-testing-pt-21.pgn: CCC v2 Testing pt. 21
+250922-250922-ccc-v2-testing-pt-22.pgn: CCC v2 Testing pt. 22
+250923-250923-ccc-v2-testing-pt-23.pgn: CCC v2 Testing pt. 23
+250923-250924-ccc-25-blitz-entry-league.pgn: CCC 25 Blitz: Entry League
+250924-250927-ccc-25-blitz-qualifier-1.pgn: CCC 25 Blitz: Qualifier #1
+250928-251001-ccc-25-blitz-qualifier-2.pgn: CCC 25 Blitz: Qualifier #2
+251001-251004-ccc-25-blitz-qualifier-3.pgn: CCC 25 Blitz: Qualifier #3
+251005-251010-ccc-25-blitz-main.pgn: CCC 25 Blitz: Main
+251010-251010-ccc-v2-testing-pt-24.pgn: CCC v2 Testing pt. 24
+251010-251017-ccc-25-blitz-semifinals.pgn: CCC 25 Blitz: Semifinals
+251017-251022-ccc-25-blitz-challenger-match.pgn: CCC 25 Blitz: Challenger Match
+251026-251030-ccc-25-blitz-finals.pgn: CCC 25 Blitz: Finals
+251030-251103-ccc-25-blitz-torch-vs-leela.pgn: CCC 25 Blitz: Torch vs Leela
+251104-251115-rating-brawl-fall-2025.pgn: Rating Brawl: Fall 2025
+251119-251129-ccc-25-rapid-qualifier-1.pgn: CCC 25 Rapid: Qualifier #1
+251129-251206-ccc-25-rapid-qualifier-2.pgn: CCC 25 Rapid: Qualifier #2
+251208-251216-ccc-25-rapid-qualifier-3.pgn: CCC 25 Rapid: Qualifier #3
+251216-251218-main-event-waiting-room.pgn: Main Event Waiting Room
+251218-251218-ccc-v2-testing-leela-update.pgn: CCC v2 Testing: Leela Update
+251223-251223-ccc-v2-testing-leela-take-3.pgn: CCC v2 Testing: Leela take #3
+251223-260102-ccc-25-rapid-main.pgn: CCC 25 Rapid: Main
+
+```
+
+## Full File: `[chessnerd] game_counts.txt`
+
+Source: `D:\GitHub\chessnerd\game_counts.txt`
+
+```text
+180831-180916-cccc-1-rapid-rumble-15-5-stage-1.pgn: 569
+180917-180925-cccc-1-rapid-rumble-15-5-stage-2.pgn: 285
+180925-181001-cccc-1-rapid-rumble-15-5-stage-3.pgn: 200
+181003-181006-cccc-1-rapid-rumble-15-5-bonus-games.pgn: 156
+181008-181031-ccc-2-blitz-battle-5-2.pgn: 2140
+181031-181110-ccc-2-blitz-battle-5-2-stage-2.pgn: 896
+181112-181119-ccc-2-blitz-battle-5-2-stage-3.pgn: 604
+181123-181220-ccc-3-rapid-redux-30-5.pgn: 480
+181223-190105-ccc-3-rapid-redux-stage-2-30-5.pgn: 252
+190106-190121-ccc-3-rapid-redux-stage-3-30-5.pgn: 288
+190127-190130-ccc-4-bullet-brawl-1-2.pgn: 560
+190131-190208-ccc-5-escalation-10-5.pgn: 360
+190208-190210-ccc-5-finals-10-5.pgn: 100
+190216-190224-ccc-6-the-winter-classic-stage-1-5-2.pgn: 720
+190224-190308-ccc-6-the-winter-classic-playoffs-10-10.pgn: 396
+190309-190316-ccc-6-the-winter-classic-final-10-10.pgn: 200
+190406-190412-ccc-7-blitz-bonanza-final-5-2.pgn: 600
+190413-190513-ccc-8-deep-dive-15-5.pgn: 1104
+190513-190522-ccc-8-deep-dive-finals-15-5.pgn: 300
+190616-190623-ccc-9-the-gauntlet-qualification-5-2.pgn: 660
+190623-190630-ccc-9-the-gauntlet-quarterfinals-5-2.pgn: 630
+190630-190707-ccc-9-the-gauntlet-semifinals-5-2.pgn: 600
+190707-190712-ccc-9-the-gauntlet-final-10-5.pgn: 200
+190903-190911-ccc-10-quarterfinals-10-3.pgn: 440
+190911-190919-ccc-10-semifinals-10-3.pgn: 360
+190919-190923-ccc-10-finals-10-3.pgn: 200
+191011-191023-ccc-11-qualification-30-5.pgn: 264
+191024-191107-ccc-11-round-1-30-5.pgn: 264
+191109-191119-ccc-11-round-2-30-5.pgn: 216
+191128-191205-ccc-11-round-3-30-5.pgn: 150
+191208-191215-ccc-11-semifinals-30-5.pgn: 144
+191216-191223-ccc-11-finals-30-5.pgn: 150
+200104-200105-ccc-12-0-houdini-vs-stoofvlees-1-1.pgn: 200
+200105-200106-ccc-12-1-rubichess-vs-winter-1-1.pgn: 200
+200106-200106-ccc-12-2-andscacs-vs-ethereal-1-1.pgn: 200
+200106-200107-ccc-12-3-dark-allie-vs-fire-1-1.pgn: 200
+200107-200108-ccc-12-8-houdini-vs-lc0-cpu-1-1.pgn: 200
+200108-200109-ccc-12-8-houdini-vs-lc0-cpu-1-1.pgn: 200
+200109-200110-ccc-12-72-lc0-vs-rofchade-1-1.pgn: 200
+200110-200111-ccc-12-6-stoofvlees-vs-komodo-mc-1-1.pgn: 200
+200111-200112-ccc-12-9-leelenstein-vs-rubichess-1-1.pgn: 200
+200112-200113-ccc-12-10-stockfish-vs-ethereal-1-1.pgn: 200
+200113-200114-ccc-12-5-scorpio-vs-xiphos-1-1.pgn: 200
+200114-200115-ccc-12-4-komodo-vs-laser-1-1.pgn: 200
+200115-200115-ccc-12-14-stockfish-vs-stoofvlees-1-1.pgn: 200
+200116-200117-ccc-12-13-fire-vs-leelenstein-1-1.pgn: 200
+200117-200118-ccc-12-12-houdini-vs-lc0-1-1.pgn: 200
+200119-200120-ccc-12-11-komodo-vs-scorpio-1-1.pgn: 200
+200120-200121-ccc-12-15-leelenstein-vs-scorpio-1-1.pgn: 200
+200121-200122-ccc-12-16-lc0-vs-stockfish-1-1.pgn: 200
+200122-200123-ccc-12-18-scorpio-vs-stockfish-third-place-match-1-1.pgn: 200
+200123-200123-ccc-12-17-lc0-vs-leelenstein-finals-1-1.pgn: 200
+200307-200310-ccc-13-pool-c-3-2.pgn: 400
+200314-200318-ccc-13-pool-b-3-2.pgn: 400
+200318-200320-ccc-13-triangular-3-2.pgn: 300
+200323-200330-ccc-13-heptagonal-5-5.pgn: 504
+200401-200408-ccc-13-semifinals-10-5.pgn: 300
+200408-200414-ccc-13-finals-15-5.pgn: 200
+200603-200610-ccc-14-round-1-15-5.pgn: 240
+200610-200610-ccc-14-9-winter-vs-ethereal-15-5.pgn: 12
+200610-200611-ccc-14-11-rofchade-vs-rubi-15-5.pgn: 12
+200611-200611-ccc-14-12-defenchess-vs-komodo-mc-15-5.pgn: 12
+200611-200612-ccc-14-10-dark-queen-vs-xiphos-15-5.pgn: 12
+200612-200612-ccc-14-13-lc0-vs-fire-15-5.pgn: 12
+200612-200613-ccc-14-14-stockfish-vs-komodo-15-5.pgn: 12
+200613-200614-ccc-14-17-ethereal-vs-fire-15-5.pgn: 12
+200614-200614-ccc-14-15-scorpio-vs-stoofvlees-15-5.pgn: 12
+200614-200614-ccc-14-18-dark-queen-vs-komodo-15-5.pgn: 12
+200615-200615-ccc-14-19-scorpio-vs-rofchade-15-5.pgn: 12
+200615-200616-ccc-14-23-fire-vs-komodo-15-5.pgn: 12
+200623-200623-ccc-14-20-leelenstein-vs-lc0-cpu-15-5.pgn: 12
+200623-200624-ccc-14-20-lc0-cpu-vs-komodo-mc-15-5.pgn: 12
+200624-200624-ccc-14-21-lc0-vs-stockfish-15-5.pgn: 10
+200624-200625-ccc-14-21-lc0-vs-stockfish-ii-15-5.pgn: 12
+200625-200625-ccc-14-22-stoofvlees-vs-leelenstein-15-5.pgn: 12
+200625-200625-ccc-14-25-stoofvlees-vs-komodo-15-5.pgn: 12
+200625-200626-ccc-14-24-scorpio-vs-lc0-cpu-15-5.pgn: 12
+200626-200626-ccc-14-24-scorpio-vs-lc0-cpu-tiebreak-15-5.pgn: 6
+200626-200626-ccc-14-26-lc0-vs-lc0-cpu-15-5.pgn: 12
+200626-200627-ccc-14-27-stockfish-vs-leelenstein-15-5.pgn: 12
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-15-5.pgn: 6
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-ii-5-2.pgn: 12
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-iii-5-2.pgn: 6
+200627-200627-ccc-14-27-stockfish-vs-leelenstein-tiebreak-iv-1-1.pgn: 2
+200627-200627-ccc-14-28-lc0-vs-stoofvlees-15-5.pgn: 12
+200627-200628-ccc-14-28-lc0-vs-stoofvlees-tiebreak-15-5.pgn: 6
+200628-200628-ccc-14-29-stockfish-vs-lc0-15-5.pgn: 12
+200628-200628-ccc-14-29-stockfish-vs-lc0-tiebreak-15-5.pgn: 6
+200628-200628-ccc-14-29-stockfish-vs-lc0-tiebreak-ii-5-2.pgn: 2
+200628-200629-ccc-14-30-lc0-vs-leelenstein-i-15-5.pgn: 12
+200629-200629-ccc-14-30-lc0-vs-leelenstein-i-tiebreak-15-5.pgn: 6
+200629-200629-ccc-14-30-lc0-vs-leelenstein-i-tiebreak-ii-5-2.pgn: 12
+200629-200630-ccc-14-31-lc0-vs-leelenstein-ii-15-5.pgn: 12
+200630-200630-ccc-14-31-lc0-vs-leelenstein-ii-tiebreak-15-5.pgn: 6
+200827-200828-ccc-15-02-komodo-mc-vs-lc0-cpu-1-1.pgn: 200
+200828-200829-ccc-15-05-fire-vs-ethereal-1-1.pgn: 200
+200829-200830-ccc-15-08-stockfish-vs-defenchess-1-1.pgn: 200
+200830-200831-ccc-15-03-stoofvlees-vs-slowchess-1-1.pgn: 200
+200831-200901-ccc-15-09-leelenstein-vs-rubichess-1-1.pgn: 200
+200901-200902-ccc-15-06-komodo-vs-xiphos-1-1.pgn: 200
+200902-200903-ccc-15-07-stockfish-classic-vs-rofchade-1-1.pgn: 200
+201112-201126-ccc-blitz-championship-2020-5-5.pgn: 960
+201126-201203-ccc-blitz-championship-2020-semi-finals-5-5.pgn: 480
+201203-201210-ccc-blitz-championship-2020-finals-5-5.pgn: 500
+210115-210122-ccc-rapid-2021-qualifiers-15-3.pgn: 280
+210122-210129-ccc-rapid-2021-nnue-league-15-3.pgn: 280
+210129-210206-ccc-rapid-2021-main-league-15-3.pgn: 336
+210206-210217-ccc-rapid-2021-nn-vs-classic-15-3.pgn: 450
+210217-210303-ccc-rapid-2021-elite-round-15-3.pgn: 600
+210304-210317-ccc-rapid-2021-finals-15-3.pgn: 500
+210817-210831-ccc-blitz-championship-2021-5-5.pgn: 960
+210831-210907-ccc-blitz-championship-2021-semifinals-5-5.pgn: 480
+210907-210911-ccc-blitz-championship-2021-finals-5-5.pgn: 300
+210924-211009-ccc-chess-960-blitz-championship-5-5.pgn: 1056
+211009-211017-ccc-chess-960-blitz-championship-semifinals-5-5.pgn: 600
+211017-211025-ccc-chess-960-blitz-championship-finals-5-5.pgn: 600
+211025-211101-ccc-16-rapid-qualification-15-3.pgn: 280
+211101-211108-ccc-16-rapid-main-15-3.pgn: 264
+211108-211115-ccc-16-rapid-semifinals-15-3.pgn: 300
+211115-211123-ccc-16-rapid-finals-15-3.pgn: 300
+211123-211201-ccc-16-rapid-runners-up-15-3.pgn: 300
+211201-211209-ccc-16-bullet-qualification-2-1.pgn: 1568
+211209-211218-ccc-16-bullet-main-2-1.pgn: 1584
+211218-211227-ccc-16-bullet-semifinals-2-1.pgn: 1620
+211227-220106-ccc-16-bullet-finals-2-1.pgn: 1620
+220109-220115-ccc-16-blitz-qualification-5-5.pgn: 448
+220115-220123-ccc-16-blitz-main-5-5.pgn: 528
+220123-220130-ccc-16-blitz-semifinals-5-5.pgn: 480
+220131-220208-ccc-16-blitz-challenger-5-5.pgn: 466
+220208-220215-ccc-16-blitz-finals-5-5.pgn: 466
+220220-220227-ccc-17-rapid-qualification-15-3.pgn: 280
+220227-220306-ccc-17-rapid-main-15-3.pgn: 264
+220306-220314-ccc-17-rapid-semifinals-15-3.pgn: 300
+220314-220322-ccc-17-rapid-challenger-15-3.pgn: 300
+220322-220330-ccc-17-rapid-finals-15-3.pgn: 300
+220404-220412-ccc-17-bullet-qualification-2-1.pgn: 1568
+220412-220421-ccc-17-bullet-main-2-1.pgn: 1584
+220421-220430-ccc-17-bullet-semifinals-2-1.pgn: 1620
+220430-220509-ccc-17-bullet-challenger-2-1.pgn: 1620
+220509-220518-ccc-17-bullet-finals-2-1.pgn: 1620
+220601-220607-ccc-17-blitz-qualification-5-5.pgn: 448
+220608-220616-ccc-17-blitz-main-5-5.pgn: 528
+220616-220624-ccc-17-blitz-semifinals-5-5.pgn: 480
+220628-220705-ccc-17-blitz-challenger-5-5.pgn: 480
+220705-220713-ccc-17-blitz-finals-5-5.pgn: 480
+220717-220724-ccc-18-rapid-qualification-15-3.pgn: 280
+220724-220731-ccc-18-rapid-main-15-3.pgn: 264
+220731-220808-ccc-18-rapid-semifinals-15-3.pgn: 300
+220811-220819-ccc-18-rapid-finals-15-3.pgn: 300
+220822-220831-ccc-18-rapid-challenger-15-3.pgn: 300
+220908-220910-ccc-19-blitz-newcomers-5-5.pgn: 120
+220910-220913-ccc-19-blitz-qualifier-1-5-5.pgn: 224
+220913-220918-ccc-19-blitz-qualifier-2-5-5.pgn: 336
+220918-220926-ccc-19-blitz-main-5-5.pgn: 540
+220926-221001-ccc-19-blitz-semifinals-5-5.pgn: 300
+221001-221006-ccc-19-blitz-challenger-match-5-5.pgn: 300
+221009-221013-ccc-19-blitz-finals-5-5.pgn: 300
+221013-221015-ccc-19-blitz-revenge-for-leela-5-2.pgn: 150
+221020-221025-ccc-19-rapid-newcomers-15-3.pgn: 168
+221025-221029-ccc-19-rapid-qualifier-1-15-3.pgn: 168
+221029-221102-ccc-19-rapid-qualifier-2-15-3.pgn: 168
+221102-221103-ccc-19-rapid-qualifier-2-tiebreaks-15-3.pgn: 30
+221103-221110-ccc-19-rapid-main-15-3.pgn: 270
+221110-221117-ccc-19-rapid-semifinals-15-3.pgn: 240
+221117-221123-ccc-19-rapid-challenger-match-15-3.pgn: 200
+221127-221202-ccc-19-rapid-finals-15-3.pgn: 200
+221204-221209-ccc-19-rapid-alt-finals-15-3.pgn: 200
+221215-221219-ccc-19-bullet-newcomers-1-1.pgn: 1170
+221220-221224-ccc-19-bullet-qualifier-1-1-1.pgn: 1170
+221225-221230-ccc-19-bullet-qualifier-2-1-1.pgn: 1170
+221230-230106-ccc-19-bullet-main-1-1.pgn: 1716
+230107-230112-ccc-19-bullet-semifinals-1-1.pgn: 1200
+230114-230119-ccc-19-bullet-challenger-match-1-1.pgn: 1000
+230119-230123-ccc-19-bullet-finals-1-1.pgn: 1000
+230124-230124-ccc-19-bullet-alt-finals-1-1.pgn: 16
+230207-230211-ccc-20-blitz-newcomers-3-2.pgn: 540
+230211-230215-ccc-20-blitz-qualifier-1-3-2.pgn: 540
+230216-230221-ccc-20-blitz-qualifier-2-3-2.pgn: 720
+230221-230304-ccc-20-blitz-main-3-2.pgn: 1056
+230305-230313-ccc-20-blitz-semifinals-3-2.pgn: 900
+230313-230317-ccc-20-blitz-challenger-match-3-2.pgn: 500
+230317-230319-ccc-20-blitz-fight-for-fourth-3-2.pgn: 250
+230319-230323-ccc-20-blitz-finals-3-2.pgn: 500
+230405-230410-ccc-20-rapid-entry-league-10-3.pgn: 264
+230410-230415-ccc-20-rapid-qualifier-1-10-3.pgn: 264
+230415-230420-ccc-20-rapid-qualifier-2-10-3.pgn: 264
+230420-230420-ccc-20-rapid-tiebreaker-1-10-3.pgn: 20
+230422-230502-ccc-20-rapid-main-10-3.pgn: 528
+230503-230512-ccc-20-rapid-semifinals-10-3.pgn: 480
+230522-230527-ccc-20-rapid-challenger-match-10-3.pgn: 250
+230527-230601-ccc-20-rapid-finals-10-3.pgn: 250
+230610-230614-ccc-20-bullet-entry-league-1-1.pgn: 1056
+230614-230619-ccc-20-bullet-qualifier-1-1-1.pgn: 1056
+230619-230625-ccc-20-bullet-qualifier-2-1-1.pgn: 1320
+230625-230626-ccc-20-bullet-holding-pattern-1-1.pgn: 200
+230626-230703-ccc-20-bullet-main-1-1.pgn: 1584
+230705-230711-ccc-20-bullet-semifinals-1-1.pgn: 1200
+230711-230715-ccc-20-bullet-challenger-match-1-1.pgn: 1000
+230716-230721-ccc-20-bullet-finals-1-1.pgn: 1000
+230721-230725-ccc-21-blitz-entry-league-3-2.pgn: 396
+230725-230728-ccc-21-blitz-qualifier-1-3-2.pgn: 396
+230728-230731-ccc-21-blitz-qualifier-2-3-2.pgn: 396
+230731-230806-ccc-21-blitz-main-3-2.pgn: 660
+230806-230813-ccc-21-blitz-semifinals-3-2.pgn: 900
+230813-230818-ccc-21-blitz-challenger-match-3-2.pgn: 500
+230818-230822-ccc-21-blitz-finals-3-2.pgn: 500
+230823-230827-ccc-21-blitz-alt-finals-3-2.pgn: 500
+230829-230903-ccc-21-rapid-entry-league-10-3.pgn: 264
+230903-230908-ccc-21-rapid-qualifier-1-10-3.pgn: 264
+230909-230913-ccc-21-rapid-qualifier-2-10-3.pgn: 264
+230914-230914-ccc-21-rapid-tiebreaker-1-10-3.pgn: 20
+230914-230914-ccc-21-rapid-tiebreaker-2-10-3.pgn: 10
+230914-230914-ccc-21-rapid-tiebreaker-3-10-3.pgn: 2
+230914-230922-ccc-21-rapid-main-10-3.pgn: 396
+230922-231001-ccc-21-rapid-semifinals-10-3.pgn: 480
+231001-231003-ccc-21-rapid-fight-for-fifth-10-3.pgn: 60
+231003-231008-ccc-21-rapid-challenger-match-10-3.pgn: 250
+231008-231013-ccc-21-rapid-finals-10-3.pgn: 250
+231013-231018-ccc-21-rapid-alt-finals-10-3.pgn: 250
+231021-231022-classical-cup-1-match-2-30-5.pgn: 10
+231021-231023-classical-cup-1-match-1-30-5.pgn: 10
+231022-231022-classical-cup-1-match-3-30-5.pgn: 10
+231023-231023-classical-cup-1-match-4-30-5.pgn: 10
+231023-231024-classical-cup-1-match-5-30-5.pgn: 10
+231024-231024-classical-cup-1-match-6-30-5.pgn: 10
+231024-231025-classical-cup-1-match-7-30-5.pgn: 10
+231025-231025-classical-cup-1-match-8-30-5.pgn: 10
+231025-231026-classical-cup-1-match-9-30-5.pgn: 10
+231026-231026-classical-cup-1-match-10-30-5.pgn: 10
+231026-231027-classical-cup-1-match-11-30-5.pgn: 10
+231027-231027-classical-cup-1-match-12-30-5.pgn: 10
+231027-231028-classical-cup-1-match-13-30-5.pgn: 10
+231028-231028-classical-cup-1-match-14-30-5.pgn: 10
+231028-231029-classical-cup-1-match-15-30-5.pgn: 10
+231029-231106-rating-brawl-fall-2023-1-1.pgn: 1984
+231106-231110-ccc-21-bullet-entry-league-1-1.pgn: 1056
+231110-231115-ccc-21-bullet-qualifier-1-1-1.pgn: 1056
+231115-231120-ccc-21-bullet-qualifier-2-1-1.pgn: 1320
+231120-231127-ccc-21-bullet-main-1-1.pgn: 1584
+231127-231202-ccc-21-bullet-semifinals-1-1.pgn: 1200
+231203-231207-ccc-21-bullet-challenger-match-1-1.pgn: 1000
+231207-231212-ccc-21-bullet-finals-1-1.pgn: 1000
+231212-231214-ccc-21-bullet-fight-for-4th-1-1.pgn: 500
+231214-231216-ccc-21-bullet-would-be-challenger-match-1-1.pgn: 500
+231217-231220-ccc-22-blitz-entry-league-3-2.pgn: 396
+231220-231223-ccc-22-blitz-qualifier-1-3-2.pgn: 396
+231224-231227-ccc-22-blitz-qualifier-2-3-2.pgn: 396
+231227-240102-ccc-22-blitz-main-3-2.pgn: 660
+240102-240109-ccc-22-blitz-semifinals-3-2.pgn: 900
+240109-240113-ccc-22-blitz-challenger-match-3-2.pgn: 500
+240113-240117-ccc-22-blitz-finals-3-2.pgn: 500
+240118-240122-ccc-22-blitz-alt-finals-3-2.pgn: 500
+240122-240124-ccc-22-blitz-fight-for-fourth-3-2.pgn: 250
+240125-240130-ccc-22-rapid-entry-league-10-3.pgn: 264
+240130-240131-ccc-22-rapid-tiebreaker-1-10-3.pgn: 30
+240131-240205-ccc-22-rapid-qualifier-1-10-3.pgn: 264
+240205-240206-ccc-22-rapid-tiebreaker-2-10-3.pgn: 60
+240206-240211-ccc-22-rapid-qualifier-2-10-2.pgn: 264
+240213-240221-ccc-22-rapid-main-10-3.pgn: 396
+240221-240301-ccc-22-rapid-semifinals-10-3.pgn: 480
+240301-240304-ccc-22-rapid-fight-for-sixth-10-3.pgn: 120
+240304-240309-ccc-22-rapid-challenger-match-10-3.pgn: 250
+240309-240314-ccc-22-rapid-finals-10-3.pgn: 250
+240314-240319-ccc-22-rapid-alt-finals-10-3.pgn: 250
+240320-240321-classical-cup-2-match-1-30-5.pgn: 16
+240321-240322-classical-cup-2-match-2-30-5.pgn: 16
+240322-240323-classical-cup-2-match-3-30-5.pgn: 16
+240323-240324-classical-cup-2-match-4-30-5.pgn: 16
+240324-240325-classical-cup-2-match-5-30-5.pgn: 16
+240325-240325-classical-cup-2-tiebreaker-1-10-3.pgn: 16
+240325-240326-classical-cup-2-match-6-30-5.pgn: 16
+240326-240327-classical-cup-2-tiebreaker-2-10-3.pgn: 16
+240327-240327-classical-cup-2-match-7-30-5.pgn: 16
+240327-240328-classical-cup-2-match-8-30-5.pgn: 16
+240328-240329-classical-cup-2-tiebreaker-3-10-3.pgn: 16
+240329-240329-classical-cup-2-match-9-30-5.pgn: 16
+240329-240330-classical-cup-2-match-10-30-5.pgn: 16
+240330-240331-classical-cup-2-match-11-30-5.pgn: 16
+240331-240401-classical-cup-2-match-12-30-5.pgn: 16
+240401-240402-classical-cup-2-match-13-30-5.pgn: 16
+240402-240403-classical-cup-2-match-14-30-5.pgn: 16
+240408-240423-rating-brawl-spring-2024-1-1.pgn: 2520
+240423-240426-ccc-22-bullet-entry-league-1-1.pgn: 720
+240426-240430-ccc-22-bullet-qualifier-1-1-1.pgn: 1056
+240430-240504-ccc-22-bullet-qualifier-2-1-1.pgn: 1056
+240504-240509-ccc-22-bullet-qualifier-3-1-1.pgn: 1056
+240509-240516-ccc-22-bullet-main-1-1.pgn: 1584
+240516-240521-ccc-22-bullet-semifinals-1-1.pgn: 1200
+240521-240525-ccc-22-bullet-challenger-match-1-1.pgn: 1000
+240525-240530-ccc-22-bullet-finals-1-1.pgn: 1000
+240530-240603-ccc-22-bullet-alt-finals-1-1.pgn: 1000
+240603-240608-ccc-22-bullet-would-be-challenger-match-1-1.pgn: 1000
+240608-240609-ccc-23-blitz-entry-league-3-2.pgn: 224
+240610-240613-ccc-23-blitz-qualifier-1-3-2.pgn: 396
+240613-240616-ccc-23-blitz-qualifier-2-3-2.pgn: 396
+240616-240616-ccc-23-blitz-tiebreaker-1-3-2.pgn: 20
+240616-240620-ccc-23-blitz-qualifier-3-3-2.pgn: 396
+240620-240625-ccc-23-blitz-main-3-2.pgn: 660
+240626-240626-ccc-23-blitz-tiebreaker-2-3-2.pgn: 20
+240626-240626-ccc-23-blitz-tiebreaker-3-3-2.pgn: 20
+240626-240626-ccc-23-blitz-tiebreaker-4-3-2.pgn: 20
+240627-240704-ccc-23-blitz-semifinals-3-2.pgn: 900
+240704-240708-ccc-23-blitz-challenger-match-3-2.pgn: 500
+240708-240713-ccc-23-blitz-finals-3-2.pgn: 500
+240713-240717-ccc-23-blitz-alt-finals-3-2.pgn: 500
+240729-240802-ccc-23-rapid-entry-league-10-3.pgn: 216
+240802-240807-ccc-23-rapid-qualifier-1-10-3.pgn: 264
+240807-240812-ccc-23-rapid-qualifier-2-10-3.pgn: 264
+240812-240817-ccc-23-rapid-qualifier-3-10-3.pgn: 264
+240817-240818-ccc-23-rapid-tiebreaker-1-10-3.pgn: 20
+240818-240825-ccc-23-rapid-main-10-3.pgn: 396
+240825-240904-ccc-23-rapid-semifinals-10-3.pgn: 480
+240904-240909-ccc-23-rapid-challenger-match-10-3.pgn: 250
+240909-240914-ccc-23-rapid-finals-10-3.pgn: 250
+240914-240919-ccc-23-rapid-alt-finals-10-3.pgn: 250
+240919-240924-ccc-23-rapid-fight-for-fourth-10-3.pgn: 250
+240925-240926-classical-cup-3-match-1-30-5.pgn: 16
+240926-240927-classical-cup-3-match-2-30-5.pgn: 16
+240927-240928-classical-cup-3-match-3-30-5.pgn: 16
+240928-240929-classical-cup-3-match-4-30-5.pgn: 16
+240930-240930-classical-cup-3-match-5-30-5.pgn: 16
+240930-241001-classical-cup-3-match-6-30-5.pgn: 16
+241001-241002-classical-cup-3-match-7-30-5.pgn: 16
+241002-241003-classical-cup-3-match-8-30-5.pgn: 16
+241003-241003-classical-cup-3-match-8-1-10-3.pgn: 16
+241003-241004-classical-cup-3-match-9-30-5.pgn: 16
+241004-241005-classical-cup-3-match-10-30-5.pgn: 16
+241006-241007-classical-cup-3-match-11-30-5.pgn: 16
+241007-241008-classical-cup-3-match-12-30-5.pgn: 16
+241008-241009-classical-cup-3-match-13-30-5.pgn: 16
+241009-241009-classical-cup-3-match-13-1-10-3.pgn: 16
+241010-241010-classical-cup-3-match-14-30-5.pgn: 16
+241016-241028-rating-brawl-fall-2024-1-1.pgn: 2964
+241028-241103-ccc-23-bullet-entry-league-1-1.pgn: 1248
+241103-241107-ccc-23-bullet-qualifier-1-1-1.pgn: 1056
+241107-241111-ccc-23-bullet-qualifier-2-1-1.pgn: 1056
+241112-241116-ccc-23-bullet-qualifier-3-1-1.pgn: 1056
+241116-241116-ccc-23-bullet-tiebreaker-1-1-1.pgn: 60
+241117-241124-ccc-23-bullet-main-1-1.pgn: 1584
+241125-241130-ccc-23-bullet-semifinals-1-1.pgn: 1200
+241130-241205-ccc-23-bullet-challenger-match-1-1.pgn: 1000
+241205-241210-ccc-23-bullet-finals-1-1.pgn: 1000
+241210-241214-ccc-23-bullet-alt-finals-1-1.pgn: 1000
+241215-241219-ccc-23-bullet-alt-challenger-match-1-1.pgn: 1000
+241219-241223-ccc-24-blitz-entry-league-3-2.pgn: 468
+241223-241226-ccc-24-blitz-qualifier-1-3-2.pgn: 396
+241226-241230-ccc-24-blitz-qualifier-2-3-2.pgn: 396
+241230-250102-ccc-24-blitz-qualifier-3-3-2.pgn: 396
+250102-250107-ccc-24-blitz-main-3-2.pgn: 660
+250107-250115-ccc-24-blitz-semifinals-3-2.pgn: 900
+250115-250119-ccc-24-blitz-challenger-match-3-2.pgn: 500
+250119-250123-ccc-24-blitz-finals-3-2.pgn: 500
+250123-250128-ccc-24-blitz-alt-finals-3-2.pgn: 500
+250128-250201-ccc-24-blitz-alt-challenger-3-2.pgn: 500
+250201-250204-ccc-24-rapid-entry-league-10-3.pgn: 180
+250205-250209-ccc-24-rapid-qualifier-1-10-3.pgn: 264
+250210-250215-ccc-24-rapid-qualifier-2-10-3.pgn: 264
+250215-250220-ccc-24-rapid-qualifier-3-10-3.pgn: 264
+250220-250227-ccc-24-rapid-main-10-3.pgn: 396
+250227-250309-ccc-24-rapid-semifinals-10-3.pgn: 480
+250309-250314-ccc-24-rapid-challenger-match-10-3.pgn: 250
+250314-250319-ccc-24-rapid-finals-10-3.pgn: 250
+250319-250324-ccc-24-rapid-would-be-challenger-match-10-3.pgn: 250
+250324-250329-ccc-24-rapid-would-be-alt-finals-10-3.pgn: 250
+250329-250330-classical-cup-4-match-1-30-5.pgn: 16
+250330-250331-classical-cup-4-match-2-30-5.pgn: 16
+250331-250401-classical-cup-4-match-3-30-5.pgn: 16
+250401-250401-classical-cup-4-match-4-30-5.pgn: 16
+250401-250402-classical-cup-4-match-5-30-5.pgn: 16
+250403-250403-classical-cup-4-match-6-30-5.pgn: 16
+250403-250404-classical-cup-4-match-7-30-5.pgn: 16
+250404-250405-classical-cup-4-match-8-30-5.pgn: 16
+250405-250406-classical-cup-4-match-10-30-5.pgn: 16
+250406-250407-classical-cup-4-match-9-30-5.pgn: 16
+250407-250408-classical-cup-4-match-11-30-5.pgn: 16
+250408-250409-classical-cup-4-match-12-30-5.pgn: 16
+250409-250410-classical-cup-4-match-13-30-5.pgn: 16
+250410-250411-classical-cup-4-match-14-30-5.pgn: 16
+250418-250424-bullet-brawl-spring-2025-1-1.pgn: 1406
+250424-250427-ccc-24-bullet-entry-league-1-1.pgn: 720
+250427-250501-ccc-24-bullet-qualifier-1-1-1.pgn: 1056
+250501-250506-ccc-24-bullet-qualifier-2-1-1.pgn: 1056
+250506-250511-ccc-24-bullet-qualifier-3-1-1.pgn: 1056
+250511-250511-ccc-24-bullet-tiebreaker-1-1-1.pgn: 20
+250511-250518-ccc-24-bullet-main-1-1.pgn: 1584
+250518-250523-ccc-24-bullet-semifinals-1-1.pgn: 1200
+250523-250528-ccc-24-bullet-challenger-match-1-1.pgn: 1000
+250528-250602-ccc-24-bullet-finals-1-1.pgn: 1000
+250602-250606-ccc-24-bullet-would-be-challenger-match-1-1.pgn: 1000
+250607-250611-ccc-24-bullet-third-place-throwdown-1-1.pgn: 1000
+250806-250806-ccc-v2-testing-pt-4.pgn: 2
+250806-250806-ccc-v2-testing-pt-5.pgn: 4
+250806-250807-ccc-v2-testing-pt-3.pgn: 100
+250806-250807-ccc-v2-testing-pt-6.pgn: 43
+250807-250808-ccc-v2-testing-pt-9.pgn: 100
+250811-250815-ccc-v2-testing-pt-10.pgn: 600
+250818-250823-ccc-v2-testing-pt-11.pgn: 1500
+250902-250915-rawing-brawl-fall-2025.pgn: 2380
+250915-250915-ccc-v2-testing-pt-13.pgn: 100
+250917-250919-ccc-v2-testing-pt-14.pgn: 401
+250922-250922-ccc-v2-testing-pt-16.pgn: 4
+250922-250922-ccc-v2-testing-pt-17.pgn: 1
+250922-250922-ccc-v2-testing-pt-18.pgn: 1
+250922-250922-ccc-v2-testing-pt-19.pgn: 1
+250922-250922-ccc-v2-testing-pt-20.pgn: 1
+250922-250922-ccc-v2-testing-pt-21.pgn: 1
+250922-250922-ccc-v2-testing-pt-22.pgn: 1
+250923-250923-ccc-v2-testing-pt-23.pgn: 1
+250923-250924-ccc-25-blitz-entry-league.pgn: 168
+250924-250927-ccc-25-blitz-qualifier-1.pgn: 396
+250928-251001-ccc-25-blitz-qualifier-2.pgn: 403
+251001-251004-ccc-25-blitz-qualifier-3.pgn: 396
+251005-251010-ccc-25-blitz-main.pgn: 604
+251010-251010-ccc-v2-testing-pt-24.pgn: 60
+251010-251017-ccc-25-blitz-semifinals.pgn: 900
+251017-251022-ccc-25-blitz-challenger-match.pgn: 500
+251026-251030-ccc-25-blitz-finals.pgn: 500
+251030-251103-ccc-25-blitz-torch-vs-leela.pgn: 500
+251104-251115-rating-brawl-fall-2025.pgn: 3366
+251119-251129-ccc-25-rapid-qualifier-1.pgn: 468
+251129-251206-ccc-25-rapid-qualifier-2.pgn: 396
+251208-251216-ccc-25-rapid-qualifier-3.pgn: 396
+251216-251218-main-event-waiting-room.pgn: 101
+251218-251218-ccc-v2-testing-leela-update.pgn: 4
+251223-251223-ccc-v2-testing-leela-take-3.pgn: 4
+251223-260102-ccc-25-rapid-main.pgn: 528
+
+```
+
+## Full File: `[chessnerd] ccc_manifest.json`
+
+Source: `D:\GitHub\chessnerd\ccc_manifest.json`
+
+```json
 [
   {
     "pgn": "180831-180916-cccc-1-rapid-rumble-15-5-stage-1.pgn",
@@ -4684,82 +7529,656 @@
     "games": 528,
     "url": "https://github.com/ianrastall/ccc-archive/raw/main/2025/251223-260102-ccc-25-rapid-main.zip",
     "sha256": "ac17b9e2cc705d58e2090257c070b73092f6fa3306887d89d1f1cbf35fb48bb7"
-  },
-  {
-    "pgn": "260104-260104-ccc-25-rapid-semifinals.pgn",
-    "zip": "260104-260104-ccc-25-rapid-semifinals.zip",
-    "year": 2026,
-    "start": "260104",
-    "end": "260104",
-    "event": "CCC 25 Rapid: Semifinals",
-    "games": 480,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260104-260104-ccc-25-rapid-semifinals.zip",
-    "sha256": "7eac4b626c84afc8cb7a88703da6876cec5136c3c83cd85ba72f811e907a79b6"
-  },
-  {
-    "pgn": "260111-260116-ccc-25-rapid-challenger-match.pgn",
-    "zip": "260111-260116-ccc-25-rapid-challenger-match.zip",
-    "year": 2026,
-    "start": "260111",
-    "end": "260116",
-    "event": "CCC 25 Rapid: Challenger Match",
-    "games": 250,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260111-260116-ccc-25-rapid-challenger-match.zip",
-    "sha256": "75fbcbcca5ba9de58b410168b258e1141b19b4751d46602012c6062a98e9d0a4"
-  },
-  {
-    "pgn": "260116-260121-ccc-25-rapid-finals.pgn",
-    "zip": "260116-260121-ccc-25-rapid-finals.zip",
-    "year": 2026,
-    "start": "260116",
-    "end": "260121",
-    "event": "CCC 25 Rapid: Finals",
-    "games": 250,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260116-260121-ccc-25-rapid-finals.zip",
-    "sha256": "0a76d374cc8da3aae6f0491939c95a4f0bba34a4acb6b03be9181a05b3d34388"
-  },
-  {
-    "pgn": "260121-260126-ccc-25-rapid-fight-for-fourth.pgn",
-    "zip": "260121-260126-ccc-25-rapid-fight-for-fourth.zip",
-    "year": 2026,
-    "start": "260121",
-    "end": "260126",
-    "event": "CCC 25 Rapid: Fight for Fourth",
-    "games": 250,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260121-260126-ccc-25-rapid-fight-for-fourth.zip",
-    "sha256": "32be56abe75d74ad7506e361c8280c0c5ef600a0a3a8f61bf4f2fcf39784d84a"
-  },
-  {
-    "pgn": "260126-260131-ccc-25-rapid-torch-vs-leela.pgn",
-    "zip": "260126-260131-ccc-25-rapid-torch-vs-leela.zip",
-    "year": 2026,
-    "start": "260126",
-    "end": "260131",
-    "event": "CCC 25 Rapid: Torch vs Leela",
-    "games": 250,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260126-260131-ccc-25-rapid-torch-vs-leela.zip",
-    "sha256": "80e1785b8f4c0ff06e1b07a5c10fcf744e61f10e7d963f854a4bdf13d4ff777c"
-  },
-  {
-    "pgn": "260202-260202-ccc-25-bullet-qualifier-1.pgn",
-    "zip": "260202-260202-ccc-25-bullet-qualifier-1.zip",
-    "year": 2026,
-    "start": "260202",
-    "end": "260202",
-    "event": "CCC 25 Bullet: Qualifier #1",
-    "games": 1056,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260202-260202-ccc-25-bullet-qualifier-1.zip",
-    "sha256": "2078a03bc9d6a20e5eb3d152721207fce0540a3c2ab99d4f2d4943bc92a6a064"
-  },
-  {
-    "pgn": "260205-260208-ccc-25-bullet-qualifier-2.pgn",
-    "zip": "260205-260208-ccc-25-bullet-qualifier-2.zip",
-    "year": 2026,
-    "start": "260205",
-    "end": "260208",
-    "event": "CCC 25 Bullet: Qualifier #2",
-    "games": 1056,
-    "url": "https://github.com/ianrastall/ccc-archive/raw/main/2026/260205-260208-ccc-25-bullet-qualifier-2.zip",
-    "sha256": "2bb6d008ad6585f774cfff4f2b6ad35a98b687cf30b453c4124a58bafd390369"
   }
 ]
+```
+
+## Full File: `ccc-archive/README.md`
+
+Source: `D:\GitHub\ccc-archive\README.md`
+
+```markdown
+# ccc-archive
+Zipped PGNs of the Chesscom CCC
+
+```
+
+## Full File: `[archive] ccc_links.txt`
+
+Skipped because it is byte-identical to the chessnerd mirror file.
+- chessnerd: `D:\GitHub\chessnerd\ccc_links.txt`
+- ccc-archive: `D:\GitHub\ccc-archive\ccc_links.txt`
+- sha256: `8d6571979ba6c6257e34f83cf2179acf29737e32cb554baab5c98d7da99c0a5c`
+
+## Full File: `[archive] events.txt`
+
+Skipped because it is byte-identical to the chessnerd mirror file.
+- chessnerd: `D:\GitHub\chessnerd\events.txt`
+- ccc-archive: `D:\GitHub\ccc-archive\events.txt`
+- sha256: `0433cb68328f879646baae0224aaa65827463da2d1dee62749291c652c63c0bd`
+
+## Full File: `[archive] game_counts.txt`
+
+Skipped because it is byte-identical to the chessnerd mirror file.
+- chessnerd: `D:\GitHub\chessnerd\game_counts.txt`
+- ccc-archive: `D:\GitHub\ccc-archive\game_counts.txt`
+- sha256: `97d37289914a9d5c2da3947541906c0943d5545e8850d1e94e7a0b985e65e3df`
+
+## Full File: `[archive] ccc_manifest.json`
+
+Skipped because it is byte-identical to the chessnerd mirror file.
+- chessnerd: `D:\GitHub\chessnerd\ccc_manifest.json`
+- ccc-archive: `D:\GitHub\ccc-archive\ccc_manifest.json`
+- sha256: `87aa576aebeb010e0782652d70446ba8b5b91d6d789814ab8a1bae82a61e13b9`
+
+## Section: `[chessnerd] index.html` — CCC tool registration + homepage card routing (lines 96-212)
+
+Source: `D:\GitHub\chessnerd\index.html`
+
+```text
+   96:         const tools = [
+   97:             { 
+   98:                 id: 'ccc-archive', 
+   99:                 name: 'CCC Archive', 
+  100:                 icon: 'folder_zip', 
+  101:                 category: 'data', 
+  102:                 description: 'Computer Chess Championship event PGNs with dates and direct ZIP links.' 
+  103:             },
+  104:             { 
+  105:                 id: 'chesscom-api', 
+  106:                 name: 'Chess.com API', 
+  107:                 icon: 'api', 
+  108:                 category: 'data', 
+  109:                 description: 'Full text reference of the Chess.com Published-Data API documentation.' 
+  110:             },
+  111:             { 
+  112:                 id: 'titled-players', 
+  113:                 name: 'Chess.com Titled Players', 
+  114:                 icon: 'groups', 
+  115:                 category: 'data', 
+  116:                 description: 'Filter and search over 15,000 titled players by Elo and Country.' 
+  117:             },
+  118:             { 
+  119:                 id: 'eco-code', 
+  120:                 name: 'ECO Codes', 
+  121:                 icon: 'menu_book', 
+  122:                 category: 'reference', 
+  123:                 description: 'Browse the Encyclopedia of Chess Openings (ECO) codes hierarchically.' 
+  124:             },
+  125:             { 
+  126:                 id: 'engines', 
+  127:                 name: 'Engine Database', 
+  128:                 icon: 'memory', 
+  129:                 category: 'reference', 
+  130:                 description: 'Searchable database of chess engines, languages, and release dates.' 
+  131:             },
+  132:             { 
+  133:                 id: 'play-engine', 
+  134:                 name: 'Engine Game', 
+  135:                 icon: 'smart_toy', 
+  136:                 category: 'analysis', 
+  137:                 description: 'Interactive board to play against the Lozza engine.' 
+  138:             },
+  139:             { 
+  140:                 id: 'fide-2200', 
+  141:                 name: 'FIDE 2200+ Players', 
+  142:                 icon: 'groups', 
+  143:                 category: 'data', 
+  144:                 description: 'Browse FIDE-rated players (Standard/Rapid/Blitz ≥ 2200) with filters and search.' 
+  145:             },
+  146:             { 
+  147:                 id: 'pgn-downloads', 
+  148:                 name: 'PGN Downloads', 
+  149:                 icon: 'cloud_download', 
+  150:                 category: 'data', 
+  151:                 description: 'Download collections of master games and opening libraries in PGN format.' 
+  152:             },
+  153:             { 
+  154:                 id: 'pgn-info', 
+  155:                 name: 'PGN Info', 
+  156:                 icon: 'analytics', 
+  157:                 category: 'analysis', 
+  158:                 description: 'Analyze an uploaded PGN file to view metadata and statistics.' 
+  159:             },
+  160:             { 
+  161:                 id: 'software', 
+  162:                 name: 'Software Catalog', 
+  163:                 icon: 'inventory_2', 
+  164:                 category: 'reference', 
+  165:                 description: "Full-width table of chess software I've created with download and repo links." 
+  166:             },
+  167:             { 
+  168:                 id: 'stockfish-commits', 
+  169:                 name: 'Stockfish Commits', 
+  170:                 icon: 'history', 
+  171:                 category: 'reference', 
+  172:                 description: "List of Stockfish commits going back to the beginning, with URLs to binaries and source files." 
+  173:             },
+  174: 			{
+  175: 				id: 'titled-tuesday-archive',
+  176: 				name: 'Titled Tuesday Archive',
+  177: 				icon: 'event',
+  178: 				category: 'data',
+  179: 				description: 'Downloaded from Chesscom, renamed and organized.'
+  180: 			},
+  181:             { 
+  182:                 id: 'tournaments', 
+  183:                 name: 'Tournament Archive', 
+  184:                 icon: 'emoji_events', 
+  185:                 category: 'data', 
+  186:                 description: 'Download curated tournament PGNs with calculated FIDE categories.' 
+  187:             }
+  188:         ];
+  189: 
+  190:         const toolGrid = document.getElementById('toolGrid');
+  191: 
+  192:         function renderToolGrid() {
+  193:             toolGrid.innerHTML = '';
+  194:             
+  195:             tools.forEach(tool => {
+  196:                 const card = document.createElement('a');
+  197:                 card.className = 'tool-card';
+  198:                 card.href = `${tool.id}.html`;
+  199:                 
+  200:                 card.innerHTML = `
+  201:                     <div class="tool-icon">
+  202:                         <span class="material-icons">${tool.icon}</span>
+  203:                     </div>
+  204:                     <h3>${tool.name}</h3>
+  205:                     <p>${tool.description}</p>
+  206:                 `;
+  207:                 toolGrid.appendChild(card);
+  208:             });
+  209:         }
+  210: 
+  211:         // Initialize
+  212:         renderToolGrid();
+```
+
+## Section: `[chessnerd] sitemap.xml` — CCC sitemap entry (lines 29-32)
+
+Source: `D:\GitHub\chessnerd\sitemap.xml`
+
+```text
+   29:     <loc>https://chessnerd.net/ccc-archive.html</loc>
+   30:     <changefreq>weekly</changefreq>
+   31:     <priority>0.8</priority>
+   32:   </url>
+```
+
+## Section: `[chessnerd] css/style.css` — Shared layout/header/controls/search/status styles used by CCC page (lines 1-427)
+
+Source: `D:\GitHub\chessnerd\css\style.css`
+
+```text
+    1: :root {
+    2:     --bg-primary: #121212;
+    3:     --bg-secondary: #1e1e1e;
+    4:     --bg-tertiary: #252525;
+    5:     --text-primary: #e0e0e0;
+    6:     --text-secondary: #a0a0a0;
+    7:     --border-color: #333;
+    8:     --accent: #0d9488;
+    9:     --accent-light: #14b8a6;
+   10:     --accent-rgb: 13, 148, 136;
+   11:     --puzzle-accent: #8b5cf6;
+   12:     --success: #059669;
+   13:     --warning: #d97706;
+   14:     --error: #dc2626;
+   15:     --board-light: #d9c39a;
+   16:     --board-dark: #8a6a44;
+   17:     --board-highlight: rgba(var(--accent-rgb), 0.35);
+   18:     --board-selected: rgba(255, 255, 255, 0.18);
+   19:     --board-target: rgba(var(--accent-rgb), 0.45);
+   20: }
+   21: 
+   22: [data-theme="light"] {
+   23:     --bg-primary: #ffffff;
+   24:     --bg-secondary: #f8fafc;
+   25:     --bg-tertiary: #f1f5f9;
+   26:     --text-primary: #1e293b;
+   27:     --text-secondary: #64748b;
+   28:     --border-color: #e2e8f0;
+   29:     --accent: #0d9488;
+   30:     --accent-light: #14b8a6;
+   31:     --accent-rgb: 13, 148, 136;
+   32:     --puzzle-accent: #7c3aed;
+   33:     --board-light: #f1e3c2;
+   34:     --board-dark: #c2965a;
+   35:     --board-highlight: rgba(var(--accent-rgb), 0.28);
+   36:     --board-selected: rgba(0, 0, 0, 0.1);
+   37:     --board-target: rgba(var(--accent-rgb), 0.32);
+   38: }
+   39: 
+   40: * {
+   41:     margin: 0;
+   42:     padding: 0;
+   43:     box-sizing: border-box;
+   44: }
+   45: 
+   46: body {
+   47:     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+   48:     background: var(--bg-primary);
+   49:     color: var(--text-primary);
+   50:     line-height: 1.5;
+   51:     min-height: 100vh;
+   52: }
+   53: 
+   54: .container {
+   55:     width: 100%;
+   56:     max-width: none;
+   57:     margin: 0 auto;
+   58:     padding: 1rem 1.5rem;
+   59: }
+   60: 
+   61: a {
+   62:     color: var(--accent);
+   63:     text-decoration: none;
+   64: }
+   65: 
+   66: a:hover {
+   67:     color: var(--accent-light);
+   68: }
+   69: 
+   70: /* Header */
+   71: header {
+   72:     display: flex;
+   73:     justify-content: space-between;
+   74:     align-items: center;
+   75:     padding: 1rem 0;
+   76:     border-bottom: 1px solid var(--border-color);
+   77:     margin-bottom: 2rem;
+   78:     position: relative;
+   79: }
+   80: 
+   81: .logo {
+   82:     display: flex;
+   83:     align-items: center;
+   84:     gap: 0.5rem;
+   85:     font-size: 1.5rem;
+   86:     font-weight: 600;
+   87: }
+   88: 
+   89: .logo span {
+   90:     color: var(--accent);
+   91: }
+   92: 
+   93: .controls {
+   94:     display: flex;
+   95:     gap: 1rem;
+   96:     align-items: center;
+   97: }
+   98: 
+   99: .site-network {
+  100:     position: absolute;
+  101:     left: 50%;
+  102:     transform: translateX(-50%);
+  103:     display: flex;
+  104:     flex-direction: column;
+  105:     gap: 0.25rem;
+  106:     align-items: flex-start;
+  107: }
+  108: 
+  109: .site-network-link {
+  110:     color: var(--text-secondary);
+  111:     text-decoration: none;
+  112:     font-size: 0.9rem;
+  113:     display: inline-flex;
+  114:     align-items: center;
+  115:     gap: 0.25rem;
+  116:     line-height: 1.2;
+  117: }
+  118: 
+  119: .site-network-link .material-icons {
+  120:     font-size: 1rem;
+  121: }
+  122: 
+  123: .site-network-icon {
+  124:     width: 1rem;
+  125:     height: 1rem;
+  126:     max-width: 1rem;
+  127:     max-height: 1rem;
+  128:     object-fit: contain;
+  129:     flex: 0 0 auto;
+  130: }
+  131: 
+  132: .site-network-link > img.site-network-icon {
+  133:     width: 1rem !important;
+  134:     height: 1rem !important;
+  135:     max-width: 1rem !important;
+  136:     max-height: 1rem !important;
+  137: }
+  138: 
+  139: .site-network-link:hover {
+  140:     color: var(--accent);
+  141: }
+  142: 
+  143: .accent-selector {
+  144:     display: flex;
+  145:     align-items: center;
+  146:     gap: 0.5rem;
+  147: }
+  148: 
+  149: .color-dropdown {
+  150:     padding: 0.25rem 0.5rem;
+  151:     background: var(--bg-secondary);
+  152:     border: 1px solid var(--border-color);
+  153:     border-radius: 4px;
+  154:     color: var(--text-primary);
+  155:     cursor: pointer;
+  156: }
+  157: 
+  158: .color-dropdown:focus-visible,
+  159: .btn:focus-visible {
+  160:     outline: 2px solid var(--accent);
+  161:     outline-offset: 2px;
+  162: }
+  163: 
+  164: /* Main Layout */
+  165: .main-grid {
+  166:     display: block;
+  167:     min-height: calc(100vh - 120px);
+  168: }
+  169: 
+  170: /* Sidebar */
+  171: .sidebar {
+  172:     background: var(--bg-secondary);
+  173:     border-radius: 8px;
+  174:     padding: 1rem;
+  175:     height: fit-content;
+  176:     position: sticky;
+  177:     top: 1rem;
+  178: }
+  179: 
+  180: .search-box {
+  181:     margin-bottom: 1.5rem;
+  182: }
+  183: 
+  184: .search-box input {
+  185:     width: 100%;
+  186:     padding: 0.5rem;
+  187:     background: var(--bg-tertiary);
+  188:     border: 1px solid var(--border-color);
+  189:     border-radius: 4px;
+  190:     color: var(--text-primary);
+  191: }
+  192: 
+  193: .categories {
+  194:     display: flex;
+  195:     flex-direction: column;
+  196:     gap: 0.5rem;
+  197: }
+  198: 
+  199: .category {
+  200:     padding: 0.75rem;
+  201:     border-radius: 4px;
+  202:     cursor: pointer;
+  203:     transition: background 0.2s;
+  204:     display: flex;
+  205:     align-items: center;
+  206:     gap: 0.5rem;
+  207: }
+  208: 
+  209: .category:hover {
+  210:     background: var(--bg-tertiary);
+  211: }
+  212: 
+  213: .category.active {
+  214:     background: var(--accent);
+  215:     color: white;
+  216: }
+  217: 
+  218: .recent-tools {
+  219:     margin-top: 2rem;
+  220:     padding-top: 1rem;
+  221:     border-top: 1px solid var(--border-color);
+  222: }
+  223: 
+  224: .recent-tools h4 {
+  225:     margin-bottom: 0.5rem;
+  226:     color: var(--text-secondary);
+  227:     font-size: 0.875rem;
+  228: }
+  229: 
+  230: .tool-chip {
+  231:     display: inline-block;
+  232:     background: var(--bg-tertiary);
+  233:     padding: 0.25rem 0.5rem;
+  234:     border-radius: 4px;
+  235:     margin: 0.125rem;
+  236:     font-size: 0.75rem;
+  237:     cursor: pointer;
+  238: }
+  239: 
+  240: /* Tool Container */
+  241: .tool-container {
+  242:     background: var(--bg-secondary);
+  243:     border-radius: 8px;
+  244:     padding: 1.5rem;
+  245: }
+  246: 
+  247: .tool-header {
+  248:     display: flex;
+  249:     justify-content: space-between;
+  250:     align-items: center;
+  251:     margin-bottom: 1.5rem;
+  252: }
+  253: 
+  254: .tool-title {
+  255:     display: flex;
+  256:     align-items: center;
+  257:     gap: 0.5rem;
+  258:     font-size: 1.25rem;
+  259: }
+  260: 
+  261: .tool-description {
+  262:     color: var(--text-secondary);
+  263:     margin-bottom: 1.5rem;
+  264:     font-size: 0.95rem;
+  265: }
+  266: 
+  267: .tool-actions {
+  268:     display: flex;
+  269:     gap: 0.5rem;
+  270: }
+  271: 
+  272: .btn {
+  273:     padding: 0.5rem 1rem;
+  274:     border: none;
+  275:     border-radius: 4px;
+  276:     cursor: pointer;
+  277:     display: inline-flex;
+  278:     align-items: center;
+  279:     gap: 0.5rem;
+  280:     font-size: 0.875rem;
+  281:     transition: all 0.2s;
+  282: }
+  283: 
+  284: .btn-primary {
+  285:     background: var(--accent);
+  286:     color: white;
+  287: }
+  288: 
+  289: .btn-secondary {
+  290:     background: var(--bg-tertiary);
+  291:     color: var(--text-primary);
+  292: }
+  293: 
+  294: .btn:hover {
+  295:     transform: translateY(-1px);
+  296:     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  297: }
+  298: 
+  299: .btn:disabled {
+  300:     opacity: 0.55;
+  301:     cursor: not-allowed;
+  302: }
+  303: 
+  304: .btn:disabled:hover {
+  305:     transform: none;
+  306:     box-shadow: none;
+  307: }
+  308: 
+  309: @media (prefers-reduced-motion: reduce) {
+  310:     .btn {
+  311:         transition: none;
+  312:     }
+  313: 
+  314:     .btn:hover {
+  315:         transform: none;
+  316:         box-shadow: none;
+  317:     }
+  318: }
+  319: 
+  320: /* Tool I/O */
+  321: .io-container {
+  322:     display: grid;
+  323:     grid-template-columns: 1fr 1fr;
+  324:     gap: 1rem;
+  325:     margin-bottom: 1rem;
+  326: }
+  327: 
+  328: @media (max-width: 768px) {
+  329:     .io-container {
+  330:         grid-template-columns: 1fr;
+  331:     }
+  332: 
+  333:     .board-shell {
+  334:         width: 100%;
+  335:     }
+  336: }
+  337: 
+  338: .io-panel {
+  339:     display: flex;
+  340:     flex-direction: column;
+  341:     gap: 0.5rem;
+  342: }
+  343: 
+  344: .io-label {
+  345:     display: flex;
+  346:     justify-content: space-between;
+  347:     align-items: center;
+  348:     font-size: 0.875rem;
+  349:     color: var(--text-secondary);
+  350: }
+  351: 
+  352: .stats {
+  353:     font-size: 0.75rem;
+  354: }
+  355: 
+  356: textarea {
+  357:     width: 100%;
+  358:     min-height: 300px;
+  359:     padding: 1rem;
+  360:     background: var(--bg-tertiary);
+  361:     border: 1px solid var(--border-color);
+  362:     border-radius: 4px;
+  363:     color: var(--text-primary);
+  364:     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  365:     font-size: 0.875rem;
+  366:     line-height: 1.4;
+  367:     resize: vertical;
+  368: }
+  369: 
+  370: textarea:focus {
+  371:     outline: none;
+  372:     border-color: var(--accent);
+  373: }
+  374: 
+  375: .output {
+  376:     background: var(--bg-primary);
+  377: }
+  378: 
+  379: /* Options Panel */
+  380: .options-panel {
+  381:     background: var(--bg-tertiary);
+  382:     border-radius: 4px;
+  383:     padding: 1rem;
+  384:     margin-bottom: 1rem;
+  385: }
+  386: 
+  387: .options-grid {
+  388:     display: grid;
+  389:     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  390:     gap: 1rem;
+  391: }
+  392: 
+  393: .option-group {
+  394:     display: flex;
+  395:     flex-direction: column;
+  396:     gap: 0.5rem;
+  397: }
+  398: 
+  399: .option-group label {
+  400:     font-size: 0.875rem;
+  401:     color: var(--text-secondary);
+  402: }
+  403: 
+  404: select, input[type="range"], input[type="checkbox"], input[type="radio"] {
+  405:     padding: 0.25rem 0.5rem;
+  406:     background: var(--bg-secondary);
+  407:     border: 1px solid var(--border-color);
+  408:     border-radius: 4px;
+  409:     color: var(--text-primary);
+  410: }
+  411: 
+  412: input[type="checkbox"], input[type="radio"] {
+  413:     width: auto;
+  414:     cursor: pointer;
+  415: }
+  416: 
+  417: /* Status Bar */
+  418: .status-bar {
+  419:     display: flex;
+  420:     justify-content: space-between;
+  421:     align-items: center;
+  422:     padding-top: 1rem;
+  423:     border-top: 1px solid var(--border-color);
+  424:     font-size: 0.75rem;
+  425:     color: var(--text-secondary);
+  426: }
+  427: 
+```
+
+## Section: `[chessnerd] css/style.css` — Responsive rules affecting CCC page layout (lines 901-936)
+
+Source: `D:\GitHub\chessnerd\css\style.css`
+
+```text
+  901: /* Responsive */
+  902: @media (max-width: 768px) {
+  903:     .main-grid {
+  904:         grid-template-columns: 1fr;
+  905:     }
+  906:     
+  907:     .sidebar {
+  908:         position: static;
+  909:     }
+  910:     
+  911:     .tool-header {
+  912:         flex-direction: column;
+  913:         gap: 1rem;
+  914:         align-items: flex-start;
+  915:     }
+  916: 
+  917:     .site-network {
+  918:         position: static;
+  919:         transform: none;
+  920:         order: 3;
+  921:         width: 100%;
+  922:         margin-top: 1rem;
+  923:         display: flex;
+  924:         flex-direction: column;
+  925:         gap: 0.35rem;
+  926:         justify-content: center;
+  927:         align-items: center;
+  928:     }
+  929: 
+  930:     header {
+  931:         flex-wrap: wrap;
+  932:     }
+  933: }
+  934: .io-container.puzzle-grid {
+  935:     align-items: flex-start;
+  936: }
+```
