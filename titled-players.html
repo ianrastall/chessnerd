@@ -256,8 +256,14 @@
 
         let allPlayers = [];
         let selectedUsername = '';
+        let currentListRequestId = 0;
         let currentRequestId = 0;
+        let listAbortController = null;
         const profileCache = new Map();
+        const statsCache = new Map();
+        const leaderboardRanksByUser = new Map();
+        let leaderboardFetchPromise = null;
+        let leaderboardReady = false;
 
         function setStatus(message, type) {
             statusMessage.textContent = message;
@@ -294,6 +300,112 @@
             return fallback;
         }
 
+        function titleCase(text) {
+            if (!text) return '';
+            return text.charAt(0).toUpperCase() + text.slice(1);
+        }
+
+        function formatLeaderboardCategory(category) {
+            const known = {
+                live_rapid: 'Rapid',
+                live_blitz: 'Blitz',
+                live_bullet: 'Bullet',
+                live_chess960: 'Chess960',
+                live_bughouse: 'Bughouse',
+                live_crazyhouse: 'Crazyhouse',
+                live_kingofthehill: 'King of the Hill',
+                live_threecheck: '3 Check',
+                live_racingkings: 'Racing Kings',
+                daily: 'Daily',
+                daily960: 'Daily 960'
+            };
+
+            if (known[category]) return known[category];
+            if (category.startsWith('live_')) {
+                return category.slice(5).split('_').map(titleCase).join(' ');
+            }
+            if (category.startsWith('daily_')) {
+                return `Daily ${category.slice(6).split('_').map(titleCase).join(' ')}`;
+            }
+            return category.split('_').map(titleCase).join(' ');
+        }
+
+        function parseLeaderboardPayload(payload) {
+            const parsed = new Map();
+            if (!payload || typeof payload !== 'object') return parsed;
+
+            Object.entries(payload).forEach(([category, entries]) => {
+                if (!Array.isArray(entries)) return;
+
+                entries.forEach((entry, index) => {
+                    const username = String(entry?.username ?? '').toLowerCase();
+                    if (!username) return;
+
+                    const rankValue = Number(entry?.rank);
+                    const rank = Number.isFinite(rankValue) && rankValue > 0 ? rankValue : index + 1;
+
+                    if (!parsed.has(username)) {
+                        parsed.set(username, []);
+                    }
+                    parsed.get(username).push({ category, rank });
+                });
+            });
+
+            parsed.forEach(ranks => ranks.sort((a, b) => a.rank - b.rank));
+            return parsed;
+        }
+
+        async function ensureLeaderboardsLoaded() {
+            if (leaderboardReady) return;
+
+            if (!leaderboardFetchPromise) {
+                leaderboardFetchPromise = fetch('https://api.chess.com/pub/leaderboards')
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        const parsed = parseLeaderboardPayload(data);
+                        leaderboardRanksByUser.clear();
+                        parsed.forEach((ranks, username) => leaderboardRanksByUser.set(username, ranks));
+                        leaderboardReady = true;
+                    })
+                    .catch(error => {
+                        console.error('Leaderboards unavailable:', error);
+                        leaderboardReady = true;
+                    });
+            }
+
+            await leaderboardFetchPromise;
+        }
+
+        async function getLeaderboardRanksForUser(username) {
+            await ensureLeaderboardsLoaded();
+            const key = String(username ?? '').toLowerCase();
+            const ranks = leaderboardRanksByUser.get(key);
+            return Array.isArray(ranks) ? ranks : [];
+        }
+
+        function readNumber(value) {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : null;
+        }
+
+        function formatRatingValue(stats, key) {
+            const last = readNumber(stats?.[key]?.last?.rating);
+            if (last !== null && last > 0) return last.toLocaleString();
+
+            const best = readNumber(stats?.[key]?.best?.rating);
+            if (best !== null && best > 0) return best.toLocaleString();
+
+            return '-';
+        }
+
+        function formatTacticsValue(stats) {
+            const highest = readNumber(stats?.tactics?.highest?.rating);
+            return highest !== null && highest > 0 ? highest.toLocaleString() : '-';
+        }
+
         function setDetailsPlaceholder(message) {
             playerDetailsEl.innerHTML = `
                 <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
@@ -302,15 +414,20 @@
             `;
         }
 
-        backButton.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
-
-        fetchBtn.addEventListener('click', async () => {
+        async function fetchTitlePlayers() {
             const title = titleSelect.value;
+            const requestId = ++currentListRequestId;
+
+            if (listAbortController) {
+                listAbortController.abort();
+            }
+            listAbortController = new AbortController();
+
             fetchBtn.disabled = true;
             searchInput.disabled = true;
+            searchInput.value = '';
             selectedUsername = '';
+            currentRequestId += 1;
 
             setStatus(`Fetching ${title} list...`, 'warning');
             listStats.textContent = '0 found';
@@ -318,25 +435,70 @@
             setDetailsPlaceholder('Select a player to view details');
 
             try {
-                const response = await fetch(`https://api.chess.com/pub/titled/${title}`);
+                const response = await fetch(`https://api.chess.com/pub/titled/${title}`, {
+                    signal: listAbortController.signal
+                });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
-                allPlayers = Array.isArray(data.players) ? data.players : [];
+                if (requestId !== currentListRequestId) return;
 
-                searchInput.value = '';
+                allPlayers = Array.isArray(data.players) ? data.players : [];
                 searchInput.disabled = false;
                 renderPlayerList(allPlayers);
-                setStatus(`Loaded ${allPlayers.length} players.`, 'success');
+                setStatus(`Loaded ${allPlayers.length} ${title} players.`, 'success');
             } catch (error) {
+                if (error.name === 'AbortError') return;
                 console.error(error);
                 setStatus('Error fetching players list.', 'error');
                 playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--error);">Failed to load list.</div>';
                 listStats.textContent = '0 found';
             } finally {
-                fetchBtn.disabled = false;
+                if (requestId === currentListRequestId) {
+                    fetchBtn.disabled = false;
+                    listAbortController = null;
+                }
             }
+        }
+
+        async function fetchPlayerProfile(username) {
+            const key = String(username ?? '').toLowerCase();
+            if (profileCache.has(key)) {
+                return profileCache.get(key);
+            }
+
+            const response = await fetch(`https://api.chess.com/pub/player/${encodeURIComponent(username)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+            profileCache.set(key, data);
+            return data;
+        }
+
+        async function fetchPlayerStats(username) {
+            const key = String(username ?? '').toLowerCase();
+            if (statsCache.has(key)) {
+                return statsCache.get(key);
+            }
+
+            const response = await fetch(`https://api.chess.com/pub/player/${encodeURIComponent(username)}/stats`);
+            if (response.status === 404) {
+                statsCache.set(key, null);
+                return null;
+            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+            statsCache.set(key, data);
+            return data;
+        }
+
+        backButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
         });
+
+        fetchBtn.addEventListener('click', fetchTitlePlayers);
+        titleSelect.addEventListener('change', fetchTitlePlayers);
 
         function renderPlayerList(players) {
             listStats.textContent = `${players.length} found`;
@@ -377,29 +539,40 @@
             document.querySelectorAll('.player-item.active').forEach(el => el.classList.remove('active'));
             itemElement.classList.add('active');
 
-            if (profileCache.has(username)) {
-                renderProfile(profileCache.get(username));
-                setStatus(`Loaded ${username} from cache.`, 'success');
-                return;
+            const key = String(username ?? '').toLowerCase();
+            const hasCachedProfile = profileCache.has(key);
+            const hasCachedStats = statsCache.has(key);
+            if (!hasCachedProfile || !hasCachedStats) {
+                playerDetailsEl.innerHTML = `
+                    <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-secondary);">
+                        <div class="loading-spinner" style="width: 2rem; height: 2rem; border-color: var(--text-secondary); border-top-color: transparent;"></div>
+                        <span>Loading ${escapeHtml(username)}...</span>
+                    </div>
+                `;
             }
 
-            playerDetailsEl.innerHTML = `
-                <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-secondary);">
-                    <div class="loading-spinner" style="width: 2rem; height: 2rem; border-color: var(--text-secondary); border-top-color: transparent;"></div>
-                    <span>Loading ${escapeHtml(username)}...</span>
-                </div>
-            `;
-
             try {
-                const response = await fetch(`https://api.chess.com/pub/player/${encodeURIComponent(username)}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                const data = await response.json();
+                let statsUnavailable = false;
+                const [profile, stats, leaderboardRanks] = await Promise.all([
+                    fetchPlayerProfile(username),
+                    fetchPlayerStats(username).catch(error => {
+                        statsUnavailable = true;
+                        console.error(`Stats unavailable for ${username}:`, error);
+                        return null;
+                    }),
+                    getLeaderboardRanksForUser(username)
+                ]);
                 if (requestId !== currentRequestId) return;
 
-                profileCache.set(username, data);
-                renderProfile(data);
-                setStatus(`Loaded profile for ${username}.`, 'success');
+                renderProfile(profile, stats, leaderboardRanks);
+
+                if (statsUnavailable) {
+                    setStatus(`Loaded profile for ${username}; ratings unavailable.`, 'warning');
+                } else if (hasCachedProfile && hasCachedStats) {
+                    setStatus(`Loaded ${username} from cache.`, 'success');
+                } else {
+                    setStatus(`Loaded profile for ${username}.`, 'success');
+                }
             } catch (error) {
                 console.error(error);
                 if (requestId !== currentRequestId) return;
@@ -409,19 +582,37 @@
             }
         }
 
-        function renderProfile(data) {
-            const username = String(data.username ?? selectedUsername ?? '');
-            const displayName = String(data.name ?? username);
-            const title = String(data.title ?? '');
-            const location = String(data.location ?? '');
-            const followersNum = Number(data.followers);
+        function renderProfile(profile, stats, leaderboardRanks) {
+            const username = String(profile?.username ?? selectedUsername ?? '');
+            const displayName = String(profile?.name ?? username);
+            const title = String(profile?.title ?? '');
+            const location = String(profile?.location ?? '');
+            const followersNum = Number(profile?.followers);
             const followers = Number.isFinite(followersNum) ? followersNum.toLocaleString() : '0';
-            const status = String(data.status ?? 'unknown');
+            const status = String(profile?.status ?? 'unknown');
             const statusColor = status === 'closed' || status === 'closure_impacted' ? 'var(--error)' : 'var(--success)';
-            const joined = formatDate(data.joined);
-            const lastOnline = formatDate(data.last_online);
-            const avatarSrc = safeUrl(data.avatar, 'img/icon.png');
-            const memberUrl = safeUrl(data.url, `https://www.chess.com/member/${encodeURIComponent(username)}`);
+            const joined = formatDate(profile?.joined);
+            const lastOnline = formatDate(profile?.last_online);
+            const avatarSrc = safeUrl(profile?.avatar, 'img/icon.png');
+            const memberUrl = safeUrl(profile?.url, `https://www.chess.com/member/${encodeURIComponent(username)}`);
+            const rapid = formatRatingValue(stats, 'chess_rapid');
+            const blitz = formatRatingValue(stats, 'chess_blitz');
+            const bullet = formatRatingValue(stats, 'chess_bullet');
+            const daily = formatRatingValue(stats, 'chess_daily');
+            const daily960 = formatRatingValue(stats, 'chess960_daily');
+            const tactics = formatTacticsValue(stats);
+            const bestLeaderboard = leaderboardRanks.length > 0 ? leaderboardRanks[0] : null;
+            const leaderboardDisplay = bestLeaderboard ? `#${bestLeaderboard.rank}` : 'N/A';
+            const leaderboardLabel = bestLeaderboard
+                ? formatLeaderboardCategory(bestLeaderboard.category)
+                : 'Not listed';
+            const leaderboardText = leaderboardRanks.length > 0
+                ? leaderboardRanks
+                    .slice(0, 5)
+                    .map(item => `${formatLeaderboardCategory(item.category)} #${item.rank}`)
+                    .map(escapeHtml)
+                    .join(' | ')
+                : 'Not present in current public leaderboards.';
 
             const html = `
                 <div class="profile-header">
@@ -431,6 +622,43 @@
                         <h3>${escapeHtml(displayName)}</h3>
                         ${title ? `<span class="profile-badge">${escapeHtml(title)}</span>` : ''}
                         ${location ? `<div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);"><span class="material-icons" style="font-size: 1rem; vertical-align: text-bottom;">place</span> ${escapeHtml(location)}</div>` : ''}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <h4 style="margin: 0 0 0.75rem 0; color: var(--accent);">Ratings</h4>
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Rapid</div>
+                            <div class="stat-value">${escapeHtml(rapid)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Blitz</div>
+                            <div class="stat-value">${escapeHtml(blitz)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Bullet</div>
+                            <div class="stat-value">${escapeHtml(bullet)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Daily</div>
+                            <div class="stat-value">${escapeHtml(daily)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Daily 960</div>
+                            <div class="stat-value">${escapeHtml(daily960)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Tactics</div>
+                            <div class="stat-value">${escapeHtml(tactics)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Best Rank</div>
+                            <div class="stat-value">${escapeHtml(leaderboardDisplay)}</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong>${escapeHtml(leaderboardLabel)}:</strong> ${leaderboardText}
                     </div>
                 </div>
 
@@ -463,6 +691,8 @@
 
             playerDetailsEl.innerHTML = html;
         }
+
+        fetchTitlePlayers();
     </script>
 </body>
 </html>
