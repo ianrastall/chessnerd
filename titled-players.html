@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
     <script>
@@ -12,147 +10,129 @@
 
       gtag('config', 'G-XQ7B0Z9FK3');
     </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess.com Titled Players - Chess Nerd</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Database Table Styles */
-        .db-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-        .db-table th {
-            text-align: left;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        /* Tool specific styles */
+        .player-list {
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
             background: var(--bg-tertiary);
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border-radius: 4px;
         }
-        .db-table td {
-            padding: 0.75rem 1rem;
+
+        .player-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
             border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
+            transition: background 0.2s;
         }
-        .db-table tr:hover {
+
+        .player-item:hover {
             background: var(--bg-secondary);
         }
 
-        /* Filter Controls Area */
-        .filters-panel {
-            background: var(--bg-tertiary);
-            border-radius: 8px;
+        .player-item.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .player-details {
+            height: 500px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        /* Custom Checkboxes */
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            background: var(--bg-primary);
-            padding: 6px 12px;
             border-radius: 4px;
-            border: 1px solid var(--border-color);
-            user-select: none;
-            transition: all 0.2s;
-        }
-        .checkbox-label:hover {
-            border-color: var(--accent);
-        }
-        .checkbox-label input[type="checkbox"] {
-            accent-color: var(--accent);
-            width: 16px;
-            height: 16px;
+            overflow-y: auto;
         }
 
-        /* Inputs */
-        .input-wrapper {
+        .profile-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
         }
-        .input-wrapper label {
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            object-fit: cover;
+        }
+
+        .profile-info h3 {
+            margin-bottom: 0.25rem;
+            font-size: 1.5rem;
+        }
+
+        .profile-username {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .profile-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--error);
+            color: #fff;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-box {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
             font-weight: 500;
         }
-        .std-input {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            width: 100px;
-        }
-        .std-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        select.std-input {
-            width: 120px;
-        }
 
-        /* Badges */
-        .title-badge {
+        .loading-spinner {
             display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-        .gm-title { color: #ffd700; background: rgba(255, 215, 0, 0.15); }
-        .im-title { color: #c0c0c0; background: rgba(192, 192, 192, 0.15); }
-        .rating-cell { font-family: 'Monaco', monospace; font-weight: bold; }
-        
-        .results-count {
-            margin-left: auto;
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.9rem;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .filter-row { gap: 1rem; }
-            .results-count { margin-left: 0; width: 100%; margin-top: 0.5rem; }
-            .hide-mobile { display: none; }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container" style="max-width: 100%; padding: 0 2rem;">
+    <div class="container">
         <header>
             <div class="logo">
                 <a href="index.html" style="color: inherit; text-decoration: none;">
@@ -176,7 +156,7 @@
                     <span class="material-icons">palette</span>
                     <select id="accentColor" class="color-dropdown"></select>
                 </div>
-                <button id="themeToggle" class="btn btn-secondary">
+                <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="false">
                     <span class="material-icons">dark_mode</span>
                 </button>
             </div>
@@ -187,94 +167,77 @@
                 <div class="tool-header">
                     <div class="tool-title">
                         <span class="material-icons" id="toolIcon">groups</span>
-                        <div>
-                            <h2 id="toolName" style="margin-bottom: 0;">Chess.com Titled Players</h2>
-                            <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
-                                Verified accounts from Chess.com API
-                            </div>
-                        </div>
+                        <h2 id="toolName">Titled Players</h2>
                     </div>
                     <div class="tool-actions">
-                        <button id="backButton" class="btn btn-secondary">
+                        <button id="backButton" class="btn btn-secondary btn-compact">
                             <span class="material-icons">arrow_back</span>
                             Back
                         </button>
                     </div>
                 </div>
 
-                <div class="io-container" style="display: block;">
-                    <div class="io-panel" style="width: 100%">
-                        
-                        <div class="filters-panel">
-                            <div class="filter-row">
-                                <div class="checkbox-group">
-                                    <label class="checkbox-label"><input type="checkbox" value="GM" checked> GM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="IM" checked> IM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="FM"> FM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="CM"> CM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="NM"> NM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WGM"> WGM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WIM"> WIM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WFM"> WFM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WCM"> WCM</label>
-                                    <label class="checkbox-label"><input type="checkbox" value="WNM"> WNM</label>
-                                </div>
-                                <div style="display:flex; gap:0.5rem;">
-                                    <button id="selectAllTitlesBtn" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
-                                    <button id="clearAllTitlesBtn" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
-                                </div>
-                            </div>
-
-                            <div class="filter-row">
-                                <div class="input-wrapper">
-                                    <label>Sort By:</label>
-                                    <select id="ratingType" class="std-input">
-                                        <option value="rapid">Rapid</option>
-                                        <option value="blitz">Blitz</option>
-                                        <option value="bullet">Bullet</option>
-                                    </select>
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Min Elo:</label>
-                                    <input type="number" id="minElo" class="std-input" value="2500" step="50">
-                                </div>
-                                <div class="input-wrapper">
-                                    <label>Country:</label>
-                                    <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="2" style="text-transform: uppercase;">
-                                </div>
-                                <div class="results-count" id="countDisplay">Loading database...</div>
-                                <button id="copyBtn" class="btn btn-secondary" title="Copy list to clipboard (Excel compatible)" style="display: flex; align-items: center; gap: 5px; margin-left: 10px;">
-                                    <span class="material-icons" style="font-size: 1.1rem;">content_copy</span> Copy
-                                </button>
-                            </div>
+                <div class="options-panel" id="toolOptions">
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label for="titleSelect">Title</label>
+                            <select id="titleSelect">
+                                <option value="GM">Grandmaster (GM)</option>
+                                <option value="WGM">Woman Grandmaster (WGM)</option>
+                                <option value="IM">International Master (IM)</option>
+                                <option value="WIM">Woman Intl. Master (WIM)</option>
+                                <option value="FM">FIDE Master (FM)</option>
+                                <option value="WFM">Woman FIDE Master (WFM)</option>
+                                <option value="NM">National Master (NM)</option>
+                                <option value="WNM">Woman National Master (WNM)</option>
+                                <option value="CM">Candidate Master (CM)</option>
+                                <option value="WCM">Woman Candidate Master (WCM)</option>
+                            </select>
                         </div>
-
-                        <div style="background: var(--bg-tertiary); border-radius: 4px;">
-                            <table class="db-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50px;">Avatar</th>
-                                        <th>Player</th>
-                                        <th>Title</th>
-                                        <th>Country</th>
-                                        <th id="ratingHeader">Rapid</th>
-                                        <th class="hide-mobile">Status</th>
-                                        <th style="text-align: right;">Link</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                    </tbody>
-                            </table>
-                            <div id="loadMoreArea" style="text-align: center; padding: 1rem; display: none;">
-                                <button id="loadMoreBtn" class="btn btn-primary">Show More</button>
-                            </div>
+                        <div class="option-group" style="justify-content: flex-end;">
+                            <button id="fetchPlayersBtn" class="btn btn-primary">
+                                <span class="material-icons">download</span>
+                                Fetch Players
+                            </button>
                         </div>
-
+                        <div class="option-group">
+                            <label for="playerSearch">Filter List</label>
+                            <input type="search" id="playerSearch" placeholder="Type username..." disabled>
+                        </div>
                     </div>
+                </div>
+
+                <div class="io-container">
+                    <div class="io-panel">
+                        <div class="io-label">
+                            <span>Players</span>
+                            <span class="stats pill muted" id="listStats">0 found</span>
+                        </div>
+                        <div id="playerList" class="player-list">
+                            <div style="padding: 1rem; color: var(--text-secondary); text-align: center;">
+                                Select a title and click Fetch
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="io-panel">
+                        <div class="io-label">
+                            <span>Player Details</span>
+                        </div>
+                        <div id="playerDetails" class="player-details">
+                            <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                                Select a player to view details
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <div id="statusMessage" class="success">Ready</div>
                 </div>
             </div>
         </main>
-        
+
         <footer class="site-footer">
             <p>&copy; Ian Rastall 2025<br>Contact: moving.form.of.dust@gmail.com<br>Donate: PayPal to merastall@gmail.com</p>
         </footer>
@@ -282,304 +245,224 @@
 
     <script src="js/theme.js"></script>
     <script>
-        document.getElementById('backButton').addEventListener('click', () => {
+        const titleSelect = document.getElementById('titleSelect');
+        const fetchBtn = document.getElementById('fetchPlayersBtn');
+        const searchInput = document.getElementById('playerSearch');
+        const playerListEl = document.getElementById('playerList');
+        const playerDetailsEl = document.getElementById('playerDetails');
+        const listStats = document.getElementById('listStats');
+        const statusMessage = document.getElementById('statusMessage');
+        const backButton = document.getElementById('backButton');
+
+        let allPlayers = [];
+        let selectedUsername = '';
+        let currentRequestId = 0;
+        const profileCache = new Map();
+
+        function setStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = type;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatDate(seconds) {
+            const value = Number(seconds);
+            if (!Number.isFinite(value) || value <= 0) return 'Unknown';
+            return new Date(value * 1000).toLocaleDateString();
+        }
+
+        function safeUrl(value, fallback) {
+            const text = String(value ?? '').trim();
+            if (text) {
+                try {
+                    const parsed = new URL(text);
+                    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                        return text;
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+            return fallback;
+        }
+
+        function setDetailsPlaceholder(message) {
+            playerDetailsEl.innerHTML = `
+                <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                    ${escapeHtml(message)}
+                </div>
+            `;
+        }
+
+        backButton.addEventListener('click', () => {
             window.location.href = 'index.html';
         });
 
-        // --- DATABASE LOGIC ---
-        const INITIAL_DISPLAY_LIMIT = 100;
-        const BATCH_SIZE = 100;
-        let allPlayers = [];
-        let filteredPlayers = [];
-        let displayLimit = INITIAL_DISPLAY_LIMIT;
+        fetchBtn.addEventListener('click', async () => {
+            const title = titleSelect.value;
+            fetchBtn.disabled = true;
+            searchInput.disabled = true;
+            selectedUsername = '';
 
-        function asText(value) {
-            if (value === null || value === undefined) return '';
-            return String(value);
-        }
+            setStatus(`Fetching ${title} list...`, 'warning');
+            listStats.textContent = '0 found';
+            playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center;">Loading...</div>';
+            setDetailsPlaceholder('Select a player to view details');
 
-        function getSafeUrl(urlText) {
-            const candidate = asText(urlText).trim();
-            if (!candidate) return '';
             try {
-                const parsed = new URL(candidate);
-                if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-                    return candidate;
-                }
-            } catch (err) {
-                return '';
+                const response = await fetch(`https://api.chess.com/pub/titled/${title}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                allPlayers = Array.isArray(data.players) ? data.players : [];
+
+                searchInput.value = '';
+                searchInput.disabled = false;
+                renderPlayerList(allPlayers);
+                setStatus(`Loaded ${allPlayers.length} players.`, 'success');
+            } catch (error) {
+                console.error(error);
+                setStatus('Error fetching players list.', 'error');
+                playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--error);">Failed to load list.</div>';
+                listStats.textContent = '0 found';
+            } finally {
+                fetchBtn.disabled = false;
             }
-            return '';
-        }
+        });
 
-        function getRatingValue(player, ratingType) {
-            const value = Number(player[ratingType]);
-            return Number.isFinite(value) ? value : 0;
-        }
+        function renderPlayerList(players) {
+            listStats.textContent = `${players.length} found`;
 
-        function tsvSafeCell(value) {
-            const cleaned = asText(value).replace(/\t/g, ' ').replace(/\r?\n/g, ' ').trim();
-            return /^[=+\-@]/.test(cleaned) ? `'${cleaned}` : cleaned;
-        }
-
-        function setTableMessage(message) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            const tr = document.createElement('tr');
-            const td = document.createElement('td');
-            td.colSpan = 7;
-            td.style.textAlign = 'center';
-            td.style.padding = '1.5rem';
-            td.style.color = 'var(--text-secondary)';
-            td.textContent = message;
-            tr.appendChild(td);
-            tbody.appendChild(tr);
-            document.getElementById('loadMoreArea').style.display = 'none';
-        }
-
-        function toggleAll(checked) {
-            document.querySelectorAll('.checkbox-label input').forEach(cb => {
-                cb.checked = checked;
-            });
-            applyFilters();
-        }
-
-        function applyFilters() {
-            displayLimit = INITIAL_DISPLAY_LIMIT;
-
-            const ratingType = document.getElementById('ratingType').value;
-            const minElo = parseInt(document.getElementById('minElo').value, 10) || 0;
-            const countrySearch = document.getElementById('countryFilter').value.toUpperCase().trim();
-            const checkedBoxes = document.querySelectorAll('.checkbox-label input:checked');
-            const selectedTitles = new Set(Array.from(checkedBoxes).map(cb => cb.value));
-
-            document.getElementById('ratingHeader').innerText = ratingType.charAt(0).toUpperCase() + ratingType.slice(1);
-
-            filteredPlayers = allPlayers.filter(player => {
-                if (!selectedTitles.has(player.title)) return false;
-                if (getRatingValue(player, ratingType) < minElo) return false;
-                if (countrySearch && player.country !== countrySearch) return false;
-                return true;
-            });
-
-            filteredPlayers.sort((a, b) => getRatingValue(b, ratingType) - getRatingValue(a, ratingType));
-            document.getElementById('countDisplay').innerText = `${filteredPlayers.length} players found`;
-            renderTable();
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            if (filteredPlayers.length === 0) {
-                setTableMessage('No matching players.');
+            if (players.length === 0) {
+                playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center;">No players found.</div>';
                 return;
             }
 
-            const ratingType = document.getElementById('ratingType').value;
-            const subset = filteredPlayers.slice(0, displayLimit);
             const fragment = document.createDocumentFragment();
 
-            subset.forEach(player => {
-                const username = asText(player.username);
-                const profileName = asText(player.name);
-                const country = asText(player.country);
-                const title = asText(player.title);
-                const status = asText(player.status);
+            players.forEach(username => {
+                const item = document.createElement('div');
+                item.className = 'player-item';
+                item.textContent = username;
 
-                const tr = document.createElement('tr');
-
-                const avatarTd = document.createElement('td');
-                const avatarUrl = getSafeUrl(player.avatar);
-                if (avatarUrl) {
-                    const img = document.createElement('img');
-                    img.src = avatarUrl;
-                    img.alt = username || 'Player avatar';
-                    img.width = 40;
-                    img.height = 40;
-                    img.style.borderRadius = '50%';
-                    img.style.objectFit = 'cover';
-                    avatarTd.appendChild(img);
-                } else {
-                    const fallback = document.createElement('div');
-                    fallback.style.width = '40px';
-                    fallback.style.height = '40px';
-                    fallback.style.borderRadius = '50%';
-                    fallback.style.background = 'var(--bg-secondary)';
-                    fallback.style.display = 'flex';
-                    fallback.style.alignItems = 'center';
-                    fallback.style.justifyContent = 'center';
-                    fallback.style.color = 'var(--text-secondary)';
-                    fallback.style.fontSize = '0.8rem';
-                    const firstChar = username ? username.charAt(0).toUpperCase() : '?';
-                    fallback.textContent = /[A-Z]/.test(firstChar) ? firstChar : '?';
-                    avatarTd.appendChild(fallback);
+                if (username === selectedUsername) {
+                    item.classList.add('active');
                 }
-                tr.appendChild(avatarTd);
 
-                const playerTd = document.createElement('td');
-                const userDiv = document.createElement('div');
-                userDiv.style.fontWeight = '500';
-                userDiv.textContent = username;
-                playerTd.appendChild(userDiv);
-                if (profileName) {
-                    const nameDiv = document.createElement('div');
-                    nameDiv.style.fontSize = '0.85rem';
-                    nameDiv.style.color = 'var(--text-secondary)';
-                    nameDiv.style.marginTop = '2px';
-                    nameDiv.textContent = profileName;
-                    playerTd.appendChild(nameDiv);
-                }
-                tr.appendChild(playerTd);
-
-                const titleTd = document.createElement('td');
-                const titleBadge = document.createElement('span');
-                titleBadge.className = 'title-badge';
-                if (title === 'GM') titleBadge.classList.add('gm-title');
-                if (title === 'IM') titleBadge.classList.add('im-title');
-                titleBadge.textContent = title;
-                titleTd.appendChild(titleBadge);
-                tr.appendChild(titleTd);
-
-                const countryTd = document.createElement('td');
-                countryTd.textContent = country;
-                tr.appendChild(countryTd);
-
-                const ratingTd = document.createElement('td');
-                ratingTd.className = 'rating-cell';
-                ratingTd.style.color = 'var(--accent)';
-                ratingTd.textContent = String(getRatingValue(player, ratingType));
-                tr.appendChild(ratingTd);
-
-                const statusTd = document.createElement('td');
-                statusTd.className = 'hide-mobile';
-                statusTd.style.fontSize = '0.85rem';
-                statusTd.style.color = status === 'active' ? '#4caf50' : 'var(--text-secondary)';
-                statusTd.textContent = status;
-                tr.appendChild(statusTd);
-
-                const linkTd = document.createElement('td');
-                linkTd.style.textAlign = 'right';
-                const link = document.createElement('a');
-                link.className = 'btn btn-secondary';
-                link.style.padding = '2px 8px';
-                link.style.fontSize = '0.8rem';
-                link.textContent = 'View';
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                link.href = `https://www.chess.com/member/${encodeURIComponent(username)}`;
-                linkTd.appendChild(link);
-                tr.appendChild(linkTd);
-
-                fragment.appendChild(tr);
+                item.addEventListener('click', () => loadPlayerDetails(username, item));
+                fragment.appendChild(item);
             });
 
-            tbody.appendChild(fragment);
-            document.getElementById('loadMoreArea').style.display = filteredPlayers.length > displayLimit ? 'block' : 'none';
+            playerListEl.innerHTML = '';
+            playerListEl.appendChild(fragment);
         }
 
-        function copyList() {
-            if (!filteredPlayers || filteredPlayers.length === 0) {
-                alert('No players to copy!');
+        searchInput.addEventListener('input', (event) => {
+            const term = event.target.value.toLowerCase().trim();
+            const filtered = allPlayers.filter(player => player.toLowerCase().includes(term));
+            renderPlayerList(filtered);
+        });
+
+        async function loadPlayerDetails(username, itemElement) {
+            selectedUsername = username;
+            const requestId = ++currentRequestId;
+            document.querySelectorAll('.player-item.active').forEach(el => el.classList.remove('active'));
+            itemElement.classList.add('active');
+
+            if (profileCache.has(username)) {
+                renderProfile(profileCache.get(username));
+                setStatus(`Loaded ${username} from cache.`, 'success');
                 return;
             }
 
-            const ratingType = document.getElementById('ratingType').value;
-            const headers = ['Username', 'Name', 'Title', 'Country', `Rating (${ratingType})`, 'Status', 'Profile Link', 'Avatar URL'];
-            const lines = [headers.map(tsvSafeCell).join('\t')];
+            playerDetailsEl.innerHTML = `
+                <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-secondary);">
+                    <div class="loading-spinner" style="width: 2rem; height: 2rem; border-color: var(--text-secondary); border-top-color: transparent;"></div>
+                    <span>Loading ${escapeHtml(username)}...</span>
+                </div>
+            `;
 
-            filteredPlayers.forEach(player => {
-                const username = asText(player.username);
-                const row = [
-                    username,
-                    asText(player.name),
-                    asText(player.title),
-                    asText(player.country),
-                    String(getRatingValue(player, ratingType)),
-                    asText(player.status),
-                    `https://www.chess.com/member/${encodeURIComponent(username)}`,
-                    asText(player.avatar)
-                ];
-                lines.push(row.map(tsvSafeCell).join('\t'));
-            });
-
-            const tsvContent = lines.join('\n');
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(tsvContent).then(() => showCopySuccess()).catch(() => fallbackCopy(tsvContent));
-            } else {
-                fallbackCopy(tsvContent);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-9999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
             try {
-                document.execCommand('copy');
-                showCopySuccess();
-            } catch (err) {
-                console.error('Fallback copy failed', err);
-                alert('Failed to copy to clipboard.');
+                const response = await fetch(`https://api.chess.com/pub/player/${encodeURIComponent(username)}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                if (requestId !== currentRequestId) return;
+
+                profileCache.set(username, data);
+                renderProfile(data);
+                setStatus(`Loaded profile for ${username}.`, 'success');
+            } catch (error) {
+                console.error(error);
+                if (requestId !== currentRequestId) return;
+
+                playerDetailsEl.innerHTML = `<div style="padding: 1rem; color: var(--error);">Error loading profile for ${escapeHtml(username)}.</div>`;
+                setStatus(`Error loading ${username}.`, 'error');
             }
-            document.body.removeChild(textArea);
         }
 
-        function showCopySuccess() {
-            const btn = document.getElementById('copyBtn');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!';
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-            }, 2000);
+        function renderProfile(data) {
+            const username = String(data.username ?? selectedUsername ?? '');
+            const displayName = String(data.name ?? username);
+            const title = String(data.title ?? '');
+            const location = String(data.location ?? '');
+            const followersNum = Number(data.followers);
+            const followers = Number.isFinite(followersNum) ? followersNum.toLocaleString() : '0';
+            const status = String(data.status ?? 'unknown');
+            const statusColor = status === 'closed' || status === 'closure_impacted' ? 'var(--error)' : 'var(--success)';
+            const joined = formatDate(data.joined);
+            const lastOnline = formatDate(data.last_online);
+            const avatarSrc = safeUrl(data.avatar, 'img/icon.png');
+            const memberUrl = safeUrl(data.url, `https://www.chess.com/member/${encodeURIComponent(username)}`);
+
+            const html = `
+                <div class="profile-header">
+                    <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(username)}" class="profile-avatar">
+                    <div class="profile-info">
+                        <span class="profile-username">@${escapeHtml(username)}</span>
+                        <h3>${escapeHtml(displayName)}</h3>
+                        ${title ? `<span class="profile-badge">${escapeHtml(title)}</span>` : ''}
+                        ${location ? `<div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);"><span class="material-icons" style="font-size: 1rem; vertical-align: text-bottom;">place</span> ${escapeHtml(location)}</div>` : ''}
+                    </div>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Followers</div>
+                        <div class="stat-value">${followers}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Joined</div>
+                        <div class="stat-value">${escapeHtml(joined)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Last Online</div>
+                        <div class="stat-value">${escapeHtml(lastOnline)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" style="text-transform: capitalize; color: ${statusColor};">${escapeHtml(status)}</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); text-align: center;">
+                    <a href="${escapeHtml(memberUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                        View on Chess.com
+                        <span class="material-icons" style="font-size: 1rem;">open_in_new</span>
+                    </a>
+                </div>
+            `;
+
+            playerDetailsEl.innerHTML = html;
         }
-
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
-
-        function loadDatabase() {
-            fetch('titled-players.json')
-                .then(res => {
-                    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-                    return res.json();
-                })
-                .then(data => {
-                    const rows = Array.isArray(data) ? data : Array.isArray(data.players) ? data.players : null;
-                    if (!rows) throw new Error('Database payload is not an array');
-                    allPlayers = rows;
-                    applyFilters();
-                })
-                .catch(err => {
-                    document.getElementById('countDisplay').innerText = 'Error loading database file.';
-                    setTableMessage('Failed to load titled-players.json.');
-                    console.error('Failed to load titled-players.json:', err);
-                });
-        }
-
-        document.querySelectorAll('.checkbox-label input').forEach(cb => {
-            cb.addEventListener('change', applyFilters);
-        });
-        document.getElementById('ratingType').addEventListener('change', applyFilters);
-        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
-        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
-        document.getElementById('loadMoreBtn').addEventListener('click', () => {
-            displayLimit += BATCH_SIZE;
-            renderTable();
-        });
-        document.getElementById('selectAllTitlesBtn').addEventListener('click', () => toggleAll(true));
-        document.getElementById('clearAllTitlesBtn').addEventListener('click', () => toggleAll(false));
-        document.getElementById('copyBtn').addEventListener('click', copyList);
-
-        loadDatabase();
     </script>
 </body>
 </html>
