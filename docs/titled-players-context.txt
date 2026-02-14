@@ -1,0 +1,1689 @@
+﻿# Chess.com Titled Players Context Dump
+
+- Generated: 2026-02-13 15:55:40
+- Repo root: D:\GitHub\chessnerd
+- Output: D:\GitHub\chessnerd\docs\titled-players-context.txt
+
+This dump is intended for LLM context handoff and workflow review.
+
+## Included Files
+
+- Full: docs/titled-players-how-it-works.md
+- Full: docs/build_titled_players_context_dump.ps1
+- Full: titled-players.html
+- Full: titled-players.py
+- Partial: index.html (tool registration + card routing)
+- Partial: sitemap.xml (titled-players route)
+- Partial: chesscom-api.html (Titled Players endpoint reference section)
+- Snapshot: titled-players.json (schema, counts, samples)
+
+## JSON Snapshot
+
+Source: D:\GitHub\chessnerd\titled-players.json
+- SHA256: abf24fd3555117f6500223abb9f5505621cef8cc3d5a816e5cf99a291a4bdbb6
+- Entries: 15570
+- Distinct titles: 10 -> CM, FM, GM, IM, NM, WCM, WFM, WGM, WIM, WNM
+- Distinct countries: 230
+- Schema keys: avatar, blitz, bullet, country, name, rapid, status, title, username
+- Non-zero ratings: rapid=11971, blitz=14984, bullet=13086
+- Rating ranges:
+  - rapid: min=0, max=3087
+  - blitz: min=0, max=3412
+  - bullet: min=0, max=3524
+
+### Title Counts
+
+| Title | Count |
+| --- | ---: |
+| FM | 4455 |
+| IM | 2540 |
+| CM | 2366 |
+| NM | 2342 |
+| GM | 1676 |
+| WFM | 878 |
+| WCM | 580 |
+| WIM | 450 |
+| WGM | 253 |
+| WNM | 30 |
+
+### Status Counts
+
+| Status | Count |
+| --- | ---: |
+| active | 15564 |
+| inactive | 6 |
+
+### JSON Sample (first 25 rows)
+
+```json
+[
+    {
+        "username":  "0blivi0usspy",
+        "name":  "",
+        "avatar":  "",
+        "country":  "AM",
+        "rapid":  2563,
+        "blitz":  2911,
+        "bullet":  2826,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "123lt",
+        "name":  "Tingjie Lei",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/18800602.e26b721f.200x200o.e738019a328a.jpeg",
+        "country":  "CN",
+        "rapid":  2477,
+        "blitz":  2715,
+        "bullet":  2709,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "124chess",
+        "name":  "Dmitriy Khegay",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/29499974.39041f89.200x200o.f6478a5ae8e2.jpeg",
+        "country":  "RU",
+        "rapid":  2244,
+        "blitz":  2597,
+        "bullet":  2754,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "1977ivan",
+        "name":  "Ivan Ivanisevic",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/30610578.e05f2196.200x200o.3948baec540a.jpeg",
+        "country":  "RS",
+        "rapid":  2372,
+        "blitz":  2875,
+        "bullet":  2665,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "1stsecond",
+        "name":  "Nikita Meshkovs",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/13013662.ad4c23f8.200x200o.da161572d8ed.jpeg",
+        "country":  "LV",
+        "rapid":  2532,
+        "blitz":  2938,
+        "bullet":  2971,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "2bf41-0",
+        "name":  "Kirk Ghazarian",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/28618754.99bea62a.200x200o.f1f4223fdffd.jpg",
+        "country":  "US",
+        "rapid":  2474,
+        "blitz":  2926,
+        "bullet":  2911,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "777azazello777",
+        "name":  "Mert Yilmazyerli",
+        "avatar":  "",
+        "country":  "PT",
+        "rapid":  0,
+        "blitz":  0,
+        "bullet":  0,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "a-adly",
+        "name":  "Ahmed Adly",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/43349734.452f442f.200x200o.7d507c9ece41.jpeg",
+        "country":  "EG",
+        "rapid":  2698,
+        "blitz":  2972,
+        "bullet":  3018,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "a-fier",
+        "name":  "Alex Fier",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/10968500.f31e4e06.200x200o.2418d3cb8a26.jpeg",
+        "country":  "BR",
+        "rapid":  2477,
+        "blitz":  2888,
+        "bullet":  2712,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abasovn",
+        "name":  "Nijat Abasov",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/59828698.94a02ebe.200x200o.83213b57b80b.jpeg",
+        "country":  "AZ",
+        "rapid":  2308,
+        "blitz":  2981,
+        "bullet":  3005,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abbasifarhassan",
+        "name":  "Hassan Abbasifar",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/205859387.707620fc.200x200o.448146426a41.jpeg",
+        "country":  "IR",
+        "rapid":  1929,
+        "blitz":  2232,
+        "bullet":  2202,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abbasovfarid1979",
+        "name":  "Farid Abbasov",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/336295585.81e66958.200x200o.b3cf6986f779.jpg",
+        "country":  "AZ",
+        "rapid":  0,
+        "blitz":  2699,
+        "bullet":  2045,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abdimalik_abdisalimov",
+        "name":  "Abdimalik Abdisalimov",
+        "avatar":  "",
+        "country":  "UZ",
+        "rapid":  1924,
+        "blitz":  2783,
+        "bullet":  2826,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abhidabhi",
+        "name":  "Abhimanyu Puranik",
+        "avatar":  "",
+        "country":  "IN",
+        "rapid":  2616,
+        "blitz":  3025,
+        "bullet":  2686,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abhijeetgupta",
+        "name":  "Abhijeet Gupta",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/78571890.c98197e5.200x200o.a777c92a4502.jpeg",
+        "country":  "IN",
+        "rapid":  2459,
+        "blitz":  2981,
+        "bullet":  2679,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abhijeetgupta1016",
+        "name":  "Abhijeet Gupta",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/11047160.a434fd29.200x200o.da4781c7e235.jpg",
+        "country":  "IN",
+        "rapid":  0,
+        "blitz":  2854,
+        "bullet":  2750,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abhijeetonyoutube",
+        "name":  "",
+        "avatar":  "",
+        "country":  "IN",
+        "rapid":  2759,
+        "blitz":  2913,
+        "bullet":  2759,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "abhyak",
+        "name":  "Abhijeet Kunte",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/32069494.43d7b2ae.200x200o.d9eb4ec2dc96.jpeg",
+        "country":  "IN",
+        "rapid":  2604,
+        "blitz":  2472,
+        "bullet":  0,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "absentzest",
+        "name":  "",
+        "avatar":  "",
+        "country":  "US",
+        "rapid":  2248,
+        "blitz":  2434,
+        "bullet":  2114,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "aceontheturn",
+        "name":  "Bartlomiej Heberla",
+        "avatar":  "",
+        "country":  "PL",
+        "rapid":  2565,
+        "blitz":  2819,
+        "bullet":  2900,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "actorxu",
+        "name":  "Xu Yi",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/43428066.a3cb1b3c.200x200o.ff8226d0109a.jpg",
+        "country":  "CN",
+        "rapid":  2479,
+        "blitz":  2927,
+        "bullet":  2632,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "adananpale",
+        "name":  "",
+        "avatar":  "",
+        "country":  "US",
+        "rapid":  0,
+        "blitz":  2687,
+        "bullet":  0,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "adaro",
+        "name":  "",
+        "avatar":  "",
+        "country":  "CA",
+        "rapid":  0,
+        "blitz":  2905,
+        "bullet":  2844,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "adham_fawzy",
+        "name":  "Adham Fawzy",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/34686420.3d199bd9.200x200o.6eb68fe8fa35.jpg",
+        "country":  "PS",
+        "rapid":  2417,
+        "blitz":  2966,
+        "bullet":  2923,
+        "status":  "active",
+        "title":  "GM"
+    },
+    {
+        "username":  "adiosabu",
+        "name":  "Alder Escobar Forero",
+        "avatar":  "https://images.chesscomfiles.com/uploads/v1/user/51280493.809e19c6.200x200o.15504a466b75.png",
+        "country":  "CO",
+        "rapid":  2499,
+        "blitz":  2593,
+        "bullet":  0,
+        "status":  "active",
+        "title":  "GM"
+    }
+]
+```
+
+## Full File: docs/titled-players-how-it-works.md
+
+Source: D:\GitHub\chessnerd\docs\titled-players-how-it-works.md
+
+`markdown
+# Chess.com Titled Players Page: Under-the-Hood and Workflow
+
+## Scope
+This document explains:
+
+1. How the Titled Players page works at runtime.
+2. How `titled-players.json` is generated.
+3. What the likely historical workflow was.
+4. A repeatable current workflow for updates.
+
+It is based on the local repository state as of **February 13, 2026**.
+
+## Files and Responsibilities
+
+### Page/UI
+- `titled-players.html`
+  - Loads the JSON database.
+  - Applies client-side filters/sorting.
+  - Renders and paginates the table.
+  - Exports filtered rows to clipboard (TSV).
+
+### Data build
+- `titled-players.py`
+  - Calls Chess.com PubAPI endpoints.
+  - Builds/updates `titled-players.json`.
+  - Supports resume behavior by reusing existing JSON.
+
+### Data file
+- `titled-players.json`
+  - Flat array of player objects consumed directly by the page.
+
+### Site integration
+- `index.html` (tool registration/card)
+- `sitemap.xml` (public route entry)
+
+## Current Data Snapshot
+
+From current `titled-players.json`:
+- Entries: **15,570**
+- Distinct titles: **10** (`GM`, `WGM`, `IM`, `WIM`, `FM`, `WFM`, `NM`, `WNM`, `CM`, `WCM`)
+- Distinct countries: **230**
+- Status counts: **15,564 active**, **6 inactive**
+
+Schema keys per row:
+- `username`
+- `name`
+- `avatar`
+- `country`
+- `rapid`
+- `blitz`
+- `bullet`
+- `status`
+- `title`
+
+## Runtime Architecture (`titled-players.html`)
+
+### Data load
+- Fetches `titled-players.json` once on page load.
+- On success, stores dataset in memory (`allPlayers`) and applies filters.
+- On failure, shows an error in `#countDisplay`.
+
+### In-memory state
+- `allPlayers`: full database
+- `filteredPlayers`: active filtered/sorted subset
+- `displayLimit`: current render limit (starts at 100)
+- `BATCH_SIZE`: 100 rows per "Show More"
+
+### Filters/sort
+Inputs:
+- Title checkboxes (10 title types)
+- Rating type (`rapid` / `blitz` / `bullet`)
+- Minimum Elo (default 2500)
+- Country code filter (2-letter uppercase exact match)
+
+Behavior:
+- Filters happen fully client-side.
+- Sort order is descending by selected rating field.
+- "Show More" increases rendered rows by 100.
+
+### Export
+- `copyList()` writes filtered rows as TSV for Excel-compatible paste.
+- Columns exported:
+  - Username
+  - Name
+  - Title
+  - Country
+  - Rating (selected type)
+  - Status
+  - Profile Link
+  - Avatar URL
+
+## Build Script Behavior (`titled-players.py`)
+
+## External API inputs
+For each title in:
+- `GM`, `WGM`, `IM`, `WIM`, `FM`, `WFM`, `NM`, `WNM`, `CM`, `WCM`
+
+Script calls:
+1. `https://api.chess.com/pub/titled/{title}` (username list)
+2. `https://api.chess.com/pub/player/{username}/stats`
+3. `https://api.chess.com/pub/player/{username}`
+
+## Request handling
+- `safe_request()` retries up to 3 times.
+- On `429`, sleeps 10 seconds.
+- On request exception, sleeps 2 seconds.
+- Per-user pacing: `time.sleep(0.15)`.
+
+## Record construction
+Defaults:
+- `name = ""`
+- `avatar = ""`
+- `country = "??"`
+- ratings default to `0`
+- `status = "inactive"`
+
+Profile mapping:
+- `country` from trailing segment of `profile.country` URL.
+- `status` is mapped to `active` only for:
+  - `basic`, `premium`, `staff`, `gold`, `platinum`, `diamond`
+  - everything else -> `inactive`
+
+## Resume/incremental semantics
+Script logic:
+1. If `titled-players.json` exists, load it and build `processed_usernames`.
+2. Fetch titled username lists.
+3. Only fetch details for usernames not already in `processed_usernames`.
+4. Append new records.
+5. Save JSON.
+
+Important consequence:
+- Existing rows are **not refreshed** during normal runs.
+- Ratings/profile values can become stale unless you do a full rebuild.
+- Players no longer in titled lists are not removed by incremental runs.
+
+## Save behavior
+- Writes progress every 500 processed users.
+- Final save at end.
+- Output is compact JSON (no pretty indentation).
+
+## Reconstructed Workflow (Current + Legacy)
+
+## Likely current workflow (inferred from code and commits)
+1. Run `python titled-players.py` from repo root.
+2. Script updates/extends `titled-players.json`.
+3. Open `titled-players.html` and smoke-test filters/results.
+4. Commit updated JSON (and any page changes).
+
+## Legacy clue
+A now-deleted script (`examine.py`, removed Jan 1, 2026) referenced:
+- `D:\chessnerd\players.db`
+- tables: `players`, `aliases`
+
+This suggests an earlier external SQLite workflow before the current flat JSON-only path stabilized.
+
+## Git History Markers
+
+Notable commits:
+1. **2025-12-07** `7b97dc0`
+   - Added titled player database UI and initial JSON (`titled_players.json`).
+2. **2025-12-08** `1874e46`
+   - Renamed to `titled-players.json`.
+   - Added `titled-players.py` generator.
+3. **2026-01-04** `f4483fa`
+   - JSON data refresh.
+4. **2026-01-05** `66df300`
+   - JSON data refresh.
+
+## Repeatable Update Workflows
+
+## A) Incremental update (fastest, may leave stale existing rows)
+```powershell
+python titled-players.py
+```
+
+Use when:
+- You mainly want newly added titled accounts.
+- You accept stale existing ratings/profile data.
+
+## B) Full refresh (slowest, highest fidelity)
+```powershell
+Remove-Item .\titled-players.json
+python titled-players.py
+```
+
+Use when:
+- You want current ratings/profile values for all titled players.
+- You want dropped titles/accounts naturally pruned by fresh source lists.
+
+## C) Smoke test before commit
+1. Open `titled-players.html`.
+2. Confirm row count loads.
+3. Test filters:
+   - title toggles
+   - rating type changes
+   - min Elo
+   - country code
+4. Test "Show More".
+5. Test clipboard export.
+
+## Known Risks and Drift Points
+
+1. Incremental staleness:
+   - existing rows are not refreshed unless full rebuild.
+2. Removal drift:
+   - users no longer present in titled endpoints remain until full rebuild.
+3. Status mapping is opinionated:
+   - only select profile statuses count as active.
+4. Rate-limit resilience is basic:
+   - simple retry/sleep strategy only.
+5. Large JSON client payload:
+   - all filtering happens in browser after full-file download.
+
+## Practical Recommendation
+
+Use a two-mode policy:
+1. Daily/quick: incremental run.
+2. Periodic (for accuracy): full rebuild run.
+
+That preserves speed while preventing long-term data drift.
+
+## LLM Context Dump
+
+Use:
+- `docs/build_titled_players_context_dump.ps1`
+
+Default:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\docs\build_titled_players_context_dump.ps1
+```
+
+Default output:
+- `docs/titled-players-context.txt`
+
+```
+
+## Full File: docs/build_titled_players_context_dump.ps1
+
+Source: D:\GitHub\chessnerd\docs\build_titled_players_context_dump.ps1
+
+`powershell
+param(
+    [string]$OutputPath = "docs/titled-players-context.txt",
+    [int]$JsonSampleSize = 25
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+
+if ([System.IO.Path]::IsPathRooted($OutputPath)) {
+    $resolvedOutput = $OutputPath
+} else {
+    $resolvedOutput = Join-Path $repoRoot $OutputPath
+}
+
+$outputDir = Split-Path -Parent $resolvedOutput
+if (-not (Test-Path $outputDir)) {
+    New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+}
+
+$lines = [System.Collections.Generic.List[string]]::new()
+
+function Add-Line {
+    param([string]$Text = "")
+    $script:lines.Add($Text)
+}
+
+function Get-RepoPath {
+    param([string]$RelativePath)
+    return Join-Path $script:repoRoot $RelativePath
+}
+
+function Get-FileLanguage {
+    param([string]$RelativePath)
+    $ext = [System.IO.Path]::GetExtension($RelativePath).ToLowerInvariant()
+    switch ($ext) {
+        ".html" { return "html" }
+        ".js" { return "javascript" }
+        ".css" { return "css" }
+        ".json" { return "json" }
+        ".md" { return "markdown" }
+        ".py" { return "python" }
+        ".ps1" { return "powershell" }
+        ".xml" { return "xml" }
+        ".txt" { return "text" }
+        default { return "text" }
+    }
+}
+
+function Get-Sha256 {
+    param([string]$Path)
+    return (Get-FileHash -Path $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+
+function Add-FullFileSection {
+    param(
+        [string]$RelativePath,
+        [string]$Title = ""
+    )
+    $path = Get-RepoPath $RelativePath
+    if (-not (Test-Path $path)) {
+        Add-Line ("## Full File: [{0}]" -f $RelativePath)
+        Add-Line ""
+        Add-Line "[MISSING] $path"
+        Add-Line ""
+        return
+    }
+
+    $titleText = if ($Title) { $Title } else { $RelativePath }
+    $lang = Get-FileLanguage $RelativePath
+    $body = Get-Content -Path $path -Raw -Encoding UTF8
+
+    Add-Line ("## Full File: {0}" -f $titleText)
+    Add-Line ""
+    Add-Line ("Source: {0}" -f $path)
+    Add-Line ""
+    Add-Line ("```{0}" -f $lang)
+    Add-Line $body
+    Add-Line '```'
+    Add-Line ""
+}
+
+function Find-LineByContains {
+    param(
+        [string[]]$SourceLines,
+        [string]$Needle,
+        [int]$Occurrence = 1,
+        [int]$StartLine = 1
+    )
+    if ($Occurrence -lt 1) {
+        throw "Occurrence must be >= 1"
+    }
+    if ($StartLine -lt 1) {
+        throw "StartLine must be >= 1"
+    }
+
+    $count = 0
+    for ($i = $StartLine - 1; $i -lt $SourceLines.Count; $i++) {
+        if ($SourceLines[$i].Contains($Needle)) {
+            $count++
+            if ($count -eq $Occurrence) {
+                return $i + 1
+            }
+        }
+    }
+    throw "Marker not found: '$Needle' (occurrence $Occurrence)"
+}
+
+function Add-MarkerSection {
+    param(
+        [string]$RelativePath,
+        [string]$Title,
+        [string]$StartContains,
+        [string]$EndContains,
+        [int]$StartOccurrence = 1,
+        [int]$EndOccurrence = 1,
+        [bool]$IncludeEndLine = $true
+    )
+    $path = Get-RepoPath $RelativePath
+    if (-not (Test-Path $path)) {
+        Add-Line "## Section: `$RelativePath` - $Title"
+        Add-Line ""
+        Add-Line "[MISSING] $path"
+        Add-Line ""
+        return
+    }
+
+    $source = Get-Content -Path $path -Encoding UTF8
+    $start = Find-LineByContains -SourceLines $source -Needle $StartContains -Occurrence $StartOccurrence
+    $end = Find-LineByContains -SourceLines $source -Needle $EndContains -Occurrence $EndOccurrence -StartLine $start
+    if (-not $IncludeEndLine) {
+        $end--
+    }
+    if ($end -lt $start) {
+        throw "Invalid section range for '$RelativePath': $start-$end"
+    }
+
+    Add-Line ("## Section: {0} - {1} (lines {2}-{3})" -f $RelativePath, $Title, $start, $end)
+    Add-Line ""
+    Add-Line ("Source: {0}" -f $path)
+    Add-Line ""
+    Add-Line '```text'
+    for ($n = $start; $n -le $end; $n++) {
+        $line = $source[$n - 1]
+        Add-Line ("{0,5}: {1}" -f $n, $line)
+    }
+    Add-Line '```'
+    Add-Line ""
+}
+
+function Add-JsonSnapshot {
+    param(
+        [string]$RelativePath,
+        [int]$SampleCount
+    )
+    $path = Get-RepoPath $RelativePath
+    if (-not (Test-Path $path)) {
+        Add-Line "## JSON Snapshot"
+        Add-Line ""
+        Add-Line "[MISSING] $path"
+        Add-Line ""
+        return
+    }
+
+    $raw = Get-Content -Path $path -Raw -Encoding UTF8
+    $players = $raw | ConvertFrom-Json
+
+    $entryCount = @($players).Count
+    $sha = Get-Sha256 -Path $path
+
+    $titles = @($players | ForEach-Object { $_.title } | Sort-Object -Unique)
+    $countries = @($players | ForEach-Object { $_.country } | Sort-Object -Unique)
+    $keys = @($players[0].PSObject.Properties.Name | Sort-Object)
+
+    $titleCounts = $players | Group-Object -Property title | Sort-Object Count -Descending
+    $statusCounts = $players | Group-Object -Property status | Sort-Object Count -Descending
+
+    $rapidNonZero = @($players | Where-Object { $_.rapid -gt 0 }).Count
+    $blitzNonZero = @($players | Where-Object { $_.blitz -gt 0 }).Count
+    $bulletNonZero = @($players | Where-Object { $_.bullet -gt 0 }).Count
+
+    $rapidStats = $players | Measure-Object -Property rapid -Minimum -Maximum
+    $blitzStats = $players | Measure-Object -Property blitz -Minimum -Maximum
+    $bulletStats = $players | Measure-Object -Property bullet -Minimum -Maximum
+
+    $sample = @($players | Select-Object -First $SampleCount)
+    $sampleJson = $sample | ConvertTo-Json -Depth 5
+
+    Add-Line "## JSON Snapshot"
+    Add-Line ""
+    Add-Line ("Source: {0}" -f $path)
+    Add-Line ("- SHA256: {0}" -f $sha)
+    Add-Line "- Entries: $entryCount"
+    Add-Line "- Distinct titles: $($titles.Count) -> $($titles -join ', ')"
+    Add-Line "- Distinct countries: $($countries.Count)"
+    Add-Line "- Schema keys: $($keys -join ', ')"
+    Add-Line "- Non-zero ratings: rapid=$rapidNonZero, blitz=$blitzNonZero, bullet=$bulletNonZero"
+    Add-Line "- Rating ranges:"
+    Add-Line "  - rapid: min=$($rapidStats.Minimum), max=$($rapidStats.Maximum)"
+    Add-Line "  - blitz: min=$($blitzStats.Minimum), max=$($blitzStats.Maximum)"
+    Add-Line "  - bullet: min=$($bulletStats.Minimum), max=$($bulletStats.Maximum)"
+    Add-Line ""
+    Add-Line "### Title Counts"
+    Add-Line ""
+    Add-Line "| Title | Count |"
+    Add-Line "| --- | ---: |"
+    foreach ($row in $titleCounts) {
+        Add-Line "| $($row.Name) | $($row.Count) |"
+    }
+    Add-Line ""
+    Add-Line "### Status Counts"
+    Add-Line ""
+    Add-Line "| Status | Count |"
+    Add-Line "| --- | ---: |"
+    foreach ($row in $statusCounts) {
+        Add-Line "| $($row.Name) | $($row.Count) |"
+    }
+    Add-Line ""
+    Add-Line "### JSON Sample (first $SampleCount rows)"
+    Add-Line ""
+    Add-Line '```json'
+    Add-Line $sampleJson
+    Add-Line '```'
+    Add-Line ""
+}
+
+function Add-GitHistorySection {
+    param(
+        [string[]]$Paths,
+        [int]$MaxLines = 30
+    )
+    Add-Line "## Recent Git History"
+    Add-Line ""
+    try {
+        $args = @("-C", $script:repoRoot, "log", "--date=short", "--pretty=format:- %h | %ad | %s", "--")
+        $args += $Paths
+        $history = & git @args
+        if (-not $history) {
+            Add-Line "No history found."
+            Add-Line ""
+            return
+        }
+
+        $rows = @($history | Select-Object -First $MaxLines)
+        foreach ($row in $rows) {
+            Add-Line $row
+        }
+        Add-Line ""
+    } catch {
+        Add-Line "Unable to collect git history: $($_.Exception.Message)"
+        Add-Line ""
+    }
+}
+
+Add-Line "# Chess.com Titled Players Context Dump"
+Add-Line ""
+Add-Line "- Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+Add-Line "- Repo root: $repoRoot"
+Add-Line "- Output: $resolvedOutput"
+Add-Line ""
+Add-Line "This dump is intended for LLM context handoff and workflow review."
+Add-Line ""
+
+Add-Line "## Included Files"
+Add-Line ""
+Add-Line "- Full: docs/titled-players-how-it-works.md"
+Add-Line "- Full: docs/build_titled_players_context_dump.ps1"
+Add-Line "- Full: titled-players.html"
+Add-Line "- Full: titled-players.py"
+Add-Line "- Partial: index.html (tool registration + card routing)"
+Add-Line "- Partial: sitemap.xml (titled-players route)"
+Add-Line "- Partial: chesscom-api.html (Titled Players endpoint reference section)"
+Add-Line "- Snapshot: titled-players.json (schema, counts, samples)"
+Add-Line ""
+
+Add-JsonSnapshot -RelativePath "titled-players.json" -SampleCount $JsonSampleSize
+
+Add-FullFileSection -RelativePath "docs/titled-players-how-it-works.md"
+Add-FullFileSection -RelativePath "docs/build_titled_players_context_dump.ps1"
+Add-FullFileSection -RelativePath "titled-players.html"
+Add-FullFileSection -RelativePath "titled-players.py"
+
+Add-MarkerSection `
+    -RelativePath "index.html" `
+    -Title "Tool registration + homepage card routing" `
+    -StartContains "const tools = [" `
+    -EndContains "renderToolGrid();" `
+    -IncludeEndLine $true
+
+Add-MarkerSection `
+    -RelativePath "sitemap.xml" `
+    -Title "Titled Players sitemap entry" `
+    -StartContains "<loc>https://chessnerd.net/titled-players.html</loc>" `
+    -EndContains "</url>" `
+    -IncludeEndLine $true
+
+Add-MarkerSection `
+    -RelativePath "chesscom-api.html" `
+    -Title "PubAPI Titled Players endpoint docs" `
+    -StartContains 'id="pubapi-endpoint-titled"' `
+    -EndContains 'id="pubapi-endpoint-player-stats"' `
+    -IncludeEndLine $false
+
+Add-GitHistorySection -Paths @("titled-players.py", "titled-players.json", "titled-players.html", "index.html", "sitemap.xml")
+
+$content = ($lines -join [Environment]::NewLine) + [Environment]::NewLine
+Set-Content -Path $resolvedOutput -Value $content -Encoding UTF8
+Write-Output "Wrote: $resolvedOutput"
+
+```
+
+## Full File: titled-players.html
+
+Source: D:\GitHub\chessnerd\titled-players.html
+
+`html
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XQ7B0Z9FK3');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess.com Titled Players - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Database Table Styles */
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .db-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .db-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+        .db-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Filter Controls Area */
+        .filters-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        /* Custom Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .checkbox-label:hover {
+            border-color: var(--accent);
+        }
+        .checkbox-label input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Inputs */
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .input-wrapper label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .std-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            width: 100px;
+        }
+        .std-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        select.std-input {
+            width: 120px;
+        }
+
+        /* Badges */
+        .title-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        .gm-title { color: #ffd700; background: rgba(255, 215, 0, 0.15); }
+        .im-title { color: #c0c0c0; background: rgba(192, 192, 192, 0.15); }
+        .rating-cell { font-family: 'Monaco', monospace; font-weight: bold; }
+        
+        .results-count {
+            margin-left: auto;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .filter-row { gap: 1rem; }
+            .results-count { margin-left: 0; width: 100%; margin-top: 0.5rem; }
+            .hide-mobile { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 100%; padding: 0 2rem;">
+        <header>
+            <div class="logo">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span>Chess Nerd</span>
+                </a>
+            </div>
+            <nav class="site-network" aria-label="Network sites">
+                <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer">
+                    <img src="img/text-utils-icon.png" class="site-network-icon" alt="" width="16" height="16">
+                    <span>Text Utilities</span>
+                    <span class="material-icons" aria-hidden="true">open_in_new</span>
+                </a>
+                <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer">
+                    <img src="img/github.png" class="site-network-icon" alt="" width="16" height="16">
+                    <span>GitHub</span>
+                    <span class="material-icons" aria-hidden="true">open_in_new</span>
+                </a>
+            </nav>
+            <div class="controls">
+                <div class="accent-selector">
+                    <span class="material-icons">palette</span>
+                    <select id="accentColor" class="color-dropdown"></select>
+                </div>
+                <button id="themeToggle" class="btn btn-secondary">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div id="toolView">
+                <div class="tool-header">
+                    <div class="tool-title">
+                        <span class="material-icons" id="toolIcon">groups</span>
+                        <div>
+                            <h2 id="toolName" style="margin-bottom: 0;">Chess.com Titled Players</h2>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: normal; margin-top: 2px;">
+                                Verified accounts from Chess.com API
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-actions">
+                        <button id="backButton" class="btn btn-secondary">
+                            <span class="material-icons">arrow_back</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div class="io-container" style="display: block;">
+                    <div class="io-panel" style="width: 100%">
+                        
+                        <div class="filters-panel">
+                            <div class="filter-row">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label"><input type="checkbox" value="GM" checked> GM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="IM" checked> IM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="FM"> FM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="CM"> CM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="NM"> NM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WGM"> WGM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WIM"> WIM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WFM"> WFM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WCM"> WCM</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="WNM"> WNM</label>
+                                </div>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-secondary" onclick="toggleAll(true)" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
+                                    <button class="btn btn-secondary" onclick="toggleAll(false)" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
+                                </div>
+                            </div>
+
+                            <div class="filter-row">
+                                <div class="input-wrapper">
+                                    <label>Sort By:</label>
+                                    <select id="ratingType" class="std-input">
+                                        <option value="rapid">Rapid</option>
+                                        <option value="blitz">Blitz</option>
+                                        <option value="bullet">Bullet</option>
+                                    </select>
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Min Elo:</label>
+                                    <input type="number" id="minElo" class="std-input" value="2500" step="50">
+                                </div>
+                                <div class="input-wrapper">
+                                    <label>Country:</label>
+                                    <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="2" style="text-transform: uppercase;">
+                                </div>
+                                <div class="results-count" id="countDisplay">Loading database...</div>
+                                <button id="copyBtn" class="btn btn-secondary" onclick="copyList()" title="Copy list to clipboard (Excel compatible)" style="display: flex; align-items: center; gap: 5px; margin-left: 10px;">
+                                    <span class="material-icons" style="font-size: 1.1rem;">content_copy</span> Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-tertiary); border-radius: 4px;">
+                            <table class="db-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">Avatar</th>
+                                        <th>Player</th>
+                                        <th>Title</th>
+                                        <th>Country</th>
+                                        <th id="ratingHeader">Rapid</th>
+                                        <th class="hide-mobile">Status</th>
+                                        <th style="text-align: right;">Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    </tbody>
+                            </table>
+                            <div id="loadMoreArea" style="text-align: center; padding: 1rem; display: none;">
+                                <button id="loadMoreBtn" class="btn btn-primary">Show More</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="site-footer">
+            <p>&copy; Ian Rastall 2025<br>Contact: moving.form.of.dust@gmail.com<br>Donate: PayPal to merastall@gmail.com</p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // --- DATABASE LOGIC ---
+        let allPlayers = [];
+        let filteredPlayers = [];
+        let displayLimit = 100;
+        const BATCH_SIZE = 100;
+
+        // Load JSON on startup
+        fetch('titled-players.json')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                allPlayers = data;
+                applyFilters();
+            })
+            .catch(err => {
+                document.getElementById('countDisplay').innerText = "Error loading database file.";
+                console.error("Failed to load titled-players.json:", err);
+            });
+
+        // Event Listeners
+        document.querySelectorAll('.checkbox-label input').forEach(cb => {
+            cb.addEventListener('change', () => applyFilters());
+        });
+        document.getElementById('ratingType').addEventListener('change', () => applyFilters());
+        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            displayLimit += BATCH_SIZE;
+            renderTable();
+        });
+
+        function toggleAll(checked) {
+            document.querySelectorAll('.checkbox-label input').forEach(cb => cb.checked = checked);
+            applyFilters();
+        }
+
+        function applyFilters() {
+            // reset pagination
+            displayLimit = 100;
+            
+            const ratingType = document.getElementById('ratingType').value;
+            const minElo = parseInt(document.getElementById('minElo').value) || 0;
+            const countrySearch = document.getElementById('countryFilter').value.toUpperCase().trim();
+            
+            // Get selected titles
+            const checkedBoxes = document.querySelectorAll('.checkbox-label input:checked');
+            const selectedTitles = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // Update Header Text
+            document.getElementById('ratingHeader').innerText = ratingType.charAt(0).toUpperCase() + ratingType.slice(1);
+
+            // Filter logic
+            filteredPlayers = allPlayers.filter(p => {
+                if (!selectedTitles.includes(p.title)) return false;
+                if (p[ratingType] < minElo) return false;
+                if (countrySearch && p.country !== countrySearch) return false;
+                return true;
+            });
+
+            // Sort logic (Highest rating first)
+            filteredPlayers.sort((a, b) => b[ratingType] - a[ratingType]);
+
+            // Update UI
+            document.getElementById('countDisplay').innerText = `${filteredPlayers.length} players found`;
+            
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const ratingType = document.getElementById('ratingType').value;
+            const subset = filteredPlayers.slice(0, displayLimit);
+
+            subset.forEach(p => {
+                const tr = document.createElement('tr');
+                
+                // Style title badge
+                let titleClass = 'title-badge';
+                if(p.title === 'GM') titleClass += ' gm-title';
+                if(p.title === 'IM') titleClass += ' im-title';
+
+                const avatarHtml = p.avatar 
+                    ? `<img src="${p.avatar}" alt="${p.username}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` 
+                    : `<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.8rem;">${p.username.charAt(0).toUpperCase()}</div>`;
+
+                tr.innerHTML = `
+                    <td>${avatarHtml}</td>
+                    <td>
+                        <div style="font-weight:500;">${p.username}</div>
+                    </td>
+                    <td><span class="${titleClass}">${p.title}</span></td>
+                    <td>${p.country}</td>
+                    <td class="rating-cell" style="color: var(--accent);">${p[ratingType] || '-'}</td>
+                    <td class="hide-mobile" style="color: ${p.status==='active'?'#4caf50':'var(--text-secondary)'}; font-size:0.85rem;">
+                        ${p.status}
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="https://www.chess.com/member/${p.username}" target="_blank" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.8rem;">
+                            View
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Show/Hide "Load More" button
+            const loadBtnArea = document.getElementById('loadMoreArea');
+            if (filteredPlayers.length > displayLimit) {
+                loadBtnArea.style.display = 'block';
+            } else {
+                loadBtnArea.style.display = 'none';
+            }
+        }
+
+        function copyList() {
+            if (!filteredPlayers || filteredPlayers.length === 0) {
+                alert("No players to copy!");
+                return;
+            }
+
+            const ratingType = document.getElementById('ratingType').value;
+            const headers = ["Username", "Name", "Title", "Country", "Rating (" + ratingType + ")", "Status", "Profile Link", "Avatar URL"];
+            
+            let tsvContent = headers.join("\t") + "\n";
+            
+            filteredPlayers.forEach(p => {
+                const row = [
+                    p.username,
+                    p.name || "", // Includes Name
+                    p.title,
+                    p.country,
+                    p[ratingType] || 0,
+                    p.status,
+                    `https://www.chess.com/member/${p.username}`,
+                    p.avatar || ""
+                ];
+                tsvContent += row.join("\t") + "\n";
+            });
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(tsvContent).then(() => showCopySuccess()).catch(err => fallbackCopy(tsvContent));
+            } else {
+                fallbackCopy(tsvContent);
+            }
+        }
+
+        function fallbackCopy(text) {
+            let textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+                alert("Failed to copy to clipboard.");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showCopySuccess() {
+            const btn = document.getElementById('copyBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!`;
+            setTimeout(() => btn.innerHTML = originalHTML, 2000);
+        }
+
+        // Utility: Debounce to prevent lag while typing
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    </script>
+</body>
+</html>
+
+```
+
+## Full File: titled-players.py
+
+Source: D:\GitHub\chessnerd\titled-players.py
+
+`python
+import requests
+import json
+import time
+import os
+
+# --- CONFIGURATION ---
+TITLES = ['GM', 'WGM', 'IM', 'WIM', 'FM', 'WFM', 'NM', 'WNM', 'CM', 'WCM']
+OUTPUT_FILE = "titled-players.json"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+
+def safe_request(url, retries=3):
+    """Fetch URL with timeout and retries."""
+    for i in range(retries):
+        try:
+            resp = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=10)
+            if resp.status_code == 200:
+                return resp.json()
+            elif resp.status_code == 429:
+                print(f"  [!] Rate limit hit. Sleeping 10s...")
+                time.sleep(10)
+        except requests.exceptions.RequestException:
+            time.sleep(2)
+    return None
+
+def get_player_data(username):
+    data = {
+        "username": username,
+        "name": "",        # New Field
+        "avatar": "",      # New Field
+        "country": "??",
+        "rapid": 0,
+        "blitz": 0,
+        "bullet": 0,
+        "status": "inactive"
+    }
+    
+    # 1. Get Stats
+    stats = safe_request(f"https://api.chess.com/pub/player/{username}/stats")
+    if stats:
+        data['rapid'] = stats.get('chess_rapid', {}).get('last', {}).get('rating', 0)
+        data['blitz'] = stats.get('chess_blitz', {}).get('last', {}).get('rating', 0)
+        data['bullet'] = stats.get('chess_bullet', {}).get('last', {}).get('rating', 0)
+
+    # 2. Get Profile
+    profile = safe_request(f"https://api.chess.com/pub/player/{username}")
+    if profile:
+        # Basic Info
+        data['name'] = profile.get('name', '')
+        data['avatar'] = profile.get('avatar', '') # URL to image
+        
+        # Country
+        country_url = profile.get('country', '')
+        if country_url:
+            data['country'] = country_url.split('/')[-1].upper()
+        
+        # Status Mapping
+        raw_status = profile.get('status', 'closed')
+        active_statuses = ['basic', 'premium', 'staff', 'gold', 'platinum', 'diamond']
+        data['status'] = 'active' if raw_status in active_statuses else 'inactive'
+            
+    return data
+
+def save_db(data):
+    with open(OUTPUT_FILE, "w", encoding='utf-8') as f:
+        json.dump(data, f)
+
+# --- MAIN EXECUTION ---
+full_database = []
+processed_usernames = set()
+
+# Resume capability
+if os.path.exists(OUTPUT_FILE):
+    try:
+        with open(OUTPUT_FILE, "r", encoding='utf-8') as f:
+            full_database = json.load(f)
+            for p in full_database:
+                processed_usernames.add(p['username'])
+        print(f"RESUMING: Loaded {len(full_database)} players.")
+    except:
+        print("Starting fresh.")
+
+print("Phase 1: Fetching master list...")
+username_map = {} 
+
+for title in TITLES:
+    print(f"  Fetching {title}...")
+    data = safe_request(f"https://api.chess.com/pub/titled/{title}")
+    if data and 'players' in data:
+        for p in data['players']:
+            if p not in processed_usernames:
+                username_map[p] = title
+
+total_new = len(username_map)
+if total_new == 0:
+    print("All players up to date.")
+    exit()
+
+print(f"Phase 2: Fetching details for {total_new} NEW players...")
+count = 0
+
+for user, title in username_map.items():
+    player_info = get_player_data(user)
+    player_info['title'] = title
+    
+    full_database.append(player_info)
+    
+    count += 1
+    if count % 50 == 0: print(f"  Processed {count}/{total_new}...")
+    if count % 500 == 0: save_db(full_database)
+    
+    time.sleep(0.15) 
+
+save_db(full_database)
+print("Done!")
+```
+
+## Section: index.html - Tool registration + homepage card routing (lines 96-212)
+
+Source: D:\GitHub\chessnerd\index.html
+
+```text
+   96:         const tools = [
+   97:             { 
+   98:                 id: 'ccc-archive', 
+   99:                 name: 'CCC Archive', 
+  100:                 icon: 'folder_zip', 
+  101:                 category: 'data', 
+  102:                 description: 'Computer Chess Championship event PGNs with dates and direct ZIP links.' 
+  103:             },
+  104:             { 
+  105:                 id: 'chesscom-api', 
+  106:                 name: 'Chess.com API', 
+  107:                 icon: 'api', 
+  108:                 category: 'data', 
+  109:                 description: 'Full text reference of the Chess.com Published-Data API documentation.' 
+  110:             },
+  111:             { 
+  112:                 id: 'titled-players', 
+  113:                 name: 'Chess.com Titled Players', 
+  114:                 icon: 'groups', 
+  115:                 category: 'data', 
+  116:                 description: 'Filter and search over 15,000 titled players by Elo and Country.' 
+  117:             },
+  118:             { 
+  119:                 id: 'eco-code', 
+  120:                 name: 'ECO Codes', 
+  121:                 icon: 'menu_book', 
+  122:                 category: 'reference', 
+  123:                 description: 'Browse the Encyclopedia of Chess Openings (ECO) codes hierarchically.' 
+  124:             },
+  125:             { 
+  126:                 id: 'engines', 
+  127:                 name: 'Engine Database', 
+  128:                 icon: 'memory', 
+  129:                 category: 'reference', 
+  130:                 description: 'Searchable database of chess engines, languages, and release dates.' 
+  131:             },
+  132:             { 
+  133:                 id: 'play-engine', 
+  134:                 name: 'Engine Game', 
+  135:                 icon: 'smart_toy', 
+  136:                 category: 'analysis', 
+  137:                 description: 'Interactive board to play against the Lozza engine.' 
+  138:             },
+  139:             { 
+  140:                 id: 'fide-2200', 
+  141:                 name: 'FIDE 2200+ Players', 
+  142:                 icon: 'groups', 
+  143:                 category: 'data', 
+  144:                 description: 'Browse FIDE-rated players (Standard/Rapid/Blitz ≥ 2200) with filters and search.' 
+  145:             },
+  146:             { 
+  147:                 id: 'pgn-downloads', 
+  148:                 name: 'PGN Downloads', 
+  149:                 icon: 'cloud_download', 
+  150:                 category: 'data', 
+  151:                 description: 'Download collections of master games and opening libraries in PGN format.' 
+  152:             },
+  153:             { 
+  154:                 id: 'pgn-info', 
+  155:                 name: 'PGN Info', 
+  156:                 icon: 'analytics', 
+  157:                 category: 'analysis', 
+  158:                 description: 'Analyze an uploaded PGN file to view metadata and statistics.' 
+  159:             },
+  160:             { 
+  161:                 id: 'software', 
+  162:                 name: 'Software Catalog', 
+  163:                 icon: 'inventory_2', 
+  164:                 category: 'reference', 
+  165:                 description: "Full-width table of chess software I've created with download and repo links." 
+  166:             },
+  167:             { 
+  168:                 id: 'stockfish-commits', 
+  169:                 name: 'Stockfish Commits', 
+  170:                 icon: 'history', 
+  171:                 category: 'reference', 
+  172:                 description: "List of Stockfish commits going back to the beginning, with URLs to binaries and source files." 
+  173:             },
+  174: 			{
+  175: 				id: 'titled-tuesday-archive',
+  176: 				name: 'Titled Tuesday Archive',
+  177: 				icon: 'event',
+  178: 				category: 'data',
+  179: 				description: 'Downloaded from Chesscom, renamed and organized.'
+  180: 			},
+  181:             { 
+  182:                 id: 'tournaments', 
+  183:                 name: 'Tournament Archive', 
+  184:                 icon: 'emoji_events', 
+  185:                 category: 'data', 
+  186:                 description: 'Download curated tournament PGNs with calculated FIDE categories.' 
+  187:             }
+  188:         ];
+  189: 
+  190:         const toolGrid = document.getElementById('toolGrid');
+  191: 
+  192:         function renderToolGrid() {
+  193:             toolGrid.innerHTML = '';
+  194:             
+  195:             tools.forEach(tool => {
+  196:                 const card = document.createElement('a');
+  197:                 card.className = 'tool-card';
+  198:                 card.href = `${tool.id}.html`;
+  199:                 
+  200:                 card.innerHTML = `
+  201:                     <div class="tool-icon">
+  202:                         <span class="material-icons">${tool.icon}</span>
+  203:                     </div>
+  204:                     <h3>${tool.name}</h3>
+  205:                     <p>${tool.description}</p>
+  206:                 `;
+  207:                 toolGrid.appendChild(card);
+  208:             });
+  209:         }
+  210: 
+  211:         // Initialize
+  212:         renderToolGrid();
+```
+
+## Section: sitemap.xml - Titled Players sitemap entry (lines 64-67)
+
+Source: D:\GitHub\chessnerd\sitemap.xml
+
+```text
+   64:     <loc>https://chessnerd.net/titled-players.html</loc>
+   65:     <changefreq>monthly</changefreq>
+   66:     <priority>0.7</priority>
+   67:   </url>
+```
+
+## Section: chesscom-api.html - PubAPI Titled Players endpoint docs (lines 360-372)
+
+Source: D:\GitHub\chessnerd\chesscom-api.html
+
+```text
+  360: <p><a id="pubapi-endpoint-titled" name="pubapi-endpoint-titled"></a></p>
+  361: <h4>Titled Players</h4>
+  362: <p><strong>Description:</strong> List of titled-player usernames. <br /><strong>URL pattern:</strong> <a href="https://api.chess.com/pub/titled/">https://api.chess.com/pub/titled/</a>{title-abbrev}</p>
+  363: <p>Valid title abbreviations are: GM, WGM, IM, WIM, FM, WFM, NM, WNM, CM, WCM.</p>
+  364: <p><strong>Data Format:</strong></p>
+  365: <pre>{
+  366:   "players": [
+  367:     /* array of usernames for players with this title */
+  368:   ]
+  369: }
+  370: </pre>
+  371: <p><strong>JSON-LD contexts:</strong> <a href="https://api.chess.com/context/Players.jsonld">https://api.chess.com/context/Players.jsonld</a></p>
+  372: <p><strong>Example:</strong> <a href="https://api.chess.com/pub/titled/GM">https://api.chess.com/pub/titled/GM</a></p>
+```
+
+## Recent Git History
+
+- 045e45a | 2026-02-12 | Enhance theme accessibility and snow effect
+- 988ab91 | 2026-02-10 | Set explicit 16px size for site-network icons
+- 6082f76 | 2026-02-10 | Add site network icons and GitHub links
+- 4d31a4f | 2026-02-10 | Center site-network text, remove icon spans
+- c3f42b8 | 2026-02-10 | Add network link, dynamic accents, and footer
+- 66df300 | 2026-01-05 | Update titled-players.json data
+- a7c092f | 2026-01-05 | Update index.html
+- 1261b9c | 2026-01-05 | Add Titled Tuesday Archive to index
+- d86a27b | 2026-01-04 | Update titled players count in description
+- f4483fa | 2026-01-04 | Update titled-players.json with latest player data
+- 2c2cce9 | 2026-01-01 | Remove examine.py and update titled-players.json
+- 50ba154 | 2025-12-26 | Add Stockfish Commits reference to navigation
+- 38ee397 | 2025-12-16 | Reorder CCC Archive tool in tools list
+- fa355da | 2025-12-16 | Add CCC archive page and supporting data files
+- 0d86c68 | 2025-12-15 | Removed puzzle interface for later use as GUI
+- 3535a42 | 2025-12-13 | Add script to extract Lichess game movelists to JSONL
+- f03334e | 2025-12-13 | Simplify puzzle solution display logic
+- 24e74f1 | 2025-12-12 | Add Puzzles option to navigation menu
+- a02c1ae | 2025-12-11 | Remove Chess Guides feature and related files
+- cb29500 | 2025-12-11 | Add Chess Guides feature with chapter navigation
+- 4f8d6c2 | 2025-12-10 | Add sitemap.xml for site indexing
+- 2f309f1 | 2025-12-10 | Add Google Analytics to all HTML pages
+- d42f160 | 2025-12-10 | Reorder Engine Game entry in menu items
+- f3234c4 | 2025-12-10 | Add coordinate labels to chess board UI
+- d0cb852 | 2025-12-10 | Add chess board UI and Merida piece set
+- 049a4ee | 2025-12-09 | Use double quotes for software catalog description
+- b92b799 | 2025-12-09 | Update software catalog description
+- dc32684 | 2025-12-09 | Update software catalog description
+- c9b100f | 2025-12-09 | Update software catalog description text
+- 75bb924 | 2025-12-09 | Reorder and add new chess tools to tool list
+
+

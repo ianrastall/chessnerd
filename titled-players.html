@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
     <script>
@@ -10,8 +12,6 @@
 
       gtag('config', 'G-XQ7B0Z9FK3');
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess.com Titled Players - Chess Nerd</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -220,8 +220,8 @@
                                     <label class="checkbox-label"><input type="checkbox" value="WNM"> WNM</label>
                                 </div>
                                 <div style="display:flex; gap:0.5rem;">
-                                    <button class="btn btn-secondary" onclick="toggleAll(true)" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
-                                    <button class="btn btn-secondary" onclick="toggleAll(false)" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
+                                    <button id="selectAllTitlesBtn" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;">All</button>
+                                    <button id="clearAllTitlesBtn" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;">None</button>
                                 </div>
                             </div>
 
@@ -243,7 +243,7 @@
                                     <input type="text" id="countryFilter" class="std-input" placeholder="All" maxlength="2" style="text-transform: uppercase;">
                                 </div>
                                 <div class="results-count" id="countDisplay">Loading database...</div>
-                                <button id="copyBtn" class="btn btn-secondary" onclick="copyList()" title="Copy list to clipboard (Excel compatible)" style="display: flex; align-items: center; gap: 5px; margin-left: 10px;">
+                                <button id="copyBtn" class="btn btn-secondary" title="Copy list to clipboard (Excel compatible)" style="display: flex; align-items: center; gap: 5px; margin-left: 10px;">
                                     <span class="material-icons" style="font-size: 1.1rem;">content_copy</span> Copy
                                 </button>
                             </div>
@@ -287,74 +287,83 @@
         });
 
         // --- DATABASE LOGIC ---
+        const INITIAL_DISPLAY_LIMIT = 100;
+        const BATCH_SIZE = 100;
         let allPlayers = [];
         let filteredPlayers = [];
-        let displayLimit = 100;
-        const BATCH_SIZE = 100;
+        let displayLimit = INITIAL_DISPLAY_LIMIT;
 
-        // Load JSON on startup
-        fetch('titled-players.json')
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
+        function asText(value) {
+            if (value === null || value === undefined) return '';
+            return String(value);
+        }
+
+        function getSafeUrl(urlText) {
+            const candidate = asText(urlText).trim();
+            if (!candidate) return '';
+            try {
+                const parsed = new URL(candidate);
+                if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                    return candidate;
                 }
-                return res.json();
-            })
-            .then(data => {
-                allPlayers = data;
-                applyFilters();
-            })
-            .catch(err => {
-                document.getElementById('countDisplay').innerText = "Error loading database file.";
-                console.error("Failed to load titled-players.json:", err);
-            });
+            } catch (err) {
+                return '';
+            }
+            return '';
+        }
 
-        // Event Listeners
-        document.querySelectorAll('.checkbox-label input').forEach(cb => {
-            cb.addEventListener('change', () => applyFilters());
-        });
-        document.getElementById('ratingType').addEventListener('change', () => applyFilters());
-        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
-        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
-        document.getElementById('loadMoreBtn').addEventListener('click', () => {
-            displayLimit += BATCH_SIZE;
-            renderTable();
-        });
+        function getRatingValue(player, ratingType) {
+            const value = Number(player[ratingType]);
+            return Number.isFinite(value) ? value : 0;
+        }
+
+        function tsvSafeCell(value) {
+            const cleaned = asText(value).replace(/\t/g, ' ').replace(/\r?\n/g, ' ').trim();
+            return /^[=+\-@]/.test(cleaned) ? `'${cleaned}` : cleaned;
+        }
+
+        function setTableMessage(message) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = 7;
+            td.style.textAlign = 'center';
+            td.style.padding = '1.5rem';
+            td.style.color = 'var(--text-secondary)';
+            td.textContent = message;
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            document.getElementById('loadMoreArea').style.display = 'none';
+        }
 
         function toggleAll(checked) {
-            document.querySelectorAll('.checkbox-label input').forEach(cb => cb.checked = checked);
+            document.querySelectorAll('.checkbox-label input').forEach(cb => {
+                cb.checked = checked;
+            });
             applyFilters();
         }
 
         function applyFilters() {
-            // reset pagination
-            displayLimit = 100;
-            
-            const ratingType = document.getElementById('ratingType').value;
-            const minElo = parseInt(document.getElementById('minElo').value) || 0;
-            const countrySearch = document.getElementById('countryFilter').value.toUpperCase().trim();
-            
-            // Get selected titles
-            const checkedBoxes = document.querySelectorAll('.checkbox-label input:checked');
-            const selectedTitles = Array.from(checkedBoxes).map(cb => cb.value);
+            displayLimit = INITIAL_DISPLAY_LIMIT;
 
-            // Update Header Text
+            const ratingType = document.getElementById('ratingType').value;
+            const minElo = parseInt(document.getElementById('minElo').value, 10) || 0;
+            const countrySearch = document.getElementById('countryFilter').value.toUpperCase().trim();
+            const checkedBoxes = document.querySelectorAll('.checkbox-label input:checked');
+            const selectedTitles = new Set(Array.from(checkedBoxes).map(cb => cb.value));
+
             document.getElementById('ratingHeader').innerText = ratingType.charAt(0).toUpperCase() + ratingType.slice(1);
 
-            // Filter logic
-            filteredPlayers = allPlayers.filter(p => {
-                if (!selectedTitles.includes(p.title)) return false;
-                if (p[ratingType] < minElo) return false;
-                if (countrySearch && p.country !== countrySearch) return false;
+            filteredPlayers = allPlayers.filter(player => {
+                if (!selectedTitles.has(player.title)) return false;
+                if (getRatingValue(player, ratingType) < minElo) return false;
+                if (countrySearch && player.country !== countrySearch) return false;
                 return true;
             });
 
-            // Sort logic (Highest rating first)
-            filteredPlayers.sort((a, b) => b[ratingType] - a[ratingType]);
-
-            // Update UI
+            filteredPlayers.sort((a, b) => getRatingValue(b, ratingType) - getRatingValue(a, ratingType));
             document.getElementById('countDisplay').innerText = `${filteredPlayers.length} players found`;
-            
             renderTable();
         }
 
@@ -362,87 +371,151 @@
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
-            const ratingType = document.getElementById('ratingType').value;
-            const subset = filteredPlayers.slice(0, displayLimit);
-
-            subset.forEach(p => {
-                const tr = document.createElement('tr');
-                
-                // Style title badge
-                let titleClass = 'title-badge';
-                if(p.title === 'GM') titleClass += ' gm-title';
-                if(p.title === 'IM') titleClass += ' im-title';
-
-                const avatarHtml = p.avatar 
-                    ? `<img src="${p.avatar}" alt="${p.username}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` 
-                    : `<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.8rem;">${p.username.charAt(0).toUpperCase()}</div>`;
-
-                tr.innerHTML = `
-                    <td>${avatarHtml}</td>
-                    <td>
-                        <div style="font-weight:500;">${p.username}</div>
-                    </td>
-                    <td><span class="${titleClass}">${p.title}</span></td>
-                    <td>${p.country}</td>
-                    <td class="rating-cell" style="color: var(--accent);">${p[ratingType] || '-'}</td>
-                    <td class="hide-mobile" style="color: ${p.status==='active'?'#4caf50':'var(--text-secondary)'}; font-size:0.85rem;">
-                        ${p.status}
-                    </td>
-                    <td style="text-align: right;">
-                        <a href="https://www.chess.com/member/${p.username}" target="_blank" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.8rem;">
-                            View
-                        </a>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Show/Hide "Load More" button
-            const loadBtnArea = document.getElementById('loadMoreArea');
-            if (filteredPlayers.length > displayLimit) {
-                loadBtnArea.style.display = 'block';
-            } else {
-                loadBtnArea.style.display = 'none';
-            }
-        }
-
-        function copyList() {
-            if (!filteredPlayers || filteredPlayers.length === 0) {
-                alert("No players to copy!");
+            if (filteredPlayers.length === 0) {
+                setTableMessage('No matching players.');
                 return;
             }
 
             const ratingType = document.getElementById('ratingType').value;
-            const headers = ["Username", "Name", "Title", "Country", "Rating (" + ratingType + ")", "Status", "Profile Link", "Avatar URL"];
-            
-            let tsvContent = headers.join("\t") + "\n";
-            
-            filteredPlayers.forEach(p => {
-                const row = [
-                    p.username,
-                    p.name || "", // Includes Name
-                    p.title,
-                    p.country,
-                    p[ratingType] || 0,
-                    p.status,
-                    `https://www.chess.com/member/${p.username}`,
-                    p.avatar || ""
-                ];
-                tsvContent += row.join("\t") + "\n";
+            const subset = filteredPlayers.slice(0, displayLimit);
+            const fragment = document.createDocumentFragment();
+
+            subset.forEach(player => {
+                const username = asText(player.username);
+                const profileName = asText(player.name);
+                const country = asText(player.country);
+                const title = asText(player.title);
+                const status = asText(player.status);
+
+                const tr = document.createElement('tr');
+
+                const avatarTd = document.createElement('td');
+                const avatarUrl = getSafeUrl(player.avatar);
+                if (avatarUrl) {
+                    const img = document.createElement('img');
+                    img.src = avatarUrl;
+                    img.alt = username || 'Player avatar';
+                    img.width = 40;
+                    img.height = 40;
+                    img.style.borderRadius = '50%';
+                    img.style.objectFit = 'cover';
+                    avatarTd.appendChild(img);
+                } else {
+                    const fallback = document.createElement('div');
+                    fallback.style.width = '40px';
+                    fallback.style.height = '40px';
+                    fallback.style.borderRadius = '50%';
+                    fallback.style.background = 'var(--bg-secondary)';
+                    fallback.style.display = 'flex';
+                    fallback.style.alignItems = 'center';
+                    fallback.style.justifyContent = 'center';
+                    fallback.style.color = 'var(--text-secondary)';
+                    fallback.style.fontSize = '0.8rem';
+                    const firstChar = username ? username.charAt(0).toUpperCase() : '?';
+                    fallback.textContent = /[A-Z]/.test(firstChar) ? firstChar : '?';
+                    avatarTd.appendChild(fallback);
+                }
+                tr.appendChild(avatarTd);
+
+                const playerTd = document.createElement('td');
+                const userDiv = document.createElement('div');
+                userDiv.style.fontWeight = '500';
+                userDiv.textContent = username;
+                playerTd.appendChild(userDiv);
+                if (profileName) {
+                    const nameDiv = document.createElement('div');
+                    nameDiv.style.fontSize = '0.85rem';
+                    nameDiv.style.color = 'var(--text-secondary)';
+                    nameDiv.style.marginTop = '2px';
+                    nameDiv.textContent = profileName;
+                    playerTd.appendChild(nameDiv);
+                }
+                tr.appendChild(playerTd);
+
+                const titleTd = document.createElement('td');
+                const titleBadge = document.createElement('span');
+                titleBadge.className = 'title-badge';
+                if (title === 'GM') titleBadge.classList.add('gm-title');
+                if (title === 'IM') titleBadge.classList.add('im-title');
+                titleBadge.textContent = title;
+                titleTd.appendChild(titleBadge);
+                tr.appendChild(titleTd);
+
+                const countryTd = document.createElement('td');
+                countryTd.textContent = country;
+                tr.appendChild(countryTd);
+
+                const ratingTd = document.createElement('td');
+                ratingTd.className = 'rating-cell';
+                ratingTd.style.color = 'var(--accent)';
+                ratingTd.textContent = String(getRatingValue(player, ratingType));
+                tr.appendChild(ratingTd);
+
+                const statusTd = document.createElement('td');
+                statusTd.className = 'hide-mobile';
+                statusTd.style.fontSize = '0.85rem';
+                statusTd.style.color = status === 'active' ? '#4caf50' : 'var(--text-secondary)';
+                statusTd.textContent = status;
+                tr.appendChild(statusTd);
+
+                const linkTd = document.createElement('td');
+                linkTd.style.textAlign = 'right';
+                const link = document.createElement('a');
+                link.className = 'btn btn-secondary';
+                link.style.padding = '2px 8px';
+                link.style.fontSize = '0.8rem';
+                link.textContent = 'View';
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.href = `https://www.chess.com/member/${encodeURIComponent(username)}`;
+                linkTd.appendChild(link);
+                tr.appendChild(linkTd);
+
+                fragment.appendChild(tr);
             });
 
+            tbody.appendChild(fragment);
+            document.getElementById('loadMoreArea').style.display = filteredPlayers.length > displayLimit ? 'block' : 'none';
+        }
+
+        function copyList() {
+            if (!filteredPlayers || filteredPlayers.length === 0) {
+                alert('No players to copy!');
+                return;
+            }
+
+            const ratingType = document.getElementById('ratingType').value;
+            const headers = ['Username', 'Name', 'Title', 'Country', `Rating (${ratingType})`, 'Status', 'Profile Link', 'Avatar URL'];
+            const lines = [headers.map(tsvSafeCell).join('\t')];
+
+            filteredPlayers.forEach(player => {
+                const username = asText(player.username);
+                const row = [
+                    username,
+                    asText(player.name),
+                    asText(player.title),
+                    asText(player.country),
+                    String(getRatingValue(player, ratingType)),
+                    asText(player.status),
+                    `https://www.chess.com/member/${encodeURIComponent(username)}`,
+                    asText(player.avatar)
+                ];
+                lines.push(row.map(tsvSafeCell).join('\t'));
+            });
+
+            const tsvContent = lines.join('\n');
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(tsvContent).then(() => showCopySuccess()).catch(err => fallbackCopy(tsvContent));
+                navigator.clipboard.writeText(tsvContent).then(() => showCopySuccess()).catch(() => fallbackCopy(tsvContent));
             } else {
                 fallbackCopy(tsvContent);
             }
         }
 
         function fallbackCopy(text) {
-            let textArea = document.createElement("textarea");
+            const textArea = document.createElement('textarea');
             textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
@@ -451,7 +524,7 @@
                 showCopySuccess();
             } catch (err) {
                 console.error('Fallback copy failed', err);
-                alert("Failed to copy to clipboard.");
+                alert('Failed to copy to clipboard.');
             }
             document.body.removeChild(textArea);
         }
@@ -459,11 +532,12 @@
         function showCopySuccess() {
             const btn = document.getElementById('copyBtn');
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!`;
-            setTimeout(() => btn.innerHTML = originalHTML, 2000);
+            btn.innerHTML = '<span class="material-icons" style="font-size: 1.1rem;">check</span> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
         }
 
-        // Utility: Debounce to prevent lag while typing
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -471,6 +545,41 @@
                 timeout = setTimeout(() => func.apply(this, args), wait);
             };
         }
+
+        function loadDatabase() {
+            fetch('titled-players.json')
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    const rows = Array.isArray(data) ? data : Array.isArray(data.players) ? data.players : null;
+                    if (!rows) throw new Error('Database payload is not an array');
+                    allPlayers = rows;
+                    applyFilters();
+                })
+                .catch(err => {
+                    document.getElementById('countDisplay').innerText = 'Error loading database file.';
+                    setTableMessage('Failed to load titled-players.json.');
+                    console.error('Failed to load titled-players.json:', err);
+                });
+        }
+
+        document.querySelectorAll('.checkbox-label input').forEach(cb => {
+            cb.addEventListener('change', applyFilters);
+        });
+        document.getElementById('ratingType').addEventListener('change', applyFilters);
+        document.getElementById('minElo').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('countryFilter').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            displayLimit += BATCH_SIZE;
+            renderTable();
+        });
+        document.getElementById('selectAllTitlesBtn').addEventListener('click', () => toggleAll(true));
+        document.getElementById('clearAllTitlesBtn').addEventListener('click', () => toggleAll(false));
+        document.getElementById('copyBtn').addEventListener('click', copyList);
+
+        loadDatabase();
     </script>
 </body>
 </html>
