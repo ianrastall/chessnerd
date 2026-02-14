@@ -416,33 +416,6 @@
             return fide !== null && fide > 0 ? fide.toLocaleString() : '-';
         }
 
-        function formatAgeValue(profile) {
-            const explicitAge = readNumber(profile?.age);
-            if (explicitAge !== null && explicitAge > 0) {
-                return String(Math.floor(explicitAge));
-            }
-
-            const birthSeconds = readNumber(profile?.birth);
-            if (birthSeconds !== null && birthSeconds > 0) {
-                const birthDate = new Date(birthSeconds * 1000);
-                const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
-                const monthDiff = today.getMonth() - birthDate.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                    age -= 1;
-                }
-                if (age > 0 && age < 130) return String(age);
-            }
-
-            const birthYear = readNumber(profile?.birth_year);
-            if (birthYear !== null && birthYear > 0) {
-                const age = new Date().getFullYear() - birthYear;
-                if (age > 0 && age < 130) return String(age);
-            }
-
-            return 'Not Public';
-        }
-
         function parseCountryCode(countryValue) {
             const raw = String(countryValue ?? '').trim();
             if (!raw) return '';
@@ -695,7 +668,6 @@
             const daily960 = formatRatingValue(stats, 'chess960_daily');
             const tactics = formatTacticsValue(stats);
             const fide = formatFideValue(profile, stats);
-            const age = formatAgeValue(profile);
             const league = String(profile?.league ?? '-');
             const verified = toBoolText(Boolean(profile?.verified));
             const streamer = toBoolText(Boolean(profile?.is_streamer));
@@ -769,10 +741,6 @@
                     <div class="stat-box">
                         <div class="stat-label">Country</div>
                         <div class="stat-value">${escapeHtml(countryDisplay)}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Age</div>
-                        <div class="stat-value">${escapeHtml(age)}</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">FIDE</div>
