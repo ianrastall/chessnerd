@@ -261,6 +261,7 @@
         let listAbortController = null;
         const profileCache = new Map();
         const statsCache = new Map();
+        const countryCache = new Map();
         const leaderboardRanksByUser = new Map();
         let leaderboardFetchPromise = null;
         let leaderboardReady = false;
@@ -406,6 +407,93 @@
             return highest !== null && highest > 0 ? highest.toLocaleString() : '-';
         }
 
+        function toBoolText(value) {
+            return value ? 'Yes' : 'No';
+        }
+
+        function formatFideValue(profile, stats) {
+            const fide = readNumber(stats?.fide ?? profile?.fide);
+            return fide !== null && fide > 0 ? fide.toLocaleString() : '-';
+        }
+
+        function formatAgeValue(profile) {
+            const explicitAge = readNumber(profile?.age);
+            if (explicitAge !== null && explicitAge > 0) {
+                return String(Math.floor(explicitAge));
+            }
+
+            const birthSeconds = readNumber(profile?.birth);
+            if (birthSeconds !== null && birthSeconds > 0) {
+                const birthDate = new Date(birthSeconds * 1000);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age -= 1;
+                }
+                if (age > 0 && age < 130) return String(age);
+            }
+
+            const birthYear = readNumber(profile?.birth_year);
+            if (birthYear !== null && birthYear > 0) {
+                const age = new Date().getFullYear() - birthYear;
+                if (age > 0 && age < 130) return String(age);
+            }
+
+            return 'Not Public';
+        }
+
+        function parseCountryCode(countryValue) {
+            const raw = String(countryValue ?? '').trim();
+            if (!raw) return '';
+
+            if (/^[A-Za-z]{2}$/.test(raw)) {
+                return raw.toUpperCase();
+            }
+
+            try {
+                const parsed = new URL(raw);
+                const parts = parsed.pathname.split('/').filter(Boolean);
+                const candidate = parts[parts.length - 1] || '';
+                return candidate.toUpperCase();
+            } catch (_) {
+                return raw.toUpperCase();
+            }
+        }
+
+        async function fetchCountryInfo(countryValue) {
+            const raw = String(countryValue ?? '').trim();
+            const fallbackCode = parseCountryCode(raw);
+            const fallback = {
+                code: fallbackCode || '-',
+                name: fallbackCode || 'Unknown'
+            };
+
+            if (!raw) return fallback;
+            if (countryCache.has(raw)) return countryCache.get(raw);
+
+            if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
+                countryCache.set(raw, fallback);
+                return fallback;
+            }
+
+            try {
+                const response = await fetch(raw);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                const info = {
+                    code: String(data?.code ?? fallback.code).toUpperCase(),
+                    name: String(data?.name ?? fallback.name)
+                };
+                countryCache.set(raw, info);
+                return info;
+            } catch (error) {
+                console.error('Country lookup failed:', error);
+                countryCache.set(raw, fallback);
+                return fallback;
+            }
+        }
+
         function setDetailsPlaceholder(message) {
             playerDetailsEl.innerHTML = `
                 <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
@@ -542,6 +630,9 @@
             const key = String(username ?? '').toLowerCase();
             const hasCachedProfile = profileCache.has(key);
             const hasCachedStats = statsCache.has(key);
+            const cachedProfile = hasCachedProfile ? profileCache.get(key) : null;
+            const cachedCountryRef = String(cachedProfile?.country ?? '').trim();
+            const hasCachedCountry = !cachedCountryRef || countryCache.has(cachedCountryRef);
             if (!hasCachedProfile || !hasCachedStats) {
                 playerDetailsEl.innerHTML = `
                     <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-secondary);">
@@ -553,22 +644,24 @@
 
             try {
                 let statsUnavailable = false;
-                const [profile, stats, leaderboardRanks] = await Promise.all([
-                    fetchPlayerProfile(username),
+                const profilePromise = fetchPlayerProfile(username);
+                const [profile, stats, leaderboardRanks, countryInfo] = await Promise.all([
+                    profilePromise,
                     fetchPlayerStats(username).catch(error => {
                         statsUnavailable = true;
                         console.error(`Stats unavailable for ${username}:`, error);
                         return null;
                     }),
-                    getLeaderboardRanksForUser(username)
+                    getLeaderboardRanksForUser(username),
+                    profilePromise.then(profile => fetchCountryInfo(profile?.country))
                 ]);
                 if (requestId !== currentRequestId) return;
 
-                renderProfile(profile, stats, leaderboardRanks);
+                renderProfile(profile, stats, leaderboardRanks, countryInfo);
 
                 if (statsUnavailable) {
                     setStatus(`Loaded profile for ${username}; ratings unavailable.`, 'warning');
-                } else if (hasCachedProfile && hasCachedStats) {
+                } else if (hasCachedProfile && hasCachedStats && hasCachedCountry) {
                     setStatus(`Loaded ${username} from cache.`, 'success');
                 } else {
                     setStatus(`Loaded profile for ${username}.`, 'success');
@@ -582,7 +675,7 @@
             }
         }
 
-        function renderProfile(profile, stats, leaderboardRanks) {
+        function renderProfile(profile, stats, leaderboardRanks, countryInfo) {
             const username = String(profile?.username ?? selectedUsername ?? '');
             const displayName = String(profile?.name ?? username);
             const title = String(profile?.title ?? '');
@@ -601,6 +694,16 @@
             const daily = formatRatingValue(stats, 'chess_daily');
             const daily960 = formatRatingValue(stats, 'chess960_daily');
             const tactics = formatTacticsValue(stats);
+            const fide = formatFideValue(profile, stats);
+            const age = formatAgeValue(profile);
+            const league = String(profile?.league ?? '-');
+            const verified = toBoolText(Boolean(profile?.verified));
+            const streamer = toBoolText(Boolean(profile?.is_streamer));
+            const countryName = String(countryInfo?.name ?? 'Unknown');
+            const countryCode = String(countryInfo?.code ?? '-');
+            const countryDisplay = countryCode && countryCode !== '-'
+                ? `${countryName} (${countryCode})`
+                : countryName;
             const bestLeaderboard = leaderboardRanks.length > 0 ? leaderboardRanks[0] : null;
             const leaderboardDisplay = bestLeaderboard ? `#${bestLeaderboard.rank}` : 'N/A';
             const leaderboardLabel = bestLeaderboard
@@ -663,6 +766,30 @@
                 </div>
 
                 <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Country</div>
+                        <div class="stat-value">${escapeHtml(countryDisplay)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Age</div>
+                        <div class="stat-value">${escapeHtml(age)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">FIDE</div>
+                        <div class="stat-value">${escapeHtml(fide)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">League</div>
+                        <div class="stat-value">${escapeHtml(league)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Verified</div>
+                        <div class="stat-value">${escapeHtml(verified)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Streamer</div>
+                        <div class="stat-value">${escapeHtml(streamer)}</div>
+                    </div>
                     <div class="stat-box">
                         <div class="stat-label">Followers</div>
                         <div class="stat-value">${followers}</div>
