@@ -2,7 +2,7 @@
   "month": "2025-03",
   "commits": [
     {
-      "commit_num": 315,
+      "commit_num": 362,
       "hash": "d942e133",
       "short": "d942e133",
       "author": "Daniel Samek <samekda3@fit.cvut.cz>",
@@ -65,7 +65,7 @@
       "subject": "Less fail high cnt in the condition"
     },
     {
-      "commit_num": 316,
+      "commit_num": 363,
       "hash": "f9459e4c",
       "short": "f9459e4c",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -128,7 +128,7 @@
       "subject": "Use matching llvm-profdata"
     },
     {
-      "commit_num": 317,
+      "commit_num": 364,
       "hash": "0475c865",
       "short": "0475c865",
       "author": "Disservin <disservin.social@gmail.com>",
@@ -191,7 +191,7 @@
       "subject": "Restore development"
     },
     {
-      "commit_num": 318,
+      "commit_num": 365,
       "hash": "3d61f932",
       "short": "3d61f932",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -258,7 +258,7 @@
       "subject": "Squash out post-lmr bonus variable"
     },
     {
-      "commit_num": 319,
+      "commit_num": 366,
       "hash": "03e27488",
       "short": "03e27488",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -277,55 +277,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/win64bmi2/stockfish_25033011_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/win64avx2/stockfish_25033011_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/win64modern/stockfish_25033011_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/win64ssse/stockfish_25033011_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/win64/stockfish_25033011_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/linux64bmi2/stockfish_25033011_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/linux64avx2/stockfish_25033011_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/linux64modern/stockfish_25033011_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/linux64ssse/stockfish_25033011_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/03e27488f3d21d8ff4dbf3065603afa21dbd0ef3/linux64/stockfish_25033011_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 17.1\n\nOfficial release version of Stockfish 17.1\n\nBench: 2030154\n\n---\n\nStockfish 17.1\n\nToday, we have the pleasure to announce Stockfish 17.1. As always, you can\n**freely** download it at [stockfishchess.org/download][1] and use it in the\n[GUI of your choice][2].\n\nJoin our [Discord server][3] to get in touch with the community of developers\nand users of the project!\n\nQuality of chess play\n\nIn our testing against its predecessor, Stockfish 17.1 shows a consistent\nimprovement in performance, with an [Elo gain of up to 20 points][4] and\nwinning close to 2 times more game pairs than it loses.\n\nUpdate highlights\n\nNew speedtest command\n\nThe new `speedtest` command benchmarks your computer's performance (measured in\nnodes per second) using a realistic and stable test. To run it, you'll need\n[command line access][5]—give it a try and share your results with the\ncommunity!\n\nImproved hardware support\n\nStockfish is [no longer limited to 1024 threads][6] and will allow users to\nspecify whatever their system is capable of. Additionally, hardware such as\nppc64 and Loongson is now better supported at build time.\n\nBug fixes for tablebase support\n\nOur previous release introduced improved engine lines (principal variations)\nending in mate as soon as a mate score is announced. A side effect of this\nimprovement was a [rare corner case][7] involving cursed tablebase wins, only\nrelevant in correspondence chess when the 50-move rule does not apply,  which\nhas now been fixed. Relatedly, [time management][8] has also been improved to\navoid potential time losses.\n\nShoutouts\n\nDownload page redesign\n\nWe've redesigned the [download page][1] to address unclear wording and simplify\na previously cluttered experience. The page now features a modernized layout,\nstreamlined navigation, and clearer guidance to help you select the right\nbinary for your system.\n\nFishtest framework\n\nOur testing framework has been improved in various ways, both on the worker\nside, including the adoption of [Fastchess][9] as a new game manager, and on\nthe server side, such as streamlined configuration. The reliable availability\nof testing resources is key for the progress of the engine.\n\nThank you\n\nThe Stockfish project builds on a thriving community of enthusiasts (thanks\neverybody!) who contribute their expertise, time, and resources to build a free\nand open-source chess engine that is robust, widely available, and very strong.\n\nWe would like to express our gratitude for the [12k stars][10] that light up\nour GitHub project! Thank you for your support and encouragement – your\nrecognition means a lot to us.\n\nWe invite our chess fans to [join the Fishtest testing framework][11] to\ncontribute compute resources needed for development. Programmers can contribute\nto the project either directly to [Stockfish][12] (C++), to [Fishtest][13]\n(HTML, CSS, JavaScript, and Python), to our trainer [nnue-pytorch][14] (C++ and\nPython), or to our [website][15] (HTML, CSS/SCSS, and JavaScript).\n\nThe Stockfish team\n\n[1]: https://stockfishchess.org/download\n[2]: https://official-stockfish.github.io/docs/stockfish-wiki/Download-and-usage.html#download-a-chess-gui\n[3]: https://discord.gg/GWDRS3kU6R\n[4]: https://tests.stockfishchess.org/tests/view/67e7d2fd6682f97da2178fbd\n[5]: https://official-stockfish.github.io/docs/stockfish-wiki/UCI-&-Commands.html#speedtest\n[6]: https://github.com/official-stockfish/Stockfish/commit/652a8874b523360a3b19c5003c8ba9894ac54d0f\n[7]: https://github.com/official-stockfish/Stockfish/commit/6c7c5c7e471c16f14518229428e51a3e00c0f1dd\n[8]: https://github.com/official-stockfish/Stockfish/commit/0f9ae0d11cd034288a49ef3892c580dfed025091\n[9]: https://github.com/Disservin/fastchess\n[10]: https://github.com/official-stockfish/Stockfish/stargazers\n[11]: https://official-stockfish.github.io/docs/fishtest-wiki/Running-the-Worker.html\n[12]: https://github.com/official-stockfish/Stockfish\n[13]: https://github.com/official-stockfish/fishtest\n[14]: https://github.com/official-stockfish/nnue-pytorch\n[15]: https://github.com/official-stockfish/stockfish-web\n",
       "subject": "Stockfish 17.1"
     },
     {
-      "commit_num": 320,
+      "commit_num": 367,
       "hash": "aafc732b",
       "short": "aafc732b",
       "author": "Disservin <disservin.social@gmail.com>",
@@ -388,7 +347,7 @@
       "subject": "Silence \"may be used uninitialized\" GCC warning"
     },
     {
-      "commit_num": 321,
+      "commit_num": 368,
       "hash": "ed89817f",
       "short": "ed89817f",
       "author": "mstembera <m_stembera@yahoo.com>",
@@ -455,7 +414,7 @@
       "subject": "Various cleanups"
     },
     {
-      "commit_num": 322,
+      "commit_num": 369,
       "hash": "1a395f1b",
       "short": "1a395f1b",
       "author": "mstembera <m_stembera@yahoo.com>",
@@ -522,7 +481,7 @@
       "subject": "Remove pawn_attacks_bb()"
     },
     {
-      "commit_num": 323,
+      "commit_num": 370,
       "hash": "904a0163",
       "short": "904a0163",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -589,7 +548,7 @@
       "subject": "Don't use 5th continuation history in move ordering"
     },
     {
-      "commit_num": 324,
+      "commit_num": 371,
       "hash": "dfef7e75",
       "short": "dfef7e75",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -656,7 +615,7 @@
       "subject": "Remove redundant assignment"
     },
     {
-      "commit_num": 325,
+      "commit_num": 372,
       "hash": "fb6a3e04",
       "short": "fb6a3e04",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -723,7 +682,7 @@
       "subject": "Simply use non_pawn_material rather than summing tuned terms"
     },
     {
-      "commit_num": 326,
+      "commit_num": 373,
       "hash": "ee35a51c",
       "short": "ee35a51c",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -742,14 +701,47 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/win64avx2/stockfish_25040215_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/win64modern/stockfish_25040215_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/win64ssse/stockfish_25040215_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/linux64bmi2/stockfish_25040215_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/linux64avx2/stockfish_25040215_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/linux64modern/stockfish_25040215_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/linux64ssse/stockfish_25040215_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/ee35a51c40eff7fb237f217d87d9ca7c73874924/linux64/stockfish_25040215_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Remove extra division\n\ncloses https://github.com/official-stockfish/Stockfish/pull/5943\n\nNo functional change\n",
       "subject": "Remove extra division"
     },
     {
-      "commit_num": 327,
+      "commit_num": 374,
       "hash": "7beff18e",
       "short": "7beff18e",
       "author": "Disservin <disservin.social@gmail.com>",
@@ -816,7 +808,7 @@
       "subject": "Retire Acc Pointer"
     },
     {
-      "commit_num": 328,
+      "commit_num": 375,
       "hash": "4a869f41",
       "short": "4a869f41",
       "author": "Robert Nurnberg @ elitebook <robert.nurnberg@gmx.de>",
@@ -883,7 +875,7 @@
       "subject": "Update the WDL model"
     },
     {
-      "commit_num": 329,
+      "commit_num": 376,
       "hash": "6028264c",
       "short": "6028264c",
       "author": "Michel Van den Bergh <michel.vandenbergh@uhasselt.be>",
@@ -950,7 +942,7 @@
       "subject": "Delay check for curl/wget until really needed"
     },
     {
-      "commit_num": 330,
+      "commit_num": 377,
       "hash": "12d023ed",
       "short": "12d023ed",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1013,7 +1005,7 @@
       "subject": "Update CPU contributors"
     },
     {
-      "commit_num": 331,
+      "commit_num": 378,
       "hash": "c2ff7a95",
       "short": "c2ff7a95",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1076,7 +1068,7 @@
       "subject": "Cleanup fused updates"
     },
     {
-      "commit_num": 332,
+      "commit_num": 379,
       "hash": "6ceaca4c",
       "short": "6ceaca4c",
       "author": "mstembera <m_stembera@yahoo.com>",
@@ -1139,7 +1131,7 @@
       "subject": "Change layout of CorrectionHistory<NonPawn>"
     },
     {
-      "commit_num": 333,
+      "commit_num": 380,
       "hash": "d2cb927a",
       "short": "d2cb927a",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1206,7 +1198,7 @@
       "subject": "Simplify TT cutoff conthist updates"
     },
     {
-      "commit_num": 334,
+      "commit_num": 381,
       "hash": "0dabf4f3",
       "short": "0dabf4f3",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1269,7 +1261,7 @@
       "subject": "Removing the conditional bonus calculation"
     },
     {
-      "commit_num": 335,
+      "commit_num": 382,
       "hash": "43d8ccf8",
       "short": "43d8ccf8",
       "author": "Nonlinear2 <131959792+Nonlinear2@users.noreply.github.com>",
@@ -1336,7 +1328,7 @@
       "subject": "change the bonusScale depth component"
     },
     {
-      "commit_num": 336,
+      "commit_num": 383,
       "hash": "8fc5e920",
       "short": "8fc5e920",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -1403,7 +1395,7 @@
       "subject": "Use slightly different formula for stat score when position is in check"
     },
     {
-      "commit_num": 337,
+      "commit_num": 384,
       "hash": "652a8874",
       "short": "652a8874",
       "author": "Robert Nurnberg @ elitebook <robert.nurnberg@gmx.de>",
@@ -1462,7 +1454,7 @@
       "subject": "Allow more than 1024 threads on high-end machines"
     },
     {
-      "commit_num": 338,
+      "commit_num": 385,
       "hash": "9045f17c",
       "short": "9045f17c",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1529,7 +1521,7 @@
       "subject": "Simplify captures PCM"
     },
     {
-      "commit_num": 339,
+      "commit_num": 386,
       "hash": "fc0e0a44",
       "short": "fc0e0a44",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1596,7 +1588,7 @@
       "subject": "Refactor accumulator storage/updates"
     },
     {
-      "commit_num": 340,
+      "commit_num": 387,
       "hash": "4afd7f1a",
       "short": "4afd7f1a",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1659,7 +1651,7 @@
       "subject": "Removing contHist[1] from pruning formula"
     },
     {
-      "commit_num": 341,
+      "commit_num": 388,
       "hash": "f9a6d432",
       "short": "f9a6d432",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -1726,7 +1718,7 @@
       "subject": "Simplify condition in futility pruning"
     },
     {
-      "commit_num": 342,
+      "commit_num": 389,
       "hash": "e3660b47",
       "short": "e3660b47",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1789,7 +1781,7 @@
       "subject": "Add dbg_clear helper function"
     },
     {
-      "commit_num": 343,
+      "commit_num": 390,
       "hash": "66aee01b",
       "short": "66aee01b",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1856,7 +1848,7 @@
       "subject": "Simplify Return Value Adjustment Condition"
     },
     {
-      "commit_num": 344,
+      "commit_num": 391,
       "hash": "e407a4f2",
       "short": "e407a4f2",
       "author": "Carlos Esparza <ca2010es@gmail.com>",

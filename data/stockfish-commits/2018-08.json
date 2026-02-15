@@ -2,7 +2,7 @@
   "month": "2018-08",
   "commits": [
     {
-      "commit_num": 2491,
+      "commit_num": 2538,
       "hash": "f923dc0f",
       "short": "f923dc0f",
       "author": "Rocky640 <support@multicim.com>",
@@ -57,7 +57,7 @@
       "subject": "Long Diagonal Tweaks"
     },
     {
-      "commit_num": 2492,
+      "commit_num": 2539,
       "hash": "e846a930",
       "short": "e846a930",
       "author": "protonspring <mike@whiteley.org>",
@@ -112,7 +112,7 @@
       "subject": "Remove PawnsOnBothFlanks"
     },
     {
-      "commit_num": 2493,
+      "commit_num": 2540,
       "hash": "10bb2e6c",
       "short": "10bb2e6c",
       "author": "MJZ1977 <37274752+MJZ1977@users.noreply.github.com>",
@@ -167,7 +167,7 @@
       "subject": "Fix bug with \"excludedMove\" for probcut"
     },
     {
-      "commit_num": 2494,
+      "commit_num": 2541,
       "hash": "166bf90e",
       "short": "166bf90e",
       "author": "Steinar H. Gunderson <sgunderson@bigfoot.com>",
@@ -222,7 +222,7 @@
       "subject": "Shrink the hash table of tablebases back to 4096 entries"
     },
     {
-      "commit_num": 2495,
+      "commit_num": 2542,
       "hash": "4aa091cf",
       "short": "4aa091cf",
       "author": "Ondrej Mosnacek <omosnacek@gmail.com>",
@@ -277,7 +277,7 @@
       "subject": "Refactor pure static eval code"
     },
     {
-      "commit_num": 2496,
+      "commit_num": 2543,
       "hash": "6307fd08",
       "short": "6307fd08",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -332,7 +332,7 @@
       "subject": "Tweak stat bonus formula"
     },
     {
-      "commit_num": 2497,
+      "commit_num": 2544,
       "hash": "3ac3b685",
       "short": "3ac3b685",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -387,7 +387,7 @@
       "subject": "Don't modify Eval with search stats at ttHits"
     },
     {
-      "commit_num": 2498,
+      "commit_num": 2545,
       "hash": "8a482192",
       "short": "8a482192",
       "author": "protonspring <mike@whiteley.org>",
@@ -442,7 +442,7 @@
       "subject": "make DistanceRing more consistent"
     },
     {
-      "commit_num": 2499,
+      "commit_num": 2546,
       "hash": "28543cdd",
       "short": "28543cdd",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -497,7 +497,7 @@
       "subject": "Store only unchanged static evaluations in TT"
     },
     {
-      "commit_num": 2500,
+      "commit_num": 2547,
       "hash": "f3b8a699",
       "short": "f3b8a699",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -516,14 +516,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win64bmi2/stockfish_18081801_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win64modern/stockfish_18081801_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win64/stockfish_18081801_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/win32/stockfish_18081801_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/linux64bmi2/stockfish_18081801_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/linux64modern/stockfish_18081801_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f3b8a699194515e0b74f5349cf84175a97f824e8/linux64/stockfish_18081801_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Use an affine formula to mix stats and eval\n\nFollow-up for the previous patch: we use an affine formula to mix stats\nand evaluation in search. The idea is to give a bonus if the previous\nmove of the opponent was historically bad, and a malus if the previous\nmove of the opponent was historically good.\n\nMore precisely, if x is the stat score of the previous move by the opponent,\nwe implement the following formulas to tweak the evaluation at an internal\nnode of the tree for our pruning decisions at this node:\n\nif x = 0, use v' = eval(P)\nif x > 0, use v' = eval(P) - 5 - x/1024\nif x < 0, use v' = eval(P) + 5 - x/1024\n\nFor reference, the previous master had this simpler rule:\n\nif x > 0, use v' = eval(P) - 10\nif x <= 0, use v' = eval(P)\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 29322 W: 6359 L: 6088 D: 16875\nhttp://tests.stockfishchess.org/tests/view/5b76a5980ebc5902bdba957f\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 30893 W: 5154 L: 4910 D: 20829\nhttp://tests.stockfishchess.org/tests/view/5b76ca6d0ebc5902bdba9914\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1740\n\nBench: 4592766\n",
       "subject": "Use an affine formula to mix stats and eval"
     },
     {
-      "commit_num": 2501,
+      "commit_num": 2548,
       "hash": "d0f09de2",
       "short": "d0f09de2",
       "author": "protonspring <mike@whiteley.org>",
@@ -578,7 +607,7 @@
       "subject": "Simplify king file dependancy in evaluate_shelter()"
     },
     {
-      "commit_num": 2502,
+      "commit_num": 2549,
       "hash": "96c3a1f2",
       "short": "96c3a1f2",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -633,7 +662,7 @@
       "subject": "Mix search stats with evaluation"
     },
     {
-      "commit_num": 2503,
+      "commit_num": 2550,
       "hash": "881cab25",
       "short": "881cab25",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -652,43 +681,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win64bmi2/stockfish_18081410_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win64modern/stockfish_18081410_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win64/stockfish_18081410_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/win32/stockfish_18081410_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/linux64bmi2/stockfish_18081410_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/linux64modern/stockfish_18081410_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/881cab252530c8711e942f7936a3eb41b2956a6b/linux64/stockfish_18081410_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Double weight of capture history\n\nWe double in this patch the weight of the capture history table in the\nlocal scoring of captures for move ordering.\n\nThe capture history table is indexed by the triplet (capturing piece,\ncapture square, captured piece) and gets information like \"it seems to\nhave been historically good in that part of the search tree to capture\na pawn with a rook on g3, even if it seems to lose material\", and affect\nthe normaly pure « Most Valuable Victim » ordering of captures.\n\nFinished yellow at STC after 228842 games (posting a +1.36 Elo gain):\nLLR: -2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 228842 W: 50894 L: 50152 D: 127796\nhttp://tests.stockfishchess.org/tests/view/5b714bb00ebc5902bdba332d\n\nPassed LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 43251 W: 7425 L: 7131 D: 28695\nhttp://tests.stockfishchess.org/tests/view/5b71c7d40ebc5902bdba3e51\n\nThanks to user Vizvezdenec for running the LTC test.\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1736\n\nBench: 4272361\n",
       "subject": "Double weight of capture history"
     },
     {
-      "commit_num": 2504,
+      "commit_num": 2551,
       "hash": "4d22d3e5",
       "short": "4d22d3e5",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -743,7 +743,7 @@
       "subject": "Remove pawncount array in imbalance"
     },
     {
-      "commit_num": 2505,
+      "commit_num": 2552,
       "hash": "41cc4eb9",
       "short": "41cc4eb9",
       "author": "GuardianRM <strimr25@mail.ru>",
@@ -798,7 +798,7 @@
       "subject": "Non-linear bonus for pawn count"
     },
     {
-      "commit_num": 2506,
+      "commit_num": 2553,
       "hash": "b5581b77",
       "short": "b5581b77",
       "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
@@ -853,7 +853,7 @@
       "subject": "Combo of several promising parameter tweaks"
     },
     {
-      "commit_num": 2507,
+      "commit_num": 2554,
       "hash": "348cd5ed",
       "short": "348cd5ed",
       "author": "Jerry Donald Watson <j1.donald1@gmail.com>",
@@ -908,7 +908,7 @@
       "subject": "Simple razoring: depth 1 only, no distinction between PV / NonPV"
     },
     {
-      "commit_num": 2508,
+      "commit_num": 2555,
       "hash": "f1088c98",
       "short": "f1088c98",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -963,7 +963,7 @@
       "subject": "Remove Condition For Passed Pawns"
     },
     {
-      "commit_num": 2509,
+      "commit_num": 2556,
       "hash": "c569cf26",
       "short": "c569cf26",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1018,7 +1018,7 @@
       "subject": "King Psqt Tuning"
     },
     {
-      "commit_num": 2510,
+      "commit_num": 2557,
       "hash": "bd4d2b05",
       "short": "bd4d2b05",
       "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
@@ -1073,7 +1073,7 @@
       "subject": "First check threshold in space evaluation"
     },
     {
-      "commit_num": 2511,
+      "commit_num": 2558,
       "hash": "198418ee",
       "short": "198418ee",
       "author": "Stefan Geschwentner <Stefan-Geschwentner@web.de>",

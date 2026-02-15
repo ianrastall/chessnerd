@@ -2,7 +2,7 @@
   "month": "2019-11",
   "commits": [
     {
-      "commit_num": 2162,
+      "commit_num": 2209,
       "hash": "f0047ce0",
       "short": "f0047ce0",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -57,7 +57,7 @@
       "subject": "King proximity tweak for passed pawns"
     },
     {
-      "commit_num": 2163,
+      "commit_num": 2210,
       "hash": "97a0e4e8",
       "short": "97a0e4e8",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -112,7 +112,7 @@
       "subject": "UnblockedStorm tuned"
     },
     {
-      "commit_num": 2164,
+      "commit_num": 2211,
       "hash": "54253bcc",
       "short": "54253bcc",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -167,7 +167,7 @@
       "subject": "Extend bench to static evaluations"
     },
     {
-      "commit_num": 2165,
+      "commit_num": 2212,
       "hash": "df340a83",
       "short": "df340a83",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -222,7 +222,7 @@
       "subject": "Simplify king danger"
     },
     {
-      "commit_num": 2166,
+      "commit_num": 2213,
       "hash": "53125902",
       "short": "53125902",
       "author": "Moez Jellouli <37274752+MJZ1977@users.noreply.github.com>",
@@ -277,7 +277,7 @@
       "subject": "Extend last non-pawn captures"
     },
     {
-      "commit_num": 2167,
+      "commit_num": 2214,
       "hash": "87ed9fac",
       "short": "87ed9fac",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",
@@ -332,7 +332,7 @@
       "subject": "King danger: retire attacked-by-bishop defense"
     },
     {
-      "commit_num": 2168,
+      "commit_num": 2215,
       "hash": "3f419139",
       "short": "3f419139",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -387,7 +387,7 @@
       "subject": "Do lmr for more captures"
     },
     {
-      "commit_num": 2169,
+      "commit_num": 2216,
       "hash": "1fdf1f1f",
       "short": "1fdf1f1f",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -442,7 +442,7 @@
       "subject": "Simplify endgame factor for opposite colored bishops"
     },
     {
-      "commit_num": 2170,
+      "commit_num": 2217,
       "hash": "e0f42aa9",
       "short": "e0f42aa9",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -497,7 +497,7 @@
       "subject": "Simplify advanced pawn push pruning"
     },
     {
-      "commit_num": 2171,
+      "commit_num": 2218,
       "hash": "37698b03",
       "short": "37698b03",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -552,7 +552,7 @@
       "subject": "Outpost Endgame values"
     },
     {
-      "commit_num": 2172,
+      "commit_num": 2219,
       "hash": "34681382",
       "short": "34681382",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -571,14 +571,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win64bmi2/stockfish_19111617_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win64modern/stockfish_19111617_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win64/stockfish_19111617_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/win32/stockfish_19111617_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/linux64bmi2/stockfish_19111617_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/linux64modern/stockfish_19111617_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/3468138210cacdf46051e9d5bde6e28effee2cdc/linux64/stockfish_19111617_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Introduce king flank defenders\n\nThis patch implements what we have been trying for quite some time -\ndependance of kingdanger on balance of attackers and defenders of king\nflank, to avoid overestimate attacking power if the opponent has enough\ndefenders of king position. We already have some form of it in bishop\nand knight defenders - this is further work in this direction.\n\nWhat to do based on this?\n\n1) constant 4 is arbitrary, maybe it is not optimal\n2) maybe we can use quadratic formula as in kingflankattack\n3) simplification into alrealy existing terms is always a possibility :)\n4) overall kingdanger tuning always can be done.\n\npassed STC:\nhttp://tests.stockfishchess.org/tests/view/5dcf40560ebc590256325f30\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 26298 W: 5819 L: 5632 D: 14847\n\npassed LTC:\nhttp://tests.stockfishchess.org/tests/view/5dcfa5760ebc590256326464\nLLR: 2.96 (-2.94,2.94) [0.00,3.50]\nTotal: 30600 W: 5042 L: 4784 D: 20774\n\nCloses https://github.com/official-stockfish/Stockfish/pull/2415\n\nBench: 4496847\n",
       "subject": "Introduce king flank defenders"
     },
     {
-      "commit_num": 2173,
+      "commit_num": 2220,
       "hash": "fe124896",
       "short": "fe124896",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -633,7 +662,7 @@
       "subject": "Use exploration rate for reductions"
     },
     {
-      "commit_num": 2174,
+      "commit_num": 2221,
       "hash": "a00a3369",
       "short": "a00a3369",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -688,7 +717,7 @@
       "subject": "Prune before extension"
     },
     {
-      "commit_num": 2175,
+      "commit_num": 2222,
       "hash": "0256416b",
       "short": "0256416b",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -743,7 +772,7 @@
       "subject": "Remove unneeded & incorrect check."
     },
     {
-      "commit_num": 2176,
+      "commit_num": 2223,
       "hash": "a1319751",
       "short": "a1319751",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -798,7 +827,7 @@
       "subject": "Rank-based outposts"
     },
     {
-      "commit_num": 2177,
+      "commit_num": 2224,
       "hash": "9ab25909",
       "short": "9ab25909",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -817,43 +846,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/win64bmi2/stockfish_19111201_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/win64modern/stockfish_19111201_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/win64/stockfish_19111201_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/win32/stockfish_19111201_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/linux64bmi2/stockfish_19111201_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/linux64modern/stockfish_19111201_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/9ab2590963b029092a378c7a69d1c80c43999db8/linux64/stockfish_19111201_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Shallow depth pruning on NonPV advanced pawn push\n\nUsually advanced pawn pushes are not considered in shallow depth pruning\nbecause it is risky to do so with possible promotions near the horizon.\nHowever, this heuristic is not also beneficial on NonPV nodes since we\ncan afford to take slightly more risk on less important nodes.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 54530 W: 11955 L: 11686 D: 30889\nhttp://tests.stockfishchess.org/tests/view/5dc7dda30ebc5902ea57efd0\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,3.50]\nTotal: 77336 W: 12786 L: 12399 D: 52151\nhttp://tests.stockfishchess.org/tests/view/5dc8050d0ebc5902ea57f491\n\nCloses https://github.com/official-stockfish/Stockfish/pull/2408\n\nBench: 4422068\n",
       "subject": "Shallow depth pruning on NonPV advanced pawn push"
     },
     {
-      "commit_num": 2178,
+      "commit_num": 2225,
       "hash": "44b6697f",
       "short": "44b6697f",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -908,7 +908,7 @@
       "subject": "Remove explicit moveCount pruning"
     },
     {
-      "commit_num": 2179,
+      "commit_num": 2226,
       "hash": "9f312c80",
       "short": "9f312c80",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -963,7 +963,7 @@
       "subject": "Revert \"Rook PSQT Tuned\""
     },
     {
-      "commit_num": 2180,
+      "commit_num": 2227,
       "hash": "3804effb",
       "short": "3804effb",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -1018,7 +1018,7 @@
       "subject": "Rook PSQT Tuned"
     },
     {
-      "commit_num": 2181,
+      "commit_num": 2228,
       "hash": "ef38046e",
       "short": "ef38046e",
       "author": "MichaelB7 <michaelbyrne1978@gmail.com>",
@@ -1073,7 +1073,7 @@
       "subject": "Remove shuffle extension"
     },
     {
-      "commit_num": 2182,
+      "commit_num": 2229,
       "hash": "474d1335",
       "short": "474d1335",
       "author": "SFisGOD <jonathandumale@gmail.com>",
@@ -1128,7 +1128,7 @@
       "subject": "Combo of Parameter Tweaks"
     },
     {
-      "commit_num": 2183,
+      "commit_num": 2230,
       "hash": "cff9a867",
       "short": "cff9a867",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",

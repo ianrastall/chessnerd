@@ -2,7 +2,7 @@
   "month": "2025-07",
   "commits": [
     {
-      "commit_num": 169,
+      "commit_num": 216,
       "hash": "0db4a1be",
       "short": "0db4a1be",
       "author": "Kevin Lu <kevie.lu8@gmail.com>",
@@ -69,7 +69,7 @@
       "subject": "Remove completedDepth condition for SE"
     },
     {
-      "commit_num": 170,
+      "commit_num": 217,
       "hash": "94175524",
       "short": "94175524",
       "author": "rn5f107s2 <clemens.lerchl@gmail.com>",
@@ -132,7 +132,7 @@
       "subject": "Only set ep square if ep capture is possible"
     },
     {
-      "commit_num": 171,
+      "commit_num": 218,
       "hash": "14a2e50a",
       "short": "14a2e50a",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -199,7 +199,7 @@
       "subject": "Simplify key after"
     },
     {
-      "commit_num": 172,
+      "commit_num": 219,
       "hash": "57b32f3e",
       "short": "57b32f3e",
       "author": "CSTENTOR <coeruleusstentor@gmail.com>",
@@ -218,14 +218,51 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/win64bmi2/stockfish_25080214_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/win64modern/stockfish_25080214_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/win64ssse/stockfish_25080214_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/win64/stockfish_25080214_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/linux64bmi2/stockfish_25080214_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/linux64avx2/stockfish_25080214_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/linux64modern/stockfish_25080214_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/linux64ssse/stockfish_25080214_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/57b32f3e60e596fe1d2452a9548baa5b292fc724/linux64/stockfish_25080214_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Make Resetting the Aspiration Window after FailLow more aggressive\n\nSets beta=(3alpha+beta)/4 when failLow. Before it was beta=(alpha+beta)/2, even\nthough in theory we should be getting an upper bound from a failLow, we can’t\ntrust the score that caused the failLow. Therefore beta=alpha doesn’t work. I\nmade the buffer between the new beta to the bestValue that caused the failLow\nsmaller.\n\npassed STC:\nhttps://tests.stockfishchess.org/tests/view/688674947b562f5f7b7315b5\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 119616 W: 31253 L: 30818 D: 57545\nPtnml(0-2): 313, 14028, 30724, 14397, 346\n\npassed LTC:\nhttps://tests.stockfishchess.org/tests/view/6887e0ad7b562f5f7b731afc\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 96978 W: 24905 L: 24466 D: 47607\nPtnml(0-2): 59, 10376, 27183, 10809, 62\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6197\n\nbench: 3085519\n",
       "subject": "Make Resetting the Aspiration Window after FailLow more aggressive"
     },
     {
-      "commit_num": 173,
+      "commit_num": 220,
       "hash": "9034730a",
       "short": "9034730a",
       "author": "J. Oster <osterj165@googlemail.com>",
@@ -288,7 +325,7 @@
       "subject": "Display upper/lowerbound before wdl"
     },
     {
-      "commit_num": 174,
+      "commit_num": 221,
       "hash": "32cb78d7",
       "short": "32cb78d7",
       "author": "MinetaS <skdty87@gmail.com>",
@@ -307,47 +344,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/win64bmi2/stockfish_25080213_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/win64modern/stockfish_25080213_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/win64/stockfish_25080213_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/linux64bmi2/stockfish_25080213_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/linux64avx2/stockfish_25080213_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/linux64modern/stockfish_25080213_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/linux64ssse/stockfish_25080213_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/32cb78d782b5918fb658622a2690ba871dc5bb06/linux64/stockfish_25080213_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase CI timeouts for perft\n\nmight fix CI failures on macOS instances\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6194\n\nNo functional change\n",
       "subject": "Increase CI timeouts for perft"
     },
     {
-      "commit_num": 175,
+      "commit_num": 222,
       "hash": "377a3a52",
       "short": "377a3a52",
       "author": "Jost Triller <tsoj.tsoj@gmx.de>",
@@ -410,7 +414,7 @@
       "subject": "Depth dependent reduction threshold when full-depth re-search"
     },
     {
-      "commit_num": 176,
+      "commit_num": 223,
       "hash": "fdd9c34b",
       "short": "fdd9c34b",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -469,7 +473,7 @@
       "subject": "Re-adding ttHit condition, but this time in the inner block"
     },
     {
-      "commit_num": 177,
+      "commit_num": 224,
       "hash": "b177b739",
       "short": "b177b739",
       "author": "KazApps <kazuki_shogi@outlook.jp>",
@@ -532,7 +536,7 @@
       "subject": "Separate bonus/malus parameters for quiet and capture moves"
     },
     {
-      "commit_num": 178,
+      "commit_num": 225,
       "hash": "cd52859b",
       "short": "cd52859b",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -599,7 +603,7 @@
       "subject": "Simplify improving term"
     },
     {
-      "commit_num": 179,
+      "commit_num": 226,
       "hash": "2e2d2778",
       "short": "2e2d2778",
       "author": "Nonlinear2 <131959792+Nonlinear2@users.noreply.github.com>",
@@ -666,7 +670,7 @@
       "subject": "increase futility value when capturing last moved piece"
     },
     {
-      "commit_num": 180,
+      "commit_num": 227,
       "hash": "ab83d320",
       "short": "ab83d320",
       "author": "Styx <164851643+styxdoto@users.noreply.github.com>",
@@ -729,7 +733,7 @@
       "subject": "Simplify NMP condition"
     },
     {
-      "commit_num": 181,
+      "commit_num": 228,
       "hash": "83071917",
       "short": "83071917",
       "author": "mstembera <m_stembera@yahoo.com>",
@@ -792,7 +796,7 @@
       "subject": "Optimize find_nnz() using VBMI2"
     },
     {
-      "commit_num": 182,
+      "commit_num": 229,
       "hash": "cef55109",
       "short": "cef55109",
       "author": "aronpetkovski <aronpetko@gmail.com>",
@@ -859,7 +863,7 @@
       "subject": "Only do IIR in minimally reduced nodes"
     },
     {
-      "commit_num": 183,
+      "commit_num": 230,
       "hash": "9045fdb2",
       "short": "9045fdb2",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -926,7 +930,7 @@
       "subject": "Add depth condition"
     },
     {
-      "commit_num": 184,
+      "commit_num": 231,
       "hash": "1d8f118c",
       "short": "1d8f118c",
       "author": "87 <dev@87flowers.com>",
@@ -993,7 +997,7 @@
       "subject": "Remove unnecessary deque allocation in perft"
     },
     {
-      "commit_num": 185,
+      "commit_num": 232,
       "hash": "a9b7638e",
       "short": "a9b7638e",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1060,7 +1064,7 @@
       "subject": "Simplify newDepth modification formulas"
     },
     {
-      "commit_num": 186,
+      "commit_num": 233,
       "hash": "4fcfb0b4",
       "short": "4fcfb0b4",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1123,7 +1127,7 @@
       "subject": "Tweak the logic for setting the improving flag"
     },
     {
-      "commit_num": 187,
+      "commit_num": 234,
       "hash": "90c83c38",
       "short": "90c83c38",
       "author": "Muzhen Gaming <61100393+XInTheDark@users.noreply.github.com>",
@@ -1182,7 +1186,7 @@
       "subject": "VVLTC Search Tune"
     },
     {
-      "commit_num": 188,
+      "commit_num": 235,
       "hash": "525a5749",
       "short": "525a5749",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -1241,7 +1245,7 @@
       "subject": "Simplify extra continuation history updates"
     },
     {
-      "commit_num": 189,
+      "commit_num": 236,
       "hash": "64e8e1b2",
       "short": "64e8e1b2",
       "author": "aronpetkovski <aronpetko@gmail.com>",
@@ -1304,7 +1308,7 @@
       "subject": "Simplify LMR extension limit formula"
     },
     {
-      "commit_num": 190,
+      "commit_num": 237,
       "hash": "402602a7",
       "short": "402602a7",
       "author": "pb00067 <pb00067@phxl0401.wp.lan>",
@@ -1367,7 +1371,7 @@
       "subject": "Simplify static evaluation difference to move ordering logic"
     },
     {
-      "commit_num": 191,
+      "commit_num": 238,
       "hash": "b6082ba7",
       "short": "b6082ba7",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -1430,7 +1434,7 @@
       "subject": "Simplify search functions according DRY principle"
     },
     {
-      "commit_num": 192,
+      "commit_num": 239,
       "hash": "69a01b88",
       "short": "69a01b88",
       "author": "Tomasz Sobczyk <tomasz.sobczyk1997@gmail.com>",
@@ -1493,7 +1497,7 @@
       "subject": "Use shared memory for network weights"
     },
     {
-      "commit_num": 193,
+      "commit_num": 240,
       "hash": "e88ccfd8",
       "short": "e88ccfd8",
       "author": "Disservin <disservin.social@gmail.com>",
@@ -1560,7 +1564,7 @@
       "subject": "Prevent accidential misuse of TUNE()"
     },
     {
-      "commit_num": 194,
+      "commit_num": 241,
       "hash": "a516b517",
       "short": "a516b517",
       "author": "aronpetkovski <aronpetko@gmail.com>",
@@ -1627,7 +1631,7 @@
       "subject": "Simplify eval >= beta condition from NMP"
     },
     {
-      "commit_num": 195,
+      "commit_num": 242,
       "hash": "bdc393d3",
       "short": "bdc393d3",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1694,7 +1698,7 @@
       "subject": "Correct comment"
     },
     {
-      "commit_num": 196,
+      "commit_num": 243,
       "hash": "2c9a1871",
       "short": "2c9a1871",
       "author": "Daniel Samek <samekdaniel@email.cz>",
@@ -1757,7 +1761,7 @@
       "subject": "Add offsets to history updates."
     },
     {
-      "commit_num": 197,
+      "commit_num": 244,
       "hash": "793110ca",
       "short": "793110ca",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1820,7 +1824,7 @@
       "subject": "Remove !ttData.move condition from cutNode reduction"
     },
     {
-      "commit_num": 198,
+      "commit_num": 245,
       "hash": "92514fd3",
       "short": "92514fd3",
       "author": "Daniel Monroe <github.com@danielmonroe.net>",
@@ -1883,7 +1887,7 @@
       "subject": "Simplify away a term in see pruning"
     },
     {
-      "commit_num": 199,
+      "commit_num": 246,
       "hash": "e2aa1255",
       "short": "e2aa1255",
       "author": "Shawn Xu <xu107288696@gmail.com>",
@@ -1942,7 +1946,7 @@
       "subject": "Consistent syntax for class members"
     },
     {
-      "commit_num": 200,
+      "commit_num": 247,
       "hash": "8c2d21f9",
       "short": "8c2d21f9",
       "author": "87 <dev@87flowers.com>",
@@ -2009,7 +2013,7 @@
       "subject": "Speedup movegen with VBMI2"
     },
     {
-      "commit_num": 201,
+      "commit_num": 248,
       "hash": "6a09a24c",
       "short": "6a09a24c",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",

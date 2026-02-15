@@ -2,7 +2,7 @@
   "month": "2019-02",
   "commits": [
     {
-      "commit_num": 2367,
+      "commit_num": 2414,
       "hash": "c2fb0ff7",
       "short": "c2fb0ff7",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -57,7 +57,7 @@
       "subject": "Add continuation history 5"
     },
     {
-      "commit_num": 2368,
+      "commit_num": 2415,
       "hash": "82ff04b9",
       "short": "82ff04b9",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -112,7 +112,7 @@
       "subject": "Remove skipQuiets with mate fix. (#2021)"
     },
     {
-      "commit_num": 2369,
+      "commit_num": 2416,
       "hash": "7c5f5fba",
       "short": "7c5f5fba",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -167,7 +167,7 @@
       "subject": "Revert \"Remove skipQuiets variable in search()\""
     },
     {
-      "commit_num": 2370,
+      "commit_num": 2417,
       "hash": "e51244cb",
       "short": "e51244cb",
       "author": "MJZ1977 <37274752+MJZ1977@users.noreply.github.com>",
@@ -222,7 +222,7 @@
       "subject": "ProbCutCount limit dependancy to cutNode"
     },
     {
-      "commit_num": 2371,
+      "commit_num": 2418,
       "hash": "76d2f5b9",
       "short": "76d2f5b9",
       "author": "protonspring <mike@whiteley.org>",
@@ -277,7 +277,7 @@
       "subject": "Remove skipQuiets variable in search()"
     },
     {
-      "commit_num": 2372,
+      "commit_num": 2419,
       "hash": "22ef3680",
       "short": "22ef3680",
       "author": "protonspring <mike@whiteley.org>",
@@ -332,7 +332,7 @@
       "subject": "Remove PvNode dimension from Reductions array"
     },
     {
-      "commit_num": 2373,
+      "commit_num": 2420,
       "hash": "2bceba7f",
       "short": "2bceba7f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -387,7 +387,7 @@
       "subject": "Assorted trivial cleanups 2/2019"
     },
     {
-      "commit_num": 2374,
+      "commit_num": 2421,
       "hash": "332b9045",
       "short": "332b9045",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -442,7 +442,7 @@
       "subject": "Log message of: Less king danger..."
     },
     {
-      "commit_num": 2375,
+      "commit_num": 2422,
       "hash": "dd4796fc",
       "short": "dd4796fc",
       "author": "protonspring <mike@whiteley.org>",
@@ -461,43 +461,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/win64bmi2/stockfish_19020809_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/win64modern/stockfish_19020809_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/win64/stockfish_19020809_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/win32/stockfish_19020809_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/linux64bmi2/stockfish_19020809_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/linux64modern/stockfish_19020809_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/dd4796fcd5559847d4b8aab7d21ffff9929799ce/linux64/stockfish_19020809_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove Some Bitboard Arrays (#1963)\n\nThis is non-functional. These 5 arrays are simple enough to calculate real-time and maintaining an array for them does not help. Decreases the memory footprint.\n\n\n\nThis seems a tiny bit slower on my machine, but passed STC well enough. Could someone verify speed?\n\n\n\nSTC\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\n\nTotal: 44745 W: 9780 L: 9704 D: 25261\n\nhttp://tests.stockfishchess.org/tests/view/5c47aa2d0ebc5902bca13fc4\n\n\n\nThe slowdown is minimal even in 32 bit case (thanks to @mstembera for testing):\n\n\n\nCompiled using make build ARCH=x86-32 CXX=i686-w64-mingw32-c++ and benched\n\nThis patch only:\n\n\n\n```\n\nResults for 40 tests for each version:\n\n\n\n            Base      Test      Diff      \n\n    Mean    1455204   1450033   5171      \n\n    StDev   49452     34533     59621     \n\n\n\np-value: 0.465\n\nspeedup: -0.004\n\n```\n\n\n\nNo functional change.\n",
       "subject": "Remove Some Bitboard Arrays (#1963)"
     },
     {
-      "commit_num": 2376,
+      "commit_num": 2423,
       "hash": "65145002",
       "short": "65145002",
       "author": "mstembera <m_stembera@yahoo.com>",
@@ -552,7 +523,7 @@
       "subject": "Less king danger if we have a knight near by to defend it. (#1987)"
     },
     {
-      "commit_num": 2377,
+      "commit_num": 2424,
       "hash": "acc47e8b",
       "short": "acc47e8b",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -607,7 +578,7 @@
       "subject": "Simplify failedLow away #1986"
     },
     {
-      "commit_num": 2378,
+      "commit_num": 2425,
       "hash": "ff97a9fd",
       "short": "ff97a9fd",
       "author": "Stéphane Nicolet <stephanenicoletsuriphone@gmail.com>",
@@ -662,7 +633,7 @@
       "subject": "Tweak tropism weight in king danger"
     },
     {
-      "commit_num": 2379,
+      "commit_num": 2426,
       "hash": "3f7ec977",
       "short": "3f7ec977",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
