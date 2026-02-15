@@ -13,6 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECO Codes - Chess Nerd</title>
+    <meta name="description" content="Browse Encyclopedia of Chess Openings (ECO) codes in a 3-level hierarchy with code summaries and named opening lines.">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -48,6 +49,14 @@
             color: var(--text-secondary);
             font-style: italic;
         }
+
+        .error {
+            color: var(--error);
+            background: rgba(255, 107, 107, 0.12);
+            border: 1px solid rgba(255, 107, 107, 0.45);
+            border-radius: 6px;
+            padding: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +84,7 @@
                     <span class="material-icons">palette</span>
                     <select id="accentColor" class="color-dropdown"></select>
                 </div>
-                <button id="themeToggle" class="btn btn-secondary">
+                <button id="themeToggle" class="btn btn-secondary" aria-label="Toggle theme">
                     <span class="material-icons">dark_mode</span>
                 </button>
             </div>
@@ -100,20 +109,26 @@
                     <div class="options-grid">
                         <div class="option-group">
                             <label for="eco1">Volume (A-E)</label>
-                            <select id="eco1"><option value="">Loading...</option></select>
+                            <select id="eco1" aria-label="ECO volume">
+                                <option value="">Loading...</option>
+                            </select>
                         </div>
                         <div class="option-group">
                             <label for="eco2">Group</label>
-                            <select id="eco2" disabled></select>
+                            <select id="eco2" aria-label="ECO group" disabled>
+                                <option value="">- Select volume first -</option>
+                            </select>
                         </div>
                         <div class="option-group">
                             <label for="eco3">Opening</label>
-                            <select id="eco3" disabled></select>
+                            <select id="eco3" aria-label="ECO opening" disabled>
+                                <option value="">- Select group first -</option>
+                            </select>
                         </div>
                     </div>
                 </div>
 
-                <div id="ecoContent">
+                <div id="ecoContent" role="region" aria-live="polite" aria-atomic="false" aria-label="ECO details">
                     <div class="loading">Loading database...</div>
                 </div>
             </div>
@@ -126,10 +141,6 @@
 
     <script src="js/theme.js"></script>
     <script>
-        document.getElementById('backButton').addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             let ecoData = {};
             const first = document.getElementById('eco1');
@@ -137,61 +148,186 @@
             const third = document.getElementById('eco3');
             const content = document.getElementById('ecoContent');
 
-            function populate(select, codes) {
-                select.innerHTML = '<option value="">- Select -</option>';
-                if (!ecoData) return;
+            document.getElementById('backButton').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
 
+            function setDisabledSelect(select, label) {
+                select.innerHTML = '';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = label;
+                select.appendChild(option);
+                select.disabled = true;
+            }
+
+            function setInfoMessage(message) {
+                content.innerHTML = '';
+                const p = document.createElement('p');
+                p.style.color = 'var(--text-secondary)';
+                p.textContent = message;
+                content.appendChild(p);
+            }
+
+            function setErrorMessage(message) {
+                content.innerHTML = '';
+                const div = document.createElement('div');
+                div.className = 'error';
+                div.textContent = message;
+                content.appendChild(div);
+            }
+
+            function toSafeString(value) {
+                return typeof value === 'string' ? value : String(value ?? '');
+            }
+
+            function appendMultilineText(container, text) {
+                const normalized = toSafeString(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                const lines = normalized.split('\n');
+                lines.forEach((line, index) => {
+                    container.appendChild(document.createTextNode(line));
+                    if (index < lines.length - 1) {
+                        container.appendChild(document.createElement('br'));
+                    }
+                });
+            }
+
+            function appendOpeningContent(container, openingValue) {
+                const raw = toSafeString(openingValue).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                const match = raw.match(/^\s*<strong>([\s\S]*?)<\/strong>\s*([\s\S]*)$/i);
+
+                if (!match) {
+                    appendMultilineText(container, raw);
+                    return;
+                }
+
+                const title = document.createElement('strong');
+                title.textContent = match[1].trim();
+                container.appendChild(title);
+
+                const remainder = match[2].trimStart();
+                if (remainder) {
+                    container.appendChild(document.createElement('br'));
+                    appendMultilineText(container, remainder);
+                }
+            }
+
+            function validateEcoData(data) {
+                if (!data || typeof data !== 'object' || Array.isArray(data)) {
+                    return { ok: false, error: 'Invalid ECO data format.' };
+                }
+
+                const volumes = Object.keys(data).filter(key => /^[A-Z]$/.test(key)).sort();
+                if (volumes.length === 0) {
+                    return { ok: false, error: 'ECO data missing root volumes.' };
+                }
+
+                for (const [code, node] of Object.entries(data)) {
+                    if (!node || typeof node !== 'object' || Array.isArray(node)) {
+                        return { ok: false, error: `Invalid node for code ${code}.` };
+                    }
+                    if ('children' in node && !Array.isArray(node.children)) {
+                        return { ok: false, error: `Invalid children list for code ${code}.` };
+                    }
+                    if ('openings' in node && !Array.isArray(node.openings)) {
+                        return { ok: false, error: `Invalid openings list for code ${code}.` };
+                    }
+                }
+
+                return { ok: true, volumes };
+            }
+
+            function populate(select, codes, placeholderLabel = '- Select -') {
+                select.innerHTML = '';
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = placeholderLabel;
+                select.appendChild(defaultOption);
+
+                if (!Array.isArray(codes)) {
+                    return 0;
+                }
+
+                let validCount = 0;
+                const missingCodes = [];
                 codes.forEach(code => {
+                    if (!ecoData[code]) {
+                        missingCodes.push(code);
+                        return;
+                    }
+
                     const name = ecoData[code]?.name || code;
                     const option = document.createElement('option');
                     option.value = code;
                     option.textContent = `${code}: ${name}`;
                     select.appendChild(option);
+                    validCount += 1;
                 });
+
+                if (missingCodes.length > 0) {
+                    console.warn('ECO data missing referenced child codes:', missingCodes);
+                }
+
+                return validCount;
             }
 
             function render(code) {
                 if (!code || !ecoData[code]) {
-                    content.innerHTML = '<p style="color: var(--text-secondary)">Select a code to view details.</p>';
+                    setInfoMessage('Select a code to view details.');
                     return;
                 }
 
-                let html = `<p>${ecoData[code].content.replace(/\n/g, '<br>')}</p>`;
+                const node = ecoData[code];
+                const fragment = document.createDocumentFragment();
 
-                if (ecoData[code].openings && ecoData[code].openings.length > 0) {
-                    html += '<h5>Named Openings</h5>';
-                    ecoData[code].openings.forEach(op => {
-                        html += `<div class="eco-move-text">${op.replace(/\n/g, '<br>')}</div>`;
+                const description = document.createElement('p');
+                appendMultilineText(description, node.content);
+                fragment.appendChild(description);
+
+                const openings = Array.isArray(node.openings) ? node.openings : [];
+                if (openings.length > 0) {
+                    const heading = document.createElement('h5');
+                    heading.textContent = 'Named Openings';
+                    fragment.appendChild(heading);
+
+                    openings.forEach(op => {
+                        const box = document.createElement('div');
+                        box.className = 'eco-move-text';
+                        appendOpeningContent(box, op);
+                        fragment.appendChild(box);
                     });
                 }
-                content.innerHTML = html;
+
+                content.innerHTML = '';
+                content.appendChild(fragment);
             }
 
             first.addEventListener('change', () => {
                 const c = first.value;
-                second.disabled = true;
-                third.disabled = true;
-                second.innerHTML = '';
-                third.innerHTML = '';
+                setDisabledSelect(second, '- Select group -');
+                setDisabledSelect(third, '- Select opening -');
                 
                 render(c);
 
-                if (c && ecoData[c] && ecoData[c].children.length) {
-                    populate(second, ecoData[c].children);
-                    second.disabled = false;
+                if (c && Array.isArray(ecoData[c]?.children) && ecoData[c].children.length > 0) {
+                    const added = populate(second, ecoData[c].children, '- Select group -');
+                    if (added > 0) {
+                        second.disabled = false;
+                    }
                 }
             });
 
             second.addEventListener('change', () => {
                 const c = second.value;
-                third.disabled = true;
-                third.innerHTML = '';
+                setDisabledSelect(third, '- Select opening -');
                 
                 render(c);
 
-                if (c && ecoData[c] && ecoData[c].children.length) {
-                    populate(third, ecoData[c].children);
-                    third.disabled = false;
+                if (c && Array.isArray(ecoData[c]?.children) && ecoData[c].children.length > 0) {
+                    const added = populate(third, ecoData[c].children, '- Select opening -');
+                    if (added > 0) {
+                        third.disabled = false;
+                    }
                 }
             });
 
@@ -204,15 +340,33 @@
                     const response = await fetch('js/eco-code.json');
                     if (!response.ok) throw new Error('Failed to load eco-code.json');
                     
-                    ecoData = await response.json();
-                    
-                    populate(first, ['A', 'B', 'C', 'D', 'E']);
-                    content.innerHTML = '<p style="color: var(--text-secondary)">Please select a volume to begin.</p>';
+                    const loadedData = await response.json();
+                    const validation = validateEcoData(loadedData);
+                    if (!validation.ok) {
+                        throw new Error(validation.error);
+                    }
+
+                    ecoData = loadedData;
+                    const added = populate(first, validation.volumes, '- Select volume -');
+                    if (added > 0) {
+                        first.disabled = false;
+                    } else {
+                        throw new Error('No valid ECO volumes were found.');
+                    }
+
+                    setInfoMessage('Please select a volume to begin.');
                 } catch (error) {
                     console.error(error);
-                    content.innerHTML = `<div class="error">Error: Could not load ECO data. Make sure 'js/eco-code.json' exists.</div>`;
+                    setErrorMessage(`Error: Could not load ECO data (${error.message}).`);
+                    setDisabledSelect(first, 'Error loading data');
+                    setDisabledSelect(second, 'Unavailable');
+                    setDisabledSelect(third, 'Unavailable');
                 }
             }
+
+            first.disabled = true;
+            setDisabledSelect(second, '- Select volume first -');
+            setDisabledSelect(third, '- Select group first -');
 
             init();
         });
