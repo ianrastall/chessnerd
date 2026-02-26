@@ -2,7 +2,7 @@
   "month": "2018-07",
   "commits": [
     {
-      "commit_num": 2559,
+      "commit_num": 2565,
       "hash": "ba2a2c34",
       "short": "ba2a2c34",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -57,7 +57,7 @@
       "subject": "Introduce tropism measure in king danger"
     },
     {
-      "commit_num": 2560,
+      "commit_num": 2566,
       "hash": "571f54b1",
       "short": "571f54b1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -112,7 +112,7 @@
       "subject": "Improve Stats definition"
     },
     {
-      "commit_num": 2561,
+      "commit_num": 2567,
       "hash": "fae57273",
       "short": "fae57273",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -167,7 +167,7 @@
       "subject": "Small tweaks to recent code changes"
     },
     {
-      "commit_num": 2562,
+      "commit_num": 2568,
       "hash": "c08e05b4",
       "short": "c08e05b4",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -222,7 +222,7 @@
       "subject": "Increase the mg->eg gradient for the PawnlessFlank malus"
     },
     {
-      "commit_num": 2563,
+      "commit_num": 2569,
       "hash": "6184d2b2",
       "short": "6184d2b2",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -277,7 +277,7 @@
       "subject": "Simplify cmh pruning"
     },
     {
-      "commit_num": 2564,
+      "commit_num": 2570,
       "hash": "9ca014df",
       "short": "9ca014df",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -332,7 +332,7 @@
       "subject": "Fix a compilation error for MSVC"
     },
     {
-      "commit_num": 2565,
+      "commit_num": 2571,
       "hash": "c9f80660",
       "short": "c9f80660",
       "author": "Jekaa <1owa@mail.ru>",
@@ -351,43 +351,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/win64bmi2/stockfish_18072710_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/win64modern/stockfish_18072710_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/win64/stockfish_18072710_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/win32/stockfish_18072710_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/linux64bmi2/stockfish_18072710_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/linux64modern/stockfish_18072710_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/c9f80660a6c529f6909c1beed4e9d5798979711b/linux64/stockfish_18072710_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small reformat in evaluate threats (non functional)\n\nWhen evaluating threat by safe pawn and pawn push the same expression is used.\n\nSTC\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 19444 W: 4540 L: 4309 D: 10595\nhttp://tests.stockfishchess.org/tests/view/5b5a6e150ebc5902bdb8c5c0\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1709\n\nNo functional change.\n\n--------------------\n\nComments by Stéphane Nicolet:\n\nI don't measure any speed-up on my system, with two parallel benches at depth 22:\n\nTotal time (ms) : 74989\nNodes searched : 144830258\nNodes/second : 1931353\nmaster\n\nTotal time (ms) : 75341\nNodes searched : 144830258\nNodes/second : 1922329\ntestedpatch\n\nAnd anyway, like Stefan Geschwentner, I don't think that a 0.3% speed-up would\nbe enough to pass a [0..5] LTC test -- as a first approximation, we have this\nrule of thumb that 1% speed-up gives about 1 Elo point.\n\nHowever, considering the facts that the reformatting by itself is interesting,\nthat this is your first green test and that you played by the rules by running\nthe SPRT[0..5] test before opening the pull request, I will commit the change.\nI will only take the liberty to change the occurrences of safe in lines 590 and\n591 to b, to make the code more similar to lines 584 and 585.\n\nSo approved, and congrats :-)\n",
       "subject": "Small reformat in evaluate threats (non functional)"
     },
     {
-      "commit_num": 2566,
+      "commit_num": 2572,
       "hash": "e12fc10b",
       "short": "e12fc10b",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -442,7 +413,7 @@
       "subject": "Remove a popcount for HinderPassedPawn"
     },
     {
-      "commit_num": 2567,
+      "commit_num": 2573,
       "hash": "9afa03b8",
       "short": "9afa03b8",
       "author": "noobpwnftw <noobpwnftw@users.noreply.github.com>",
@@ -497,7 +468,7 @@
       "subject": "7-pieces Syzygy tablebase support"
     },
     {
-      "commit_num": 2568,
+      "commit_num": 2574,
       "hash": "2660a914",
       "short": "2660a914",
       "author": "protonspring <mike@whiteley.org>",
@@ -552,7 +523,7 @@
       "subject": "Remove condition for pawn threats"
     },
     {
-      "commit_num": 2569,
+      "commit_num": 2575,
       "hash": "a4eda305",
       "short": "a4eda305",
       "author": "Stefan Geschwentner <locutus2@users.noreply.github.com>",
@@ -607,7 +578,7 @@
       "subject": "Rank threats on pinned pawns"
     },
     {
-      "commit_num": 2570,
+      "commit_num": 2576,
       "hash": "d44701be",
       "short": "d44701be",
       "author": "ianfab <ianfab@users.noreply.github.com>",
@@ -662,7 +633,7 @@
       "subject": "Fix condition for error message of signature script"
     },
     {
-      "commit_num": 2571,
+      "commit_num": 2577,
       "hash": "ae989278",
       "short": "ae989278",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -717,7 +688,7 @@
       "subject": "Code clean-up"
     },
     {
-      "commit_num": 2572,
+      "commit_num": 2578,
       "hash": "313f4037",
       "short": "313f4037",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -772,7 +743,7 @@
       "subject": "Tweak KingFlank when king is on edge files"
     },
     {
-      "commit_num": 2573,
+      "commit_num": 2579,
       "hash": "c4c2e08f",
       "short": "c4c2e08f",
       "author": "Stefan Geschwentner <locutus2@users.noreply.github.com>",
@@ -827,7 +798,7 @@
       "subject": "Tweak stat bonus"
     },
     {
-      "commit_num": 2574,
+      "commit_num": 2580,
       "hash": "6e368605",
       "short": "6e368605",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -846,14 +817,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/win64bmi2/stockfish_18072517_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/win64modern/stockfish_18072517_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/win64/stockfish_18072517_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/win32/stockfish_18072517_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/linux64bmi2/stockfish_18072517_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/linux64modern/stockfish_18072517_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/6e36860554c735775b93f7622806cea90f078480/linux64/stockfish_18072517_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "CounterMove History Pruning Tweak\n\nSTC: (Yellow)\nLLR: -2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 40124 W: 8817 L: 8751 D: 22556\nhttp://tests.stockfishchess.org/tests/view/5b5690180ebc5902bdb85c8a\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 21599 W: 3811 L: 3599 D: 14189\nhttp://tests.stockfishchess.org/tests/view/5b5757010ebc5902bdb86b1f\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1697\n\nBench:  4794161\n",
       "subject": "CounterMove History Pruning Tweak"
     },
     {
-      "commit_num": 2575,
+      "commit_num": 2581,
       "hash": "bb56779c",
       "short": "bb56779c",
       "author": "Stefan Geschwentner <Stefan-Geschwentner@web.de>",
@@ -908,7 +908,7 @@
       "subject": "Revert \"Tweak reductions formula: 0.88 * depth + 0.12\""
     },
     {
-      "commit_num": 2576,
+      "commit_num": 2582,
       "hash": "38471697",
       "short": "38471697",
       "author": "double-beep <double-beep@no-reply.github.com>",
@@ -963,7 +963,7 @@
       "subject": "Slight decrease of overload value"
     },
     {
-      "commit_num": 2577,
+      "commit_num": 2583,
       "hash": "50287a55",
       "short": "50287a55",
       "author": "Stefan Geschwentner <locutus2@users.noreply.github.com>",
@@ -1018,7 +1018,7 @@
       "subject": "Tweak reductions formula: 0.88 * depth + 0.12"
     },
     {
-      "commit_num": 2578,
+      "commit_num": 2584,
       "hash": "0d5fe2f1",
       "short": "0d5fe2f1",
       "author": "Goodkov Vasiliy Aleksandrovich <qwegood@mail.ru>",
@@ -1073,7 +1073,7 @@
       "subject": "Simplify condition for ThreatByRook"
     },
     {
-      "commit_num": 2579,
+      "commit_num": 2585,
       "hash": "4bd24da1",
       "short": "4bd24da1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1128,7 +1128,7 @@
       "subject": "Slight tidy up in endgame machinery"
     },
     {
-      "commit_num": 2580,
+      "commit_num": 2586,
       "hash": "af1ddfd8",
       "short": "af1ddfd8",
       "author": "protonspring <mike@whiteley.org>",
@@ -1183,7 +1183,7 @@
       "subject": "simplified forward ranks."
     },
     {
-      "commit_num": 2581,
+      "commit_num": 2587,
       "hash": "53c07c34",
       "short": "53c07c34",
       "author": "Stefan Geschwentner <Stefan-Geschwentner@web.de>",
@@ -1238,7 +1238,7 @@
       "subject": "Non functional LMR rewrite."
     },
     {
-      "commit_num": 2582,
+      "commit_num": 2588,
       "hash": "0365b086",
       "short": "0365b086",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -1293,7 +1293,7 @@
       "subject": "Simplify the \"overload\" condition"
     },
     {
-      "commit_num": 2583,
+      "commit_num": 2589,
       "hash": "12e79be9",
       "short": "12e79be9",
       "author": "Stefan Geschwentner <locutus2@users.noreply.github.com>",
@@ -1348,7 +1348,7 @@
       "subject": "Better check evasion move sorting"
     },
     {
-      "commit_num": 2584,
+      "commit_num": 2590,
       "hash": "41bc0d56",
       "short": "41bc0d56",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -1403,7 +1403,7 @@
       "subject": "Remove connectivity."
     },
     {
-      "commit_num": 2585,
+      "commit_num": 2591,
       "hash": "2ac35027",
       "short": "2ac35027",
       "author": "ElbertoOne <ElbertoOne@users.noreply.github.com>",
@@ -1458,7 +1458,7 @@
       "subject": "Simplify Overload condition"
     },
     {
-      "commit_num": 2586,
+      "commit_num": 2592,
       "hash": "e0f317af",
       "short": "e0f317af",
       "author": "Gian-Carlo Pascutto <gcp@sjeng.org>",
@@ -1513,7 +1513,7 @@
       "subject": "Allow Position::init() to be called multiple times."
     },
     {
-      "commit_num": 2587,
+      "commit_num": 2593,
       "hash": "a0579351",
       "short": "a0579351",
       "author": "DU-jdto <jadto@outlook.com>",
@@ -1568,7 +1568,7 @@
       "subject": "Minor code style tweaks"
     },
     {
-      "commit_num": 2588,
+      "commit_num": 2594,
       "hash": "3913726d",
       "short": "3913726d",
       "author": "Miguel Lahoz <miguel_lahoz@protonmail.com>",
@@ -1623,7 +1623,7 @@
       "subject": "Use single value for KingProtector."
     },
     {
-      "commit_num": 2589,
+      "commit_num": 2595,
       "hash": "ee0f5cd3",
       "short": "ee0f5cd3",
       "author": "ianfab <ianfab@users.noreply.github.com>",
@@ -1678,7 +1678,7 @@
       "subject": "Minor whitespace formatting changes"
     },
     {
-      "commit_num": 2590,
+      "commit_num": 2596,
       "hash": "a6fa6a9e",
       "short": "a6fa6a9e",
       "author": "protonspring <mike@whiteley.org>",
@@ -1733,7 +1733,7 @@
       "subject": "Remove rank limitation for MinorBehindPawn"
     },
     {
-      "commit_num": 2591,
+      "commit_num": 2597,
       "hash": "d2d4e85f",
       "short": "d2d4e85f",
       "author": "candirufish <buras007@mail2world.com>",
@@ -1788,7 +1788,7 @@
       "subject": "Tuned Values after 2 million spsa games"
     },
     {
-      "commit_num": 2592,
+      "commit_num": 2598,
       "hash": "d2752fdc",
       "short": "d2752fdc",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1843,7 +1843,7 @@
       "subject": "Remove offset in thread redistribution scheme."
     },
     {
-      "commit_num": 2593,
+      "commit_num": 2599,
       "hash": "0f480957",
       "short": "0f480957",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",
@@ -1862,43 +1862,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/win64bmi2/stockfish_18070601_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/win64modern/stockfish_18070601_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/win64/stockfish_18070601_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/win32/stockfish_18070601_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/linux64bmi2/stockfish_18070601_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/linux64modern/stockfish_18070601_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/0f480957595cc5a20d314211e19b86f1beb44f87/linux64/stockfish_18070601_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify ThreatByKing to be a single Score.\n\nIn the current master, ThreatByKing is an array of two Scores, one for\nwhen we have a single attack and one for when we have many. The latter\ncase is very rarely called during bench and was recently given a strange\nnegative value during a tuning run, as pointed out by @candirufish on\ncommit efd4ca2.  Here, we simplify away this second case entirely, and\nincrease the remaining ThreatByKing to compensate.\n\nAlthough I derived the parameter tweak independently, with the goal of\npreserving the same average bonus, I later noticed that a very similar\nScore had already been derived by an ongoing SPSA tuning session.\nI therefore recognize @candirufish for first discovering these values.\n\nI would also like to thank @Rocky640 for valuable feedback that pointed\nme in the direction of ThreatByKing.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 7677 W: 1772 L: 1623 D: 4282\nhttp://tests.stockfishchess.org/tests/view/5b3db0320ebc5902b9ffe97a\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 108031 W: 18329 L: 18350 D: 71352\nhttp://tests.stockfishchess.org/tests/view/5b3dbf4b0ebc5902b9ffe9db\n\nCloses https://github.com/official-stockfish/Stockfish/pull/1666\n\nBench: 4678861\n",
       "subject": "Simplify ThreatByKing to be a single Score."
     },
     {
-      "commit_num": 2594,
+      "commit_num": 2600,
       "hash": "d96c1c32",
       "short": "d96c1c32",
       "author": "Stefano Cardanobile <stefano.cardanobile@gmail.com>",
@@ -1953,7 +1924,7 @@
       "subject": "Introduce voting system for best move selection"
     },
     {
-      "commit_num": 2595,
+      "commit_num": 2601,
       "hash": "3279655f",
       "short": "3279655f",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -2008,7 +1979,7 @@
       "subject": "Capture Stat Tweak"
     },
     {
-      "commit_num": 2596,
+      "commit_num": 2602,
       "hash": "e7cfa5d0",
       "short": "e7cfa5d0",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -2063,7 +2034,7 @@
       "subject": "Simplify saving a TT entry."
     },
     {
-      "commit_num": 2597,
+      "commit_num": 2603,
       "hash": "8c4f0ffa",
       "short": "8c4f0ffa",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",

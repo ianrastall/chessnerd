@@ -2,7 +2,7 @@
   "month": "2019-12",
   "commits": [
     {
-      "commit_num": 2195,
+      "commit_num": 2201,
       "hash": "f3c83ed4",
       "short": "f3c83ed4",
       "author": "protonspring <mike@whiteley.org>",
@@ -57,7 +57,7 @@
       "subject": "Determine opposite colors mathematically"
     },
     {
-      "commit_num": 2196,
+      "commit_num": 2202,
       "hash": "7a7bcd63",
       "short": "7a7bcd63",
       "author": "protonspring <mike@whiteley.org>",
@@ -112,7 +112,7 @@
       "subject": "Simplify signature of remove_piece()"
     },
     {
-      "commit_num": 2197,
+      "commit_num": 2203,
       "hash": "39437f4e",
       "short": "39437f4e",
       "author": "Sami Kiminki <skiminki@users.noreply.github.com>",
@@ -131,43 +131,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/win64bmi2/stockfish_20012711_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/win64modern/stockfish_20012711_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/win64/stockfish_20012711_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/win32/stockfish_20012711_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/linux64bmi2/stockfish_20012711_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/linux64modern/stockfish_20012711_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/39437f4e55aaa26ef9f0d5a1c762e560e9ffde32/linux64/stockfish_20012711_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Advise the kernel to use huge pages (Linux)\n\nAlign the TT allocation by 2M to make it huge page friendly and advise the\nkernel to use huge pages.\n\nBenchmarks on my i7-8700K (6C/12T) box: (3 runs per bench per config)\n\n                    vanilla (nps)               hugepages (nps)              avg\n==\nbench             | 3012490  3024364  3036331   3071052  3067544  3071052    +1.5%\nbench 16 12 20    | 19237932 19050166 19085315  19266346 19207025 19548758   +1.1%\nbench 16384 12 20 | 18182313 18371581 18336838  19381275 19738012 19620225   +7.0%\n\nOn my box, huge pages have a significant perf impact when using a big\nhash size. They also speed up TT initialization big time:\n\n                                  vanilla (s)  huge pages (s)  speed-up\n=======================================================================\ntime stockfish bench 16384 1 1  | 5.37         1.48            3.6x\n\nIn practice, huge pages with auto-defrag may always be enabled in the\nsystem, in which case this patch has no effect. This\ndepends on the values in /sys/kernel/mm/transparent_hugepage/enabled\nand /sys/kernel/mm/transparent_hugepage/defrag.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/2463\n\nNo functional change\n",
       "subject": "Advise the kernel to use huge pages (Linux)"
     },
     {
-      "commit_num": 2198,
+      "commit_num": 2204,
       "hash": "13f70d03",
       "short": "13f70d03",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -186,14 +157,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/win64bmi2/stockfish_19122500_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/win64modern/stockfish_19122500_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/win64/stockfish_19122500_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/win32/stockfish_19122500_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/linux64bmi2/stockfish_19122500_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/linux64modern/stockfish_19122500_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/13f70d0392ca3ce7f1c8e34dd0a10c3537d2fbab/linux64/stockfish_19122500_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Tune search constants\n\nSTC failed red :\nLLR: -2.95 (-2.94,2.94) [0.00,3.50]\nTotal: 41667 W: 9094 L: 9138 D: 23435\nhttps://tests.stockfishchess.org/tests/view/5df7bb566932658fe9b45253\n\nLTC failed yellow :\nLLR: -2.96 (-2.94,2.94) [0.00,3.50]\nTotal: 113667 W: 18330 L: 18196 D: 77141\nhttps://tests.stockfishchess.org/tests/view/5df562386932658fe9b451c7\n\nVLTC turned green :\nLLR: 2.95 (-2.94,2.94) [0.00,3.50]\nTotal: 128630 W: 17747 L: 17273 D: 93610\nhttps://tests.stockfishchess.org/tests/view/5df9054dcde01bf360ab78db\n\nBench 5180012\n",
       "subject": "Tune search constants"
     },
     {
-      "commit_num": 2199,
+      "commit_num": 2205,
       "hash": "bae019b5",
       "short": "bae019b5",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -248,7 +248,7 @@
       "subject": "50-moves rule improvement for transposition table"
     },
     {
-      "commit_num": 2200,
+      "commit_num": 2206,
       "hash": "b6482472",
       "short": "b6482472",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -303,7 +303,7 @@
       "subject": "Refine improving-logic"
     },
     {
-      "commit_num": 2201,
+      "commit_num": 2207,
       "hash": "3ef0c3c3",
       "short": "3ef0c3c3",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -358,7 +358,7 @@
       "subject": "TrappedRook value and King positional tables"
     },
     {
-      "commit_num": 2202,
+      "commit_num": 2208,
       "hash": "443787b0",
       "short": "443787b0",
       "author": "lantonov <lantonov.here@gmail.com>",
@@ -413,7 +413,7 @@
       "subject": "Tuned razor and futility margins"
     },
     {
-      "commit_num": 2203,
+      "commit_num": 2209,
       "hash": "6a6fc285",
       "short": "6a6fc285",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -468,7 +468,7 @@
       "subject": "The sudo tag is deprecated in Travis CI"
     },
     {
-      "commit_num": 2204,
+      "commit_num": 2210,
       "hash": "764b9add",
       "short": "764b9add",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -523,7 +523,7 @@
       "subject": "Exclude blockers for king from mobility area"
     },
     {
-      "commit_num": 2205,
+      "commit_num": 2211,
       "hash": "20484ccd",
       "short": "20484ccd",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -578,7 +578,7 @@
       "subject": "Tweak time management (failing eval)"
     },
     {
-      "commit_num": 2206,
+      "commit_num": 2212,
       "hash": "d00b2ec6",
       "short": "d00b2ec6",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -633,7 +633,7 @@
       "subject": "Do last capture extensions for every single node"
     },
     {
-      "commit_num": 2207,
+      "commit_num": 2213,
       "hash": "78eeba29",
       "short": "78eeba29",
       "author": "protonspring <mike@whiteley.org>",
@@ -688,7 +688,7 @@
       "subject": "Simplify pruning moves with negative SEE"
     },
     {
-      "commit_num": 2208,
+      "commit_num": 2214,
       "hash": "a6b5ba1b",
       "short": "a6b5ba1b",
       "author": "joergoster <osterj165@googlemail.com>",

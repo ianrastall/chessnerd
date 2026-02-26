@@ -2,7 +2,7 @@
   "month": "2021-02",
   "commits": [
     {
-      "commit_num": 1790,
+      "commit_num": 1796,
       "hash": "5346f1c6",
       "short": "5346f1c6",
       "author": "mattginsberg <mlginsberg@gmail.com>",
@@ -73,7 +73,7 @@
       "subject": "Deal with commented lines in UCI input"
     },
     {
-      "commit_num": 1791,
+      "commit_num": 1797,
       "hash": "f28303d2",
       "short": "f28303d2",
       "author": "Tomasz Sobczyk <tomasz.sobczyk1997@gmail.com>",
@@ -144,7 +144,7 @@
       "subject": "Allow using Intel SDE for PGO builds."
     },
     {
-      "commit_num": 1792,
+      "commit_num": 1798,
       "hash": "0f3f5d85",
       "short": "0f3f5d85",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -215,7 +215,7 @@
       "subject": "Introduce DistanceFromPV"
     },
     {
-      "commit_num": 1793,
+      "commit_num": 1799,
       "hash": "7ffae17f",
       "short": "7ffae17f",
       "author": "Dieter Dobbelaere <dieter.dobbelaere@gmail.com>",
@@ -286,7 +286,7 @@
       "subject": "Add Stockfish namespace."
     },
     {
-      "commit_num": 1794,
+      "commit_num": 1800,
       "hash": "7c30091a",
       "short": "7c30091a",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -305,59 +305,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/win64bmi2/stockfish_21022022_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/win64avx2/stockfish_21022022_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/win64modern/stockfish_21022022_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/win64ssse/stockfish_21022022_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/win64/stockfish_21022022_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/win32/stockfish_21022022_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/linux64bmi2/stockfish_21022022_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/linux64avx2/stockfish_21022022_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/linux64modern/stockfish_21022022_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/linux64ssse/stockfish_21022022_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/7c30091a92abddb8265e53768b32751c49642040/linux64/stockfish_21022022_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce ProbCut for check evasions\n\nThe idea of this patch can be described as follows: if we are in check\nand the transposition table move is a capture that returns a value\nfar above beta, we can assume that the opponent just blundered a piece\nby giving check, and we return the transposition table value. This is\nsimilar to the usual probCut logic for quiet moves, but with a different\nthreshold.\n\nPassed STC\nLLR: 2.94 (-2.94,2.94) {-0.25,1.25}\nTotal: 33440 W: 3056 L: 2891 D: 27493\nPtnml(0-2): 110, 2338, 11672, 2477, 123\nhttps://tests.stockfishchess.org/tests/view/602cd1087f517a561bc49bda\n\nPassed LTC\nLLR: 2.98 (-2.94,2.94) {0.25,1.25}\nTotal: 10072 W: 401 L: 309 D: 9362\nPtnml(0-2): 2, 288, 4365, 378, 3\nhttps://tests.stockfishchess.org/tests/view/602ceea57f517a561bc49bf0\n\nThe committed version has an additional fix to never return unproven wins\nin the tablebase range or the mate range. This fix passed tests for non-\nregression at STC and LTC:\n\nSTC:\nLLR: 2.93 (-2.94,2.94) {-1.25,0.25}\nTotal: 26240 W: 2354 L: 2280 D: 21606\nPtnml(0-2): 85, 1763, 9372, 1793, 107\nhttps://tests.stockfishchess.org/tests/view/602d86a87f517a561bc49c7a\n\nLTC:\nLLR: 2.95 (-2.94,2.94) {-0.75,0.25}\nTotal: 35304 W: 1299 L: 1256 D: 32749\nPtnml(0-2): 14, 1095, 15395, 1130, 18\nhttps://tests.stockfishchess.org/tests/view/602d98d17f517a561bc49c83\n\nCloses https://github.com/official-stockfish/Stockfish/pull/3362\n\nBench: 3830215\n",
       "subject": "Introduce ProbCut for check evasions"
     },
     {
-      "commit_num": 1795,
+      "commit_num": 1801,
       "hash": "a31007c9",
       "short": "a31007c9",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -428,7 +383,7 @@
       "subject": "Restore development version"
     },
     {
-      "commit_num": 1796,
+      "commit_num": 1802,
       "hash": "6294db75",
       "short": "6294db75",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -499,7 +454,7 @@
       "subject": "Tune search parameters (with Unai Corzo)"
     },
     {
-      "commit_num": 1797,
+      "commit_num": 1803,
       "hash": "9f6d69c5",
       "short": "9f6d69c5",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -570,7 +525,7 @@
       "subject": "Update README.md"
     },
     {
-      "commit_num": 1798,
+      "commit_num": 1804,
       "hash": "b46813f9",
       "short": "b46813f9",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -589,14 +544,59 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/win64bmi2/stockfish_21021523_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/win64avx2/stockfish_21021523_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/win64modern/stockfish_21021523_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/win64ssse/stockfish_21021523_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/win64/stockfish_21021523_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/win32/stockfish_21021523_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/linux64bmi2/stockfish_21021523_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/linux64avx2/stockfish_21021523_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/linux64modern/stockfish_21021523_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/linux64ssse/stockfish_21021523_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/b46813f9b74c9edcb830b32d877469ed428072ad/linux64/stockfish_21021523_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Update Top CPU Contributors\n\nNo functional change\n",
       "subject": "Update Top CPU Contributors"
     },
     {
-      "commit_num": 1799,
+      "commit_num": 1805,
       "hash": "3597f194",
       "short": "3597f194",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -667,7 +667,7 @@
       "subject": "Stockfish 13"
     },
     {
-      "commit_num": 1800,
+      "commit_num": 1806,
       "hash": "573f0e36",
       "short": "573f0e36",
       "author": "mattginsberg <mlginsberg@gmail.com>",
@@ -738,7 +738,7 @@
       "subject": "Better code for hash table generation"
     },
     {
-      "commit_num": 1801,
+      "commit_num": 1807,
       "hash": "76daa88c",
       "short": "76daa88c",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -809,7 +809,7 @@
       "subject": "PV-Nodes likely to fail low"
     },
     {
-      "commit_num": 1802,
+      "commit_num": 1808,
       "hash": "550fed33",
       "short": "550fed33",
       "author": "Gian-Carlo Pascutto <gcp@sjeng.org>",
@@ -880,7 +880,7 @@
       "subject": "Enable New Pass Manager for Clang."
     },
     {
-      "commit_num": 1803,
+      "commit_num": 1809,
       "hash": "b15e3b3f",
       "short": "b15e3b3f",
       "author": "Gian-Carlo Pascutto <gcp@sjeng.org>",
@@ -951,7 +951,7 @@
       "subject": "Disable ThinLTO when using Clang."
     },
     {
-      "commit_num": 1804,
+      "commit_num": 1810,
       "hash": "1f87a9eb",
       "short": "1f87a9eb",
       "author": "Andy Pilate <cubox@cubox.dev>",
@@ -1022,7 +1022,7 @@
       "subject": "Fixes FreeBSD compilation when using Clang"
     },
     {
-      "commit_num": 1805,
+      "commit_num": 1811,
       "hash": "5ebdc40f",
       "short": "5ebdc40f",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -1093,7 +1093,7 @@
       "subject": "Pawns Tuning"
     },
     {
-      "commit_num": 1806,
+      "commit_num": 1812,
       "hash": "29ed22de",
       "short": "29ed22de",
       "author": "bmc4 <bmc4@cin.ufpe.br>",
