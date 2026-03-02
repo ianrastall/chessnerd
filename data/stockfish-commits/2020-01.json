@@ -2,7 +2,7 @@
   "month": "2020-01",
   "commits": [
     {
-      "commit_num": 2167,
+      "commit_num": 2173,
       "hash": "0f37da0e",
       "short": "0f37da0e",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -57,7 +57,7 @@
       "subject": "Simplify away king infiltration."
     },
     {
-      "commit_num": 2168,
+      "commit_num": 2174,
       "hash": "6ccb1cac",
       "short": "6ccb1cac",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -76,43 +76,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/win64bmi2/stockfish_20013119_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/win64modern/stockfish_20013119_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/win64/stockfish_20013119_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/win32/stockfish_20013119_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/linux64bmi2/stockfish_20013119_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/linux64modern/stockfish_20013119_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/6ccb1cac5aaaf7337da8b1738448793be63fdfdb/linux64/stockfish_20013119_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert 5 recent patches\n\nRevert 5 patches which were merged, but lead to a regression test that showed negative Elo gain:\n\nhttp://tests.stockfishchess.org/tests/view/5e307251ab2d69d58394fdb9\n\nThis was discussed in depth in:\n\nhttps://github.com/official-stockfish/Stockfish/issues/2531\n\nEach patch was removed and tested as a simplification, full list below, and the whole combo as well.\n\nAfter the revert the regression test showed a neutral result:\n\nhttp://tests.stockfishchess.org/tests/view/5e334851708b13464ceea33c\n\nAs a result of this experience, the SPRT testing bounds will be made more strict.\n\nReverted patches:\n\n1 Dynamic Complexity 6d0eabd5fe2961551477820ab7619e2c31e01ffd :\n\nSTC 10+0.1 https://tests.stockfishchess.org/tests/view/5e31fcacec661e2e6a340d08 :\nLLR: 2.97 (-2.94,2.94) {-1.50,0.50}\nTotal: 38130 W: 7326 L: 7189 D: 23615\nPtnml(0-2): 677, 4346, 8843, 4545, 646\n\nLTC 60+0.6 https://tests.stockfishchess.org/tests/view/5e32c18fec661e2e6a340d73 :\nLLR: 2.94 (-2.94,2.94) {-1.50,0.50}\nTotal: 38675 W: 4941 L: 4866 D: 28868\nPtnml(0-2): 270, 3556, 11429, 3584, 291\n\n3 More bonus for bestMoves on past PV nodes 71e0b5385e2717679a57c6b77d8c7ac5fff3b89f :\n\nSTC 10+0.1 https://tests.stockfishchess.org/tests/view/5e31fe93ec661e2e6a340d10 :\nLLR: 2.95 (-2.94,2.94) {-1.50,0.50}\nTotal: 46100 W: 8853 L: 8727 D: 28520\nPtnml(0-2): 796, 5297, 10749, 5387, 813\n\nLTC 60+0.6 https://tests.stockfishchess.org/tests/view/5e32c187ec661e2e6a340d71 :\nLLR: 2.96 (-2.94,2.94) {-1.50,0.50}\nTotal: 16920 W: 2161 L: 2055 D: 12704\nPtnml(0-2): 115, 1498, 5006, 1569, 130\n\n4 Tweak Restricted Piece Bonus 0ae00454ba6928d181b46103e5c83e6d58fcebe5 :\n\nSTC 10+0.1 https://tests.stockfishchess.org/tests/view/5e31fefaec661e2e6a340d15 :\nLLR: 2.94 (-2.94,2.94) {-1.50,0.50}\nTotal: 88328 W: 17060 L: 16997 D: 54271\nPtnml(0-2): 1536, 10446, 20169, 10422, 1581\n\nLTC 60+0.6 https://tests.stockfishchess.org/tests/view/5e32c17aec661e2e6a340d6f :\nLLR: 2.95 (-2.94,2.94) {-1.50,0.50}\nTotal: 34784 W: 4551 L: 4466 D: 25767\nPtnml(0-2): 255, 3279, 10061, 3345, 262\n\n5 History update for pruned captures 01b6088af39902001d2d6844561b6a2faa549282 :\n\nSTC 10+0.1 https://tests.stockfishchess.org/tests/view/5e31ff5eec661e2e6a340d1a :\nLLR: 2.94 (-2.94,2.94) {-1.50,0.50}\nTotal: 29541 W: 5735 L: 5588 D: 18218\nPtnml(0-2): 483, 3445, 6820, 3469, 545\n\nLTC 60+0.6 https://tests.stockfishchess.org/tests/view/5e32c196ec661e2e6a340d75 :\nLLR: 2.94 (-2.94,2.94) {-1.50,0.50}\nTotal: 22177 W: 2854 L: 2757 D: 16566\nPtnml(0-2): 143, 2005, 6555, 2055, 164\n\n6 Tweak trapped rook penalty 18fc21eba0368fd5e3c4c4b8ee1000c9ac445425 :\n\nSTC 10+0.1 https://tests.stockfishchess.org/tests/view/5e31ffb1ec661e2e6a340d1c :\nLLR: 2.95 (-2.94,2.94) {-1.50,0.50}\nTotal: 24476 W: 4727 L: 4569 D: 15180\nPtnml(0-2): 390, 2834, 5659, 2933, 417\n\nLTC 60+0.6 https://tests.stockfishchess.org/tests/view/5e32c19eec661e2e6a340d77 :\nLLR: 2.95 (-2.94,2.94) {-1.50,0.50}\nTotal: 97332 W: 12492 L: 12466 D: 72374\nPtnml(0-2): 690, 9107, 28738, 9034, 720\n\nAll 5 as one simplification :\nLTC 60+0.6 https://tests.stockfishchess.org/tests/view/5e334098708b13464ceea330 :\nLLR: 2.94 (-2.94,2.94) {-1.50,0.50}\nTotal: 7829 W: 1079 L: 964 D: 5786\nPtnml(0-2): 52, 690, 2281, 781, 65\n\nBench: 5153165\n",
       "subject": "Revert 5 recent patches"
     },
     {
-      "commit_num": 2169,
+      "commit_num": 2175,
       "hash": "c390b734",
       "short": "c390b734",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -167,7 +138,7 @@
       "subject": "Simplify Tweak late move reductions at root."
     },
     {
-      "commit_num": 2170,
+      "commit_num": 2176,
       "hash": "3b70932b",
       "short": "3b70932b",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -222,7 +193,7 @@
       "subject": "Fix compilation on android"
     },
     {
-      "commit_num": 2171,
+      "commit_num": 2177,
       "hash": "71e0b538",
       "short": "71e0b538",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -277,7 +248,7 @@
       "subject": "More bonus for bestMoves on past PV nodes"
     },
     {
-      "commit_num": 2172,
+      "commit_num": 2178,
       "hash": "d878bc8c",
       "short": "d878bc8c",
       "author": "31m059 <37052095+31m059@users.noreply.github.com>",
@@ -332,7 +303,7 @@
       "subject": "Less NMP if the position was previously in PV."
     },
     {
-      "commit_num": 2173,
+      "commit_num": 2179,
       "hash": "a910ba71",
       "short": "a910ba71",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -387,7 +358,7 @@
       "subject": "Simplify hashfull calculation."
     },
     {
-      "commit_num": 2174,
+      "commit_num": 2180,
       "hash": "1d3efff4",
       "short": "1d3efff4",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -442,7 +413,7 @@
       "subject": "Dynamic Complexity based on psqt"
     },
     {
-      "commit_num": 2175,
+      "commit_num": 2181,
       "hash": "6d0eabd5",
       "short": "6d0eabd5",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -497,7 +468,7 @@
       "subject": "Dynamic complexity"
     },
     {
-      "commit_num": 2176,
+      "commit_num": 2182,
       "hash": "0ae00454",
       "short": "0ae00454",
       "author": "Lolligerhans <lolligerhans@gmx.de>",
@@ -552,7 +523,7 @@
       "subject": "Tweak RestrictedPiece bonus"
     },
     {
-      "commit_num": 2177,
+      "commit_num": 2183,
       "hash": "6f101379",
       "short": "6f101379",
       "author": "protonspring <mike@whiteley.org>",
@@ -607,7 +578,7 @@
       "subject": "Use a std::bitset for KPKBitbase"
     },
     {
-      "commit_num": 2178,
+      "commit_num": 2184,
       "hash": "bcf92828",
       "short": "bcf92828",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -662,7 +633,7 @@
       "subject": "Restore development version"
     },
     {
-      "commit_num": 2179,
+      "commit_num": 2185,
       "hash": "01b6088a",
       "short": "01b6088a",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -717,7 +688,7 @@
       "subject": "History update for pruned captures"
     },
     {
-      "commit_num": 2180,
+      "commit_num": 2186,
       "hash": "18fc21eb",
       "short": "18fc21eb",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -772,7 +743,7 @@
       "subject": "Tweak trapped rook penalty"
     },
     {
-      "commit_num": 2181,
+      "commit_num": 2187,
       "hash": "7ed817d7",
       "short": "7ed817d7",
       "author": "Chess13234 <37609326+Chess13234@users.noreply.github.com>",
@@ -827,7 +798,7 @@
       "subject": "Minor fixes for misc.cpp"
     },
     {
-      "commit_num": 2182,
+      "commit_num": 2188,
       "hash": "56e698ef",
       "short": "56e698ef",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -882,7 +853,7 @@
       "subject": "Less reduction for escape moves at ttPv nodes"
     },
     {
-      "commit_num": 2183,
+      "commit_num": 2189,
       "hash": "f63d112c",
       "short": "f63d112c",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -937,7 +908,7 @@
       "subject": "Use (strict) greater-than-operator for 'improving'"
     },
     {
-      "commit_num": 2184,
+      "commit_num": 2190,
       "hash": "c3483fa9",
       "short": "c3483fa9",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -992,7 +963,7 @@
       "subject": "Stockfish 11"
     },
     {
-      "commit_num": 2185,
+      "commit_num": 2191,
       "hash": "446a3c25",
       "short": "446a3c25",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -1047,7 +1018,7 @@
       "subject": "Update Readme.md for the compiler command"
     },
     {
-      "commit_num": 2186,
+      "commit_num": 2192,
       "hash": "baf184e8",
       "short": "baf184e8",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1102,7 +1073,7 @@
       "subject": "Tweak late move reductions at root"
     },
     {
-      "commit_num": 2187,
+      "commit_num": 2193,
       "hash": "7150183d",
       "short": "7150183d",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -1157,7 +1128,7 @@
       "subject": "Tweak reductions for captures/promotions"
     },
     {
-      "commit_num": 2188,
+      "commit_num": 2194,
       "hash": "01dfdb95",
       "short": "01dfdb95",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -1212,7 +1183,7 @@
       "subject": "Fix previous patch in case of ponder"
     },
     {
-      "commit_num": 2189,
+      "commit_num": 2195,
       "hash": "4901218d",
       "short": "4901218d",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -1267,7 +1238,7 @@
       "subject": "Tweak futility pruning constants"
     },
     {
-      "commit_num": 2190,
+      "commit_num": 2196,
       "hash": "69204f07",
       "short": "69204f07",
       "author": "xoto10 <buylow001@gmail.com>",
@@ -1286,43 +1257,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/win64bmi2/stockfish_20011222_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/win64modern/stockfish_20011222_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/win64/stockfish_20011222_x64.zip"
-          },
-          {
-            "label": "Windows 32",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/win32/stockfish_20011222_32bit.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/linux64bmi2/stockfish_20011222_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/linux64modern/stockfish_20011222_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/69204f0720bba198952fb7a848ed4377430ef433/linux64/stockfish_20011222_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Smarter time management near stop limit\n\nThis patch makes Stockfish search same depth again if > 60% of optimum time is\nalready used, instead of trying the next iteration. The idea is that the next\niteration will generally take about the same amount of time as has already been\nused in total. When we are likely to begin the last iteration, as judged by total\ntime taken so far > 0.6 * optimum time, searching the last depth again instead of\nincreasing the depth still helps the other threads in lazy SMP and prepares better\nmove ordering for the next moves.\n\nSTC :\nLLR: 2.95 (-2.94,2.94) {-1.00,3.00}\nTotal: 13436 W: 2695 L: 2558 D: 8183\nPtnml(0-2): 222, 1538, 3087, 1611, 253\nhttps://tests.stockfishchess.org/tests/view/5e1618a761fe5f83a67dd964\n\nLTC :\nLLR: 2.94 (-2.94,2.94) {0.00,2.00}\nTotal: 32160 W: 4261 L: 4047 D: 23852\nPtnml(0-2): 211, 2988, 9448, 3135, 247\nhttps://tests.stockfishchess.org/tests/view/5e162ca061fe5f83a67dd96d\n\nThe code was revised as suggested by @vondele for multithreading:\n\nSTC (8 threads):\nLLR: 2.95 (-2.94,2.94) {0.00,2.00}\nTotal: 16640 W: 2049 L: 1885 D: 12706\nPtnml(0-2): 119, 1369, 5158, 1557, 108\nhttps://tests.stockfishchess.org/tests/view/5e19826a2cc590e03c3c2f52\n\nLTC (8 threads):\nLLR: 2.95 (-2.94,2.94) {-1.00,3.00}\nTotal: 16536 W: 2758 L: 2629 D: 11149\nPtnml(0-2): 182, 1758, 4296, 1802, 224\nhttps://tests.stockfishchess.org/tests/view/5e18b91a27dab692fcf9a140\n\nThanks to those discussing Stockfish lazy SMP on fishcooking which made me\ntry this, and to @vondele for suggestions and doing related tests.\n\nSee full discussion in the pull request thread:\nhttps://github.com/official-stockfish/Stockfish/pull/2482\n\nBench: 4586187\n",
       "subject": "Smarter time management near stop limit"
     },
     {
-      "commit_num": 2191,
+      "commit_num": 2197,
       "hash": "75dfdeac",
       "short": "75dfdeac",
       "author": "protonspring <mike@whiteley.org>",
@@ -1377,7 +1319,7 @@
       "subject": "Simplify KPK classify"
     },
     {
-      "commit_num": 2192,
+      "commit_num": 2198,
       "hash": "114ddb78",
       "short": "114ddb78",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1432,7 +1374,7 @@
       "subject": "Update Elo estimates for terms in search"
     },
     {
-      "commit_num": 2193,
+      "commit_num": 2199,
       "hash": "384bff42",
       "short": "384bff42",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -1487,7 +1429,7 @@
       "subject": "Assorted trivial cleanups January 2020"
     },
     {
-      "commit_num": 2194,
+      "commit_num": 2200,
       "hash": "09bef14c",
       "short": "09bef14c",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -1506,14 +1448,43 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/win64bmi2/stockfish_20010901_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/win64modern/stockfish_20010901_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/win64/stockfish_20010901_x64.zip"
+          },
+          {
+            "label": "Windows 32",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/win32/stockfish_20010901_32bit.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/linux64bmi2/stockfish_20010901_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/linux64modern/stockfish_20010901_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/09bef14c76e119103cc1a9404cbde7e249205deb/linux64/stockfish_20010901_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Update lists of authors and contributors\n\nPreparing for version 11 of Stockfish: update lists of authors,\ncontributors giving CPU time to the fishtest framework, etc.\n\nNo functional change\n",
       "subject": "Update lists of authors and contributors"
     },
     {
-      "commit_num": 2195,
+      "commit_num": 2201,
       "hash": "83ecfa7c",
       "short": "83ecfa7c",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -1568,7 +1539,7 @@
       "subject": "Use a faster implementation of Static Exchange Evaluation"
     },
     {
-      "commit_num": 2196,
+      "commit_num": 2202,
       "hash": "44f56e04",
       "short": "44f56e04",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -1623,7 +1594,7 @@
       "subject": "Update Readme.md"
     },
     {
-      "commit_num": 2197,
+      "commit_num": 2203,
       "hash": "7f623206",
       "short": "7f623206",
       "author": "protonspring <mike@whiteley.org>",
@@ -1678,7 +1649,7 @@
       "subject": "Rewrite initialization of PseudoMoves"
     },
     {
-      "commit_num": 2198,
+      "commit_num": 2204,
       "hash": "56d5504f",
       "short": "56d5504f",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -1733,7 +1704,7 @@
       "subject": "Tweak futility pruning"
     },
     {
-      "commit_num": 2199,
+      "commit_num": 2205,
       "hash": "de4e1cb8",
       "short": "de4e1cb8",
       "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
@@ -1788,7 +1759,7 @@
       "subject": "Introduce king infiltration bonus"
     },
     {
-      "commit_num": 2200,
+      "commit_num": 2206,
       "hash": "44f79bdf",
       "short": "44f79bdf",
       "author": "lantonov <lantonov.here@gmail.com>",

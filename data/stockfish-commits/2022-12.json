@@ -2,7 +2,7 @@
   "month": "2022-12",
   "commits": [
     {
-      "commit_num": 1370,
+      "commit_num": 1376,
       "hash": "a6fa6834",
       "short": "a6fa6834",
       "author": "Linmiao Xu <linmiao.xu@gmail.com>",
@@ -69,7 +69,7 @@
       "subject": "Update default net to nn-a3dc078bafc7.nnue"
     },
     {
-      "commit_num": 1371,
+      "commit_num": 1377,
       "hash": "be9bc420",
       "short": "be9bc420",
       "author": "Linmiao Xu <linmiao.xu@gmail.com>",
@@ -136,7 +136,7 @@
       "subject": "Update default net to nn-60fa44e376d9.nnue"
     },
     {
-      "commit_num": 1372,
+      "commit_num": 1378,
       "hash": "9fe9ff00",
       "short": "9fe9ff00",
       "author": "mstembera <MissingEmail@email>",
@@ -155,55 +155,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/win64bmi2/stockfish_23010408_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/win64avx2/stockfish_23010408_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/win64modern/stockfish_23010408_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/win64ssse/stockfish_23010408_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/win64/stockfish_23010408_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/linux64bmi2/stockfish_23010408_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/linux64avx2/stockfish_23010408_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/linux64modern/stockfish_23010408_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/linux64ssse/stockfish_23010408_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/9fe9ff00823a0d1e989fcfc45410396e94345987/linux64/stockfish_23010408_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix stack initialization\n\nThis fixes a bug where on line 278 the Stack::staticEvals are\ninitialized to 0. However VALUE_NONE is defined to be 32002 so\nthis is a bug in master. It is probably due to the calculation\nof improvement, where staticEval prior to rootPos can be accessed.\n\nhttps://tests.stockfishchess.org/tests/view/63ab91cf39af998100ce1666\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 53736 W: 14285 L: 13955 D: 25496\nPtnml(0-2): 121, 5921, 14500, 6159, 167\n\nhttps://tests.stockfishchess.org/tests/view/63b2af5ee28ed36c814bed52\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 33776 W: 9130 L: 8934 D: 15712\nPtnml(0-2): 14, 3240, 10185, 3434, 15\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4320\n\nBench: 4068510\n",
       "subject": "Fix stack initialization"
     },
     {
-      "commit_num": 1373,
+      "commit_num": 1379,
       "hash": "31acd6ba",
       "short": "31acd6ba",
       "author": "Sebastian Buchwald <UniQP@web.de>",
@@ -270,7 +229,7 @@
       "subject": "Warn if a global function has no previous declaration"
     },
     {
-      "commit_num": 1374,
+      "commit_num": 1380,
       "hash": "f09b391c",
       "short": "f09b391c",
       "author": "Sebastian Buchwald <UniQP@web.de>",
@@ -289,14 +248,55 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/win64bmi2/stockfish_23010111_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/win64avx2/stockfish_23010111_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/win64modern/stockfish_23010111_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/win64ssse/stockfish_23010111_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/win64/stockfish_23010111_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/linux64bmi2/stockfish_23010111_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/linux64avx2/stockfish_23010111_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/linux64modern/stockfish_23010111_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/linux64ssse/stockfish_23010111_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/f09b391ceb5ea282538b721b069db67e3b6e098f/linux64/stockfish_23010111_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Fix comparison with uninitialized variable\n\nIn both modified methods, the variable 'result' is checked to detect\nwhether the probe operation failed. However, the variable is not\ninitialized on all paths, so the check might test an uninitialized\nvalue.\n\nA test position (with TB) is given by:\n\nposition fen 3K1k2/R7/8/8/8/8/8/R6Q w - - 0 1 moves a1b1 f8g8 b1a1 g8f8 a1b1 f8g8 b1a1\n\nThis is now fixed by always initializing the variable.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4309\n\nNo functional change\n",
       "subject": "Fix comparison with uninitialized variable"
     },
     {
-      "commit_num": 1375,
+      "commit_num": 1381,
       "hash": "258c13ba",
       "short": "258c13ba",
       "author": "Sebastian Buchwald <UniQP@web.de>",
@@ -363,7 +363,7 @@
       "subject": "Remove redundant extern modifier for function declarations"
     },
     {
-      "commit_num": 1376,
+      "commit_num": 1382,
       "hash": "ea0f3412",
       "short": "ea0f3412",
       "author": "Dubslow <bunslow@gmail.com>",
@@ -430,7 +430,7 @@
       "subject": "Late countermove bonus: remove \"extraBonus &&\""
     },
     {
-      "commit_num": 1377,
+      "commit_num": 1383,
       "hash": "64656f85",
       "short": "64656f85",
       "author": "Muzhen Gaming <61100393+XInTheDark@users.noreply.github.com>",
@@ -497,7 +497,7 @@
       "subject": "Add double bonus for prior countermove fail low"
     },
     {
-      "commit_num": 1378,
+      "commit_num": 1384,
       "hash": "b2bd8699",
       "short": "b2bd8699",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -564,7 +564,7 @@
       "subject": "Update Elo estimates for terms in search"
     },
     {
-      "commit_num": 1379,
+      "commit_num": 1385,
       "hash": "20b02264",
       "short": "20b02264",
       "author": "MinetaS <skdty87@gmail.com>",
@@ -631,7 +631,7 @@
       "subject": "Fix a dependency bug"
     },
     {
-      "commit_num": 1380,
+      "commit_num": 1386,
       "hash": "c6208861",
       "short": "c6208861",
       "author": "Linmiao Xu <linmiao.xu@gmail.com>",
@@ -698,7 +698,7 @@
       "subject": "Update default net to nn-335a9b2d8a80.nnue"
     },
     {
-      "commit_num": 1381,
+      "commit_num": 1387,
       "hash": "c2d50700",
       "short": "c2d50700",
       "author": "Alfredo Menezes <lomalfredo8@gmail.com>",
@@ -765,7 +765,7 @@
       "subject": "Sometimes do a reduced search if LMR is skipped"
     },
     {
-      "commit_num": 1382,
+      "commit_num": 1388,
       "hash": "61ea1534",
       "short": "61ea1534",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -832,7 +832,7 @@
       "subject": "No error if net available but wget/curl missing"
     },
     {
-      "commit_num": 1383,
+      "commit_num": 1389,
       "hash": "39af98c8",
       "short": "39af98c8",
       "author": "Michael Chaly <Vizvezdenec@gmail.com>",
@@ -899,7 +899,7 @@
       "subject": "Reintroduce doEvenDeeperSearch"
     },
     {
-      "commit_num": 1384,
+      "commit_num": 1390,
       "hash": "726e90cc",
       "short": "726e90cc",
       "author": "PikaCat <73384062+PikaCat-OuO@users.noreply.github.com>",
@@ -966,7 +966,7 @@
       "subject": "Badge link fix"
     },
     {
-      "commit_num": 1385,
+      "commit_num": 1391,
       "hash": "3659a9fd",
       "short": "3659a9fd",
       "author": "NguyenPham <phhnguyen@gmail.com>",
@@ -1033,7 +1033,7 @@
       "subject": "Fixed the help of Makefile"
     },
     {
-      "commit_num": 1386,
+      "commit_num": 1392,
       "hash": "3a32d3e0",
       "short": "3a32d3e0",
       "author": "mstembera <MissingEmail@email>",
@@ -1100,7 +1100,7 @@
       "subject": "Don't reset increaseDepth back to true after it has been set to false"
     },
     {
-      "commit_num": 1387,
+      "commit_num": 1393,
       "hash": "955edf1d",
       "short": "955edf1d",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1167,7 +1167,7 @@
       "subject": "Revert \"doEvenDeeperSearch + tuning\""
     },
     {
-      "commit_num": 1388,
+      "commit_num": 1394,
       "hash": "7cf93f8b",
       "short": "7cf93f8b",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -1234,7 +1234,7 @@
       "subject": "Simplify Capture Scoring"
     },
     {
-      "commit_num": 1389,
+      "commit_num": 1395,
       "hash": "5fe1fa02",
       "short": "5fe1fa02",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -1301,7 +1301,7 @@
       "subject": "GitHub Actions: install NDK once and clean up yaml"
     },
     {
-      "commit_num": 1390,
+      "commit_num": 1396,
       "hash": "310928e9",
       "short": "310928e9",
       "author": "mstembera <MissingEmail@email>",
@@ -1368,7 +1368,7 @@
       "subject": "Avoid truncated PV in the threaded case"
     },
     {
-      "commit_num": 1391,
+      "commit_num": 1397,
       "hash": "8f817ef0",
       "short": "8f817ef0",
       "author": "disservin <disservin.social@gmail.com>",
@@ -1435,7 +1435,7 @@
       "subject": "Fix lower/upper bounds output"
     },
     {
-      "commit_num": 1392,
+      "commit_num": 1398,
       "hash": "3a30b478",
       "short": "3a30b478",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1502,7 +1502,7 @@
       "subject": "CI workflows, install git on windows"
     },
     {
-      "commit_num": 1393,
+      "commit_num": 1399,
       "hash": "aedf0251",
       "short": "aedf0251",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1569,7 +1569,7 @@
       "subject": "CI workflows, install git on windows"
     },
     {
-      "commit_num": 1394,
+      "commit_num": 1400,
       "hash": "9d3fd011",
       "short": "9d3fd011",
       "author": "Alfredo Menezes <lomalfredo8@gmail.com>",
@@ -1588,55 +1588,14 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [
-          {
-            "label": "Windows x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/win64bmi2/stockfish_22120915_x64_bmi2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/win64avx2/stockfish_22120915_x64_avx2.zip"
-          },
-          {
-            "label": "Windows x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/win64modern/stockfish_22120915_x64_modern.zip"
-          },
-          {
-            "label": "Windows x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/win64ssse/stockfish_22120915_x64_ssse.zip"
-          },
-          {
-            "label": "Windows x64",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/win64/stockfish_22120915_x64.zip"
-          },
-          {
-            "label": "Linux x64 for Haswell CPUs",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/linux64bmi2/stockfish_22120915_x64_bmi2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers + AVX2",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/linux64avx2/stockfish_22120915_x64_avx2.zip"
-          },
-          {
-            "label": "Linux x64 for modern computers",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/linux64modern/stockfish_22120915_x64_modern.zip"
-          },
-          {
-            "label": "Linux x64 + SSSE3",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/linux64ssse/stockfish_22120915_x64_ssse.zip"
-          },
-          {
-            "label": "Linux x64",
-            "url": "https://abrok.eu/stockfish/builds/9d3fd011f1bc9ef6f3a3091aae10634b31e0032c/linux64/stockfish_22120915_x64.zip"
-          }
-        ],
+        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Extend all moves at low depth if ttMove is doubly extended\n\nIf ttMove is doubly extended, we allow a depth growth of the remaining moves.\nThe idea is to get a more realistic score comparison, because of the depth\ndifference. We take some care to avoid this extension for high depths,\nin order to avoid the cost, since the search result is supposed\nto be more accurate in this case.\n\nThis pull request includes some small cleanups.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 60256 W: 16189 L: 15848 D: 28219\nPtnml(0-2): 182, 6546, 16330, 6889, 181\nhttps://tests.stockfishchess.org/tests/view/639109a1792a529ae8f27777\n\nLTC:\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 106232 W: 28487 L: 28053 D: 49692\nPtnml(0-2): 46, 10224, 32145, 10652, 49\nhttps://tests.stockfishchess.org/tests/view/63914cba792a529ae8f282ee\n\ncloses https://github.com/official-stockfish/Stockfish/pull/4271\n\nBench: 3622368\n",
       "subject": "Extend all moves at low depth if ttMove is doubly extended"
     },
     {
-      "commit_num": 1395,
+      "commit_num": 1401,
       "hash": "44ecadee",
       "short": "44ecadee",
       "author": "Douglas Matos Gomes <dsmsgomes@gmail.com>",
@@ -1703,7 +1662,7 @@
       "subject": "Simplify redundant condition."
     },
     {
-      "commit_num": 1396,
+      "commit_num": 1402,
       "hash": "aa603cfe",
       "short": "aa603cfe",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -1770,7 +1729,7 @@
       "subject": "GitHub Action: upload ARM artifacts"
     },
     {
-      "commit_num": 1397,
+      "commit_num": 1403,
       "hash": "e8caa664",
       "short": "e8caa664",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -1789,14 +1748,55 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
+        "abrok_eu": [
+          {
+            "label": "Windows x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/win64bmi2/stockfish_22120819_x64_bmi2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/win64avx2/stockfish_22120819_x64_avx2.zip"
+          },
+          {
+            "label": "Windows x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/win64modern/stockfish_22120819_x64_modern.zip"
+          },
+          {
+            "label": "Windows x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/win64ssse/stockfish_22120819_x64_ssse.zip"
+          },
+          {
+            "label": "Windows x64",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/win64/stockfish_22120819_x64.zip"
+          },
+          {
+            "label": "Linux x64 for Haswell CPUs",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/linux64bmi2/stockfish_22120819_x64_bmi2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers + AVX2",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/linux64avx2/stockfish_22120819_x64_avx2.zip"
+          },
+          {
+            "label": "Linux x64 for modern computers",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/linux64modern/stockfish_22120819_x64_modern.zip"
+          },
+          {
+            "label": "Linux x64 + SSSE3",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/linux64ssse/stockfish_22120819_x64_ssse.zip"
+          },
+          {
+            "label": "Linux x64",
+            "url": "https://abrok.eu/stockfish/builds/e8caa6640df15b1823d5d4b94e759d52923769e6/linux64/stockfish_22120819_x64.zip"
+          }
+        ],
         "github_actions_artifacts": []
       },
       "message": "Restore development version\n\nNo functional change\n",
       "subject": "Restore development version"
     },
     {
-      "commit_num": 1398,
+      "commit_num": 1404,
       "hash": "9fc203a3",
       "short": "9fc203a3",
       "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
@@ -1863,7 +1863,7 @@
       "subject": "Set the right PATH for ARM compiler and build tests in CI"
     },
     {
-      "commit_num": 1399,
+      "commit_num": 1405,
       "hash": "cb0c7a98",
       "short": "cb0c7a98",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -1930,7 +1930,7 @@
       "subject": "Correctly output lowerbound/upperbound scores"
     },
     {
-      "commit_num": 1400,
+      "commit_num": 1406,
       "hash": "74fb936d",
       "short": "74fb936d",
       "author": "MinetaS <skdty87@gmail.com>",
@@ -1997,7 +1997,7 @@
       "subject": "Invoke .depend only on build targets"
     },
     {
-      "commit_num": 1401,
+      "commit_num": 1407,
       "hash": "758f9c93",
       "short": "758f9c93",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -2064,7 +2064,7 @@
       "subject": "Stockfish 15.1"
     },
     {
-      "commit_num": 1402,
+      "commit_num": 1408,
       "hash": "98965c13",
       "short": "98965c13",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -2131,7 +2131,7 @@
       "subject": "doEvenDeeperSearch + tuning"
     },
     {
-      "commit_num": 1403,
+      "commit_num": 1409,
       "hash": "c7118fb4",
       "short": "c7118fb4",
       "author": "VoyagerOne <excelgeek@gmail.com>",
