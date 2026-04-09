@@ -2,7 +2,7 @@
   "month": "2009-10",
   "commits": [
     {
-      "commit_num": 6185,
+      "commit_num": 6208,
       "hash": "dddaeff7",
       "short": "dddaeff7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Another see() shortcut\n\nBecause we only generate legal moves we can assume\na king cannot be recaptured, so we can safely return\nimmediately with the captured piece score. If the move\nturns out to be illegal it will be pruned anyhow,\nindependently from SEE value. This gives a good speed up\nespecially now that we SEE-test all the evasions that\nare always legal and very often are king moves.\n\nAnother optimization catches almost 15% of cases, unfortunatly\nwe have already calculated the very expensive attacks, so\nbenefits are not so big anyway.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Another see() shortcut"
     },
     {
-      "commit_num": 6186,
+      "commit_num": 6209,
       "hash": "70b7404a",
       "short": "70b7404a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reorder evasions\n\nAlways try ttMove as first. Then try good captures ordered\nby MVV/LVA, then non-captures if destination square is not\nunder attack, ordered by history value, and at the end\nbad-captures and non-captures with a negative SEE. This\nlast group is ordered by the SEE score.\n\nAfter 999 games at 1+0\nMod vs Orig +254 =546 -199 +19 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reorder evasions"
     },
     {
-      "commit_num": 6187,
+      "commit_num": 6210,
       "hash": "941d923b",
       "short": "941d923b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Shortcut see_sign() when SEE is known negative\n\nThis patch cuts 30% of SEE calculations, as a drawback\na returned negative value is no more always correct if\na shortcut is found.\n\nThis could impact move order when based on negative see\nscore as example bad captures and evasions.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Shortcut see_sign() when SEE is known negative"
     },
     {
-      "commit_num": 6188,
+      "commit_num": 6211,
       "hash": "d9b920ac",
       "short": "d9b920ac",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Evaluation threat values after 39089 games\n\nVerified against tuning branch.\n\nAfter 100 games at 1+0 on Joona QUAD\n\nMod - Orig: 527.5 - 471.5 (+20 elo)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Evaluation threat values after 39089 games"
     },
     {
-      "commit_num": 6189,
+      "commit_num": 6212,
       "hash": "12b0517d",
       "short": "12b0517d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix build under gcc\n\nAlso some warnings squashed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix build under gcc"
     },
     {
-      "commit_num": 6190,
+      "commit_num": 6213,
       "hash": "b3868562",
       "short": "b3868562",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add threat evaluation\n\nGive a bonus for each kind of attacked piece. Bonus\nvalue is based on the type of attacked piece and the\ntype of attacking one.\n\nPenalize pieces attacked by enemy pawns, also in\nthis case penality value depends on the type of\nattacked piece.\n\nThis patch oboletes as redundant the increased mobility\ncount of the attcked squares that is then removed.\n\nAfter 956 games at 1+0\nMod vs Orig  +262 =462 -232 51.57%  493.0/956 +11 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add threat evaluation"
     },
     {
-      "commit_num": 6191,
+      "commit_num": 6214,
       "hash": "73da3a43",
       "short": "73da3a43",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro optimize mobility calculation\n\nTake out of mobility loop a constant expression.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Micro optimize mobility calculation"
     },
     {
-      "commit_num": 6192,
+      "commit_num": 6215,
       "hash": "b50921fd",
       "short": "b50921fd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify capture and promotion tests\n\nSmall code cleanup and a bit faster too.\n\nThe only functional change is that in extension\nin pv node we extend promotions and not only captures\nwhen condition met.\n\nThis is practically an undetectable change and has\nno impact on strenght.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify capture and promotion tests"
     },
     {
-      "commit_num": 6193,
+      "commit_num": 6216,
       "hash": "a72c5528",
       "short": "a72c5528",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't prune TT move in qsearch even if SEE < 0\n\nEven if SEE is negative there is always a good possibility\nthat TT move is a cut move anyway. For instance a lot of\nBXN exchanges that have negative SEE can very easily be\ngood exchanges.\n\nA nice side effect is a bit reduced frequency of\nsee_sign() calls.\n\nAfter 643 games at 1+0\nMod vs Orig +174 =327 -142 52.49%  337.5/643 +17 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't prune TT move in qsearch even if SEE < 0"
     },
     {
-      "commit_num": 6194,
+      "commit_num": 6217,
       "hash": "cf4df032",
       "short": "cf4df032",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pick best moves one per cycle instead of sorting\n\nWhen the move list is very small, like captures normally\nare, it is faster to pick the best move with a linear\nscan, one per cycle.\n\nThis has the added advantage that the picked capture move is\nvery possibly a cut-off move, so that other searches are\navoided. For non-captures it is still faster to sort in\nadvance.\n\nBecause scan-and-pick alghortim is not stable, node count\nhas changed.\n\nAfter 885 games at 1+0\nMod vs Orig +196 =510 -179 50.96%  451.0/885\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Pick best moves one per cycle instead of sorting"
     },
     {
-      "commit_num": 6195,
+      "commit_num": 6218,
       "hash": "51c3af9d",
       "short": "51c3af9d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid a needless locking in sp_search()\n\nOnly in less then 2% of cases we have a new sp->bestValue,\nso check before to lock and save a costly locking\nmost of the times.\n\nPatch suggested by Joona.\n\nNo functional search.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid a needless locking in sp_search()"
     },
     {
-      "commit_num": 6196,
+      "commit_num": 6219,
       "hash": "f0b0a3b1",
       "short": "f0b0a3b1",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Similarize pruning code in search() and sp_search()\n\nUse futility pruning also in split points.\nDo not use history pruning in split points when\ngetting mated.\n\nAfter 1000 games on Joona QUAD\nOrig - Mod: 496 - 504\n\nAdded an optimization to avoid a costly lock in the\nvery common case that sp->futilityValue <= sp->bestValue.\nA test on a dual CPU shows only 114 hits on 23196 events,\nso avoid a lock in all the other cases.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Similarize pruning code in search() and sp_search()"
     },
     {
-      "commit_num": 6197,
+      "commit_num": 6220,
       "hash": "4dd7fccf",
       "short": "4dd7fccf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use an homegrown insertion sort instead of std::sort()\n\nIt is stable and it is also a bit faster then std::sort()\non the tipical small move lists that we need to handle.\n\nVerified to have same functionality of std::stable_sort()\n\nAfter 999 games at 1+0\nMod vs Orig +240 =534 -225 50.75%  507.0/999  +5 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use an homegrown insertion sort instead of std::sort()"
     },
     {
-      "commit_num": 6198,
+      "commit_num": 6221,
       "hash": "53f882ff",
       "short": "53f882ff",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Minor improvement in eval of unstoppable pawns promoting one ply apart.\n\nMarco's new code for evaluating two unstoppable passed pawns where\none pawn promotes a single ply before the other tried to detect\ncases where the pawn that promotes first could immediately capture\nthe pawn that promotes a ply later, but didn't work in cases where\nthe two pawns are on the same file. An example of this is the\nfollowing position:\n\n8/8/3K4/2P5/2p5/3k4/8/8 w - -\n\nWith the new code, such positions are handled correctly.\n",
       "subject": "Minor improvement in eval of unstoppable pawns promoting one ply apart."
     },
     {
-      "commit_num": 6199,
+      "commit_num": 6222,
       "hash": "c1ea5ed6",
       "short": "c1ea5ed6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not prune the move if we are still under mate\n\nIf after the first tried 2 + int(depth) moves we still\nhave no any move that takes us out of a mate then do\nnot prune the following move, it is more important to\nescape mate then speed up search.\n\nThis fixes an odd behaviour regarding mates, as example\nthe following diagram is a mate in 4, not in 3 as bogusly\nreported before this patch.\n\n1B2n3/8/2R5/5p2/3kp1n1/4p3/B3K3/8 w - - bm #4;\n\nThe performance impact should be minimal, the increment\nin searched nodes is less then 0.1 %%\n\nIdea and patch by Joona\n\nAfter 999 games at 1+0\nMod vs Orig +193 =604 -202  -3 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not prune the move if we are still under mate"
     },
     {
-      "commit_num": 6200,
+      "commit_num": 6223,
       "hash": "d8e7ce18",
       "short": "d8e7ce18",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a crash when reaching PLY_MAX in a check position\n\nIn this case we call evaluate() being in check and this\nis not allowed.\n\nBug found testing with reduced PLY_MAX value as suggested\nby Miguel A. Ballicora on talkchess.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a crash when reaching PLY_MAX in a check position"
     },
     {
-      "commit_num": 6201,
+      "commit_num": 6224,
       "hash": "181d34e5",
       "short": "181d34e5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add a new rule on promoting pawns in evaluate_passed_pawns()\n\nAdd a rule about the situation when one side queens exactly\none ply before the other. To avoid difficult (but luckly rare)\ncases we only handle the case of free paths to queen for\nboth sides.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add a new rule on promoting pawns in evaluate_passed_pawns()"
     },
     {
-      "commit_num": 6202,
+      "commit_num": 6225,
       "hash": "2655f93c",
       "short": "2655f93c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix x-ray attack from behind in evaluate_passed_pawns()\n\nFix a condition for x-ray attack of a queen or\na rook behind a pawn of us. Previous condition does\nnot check if the enemy slider behind our pawn is\nreally attacking the pawn.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix x-ray attack from behind in evaluate_passed_pawns()"
     },
     {
-      "commit_num": 6203,
+      "commit_num": 6226,
       "hash": "ab4d26f9",
       "short": "ab4d26f9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small cleanup and in evaluate_passed_pawns()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small cleanup and in evaluate_passed_pawns()"
     },
     {
-      "commit_num": 6204,
+      "commit_num": 6227,
       "hash": "d6b04c27",
       "short": "d6b04c27",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Use std::stable_sort() instead of std::sort()\"\n\nUnfortunatly std::stable_sort() implementation in gcc is\nhorrendously slow. We have a big performance regression on\nLinux systems (-20% !)\n\nSo revert the commit and wait to fix the issue in a different\nway, perhaps with an our home grown sorting, that should be\ncomparable in speed with std::sort()\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"Use std::stable_sort() instead of std::sort()\""
     },
     {
-      "commit_num": 6205,
+      "commit_num": 6228,
       "hash": "e2e249ea",
       "short": "e2e249ea",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use std::stable_sort() instead of std::sort()\n\nStandard does not mandate std::sort() to be stable, so we\ncan have, and actually do have different node count on\ndifferent platforms.\n\nSo use the platform independent std::stable_sort() and gain\nsame functionality on any platform (Windows, Unix, Mac OS)\nand with any compiler (MSVC, gcc or Intel C++).\n\nThis sort is teoretically slower, but profiling shows only a very\nminimal drop in performance, probably due to the fact that\nthe set to sort is very small, mainly only captures and with\nless frequency non-captures, anyhow we are talking of 30-40 moves\nin the worst average case. Sorting alghortims are build to work on\nthousands or even milions of elements. With such small sets\nperformance difference seems not noticable.\n\nAfter 999 games at 1+0\n\nMod vs Orig +234 =523 -242 -3 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use std::stable_sort() instead of std::sort()"
     },
     {
-      "commit_num": 6206,
+      "commit_num": 6229,
       "hash": "ed19a9f9",
       "short": "ed19a9f9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unroll color loops in evaluate_passed_pawns()\n\nSpeed increase is on 1.5% on Intel pgo build.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unroll color loops in evaluate_passed_pawns()"
     },
     {
-      "commit_num": 6207,
+      "commit_num": 6230,
       "hash": "a806d7c3",
       "short": "a806d7c3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix pieceList initialization in Position::clear()\n\nWe want piece list to be terminated with SQ_NONE.\n\nThis happens with all the pieces but the pawns that\nbeing 8 make the inner loop exit just before writing\nthe SQ_NONE value at the tail of the list.\n\nThis bug was hidden because currently we don't use\npiece list to scan pawns, but this will change in the\nfuture and in any case an initialization should be done\ncorrectly for the whole array to avoid subtle bugs in\nthe future.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix pieceList initialization in Position::clear()"
     },
     {
-      "commit_num": 6208,
+      "commit_num": 6231,
       "hash": "eddfd46a",
       "short": "eddfd46a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use piece_list to scan the pawns in evaluate_pawns()\n\nNo functional change and small speed increase.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use piece_list to scan the pawns in evaluate_pawns()"
     },
     {
-      "commit_num": 6209,
+      "commit_num": 6232,
       "hash": "ccdb634b",
       "short": "ccdb634b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unroll color loops in get_pawn_info\n\nThis allow to resolve a lot of addresses at compile time\ninstead of an indirect access at runtime.\n\nSpeed up on pgo compile is of 1.3%\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unroll color loops in get_pawn_info"
     },
     {
-      "commit_num": 6210,
+      "commit_num": 6233,
       "hash": "564ed5b3",
       "short": "564ed5b3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small micro-optimization in get_pawn_info()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small micro-optimization in get_pawn_info()"
     },
     {
-      "commit_num": 6211,
+      "commit_num": 6234,
       "hash": "f05d059b",
       "short": "f05d059b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore pliesFromNull counter\n\nIt is not equivalent because the check for the\n50 moves rule get badly affected.\n\n// Draw by the 50 moves rule?\nif (st->rule50 > 100 || (st->rule50 == 100 && !is_check()))\n    return true;\n\nSo we _really_ need two counters.\n\nThanks to Joona and Tord to be patience with a silly guy ;-)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Restore pliesFromNull counter"
     },
     {
-      "commit_num": 6212,
+      "commit_num": 6235,
       "hash": "06a5b602",
       "short": "06a5b602",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an off-by-one bug in extract_pv()\n\nIn case we reach ply == PLY_MAX we exit the function\nwriting\n\npv[PLY_MAX] = MOVE_NONE;\n\nAnd because SearchStack is defined as:\n\nstruct SearchStack {\n  Move pv[PLY_MAX];\n  Move currentMove;\n  .....\n\nWe end up with the unwanted assignment\n\nSearchStack.currentMove = MOVE_NONE;\n\nFortunatly this is harmless because currentMove is not used where\nextarct_pv() is called. But neverthless this is a bug that\nneeds to be fixed.\n\nThanks to Uri Blass for spotting out this.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix an off-by-one bug in extract_pv()"
     },
     {
-      "commit_num": 6213,
+      "commit_num": 6236,
       "hash": "d892063c",
       "short": "d892063c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite previous patch using only one counter\n\nUse only rule50 and retire pliesFromNull.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite previous patch using only one counter"
     },
     {
-      "commit_num": 6214,
+      "commit_num": 6237,
       "hash": "e59ff49a",
       "short": "e59ff49a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix the polling frequency when pondering\n\nWhen pondering InfiniteSearch == false but myTime == 0 so that\nNodesBetweenPolls = 1000 instead of the standard.\n\nThe patch fixes the bug and is more robust because checks\ndirectly myTime for a non-zero value, without relying on\nan indirect test (InfiniteSearch in this case).\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix the polling frequency when pondering"
     },
     {
-      "commit_num": 6215,
+      "commit_num": 6238,
       "hash": "225dcfee",
       "short": "225dcfee",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use slightly lower polling frequency in the last few seconds.\n\nInstead of checking the time every 100 nodes in the last second,\nand every 1000 nodes in the last five seconds, Stockfish now checks\nevery 1000 nodes in the last second and every 5000 nodes in the last\nfive seconds.  This was tested in 1036 games at a time control of\n40 moves/10 seconds, and no losses on time occured.\n\nAlso fixed a bug pointed out by Marco:  In infinite mode, myTime\nis actually 0, but of course we still don't want to check the time\nmore frequently than the standard once per 30000 nodes in this\ncase.\n",
       "subject": "Use slightly lower polling frequency in the last few seconds."
     },
     {
-      "commit_num": 6216,
+      "commit_num": 6239,
       "hash": "8dd01fda",
       "short": "8dd01fda",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Minor change to time management code, to make sure we don't lose on\ntime at the last move before the time control when there is very\nlittle time left.\n",
       "subject": "Minor change to time management code, to make sure we don't lose on"
     },
     {
-      "commit_num": 6217,
+      "commit_num": 6240,
       "hash": "5a5dc6fa",
       "short": "5a5dc6fa",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore development version\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Restore development version"
     },
     {
-      "commit_num": 6218,
+      "commit_num": 6241,
       "hash": "8ee0842c",
       "short": "8ee0842c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 1.5.1\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stockfish 1.5.1"
     },
     {
-      "commit_num": 6219,
+      "commit_num": 6242,
       "hash": "64d6ba2e",
       "short": "64d6ba2e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not claim repetition after null move\n\nNull moves can artificially create a repetition\ndraw where instead there is no one.\n\nSo use a second counter to reset history after\na null move.\n\nIdea from Joona.\n\nAfter 999 games at 1+0\n\nMod vs Orig +238 =553 -208 51.50%  514.5/999  +10 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not claim repetition after null move"
     },
     {
-      "commit_num": 6220,
+      "commit_num": 6243,
       "hash": "18cd83a3",
       "short": "18cd83a3",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Display fail high/fail low in search log file.\n",
       "subject": "Display fail high/fail low in search log file."
     },
     {
-      "commit_num": 6221,
+      "commit_num": 6244,
       "hash": "fd2b3df7",
       "short": "fd2b3df7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix bogus comment in extract_pv()\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix bogus comment in extract_pv()"
     },
     {
-      "commit_num": 6222,
+      "commit_num": 6245,
       "hash": "e49b21ea",
       "short": "e49b21ea",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove a redundant assignment in PawnInfo c'tor\n\nWe don't need to set key to 0 because clear() already\ntakes care of that.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove a redundant assignment in PawnInfo c'tor"
     },
     {
-      "commit_num": 6223,
+      "commit_num": 6246,
       "hash": "da948cc9",
       "short": "da948cc9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix use of an initialized SearchStack\n\nIn RootMoveList c'tor we allocate a search stack and then\ncall directly qsearch.\n\nThere is called init_node() that clears all the fields of the search\nstack array that refers to current ply but not the the killer moves.\n\nThe killer moves cleared correspond to ply+2.\n\nIn id_loop() this is not a problem because killer moves of\ncorresponding ply are cleared anyway few instructions later,\nbut in RootMoveList c'tor we leave them uninitialized.\n\nThis patch fixes this very old bug. It comes direclty\nfrom Glaurung age.\n\nBug spotted by Valgrind.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix use of an initialized SearchStack"
     },
     {
-      "commit_num": 6224,
+      "commit_num": 6247,
       "hash": "32dfaa56",
       "short": "32dfaa56",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fixed an embarassing Chess960 bug found by Alexander Schmidt.\n\nIt turned out that we used do_move_bb to update the king and rook\nbitboards when making and unmaking castling moves, which obviously\ndoesn't work in Chess960, where the source and destination squares\nfor the king or rook could be identical.\n\nNo functional change in normal chess.\n",
       "subject": "Fixed an embarassing Chess960 bug found by Alexander Schmidt."
     },
     {
-      "commit_num": 6225,
+      "commit_num": 6248,
       "hash": "60bc3027",
       "short": "60bc3027",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small code reformat in TranspositionTable::extract_pv()\n\nIn particular don't use an array of StateInfo, this\navoids a possible overflow and is in any case redundant.\n\nAlso pass as argument the pv[] array size to avoid a second\npossible overflow on this one.\n\nFix suggested by Joona.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small code reformat in TranspositionTable::extract_pv()"
     },
     {
-      "commit_num": 6226,
+      "commit_num": 6249,
       "hash": "3701a8e5",
       "short": "3701a8e5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore development version\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Restore development version"
     },
     {
-      "commit_num": 6227,
+      "commit_num": 6250,
       "hash": "aaa07fb1",
       "short": "aaa07fb1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 1.5\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stockfish 1.5"
     },
     {
-      "commit_num": 6228,
+      "commit_num": 6251,
       "hash": "1361ba75",
       "short": "1361ba75",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small touches to increased mobility patch\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small touches to increased mobility patch"
     },
     {
-      "commit_num": 6229,
+      "commit_num": 6252,
       "hash": "da9c4239",
       "short": "da9c4239",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move a comment where it belongs in SEE\n\nNo functional change of course.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move a comment where it belongs in SEE"
     },
     {
-      "commit_num": 6230,
+      "commit_num": 6253,
       "hash": "fa49311b",
       "short": "fa49311b",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1191,7 +1146,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Implemented perft\n\nPatch from Joona with extension to benchmark and inclusion\nof Depth(0) moves generation by me.\n\nNote that to test also qsearch and in particulary checks\ngenerations a change in the end condition is needed.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

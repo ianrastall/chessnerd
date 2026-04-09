@@ -2,7 +2,7 @@
   "month": "2011-12",
   "commits": [
     {
-      "commit_num": 4848,
+      "commit_num": 4871,
       "hash": "8300ab14",
       "short": "8300ab14",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify Book APIs\n\nRetire open(), close() and name() from public visibility\nand greately simplify the code. It is amazing how much\ncan be squeezed out of an already mature code !\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify Book APIs"
     },
     {
-      "commit_num": 4849,
+      "commit_num": 4872,
       "hash": "22e40c8c",
       "short": "22e40c8c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix cond_signal() semantics when using OLD_LOCKS\n\nIn Windows when OLD_LOCKS is defined we use SetEvent() to mimic\nthe semantic of the POSIX pthread_cond_signal().\n\nUnfortunatly there is not a direct mapping because with SetEvent()\nthe state of an event object remains signaled until it is set\nexplicitly to the nonsignaled state or until a single waiting thread\nhas been released. Instead in case of pthread_cond_signal(), if there\nare no waiting threads it has no effect. What we may want is something\nlike PulseEvent() instead of SetEvent(). Unfortunatly it is documented\nby Mcrosoft as 'unreliable' due to spurious wakes up that could\nfilter out the signal resetting. So we opt to reset manually any\npending signaled state before to go to sleep.\n\nThis fixes the strange misbehaves during 'stockfish bench'\nwhen using OLD_LOCKS under Windows.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix cond_signal() semantics when using OLD_LOCKS"
     },
     {
-      "commit_num": 4850,
+      "commit_num": 4873,
       "hash": "e9296d69",
       "short": "e9296d69",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify BitCountType selection\n\nNow that HasPopCnt is a compile time constant we can\ncentralize and unify the BitCountType selection.\n\nAlso rename count_1s() in the more standard popcount()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify BitCountType selection"
     },
     {
-      "commit_num": 4851,
+      "commit_num": 4874,
       "hash": "fb4b4f77",
       "short": "fb4b4f77",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix Windows 64 build\n\nBroken by previous patch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix Windows 64 build"
     },
     {
-      "commit_num": 4852,
+      "commit_num": 4875,
       "hash": "f4dadee5",
       "short": "f4dadee5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat types.h\n\nRetire obsolete code and reshuffle stuff.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reformat types.h"
     },
     {
-      "commit_num": 4853,
+      "commit_num": 4876,
       "hash": "808a312e",
       "short": "808a312e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify debug functions\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify debug functions"
     },
     {
-      "commit_num": 4854,
+      "commit_num": 4877,
       "hash": "93e539d9",
       "short": "93e539d9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Assorted cleanups in benchmark.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Assorted cleanups in benchmark.cpp"
     },
     {
-      "commit_num": 4855,
+      "commit_num": 4878,
       "hash": "9d7a3612",
       "short": "9d7a3612",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire RootMove::nodes\n\nWas used for time management but is no more used\ntoday.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire RootMove::nodes"
     },
     {
-      "commit_num": 4856,
+      "commit_num": 4879,
       "hash": "8307da0d",
       "short": "8307da0d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update copyright year to 2012\n\nAnd refresh Readme.txt while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Update copyright year to 2012"
     },
     {
-      "commit_num": 4857,
+      "commit_num": 4880,
       "hash": "ad43ce14",
       "short": "ad43ce14",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify printing of engine info\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify printing of engine info"
     },
     {
-      "commit_num": 4858,
+      "commit_num": 4881,
       "hash": "0a6532a3",
       "short": "0a6532a3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire run-time detection of hardware POPCNT\n\nIt was meant to build a single binary optimized\nfor any kind of CPU: with and without hardware POPCNT.\n\nThis is a nice idea but in practice was never used, or\npeople builds binary with popcnt enabled or not, mainly\naccording to their type of CPU. And it was also never\nused in the official Jim's builds where, in case, would\nbe easier for a number of reasons, do build two different\nversions: with and without SEE42 support.\n\nSo retire this feature and simplify the code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire run-time detection of hardware POPCNT"
     },
     {
-      "commit_num": 4859,
+      "commit_num": 4882,
       "hash": "20a6f99c",
       "short": "20a6f99c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an off-by-one bug in ucioption.cpp\n\nHarmless but anyhow wrong.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix an off-by-one bug in ucioption.cpp"
     },
     {
-      "commit_num": 4860,
+      "commit_num": 4883,
       "hash": "4554d8b2",
       "short": "4554d8b2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better use STL algorithms in Endgame functions\n\nThis leads to a further and unexpected simplification\nof this already very size optimized code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better use STL algorithms in Endgame functions"
     },
     {
-      "commit_num": 4861,
+      "commit_num": 4884,
       "hash": "c00443b1",
       "short": "c00443b1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore development version\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Restore development version"
     },
     {
-      "commit_num": 4862,
+      "commit_num": 4885,
       "hash": "f237e8b8",
       "short": "f237e8b8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 2.2.2\n\nDedicated to the new Jim's super fast builds ! :-)\n\nstockfish bench signature is: 5447426\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stockfish 2.2.2"
     },
     {
-      "commit_num": 4863,
+      "commit_num": 4886,
       "hash": "78e6b361",
       "short": "78e6b361",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 2.2.1\n\nHopefully fixed the \"lose on time\" issue.\n\nstockfish bench signature is: 5457475\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stockfish 2.2.1"
     },
     {
-      "commit_num": 4864,
+      "commit_num": 4887,
       "hash": "9db9e4f7",
       "short": "9db9e4f7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 2.2\n\nstockfish bench signature is: 5457475\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stockfish 2.2"
     },
     {
-      "commit_num": 4865,
+      "commit_num": 4888,
       "hash": "9cb18776",
       "short": "9cb18776",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Wait for main thread to finish before to exit\n\nCurrently after a 'quit' command UI thread raises stop\nsignal, exits from uci_loop() and calls Threads.exit()\nwhile the search threads are still active.\n\nIn Threads.exit() main thread is asked to terminate, but\nif it is parked in idle_loop() it will exit and free its\nresources (in particular the shared Movepicker object) while\nsibling slaves are still active and this leads to a crash.\n\nThe fix is to let the UI thread always wait for main thread\nto finish the search before to return from uci_loop().\n\nFound by Valgrind when running with 8 threads.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Wait for main thread to finish before to exit"
     },
     {
-      "commit_num": 4866,
+      "commit_num": 4889,
       "hash": "4a8c1b24",
       "short": "4a8c1b24",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use for_each() in Endgames d'tor\n\nAnd fix some comments while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use for_each() in Endgames d'tor"
     },
     {
-      "commit_num": 4867,
+      "commit_num": 4890,
       "hash": "0759d8f4",
       "short": "0759d8f4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add user-defined conversions to UCIOption\n\nGreatly improves the usage. User defined conversions\nare a novelity for SF, another amazing C++ facility\nat work !\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add user-defined conversions to UCIOption"
     },
     {
-      "commit_num": 4868,
+      "commit_num": 4891,
       "hash": "ae65ab25",
       "short": "ae65ab25",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix score_to_uci()\n\nThe condition for a mate score was wrong:\n\nabs(v) < VALUE_MATE - PLY_MAX * ONE_PLY\n\ninstead of\n\nabs(v) < VALUE_MATE_IN_PLY_MAX\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix score_to_uci()"
     },
     {
-      "commit_num": 4869,
+      "commit_num": 4892,
       "hash": "24417a6c",
       "short": "24417a6c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document how mate scores are stored in TT\n\nDuring the search we score a mate as \"plies to mate\nfrom the root\" to compare in an homogeneous way the\nvalues returned by different sub-trees. However we\nstore in TT a mate score as \"plies to mate from the\ncurrent position\" the let the TT value remain valid\nacross the game.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better document how mate scores are stored in TT"
     },
     {
-      "commit_num": 4870,
+      "commit_num": 4893,
       "hash": "ad4739a6",
       "short": "ad4739a6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire SquaresByColorBB[] and enum SquareColor\n\nUse same_color_squares() instead.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire SquaresByColorBB[] and enum SquareColor"
     },
     {
-      "commit_num": 4871,
+      "commit_num": 4894,
       "hash": "a695ed65",
       "short": "a695ed65",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename Pieces\n\nAlign with PieceType naming convention and\nmake them more readable.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename Pieces"
     },
     {
-      "commit_num": 4872,
+      "commit_num": 4895,
       "hash": "750ac9ac",
       "short": "750ac9ac",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document mate distance pruning\n\nIt is simple but somewhat tricky code that deserves\na bit of documentation. A bit of renaming while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Document mate distance pruning"
     },
     {
-      "commit_num": 4873,
+      "commit_num": 4896,
       "hash": "07f3f038",
       "short": "07f3f038",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Assert enhancements in search\n\nAdd the check that alpha < beta - 1 if and only if PvNode is true.\nThe current code would not flag PvNode and alpha == beta - 1. In\nother words, the || is not an exclusive OR!.\n\nAlso sync assert conditions of search() and qsearch()\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Assert enhancements in search"
     },
     {
-      "commit_num": 4874,
+      "commit_num": 4897,
       "hash": "87b483f9",
       "short": "87b483f9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat UCI option code\n\nMake a better use of C++ operators overloading to\nstreamline the APIs.\n\nAlso sync polyglot.ini file while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reformat UCI option code"
     },
     {
-      "commit_num": 4875,
+      "commit_num": 4898,
       "hash": "c2d42ea8",
       "short": "c2d42ea8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename getters functions removing 'get_' prefix\n\nFollow the suggested Qt style:\n\nhttp://doc.qt.nokia.com/qq/qq13-apis.html\n\nIt seems to me simpler and easier to read.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename getters functions removing 'get_' prefix"
     },
     {
-      "commit_num": 4876,
+      "commit_num": 4899,
       "hash": "b5f6c224",
       "short": "b5f6c224",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore std::cout instead of printf()\n\nI am not able to reproduce the speed regression anymore,\nand also we were using cout even before speed regression\nso probably the reason is not there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Restore std::cout instead of printf()"
     },
     {
-      "commit_num": 4877,
+      "commit_num": 4900,
       "hash": "e89a8e09",
       "short": "e89a8e09",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correctly define operators in types.h\n\nBe consistent with the way these operators are defined\nin plain C (and in C++).\n\nSpotted by Lucas Braesch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Correctly define operators in types.h"
     },
     {
-      "commit_num": 4878,
+      "commit_num": 4901,
       "hash": "939b621e",
       "short": "939b621e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use ADL to skip std:: qualifier\n\nTake advantage of argument-dependent lookup (ADL) to\navoid specifying std:: qualifier in some STL functions.\nWhen a function argument refers to a namespace (in this\ncase std) then the compiler will search the unqualified\nfunction in that namespace too.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use ADL to skip std:: qualifier"
     },
     {
-      "commit_num": 4879,
+      "commit_num": 4902,
       "hash": "a77a3b72",
       "short": "a77a3b72",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Disable again buffering at startup\n\nPartially revert efd21679980dfd59\nWithout this patch SF does not send \"bestmove\" to GUI.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Disable again buffering at startup"
     },
     {
-      "commit_num": 4880,
+      "commit_num": 4903,
       "hash": "97627091",
       "short": "97627091",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Headers cleanup in ucioption.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Headers cleanup in ucioption.cpp"
     },
     {
-      "commit_num": 4881,
+      "commit_num": 4904,
       "hash": "87f7e99b",
       "short": "87f7e99b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use printf() instead of std::cout()\n\nSeems sensibly faster: On a\n\n./stockfish bench > /dev/null\n\nWe have +2% on mingw and even +5% on MSVC !\n\nAlso removed the nice but complex enum set960 machinery,\nuse directly the underlying move_to_uci() function.\n\nSpeed regression reported by Heinz van Saanen.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use printf() instead of std::cout()"
     },
     {
-      "commit_num": 4882,
+      "commit_num": 4905,
       "hash": "72d8d272",
       "short": "72d8d272",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire update_history() Inline the only caller site\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire update_history() Inline the only caller site"
     },
     {
-      "commit_num": 4883,
+      "commit_num": 4906,
       "hash": "1ae6ae9b",
       "short": "1ae6ae9b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix book move with searchmoves compatibility\n\nDo not return the book move if is not among the\nRootMoves,in particular if we have been asked to\nsearch on a move subset with \"searchmoves\" then\nreturn book move only if it is among this subset.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix book move with searchmoves compatibility"
     },
     {
-      "commit_num": 4884,
+      "commit_num": 4907,
       "hash": "af4fadeb",
       "short": "af4fadeb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify id_loop() signature\n\nAnd related assorted cleanup of this\nvery important function.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify id_loop() signature"
     },
     {
-      "commit_num": 4885,
+      "commit_num": 4908,
       "hash": "0af3af5d",
       "short": "0af3af5d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat sending of PV information\n\nIntroduce pv_info_to_log() and pv_info_to_uci() and\ngreatly cleanup this stuff.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reformat sending of PV information"
     },
     {
-      "commit_num": 4886,
+      "commit_num": 4909,
       "hash": "852d45a6",
       "short": "852d45a6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further simplify aspiration code\n\nActually after last patch it happens that delta\nstarts always with the fixed value of 16.\n\nSo further remove useless code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Further simplify aspiration code"
     },
     {
-      "commit_num": 4887,
+      "commit_num": 4910,
       "hash": "4e59c5c2",
       "short": "4e59c5c2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire RootMoveList\n\nDiretcly use the underlying std::vector<Move> and the\nSTL algorithms. Also a bit of cleanup while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire RootMoveList"
     },
     {
-      "commit_num": 4888,
+      "commit_num": 4911,
       "hash": "7d97ebfe",
       "short": "7d97ebfe",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix another crash triggered by previous patch\n\nIt is ok to redirect st pointer to startState, but the latter\nshould be updated with the content pointed by the st of the\noriginal position. The bug is hidden when startState and *st\nare the same as is the case of searching from start position,\nbut as soon as moves are made (as is the case when splitting)\nthe bug leads to a crash.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix another crash triggered by previous patch"
     },
     {
-      "commit_num": 4889,
+      "commit_num": 4912,
       "hash": "377c406c",
       "short": "377c406c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a crash when quitting while searching\n\nThe Position object used by UI thread is a local variable in\nuci_loop(), so after receiving \"quit\" command the function\nreturns and the position is freed from the stack.\n\nThis should not be a problem becuase in start_thinking() we copy\nthe position to RootPosition that is the one used by main search\nthread. Unfortunatly we blindly copy also StateInfo pointer that\nstill points to the startState struct inside UI position. So the\npointer becomes stale as soon as UI thread leaves uci_loop() and\nbecause this happens while main search thread is still recovering\nafter the 'stop' signal we have a crash.\n\nThe fix is to update the pointer to the correct startState after\nthe copy.\n\nFound with Valgrind.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a crash when quitting while searching"
     },
     {
-      "commit_num": 4890,
+      "commit_num": 4913,
       "hash": "91601d7f",
       "short": "91601d7f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prune silly comments in search()\n\nComments should be informative but not pedantic / obvious.\nThe only exception is the function description where we\nindulge a bit on the \"chatty\" side, but has always been like\nthis since Glaurung times, so we continue with this tradition.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Prune silly comments in search()"
     },
     {
-      "commit_num": 4891,
+      "commit_num": 4914,
       "hash": "14df9913",
       "short": "14df9913",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix description of endgame scaling functions\n\nTriggered by a comment of Eelco on talkchess. Also\na bit of cleanup while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix description of endgame scaling functions"
     },
     {
-      "commit_num": 4892,
+      "commit_num": 4915,
       "hash": "f3728e66",
       "short": "f3728e66",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Allow to prune also first move\n\nTested togheter with previous patch; shows no regression and\nis a semplification.\n\nAfter 5817 games:\nMod vs Orig 939 - 892 - 3986 ELO +2 (+- 5.1)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Allow to prune also first move"
     },
     {
-      "commit_num": 4893,
+      "commit_num": 4916,
       "hash": "3f14ed66",
       "short": "3f14ed66",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't update bestValue when pruning\n\nSimply return a fail-low score\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't update bestValue when pruning"
     },
     {
-      "commit_num": 4894,
+      "commit_num": 4917,
       "hash": "d543a64c",
       "short": "d543a64c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't update killers for evasions\n\nWe don't use killers to order evasions, so it\nseems natural do not consider an evasion cut-off\nmove as a possible killer. Test shows almost no\nchange, as it should be becuase this is a really\ntiny change, but neverthless seems the correct\nthing to do.\n\nAfter 11893 games\nMod vs Orig 1773 - 1696 - 8424 ELO +2 (+-3.4)\n\nIdea from Critter.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't update killers for evasions"
     },
     {
-      "commit_num": 4895,
+      "commit_num": 4918,
       "hash": "47bcb892",
       "short": "47bcb892",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix compile for 64 bits\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix compile for 64 bits"
     },
     {
-      "commit_num": 4896,
+      "commit_num": 4919,
       "hash": "6e05055f",
       "short": "6e05055f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Set captureThreshold according to static evaluation\n\nConsider negative captures as good if\nstill enough to reach beta.\n\nAfter 7502 games:\nMod vs Orig 1225 - 1158 - 5119 ELO +3 (+- 4.5)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Set captureThreshold according to static evaluation"
     },
     {
-      "commit_num": 4897,
+      "commit_num": 4920,
       "hash": "96213689",
       "short": "96213689",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify aspiration window calculation\n\nIt seems that we just need to look at previous score to\ncompute aspiration window size.\n\nAfter 5350 games:\nMod vs Orig 800 - 803  - 3647 ELO +0 (+- 5.2)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify aspiration window calculation"
     },
     {
-      "commit_num": 4898,
+      "commit_num": 4921,
       "hash": "da6e53a4",
       "short": "da6e53a4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove some (int) casts\n\nA cast rarely is the right solution. In this case was enough\nto redifine 3 variables with type size_t instead of int\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove some (int) casts"
     },
     {
-      "commit_num": 4899,
+      "commit_num": 4922,
       "hash": "56774fff",
       "short": "56774fff",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire all extensions (but checks) for non-PV nodes\n\nIt seems we don't have any added value. Note that the\nmoves that were used to be extended are still flagged\nas dangerous so to avoid at least pruning them.\n\nAfter 9555 games\nMod vs Orig 1562 - 1540 - 6453 ELO +0 (+- 4)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire all extensions (but checks) for non-PV nodes"
     },
     {
-      "commit_num": 4900,
+      "commit_num": 4923,
       "hash": "3527a420",
       "short": "3527a420",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prefer empty() to size()\n\nAs Heinz says:\n\n\"Function empty() should have a constant run-time even\n on lousy compilers and you spare the not.\n\nThe change is even measurable: + 100-150 nodes/sec. Wow:-)\"\n\nPatch from Heinz van Saanen\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Prefer empty() to size()"
     },
     {
-      "commit_num": 4901,
+      "commit_num": 4924,
       "hash": "98352a5e",
       "short": "98352a5e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use operator() instead of apply() in endgames\n\nIt is more idiomatic for a functor (a function object) as are\nthe endgames.\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use operator() instead of apply() in endgames"
     },
     {
-      "commit_num": 4902,
+      "commit_num": 4925,
       "hash": "11a79809",
       "short": "11a79809",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,14 +1371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix disambiguation bug in move_to_san()\n\nA pinned piece cannot move and so does not play any role\nin SAN disambiguation.\n\nReported by Steven Edwards.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix disambiguation bug in move_to_san()"
     },
     {
-      "commit_num": 4903,
+      "commit_num": 4926,
       "hash": "5b8ca1ee",
       "short": "5b8ca1ee",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1451,14 +1396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move SearchStack under Search namespace\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move SearchStack under Search namespace"
     },
     {
-      "commit_num": 4904,
+      "commit_num": 4927,
       "hash": "81cd417b",
       "short": "81cd417b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1477,14 +1421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire move.h\n\nAlso some assorted comments fixes and other trivia.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire move.h"
     },
     {
-      "commit_num": 4905,
+      "commit_num": 4928,
       "hash": "a44c5cf4",
       "short": "a44c5cf4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1503,14 +1446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prefer 0 to EmptyBoardBB\n\nEasier and even faster or at least easier to optimize.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Prefer 0 to EmptyBoardBB"
     },
     {
-      "commit_num": 4906,
+      "commit_num": 4929,
       "hash": "5c5af4fa",
       "short": "5c5af4fa",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1529,14 +1471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire neighboring_files_bb() overload\n\nRarely used and we prefer to not hide the complexity.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire neighboring_files_bb() overload"
     },
     {
-      "commit_num": 4907,
+      "commit_num": 4930,
       "hash": "efd21679",
       "short": "efd21679",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1555,14 +1496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't disable IO buffering at startup\n\nIt was never clear to me why we needed this trick, and now\nthat we rely only on C++ std::getline() and std::cout for\ninput / output it is even more a mistery what this code does.\n\nSo disable it and wait to see if someone screams ;-)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't disable IO buffering at startup"
     },
     {
-      "commit_num": 4908,
+      "commit_num": 4931,
       "hash": "348f8241",
       "short": "348f8241",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1581,7 +1521,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tidy up comments in uci.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

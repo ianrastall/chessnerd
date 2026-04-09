@@ -2,7 +2,7 @@
   "month": "2015-10",
   "commits": [
     {
-      "commit_num": 3274,
+      "commit_num": 3297,
       "hash": "aa242d2f",
       "short": "aa242d2f",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "New History Bonus Formula\n\nbonus = d^2 + d - 1\n\nBench: 8639247\n\nResolves #484\n",
       "subject": "New History Bonus Formula"
     },
     {
-      "commit_num": 3275,
+      "commit_num": 3298,
       "hash": "8d858783",
       "short": "8d858783",
       "author": "Ajith <achajo@yahoo.co.in>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reduce variation in rootDepth between different threads\n\nReduce the variation in Root Depth between different threads. This\nprevents threads from searching at a depth much higher than Main Thread.\n\nPerformed well at STC 24 Threads:\nELO: 3.44 +-3.8 (95%) LOS: 96.1%\nTotal: 10000 W: 1627 L: 1528 D: 6845\n\nAnd LTC 24 Threads\nLLR: 1.43 (-2.94,2.94) [0.00,4.00]\nTotal: 3804 W: 500 L: 420 D: 2884\nELO : +7.31\np-value: 73.16%\n\nPassed no regression at STC 3 Threads:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 40457 W: 7148 L: 7060 D: 26249\n\nAnd LTC 3 Threads:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 17704 W: 2489 L: 2364 D: 12851\n\nRaising a pull request early as 24 Thread tests are very expensive and\nthis is clearly a positive gain at high thread counts and high time\ncontrols. The change is a small parameter tweak with no additional\nlogic.\n\nNo functional change for single thread mode.\n\nResolves #481\n",
       "subject": "Reduce variation in rootDepth between different threads"
     },
     {
-      "commit_num": 3276,
+      "commit_num": 3299,
       "hash": "80d7556a",
       "short": "80d7556a",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Some code and comment cleanup\n\n- Remove all references to split points\n- Some grammar and spelling fixes\n\nNo Functional change\n\nResolves #478\n",
       "subject": "Some code and comment cleanup"
     },
     {
-      "commit_num": 3277,
+      "commit_num": 3300,
       "hash": "86f04dbc",
       "short": "86f04dbc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Assorted trivia in search.cpp\n\nThe only interesting change is the moving of\nstack[MAX_PLY+4] back to its original position\nin id_loop (now renamed Thread::search).\n\nNo functional change.\n",
       "subject": "Assorted trivia in search.cpp"
     },
     {
-      "commit_num": 3278,
+      "commit_num": 3301,
       "hash": "3428a287",
       "short": "3428a287",
       "author": "Stefano80 <stefano.cardanobile@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "KRPPKRP endgame: Simplify ugly switch statement\n\nNo functional change\n\nResolves #470\n",
       "subject": "KRPPKRP endgame: Simplify ugly switch statement"
     },
     {
-      "commit_num": 3279,
+      "commit_num": 3302,
       "hash": "00d9e9fd",
       "short": "00d9e9fd",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use atomics instead of volatile\n\nRely on well defined behaviour for message passing, instead of volatile. Three\nversions have been tested, to make sure this wouldn't cause a slowdown on any\nplatform.\n\nv1: Sequentially consistent atomics\n\nNo mesurable regression, despite the extra memory barriers on x86. Even with 15\nthreads and extreme time pressure, both acting as a magnifying glass:\n\nthreads=15, tc=2+0.02\nELO: 2.59 +-3.4 (95%) LOS: 93.3%\nTotal: 18132 W: 4113 L: 3978 D: 10041\n\nthreads=7, tc=2+0.02\nELO: -1.64 +-3.6 (95%) LOS: 18.8%\nTotal: 16914 W: 4053 L: 4133 D: 8728\n\nv2: Acquire/Release semantics\n\nThis version generates no extra barriers for x86 (on the hot path). As expected,\nno regression either, under the same conditions:\n\nthreads=15, tc=2+0.02\nELO: 2.85 +-3.3 (95%) LOS: 95.4%\nTotal: 19661 W: 4640 L: 4479 D: 10542\n\nthreads=7, tc=2+0.02\nELO: 0.23 +-3.5 (95%) LOS: 55.1%\nTotal: 18108 W: 4326 L: 4314 D: 9468\n\nAs suggested by Joona, another test at LTC:\n\nthreads=15, tc=20+0.05\nELO: 0.64 +-2.6 (95%) LOS: 68.3%\nTotal: 20000 W: 3053 L: 3016 D: 13931\n\nv3: Final version: SeqCst/Relaxed\n\nthreads=15, tc=10+0.1\nELO: 0.87 +-3.9 (95%) LOS: 67.1%\nTotal: 9541 W: 1478 L: 1454 D: 6609\n\nResolves #474\n",
       "subject": "Use atomics instead of volatile"
     },
     {
-      "commit_num": 3280,
+      "commit_num": 3303,
       "hash": "307a5a4f",
       "short": "307a5a4f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Cleanup history stats\n\nAnd other assorted trivia.\n\nNo functional change.\n",
       "subject": "Cleanup history stats"
     },
     {
-      "commit_num": 3281,
+      "commit_num": 3304,
       "hash": "5066e17e",
       "short": "5066e17e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update authors\n\nFishtest is a key factor of SF success.\n\nThanks to Fishtest we have not only greately\nimproved ELO but, even more important, we\nhave enabled a kind of joint development and\ntesting that it is the herat of on open\nsource project like SF.\n\nOpen sourcing is not just about open code, it is\nabout commuity development. In case of a chess engine\nthis has never been possible before due to missing\na strong and strict testing environment that allows\nmany people to contribute in a safe and coordinate way.\n\nFishtest is a new way of developing chess engines,\nsomething that has never exsisted before.\n\nNo functional change.\n",
       "subject": "Update authors"
     },
     {
-      "commit_num": 3282,
+      "commit_num": 3305,
       "hash": "4eca981e",
       "short": "4eca981e",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "History pruning\n\nPrune moves with negative History\nand CMH scores at low depth.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 24182 W: 4672 L: 4439 D: 15071\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 12579 W: 1959 L: 1792 D: 8828\n\nbench: 8907701\n",
       "subject": "History pruning"
     },
     {
-      "commit_num": 3283,
+      "commit_num": 3306,
       "hash": "328d314f",
       "short": "328d314f",
       "author": "Stefano80 <stefano.cardanobile@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Almost passed tuning attempts\n\nCollect and give a second try to some almost passed tuning attempts and\none-line tweaks from the last month.\n\nPassed STC\n\nLLR: 3.07 (-2.94,2.94) [0.00,4.00]\nTotal: 15124 W: 2974 L: 2756 D: 9394\n\nAnd LTC\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 21577 W: 3507 L: 3289 D: 14781\n\nBench: 8855226\n\nResolves #464\n",
       "subject": "Almost passed tuning attempts"
     },
     {
-      "commit_num": 3284,
+      "commit_num": 3307,
       "hash": "55758344",
       "short": "55758344",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify threats\n\nUsing less parameters and code to compute Threats\nIncludes also a few spacing edits.\n\nRun as a simplification.\n\nPassed STC 10+0.1\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 18879 W: 3725 L: 3600 D: 11554\n\nPassed LTC 60+0.4\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 74116 W: 11001 L: 10958 D: 52157\n\nbench: 8004751\n",
       "subject": "Simplify threats"
     },
     {
-      "commit_num": 3285,
+      "commit_num": 3308,
       "hash": "7ea5659c",
       "short": "7ea5659c",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Asymmetry bonus for the attacking side\n\nUse asymmetry in the position (king separation, pawn structure) to\ncompute an \"initiative bonus\" for the attacking side.\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 14563 W: 2826 L: 2636 D: 9101\n\nAnd LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 14363 W: 2317 L: 2141 D: 9905\n\nBench: 8116244\n\nResolves #462\n",
       "subject": "Asymmetry bonus for the attacking side"
     },
     {
-      "commit_num": 3286,
+      "commit_num": 3309,
       "hash": "8fd34d77",
       "short": "8fd34d77",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Combination of two ideas:\n\nApply bonus for the prior CMH that caused a fail low.\n\nBalance Stats: CMH and History bonuses are updated differently.\nThis eliminates the \"fudge\" factor weight when scoring moves. Also\neliminated discontinuity in the gravity history stat formula. (i.e. stat\nscores will no longer inverse when depth exceeds 22)\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 21802 W: 4107 L: 3887 D: 13808\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 46036 W: 7046 L: 6756 D: 32234\n\nBench: 7677367\n",
       "subject": "Combination of two ideas:"
     },
     {
-      "commit_num": 3287,
+      "commit_num": 3310,
       "hash": "08d6465d",
       "short": "08d6465d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Travis CI: add gcc 4.8 for osx\n\nThis setup was still missing.\n\nSuggested by Stéphane Nicolet.\n\nNo functional change.\n",
       "subject": "Travis CI: add gcc 4.8 for osx"
     },
     {
-      "commit_num": 3288,
+      "commit_num": 3311,
       "hash": "55b46ffa",
       "short": "55b46ffa",
       "author": "Jonathan Calovski <jonoface@live.com.au>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire rook contact checks\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 34114 W: 6363 L: 6265 D: 21486\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 61776 W: 9349 L: 9289 D: 43138\n\nLTC (after rebasing):\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 15261 W: 2343 L: 2214 D: 10704\n\nBench: 7523382\n\nResolves #442\n",
       "subject": "Retire rook contact checks"
     },
     {
-      "commit_num": 3289,
+      "commit_num": 3312,
       "hash": "5f4d9309",
       "short": "5f4d9309",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Travis CI: add clang and osx\n\nExtend builds to clang and osx platforms.\n\nAnd check bench numbers.\n\nNo functional change.\n",
       "subject": "Travis CI: add clang and osx"
     },
     {
-      "commit_num": 3290,
+      "commit_num": 3313,
       "hash": "ecc5ff66",
       "short": "ecc5ff66",
       "author": "mbootsector <mbootsector@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Lazy SMP\n\nStart all threads searching on root position and\nuse only the shared TT table as synching scheme.\n\nIt seems this scheme scales better than YBWC for\nhigh number of threads.\n\nVerified for nor regression at STC 3 threads\nLLR: -2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 40232 W: 6908 L: 7130 D: 26194\n\nVerified for nor regression at LTC 3 threads\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 28186 W: 3908 L: 3798 D: 20480\n\nVerified for nor regression at STC 7 threads\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 3607 W: 674 L: 526 D: 2407\n\nVerified for nor regression at LTC 7 threads\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 4235 W: 671 L: 528 D: 3036\n\nTested with fixed games at LTC with 20 threads\nELO: 44.75 +-7.6 (95%) LOS: 100.0%\nTotal: 2069 W: 407 L: 142 D: 1520\n\nTested with fixed games at XLTC (120secs) with 20 threads\nELO: 28.01 +-6.7 (95%) LOS: 100.0%\nTotal: 2275 W: 349 L: 166 D: 1760\n\nOriginal patch of mbootsector, with additional work\nfrom Ivan Ivec (log formula), Joerg Oster (id loop\nsimplification) and Marco Costalba (assorted formatting\nand rework).\n\nBench: 8116244\n",
       "subject": "Lazy SMP"
     },
     {
-      "commit_num": 3291,
+      "commit_num": 3314,
       "hash": "436c3037",
       "short": "436c3037",
       "author": "Stefano80 <stefano.cardanobile@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tuning of assorted values\n\nPassed STC\n\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 45401 W: 8590 L: 8274 D: 28537\n\nPassed LTC\n\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 36089 W: 5589 L: 5331 D: 25169\n\nBench: 8397672\n\nResolves #445\n",
       "subject": "Tuning of assorted values"
     },
     {
-      "commit_num": 3292,
+      "commit_num": 3315,
       "hash": "540b49a1",
       "short": "540b49a1",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove queen threat evaluation\n\nThreats by queen seem to be worthless.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 13627 W: 2607 L: 2473 D: 8547\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 19146 W: 2950 L: 2827 D: 13369\n\nBench: 8222484\n\nResolves #439\n",
       "subject": "Remove queen threat evaluation"
     },
     {
-      "commit_num": 3293,
+      "commit_num": 3316,
       "hash": "2e454479",
       "short": "2e454479",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add Trevis CI support\n\nAdd Travis CI support to GitHub repo.\n\nAfter every push to master, Travis will build\nthe sources directly from GitHub repo according\nto .travis.yml and verify everything is ok.\n\nNo functional change.\n",
       "subject": "Add Trevis CI support"
     },
     {
-      "commit_num": 3294,
+      "commit_num": 3317,
       "hash": "83e19fbe",
       "short": "83e19fbe",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "File based passed pawn bonus\n\nAdd file based bonus for passed pawns. Values tuned by SPSA.\n\nSTC:\nLLR: 3.33 (-2.94,2.94) [0.00,5.00]\nTotal: 36889 W: 6805 L: 6507 D: 23577\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 32301 W: 5101 L: 4858 D: 22342\n\nBench: 8073614\n\nResolves #436\n",
       "subject": "File based passed pawn bonus"
     },
     {
-      "commit_num": 3295,
+      "commit_num": 3318,
       "hash": "9f5b31c2",
       "short": "9f5b31c2",
       "author": "Jonathan Calovski <jonoface@live.com.au>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Bonus for checking moves\n\nSTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 14531 W: 2765 L: 2576 D: 9190\n\nLTC:\nLLR: 3.20 (-2.94,2.94) [0.00,5.00]\nTotal: 52518 W: 8107 L: 7782 D: 36629\n\nBench: 7556477\n\nResolves #435\n",
       "subject": "Bonus for checking moves"
     },
     {
-      "commit_num": 3296,
+      "commit_num": 3319,
       "hash": "dc3508d1",
       "short": "dc3508d1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,7 +571,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a comment in TTEntry::save\n\nComment was slightly incorrect.\n\nNo functional change.\n",

@@ -2,7 +2,7 @@
   "month": "2012-03",
   "commits": [
     {
-      "commit_num": 4692,
+      "commit_num": 4715,
       "hash": "32c50407",
       "short": "32c50407",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use std::vector to implement HashTable\n\nAllows some code semplification and avoids directly\nallocation and managing heap memory.\n\nAlso the usual renaming while there.\n\nNo functional change and no speed regression.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use std::vector to implement HashTable"
     },
     {
-      "commit_num": 4693,
+      "commit_num": 4716,
       "hash": "cc6c745b",
       "short": "cc6c745b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reset search time as early as possible\n\nIn particualr before to wake up main thread that\ncould take some random time. Until we don't reset\nsearch time we are not able to correctly track\nthe elapsed search time and this can be dangerous\nunder extreme time pressure.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reset search time as early as possible"
     },
     {
-      "commit_num": 4694,
+      "commit_num": 4717,
       "hash": "304deb5e",
       "short": "304deb5e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename Materials and Pawns hash stuff\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename Materials and Pawns hash stuff"
     },
     {
-      "commit_num": 4695,
+      "commit_num": 4718,
       "hash": "d84865ea",
       "short": "d84865ea",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Complete the renaming in Search::LimitsType\n\nThis completes the job started with revision\n4124c94583c8f61.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Complete the renaming in Search::LimitsType"
     },
     {
-      "commit_num": 4696,
+      "commit_num": 4719,
       "hash": "d033d5e0",
       "short": "d033d5e0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Call wait_for_search_finished() only when quitting\"\n\nWe need to wake up main thread if it is sleeping\nwaiting for stop or ponderhit, so we cannot skip\ncalling wait_for_search_finished().\n\nFound by Othello1984.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"Call wait_for_search_finished() only when quitting\""
     },
     {
-      "commit_num": 4697,
+      "commit_num": 4720,
       "hash": "5e18b81e",
       "short": "5e18b81e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an hang when max depth is reached\n\nIn this case SF stop searching and goes sleeping\nwaiting for a stop / ponderhit before to return\nbest move. So when a \"stop\" arrives we need to wake\nup the main thread again.\n\nAnother regression introduced by 3aa471f2a9cb,\nhopefully the last one.\n\nThanks to Otello1984 to reporting this.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix an hang when max depth is reached"
     },
     {
-      "commit_num": 4698,
+      "commit_num": 4721,
       "hash": "b0b9bb34",
       "short": "b0b9bb34",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Last touches to pawns shelter code\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Last touches to pawns shelter code"
     },
     {
-      "commit_num": 4699,
+      "commit_num": 4722,
       "hash": "76622342",
       "short": "76622342",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore MS1BTable[]\n\nIncredible typo from my side!\n\nThe 2 tables are completely different, one counts 1s the\nother returns the msb position. Even more incredible\nthe 'stockfish bench' command returns the same number\nof nodes!!!\n\nSpotted by Justin Blanchard.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Restore MS1BTable[]"
     },
     {
-      "commit_num": 4700,
+      "commit_num": 4723,
       "hash": "d6e3a40c",
       "short": "d6e3a40c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Silently handle \"ucinewgame\" command\n\nAvoid returning \"Unknown command\", it seems some\nGUI are misguided by this.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Silently handle \"ucinewgame\" command"
     },
     {
-      "commit_num": 4701,
+      "commit_num": 4724,
       "hash": "10e64e05",
       "short": "10e64e05",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Refactor pawns shelter and storm\n\nRenamed stuff and added comments. The aim is to make more\nreadable, at least by me ;-) , this newly added part of code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Refactor pawns shelter and storm"
     },
     {
-      "commit_num": 4702,
+      "commit_num": 4725,
       "hash": "46a50cbf",
       "short": "46a50cbf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Replace MS1BTable[] with BitCount8Bit[]\n\nWe already have the necessary infrastructure\nin place.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Replace MS1BTable[] with BitCount8Bit[]"
     },
     {
-      "commit_num": 4703,
+      "commit_num": 4726,
       "hash": "cc2b3ece",
       "short": "cc2b3ece",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge pull request #11 from glinscott/squash\n\nAdd more detailed pawn shelter/storm evaluation\n\nAfter 10670 games at 10\"+0.05\nMod vs Orig 2277 - 1941 - 6452 ELO +11 !!!\n\nThe first real increase since 2.2.2, congratulations Gary !!!\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Merge pull request #11 from glinscott/squash"
     },
     {
-      "commit_num": 4704,
+      "commit_num": 4727,
       "hash": "22e294e0",
       "short": "22e294e0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Set do_sleep out of lock protection\n\nFixes a not so rare crash (once every 100 games)\nnewly introduced. Unfortunatly I am still not\nable to figure out why :-(\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Set do_sleep out of lock protection"
     },
     {
-      "commit_num": 4705,
+      "commit_num": 4728,
       "hash": "4124c945",
       "short": "4124c945",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use UCI names in Search::LimitsType\n\nThere is no need to \"invent\" different names\nfrom the original UCI parameters.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use UCI names in Search::LimitsType"
     },
     {
-      "commit_num": 4706,
+      "commit_num": 4729,
       "hash": "a56322fd",
       "short": "a56322fd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge pull request #9 from glinscott/master\n\nPenalty for undefended rook\n\nAlmost no change at longer TC, but perhaps there\nis a tiny increase....\n\nAfter 17522 games at 10\"+0.05\nMod vs Orig 3064 - 2967 - 11491 ELO +2\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Merge pull request #9 from glinscott/master"
     },
     {
-      "commit_num": 4707,
+      "commit_num": 4730,
       "hash": "3d0d0237",
       "short": "3d0d0237",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify start_searching() signature\n\nRetire the \"sync\" behaviour that now is up to\nthe caller to honour.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify start_searching() signature"
     },
     {
-      "commit_num": 4708,
+      "commit_num": 4731,
       "hash": "d11a5299",
       "short": "d11a5299",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Call wait_for_search_finished() only when quitting\n\nWhen quitting we should avoid RootPosition to be\ndestroyed while threads are still running, leading\nto a crash. In case of a \"stop\" or \"ponderhit\"\ncommand there is no need for the UI thread to wait.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Call wait_for_search_finished() only when quitting"
     },
     {
-      "commit_num": 4709,
+      "commit_num": 4732,
       "hash": "3aa471f2",
       "short": "3aa471f2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce and use wait_for_search_finished()\n\nHelper function that allows us to simplify\nthe code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce and use wait_for_search_finished()"
     },
     {
-      "commit_num": 4710,
+      "commit_num": 4733,
       "hash": "374c9e6b",
       "short": "374c9e6b",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add more detailed pawn shelter/storm evaluation\n",
       "subject": "Add more detailed pawn shelter/storm evaluation"
     },
     {
-      "commit_num": 4711,
+      "commit_num": 4734,
       "hash": "32d3a07c",
       "short": "32d3a07c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move ThreadsManager::exit() to d'tor\n\nAnd add final touches to this long patch series.\n\nAll the series has been verified against regression with\n20K games at fast TC.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move ThreadsManager::exit() to d'tor"
     },
     {
-      "commit_num": 4712,
+      "commit_num": 4735,
       "hash": "b978eb05",
       "short": "b978eb05",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix compile error with gcc\n\nWe have a clash with start_fn defined both as a\nThread memeber and as a function pointer type in\npthread_create().\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix compile error with gcc"
     },
     {
-      "commit_num": 4713,
+      "commit_num": 4736,
       "hash": "e4efc8b7",
       "short": "e4efc8b7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reset Thread::maxPly before a new search\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reset Thread::maxPly before a new search"
     },
     {
-      "commit_num": 4714,
+      "commit_num": 4737,
       "hash": "58c2fe39",
       "short": "58c2fe39",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix race in ThreadsManager::sleep()\n\nWe cannot set do_sleep flag of main thread before\n\"bestmove\" is sent to GUI, otherwise GUI could send\nimmediately the next \"go\" command that triggers\nstart_thinking() and because do_sleep is set UI\nthread resets the flag to launch a new search. But\nwhen shortly after main thread returns to main_loop()\nflag is incorrectly reset and main thread goes to sleep\nhanging the engine.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix race in ThreadsManager::sleep()"
     },
     {
-      "commit_num": 4715,
+      "commit_num": 4738,
       "hash": "dbe5e28e",
       "short": "dbe5e28e",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge remote-tracking branch 'upstream/master'\n",
       "subject": "Merge remote-tracking branch 'upstream/master'"
     },
     {
-      "commit_num": 4716,
+      "commit_num": 4739,
       "hash": "c483ffc7",
       "short": "c483ffc7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Try to mimic std::thread API\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Try to mimic std::thread API"
     },
     {
-      "commit_num": 4717,
+      "commit_num": 4740,
       "hash": "8ec421fa",
       "short": "8ec421fa",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Don't sync with C library I/O buffers\"\n\nIt seems is the cause of strange and rare hangs\nreported by some users where Stockfish stops\nresponding to GUI. It is not clear why but for\nthe moment revert the patch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"Don't sync with C library I/O buffers\""
     },
     {
-      "commit_num": 4718,
+      "commit_num": 4741,
       "hash": "11b0c7b4",
       "short": "11b0c7b4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't ceil cpu_count()\n\nIt is already done at calling site where it is\nmore appropiate.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't ceil cpu_count()"
     },
     {
-      "commit_num": 4719,
+      "commit_num": 4742,
       "hash": "41561c9b",
       "short": "41561c9b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use std::vector<Thread*> to store threads\n\nWe store pointers instead of Thread objects because\nThread is not copy-constructible nor copy-assignable\nand default ones are not suitable. So we cannot store\ndirectly in a std::vector.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use std::vector<Thread*> to store threads"
     },
     {
-      "commit_num": 4720,
+      "commit_num": 4743,
       "hash": "553655eb",
       "short": "553655eb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Refactor Thread class\n\nAssociate platform OS thread to the Thread class instead of\ncreating it from ThreadsManager.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Refactor Thread class"
     },
     {
-      "commit_num": 4721,
+      "commit_num": 4744,
       "hash": "f01b53c3",
       "short": "f01b53c3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Refactor ThreadsManager::set_size() functionality\n\nSplit the data allocation, now done (mostly once)\nin read_uci_options(), from the wake up and sleeping\nof the slave threads upon entering/exiting the search.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Refactor ThreadsManager::set_size() functionality"
     },
     {
-      "commit_num": 4722,
+      "commit_num": 4745,
       "hash": "f8224fc7",
       "short": "f8224fc7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a MSVC warning\n\nNot correct warning about use of an uninitialized\nvariable. The warning is not correct becuase we can\nnever reach the warned code when in SpNode, anyhow\nthe fix is simple.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a MSVC warning"
     },
     {
-      "commit_num": 4723,
+      "commit_num": 4746,
       "hash": "b356e0fa",
       "short": "b356e0fa",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename lock.h to platform.h\n\nAnd move some more platform specific code there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename lock.h to platform.h"
     },
     {
-      "commit_num": 4724,
+      "commit_num": 4747,
       "hash": "06f33ff1",
       "short": "06f33ff1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove last platform specific code form thread.cpp\n\nA somewhat tricky function pointer cast allows us\nto move the platform specifics to lock.h, the cast\nis tricky because return type is not the same of the\ncasted function in Linux (for Windows return type is\na DWORD that is a long) but this should not be a\nproblem as long as the size is the same;\n\nFrom: http://stackoverflow.com/questions/188839/function-pointer-cast-to-different-signature\n\n\"OpenSSL was only casting functions pointers to\nother function types taking and returning the same\nnumber of values of the same exact sizes, and this\n(assuming you're not dealing with floating-point)\nhappens to be safe across all the platforms and\ncalling conventions I know of. However, anything\nelse is potentially unsafe.\"\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove last platform specific code form thread.cpp"
     },
     {
-      "commit_num": 4725,
+      "commit_num": 4748,
       "hash": "c47a74ec",
       "short": "c47a74ec",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge two loops in ThreadsManager::init()\n\nIn analogy with ThreadsManager::exit()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Merge two loops in ThreadsManager::init()"
     },
     {
-      "commit_num": 4726,
+      "commit_num": 4749,
       "hash": "f41a21fe",
       "short": "f41a21fe",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Penalty for undefended rook as well\n",
       "subject": "Penalty for undefended rook as well"
     },
     {
-      "commit_num": 4727,
+      "commit_num": 4750,
       "hash": "d4c9abb9",
       "short": "d4c9abb9",
       "author": "mcostalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge pull request #8 from glinscott/master\n\nOptimize undefended minor check. Little editing by\nme, no change even at assembly level.\n\nNo regression after 8K games at fast TC on a 64bit CPU.\n",
       "subject": "Merge pull request #8 from glinscott/master"
     },
     {
-      "commit_num": 4728,
+      "commit_num": 4751,
       "hash": "d1e18fc7",
       "short": "d1e18fc7",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Optimize undefended minor check.\n",
       "subject": "Optimize undefended minor check."
     },
     {
-      "commit_num": 4729,
+      "commit_num": 4752,
       "hash": "3c6a4bfb",
       "short": "3c6a4bfb",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Penalize undefended minors\n\nEven if not under attack. This seems to be good\nespecially on openings.\n\nAfter 12112 games at 10\"+0.05\nMod vs Orig 2175 - 1997 - 7940 ELO +5 (+- 3.7)\n\n[Patch series from Gary, little edited by me]\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Penalize undefended minors"
     },
     {
-      "commit_num": 4730,
+      "commit_num": 4753,
       "hash": "3b7dbc4f",
       "short": "3b7dbc4f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix Logger under MSVC iostream libraries\n\nWe need splitted Tie classes because MSVC stream library\ntakes a lock on buffer both on reading and on writing and\nthis causes an hang because, while searching, the I/O\nthread is locked on getline() and when main thread is\ntrying to std::cout() something it blocks on the same\nlock waiting for I/O thread getting some input and\nreleasing the lock.\n\nThe solution is to use separated streambuf objects for\ncin and cout.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix Logger under MSVC iostream libraries"
     },
     {
-      "commit_num": 4731,
+      "commit_num": 4754,
       "hash": "17d19402",
       "short": "17d19402",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove cruft from Logger class\n\nA big code simplification and cruft removing, make\nLogger class a singleton and fully self conteined.\nAlso add direction indicators (\">>\" and \"<<\") to\nbetter differentiate input and output lines in the\nlog file.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove cruft from Logger class"
     },
     {
-      "commit_num": 4732,
+      "commit_num": 4755,
       "hash": "e26d13bb",
       "short": "e26d13bb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use a local copy of tte->value()\n\nThis should avoid some aliasing issues\nwith TT table access.\n\nAfter 3913 games at 10\"+0.05\nMod vs Orig 662 - 651 - 2600  ELO +0 (+- 6.4)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use a local copy of tte->value()"
     },
     {
-      "commit_num": 4733,
+      "commit_num": 4756,
       "hash": "258da28e",
       "short": "258da28e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better on_change() argument name\n\nUsing \"o\" as a parameter with the on_xxx(const UICOption& o)\nfunctions is a bit dangerous because of confusion with \"0\".\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better on_change() argument name"
     },
     {
-      "commit_num": 4734,
+      "commit_num": 4757,
       "hash": "df802324",
       "short": "df802324",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add also logging of std::cin\n\nSome trial was needed to find the correct recipe but now\nwe log both stdin and stdout to file \"io_log.txt\".\n\nLink http://spec.winprog.org/streams/ was very useful\nto understand the details of iostreams implementation.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add also logging of std::cin"
     },
     {
-      "commit_num": 4735,
+      "commit_num": 4758,
       "hash": "2dfc94e0",
       "short": "2dfc94e0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Show startup messages immediately\n\nIn particular before initialization. So that SF\nseems more snappy at startup.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Show startup messages immediately"
     },
     {
-      "commit_num": 4736,
+      "commit_num": 4759,
       "hash": "7bc36887",
       "short": "7bc36887",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert to byTypeBB[0] storing occupied squares\n\nAs it was in Glaurung times. Also rearranged order\nso that byTypeBB[0] is accessed before byTypeBB[x]\nto be more cache friendly. It seems there is even\na small speedup.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert to byTypeBB[0] storing occupied squares"
     },
     {
-      "commit_num": 4737,
+      "commit_num": 4760,
       "hash": "fc3ea736",
       "short": "fc3ea736",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename occupied_squares() to pieces()\n\nAlso some microoptimizations, were there from ages\nbut hidden: the renaming suddendly made them visible!\n\nThis is a good example of how better naming lets you write\nbetter code. Naming is really a kind of black art!\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename occupied_squares() to pieces()"
     },
     {
-      "commit_num": 4738,
+      "commit_num": 4761,
       "hash": "eb28a683",
       "short": "eb28a683",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add (smart) logging facility\n\nBy means of \"Use Debug Log\" UCI option it is possible to toggle\nthe logging of std::cout to file \"out.txt\" while preserving\nthe usual output to stdout. There is zero overhead when logging\nis disabled and we achieved this without changing a single line\nof exsisting code, in particular we still use std::cout as usual.\n\nThe idea and part of the code comes from this article:\nhttp://groups.google.com/group/comp.lang.c++/msg/1d941c0f26ea0d81\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add (smart) logging facility"
     },
     {
-      "commit_num": 4739,
+      "commit_num": 4762,
       "hash": "55376219",
       "short": "55376219",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "UCI buttons don't need a value\n\nTake advantage of this to further simplify the code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "UCI buttons don't need a value"
     },
     {
-      "commit_num": 4740,
+      "commit_num": 4763,
       "hash": "9b263563",
       "short": "9b263563",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't use \"OwnBook\" by default\n\nStick to UCI protocol that says:\n\n* by default all the opening book handling is done by the GUI,\n  but there is an option for the engine to use its own book\n  (\"OwnBook\" option, see below)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't use \"OwnBook\" by default"
     },
     {
-      "commit_num": 4741,
+      "commit_num": 4764,
       "hash": "7c8a8e03",
       "short": "7c8a8e03",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire \"ucinewgame\" UCI option\n\nUCI protocol it is not clear about what the engine\nshould be supposed to do when \"ucinewgame\" is\nreceived. Stockfish simply sets the position to\nstart FEN, but it is redundant becuase the GUI always\nresends the position after \"ucinewgame\" command, so\nit seems we can safely ignore that command.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire \"ucinewgame\" UCI option"
     },
     {
-      "commit_num": 4742,
+      "commit_num": 4765,
       "hash": "ee838f56",
       "short": "ee838f56",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix UCI 'button' options\n\nWhen a button fires UCIOption::operator=() is called and from\nthere the on_change() function. Now it happens that in case of\na button the on_change() function resets option's value to\n\"false\" triggering again UCIOption::operator=() that calls again\non_change() and so on in an endless loop that is experienced\nby the user as an application hang.\n\nRework the button logic to fix the issue and also be more clear\nabout how button works.\n\nReported by several people working with Scid and tracked down\nto the \"Clear Hash\" UCI button by Steven Atkinson.\n\nBug recently introduced by 2ef5b4066e649.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix UCI 'button' options"
     },
     {
-      "commit_num": 4743,
+      "commit_num": 4766,
       "hash": "9934b8ec",
       "short": "9934b8ec",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't sync with C library I/O buffers\n\nNow we are forced to just use C++ iostream becuase\nbuffers are independent and using C library functions\nlike printf() or scanf() could yield to issues.\n\nSpeed up of about 1%.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't sync with C library I/O buffers"
     },
     {
-      "commit_num": 4744,
+      "commit_num": 4767,
       "hash": "3dccdf5b",
       "short": "3dccdf5b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix time_to_msec() precision\n\nResult of t.time * 1000 should be a 64 bit value, not an int.\n\nBug reported by several users.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix time_to_msec() precision"
     },
     {
-      "commit_num": 4745,
+      "commit_num": 4768,
       "hash": "4220f191",
       "short": "4220f191",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce Eval namespace\n\nWrap evaluation related stuff and reshuffle\na bit the code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce Eval namespace"
     },
     {
-      "commit_num": 4746,
+      "commit_num": 4769,
       "hash": "d8e56cbe",
       "short": "d8e56cbe",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,14 +1371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert init of eval to async option\n\nSo to be done only once at startup and in the (unlikely)\ncases that a relevant UCI parameter is changed, instead\nof doing it at the beginning of each search.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert init of eval to async option"
     },
     {
-      "commit_num": 4747,
+      "commit_num": 4770,
       "hash": "19540c9e",
       "short": "19540c9e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1451,14 +1396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce single_bit() helper\n\nSelf-documenting code instead of a tricky\nbitwise tweak, not known by everybody.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce single_bit() helper"
     },
     {
-      "commit_num": 4748,
+      "commit_num": 4771,
       "hash": "2ef5b406",
       "short": "2ef5b406",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1477,14 +1421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Async UCI options actions\n\nIntroduce 'on change' actions that are triggered as soon as\nan UCI option is changed by the GUI. This allows to set hash\nsize before to start the game, helpful especially on very fast\nTC and big TT size.\n\nAs a side effect remove the 'button' type option, that now\nis managed as a 'check' type.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Async UCI options actions"
     },
     {
-      "commit_num": 4749,
+      "commit_num": 4772,
       "hash": "482b5b7e",
       "short": "482b5b7e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1503,14 +1446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use new Time class in timed_wait()\n\nAnd simplify the code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use new Time class in timed_wait()"
     },
     {
-      "commit_num": 4750,
+      "commit_num": 4773,
       "hash": "161c6b02",
       "short": "161c6b02",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1529,7 +1471,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite time measurement code\n\nIntroduce and use a new Time class designed after\nQTime, from Qt framework. Should be a more clear and\nself documented code.\n\nAs an added benefit we now use 64 bits internally to get\nmillisecs from system time. This avoids to wrap around\nto 0 every 2^32 milliseconds, which is 49.71 days.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

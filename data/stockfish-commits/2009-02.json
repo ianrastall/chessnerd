@@ -2,7 +2,7 @@
   "month": "2009-02",
   "commits": [
     {
-      "commit_num": 6587,
+      "commit_num": 6610,
       "hash": "9b6b9e67",
       "short": "9b6b9e67",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use checker info to remove a bunch of hidden checks updates\n\nAnother powerful condition let us remove a big chunk of\nuseless updates.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use checker info to remove a bunch of hidden checks updates"
     },
     {
-      "commit_num": 6588,
+      "commit_num": 6611,
       "hash": "6a8cfe79",
       "short": "6a8cfe79",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stricter condition to check for dc candidates\n\nAnother optimization that let us remove another half\nof find_hidden_checks(them, DcCandidates) calls.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stricter condition to check for dc candidates"
     },
     {
-      "commit_num": 6589,
+      "commit_num": 6612,
       "hash": "1f97b48a",
       "short": "1f97b48a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Split calculation of pinners from dc candidates\n\nThis let us to calculate only pinners when we now that\ndc candidates are not possible.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Split calculation of pinners from dc candidates"
     },
     {
-      "commit_num": 6590,
+      "commit_num": 6613,
       "hash": "a96cba0e",
       "short": "a96cba0e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Slightly better condition in update_hidden_checks()\n\nUse a more strict condition to check if we have captured\nan opponent pinner or hidden checker.\n\nWith this patch the occurrence of checkerCaptured == true are\nreduced of 50%.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Slightly better condition in update_hidden_checks()"
     },
     {
-      "commit_num": 6591,
+      "commit_num": 6614,
       "hash": "f9f30412",
       "short": "f9f30412",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Compute pinned and friends incrementally\n\nIn do_move() use previous pinned bitboards values to compute\nthe new one after the move. In particulary we end up with the\nsame bitboards in most cases. So detect these cases and just\nkeep the old values.\n\nThis should speedup a lot this slow computation in a very hot\npath so that we can use this important info everywhere in the\ncode at very cheap cost.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Compute pinned and friends incrementally"
     },
     {
-      "commit_num": 6592,
+      "commit_num": 6615,
       "hash": "55f9afee",
       "short": "55f9afee",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a subtle bug due to the StateInfo pointer became stale\n\nThere was one occurence when the StateInfo variable went\nout of scope before the corresponding Position object.\n\nThis yelds to a crash. Bug was not hit before because occurs\nonly when using an UCI interface and not the usual benchmark.\n\nThe fix consists in copying internally the content of the\nabout to stale StateInfo.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a subtle bug due to the StateInfo pointer became stale"
     },
     {
-      "commit_num": 6593,
+      "commit_num": 6616,
       "hash": "96221644",
       "short": "96221644",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Teach SEE about pinned pieces\n\nRemove pinned pieces from attacks when calculating\nSEE value.\n\nAlgorithm is not perfect, there should be no false\npositives, but can happen that we miss to remove a\npinned piece. Currently we don't cach 100% of cases,\nbut is a tradeoff between speed and accuracy. In any\ncase we stay on the safe side, so we remove an attacker\nwhen we are sure it is pinned.\n\nAbout only 0,5% of cases are affected by this patch, not\na lot given the hard work: this is a difficult patch!\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Teach SEE about pinned pieces"
     },
     {
-      "commit_num": 6594,
+      "commit_num": 6617,
       "hash": "243fa483",
       "short": "243fa483",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small Position::clear() cleanup\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small Position::clear() cleanup"
     },
     {
-      "commit_num": 6595,
+      "commit_num": 6618,
       "hash": "da7a6285",
       "short": "da7a6285",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not copy the whole old state in do_move()\n\nInstead of copy the old state in the new one, copy only\nfields that will be updated incrementally, not the ones\nthat will be recalculcated anyway.\n\nThis let us copy 13 bytes instead of 28 for each do_move()\ncall.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not copy the whole old state in do_move()"
     },
     {
-      "commit_num": 6596,
+      "commit_num": 6619,
       "hash": "0bf45823",
       "short": "0bf45823",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update pinned bitboards and friends in do_move()\n\nProbably is slightly slow, but code is surely better\nin this way. We will optimize later for speed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Update pinned bitboards and friends in do_move()"
     },
     {
-      "commit_num": 6597,
+      "commit_num": 6620,
       "hash": "43242764",
       "short": "43242764",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix some asserts unhidden by a debug compile\n\nFallback form previous patches.\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix some asserts unhidden by a debug compile"
     },
     {
-      "commit_num": 6598,
+      "commit_num": 6621,
       "hash": "43bc5479",
       "short": "43bc5479",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid resetting pinners[c]\n\nSmall optimization. No functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid resetting pinners[c]"
     },
     {
-      "commit_num": 6599,
+      "commit_num": 6622,
       "hash": "8f59de48",
       "short": "8f59de48",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce StateInfo instead of UndoInfo\n\nWe don't backup anymore but use the renamed StateInfo\nargument passed in do_move() to store the new position\nstate when doing a move.\n\nBackup is now just revert to previous StateInfo that we know\nbecause we store a pointer to it.\nNote that now backing store is up to the caller, Position is\nstateless in that regard, state is accessed through a pointer.\n\nThis patch will let us remove all the backup/restore copying,\njust a pointer switch is now necessary.\n\nNote that do_null_move() still uses StateInfo as backup.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce StateInfo instead of UndoInfo"
     },
     {
-      "commit_num": 6600,
+      "commit_num": 6623,
       "hash": "2f6c5f00",
       "short": "2f6c5f00",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Wrap state variables in a named struct\n\nThis will allow us to more easily move the state\nout of Position class.\n\nNo functioanl change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Wrap state variables in a named struct"
     },
     {
-      "commit_num": 6601,
+      "commit_num": 6624,
       "hash": "2f21ec39",
       "short": "2f21ec39",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert also undo_null_move() to avoid passing UndoInfo object\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert also undo_null_move() to avoid passing UndoInfo object"
     },
     {
-      "commit_num": 6602,
+      "commit_num": 6625,
       "hash": "9b257ba2",
       "short": "9b257ba2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Passing UndoInfo is not needed anymore when undoing the move\n\nWe store it now in the same UndoInfo struct as 'previous'\nfield, so when doing a move we also know where to get\nthe previous info when undoing the back the move.\n\nThis is needed for future patches and is a nice cleanup anyway.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Passing UndoInfo is not needed anymore when undoing the move"
     },
     {
-      "commit_num": 6603,
+      "commit_num": 6626,
       "hash": "1b0fee9b",
       "short": "1b0fee9b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove two useless calls to pinned_pieces()\n\nAre obsoleted by new pinned caching code.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove two useless calls to pinned_pieces()"
     },
     {
-      "commit_num": 6604,
+      "commit_num": 6627,
       "hash": "b7cb6180",
       "short": "b7cb6180",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Position: Unify and templetize mg_pst() and eg_pst()\n\nAlso templetize compute_value() can be simpler now that\nthe above is templetized too.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Position: Unify and templetize mg_pst() and eg_pst()"
     },
     {
-      "commit_num": 6605,
+      "commit_num": 6628,
       "hash": "f30aa83f",
       "short": "f30aa83f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify compute_mg_value() and compute_eg_value()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify compute_mg_value() and compute_eg_value()"
     },
     {
-      "commit_num": 6606,
+      "commit_num": 6629,
       "hash": "1dc27f32",
       "short": "1dc27f32",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use a union to fast and simply backup info in do_move()\n\nThis nice union trick let us optimize the speed and\nremove the now unuseful backup() and restore() functions.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use a union to fast and simply backup info in do_move()"
     },
     {
-      "commit_num": 6607,
+      "commit_num": 6630,
       "hash": "95cfc0e3",
       "short": "95cfc0e3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "In Position backup and restore contiguous data\n\nGive the compiler one more chance to optimize the copy.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "In Position backup and restore contiguous data"
     },
     {
-      "commit_num": 6608,
+      "commit_num": 6631,
       "hash": "9e1d142f",
       "short": "9e1d142f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Finally remove any occurence of dcCandidates from search.cpp\n\nThis ends our cleanup series.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Finally remove any occurence of dcCandidates from search.cpp"
     },
     {
-      "commit_num": 6609,
+      "commit_num": 6632,
       "hash": "683e6dc6",
       "short": "683e6dc6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not pass discovery check candidates in Position::do_move()\n\nAlso remove any bit of 'pinned' and co. from MovePicker class.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not pass discovery check candidates in Position::do_move()"
     },
     {
-      "commit_num": 6610,
+      "commit_num": 6633,
       "hash": "c6630abe",
       "short": "c6630abe",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not pass pinned argument in Position::move_is_check()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not pass pinned argument in Position::move_is_check()"
     },
     {
-      "commit_num": 6611,
+      "commit_num": 6634,
       "hash": "73494167",
       "short": "73494167",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not pass pinned argument in Position::pl_move_is_legal()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not pass pinned argument in Position::pl_move_is_legal()"
     },
     {
-      "commit_num": 6612,
+      "commit_num": 6635,
       "hash": "0a0ea36e",
       "short": "0a0ea36e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Cleanup pinned and friends in movegen.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Cleanup pinned and friends in movegen.cpp"
     },
     {
-      "commit_num": 6613,
+      "commit_num": 6636,
       "hash": "5f142ec2",
       "short": "5f142ec2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Cache pinned and discovery check bitboards\n\nAfter have been calculated cache their values\nso to avoid another expensive call to hidden_checks()\nif pinned_pieces() or discovered_check_candidates() are\ncalled with the same position.\n\nAdd also interface to get pinners bitboard, we already have\nthis value so save it instead of discard.\n\nNow that, after the first call to pinned_pieces() the following\nare very cheap we can rewrite and cleanup all the checking handling.\n\nSo this patch is a prerequisite for future work.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Cache pinned and discovery check bitboards"
     },
     {
-      "commit_num": 6614,
+      "commit_num": 6637,
       "hash": "7f4f18f9",
       "short": "7f4f18f9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert mobility of pinned pieces for now\nWe will redo after rewriting the handling of\npinned bitboard and its friends.\n",
       "subject": "Revert mobility of pinned pieces for now"
     },
     {
-      "commit_num": 6615,
+      "commit_num": 6638,
       "hash": "c45818e9",
       "short": "c45818e9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove xxx_of_color() for real\n\nRemove also from assert expressions. Was hidden\nin release mode.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove xxx_of_color() for real"
     },
     {
-      "commit_num": 6616,
+      "commit_num": 6639,
       "hash": "7013efce",
       "short": "7013efce",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change piece_attacks_square() API\n\nAn extra argument let us simplify some code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Change piece_attacks_square() API"
     },
     {
-      "commit_num": 6617,
+      "commit_num": 6640,
       "hash": "9f5b709d",
       "short": "9f5b709d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Mobility is zero for a pinned piece\n\nA little bit more overhead, but better mobility evaluation.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Mobility is zero for a pinned piece"
     },
     {
-      "commit_num": 6618,
+      "commit_num": 6641,
       "hash": "2c955f25",
       "short": "2c955f25",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove xxx_of_color() helpers\n\nThey hide the underlying uniform function call with\nno benefit.\n\nA little bit more verbose but now is clear what happens.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove xxx_of_color() helpers"
     },
     {
-      "commit_num": 6619,
+      "commit_num": 6642,
       "hash": "f32992f8",
       "short": "f32992f8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid a call to move_is_capture() in extension()\n\nPass value as an argument instead or recalculating it.\nAltough call is cheap this is a very hot path so with\nthis patch total time spent for move_is_capture() is almost\nhalved.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid a call to move_is_capture() in extension()"
     },
     {
-      "commit_num": 6620,
+      "commit_num": 6643,
       "hash": "e71d5207",
       "short": "e71d5207",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add scan for X-ray attacks in piece_attacks_square()\n\nUsed to avoid pruning interesting moves.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add scan for X-ray attacks in piece_attacks_square()"
     },
     {
-      "commit_num": 6621,
+      "commit_num": 6644,
       "hash": "52ed0e95",
       "short": "52ed0e95",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a subtle bug in Position::move_is_capture()\n\nCurrently fails if we test with a move that is not of\nfrom the side to move but from the opponent.\n\nThis is the typical case of the threat from null move\nsearch. The result is an erroneus prune of the defending\nmoves, see PruneDefendingMoves in ok_to_prune()\n\nFix the test to work also with threat moves.\n\nBug was always in but was unhidden by a patch of 17/12/2008\n\"Trigger of PawnEndgameExtension if capture is not a pawn\"\n\nUntil then it was hidden by a tricky check in the prune\nconditions instead of the natural move_is_capture()\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a subtle bug in Position::move_is_capture()"
     },
     {
-      "commit_num": 6622,
+      "commit_num": 6645,
       "hash": "30e8f0c9",
       "short": "30e8f0c9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not manually build endgame functions hash keys\n\nUse Position::compute_material_key() to do the job,\nso we are sure there is not key mismatch during\nendgame function lookups.\n\nThis fixes two endgames hash errors that caused two\nendgames to be disabled.\n\nThis patch is also a code cleanup because removes a lot\nof messy key assignments.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not manually build endgame functions hash keys"
     },
     {
-      "commit_num": 6623,
+      "commit_num": 6646,
       "hash": "67375f46",
       "short": "67375f46",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use template for endgame scaling functions\n\nAlso integrate scaling and evaluation in a\nsingle base class.\n\nNice use of templates here :-)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use template for endgame scaling functions"
     },
     {
-      "commit_num": 6624,
+      "commit_num": 6647,
       "hash": "039badfd",
       "short": "039badfd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use templates for end game evaluation functions\n\nHuge simplification and no speed cost penalty.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use templates for end game evaluation functions"
     },
     {
-      "commit_num": 6625,
+      "commit_num": 6648,
       "hash": "088ecc24",
       "short": "088ecc24",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small code formatting in position.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small code formatting in position.cpp"
     },
     {
-      "commit_num": 6626,
+      "commit_num": 6649,
       "hash": "a188a047",
       "short": "a188a047",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use update_checkers<>() also for PAWN\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use update_checkers<>() also for PAWN"
     },
     {
-      "commit_num": 6627,
+      "commit_num": 6650,
       "hash": "1d2247ae",
       "short": "1d2247ae",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce update_checkers() to simplify do_move()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce update_checkers() to simplify do_move()"
     },
     {
-      "commit_num": 6628,
+      "commit_num": 6651,
       "hash": "8365f8ac",
       "short": "8365f8ac",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove square_is_attacked()\n\nUse attacks_to() instead. No functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove square_is_attacked()"
     },
     {
-      "commit_num": 6629,
+      "commit_num": 6652,
       "hash": "68d36b6f",
       "short": "68d36b6f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename generate_piece_blocking_evasions()\n\nIn generate_piece_moves() to be more uniform with other\nfunctions. Unfortunatly the different number of calling arguments\ndo not allow us to easily integrate in generate_piece_moves()\ntemplate family.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename generate_piece_blocking_evasions()"
     },
     {
-      "commit_num": 6630,
+      "commit_num": 6653,
       "hash": "33c608e1",
       "short": "33c608e1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Final touches to generate_evasions()\n\nSmall code tidy up and a little optimization\nto avoid calling generate_piece_blocking_evasions()\nwhen blockSquares is empty (30% of cases).\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Final touches to generate_evasions()"
     },
     {
-      "commit_num": 6631,
+      "commit_num": 6654,
       "hash": "214f9dcc",
       "short": "214f9dcc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "generate_evasions() avoid an usless check for enpassant case\n\nRemove ugly and useless code.\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "generate_evasions() avoid an usless check for enpassant case"
     },
     {
-      "commit_num": 6632,
+      "commit_num": 6655,
       "hash": "1dc1cecf",
       "short": "1dc1cecf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Optimize generate_piece_blocking_evasions()\n\nRewrite as in generate_piece_moves() using a for\nloop instead of the slower serializing of the\nbitboard with pop_1st_bit()\n\nThis will allow also to merge with generate_piece_moves()\nwhen we will drop legality constrain on generate_evasions()\n\nGenerated moves are not changed, but are generated in a\ndifferent order, this changes the number of nodes at fixed\ndepth test.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Optimize generate_piece_blocking_evasions()"
     },
     {
-      "commit_num": 6633,
+      "commit_num": 6656,
       "hash": "67535711",
       "short": "67535711",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "generate_evasions() avoid to calculate pinned pieces\n\nPass as function argument.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "generate_evasions() avoid to calculate pinned pieces"
     },
     {
-      "commit_num": 6634,
+      "commit_num": 6657,
       "hash": "ff60dafe",
       "short": "ff60dafe",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify legality check in generate_evasions()\n\nNow that we have removed sliders checkers attacks\nfrom evasion's set we can simplyfy legality check.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify legality check in generate_evasions()"
     },
     {
-      "commit_num": 6635,
+      "commit_num": 6658,
       "hash": "56f607fe",
       "short": "56f607fe",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Drop a double semicolon\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Drop a double semicolon"
     },
     {
-      "commit_num": 6636,
+      "commit_num": 6659,
       "hash": "9d044cf4",
       "short": "9d044cf4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Last touches to movegen.cpp\n\nOf course no functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Last touches to movegen.cpp"
     },
     {
-      "commit_num": 6637,
+      "commit_num": 6660,
       "hash": "769f2fde",
       "short": "769f2fde",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove special case of pawn checks generation\n\nAlso additional renaming.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove special case of pawn checks generation"
     },
     {
-      "commit_num": 6638,
+      "commit_num": 6661,
       "hash": "9bffe811",
       "short": "9bffe811",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove special case of pawn move generatation\n\nCode cleanup. No functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove special case of pawn move generatation"
     },
     {
-      "commit_num": 6639,
+      "commit_num": 6662,
       "hash": "3e20c6c0",
       "short": "3e20c6c0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify generate_evasions()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify generate_evasions()"
     },
     {
-      "commit_num": 6640,
+      "commit_num": 6663,
       "hash": "4f5f9710",
       "short": "4f5f9710",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify generate_checks()\n\nAlso rearrange signatures to be uniform.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify generate_checks()"
     },
     {
-      "commit_num": 6641,
+      "commit_num": 6664,
       "hash": "151d47dc",
       "short": "151d47dc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,14 +1371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro-optimize do_generate_pawn_checks()\n\nDiscovery check candidates are normally empty, so\navoid discovery checks generation in that common case.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Micro-optimize do_generate_pawn_checks()"
     },
     {
-      "commit_num": 6642,
+      "commit_num": 6665,
       "hash": "33ddeec5",
       "short": "33ddeec5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1451,14 +1396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Templetize generate_piece_checks_king()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Templetize generate_piece_checks_king()"
     },
     {
-      "commit_num": 6643,
+      "commit_num": 6666,
       "hash": "4573d618",
       "short": "4573d618",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1477,14 +1421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small optimization in generate_evasions()\n\nFind squares attacked by slider checkers, we will\nremove them from king evasions set so to avoid a couple\nof cycles in the slow king evasions legality check loop.\n\nNot a biggie, but now generate_evasions() is faster then\ngenerate_non_captures(), before was slower.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small optimization in generate_evasions()"
     },
     {
-      "commit_num": 6644,
+      "commit_num": 6667,
       "hash": "fa322b37",
       "short": "fa322b37",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1503,14 +1446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix casting warnings under Intel Compiler\n\nInt to Char warning fixed changing the function\nsignature to int.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix casting warnings under Intel Compiler"
     },
     {
-      "commit_num": 6645,
+      "commit_num": 6668,
       "hash": "2ea7449f",
       "short": "2ea7449f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1529,14 +1471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix Makefile\n\nWas broken after we removed color.cpp and square.cpp\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix Makefile"
     },
     {
-      "commit_num": 6646,
+      "commit_num": 6669,
       "hash": "1156eb86",
       "short": "1156eb86",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1555,14 +1496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify newly introduced castling_is_check()\n\nUse bit_is_set() instead of open coding.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify newly introduced castling_is_check()"
     },
     {
-      "commit_num": 6647,
+      "commit_num": 6670,
       "hash": "76381cbd",
       "short": "76381cbd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1581,14 +1521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small code style tidy up\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small code style tidy up"
     },
     {
-      "commit_num": 6648,
+      "commit_num": 6671,
       "hash": "ee6e8851",
       "short": "ee6e8851",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1607,14 +1546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Templetize generate_castle_moves()\n\nCleanup the code and remove lines.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Templetize generate_castle_moves()"
     },
     {
-      "commit_num": 6649,
+      "commit_num": 6672,
       "hash": "03211296",
       "short": "03211296",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1633,14 +1571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add generation of castling checks\n\nWhen we generate checks one case is missing: generation\nof castling moves that give check to the opponent king.\n\nThis is a very rare case but anyway it is a case\nand we can do this without slowing down the common\ncase of no castling checks.\n\nSo this is the patch.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add generation of castling checks"
     },
     {
-      "commit_num": 6650,
+      "commit_num": 6673,
       "hash": "cc769514",
       "short": "cc769514",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1659,14 +1596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove square.cpp\n\nMove the few stuff in square.h\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove square.cpp"
     },
     {
-      "commit_num": 6651,
+      "commit_num": 6674,
       "hash": "f0858cd2",
       "short": "f0858cd2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1685,14 +1621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move constants from piece.cpp to piece.h\n\nLeave in piece.cpp only a couple of functions that\nneed #include <cstring>\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move constants from piece.cpp to piece.h"
     },
     {
-      "commit_num": 6652,
+      "commit_num": 6675,
       "hash": "225d89c5",
       "short": "225d89c5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1711,14 +1646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "PawnInfo::clear() retire memset() and fix Ubuntu compile\n\nGo back to original direct assignment, this allows to\nadd an include in pawns.h to teach about memset()\n\nThis fix a compile error under Ubuntu.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "PawnInfo::clear() retire memset() and fix Ubuntu compile"
     },
     {
-      "commit_num": 6653,
+      "commit_num": 6676,
       "hash": "8bef9e59",
       "short": "8bef9e59",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1737,14 +1671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove the useless color.cpp\n\nIntegrate the only (inline) function in color.h\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove the useless color.cpp"
     },
     {
-      "commit_num": 6654,
+      "commit_num": 6677,
       "hash": "82bf08e4",
       "short": "82bf08e4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1763,14 +1696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Final endgame.cpp space inflate\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Final endgame.cpp space inflate"
     },
     {
-      "commit_num": 6655,
+      "commit_num": 6678,
       "hash": "c32904f0",
       "short": "c32904f0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1789,7 +1721,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert previous commit.\nOptimization is correct but slightly slower\nso it is a pessimization :-)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

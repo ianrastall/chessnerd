@@ -2,7 +2,7 @@
   "month": "2010-01",
   "commits": [
     {
-      "commit_num": 5977,
+      "commit_num": 6000,
       "hash": "3941e4bd",
       "short": "3941e4bd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Some code style triviality in root search\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Some code style triviality in root search"
     },
     {
-      "commit_num": 5978,
+      "commit_num": 6001,
       "hash": "d7d2c1b7",
       "short": "d7d2c1b7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add hardware POPCNT support for gcc\n\nWith new target 'make gcc-popcnt' it is now\npossible to compile with enabled hardware POPCNT\nsupport also with gcc. Until now was possible only\nfor Intel and MSVC compilers.\n\nWhen this instruction is supported by CPU, for instance\non Intel i7 or i5 family, produced binary is a bit faster.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add hardware POPCNT support for gcc"
     },
     {
-      "commit_num": 5979,
+      "commit_num": 6002,
       "hash": "17502a56",
       "short": "17502a56",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Remove pointless gcc flag when generating dependencies\"\n\nThis reverts commit c43c5fe9e0c9a99947b940133df2cb2bbb57c3f9.\n\nProduces following build error after 'make clean', 'make icc' under Mandriva\nwith icc version 11.0\n\nMakefile:306: .depend: No such file or directory\nIn file included from tt.cpp:28:\n/usr/lib/gcc/i586-manbo-linux-gnu/4.3.2/include/xmmintrin.h:35:3: error: #error \"SSE instruction set not enabled\"\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"Remove pointless gcc flag when generating dependencies\""
     },
     {
-      "commit_num": 5980,
+      "commit_num": 6003,
       "hash": "252844e8",
       "short": "252844e8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid search tree explosion in qsearch\n\nUnder some rare cases we can have a search tree explosion\ndue to a perpetual check or to a very long non-capture TT\nsequence.\n\nThis avoids the tree explosion not following TT moves that\nare not captures or promotions when we are below the\n'generate checks' depth.\n\nIdea suggested by Richard Vida.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid search tree explosion in qsearch"
     },
     {
-      "commit_num": 5981,
+      "commit_num": 6004,
       "hash": "b651e533",
       "short": "b651e533",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correct qsearch() TT save\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Correct qsearch() TT save"
     },
     {
-      "commit_num": 5982,
+      "commit_num": 6005,
       "hash": "e84488ed",
       "short": "e84488ed",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire captures pruning\n\nFutility captures alone does not seem an improvment.\n\nPerhaps is a combination of stand pat + futility that is winning,\nso revert for now and continue testing starting from a standard\nbase until we find the correct receipe.\n\nAfter 999 games at 1+0\nMod vs Orig +231 0506 -201  +10 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire captures pruning"
     },
     {
-      "commit_num": 5983,
+      "commit_num": 6006,
       "hash": "e4d3a156",
       "short": "e4d3a156",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use float instead of double in reduction parameters\n\nThis is faster on 32 bit CPU and precision is enough.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use float instead of double in reduction parameters"
     },
     {
-      "commit_num": 5984,
+      "commit_num": 6007,
       "hash": "1d7a3f26",
       "short": "1d7a3f26",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro optimize reduction_parameters()\n\nAt ply == OnePly (common case) we avoid some useless\nfloating point computation.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Micro optimize reduction_parameters()"
     },
     {
-      "commit_num": 5985,
+      "commit_num": 6008,
       "hash": "a0005ba4",
       "short": "a0005ba4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid to calculate reduction for each move\n\nThis is slow because some floating point operation is\ninvolved.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid to calculate reduction for each move"
     },
     {
-      "commit_num": 5986,
+      "commit_num": 6009,
       "hash": "bdd61b17",
       "short": "bdd61b17",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove useless variable 'PostFutilityValueMargin'\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove useless variable 'PostFutilityValueMargin'"
     },
     {
-      "commit_num": 5987,
+      "commit_num": 6010,
       "hash": "973e574e",
       "short": "973e574e",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Precalculate FutilityMargins\n\nThis way we don't need to copy+paste formula everywhere\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Precalculate FutilityMargins"
     },
     {
-      "commit_num": 5988,
+      "commit_num": 6011,
       "hash": "27393eba",
       "short": "27393eba",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use calculate_reduction() function to simplify code\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use calculate_reduction() function to simplify code"
     },
     {
-      "commit_num": 5989,
+      "commit_num": 6012,
       "hash": "3c7eebb4",
       "short": "3c7eebb4",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Bugfix: reduction was not set to zero in full depth search\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Bugfix: reduction was not set to zero in full depth search"
     },
     {
-      "commit_num": 5990,
+      "commit_num": 6013,
       "hash": "548bae80",
       "short": "548bae80",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Implement calculate_reduction function\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Implement calculate_reduction function"
     },
     {
-      "commit_num": 5991,
+      "commit_num": 6014,
       "hash": "c83fd08f",
       "short": "c83fd08f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Aspiration window rewrite\n\nJoona new aspiration window. Main idea is to always\nresearch aspiration fail highs/low at the same\nply and use much smaller aspiration window than previously.\n\nTesting result is very positive.\n\n1CPU:\n953-1149\n\n4CPU:\n545 - 656\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Aspiration window rewrite"
     },
     {
-      "commit_num": 5992,
+      "commit_num": 6015,
       "hash": "62b43130",
       "short": "62b43130",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Be sure we exit while loop with lock held\n\nThis fixes an hang introduced by recent locking\nrewrite patch.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Be sure we exit while loop with lock held"
     },
     {
-      "commit_num": 5993,
+      "commit_num": 6016,
       "hash": "cd112ee8",
       "short": "cd112ee8",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix capture pruning\n\nWe forgot to update bestValue previously\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix capture pruning"
     },
     {
-      "commit_num": 5994,
+      "commit_num": 6017,
       "hash": "307909be",
       "short": "307909be",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Temporary revert \"captures pruning\" due to an assert\n\nIn debug run with 2 threads it happens to be following\nassert after some minutes:\n\nassert(value > -VALUE_INFINITE && value < VALUE_INFINITE);\n\nin search(), line 1615.\n\nI am not able to understand why, anyhow reverted for the moment.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Temporary revert \"captures pruning\" due to an assert"
     },
     {
-      "commit_num": 5995,
+      "commit_num": 6018,
       "hash": "bb968fd4",
       "short": "bb968fd4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify locking in sp_search and sp_search_pv\n\nAvoid to take the lock two times in a tight sequence, the first\nin get_next_move() and the second to update sp->moves.\n\nDo all with one lock and so retire the now useless locked version\nof get_next_move().\n\nAlso fix some theorical race due to comparison sp->bestValue < sp->beta\nis done out of lock protection. Finally fix another (harmless but time\nwaster) race that coudl occur because thread_should_stop() is also\ncalled outside of lock protection.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify locking in sp_search and sp_search_pv"
     },
     {
-      "commit_num": 5996,
+      "commit_num": 6019,
       "hash": "bd358533",
       "short": "bd358533",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stricter conditions in main search stand pat\n\nNot a biggie but is a reduced pruned patch that doesn't\nseems to hurt, so it is welcomed ;-)\n\nAfter 999 games at 1+0\nMod vs Orig +207 =601 -191  +6 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stricter conditions in main search stand pat"
     },
     {
-      "commit_num": 5997,
+      "commit_num": 6020,
       "hash": "b95ba7b3",
       "short": "b95ba7b3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Added some FIXME to track needed tests\n\nThis avoid us to forget some very needed tests now that\nfutility has changed in a whole big chunk we need to fine\ntuning every splitted change.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Added some FIXME to track needed tests"
     },
     {
-      "commit_num": 5998,
+      "commit_num": 6021,
       "hash": "f37741cc",
       "short": "f37741cc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Integrate gains table in History\n\nThis will be useful to use gains table in move\nordering along with history table.\n\nNo functional change and big code remove.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Integrate gains table in History"
     },
     {
-      "commit_num": 5999,
+      "commit_num": 6022,
       "hash": "54b3d441",
       "short": "54b3d441",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce update_gains() and refactor some code\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce update_gains() and refactor some code"
     },
     {
-      "commit_num": 6000,
+      "commit_num": 6023,
       "hash": "2360c8aa",
       "short": "2360c8aa",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Standardize set_option function\n\nPreviously input like \"setoption name Use Search Log value true \"\n(note space at the end of the line) didn't work.\n\nNow parse value same way as option name. This way we implicitly\nleft- and right-trim value.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Standardize set_option function"
     },
     {
-      "commit_num": 6001,
+      "commit_num": 6024,
       "hash": "32bd6e44",
       "short": "32bd6e44",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not initialize RootPosition at startup\n\nInitializing high-level object at startup is very dangerous,\nbecause low-level snippets are not yet initialized.\n\nFor example Position's constructor calls find_checkers() which\ncalls attackers_to() which depends on various global bitboard arrays\nwhich are not yet initialized. I think we are lucky not to crash.\n\nRootPosition.from_fen(StartPosition); is called immediately after\nall initializations are made at uci_main_loop() which is the\ncorrect behaviour\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not initialize RootPosition at startup"
     },
     {
-      "commit_num": 6002,
+      "commit_num": 6025,
       "hash": "c43c5fe9",
       "short": "c43c5fe9",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove pointless gcc flag when generating dependencies\n\nWhen generating dependencies there is absolutely no point\nto pass -msse flag to gcc, so remove it.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove pointless gcc flag when generating dependencies"
     },
     {
-      "commit_num": 6003,
+      "commit_num": 6026,
       "hash": "d0daa167",
       "short": "d0daa167",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove InfiniteSearch hack\n\nWith current search control system, I can see absolutely no\nreason to classify fixed time search as infinite search.\n\nSo remove old dated hack\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove InfiniteSearch hack"
     },
     {
-      "commit_num": 6004,
+      "commit_num": 6027,
       "hash": "87303d7e",
       "short": "87303d7e",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove last use of uip.eof()\n\nValue of uip.eof() should not be trusted.\ninput like \"go infinite searchmoves \" (note space in the end of line)\ncauses problems.\n\nCheck the return value of (uip >> token) instead\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove last use of uip.eof()"
     },
     {
-      "commit_num": 6005,
+      "commit_num": 6028,
       "hash": "cf9bf4e5",
       "short": "cf9bf4e5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reduce lock contention in sp_search_pv()\n\nIn less then 1% of cases value > sp->bestValue, so avoid\nan useless lock in the common case. This is the same change\nalready applied to sp_search().\n\nAlso SplitPoint futilityValue is not volatile because\nnever changes after has been assigned in split()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reduce lock contention in sp_search_pv()"
     },
     {
-      "commit_num": 6006,
+      "commit_num": 6029,
       "hash": "5ca42840",
       "short": "5ca42840",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a possible crash in thread_is_available()\n\nWhen we have more then 2 threads then we do an array\naccess with index 'Threads[slave].activeSplitPoints - 1'\nThis should be >= 0 because we tested the variable just\nfew statements before, but because is a shared variable\nit could be that the 'slave' thread set the value to zero\njust after we test it, so that when we use the decremented\nvariable for array access we crash.\n\nBug spotted by Bruno Causse.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a possible crash in thread_is_available()"
     },
     {
-      "commit_num": 6007,
+      "commit_num": 6030,
       "hash": "dac1bcab",
       "short": "dac1bcab",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small split() cleanup\n\nUnify start loop for master and slave threads. Also guarantee\nthat all the 'stop' flags are set to false before first slave\nis started, should be no harm because only master thread can\nreset 'stop' flag of slaves to true, so should be no race but\nbetter safe then sorry.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small split() cleanup"
     },
     {
-      "commit_num": 6008,
+      "commit_num": 6031,
       "hash": "d844a75d",
       "short": "d844a75d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid copy a Position to get a move's san notation\n\nIn move_to_san() we create by copy a new position just\nto detect if move gives check. This could be very costly in\nline_to_san() that calls move_to_san() for every move, so\ncreate the position only once and pass a reference to move_to_san()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid copy a Position to get a move's san notation"
     },
     {
-      "commit_num": 6009,
+      "commit_num": 6032,
       "hash": "c5e71f51",
       "short": "c5e71f51",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a race in idle_loop() exiting\n\nWhen pondering threads are put to sleep, but when thinking\nthe threads are parked in idle_loop in a tight polling loop\nchecking for workIsWaiting falg.\n\nSo before we set the slave's flag workIsWaiting we have to\nguarantee that all the slave data is already setup because\nslave can start in any moment from there.\n\nRearrange the last loop to fix this race.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a race in idle_loop() exiting"
     },
     {
-      "commit_num": 6010,
+      "commit_num": 6033,
       "hash": "c5858ff9",
       "short": "c5858ff9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "In split() release the lock before slow search stack copy\n\nOnce we have allocated our slave threads and we have removed\nmaster from available threads we can safely remove the lock\nso that the lenghty search stack copy operation will not\nimpact lock contention.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "In split() release the lock before slow search stack copy"
     },
     {
-      "commit_num": 6011,
+      "commit_num": 6034,
       "hash": "0ff91e16",
       "short": "0ff91e16",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not copy master position in split()\n\nA pointer is enough because after a split point has been\nsetup master and slaves thread end up calling sp_search() or\nsp_search_pv() and here a full copy of split point position is\ndone again, note that even master does another copy (of itself)\nand this is done before any do_move() call so that master Position\nis never updated between split() and sp_search().\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not copy master position in split()"
     },
     {
-      "commit_num": 6012,
+      "commit_num": 6035,
       "hash": "c2df6004",
       "short": "c2df6004",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use fast_copy() instead of full copy in sp_search\n\nAnd detach splitPoint Position from the master one.\n\nSo we duplicate StateInfo only once in split() instead\nof one for each thread in sp_search\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use fast_copy() instead of full copy in sp_search"
     },
     {
-      "commit_num": 6013,
+      "commit_num": 6036,
       "hash": "84ec1f73",
       "short": "84ec1f73",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document how Position c'tor works\n\nRenamed a bit the functions to be more clear what\nwe actually are doing when we craete a Position object\nand explained how StateInfo works.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better document how Position c'tor works"
     },
     {
-      "commit_num": 6014,
+      "commit_num": 6037,
       "hash": "b1ac6c69",
       "short": "b1ac6c69",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a couple of MSVC casting warnings\n\nAlso removed some trailing whitespaces and aligned\nindentation to current standard.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a couple of MSVC casting warnings"
     },
     {
-      "commit_num": 6015,
+      "commit_num": 6038,
       "hash": "56e09b4c",
       "short": "56e09b4c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Copy only the search stack tail in split()\n\nOnly the previous, the current and the next ply SearchStack\nare copied.\n\nThis reduces split overhead especially at low depth (high ply)\nand with many threads.\n\nPossibly no functional change (it is not easy to prove in SMP)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Copy only the search stack tail in split()"
     },
     {
-      "commit_num": 6016,
+      "commit_num": 6039,
       "hash": "5ed0a602",
       "short": "5ed0a602",
       "author": "Tord Romstad <tord@cm-84.215.101.133.getinternet.no>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'master' of ssh://free2.projectlocker.com/sf\n",
       "subject": "Merge branch 'master' of ssh://free2.projectlocker.com/sf"
     },
     {
-      "commit_num": 6017,
+      "commit_num": 6040,
       "hash": "1588a4e8",
       "short": "1588a4e8",
       "author": "Tord Romstad <tord@cm-84.215.101.133.getinternet.no>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fixes a Chess960 bug when playing with more than one search thread.\n\nThe init_eval() function corrupted the static array castleRightsMask[]\nin the Position class, resulting in instant crashes in most Chess960\ngames. Fixed by repairing the damage directly after the function is\ncalled. Also modified the Position::to_fen() function to display\ncastle rights correctly for Chess960 positions, and added sanity checks\nfor uncastled rook files in Position::is_ok().\n",
       "subject": "Fixes a Chess960 bug when playing with more than one search thread."
     },
     {
-      "commit_num": 6018,
+      "commit_num": 6041,
       "hash": "3975a2b9",
       "short": "3975a2b9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix some races in SMP code\n\nWhen a search fails high then sp->alpha is increased and\nslave threads are requested to stop.\n\nSo we have to check for a stop request before to start a search\notherwise we could end up with sp->alpha >= sp->beta\nleading to an assert in debug run in search_pv().\n\nThis patch fixes the assert and get rid of some of possible races.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix some races in SMP code"
     },
     {
-      "commit_num": 6019,
+      "commit_num": 6042,
       "hash": "5894c759",
       "short": "5894c759",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Check for thread creation successful completion\n\nIt is a good programming practice to verify a system\ncall has indeed succeed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Check for thread creation successful completion"
     },
     {
-      "commit_num": 6020,
+      "commit_num": 6043,
       "hash": "ea53006a",
       "short": "ea53006a",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix some silly bugs\n\nSelectiveDepth was ignored\n\nTest results for the whole futility pruning series:\n\n4CPU:\nOrig - Mod: 959 - 1027 (+12 elo)\n\n1CPU:\nOrig - Mod: 763 - 830 (+15 elo)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix some silly bugs"
     },
     {
-      "commit_num": 6021,
+      "commit_num": 6044,
       "hash": "eb6ddd54",
       "short": "eb6ddd54",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Make sure we make a move at the end of the search when reaching\nmaximum depth during a \"go movetime ...\" search. This prevents\nStockfish from hanging forever after finding a mate in two or\nthree while running a test suite at a level of a few seconds\nper move.\n\nNo functional change when playing games at normal time controls.\n",
       "subject": "Make sure we make a move at the end of the search when reaching"
     },
     {
-      "commit_num": 6022,
+      "commit_num": 6045,
       "hash": "6247f27a",
       "short": "6247f27a",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "MaxGain based futility pruning for captures\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "MaxGain based futility pruning for captures"
     },
     {
-      "commit_num": 6023,
+      "commit_num": 6046,
       "hash": "5b2fc1e1",
       "short": "5b2fc1e1",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "MaxGain based pruning\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "MaxGain based pruning"
     },
     {
-      "commit_num": 6024,
+      "commit_num": 6047,
       "hash": "05a8c318",
       "short": "05a8c318",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Implement post futility pruning\n\nand prevent futility pruning from pruning\ncastling moves\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Implement post futility pruning"
     },
     {
-      "commit_num": 6025,
+      "commit_num": 6048,
       "hash": "22b8dc8c",
       "short": "22b8dc8c",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Collect MaxGain statistics\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Collect MaxGain statistics"
     },
     {
-      "commit_num": 6026,
+      "commit_num": 6049,
       "hash": "cfe59de2",
       "short": "cfe59de2",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Implement MaxGain table\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Implement MaxGain table"
     },
     {
-      "commit_num": 6027,
+      "commit_num": 6050,
       "hash": "285df57a",
       "short": "285df57a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire LMRPVMoves and LMRNonPVMoves\n\nAre no used anymore.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire LMRPVMoves and LMRNonPVMoves"
     },
     {
-      "commit_num": 6028,
+      "commit_num": 6051,
       "hash": "81cfd813",
       "short": "81cfd813",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prune evasions with negative SEE in qsearch\n\nOnly pure blocking evasions are candidate\nfor pruning.\n\nAfter 998 games at 1+0\n\nMod vs Orig +215 =596 -187  +10 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Prune evasions with negative SEE in qsearch"
     },
     {
-      "commit_num": 6029,
+      "commit_num": 6052,
       "hash": "806c1d87",
       "short": "806c1d87",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix enum Value issue with gcc 4.4\n\nLouis Zulli reports a miscompile with g++-4.4 from MacPorts.\n\nNamely enum Value is compiled as unsigned instead of signed integer\nand this yields an issue in score_string() where float(v) is incorrectly\ncasted when Value v is negative.\n\nThis patch ensure that compiler choses a signed variable to store a Value.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix enum Value issue with gcc 4.4"
     },
     {
-      "commit_num": 6030,
+      "commit_num": 6053,
       "hash": "01ebb3d9",
       "short": "01ebb3d9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "If near beta generate checks at -OnePly\n\nIn qsearch() try to get a cutoff with the help of an\nextra check if we are already very near.\n\nSmall increase in actual games but a good result in tactical\ntest sets where this patch makes SF more tactical.\n\nMod vs Orig +197 =620 -181 +6 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "If near beta generate checks at -OnePly"
     },
     {
-      "commit_num": 6031,
+      "commit_num": 6054,
       "hash": "a1b8c810",
       "short": "a1b8c810",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,14 +1371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small lnArray[] cleanup\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small lnArray[] cleanup"
     },
     {
-      "commit_num": 6032,
+      "commit_num": 6055,
       "hash": "c01af567",
       "short": "c01af567",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1451,14 +1396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Silence some silly MSVC warnings\n\nValue is never used un-initialized, but MSVC is not\nsmart enough to detect itself :-(\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Silence some silly MSVC warnings"
     },
     {
-      "commit_num": 6033,
+      "commit_num": 6056,
       "hash": "0edad63b",
       "short": "0edad63b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1477,14 +1421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid an useless evaluate() call\n\nNow that we have position static score we don't\nneed to call evaluate() a second time.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid an useless evaluate() call"
     },
     {
-      "commit_num": 6034,
+      "commit_num": 6057,
       "hash": "b833c824",
       "short": "b833c824",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1503,14 +1446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Allow SearchStack to link an EvalInfo object\n\nThis will allow to have wider access to attack\ninformation, for instance from MovePicker.\n\nNote that 'eval' field become obsolete, it is kept\njust becasue when we get a position score from TT\nwe update 'eval' even without an EvalInfo object.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Allow SearchStack to link an EvalInfo object"
     },
     {
-      "commit_num": 6035,
+      "commit_num": 6058,
       "hash": "419c5b69",
       "short": "419c5b69",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1529,14 +1471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Make reduction search code SMP-friendly\n\nIn sp_search_pv() we do a LMR search using sp->alpha, at the end\nwe detect a fail high with condition (value > sp->alpha), but if\nanother thread has increased sp->alpha during our LMR search we\ncould miss to detect a fail high event becasue value will be equal\nto old alpha and so smaller then new one.\n\nThis patch fixes this SMP-bug and changes also the non SMP versions\nof the search to keep code style in sync.\n\nBug spotted by Bruno Causse.\n\nNo functional change (for single CPU case)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Make reduction search code SMP-friendly"
     },
     {
-      "commit_num": 6036,
+      "commit_num": 6059,
       "hash": "66d5c13a",
       "short": "66d5c13a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1555,14 +1496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Order check moves used in qsearch\n\nUse the same scoring system used for evasions. Small if any\nincrease, but should be in at least for completeness.\n\nAfter 999 games at 1+0\nMod vs Orig +208 =601 -190 +6 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Order check moves used in qsearch"
     },
     {
-      "commit_num": 6037,
+      "commit_num": 6060,
       "hash": "72e1e9b9",
       "short": "72e1e9b9",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1581,14 +1521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small cleanup of unused code in sp_search\n\nfutilityValue is now calculated immediately after\nstaticValue, so remove small bunch of unused code\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small cleanup of unused code in sp_search"
     },
     {
-      "commit_num": 6038,
+      "commit_num": 6061,
       "hash": "10624590",
       "short": "10624590",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1607,14 +1546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix silly MSVC warning\n\nMSVC raises an \"use of partially uninitialized variable\" for futilityValue\nand staticValue but this is not rue becasue when !isCheck variables\nare never used, anyhow silence the warning.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix silly MSVC warning"
     },
     {
-      "commit_num": 6039,
+      "commit_num": 6062,
       "hash": "b5d38ad1",
       "short": "b5d38ad1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1633,14 +1571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Initialize futilityMargin in EvalInfo c'tor\n\nThis is less prone to bugs because now it's up to the\ncompiler don't forget this important initialization.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Initialize futilityMargin in EvalInfo c'tor"
     },
     {
-      "commit_num": 6040,
+      "commit_num": 6063,
       "hash": "000a975e",
       "short": "000a975e",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1659,14 +1596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire quick_evaluate()\n\nNo change in functionality signature\n\nThe only functional change is that when we reach PLY_MAX,\nwe now return VALUE_DRAW instead of evaluating position.\n\nBut we reach PLY_MAX only when position is dead drawn and\ntransposition table is filled with draw scores, so this\nshouldn't matter at all.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire quick_evaluate()"
     },
     {
-      "commit_num": 6041,
+      "commit_num": 6064,
       "hash": "d4575941",
       "short": "d4575941",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1685,14 +1621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Razor at depth one, but do razoring only when not in check\n\nThis way razoring is always based on exact evaluation and\nfollows simple formula.\n\nJoona's test results are positive:\n\n32-bit 1CPU:\n\nMod - Orig: 1073 - 993\n\n64-bit 4CPU:\n\nMod - Orig: 759 - 721\n\nFunctionality Signature: 11448962\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Razor at depth one, but do razoring only when not in check"
     },
     {
-      "commit_num": 6042,
+      "commit_num": 6065,
       "hash": "942c18ef",
       "short": "942c18ef",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1711,14 +1646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Allow negative history values\n\nDon't clamp to zero if a move continues to fail.\n\nAfter 946 games at 1+0\nMod vs Orig +208 =562 -176 +12 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Allow negative history values"
     },
     {
-      "commit_num": 6043,
+      "commit_num": 6066,
       "hash": "638f3d31",
       "short": "638f3d31",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1737,14 +1671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not wait when AbortSearch is set\n\nIt means we have already received \"stop\" or \"quit\" commands.\n\nThis fixes an hang in tactical test in Fritz GUI. Bug\nintroduced by previous bug fix :-(\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not wait when AbortSearch is set"
     },
     {
-      "commit_num": 6044,
+      "commit_num": 6067,
       "hash": "007285be",
       "short": "007285be",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1763,14 +1696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Store node evaluation in SearchStack\n\nThis info will be used by future patches.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Store node evaluation in SearchStack"
     },
     {
-      "commit_num": 6045,
+      "commit_num": 6068,
       "hash": "55745f41",
       "short": "55745f41",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1789,14 +1721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix sending of best move during an infinite search\n\nAccording to UCI standard once engine receives 'go infinite'\ncommand it should search until the \"stop\" command and do not exit\nthe search without being told so, even if PLY_MAX has been reached.\n\nPatch is quite invasive because it cleanups some hacks used\nby fixed depth and fixed nodes modes, mainly during benchmarks.\n\nBug found by Pascal Georges.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix sending of best move during an infinite search"
     },
     {
-      "commit_num": 6046,
+      "commit_num": 6069,
       "hash": "e817a55b",
       "short": "e817a55b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1815,14 +1746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Decrease NullMoveMargin and adjust razoring\n\nAlso retire razoring margins vector and use\na simpler formula instead.\n\nNow that we use a more accurate static evaluation\ntry to avoid useless null searches when we are well\nbelow beta. And for teh same reason increase a bit\nthe razoring.\n\nAfter 972 games at 1+0\nMod vs Orig +224 =558 -190 +12 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Decrease NullMoveMargin and adjust razoring"
     },
     {
-      "commit_num": 6047,
+      "commit_num": 6070,
       "hash": "968c3de8",
       "short": "968c3de8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1841,14 +1771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix threads count setting\n\nWas broken after \"Optimal tune for 8 cores\" patch.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix threads count setting"
     },
     {
-      "commit_num": 6048,
+      "commit_num": 6071,
       "hash": "6a6facc0",
       "short": "6a6facc0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1867,14 +1796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Optimal tune for 8 cores\n\nAfter deep tests Louis Zulli found on his OCTAL machine that\nbest setup for an 8 core CPU is as following\n\n\"Threads\" = 8\n\"Minimum Split Depth\" = 6 or 7 (mSD)\n\"Maximum Number of Threads per Split Point\" = not important (MNTpSP)\n\nHere are testing results:\n\nmSD7 (8 threads) vs mSD4 (8 threads): 291 - 120 - 589\nmSD6 vs mSD7: 168 - 188 - 644\nmSD6-MNTpSP5 vs mSD6-MNTpSP6: 172 - 172 - 656\nSF-7threads vs SF-8threads: 179 - 204 - 617\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Optimal tune for 8 cores"
     },
     {
-      "commit_num": 6049,
+      "commit_num": 6072,
       "hash": "5b21c10a",
       "short": "5b21c10a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1893,14 +1821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Sync qsearch with search\n\nSo to have the same layout and be as much similar as\npossible. The only functional change is that now we\ntry ttMove as first also in PV nodes and at the end\nwe save the ttMove, as it happens in search. This\nshould have almost zero impact on ELO but it seems\nthe correct thing to do.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Sync qsearch with search"
     },
     {
-      "commit_num": 6050,
+      "commit_num": 6073,
       "hash": "7c0679ad",
       "short": "7c0679ad",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1919,14 +1846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix 'position ..... moves ' parsing bug\n\nIf after 'moves' there is a space then we crash.\n\nThe problem is that operator>>() trims whitespaces so that\nafter 'moves' has been extract we are still not at eof()\nbut remaining string contains only spaces. So that the next\nextarction operation uip >> token ends up with unchanged token\nvalue that remains 'moves', this garbage value is then feeded\nto RootPosition.do_move() through move_from_string() that does\nnot detect the invalid move value leading to a crash.\n\nThis bug is triggered by Shredder 12 interface under Mac that\nputs a space after 'moves' without any actual move list.\n\nBug fixed by Justin Blanchard\n\nAfter reviewing UCI parsing code I spotted other possible weak\npoints due to the fact that we don't test if the last extract\noperation has been succesful. So I have extended Justing patch\nto fix the remaining possible holes in uci.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix 'position ..... moves ' parsing bug"
     },
     {
-      "commit_num": 6051,
+      "commit_num": 6074,
       "hash": "cc974fa7",
       "short": "cc974fa7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1945,14 +1871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix en-passant parsing from fen string\n\nAccording to standard en-passant is recorded in fen string regardless\nof whether there is a pawn in position to make an en passant capture.\n\nInstead internally we set ep square only if the pawn can be captured.\nSo teach from_fen() to correctly handle this difference.\n\nBug reported and fixed by Justin Blanchard.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix en-passant parsing from fen string"
     },
     {
-      "commit_num": 6052,
+      "commit_num": 6075,
       "hash": "dba072c4",
       "short": "dba072c4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1971,14 +1896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use full evaluation in null search\n\nThis is an important design change because we know\ncompute evaluation in each node.\n\nThis is a 2.0 type change!\n\nAfter 977 games at 1+0\n\nMod vs Orig +236 =538 -202 51.74%  +12 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use full evaluation in null search"
     },
     {
-      "commit_num": 6053,
+      "commit_num": 6076,
       "hash": "e2e360fc",
       "short": "e2e360fc",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1997,14 +1921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Slow down reductions\n\nAfter testing on Joona QUAD the whole LMR series:\n\nOrig - Mod: 335 - 405 (+33 elo)\n\nFunctionality Signature: 12581900\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Slow down reductions"
     },
     {
-      "commit_num": 6054,
+      "commit_num": 6077,
       "hash": "d11af1de",
       "short": "d11af1de",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2023,14 +1946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a compile error under gcc\n\nAnd some warnings on the picky icc.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a compile error under gcc"
     },
     {
-      "commit_num": 6055,
+      "commit_num": 6078,
       "hash": "721d5576",
       "short": "721d5576",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2049,14 +1971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Last round of search.cpp cleanup\n\nThe most interesting thing is a bit of rewrite\nand semplification in connected_moves()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Last round of search.cpp cleanup"
     },
     {
-      "commit_num": 6056,
+      "commit_num": 6079,
       "hash": "49b1c5dc",
       "short": "49b1c5dc",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -2075,14 +1996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use logarithmic LMR also at root\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use logarithmic LMR also at root"
     },
     {
-      "commit_num": 6057,
+      "commit_num": 6080,
       "hash": "0e15b0f1",
       "short": "0e15b0f1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2101,14 +2021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Space inflate bottom part of search.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Space inflate bottom part of search.cpp"
     },
     {
-      "commit_num": 6058,
+      "commit_num": 6081,
       "hash": "c99d963f",
       "short": "c99d963f",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -2127,14 +2046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Logarithmic LMR\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Logarithmic LMR"
     },
     {
-      "commit_num": 6059,
+      "commit_num": 6082,
       "hash": "9e6d38d2",
       "short": "9e6d38d2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2153,14 +2071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename MaxActiveSplitPoints\n\nAnd move in thread.h togheter with THREAD_MAX\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename MaxActiveSplitPoints"
     },
     {
-      "commit_num": 6060,
+      "commit_num": 6083,
       "hash": "c8af7a86",
       "short": "c8af7a86",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2179,14 +2096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire 'finished' from MovePicker\n\nIt is not useful becasue it is safe to call\nget_next_move() multiple times when phase == PH_STOP\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire 'finished' from MovePicker"
     },
     {
-      "commit_num": 6061,
+      "commit_num": 6084,
       "hash": "5c8f5714",
       "short": "5c8f5714",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2205,14 +2121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename SingleReplyExtension in SingleEvasionExtension\n\nBecause that's the correct meaning. Note that also the\ncorresponding UCI option has been renamed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename SingleReplyExtension in SingleEvasionExtension"
     },
     {
-      "commit_num": 6062,
+      "commit_num": 6085,
       "hash": "0256db2a",
       "short": "0256db2a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2231,14 +2146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small cleanup in search.cpp\n\nAlso clarify some comments.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small cleanup in search.cpp"
     },
     {
-      "commit_num": 6063,
+      "commit_num": 6086,
       "hash": "12d8f742",
       "short": "12d8f742",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2257,14 +2171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire approximateEval field from SplitPoint\n\nIt is not used anymore after the futility pruning\nrewrite in a66f31f12.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire approximateEval field from SplitPoint"
     },
     {
-      "commit_num": 6064,
+      "commit_num": 6087,
       "hash": "807844ea",
       "short": "807844ea",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2283,7 +2196,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce refine_eval()\n\nTry to get a position evaluation better then\nthe quick one with the help of the TT table.\n\nThis allows the null search conditions and\nchosen reductions to be more accurate.\n\nAfter 908 games at 1+0\nMod vs Orig +209 =526 -173 +14 ELO\n\nFunctionality Signature: 16627355\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

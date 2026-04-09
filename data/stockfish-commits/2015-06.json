@@ -2,7 +2,7 @@
   "month": "2015-06",
   "commits": [
     {
-      "commit_num": 3327,
+      "commit_num": 3350,
       "hash": "b2edac70",
       "short": "b2edac70",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove useless razoring condition\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 20626 W: 3977 L: 3855 D: 12794\n\nLTC:\nLLR: 3.10 (-2.94,2.94) [-3.00,1.00]\nTotal: 87334 W: 13675 L: 13648 D: 60011\n\nRetire also the now unused pawn_on_7th() helper.\n\nbench: 8248166\n",
       "subject": "Remove useless razoring condition"
     },
     {
-      "commit_num": 3328,
+      "commit_num": 3351,
       "hash": "112607bf",
       "short": "112607bf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correctly check for no-makefile compile\n\nUnder Windows with MSVC we use the IDE to compile,\nin this case we infer some compiler flags usually\nset by Makefile.\n\nThe condition to check this was wrong, namely when compiling\nwith mingw under Windows 64 bit we always set IS_64BIT and\nUSE_BSFQ even if compiled with ARCH=x86-32 (this is how I\nfound it).\n\nSmall code style touches while there.\n\nNo functional change.\n",
       "subject": "Correctly check for no-makefile compile"
     },
     {
-      "commit_num": 3329,
+      "commit_num": 3352,
       "hash": "aa0dc16b",
       "short": "aa0dc16b",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "CMH Fix: Exclude captures for TT move refutation penalty\n\nThis will make sure we store only quiet moves for TT Penalty.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 34748 W: 6617 L: 6420 D: 21711\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 19975 W: 3259 L: 3137 D: 13579\n\nBench: 8063826\n\nResolves #373\n",
       "subject": "CMH Fix: Exclude captures for TT move refutation penalty"
     },
     {
-      "commit_num": 3330,
+      "commit_num": 3353,
       "hash": "7e9f776f",
       "short": "7e9f776f",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "LMR Tweak: Decrease reduction if cmh>0 && history>0.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 9627 W: 1879 L: 1748 D: 6000\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 21543 W: 3433 L: 3234 D: 14876\n\nBench: 8646407\n\nResolves #370 #371\n",
       "subject": "LMR Tweak: Decrease reduction if cmh>0 && history>0."
     },
     {
-      "commit_num": 3331,
+      "commit_num": 3354,
       "hash": "3f1bc9e0",
       "short": "3f1bc9e0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix compile on icc\n\nError is:\n\n  a value of type \"int\" cannot be assigned to an entity of type \"Value\"\n\nAlso retire the now unused squares_of_color() function.\n\nNo functional change.\n",
       "subject": "Fix compile on icc"
     },
     {
-      "commit_num": 3332,
+      "commit_num": 3355,
       "hash": "e8cc5c99",
       "short": "e8cc5c99",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small coding style fix for Outpost array\n\nNo functional change\n\nResolves #367\n",
       "subject": "Small coding style fix for Outpost array"
     },
     {
-      "commit_num": 3333,
+      "commit_num": 3356,
       "hash": "00563be5",
       "short": "00563be5",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire -Wno-long-long\n\nlong long is part of the C++11 standard.\n\nNo functional change.\n\nResolves #364\n",
       "subject": "Retire -Wno-long-long"
     },
     {
-      "commit_num": 3334,
+      "commit_num": 3357,
       "hash": "ad87d707",
       "short": "ad87d707",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify outpost evaluation\n\nSTC\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 114149 W: 21986 L: 22032 D: 70131\n\nLTC\n\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 52232 W: 8468 L: 8396 D: 35368\n\nBench: 6716940\n\nNo functional change\n\nResolves #363\n",
       "subject": "Simplify outpost evaluation"
     },
     {
-      "commit_num": 3335,
+      "commit_num": 3358,
       "hash": "c1d3bd2d",
       "short": "c1d3bd2d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename stages\n\nHopefully more clear.\n\nNo functional change.\n",
       "subject": "Rename stages"
     },
     {
-      "commit_num": 3336,
+      "commit_num": 3359,
       "hash": "5ebdf2f8",
       "short": "5ebdf2f8",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tune pawn shelter/storm\n\nSTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 31679 W: 6183 L: 5912 D: 19584\n\nLTC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 43550 W: 6885 L: 6602 D: 30063\n\nBench: 9219343\n\nResolves #360\n",
       "subject": "Tune pawn shelter/storm"
     },
     {
-      "commit_num": 3337,
+      "commit_num": 3360,
       "hash": "4502a193",
       "short": "4502a193",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -281,7 +271,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tweak backward pawns definition\n\nAdvanced pawns cannot be backward. Also lower the backward penalty in\nendgame.\n\nPassed STC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 18534 W: 3588 L: 3433 D: 11513\n\nand LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 21319 W: 3415 L: 3217 D: 14687\n\nBench: 7271152\n\nResolves #359\n",

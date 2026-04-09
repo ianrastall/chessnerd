@@ -2,7 +2,7 @@
   "month": "2014-06",
   "commits": [
     {
-      "commit_num": 3700,
+      "commit_num": 3723,
       "hash": "6b354305",
       "short": "6b354305",
       "author": "Ajith <achajo@yahoo.co.in>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add bonuses for Minors attacking enemy pieces(except pawns) even when they are protected by enemy pawns.\n\nPatch passed STC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 8206 W: 1426 L: 1304 D: 5476\n\nand LTC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 19534 W: 2821 L: 2640 D: 14073\n\nBench: 9942172\n",
       "subject": "Add bonuses for Minors attacking enemy pieces(except pawns) even when they are protected by enemy pawns."
     },
     {
-      "commit_num": 3701,
+      "commit_num": 3724,
       "hash": "ffedfa33",
       "short": "ffedfa33",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix Singular extension condition to handle mate scores\n\nWith Eelco's patch \"Don't special case for abs(beta) >= VALUE_MATE_IN_MAX_PLY\" condition \"abs(ttValue) < VALUE_KNOWN_WIN\" has been removed from singular extension search, and condition \"abs(beta) < VALUE_KNOWN_WIN\" was added to the SingularExtensionNode definition.\nThis might lead to problems, especially in positions, where a mate is due.\nFor example, this position 5rk1/4K1pp/8/5PPP/8/8/8/1R6 w - - 12 1 triggers an assert.\nstockfish: search.cpp:434: Value {anonymous}::search(Position&, Search::Stack*, Value, Value, Depth, bool) [with {anonymous}::NodeType NT = (<unnamed>::NodeType)2u; bool SpNode = false]: Assertion `-VALUE_INFINITE <= alpha && alpha < beta && beta <= VALUE_INFINITE' failed.\n\nSo let's re-insert the removed condition.\nFirst spotted by Uri Blass, fix by me.\n\nBench: 8759675\n",
       "subject": "Fix Singular extension condition to handle mate scores"
     },
     {
-      "commit_num": 3702,
+      "commit_num": 3725,
       "hash": "e4e423bb",
       "short": "e4e423bb",
       "author": "Joseph R. Prostko <joe.prostko@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change the install prefix for Haiku\n\n* /boot/common was removed from Haiku\n* The equivalent path now that package management has been implemented is /boot/system/non-packaged\n\nNo functional change\n\nBench: 8759681\n",
       "subject": "Change the install prefix for Haiku"
     },
     {
-      "commit_num": 3703,
+      "commit_num": 3726,
       "hash": "ccd823a4",
       "short": "ccd823a4",
       "author": "Ron Britvich <ron@britvich.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pack 3 TT entries in 32 bytes cluster\n\nIdea from Ron Britvich\n\nCode reworked by Marco Costalba and Joona Kiiski\n\nBench: 8095369\n\nResolves #3\nResolves #10\n",
       "subject": "Pack 3 TT entries in 32 bytes cluster"
     },
     {
-      "commit_num": 3704,
+      "commit_num": 3727,
       "hash": "7ff865b9",
       "short": "7ff865b9",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge pull request #9 from glinscott/pawnspan\n\nScale down endgames with pawns on one or two adjacent files\n\n\n\nPassed STC\n\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\n\nTotal: 16081 W: 2745 L: 2604 D: 10732\n\n\n\nPassed LTC\n\nLLR: 2.95 (-2.94,2.94) [1.00,6.00]\n\nTotal: 123832 W: 17292 L: 16584 D: 89956\n\n\n\n128k games to measure ELO at 15+0.05:\n\nELO: 2.07 +-1.1 (95%) LOS: 100.0%\n\nTotal: 128000 W: 21632 L: 20869 D: 85499\n\n\n\nNew bench: 8028792\n",
       "subject": "Merge pull request #9 from glinscott/pawnspan"
     },
     {
-      "commit_num": 3705,
+      "commit_num": 3728,
       "hash": "ec627911",
       "short": "ec627911",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "A bit more cleanup\n",
       "subject": "A bit more cleanup"
     },
     {
-      "commit_num": 3706,
+      "commit_num": 3729,
       "hash": "22ffb588",
       "short": "22ffb588",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge pull request #8 from glinscott/revert_ce1c260\n\nRevert \"Check for an available slave early on\"\n",
       "subject": "Merge pull request #8 from glinscott/revert_ce1c260"
     },
     {
-      "commit_num": 3707,
+      "commit_num": 3730,
       "hash": "e6a8d03d",
       "short": "e6a8d03d",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Check for an available slave early on\"\n\nThis reverts commit ce1c260ea97c14eea996d0a2638f4876ccbc412b.\n",
       "subject": "Revert \"Check for an available slave early on\""
     },
     {
-      "commit_num": 3708,
+      "commit_num": 3731,
       "hash": "747e035c",
       "short": "747e035c",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Original version of shane's patch\n",
       "subject": "Original version of shane's patch"
     },
     {
-      "commit_num": 3709,
+      "commit_num": 3732,
       "hash": "6c9f4cf3",
       "short": "6c9f4cf3",
       "author": "shane31 <shane_booth@acslink.net.au>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Scale down endgames with pawns on one or two adjacent files\n",
       "subject": "Scale down endgames with pawns on one or two adjacent files"
     },
     {
-      "commit_num": 3710,
+      "commit_num": 3733,
       "hash": "ab580106",
       "short": "ab580106",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge pull request #5 from glinscott/authors\n\nAdd AUTHORS\n",
       "subject": "Merge pull request #5 from glinscott/authors"
     },
     {
-      "commit_num": 3711,
+      "commit_num": 3734,
       "hash": "aa23eb44",
       "short": "aa23eb44",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Some reformatting in pawns.cpp\n\nNo functional change.\n",
       "subject": "Some reformatting in pawns.cpp"
     },
     {
-      "commit_num": 3712,
+      "commit_num": 3735,
       "hash": "e8baf2b7",
       "short": "e8baf2b7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Ensure ttValue != VALUE_NONE in singular extension search\n\nThe assert:\n\n  assert(ttValue != VALUE_NONE);\n\nCould fire for multiple reasons (although is very rare),\nfor instance after an IID we can have ttMove != MOVE_NONE\nwhile ttValue is still set at VALUE_NONE.\n\nBut not only this, actually SMP is a source of corrupted\nttValue and anyhow we can detect the condition:\n\n ttMove != MOVE_NONE && ttValue == VALUE_NONE\n\neven north of IID.\n\nReported by Ronald de Man.\n\nIt is so rare that bench didn't change.\n\nbench: 7710548\n",
       "subject": "Ensure ttValue != VALUE_NONE in singular extension search"
     },
     {
-      "commit_num": 3713,
+      "commit_num": 3736,
       "hash": "58bb23d0",
       "short": "58bb23d0",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove some duplicates\n",
       "subject": "Remove some duplicates"
     },
     {
-      "commit_num": 3714,
+      "commit_num": 3737,
       "hash": "bbacff5e",
       "short": "bbacff5e",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add AUTHORS\n",
       "subject": "Add AUTHORS"
     },
     {
-      "commit_num": 3715,
+      "commit_num": 3738,
       "hash": "43efd7fa",
       "short": "43efd7fa",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better value clipping in game_phase()\n\nNo functional change.\n",
       "subject": "Better value clipping in game_phase()"
     },
     {
-      "commit_num": 3716,
+      "commit_num": 3739,
       "hash": "3b315c9a",
       "short": "3b315c9a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move game_phase() to Position\n\nIt seems a more natural to place this\nfunction there.\n\nNo functional change.\n",
       "subject": "Move game_phase() to Position"
     },
     {
-      "commit_num": 3717,
+      "commit_num": 3740,
       "hash": "f7926ea4",
       "short": "f7926ea4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small renaming in material weights\n\nAlso dropped some temporary variable: compiler\nis more than able to push on stack temp values\nby itself (verified).\n\nNo functional change.\n",
       "subject": "Small renaming in material weights"
     },
     {
-      "commit_num": 3718,
+      "commit_num": 3741,
       "hash": "264c8637",
       "short": "264c8637",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify a condition in is_KXK()\n\nNo functional change.\n",
       "subject": "Simplify a condition in is_KXK()"
     },
     {
-      "commit_num": 3719,
+      "commit_num": 3742,
       "hash": "55a3e0af",
       "short": "55a3e0af",
       "author": "Eelco de Groot <eelcogro@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't special case for abs(beta) >= VALUE_MATE_IN_MAX_PLY\n\nRemove from the search this special case and apply\nnull search and razoring also in mate positions.\n\nTested in no-regression mode and passed both\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 65431 W: 10860 L: 10810 D: 43761\n\nand LTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 34928 W: 4814 L: 4713 D: 25401\n\nThis patch kicks in only in mate positions and in\nthese cases it seems beneficial in finding mates\nfaster as Yery Spark measured on the Chest mate suite:\n\nTotal number of positions 6425\nFixed nodes 200K per position\n\nmaster: 1049\nnew:    1154\n\nAnd also the 5446 'hard' positions again with 2000K nodes\n(those not found by both engines in 200K nodes):\n\nmaster: 1069\nnew:    1395\n\nbench: 7710548\n",
       "subject": "Don't special case for abs(beta) >= VALUE_MATE_IN_MAX_PLY"
     },
     {
-      "commit_num": 3720,
+      "commit_num": 3743,
       "hash": "66c93245",
       "short": "66c93245",
       "author": "Leonid Pechenik <lp@home>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify unstoppable pawns\n\nTested in no-regression mode and passed both\n\nSTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 17919 W: 3103 L: 2978 D: 11838\n\nand LTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 31460 W: 4414 L: 4308 D: 22738\n\nbench: 7709279\n",
       "subject": "Simplify unstoppable pawns"
     },
     {
-      "commit_num": 3721,
+      "commit_num": 3744,
       "hash": "73ca93f3",
       "short": "73ca93f3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove -ansi flag for Clang\n\nIt seems this flag is only for gcc and\nyields a warning under OSX Mavericks:\n\nclang: warning: argument unused during compilation: '-ansi'\n\nNo functional change.\n",
       "subject": "Remove -ansi flag for Clang"
     },
     {
-      "commit_num": 3722,
+      "commit_num": 3745,
       "hash": "c6fc51c5",
       "short": "c6fc51c5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a warning with MSVC in 'analyze' mode\n\nHere MSVC is worried that\n\nStepAttacksBB[PAWN][psq]\n\ncould overflow, so change psq initialization\nto clarify psq is always less than 64.\n\nNo functional change.\n",
       "subject": "Fix a warning with MSVC in 'analyze' mode"
     },
     {
-      "commit_num": 3723,
+      "commit_num": 3746,
       "hash": "2cb4c705",
       "short": "2cb4c705",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Triviality in UCI::loop\n\nCode style paranoid in action here :-)\n\nNo functional change.\n",
       "subject": "Triviality in UCI::loop"
     },
     {
-      "commit_num": 3724,
+      "commit_num": 3747,
       "hash": "3c1201c2",
       "short": "3c1201c2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Factor out pawn attacks in 'lever'\n\nImproves readibility and possibly speed.\n\nNo functional change.\n",
       "subject": "Factor out pawn attacks in 'lever'"
     },
     {
-      "commit_num": 3725,
+      "commit_num": 3748,
       "hash": "84dabe59",
       "short": "84dabe59",
       "author": "Ajith <achajo@yahoo.co.in>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify pawn threats and merge into ThreatenedByPawn[]\n\nTested in no-regression mode,\n\npassed STC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 14477 W: 2493 L: 2362 D: 9622\n\nand LTC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 51964 W: 7091 L: 7013 D: 37860\n\nbench: 7875814\n",
       "subject": "Simplify pawn threats and merge into ThreatenedByPawn[]"
     },
     {
-      "commit_num": 3726,
+      "commit_num": 3749,
       "hash": "2312c267",
       "short": "2312c267",
       "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add bonus for advanced lever\n\nPassed both STC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 15413 W: 2670 L: 2530 D: 10213\n\nAnd LTC:\nLLR: 2.95 (-2.94,2.94) [1.00,6.00]\nTotal: 66908 W: 9398 L: 8960 D: 48550\n\nBench : 7859385\n",
       "subject": "Add bonus for advanced lever"
     },
     {
-      "commit_num": 3727,
+      "commit_num": 3750,
       "hash": "e10276f4",
       "short": "e10276f4",
       "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tweak outpost name\n\nThis name is more accurate, since that function evaluates only one\noutpost in every call.\nNo functional change.\n",
       "subject": "Tweak outpost name"
     },
     {
-      "commit_num": 3728,
+      "commit_num": 3751,
       "hash": "b6cd89ae",
       "short": "b6cd89ae",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small renaming in Tracing\n\nNo functional change.\n",
       "subject": "Small renaming in Tracing"
     },
     {
-      "commit_num": 3729,
+      "commit_num": 3752,
       "hash": "ce1c260e",
       "short": "ce1c260e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Check for an available slave early on\n\nDon't take the split lock if we don't have\navailable slaves (about 30-40% of times).\n\nThis new condition allows to retire the now\nredundant one on number of threads.\n\nNo functional change.\n",
       "subject": "Check for an available slave early on"
     },
     {
-      "commit_num": 3730,
+      "commit_num": 3753,
       "hash": "4d30126e",
       "short": "4d30126e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use unsigned char as argument of std::isspace\n\nAlthough signature allows an int:\n\nint isspace( int ch );\n\nThe behavior is undefined if the value of ch is\nnot representable as unsigned char and is not\nequal to EOF.\n\nSee\n\nhttp://en.cppreference.com/w/cpp/string/byte/isspace\nhttp://www.greenend.org.uk/rjk/tech/cfu.html\n\nThis is really a tricky corner case of C standard!\n\nSpotted and reported by Ron Britvich.\n\nNo functional change.\n",
       "subject": "Use unsigned char as argument of std::isspace"
     },
     {
-      "commit_num": 3731,
+      "commit_num": 3754,
       "hash": "7f56d294",
       "short": "7f56d294",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid to use nullChild\n\nUse instead:\n\n(ss-1)->currentMove == MOVE_NULL\n\nNo functional change.\n",
       "subject": "Avoid to use nullChild"
     },
     {
-      "commit_num": 3732,
+      "commit_num": 3755,
       "hash": "d10ae90d",
       "short": "d10ae90d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove 'update gains' hack\n\nUse (move != MOVE_NONE) condition to\nfiltering out updating gains at root.\n\nbench: 8454456\n",
       "subject": "Remove 'update gains' hack"
     },
     {
-      "commit_num": 3733,
+      "commit_num": 3756,
       "hash": "2f756394",
       "short": "2f756394",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Temporary revert previous patch\n\nSplit previous patch in 2 steps: first remove\nthe MOVE_NULL hack, then retire nullChild.\n\nThe first step is a prerequisite\nfor second one and affects bench.\n\nThe second step (next patch) just removes nullChild\nwithout affecting bench.\n\nbench: 8205159\n",
       "subject": "Temporary revert previous patch"
     },
     {
-      "commit_num": 3734,
+      "commit_num": 3757,
       "hash": "ad1167c4",
       "short": "ad1167c4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid to use nullChild\n\nShould be a non functional change, but\nfor some reason bench is changed.\n\nbench: 8454456\n",
       "subject": "Avoid to use nullChild"
     },
     {
-      "commit_num": 3735,
+      "commit_num": 3758,
       "hash": "08753771",
       "short": "08753771",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move Tempo to evaluation\n\nNo functional change.\n",
       "subject": "Move Tempo to evaluation"
     },
     {
-      "commit_num": 3736,
+      "commit_num": 3759,
       "hash": "69ac45d9",
       "short": "69ac45d9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Score extractors\"\n\nAre broken for big-endian case and\nI have verified with MSVC 2013 Premium\nbench is correct and there is no\nmiscompilation, so the main reason\nto change the original code drops.\n\nNo functional change.\n",
       "subject": "Revert \"Score extractors\""
     },
     {
-      "commit_num": 3737,
+      "commit_num": 3760,
       "hash": "323a0066",
       "short": "323a0066",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a warning with MSVC Premium 2013\n\nReported by Ron Britvich.\n\nNo functional change.\n",
       "subject": "Fix a warning with MSVC Premium 2013"
     },
     {
-      "commit_num": 3738,
+      "commit_num": 3761,
       "hash": "16e170d1",
       "short": "16e170d1",
       "author": "pellanda <pellanda@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update Readme.md\n\nRetire line about polyglot.ini and\nbook as they are not used anymore.\n\nNo functional change.\n",
       "subject": "Update Readme.md"
     },
     {
-      "commit_num": 3739,
+      "commit_num": 3762,
       "hash": "adeded29",
       "short": "adeded29",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Symmetric King Safety: take 2\n\nAnother attempt at retiring current asymmetric\nking evaluation and use a much simpler symmetric\none. As a good side effect we can avoid recalculating\neval after a null move.\n\nTested in no-regression mode and passed\n\nSTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 21580 W: 3752 L: 3632 D: 14196\n\nLTC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 18253 W: 2593 L: 2469 D: 13191\n\nAnd a LTC regression test against SF DD to\nverify we don't have regression against\nweaker engines due to some kind of 'contempt'\neffect:\n\nELO: 54.69 +-2.1 (95%) LOS: 100.0%\nTotal: 40000 W: 11072 L: 4827 D: 24101\n\nbench: 8205159\n",
       "subject": "Symmetric King Safety: take 2"
     },
     {
-      "commit_num": 3740,
+      "commit_num": 3763,
       "hash": "187a9fe5",
       "short": "187a9fe5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use see() instead of see_sign() in previous patch\n\nBefore it was working by accident in case of\nsee_sign() and failing with see() due to how\ncastle moves are coded (king captures the rook).\n\nBetter to explicitly filter out castling moves\nand use see() without any surprise/trick.\n\nNo functional case.\n",
       "subject": "Use see() instead of see_sign() in previous patch"
     },
     {
-      "commit_num": 3741,
+      "commit_num": 3764,
       "hash": "83a574ff",
       "short": "83a574ff",
       "author": "Reuven Peleg <reuvenpe2005@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Decrease reduction for moves that escape a capture\n\nPassed both STC\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 10094 W: 1833 L: 1704 D: 6557\n\nand LTC\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 27738 W: 4147 L: 3928 D: 19663\n\nbench : 8599236\n",
       "subject": "Decrease reduction for moves that escape a capture"
     },
     {
-      "commit_num": 3742,
+      "commit_num": 3765,
       "hash": "6f483670",
       "short": "6f483670",
       "author": "kinderchocolate <WongMingYin@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add some const qualifier\n\nNo functional change.\n",
       "subject": "Add some const qualifier"
     },
     {
-      "commit_num": 3743,
+      "commit_num": 3766,
       "hash": "f4dcec0b",
       "short": "f4dcec0b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire Polyglot Book management\n\nBook handling belongs to GUI, we kept this code\nfor historical reasons, but nowdays there is\nreally no need of this old, (mostly) unused\nand especially incorrect designed functionality.\n\nIt is up to the GUI to choose the book (far easier for\nthe user) and to select the book parameters. In no\nplace, including fishtest, TCEC, rating lists, etc.\nthe \"own book\" is used, moreover currently SF is\nreleased without any book and even if in the future we\nbundle a book in the release package, it will be the GUI\nthat will take care of it.\n\nThis corrects a wrong design decision that Galurung\nand later Stockfish inherited from what was common\npractice many yeas ago.\n\nNo functional change.\n",
       "subject": "Retire Polyglot Book management"
     },
     {
-      "commit_num": 3744,
+      "commit_num": 3767,
       "hash": "e4fc9d84",
       "short": "e4fc9d84",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,7 +1121,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire eval weights UCI options\n\nThere is really little that user can achieve (apart\nfrom a weakened engine) tweaking these parameters\nthat are already tuned and have no immediate or visible\neffect.\n\nSo better do not expose them to the user and avoid the\ntypical \"What is the best setup for my machine?\" kind of\nquestion (by far the most common, by far the most useless).\n\nNo functional change.\n",

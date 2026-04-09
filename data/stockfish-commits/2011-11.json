@@ -2,7 +2,7 @@
   "month": "2011-11",
   "commits": [
     {
-      "commit_num": 4909,
+      "commit_num": 4932,
       "hash": "0f7cbaca",
       "short": "0f7cbaca",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tidy up comments in thread.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Tidy up comments in thread.cpp"
     },
     {
-      "commit_num": 4910,
+      "commit_num": 4933,
       "hash": "e870afa5",
       "short": "e870afa5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Include <cstring> in search.h\n\nNow we use memset() directly there.\n\nSpotted by Justin Blanchard.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Include <cstring> in search.h"
     },
     {
-      "commit_num": 4911,
+      "commit_num": 4934,
       "hash": "9bacd921",
       "short": "9bacd921",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Little reformat of elapsed_search_time()\n\nChange name and argument type.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Little reformat of elapsed_search_time()"
     },
     {
-      "commit_num": 4912,
+      "commit_num": 4935,
       "hash": "bb3427ca",
       "short": "bb3427ca",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Detach search arguments from UI thread\n\nDetach from the UI thread the input arguments used by\nthe search threads so that the UI thread is able to receive\nand process any command sent by the GUI while other threads\nkeep searching.\n\nWith this patch there is no more need to block the UI\nthread after a \"stop\", so it is a more reliable and\nrobust solution than the previous patch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Detach search arguments from UI thread"
     },
     {
-      "commit_num": 4913,
+      "commit_num": 4936,
       "hash": "6809b57c",
       "short": "6809b57c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "After a \"stop\" do not read new input until search finishes\n\nUnfortunatly xboard sends immediately the new position to\nsearch after sending \"stop\" when we have a ponder miss.\n\nBecuase main thread position is not copied but is referenced\ndirectly from root position and the latter is modified by\nthe \"position..\" UCI command we end up with the working position\nthat changes under our feet while the search is still recovering\nafter the \"stop\" and this causes a crash.\n\nThis happens only with the (broken) xboard, native UCI does not\nhave this problem.\n\nReported by otello1984\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "After a \"stop\" do not read new input until search finishes"
     },
     {
-      "commit_num": 4914,
+      "commit_num": 4937,
       "hash": "ffa75215",
       "short": "ffa75215",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a race in pondering mode\n\nFixes an hang when playing with ponder ON. Perhaps there is still\na very small race but now it seems engine does not hang anymore.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a race in pondering mode"
     },
     {
-      "commit_num": 4915,
+      "commit_num": 4938,
       "hash": "c4517c01",
       "short": "c4517c01",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce Search namespace\n\nMove global search-related variables under \"Search\" namespace.\n\nAs a side effect we can move uci_async_command() and\nwait_for_stop_or_ponderhit() away from search.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce Search namespace"
     },
     {
-      "commit_num": 4916,
+      "commit_num": 4939,
       "hash": "ed04c010",
       "short": "ed04c010",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite async I/O\n\nUse the starting thread to wait for GUI input and instead use\nthe other threads to search. The consequence is that now think()\nis alwasy started on a differnt thread than the caller that\nreturns immediately waiting for input. This reformat greatly\nsimplifies the code and is more in line with the common way\nto implement this feature.\n\nAs a side effect now we don't need anymore Makefile tricks\nwith sleep() to allow profile builds.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite async I/O"
     },
     {
-      "commit_num": 4917,
+      "commit_num": 4940,
       "hash": "9c7d7273",
       "short": "9c7d7273",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix regression with printing of debug info\n\nOutput of debug info each second was disabled\ndue to recent patches.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix regression with printing of debug info"
     },
     {
-      "commit_num": 4918,
+      "commit_num": 4941,
       "hash": "e9dc2e9e",
       "short": "e9dc2e9e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat search dispatch code\n\nReduce indentation level and lines of code and tidy up\nsome comment.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reformat search dispatch code"
     },
     {
-      "commit_num": 4919,
+      "commit_num": 4942,
       "hash": "3fc08f8a",
       "short": "3fc08f8a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't check for early stop when StopOnPonderhit is set\n\nIf we are pondering we will stop the search only when\nGUI sends \"ponderhit\" or \"stop\" commands or when we reach\nmaximum depth. In all the other cases we continue to search\nso there is no need to verify for available time.\n\nAlso better clarify why wait_for_stop_or_ponderhit() before\nto exit in some cases.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't check for early stop when StopOnPonderhit is set"
     },
     {
-      "commit_num": 4920,
+      "commit_num": 4943,
       "hash": "c56a7ee8",
       "short": "c56a7ee8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Early stop: retire redundant Rml.size() == 1 case\n\nIn case there is only 1 legal move we will stop the\nsearch at depth 10 anyway because the exclusion search\nprobe will fail low.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Early stop: retire redundant Rml.size() == 1 case"
     },
     {
-      "commit_num": 4921,
+      "commit_num": 4944,
       "hash": "b56a098c",
       "short": "b56a098c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "CLOP: Passed pawns weights tuning\n\nTuned with CLOP against a pool of 3 engines. Result\nverified with a direct match:\n\nAfter 11720 games at 10\"+0.1\nMod vs Orig 1922 - 1832 - 7966 ELO +2 (+-3.6)\n\nSo no change in self match but if CLOP is right it should\nbe a bit better against an engine pool.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "CLOP: Passed pawns weights tuning"
     },
     {
-      "commit_num": 4922,
+      "commit_num": 4945,
       "hash": "4cc272cb",
       "short": "4cc272cb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename value in bestValue in id_loop()\n\nThe value returned by root search it is actually\nour best value, so rename the variable to reflect this.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename value in bestValue in id_loop()"
     },
     {
-      "commit_num": 4923,
+      "commit_num": 4946,
       "hash": "c4fc82c6",
       "short": "c4fc82c6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite link time optimization in Makefile\n\nInstead of binding link time optimization to the choice of\npopcount support, do the right thing and add -flto option\nwhen gcc 4.5 or later is detected.\n\nAlthough it should be supported also under mingw, it happens\nthat it doesn't, at least on my 4.6.1 due to some known bugs.\n\nThanks to Mike for helping me with this patch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite link time optimization in Makefile"
     },
     {
-      "commit_num": 4924,
+      "commit_num": 4947,
       "hash": "a40ded28",
       "short": "a40ded28",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify passed pawns logic\n\nRemove the bonus for no *friendly* pieces in the pawn's path and\nreduce a bit the bonus based on kings proximity.\n\nThis patch is part of to the ongoing effort to remove form evaluation\nall the terms that do not add value.\n\nAfter 16284 games:\n\nMod vs Orig 2728 - 2651 - 10911 ELO +1 (+- 3.1)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify passed pawns logic"
     },
     {
-      "commit_num": 4925,
+      "commit_num": 4948,
       "hash": "44c78fdb",
       "short": "44c78fdb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix regression: engine hangs while pondering\n\nAfter a \"stop\" due to a ponder miss Xboard sends\nimmediately the new position to search, without\nwaiting for engine to effectively stop the search.\n\nIt is not clear if this is a GUI bug (as I suspect)\nor allowed behaviour, but because it won't be fixed\nanyway workaround this issue making listener thread\nto switch to in-sync mode as soon as a \"stop\" command\nis received.\n\nThanks to Mike Whiteley for reporting this.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix regression: engine hangs while pondering"
     },
     {
-      "commit_num": 4926,
+      "commit_num": 4949,
       "hash": "ecb98a33",
       "short": "ecb98a33",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stop is not an unknown command\n\nIf GUI sends stop while we are waiting for\na command do not reply with a silly:\n\nUnknown command: stop\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Stop is not an unknown command"
     },
     {
-      "commit_num": 4927,
+      "commit_num": 4950,
       "hash": "9b6b510c",
       "short": "9b6b510c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Another fix to profile-build on gcc 4.6\n\nOliver reports profile builds error with new gcc 4.6, he says:\n\n\"We need to add -lgov with profile-generate AND profile-use.\nSo it has to be added to the second stage of building too.\n\nThe problem occurred first with the introduction of gcc4.6 and\nI think this is because the previous version did find the gcov\nlibrary automatically. gcc4.6 needs more precise options and\ndoes less guesses. I have seen it in debian, Ubuntu and also with\nmingw on Windows. And all use gcc4.6.\"\n\nThis patch fixes the issue.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Another fix to profile-build on gcc 4.6"
     },
     {
-      "commit_num": 4928,
+      "commit_num": 4951,
       "hash": "c2600a73",
       "short": "c2600a73",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix profile-build\n\nAfter async I/O patches 'bench' changed behaviour and now waits for\ninput at the end of the test run. This is due to listener thread stay\nblocked on std::getline() even after test run is finished, as soon as\nwe feed something the thread unblocks and then quickly exits.\n\nThis is not a big problem, but has the bad side effect of breaking\nprofile builds that hang forever at the end of the test run.\n\nThe tricky workaround is to create a pipe that connects to stockfish\ninput and then, when test run is finished, breaking the pipe: this\nmakes std::getline() immediately return.\n\nSo this patch adds a 'sleep 10' piped into 'stockfish bench' test run\ncommand. After 10 seconds sleep ends, the pipe breaks and 'bench'\nfinishes as usual.\n\nThanks to Oliver Korff for reporting the issue, and to Mike Whiteley\nfor having co-authored this solution.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix profile-build"
     },
     {
-      "commit_num": 4929,
+      "commit_num": 4952,
       "hash": "43204d9a",
       "short": "43204d9a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat all_slaves_finished()\n\nRename and move under ThreadsManager class.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reformat all_slaves_finished()"
     },
     {
-      "commit_num": 4930,
+      "commit_num": 4953,
       "hash": "369789b4",
       "short": "369789b4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document and reshuffle stuff in think()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better document and reshuffle stuff in think()"
     },
     {
-      "commit_num": 4931,
+      "commit_num": 4954,
       "hash": "8fa53a5b",
       "short": "8fa53a5b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better define wait_for_stop_or_ponderhit()\n\nUse do_uci_async_cmd() instead of process input commands\ndirectly and clarify that what we are waiting for is\nsomething that is able to raise StopRequest flag.\n\nAlso fix some stale comments in do_uci_async_cmd(). Here\nwe need to reset Limits.ponder only upon receiving \"ponderhit\".\nIn the case of \"quit\" or \"stop\" resetting Limits.ponder has no\neffect because the search is going to be stopped anyway.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better define wait_for_stop_or_ponderhit()"
     },
     {
-      "commit_num": 4932,
+      "commit_num": 4955,
       "hash": "d58176bf",
       "short": "d58176bf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use a timer to avoid polling\n\nThe timer will be fired asynchronously to handle\ntime management flags, while other threads are\nsearching.\n\nThis implementation uses a thread waiting on a\ntimed condition variable instead of real timers.\nThis approach allow to reduce platform dependant\ncode to a minimum and also is the most portable given\nthat timers libraries are very different among platforms\nand also the best ones are not compatible with olds\nWindows.\n\nAlso retire the now unused polling code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use a timer to avoid polling"
     },
     {
-      "commit_num": 4933,
+      "commit_num": 4956,
       "hash": "0095f423",
       "short": "0095f423",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire now unused input_available()\n\nWith our new listener thread we don't need anymore\nthis ugly and platform dependent code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire now unused input_available()"
     },
     {
-      "commit_num": 4934,
+      "commit_num": 4957,
       "hash": "2617aa41",
       "short": "2617aa41",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite how commands from GUI are read\n\nInstead of polling for input use a dedicated listener\nthread to read commands from the GUI independently\nfrom other threads.\n\nTo do this properly we have to delegate to the listener\nall the reading from the GUI: while searching but also\nwhile waiting for a command, like in std::getline().\n\nSo we have two possible behaviours: in-sync mode, in which\nthe thread mimics std::getline() and the caller blocks until\nsomething is read from GUI, and async mode where the listener\ncontinuously reads and processes GUI commands while other\nthreads are searching.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite how commands from GUI are read"
     },
     {
-      "commit_num": 4935,
+      "commit_num": 4958,
       "hash": "22b9307a",
       "short": "22b9307a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,7 +671,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further touches to magic bitboards code\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

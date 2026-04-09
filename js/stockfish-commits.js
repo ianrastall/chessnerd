@@ -14,7 +14,6 @@
   const yearSelect = document.getElementById('yearSelect');
   const monthSelect = document.getElementById('monthSelect');
   const searchBox = document.getElementById('searchBox');
-  const showAbrok = document.getElementById('showAbrok');
   const showArtifacts = document.getElementById('showArtifacts');
   const pageSizeSel = document.getElementById('pageSize');
 
@@ -77,10 +76,6 @@
     if (Array.isArray(payload)) return payload;
     if (payload && Array.isArray(payload.commits)) return payload.commits;
     return [];
-  }
-
-  function commitHasAbrok(c) {
-    return !!(c?.downloads?.abrok_eu?.length);
   }
 
   function commitHasArtifacts(c) {
@@ -175,17 +170,12 @@
 
   function applyFilters() {
     const q = searchBox.value.trim().toLowerCase();
-    const wantAbrok = showAbrok.checked;
     const wantArtifacts = showArtifacts.checked;
 
     filteredCommits = monthCommits.filter(c => {
-      // Link-set filters (if a commit has only artifacts and artifacts are off, hide it; etc.)
-      const hasA = commitHasAbrok(c);
       const hasG = commitHasArtifacts(c);
 
-      if (!wantAbrok && hasA && !hasG) return false;
-      if (!wantArtifacts && hasG && !hasA) return false;
-      if (!wantAbrok && !wantArtifacts && (hasA || hasG)) return false; // user disabled both
+      if (!wantArtifacts && hasG) return false;
 
       if (!q) return true;
 
@@ -253,12 +243,6 @@
       if (sc?.url) urls.push(sc.url);
     }
 
-    if (showAbrok.checked) {
-      for (const d of (c?.downloads?.abrok_eu || [])) {
-        if (d?.url) urls.push(d.url);
-      }
-    }
-
     if (showArtifacts.checked) {
       for (const d of (c?.downloads?.github_actions_artifacts || [])) {
         if (d?.url) urls.push(d.url);
@@ -285,10 +269,8 @@
     const bench = extractBench(c.message);
     const tests = extractTestLinks(c.message);
 
-    const hasAbrok = commitHasAbrok(c);
     const hasArtifacts = commitHasArtifacts(c);
     const srcCount = (c.source_code || []).length;
-    const abrokCount = (c?.downloads?.abrok_eu || []).length;
     const artCount = (c?.downloads?.github_actions_artifacts || []).length;
 
     const details = el('details', { class: 'sf-commit', id: anchorForCommit(c) });
@@ -308,7 +290,6 @@
 
     // Useful counts visible in the clickable area
     if (srcCount) pills.appendChild(el('span', { class: 'sf-pill', text: `Source: ${srcCount}` }));
-    if (hasAbrok) pills.appendChild(el('span', { class: 'sf-pill', text: `ABROK: ${abrokCount}` }));
     if (hasArtifacts) pills.appendChild(el('span', { class: 'sf-pill warn', text: `Artifacts: ${artCount}` }));
     if (pr) pills.appendChild(el('span', { class: 'sf-pill', text: `PR: #${pr}` }));
     if (bench) pills.appendChild(el('span', { class: 'sf-pill', text: `Bench: ${bench}` }));
@@ -407,21 +388,6 @@
       linkList.appendChild(linkRow(`Source code: ${sc.label || sc.type || 'archive'}`, sc.url, copyUrl));
     }
     body.appendChild(linkList);
-
-    // Section: ABROK
-    if (showAbrok.checked && hasAbrok) {
-      body.appendChild(el('div', { class: 'sf-section-title', text: `ABROK builds (${abrokCount})` }));
-      const note = el('div', { class: 'sf-section-note', text: 'Direct binaries hosted externally; URLs shown explicitly.' });
-      body.appendChild(note);
-
-      const abrokList = document.createElement('div');
-      abrokList.className = 'sf-linklist';
-      for (const d of (c.downloads.abrok_eu || [])) {
-        if (!d?.url) continue;
-        abrokList.appendChild(linkRow(d.label || 'ABROK build', d.url, copyUrl));
-      }
-      body.appendChild(abrokList);
-    }
 
     // Section: Artifacts
     if (showArtifacts.checked && hasArtifacts) {
@@ -529,7 +495,7 @@
     populateYearMonth(data);
 
     datasetMeta.textContent = data.generated
-      ? `Generated: ${safeText(data.generated)} | Commits: ${safeText(data.total_commits ?? '')} | Binaries: ${safeText(data.total_binaries ?? '')} | Artifacts: ${safeText(data.total_artifacts ?? '')}`
+      ? `Generated: ${safeText(data.generated)} | Commits: ${safeText(data.total_commits ?? '')} | Artifacts: ${safeText(data.total_artifacts ?? '')}`
       : 'Dataset loaded.';
 
     // Auto-load newest month
@@ -579,7 +545,6 @@
   });
 
   searchBox.addEventListener('input', () => applyFilters());
-  showAbrok.addEventListener('change', () => applyFilters());
   showArtifacts.addEventListener('change', () => applyFilters());
   pageSizeSel.addEventListener('change', () => applyFilters());
 

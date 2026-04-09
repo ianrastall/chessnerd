@@ -2,7 +2,7 @@
   "month": "2013-02",
   "commits": [
     {
-      "commit_num": 4330,
+      "commit_num": 4353,
       "hash": "0fc9a019",
       "short": "0fc9a019",
       "author": "jundery <jundery@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove strange use of the ternary operator\n\nNote that we read shared data without lock\nprotection, so code is theoretically prone to\ntorn reads. But, first splitPoint pointer\nnever changes, and alpha is of integer type so\nit is read in a single DWORD access.\n\nNo functional change.\n",
       "subject": "Remove strange use of the ternary operator"
     },
     {
-      "commit_num": 4331,
+      "commit_num": 4354,
       "hash": "68d1bebd",
       "short": "68d1bebd",
       "author": "jundery <jundery@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Split() clean up locking\n\nOnly unlock and relock when idle_loop() is actually called\n\nNo functional change\n",
       "subject": "Split() clean up locking"
     },
     {
-      "commit_num": 4332,
+      "commit_num": 4355,
       "hash": "57b6df48",
       "short": "57b6df48",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge Lucas's \"SEE pruning at PV nodes\"\n\nbench: 4922272\n",
       "subject": "Merge Lucas's \"SEE pruning at PV nodes\""
     },
     {
-      "commit_num": 4333,
+      "commit_num": 4356,
       "hash": "bc38efd1",
       "short": "bc38efd1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove pruning condition on alpha\n\nFurther simplifying on Lucas's idea, seems reliable\nin tests:\n\nELO: 2.15 +-7 (95%) LOS: 84.9%\nTotal: 9999 W: 1831 L: 1769 D: 6399\n",
       "subject": "Remove pruning condition on alpha"
     },
     {
-      "commit_num": 4334,
+      "commit_num": 4357,
       "hash": "dbd28bc7",
       "short": "dbd28bc7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid a tricky line in shelter_storm()\n\nkf = (kf == FILE_A) ? kf++ : ....\n\nis tricky becuase kf is updated twice and it happens\nto do the right thing just by accident.\n\nRewrite in a better way.\n\nSpotted by pdimov\n\nNo functional change.\n",
       "subject": "Avoid a tricky line in shelter_storm()"
     },
     {
-      "commit_num": 4335,
+      "commit_num": 4358,
       "hash": "ccf21f55",
       "short": "ccf21f55",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert Readme to markdown format\n\nLooks better on GitHub, that supports this format.\n\nNo functional change.\n",
       "subject": "Convert Readme to markdown format"
     },
     {
-      "commit_num": 4336,
+      "commit_num": 4359,
       "hash": "335b57b5",
       "short": "335b57b5",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prune negative SEE moves also in PV nodes\n\nThis patch is actually the sum of two contributions that\nhave been tested independently:\n\n1) Pruning of negative SEE moves in PV\n\nAfter 10000 games at 20+0.05\nELO: 5.18 +-7 (95%) LOS: 99.2%\nTotal: 10000 W: 1952 L: 1803 D: 6245\n\n2) Remove of bestValue > VALUE_MATED_IN_MAX_PLY condition\n\nAfter 23000 games at 20+0.05\nELO: 1.63 +-4 (95%) LOS: 88.1%\nTotal: 23000 W: 4232 L: 4124 D: 14644\n\nThe whole patch as been re-tested at long TC with positive results:\n\nAfter 10000 games at 60+0.05\nELO: 4.31 +-7 (95%) LOS: 98.3%\nTotal: 10000 W: 1765 L: 1641 D: 6594\n",
       "subject": "Prune negative SEE moves also in PV nodes"
     },
     {
-      "commit_num": 4337,
+      "commit_num": 4360,
       "hash": "1d1fcf80",
       "short": "1d1fcf80",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use DD-MM-YY as date format\n\nIn engine name and version number.\n\nNo functional change.\n",
       "subject": "Use DD-MM-YY as date format"
     },
     {
-      "commit_num": 4338,
+      "commit_num": 4361,
       "hash": "373503f4",
       "short": "373503f4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Statically link std libraries under mingw\n\nAllows for easier redistribution.\n\nNo functional change.\n",
       "subject": "Statically link std libraries under mingw"
     },
     {
-      "commit_num": 4339,
+      "commit_num": 4362,
       "hash": "9a1d5f0f",
       "short": "9a1d5f0f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge Gary's bishop_pin patch\n\nGive a bonus if a bishop can pin a piece or can\ngive a discovered check through an x-ray attack.\n\nSeems good after 24000 games at 15\"+0.05 (single thread):\n\nELO: 12.30 +- 99%: 5.79 95%: 4.40 LOS: 100.00%\nTotal: 24000 W: 4931 L: 4082 D: 14987\n\nbench: 4917064\n",
       "subject": "Merge Gary's bishop_pin patch"
     },
     {
-      "commit_num": 4340,
+      "commit_num": 4363,
       "hash": "ea4e22be",
       "short": "ea4e22be",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'master' into bishop_pin_clop\n",
       "subject": "Merge branch 'master' into bishop_pin_clop"
     },
     {
-      "commit_num": 4341,
+      "commit_num": 4364,
       "hash": "dc8c6ea2",
       "short": "dc8c6ea2",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Bring back original bonus\n",
       "subject": "Bring back original bonus"
     },
     {
-      "commit_num": 4342,
+      "commit_num": 4365,
       "hash": "d5e49a3a",
       "short": "d5e49a3a",
       "author": "jundery <jundery@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Print leading zeroes in hash keys\n\nAnd convert to uppercase. Reset the stream to dec too.\n\n[Edit: Also fixed the hash key in Position::pretty()]\n",
       "subject": "Print leading zeroes in hash keys"
     },
     {
-      "commit_num": 4343,
+      "commit_num": 4366,
       "hash": "c5ec94d0",
       "short": "c5ec94d0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update copyright year\n\nNo functional change.\n",
       "subject": "Update copyright year"
     },
     {
-      "commit_num": 4344,
+      "commit_num": 4367,
       "hash": "d570260a",
       "short": "d570260a",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Back to CLOP average values\n",
       "subject": "Back to CLOP average values"
     },
     {
-      "commit_num": 4345,
+      "commit_num": 4368,
       "hash": "76caef8b",
       "short": "76caef8b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Account for gamePly after each move\n\nRename startPosPly to gamePly and increment/decrement\nthe variable after each do/undo move. This adds a little\noverhead in do_move() but we will need to have the\ngame ply during the search for the next patches now\nunder test.\n\nCurrently we don't increment gamePly in do_null_move()\nbecuase it is not needed at the moment. Could change\nin the future.\n\nAs a nice side effect we can now remove an hack in\nstartpos_ply_counter().\n\nNo functional change.\n",
       "subject": "Account for gamePly after each move"
     },
     {
-      "commit_num": 4346,
+      "commit_num": 4369,
       "hash": "5a156df7",
       "short": "5a156df7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge Gary's king safety tweak\n\nStill well within error bars, so probably not a big improvement,\nbut may be worthwhile. I will let the test keep running. The idea\nfor the tweak came from the TCEC game against Houdini. Stockfish saw\nit as a draw, well past when it should have seen problems. King safety\nwas off, since it was QN and pawns only, but in fact the king was\nquite vulnerable.\n\nAfter 8000 games at 60/1 (Gary's test)\n\nELO: -0.43 +- 99%: 10.02 95%: 7.62\nWins: 1235 Losses: 1245 Draws: 5520 Total: 8000\n\nPGN of game against houdini. Moves 55-59 it was seeing a draw, and\nHoudini was seeing a good sized advantage for black. With the change,\nStockfish now recognizes that moving the king there is a bad idea.\n\n[Event \"nTCEC - Stage 1 - Season 1\"]\n[Site \"http://www.tcec-chess.net\"]\n[Date \"2013.02.07\"]\n[Round \"4.2\"]\n[White \"Stockfish 2.31\"]\n[Black \"Houdini 3.0\"]\n[Result \"0-1\"]\n[Variant \"normal\"]\n\n1. Nf3 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 O-O 5. a3 Bxc3 6. Qxc3 b6 7. b4 a5 8. Bb2\naxb4 9. axb4 Rxa1+ 10. Bxa1 Na6 11. e3 Qe7 12. b5 Nc5 13. Qc2 Bb7 14. Be2 d6\n15. O-O Ra8 16. Bb2 h6 17. Ra1 Rxa1+ 18. Bxa1 e5 19. Qa2 Be4 20. Ne1 Bg6\n21. Bb2 Kh7 22. f3 Nfd7 23. Bc3 h5 24. Qa1 h4 25. Kf1 Qf6 26. Qa7 Qd8 27. Qa2\ne4 28. Qa1 h3 29. g3 exf3 30. Nxf3 Bf5 31. Bd4 g6 32. Kf2 Kg8 33. Qa3 Bg4\n34. d3 Qc8 35. Bxc5 bxc5 36. Ke1 Qb7 37. e4 Bxf3 38. Bxf3 Ne5 39. Be2 Qc8\n40. Qa6 Qd8 41. Qa5 Kh7 42. Kd1 Kg7 43. Qa7 Kg8 44. Qa5 Kh7 45. Qa7 Kg7 46. Qa5\nQb8 47. Kd2 Kh7 48. Kc2 Kg8 49. Qa6 Qd8 50. Qa5 Qf6 51. Qe1 Kg7 52. Qf1 Qe6\n53. Qe1 Qd7 54. Qc1 Qe8 55. Kc3 Qa8 56. Kb3 Kh7 57. Qa3 Qd8 58. Qc1 c6 59. Qc3\nQb6 60. Ka4 Qb7 61. Qd2 Nd7 62. Qc3 Qa7+ 63. Kb3 Kg8 64. Bg4 cxb5 65. cxb5 Nb6\n66. Bxh3 Qa4+ 67. Kb2 Qd1 68. Ka3 Qe2 69. Kb3 Qh5 70. Bg2 Qxh2 71. Qf6 Qxg3\n72. Bf1 Qe3 73. Kc2 Na4 74. b6 Nxb6 75. Qd8+ Kg7 76. Qxb6 Qf2+ 77. Kc3 Qxf1\n78. Qxd6 Qf6+ 79. Qxf6+ Kxf6 80. Kc4 g5 81. Kxc5 Ke5 82. d4+ Kxe4 83. d5 g4\n84. d6 g3 85. d7 g2 86. d8=Q g1=Q+ 87. Kb5 Qb1+ 88. Ka4 Qa2+ 89. Kb4 f5\n90. Qe8+ Kf4 91. Qg6 Qd5 92. Qg1 Qe4+ 93. Ka5 Qe2 94. Qg8 Kf3 95. Qd5+ Qe4\n96. Qd1+ Kg2 97. Qd2+ Kf1 98. Qh2 f4 99. Qh3+ Ke2 100. Qg4+ Kd2 101. Qg5 Kc2\n102. Qh4 0-1\n\nbench: 5518286\n",
       "subject": "Merge Gary's king safety tweak"
     },
     {
-      "commit_num": 4347,
+      "commit_num": 4370,
       "hash": "e0dfb0bc",
       "short": "e0dfb0bc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further speed up bitbase generation\n\nAnother trick, along the same lines of previous\npatch. This time we first check positions with\nwhite side to move that, becuase we start with\npawn on rank 7, are easily classified as wins,\nthen black ones.\n\nNumber of cycles reduced to 15 !\n\nBecuase now it is faster we can remove a lot of\ncode to detect theoretical draws. We will calculate\nthem anyhow, although a bit slower, but the speed\nup trick more than compensates it.\n\nVerified that generated bitbases match original ones.\n\nNo functional change.\n",
       "subject": "Further speed up bitbase generation"
     },
     {
-      "commit_num": 4348,
+      "commit_num": 4371,
       "hash": "3922ac2f",
       "short": "3922ac2f",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add new clop tuned value\n",
       "subject": "Add new clop tuned value"
     },
     {
-      "commit_num": 4349,
+      "commit_num": 4372,
       "hash": "66a1a774",
       "short": "66a1a774",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'master' into bishop_pin_clop\n",
       "subject": "Merge branch 'master' into bishop_pin_clop"
     },
     {
-      "commit_num": 4350,
+      "commit_num": 4373,
       "hash": "cd0ecace",
       "short": "cd0ecace",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Use CLOP mean value instead of max\"\n\nThis reverts commit d0c2faa5fd9ad05f865d2a69b59efab43b2be421.\n",
       "subject": "Revert \"Use CLOP mean value instead of max\""
     },
     {
-      "commit_num": 4351,
+      "commit_num": 4374,
       "hash": "d0c2faa5",
       "short": "d0c2faa5",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use CLOP mean value instead of max\n",
       "subject": "Use CLOP mean value instead of max"
     },
     {
-      "commit_num": 4352,
+      "commit_num": 4375,
       "hash": "671f24ff",
       "short": "671f24ff",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'simplify_eval' into bishop_pin_clop\n",
       "subject": "Merge branch 'simplify_eval' into bishop_pin_clop"
     },
     {
-      "commit_num": 4353,
+      "commit_num": 4376,
       "hash": "10d29add",
       "short": "10d29add",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Speedup KPK bitbase of 25%\n\nChange the way the index is coded so that\nnow looping from 0 to IndexMax generates\nthe pawns from RANK_7 down to RANK2.\n\nBecuase positions with pawns at RANK_7\nare easily classified as wins/draws, this\nsmall trick allows to reduce the number\nof needed iterations from 30 down to 26!\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Speedup KPK bitbase of 25%"
     },
     {
-      "commit_num": 4354,
+      "commit_num": 4377,
       "hash": "f32f8994",
       "short": "f32f8994",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "CLOP tuned\n",
       "subject": "CLOP tuned"
     },
     {
-      "commit_num": 4355,
+      "commit_num": 4378,
       "hash": "17b71fe5",
       "short": "17b71fe5",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add clop parameters\n",
       "subject": "Add clop parameters"
     },
     {
-      "commit_num": 4356,
+      "commit_num": 4379,
       "hash": "f2950ae2",
       "short": "f2950ae2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify bitbase.cpp\n\nUse a std::vector to store positions and\nrearrange KPKPosition.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify bitbase.cpp"
     },
     {
-      "commit_num": 4357,
+      "commit_num": 4380,
       "hash": "30c2e382",
       "short": "30c2e382",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'master' into simplify_eval\n",
       "subject": "Merge branch 'master' into simplify_eval"
     },
     {
-      "commit_num": 4358,
+      "commit_num": 4381,
       "hash": "a7cdf729",
       "short": "a7cdf729",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Bishop pins only\n",
       "subject": "Bishop pins only"
     },
     {
-      "commit_num": 4359,
+      "commit_num": 4382,
       "hash": "733d0099",
       "short": "733d0099",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename and de-templetize sort()\n\nRename to insertion_sort so to avoid confusion\nwith std::sort, also move it to movepicker.cpp\nand use the bit slower std::stable_sort in\nsearch.cpp where it is used in not performance\ncritical paths.\n\nNo functional change.\n",
       "subject": "Rename and de-templetize sort()"
     },
     {
-      "commit_num": 4360,
+      "commit_num": 4383,
       "hash": "0be7b8c5",
       "short": "0be7b8c5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further simplify first_entry()\n\nWe can encode the ClusterSize directly in the\nhashMask, this allows to skip the left shift.\n\nThere is no real change, but bench number is now\ndifferent because instead of using the lowest order\nbits of the key to index the start of the cluster,\nnow we don't use the last two lsb bits that are\nalways set to zero (cluster size is 4). So for\ninstance, if 10 bits are used to index the cluster,\ninstead of bits [9..0] now we use bits [11..2].\nThis changes the positions that end up in the same\ncluster affecting TT hits and so bench is different.\n\nAlso some renaming while there.\n\nbench: 5383795\n",
       "subject": "Further simplify first_entry()"
     },
     {
-      "commit_num": 4361,
+      "commit_num": 4384,
       "hash": "c6983626",
       "short": "c6983626",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Microptimize first_entry() for 32bits\n\nDo a 32bit bitwise 'and' instead of a 64bit\nsubtract and bitwise 'and'.\n\nThis is possible because even in the biggest\nhash table case (8GB) the number of entries\nis 2^29 so storable in an unsigned int.\n\nNo functional change.\n",
       "subject": "Microptimize first_entry() for 32bits"
     },
     {
-      "commit_num": 4362,
+      "commit_num": 4385,
       "hash": "fe335266",
       "short": "fe335266",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire TTCluster and simplify TT\n\nAlso some renaming while there.\n\nNo functional change.\n",
       "subject": "Retire TTCluster and simplify TT"
     },
     {
-      "commit_num": 4363,
+      "commit_num": 4386,
       "hash": "3f44be9b",
       "short": "3f44be9b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify move_to_san()\n\nNicely simplify disambiguation code.\n\nNo functional change.\n",
       "subject": "Simplify move_to_san()"
     },
     {
-      "commit_num": 4364,
+      "commit_num": 4387,
       "hash": "0c06b450",
       "short": "0c06b450",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Slight tweak to king safety.  Bench: 5534531\n",
       "subject": "Slight tweak to king safety.  Bench: 5534531"
     },
     {
-      "commit_num": 4365,
+      "commit_num": 4388,
       "hash": "e5bc79fb",
       "short": "e5bc79fb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire slavesPositions\n\nSave the current active position in each Thread\ninstead of keeping a centralized array in struct\nSplitPoint.\n\nThis allow to skip a memset() call at each split.\n\nNo functional change.\n",
       "subject": "Retire slavesPositions"
     },
     {
-      "commit_num": 4366,
+      "commit_num": 4389,
       "hash": "880726c1",
       "short": "880726c1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add const qualifer to go()\n\nObsolete renmant of when position was directly\npassed to the search instead of being copied\nfor the main thread as is now.\n\nFrom Jundery.\n\nNo functional change.\n",
       "subject": "Add const qualifer to go()"
     },
     {
-      "commit_num": 4367,
+      "commit_num": 4390,
       "hash": "50a7200b",
       "short": "50a7200b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Workaround value-initialization in MSVC\n\nThe syntax splitPoints() should force the compiler to\nvalue-initialize the array and because there is no\nuser defined c'tor it falls back on zero-initialization.\n\nUnfortunatly this is broken in MSVC compilers, because\nvalue initialization for non-POD types is not supported,\nso left splitPoints un-initialized and add in split()\ninitialization of slavesPositions, that is the only\nmember not already set at split time.\n\nThis fixes an assert under MSVC when running with\nmore than one thread.\n\nSpotted and reported by Jundery.\n\nNo functional change.\n",
       "subject": "Workaround value-initialization in MSVC"
     },
     {
-      "commit_num": 4368,
+      "commit_num": 4391,
       "hash": "14c2c139",
       "short": "14c2c139",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change slave_available() API\n\nTo return a pointer to the available\nthread instead of a bool. This allows\nto simplify the core loop in split().\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Change slave_available() API"
     },
     {
-      "commit_num": 4369,
+      "commit_num": 4392,
       "hash": "f69c185e",
       "short": "f69c185e",
       "author": "jundery <jundery@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add const qualifer to check_is_dangerous\n\nNo functional change.\n",
       "subject": "Add const qualifer to check_is_dangerous"
     },
     {
-      "commit_num": 4370,
+      "commit_num": 4393,
       "hash": "88c3670e",
       "short": "88c3670e",
       "author": "jundery <jundery@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename posKey stored in the transposition table\n\n[Edit: Slightly extended by me]\n\nNo functional change.\n",
       "subject": "Rename posKey stored in the transposition table"
     },
     {
-      "commit_num": 4371,
+      "commit_num": 4394,
       "hash": "bf706c4a",
       "short": "bf706c4a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Slightly change split() API\n\nThis function \"returns\" two values: bestValue and bestMove\n\nInstead of returning one and passing as pointer the other\nbe consistent and pass as pointers both.\n\nNo functional change.\n",
       "subject": "Slightly change split() API"
     },
     {
-      "commit_num": 4372,
+      "commit_num": 4395,
       "hash": "1a414cd9",
       "short": "1a414cd9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Derive ThreadPool from std::vector\n\nPrefer sub-classing to composition in this case.\n\nNo functional change.\n",
       "subject": "Derive ThreadPool from std::vector"
     },
     {
-      "commit_num": 4373,
+      "commit_num": 4396,
       "hash": "91427c82",
       "short": "91427c82",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move split() under Thread\n\nPrevious renaming patch suggested this reformat:\nwhen a better naming leads to a better code!\n\nNo functional change.\n",
       "subject": "Move split() under Thread"
     },
     {
-      "commit_num": 4374,
+      "commit_num": 4397,
       "hash": "b8c5ea86",
       "short": "b8c5ea86",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Some renaming in split()\n\nNaming suggested by jundery.\n\nNo functional change.\n",
       "subject": "Some renaming in split()"
     },
     {
-      "commit_num": 4375,
+      "commit_num": 4398,
       "hash": "c67fb8ef",
       "short": "c67fb8ef",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add KBPKP endgame\n\nIt is a draw if pawns are on G or B files, weaker pawn is\non rank 7 and bishop can't attack the pawn.\n\nNo functional change (because it is very rare and does not appear in bench)\n",
       "subject": "Add KBPKP endgame"
     },
     {
-      "commit_num": 4376,
+      "commit_num": 4399,
       "hash": "6560e4cc",
       "short": "6560e4cc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Be clear about not LMR the ttMove\n\nCurrently a ttMove is reduced with ss->reduction = DEPTH_ZERO,\nso it is actually not reduced (as it should be), but the\ntrick works just becuase it happens that ttMove is the first\nto be tried and\n\nreduction(depth, 1)\n\nAlways returns zero. So explicitly forbid reduction of ttMove\nin the LMR condition. This is much clear and self-documented.\n\nNo functional change.\n",
       "subject": "Be clear about not LMR the ttMove"
     },
     {
-      "commit_num": 4377,
+      "commit_num": 4400,
       "hash": "08d615cc",
       "short": "08d615cc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Templetize score_xxx() functions\n\nSo to be style-wise aligned with the corresponding\ngenerate() functions.\n\nNo functional change.\n",
       "subject": "Templetize score_xxx() functions"
     },
     {
-      "commit_num": 4378,
+      "commit_num": 4401,
       "hash": "1c4e6d7e",
       "short": "1c4e6d7e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename prevents_move() to refutes()\n\nBetter! From DiscoCheck.\n\nNo functional change.\n",
       "subject": "Rename prevents_move() to refutes()"
     },
     {
-      "commit_num": 4379,
+      "commit_num": 4402,
       "hash": "5f58db8c",
       "short": "5f58db8c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correctly score enpassant captures\n\nSurprisingly this rare case was not considered\nwhen scoring a capture.\n\nAlso take in account that in the promotion case\nwe gain a new piece (typically a queen) but we\nlose the promoting pawn.\n\nThese small issues were present since Glaurung times!\n\nFound while browsing DiscoCheck sources\n\nbench: 5400063\n",
       "subject": "Correctly score enpassant captures"
     },
     {
-      "commit_num": 4380,
+      "commit_num": 4403,
       "hash": "ddbe6082",
       "short": "ddbe6082",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify History and Gains under a single Stats class\n\nHandling of History and Gains is almost the same, with\nthe exception of the update logic, so unify both\nclasses under a single Stats struct.\n\nNo functional change.\n",
       "subject": "Unify History and Gains under a single Stats class"
     },
     {
-      "commit_num": 4381,
+      "commit_num": 4404,
       "hash": "a72710c6",
       "short": "a72710c6",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify eval take 2.  Bench 5097444\n",
       "subject": "Simplify eval take 2.  Bench 5097444"
     },
     {
-      "commit_num": 4382,
+      "commit_num": 4405,
       "hash": "53051eef",
       "short": "53051eef",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire history.h\n\nAnd move the contents to movepick.cpp, where they are\nmostly used.\n\nIdea from DiscoCheck.\n\nNo functional change (bench 5379503)\n",
       "subject": "Retire history.h"
     },
     {
-      "commit_num": 4383,
+      "commit_num": 4406,
       "hash": "9f94d228",
       "short": "9f94d228",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore \"fail-low of reduced\" and close regression\n\nThis reverts \"Threat Extensions\" and is the last of\nthis revert series.\n\nIn single-thread tests we should now be on par with 2.3.1\n",
       "subject": "Restore \"fail-low of reduced\" and close regression"
     },
     {
-      "commit_num": 4384,
+      "commit_num": 4407,
       "hash": "0901e121",
       "short": "0901e121",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,7 +1371,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Simplify Evaluation\"\n\nThis reverts commit 496c7497cb81de4383\n",

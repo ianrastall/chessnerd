@@ -2,7 +2,7 @@
   "month": "2009-08",
   "commits": [
     {
-      "commit_num": 6282,
+      "commit_num": 6305,
       "hash": "e33c9488",
       "short": "e33c9488",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Set LMRPVMoves to 10 instead of 14\n\nAfter 934 games at 1+0\n\nMod vs Orig +228 =493 -213 50.80%  474.5/934   +6 ELO\n\nSo it seems not negative and there is also the added\nbenefit to unify LMRPVMoves use in search_pv() and in\nroot list.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Set LMRPVMoves to 10 instead of 14"
     },
     {
-      "commit_num": 6283,
+      "commit_num": 6306,
       "hash": "76bed11f",
       "short": "76bed11f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Templetize functions to get pieces by type\n\nUse a single template to get bitboard representation of\nthe position given the type of piece as a constant.\n\nThis removes almost 80 lines of code and introduces an\nuniform notation to be used for querying for piece type.\n\nNo functional change and no performance change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Templetize functions to get pieces by type"
     },
     {
-      "commit_num": 6284,
+      "commit_num": 6307,
       "hash": "17c51192",
       "short": "17c51192",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire pieces_of_color_and_type()\n\nIt is used mainly in a bunch of inline oneliners\njust below its definition. So substitute it with\nthe explicit definition and avoid information hiding.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire pieces_of_color_and_type()"
     },
     {
-      "commit_num": 6285,
+      "commit_num": 6308,
       "hash": "cf71efc3",
       "short": "cf71efc3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "MovePicker: rename number_of_moves() in number_of_evasions()\n\nIt is more clear that only in that case the move number is\ncorrect, otherwise is only a partial quantity: the number of\nmoves of that phase.\n\nIn case of PH_EVASIONS instead we have only one phase.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "MovePicker: rename number_of_moves() in number_of_evasions()"
     },
     {
-      "commit_num": 6286,
+      "commit_num": 6309,
       "hash": "c9d364f9",
       "short": "c9d364f9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use pointers instead of array indices also for badCaptures\n\nTo have uniformity with moves array handling.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use pointers instead of array indices also for badCaptures"
     },
     {
-      "commit_num": 6287,
+      "commit_num": 6310,
       "hash": "97dd7568",
       "short": "97dd7568",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document index[] and pieceList[] are not invariants\n\nArray index[] and pieceList[] are not guaranteed to be\ninvariant to a do_move() + undo_move() sequence when a\ncapture move is involved.\n\nThe reason is that the captured piece is removed form\nthe list and substituted with the last one in do_move()\nwhile in undo_move() is added again but at the end of\nthe list.\n\nBecause index[] and pieceList[] are used in move generation\nto scan the pieces it means that moves will be generated\nin a different order before and after a do_move() + undo_move()\nsequence as, for instance, the one in Position::has_mate_threat()\n\nAfter latest patches, move generation could now be invoked\nalso by MovePicker c'tor and this explains why order of\npicked moves is different if MovePicker object is istantiated\nbefore or after a Position::has_mate_threat() call.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Document index[] and pieceList[] are not invariants"
     },
     {
-      "commit_num": 6288,
+      "commit_num": 6311,
       "hash": "af220cfd",
       "short": "af220cfd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Workaround a bug in Position::has_mate_threat()\n\nIt seems that pos.has_mate_threat() changes the position !\n\nSo that calling MovePicker c'tor before or after the\nhas_mate_threat() call changes the things !\n\nBug was unhidden by previous patch that makes MovePicker c'tor\nto generate, score and sort good captures under some circumstances.\n\nBecause scoring the captures is position dependent it seems that\nthe moves returned by MovePicker are different when c'tor is\ncalled before has_mate_threat()\n\nOf course this is only a workaround because the real bug is still\nhidden :-(\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Workaround a bug in Position::has_mate_threat()"
     },
     {
-      "commit_num": 6289,
+      "commit_num": 6312,
       "hash": "1130c8d8",
       "short": "1130c8d8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Skip TT_MOVES phase when possible\n\nIf we don't have tt moves to search skip the\nuseless loop associated with TT_MOVES phase.\n\nAnother 1% speed boost that brings this series\nto a +6.2% against original revision 595a90df\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Skip TT_MOVES phase when possible"
     },
     {
-      "commit_num": 6290,
+      "commit_num": 6313,
       "hash": "607ac068",
       "short": "607ac068",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Movepicker: take move's loop out of switch statement\n\nThis not only cleans up the code but gives another\nspeed boost of 1.8%\n\nFrom revision 595a90dfd0 we have increased pgo compiled binary\nspeed of a whopping +5.2% without any functional change !!\n\nThis is really awsome considering that we have also\ncut line count by 25 lines.\n\nSometime we spend days for getting an extra 1% from move\ngeneration while instead the biggest optimizations come\nfrom anonymous and apparently dull parts of the code.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Movepicker: take move's loop out of switch statement"
     },
     {
-      "commit_num": 6291,
+      "commit_num": 6314,
       "hash": "e9de96f0",
       "short": "e9de96f0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"null move reorder\" series\n\nDoes not seem to improve on the standard, latest results\nfrom Joona after 2040 games are negative:\n\nOrig - Mod: 454 - 424 - 1162\n\nAnd is more or less the same I got few days ago.\n\nSo revert for now.\n\nVerified same functionality of 595a90dfd\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"null move reorder\" series"
     },
     {
-      "commit_num": 6292,
+      "commit_num": 6315,
       "hash": "9ab84a81",
       "short": "9ab84a81",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert handling of tt moves and killers to standard form\n\nUse the same way of loop along the move list used for\nthe others move kinds so to be consistent in get_next_move()\n\nAnd a bit of the usual clean up too, but just a bit.\n\nIt is even a bit (+0.3%) faster now. ;-)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert handling of tt moves and killers to standard form"
     },
     {
-      "commit_num": 6293,
+      "commit_num": 6316,
       "hash": "9e4befe3",
       "short": "9e4befe3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use pointers instead of array indices in MovePicker\n\nThis avoids calculating the array entry position\nat each access and gives another boost of almost 1%.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use pointers instead of array indices in MovePicker"
     },
     {
-      "commit_num": 6294,
+      "commit_num": 6317,
       "hash": "ac65b14d",
       "short": "ac65b14d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Try null move before captures\n\nAlways after TT move but before captures.\n\nThis seems a better setup against version before this\npatch.\n\nAfter 999 games at 1+0\n\nMod - Orig +252 =527 -220 +11 ELO\n\nUnfortunatly it does not seems to improve on the standard\nversion, with null move outside of movepicker (595a90df) with\nthe latest speed-up patches added in.\n\nAfter 999 games at 1+0\n\nMod - Standard +244 =506 -249 -2 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Try null move before captures"
     },
     {
-      "commit_num": 6295,
+      "commit_num": 6318,
       "hash": "6cf28d4a",
       "short": "6cf28d4a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change the flow in wich moves are generated and picked\n\nIn MovePicker we get the next move with pick_move_from_list(),\nthen check if the return value is equal to MOVE_NONE and\nin this case we update the state to the new phase.\n\nThis patch reorders the flow so that now from pick_move_from_list()\nrenamed get_next_move() we directly call go_next_phase() to\ngenerate and sort the next bunch of moves when there are no more\nmove to try. This avoids to always check for pick_move_from_list()\nreturned value and the flow is more linear and natural.\n\nAlso use a local variable instead of a pointer dereferencing in a\ntime critical switch statement in get_next_move()\n\nWith this patch alone we have an incredible speed up of 3.2% !!!\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Change the flow in wich moves are generated and picked"
     },
     {
-      "commit_num": 6296,
+      "commit_num": 6319,
       "hash": "129cde00",
       "short": "129cde00",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Disable again null move at depth == OnePly\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Disable again null move at depth == OnePly"
     },
     {
-      "commit_num": 6297,
+      "commit_num": 6320,
       "hash": "595a90df",
       "short": "595a90df",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Clean killers handling in movepicker\n\nOriginal patch from Joona with added optimizations\nby me.\n\nGreat cleanup of MovePicker with speed improvment of 1%\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Clean killers handling in movepicker"
     },
     {
-      "commit_num": 6298,
+      "commit_num": 6321,
       "hash": "b088f0ae",
       "short": "b088f0ae",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use special null move technique in low depth.\n\nTry good captures before null move when depth < 3 * OnePly.\nUse this kind of null move also in Depth == OnePly.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use special null move technique in low depth."
     },
     {
-      "commit_num": 6299,
+      "commit_num": 6322,
       "hash": "e2174074",
       "short": "e2174074",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro-optimze extension()\n\nExplicitly write the conditions for pawn to 7th\nand passed pawn instead of wrapping in redundant\nhelpers.\n\nAlso retire the now unused move_is_pawn_push_to_7th()\nand the never used move_was_passed_pawn_push() and\nmove_is_deep_pawn_push()\n\nFunction extension() is so time critical that this\nsimple patch speeds up the pgo compile of 0.5% and\nit is also more clear what actually happens there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Micro-optimze extension()"
     },
     {
-      "commit_num": 6300,
+      "commit_num": 6323,
       "hash": "a5d699d6",
       "short": "a5d699d6",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use nullMove only through MovePicker.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use nullMove only through MovePicker."
     },
     {
-      "commit_num": 6301,
+      "commit_num": 6324,
       "hash": "f6d24529",
       "short": "f6d24529",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add Null move support to MovePicker.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add Null move support to MovePicker."
     },
     {
-      "commit_num": 6302,
+      "commit_num": 6325,
       "hash": "268c53ac",
       "short": "268c53ac",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Create useNullMove local variable\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Create useNullMove local variable"
     },
     {
-      "commit_num": 6303,
+      "commit_num": 6326,
       "hash": "20788783",
       "short": "20788783",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'master' of git-Stockfish@free2.projectlocker.com:sf\n",
       "subject": "Merge branch 'master' of git-Stockfish@free2.projectlocker.com:sf"
     },
     {
-      "commit_num": 6304,
+      "commit_num": 6327,
       "hash": "d1d44376",
       "short": "d1d44376",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove a local variable from pop_1st_bit()\n\nRemove the 'b' uint32_t local variable.\nOptimized assembly is more or less the same\n(one 'mov' instruction less), but now it is\nwritten in a way more similar to the final assembly\nflow so it should be easier for compiler to optimize.\n\nAlso guarantee that BitTable[] is always aligned.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove a local variable from pop_1st_bit()"
     },
     {
-      "commit_num": 6305,
+      "commit_num": 6328,
       "hash": "ba04eb04",
       "short": "ba04eb04",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Poly ampli+bias values after 73831 games\n\nVerified correct against tuning branch.\n\nAfter 999 games at 1+0\n\nMod vs Orig +257 =510 -232 51.20%  +9 ELO\n\nVery small increase but an increase anyway !\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Poly ampli+bias values after 73831 games"
     },
     {
-      "commit_num": 6306,
+      "commit_num": 6329,
       "hash": "ed347e7c",
       "short": "ed347e7c",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Added a few new targets to the Makefile for OS X with icpc.\n\nThe following new targets were added:\n   * osx-icc32: 32-bit x86 compiled with icpc.\n   * osx-icc64: 64-bit x86 compiled with icpc.\n   * osx-icc32-profile: 32-bit x86 compiled with icpc and pgo.\n   * osx-icc64-profile: 64-bit x86 compiled with icpc and pgo.\n",
       "subject": "Added a few new targets to the Makefile for OS X with icpc."
     },
     {
-      "commit_num": 6307,
+      "commit_num": 6330,
       "hash": "95af1e28",
       "short": "95af1e28",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix some asserts raised by is_ok()\n\nThere were two asserts.\n\nThe first was raised because is_ok() was called at the\nbeginning of do_castle_move() and this is wrong after\nthe last code reformatting because at that point the state\nis already modified by the caller do_move().\n\nThe second, raised by debugIncrementalEval, was due to a\nrounding error in compute_value() that occurs because\nTempoValueEndgame was updated in an odd number by patch\n\n\"Merge Joona Kiiski evaluation tweaks\" (3ed603cd) of 13/3/2009\n\nThis line in compute_value() is the guilty one:\n\nresult += (side_to_move() == WHITE)? TempoValue / 2 : -TempoValue / 2;\n\nThe fix is to increment TempoValueEndgame so to be even.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix some asserts raised by is_ok()"
     },
     {
-      "commit_num": 6308,
+      "commit_num": 6331,
       "hash": "e9aa20ad",
       "short": "e9aa20ad",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fixed incorrect material key update when making promotion moves.\n",
       "subject": "Fixed incorrect material key update when making promotion moves."
     },
     {
-      "commit_num": 6309,
+      "commit_num": 6332,
       "hash": "e01fefbb",
       "short": "e01fefbb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "More use of memset() in Position::clear()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "More use of memset() in Position::clear()"
     },
     {
-      "commit_num": 6310,
+      "commit_num": 6333,
       "hash": "e4fc9578",
       "short": "e4fc9578",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Little do_move() micro optimizations\n\nAlso a few remaining style touches.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Little do_move() micro optimizations"
     },
     {
-      "commit_num": 6311,
+      "commit_num": 6334,
       "hash": "693b38a5",
       "short": "693b38a5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better clarify how pieceList[] and index[] work\n\nRearrange the code a bit to be more self-documenting.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better clarify how pieceList[] and index[] work"
     },
     {
-      "commit_num": 6312,
+      "commit_num": 6335,
       "hash": "fbec55e5",
       "short": "fbec55e5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify patch series summary\n\nThis patch seems bigger then what actually is.\n\nIt just moves some code around and adds a bit of coding style fixes\nto do_move() and undo_move() so to have uniformity of naming in both\nfunctions.\n\nThe diffstat for the whole patch series is\n\n239 insertions(+), 426 deletions(-)\n\nAnd final MSVC pgo build is even a bit faster:\n\nBefore 448.051 nodes/sec\n\nAfter 453.810  nodes/sec (+1.3%)\n\nNo functional change (tested on more then 100M of nodes)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify patch series summary"
     },
     {
-      "commit_num": 6313,
+      "commit_num": 6336,
       "hash": "05e70d67",
       "short": "05e70d67",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify undo_ep_move(m)\n\nIntegrate undo_ep_move in undo_move() this reduces line count\nand code readibility.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify undo_ep_move(m)"
     },
     {
-      "commit_num": 6314,
+      "commit_num": 6337,
       "hash": "b4cb1a3a",
       "short": "b4cb1a3a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify undo_promotion_move()\n\nIntegrate do_ep_move in undo_move() this reduces line count\nand code readibility.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify undo_promotion_move()"
     },
     {
-      "commit_num": 6315,
+      "commit_num": 6338,
       "hash": "ec14fb1b",
       "short": "ec14fb1b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify do_promotion_move()\n\nIntegrate do_promotion_move() in do_move() this reduces line count\nand code readibility.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify do_promotion_move()"
     },
     {
-      "commit_num": 6316,
+      "commit_num": 6339,
       "hash": "cb506d3b",
       "short": "cb506d3b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify do_ep_move()\n\nIntegrate do_ep_move in do_move() this reduces line count\nand code readibility.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Unify do_ep_move()"
     },
     {
-      "commit_num": 6317,
+      "commit_num": 6340,
       "hash": "e0c47a6c",
       "short": "e0c47a6c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "L1/L2 friendly PhaseTable[]\n\nIn Movepicker c'tor we access during initialization one of\nMainSearchPhaseIndex..QsearchWithoutChecksPhaseIndex globals.\n\nPostpone definition of PhaseTable[] just after them so that\nwhen PhaseTable[] will be accessed later in get_next_move()\nit will be already present in L1/L2.\n\nIt works like an implicit prefetching of PhaseTable[].\n\nAlso shrink PhaseTable[] to fit an L1 cache line of 16 bytes\nusing uint8_t instead of int.\n\nThis apparentely innocuous patch gives an astonish speed\nup of 1.6% under MSVC 2010 beta, pgo optimized !\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "L1/L2 friendly PhaseTable[]"
     },
     {
-      "commit_num": 6318,
+      "commit_num": 6341,
       "hash": "f3d0b76f",
       "short": "f3d0b76f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use optimized pop_1st_bit() under Windows 64 with icc\n\nIntel compiler can handle this code even under Windows.\n\nSo lift the costrain.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use optimized pop_1st_bit() under Windows 64 with icc"
     },
     {
-      "commit_num": 6319,
+      "commit_num": 6342,
       "hash": "bfd4421f",
       "short": "bfd4421f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better naming and document some endgame functions\n\nIn particular the generic scaling functions.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better naming and document some endgame functions"
     },
     {
-      "commit_num": 6320,
+      "commit_num": 6343,
       "hash": "fd12e8cb",
       "short": "fd12e8cb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Finally fix prefetch on Linux\n\nIt was due to a missing -msse compiler option !\n\nWithout this option the CPU silently discards\nprefetcht2 instructions during execution.\n\nAlso added a (gcc documented) hack to prevent Intel\ncompiler to optimize away the prefetches.\n\nSpecial thanks to Heinz for testing and suggesting\nimprovments. And for Jim for testing icc on Windows.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Finally fix prefetch on Linux"
     },
     {
-      "commit_num": 6321,
+      "commit_num": 6344,
       "hash": "166c09a7",
       "short": "166c09a7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reuse 5 slots instead of 4\n\nBut this time with the guarantee of an always aligned\naccess so that prefetching is not adversely impacted.\n\nOn Joona PC\n1+0, 64Mb hash:\n\nOrig - Mod: 174 - 237 - 359\n\nInstead after 1000 games at 1+0 with 128MB hash size\nwe are at + 1 ELO (just 4 games of difference).\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reuse 5 slots instead of 4"
     },
     {
-      "commit_num": 6322,
+      "commit_num": 6345,
       "hash": "8d369600",
       "short": "8d369600",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Double prefetch on Windows\n\nAfter fixing the cpu frequency with RightMark tool I was\nable to test speed all the different prefetch combinations.\n\nHere the results:\n\nOS Windows Vista 32bit, MSVC compile\nCPU Intecl Core 2 Duo T5220 1.55 GHz\nbench on depth 12, 1 thread, 26552844 nodes searched\nresults in nodes/sec\n\nno-prefetch\n402486, 402005, 402767, 401439, 403060\n\nsingle prefetch (aligned 64)\n410145, 409159, 408078, 410443, 409652\n\ndouble prefetch (aligned 64) 0+32\n414739, 411238, 413937, 414641, 413834\n\ndouble prefetch (aligned 64) 0+64\n413537, 414337, 413537, 414842, 414240\n\nAnd now also some crazy stuff:\n\nsingle prefetch (aligned 128)\n410145, 407395, 406230, 410050, 409949\n\ndouble prefetch (aligned 64) 0+0\n409753, 410044, 409456\n\nsingle prefetch (aligned 64) +32\n408379, 408272, 406809\n\nsingle prefetch (aligned 64) +64\n408279, 409059, 407395\n\nSo it seems the best is a double prefetch at the addres + 32 or +64,\nI will choose the second one because it seems more natural to me.\n\nIt is still a mystery why it doesn't work under Linux :-(\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Double prefetch on Windows"
     },
     {
-      "commit_num": 6323,
+      "commit_num": 6346,
       "hash": "f4140ecc",
       "short": "f4140ecc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid Intel compiler optimizes away prefetching\n\nWithout this hack Intel compiler happily optimizes\naway the gcc builtin call.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid Intel compiler optimizes away prefetching"
     },
     {
-      "commit_num": 6324,
+      "commit_num": 6347,
       "hash": "60b5da4c",
       "short": "60b5da4c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use aligned prefetch address\n\nPrefetch always form a chache line boundary. It seems\nthat if prefetch address is not cache line aligned then\nperformance is adversely impacted.\n\nHopefully we will resuse that 32 bits of padding for something\nuseful in the future.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use aligned prefetch address"
     },
     {
-      "commit_num": 6325,
+      "commit_num": 6348,
       "hash": "55c46b23",
       "short": "55c46b23",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove old BishopPairBonus constants\n\nNow that we have poly imbalance these ones\nare no more used.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove old BishopPairBonus constants"
     },
     {
-      "commit_num": 6326,
+      "commit_num": 6349,
       "hash": "76ae0e36",
       "short": "76ae0e36",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Enable prefetch also for gcc\n\nThis fix a compile error under Linux with gcc when\nthere aren't the intel dev libraries.\n\nAlso simplify the previous patch moving TT definition\nfrom search.cpp to tt.cpp so to avoid using passing a\npointer to TT to the current position.\n\nFinally simplify do_move(), now we miss a prefetch in the\nrare case of setting an en-passant square but code is\nmuch cleaner and performance penalty is almost zero.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Enable prefetch also for gcc"
     },
     {
-      "commit_num": 6327,
+      "commit_num": 6350,
       "hash": "4251eac8",
       "short": "4251eac8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Try to prefetch as soon as position key is ready\n\nMove prefetching code inside do_move() so to allow a\nvery early prefetching and to put as many instructions\nas possible between prefetching and following retrieve().\n\nWith this patch retrieve() times are cutted of another 25%\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Try to prefetch as soon as position key is ready"
     },
     {
-      "commit_num": 6328,
+      "commit_num": 6351,
       "hash": "cd4604b0",
       "short": "cd4604b0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add TT prefetching support\n\nTT.retrieve() is the most time consuming function\nbecause almost always involves a very slow RAM access.\n\nTT table is so big that is never cached. This patch\nprefetches TT data just after a move is done, so that\nsubsequent TT.retrieve will be very  fast.\n\nProfiling with VTune shows that TT:retrieve() times are\nalmost cutted in half !\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add TT prefetching support"
     },
     {
-      "commit_num": 6329,
+      "commit_num": 6352,
       "hash": "e6863f46",
       "short": "e6863f46",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use 5 TTEntry slots instead of 4\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use 5 TTEntry slots instead of 4"
     },
     {
-      "commit_num": 6330,
+      "commit_num": 6353,
       "hash": "6f1475b6",
       "short": "6f1475b6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use 32 bit key in TT\n\nShrink key to 32 bits instead of 64. To still avoid\ncollisions use the high 32 bits of position key as the\nTT key and the low 32 bits to retrieve the correct\ncluster index in the table.\n\nWith this patch size og TTentry shrinks to 96 bits instead\nof 128 and the cluster of 4 TTEntry sums to 48 bytes instead\nof 64.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use 32 bit key in TT"
     },
     {
-      "commit_num": 6331,
+      "commit_num": 6354,
       "hash": "4a777954",
       "short": "4a777954",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Makefile: added 'make strip' target\n\nBinaries are always built with symbol table in to easy\ndebugging and profiling.\n\nIt is now possible to run:\n\nmake strip\n\nTo remove symbol table from the compiled binary. This\ncould be useful to prepare the release version.\n\nPatch by Heinz van Saanen.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Makefile: added 'make strip' target"
     },
     {
-      "commit_num": 6332,
+      "commit_num": 6355,
       "hash": "54382f8b",
       "short": "54382f8b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Let LMR at root be independent of MultiPV value\n\nCurrent formula enable LMR when\n\ni + MultiPV >= LMRPVMoves\n\nIt means that, for instance, if MultiPV == 1 then LMR\nwill be started to be considered at move i = LMRPVMoves - 1,\nwhile if MultiPV == 3 then it will start before,\nat move i = LMRPVMoves - 3.\n\nWith this patch the formula becomes\n\ni >= MultiPV + LMRPVMoves - 2\n\nSo that LMR will always start after LMRPVMoves - 1 moves\nfrom the last PV move.\n\nNo functional change when MultiPV == 1\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Let LMR at root be independent of MultiPV value"
     },
     {
-      "commit_num": 6333,
+      "commit_num": 6356,
       "hash": "339bb8a5",
       "short": "339bb8a5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Speed up polynomial material imbalance loop\n\nAccess pos.piece_count() only once and avoid some\nbranches in the inner loop.\n\nProfiling with VTune shows a 20% speed improvement in\nget_material_info(), and it is also a bit more cleaned\nup this way ;-)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Speed up polynomial material imbalance loop"
     },
     {
-      "commit_num": 6334,
+      "commit_num": 6357,
       "hash": "aa925a0e",
       "short": "aa925a0e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "There is no need to special case KNNK ending\n\nIt is always draw, so use the corresponding proper\nevaluation function.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "There is no need to special case KNNK ending"
     },
     {
-      "commit_num": 6335,
+      "commit_num": 6358,
       "hash": "565d12bf",
       "short": "565d12bf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Compile without DEBUG flag by default\n\nAnd build also symbol table. It can easily stripped\nafter .exe is done and it is necessary for profiling.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Compile without DEBUG flag by default"
     },
     {
-      "commit_num": 6336,
+      "commit_num": 6359,
       "hash": "00eab733",
       "short": "00eab733",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,14 +1371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert material balance values after 100000 games\n\nAfter Joona's direct testing with ~2000 games it seems\nvalues after 100.000 games does not give any advantage,\nso revert for now.\n\nScore of Stockfish_0 vs Stockfish_15: 491 - 392 - 1102\nScore of Stockfish_0 vs Stockfish_40: 461 - 439 - 1076\nScore of Stockfish_0 vs Stockfish_65: 442 - 518 - 1018 (13 elo)\nScore of Stockfish_0 vs Stockfish_100: 504 - 502 - 984\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert material balance values after 100000 games"
     },
     {
-      "commit_num": 6337,
+      "commit_num": 6360,
       "hash": "5b3fcab1",
       "short": "5b3fcab1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1451,14 +1396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Polished Makefile for *nix\n\nGreately improved Makefile from Heinz van Saanen\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Polished Makefile for *nix"
     },
     {
-      "commit_num": 6338,
+      "commit_num": 6361,
       "hash": "977ca40d",
       "short": "977ca40d",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1477,14 +1421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Supply the \"upperbound\" and \"lowerbound\" parameters in UCI search\noutput when the score is outside the root window.\n",
       "subject": "Supply the \"upperbound\" and \"lowerbound\" parameters in UCI search"
     },
     {
-      "commit_num": 6339,
+      "commit_num": 6362,
       "hash": "ae496774",
       "short": "ae496774",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1503,14 +1446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fixed a bug in PV extraction from the transposition table: The\nprevious used move_is_legal to verify that the move from the TT\nwas legal, and the old version of move_is_legal only works when\nthe side to move is not in check. Fixed this by adding a separate,\nslower version of move_is_legal which works even when the side to\nmove is in check.\n",
       "subject": "Fixed a bug in PV extraction from the transposition table: The"
     },
     {
-      "commit_num": 6340,
+      "commit_num": 6363,
       "hash": "2fff532f",
       "short": "2fff532f",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1529,14 +1471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Moved the code for extracting the PV from the TT to tt.cpp, where\nit belongs.\n",
       "subject": "Moved the code for extracting the PV from the TT to tt.cpp, where"
     },
     {
-      "commit_num": 6341,
+      "commit_num": 6364,
       "hash": "da854fe8",
       "short": "da854fe8",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1555,14 +1496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Added a new function build_pv(), which extends a PV by walking\ndown the transposition table.\n\nWhen the search was stopped before a fail high at the root was\nresolved, Stockfish would often print a very short PV, sometimes\nconsisting of just a single move. This was not only a little\nuser-unfriendly, but also harmed the strength a little in\nponder-on games: Single-move PVs mean that there is no ponder\nmove to search.\n\nIt is perhaps worth considering to remove the pv[][] array\nentirely, and always build the entire PV from the transposition\ntable. This would simplify the source code somewhat and probably\nmake the program infinitesimally faster, at the expense of\nsometimes getting shorter PVs or PVs with rubbish moves near\nthe end.\n",
       "subject": "Added a new function build_pv(), which extends a PV by walking"
     },
     {
-      "commit_num": 6342,
+      "commit_num": 6365,
       "hash": "a1096e55",
       "short": "a1096e55",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1581,14 +1521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Initial work towards adjustable playing strength.\n\nAdded the UCI_LimitStrength and the UCI_Elo options, with an Elo\nrange of 2100-2900. When UCI_LimitStrength is enabled, the number\nof threads is set to 1, and the search speed is slowed down according\nto the chosen Elo level.\n\nTodo:\n\n1. Implement Elo levels below 2100 by blundering on purpose and/or\n   crippling the evaluation.\n2. Automatically calibrate the maximum Elo by measuring the CPU speed\n   during program initialization, perhaps by doing some bitboard\n   computations and measuring the time taken.\n\nNo functional change when UCI_LimitStrength is false (the default).\n",
       "subject": "Initial work towards adjustable playing strength."
     },
     {
-      "commit_num": 6343,
+      "commit_num": 6366,
       "hash": "dad632ce",
       "short": "dad632ce",
       "author": "Tord Romstad <tord@glaurungchess.com>",
@@ -1607,7 +1546,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Added LMR at the root.\n\nAfter 2000 games at 1+0\n\nMod vs Orig +534 =1033 -433 52.525%  1050.5/2000  +18 ELO\n",

@@ -25,37 +25,18 @@ RE_COMMIT_HDR = re.compile(r"^COMMIT\s+#(\d+):\s+([0-9a-f]{8,40})\.\.\.\s*$")
 RE_AUTHOR = re.compile(r"^Author:\s+(.*)\s*$")
 RE_DATE = re.compile(r"^Date:\s+(.*)\s*$")
 RE_GITHUB = re.compile(r"^GitHub:\s+(https?://\S+)\s*$")
-RE_SECTION = re.compile(r"^(SOURCE CODE|ABROK\.EU BINARIES|GITHUB ACTIONS ARTIFACTS):\s*$")
+RE_SECTION = re.compile(r"^(SOURCE CODE|GITHUB ACTIONS ARTIFACTS):\s*$")
 RE_BULLET = re.compile(r"^\s*•\s+(.*?):\s+(https?://\S+)\s*$")
 RE_BULLET_BYTES = re.compile(r"^\s*•\s+(.*?)\s+\((\d+)\s+bytes\):\s+(https?://\S+)\s*$")
 RE_COMMIT_MESSAGE = re.compile(r"^COMMIT MESSAGE:\s*$")
 
 # Some collections include other dividers; we ignore unknown sections gracefully.
 
-
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--infile", required=True, help="Your STOCKFISH COMMIT COLLECTION .txt")
     ap.add_argument("--outdir", required=True, help="Output dir (e.g., ./data/stockfish-commits)")
-    ap.add_argument(
-        "--rewrite-abrok",
-        action="store_true",
-        help="Attempt to normalize abrok URLs from 'abrok.eubuilds' to 'abrok.eu/stockfish/builds'",
-    )
     return ap.parse_args()
-
-
-def normalize_abrok(url: str) -> str:
-    """
-    Conservative rewrite for the commonly-seen typo-domain form:
-      https://abrok.eubuilds/<hash>/win64bmi2/stockfish_....zip
-    to:
-      https://abrok.eu/stockfish/builds/<hash>/win64bmi2/stockfish_....zip
-    """
-    if "abrok.eubuilds/" in url:
-        url = url.replace("https://abrok.eubuilds/", "https://abrok.eu/stockfish/builds/")
-        url = url.replace("http://abrok.eubuilds/", "https://abrok.eu/stockfish/builds/")
-    return url
 
 
 def month_key(iso: str) -> str:
@@ -99,7 +80,7 @@ def main() -> None:
     blocks = [b.strip("\n") for b in text.split(SEP) if b.strip()]
 
     commits: List[Dict[str, Any]] = []
-    totals = {"total_commits": 0, "total_binaries": 0, "total_artifacts": 0}
+    totals = {"total_commits": 0, "total_artifacts": 0}
 
     current: Optional[Dict[str, Any]] = None
     section: Optional[str] = None
@@ -144,7 +125,6 @@ def main() -> None:
                 "github_url": "",
                 "source_code": [],  # [{label,type,url}]
                 "downloads": {
-                    "abrok_eu": [],  # [{label,url}]
                     "github_actions_artifacts": [],  # [{label,bytes?,url}]
                 },
                 "message": "",
@@ -198,8 +178,6 @@ def main() -> None:
                 label = mb.group(1).strip()
                 size = int(mb.group(2))
                 url = mb.group(3).strip()
-                if args.rewrite_abrok:
-                    url = normalize_abrok(url)
 
                 if section == "GITHUB ACTIONS ARTIFACTS":
                     current["downloads"]["github_actions_artifacts"].append(
@@ -208,9 +186,6 @@ def main() -> None:
                     totals["total_artifacts"] += 1
                 elif section == "SOURCE CODE":
                     current["source_code"].append({"label": label, "type": "source", "url": url})
-                elif section == "ABROK.EU BINARIES":
-                    current["downloads"]["abrok_eu"].append({"label": f"{label} ({size} bytes)", "url": url})
-                    totals["total_binaries"] += 1
                 continue
 
             # Simple bullets
@@ -218,15 +193,10 @@ def main() -> None:
             if mb and section:
                 label = mb.group(1).strip()
                 url = mb.group(2).strip()
-                if args.rewrite_abrok:
-                    url = normalize_abrok(url)
 
                 if section == "SOURCE CODE":
                     # label examples: "ZIP", "TAR.GZ"
                     current["source_code"].append({"label": label, "type": label.lower(), "url": url})
-                elif section == "ABROK.EU BINARIES":
-                    current["downloads"]["abrok_eu"].append({"label": label, "url": url})
-                    totals["total_binaries"] += 1
                 elif section == "GITHUB ACTIONS ARTIFACTS":
                     current["downloads"]["github_actions_artifacts"].append({"label": label, "url": url})
                     totals["total_artifacts"] += 1

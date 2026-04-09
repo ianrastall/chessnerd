@@ -2,7 +2,7 @@
   "month": "2016-08",
   "commits": [
     {
-      "commit_num": 3117,
+      "commit_num": 3140,
       "hash": "5cffc032",
       "short": "5cffc032",
       "author": "ajithcj <achajo@yahoo.co.in>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Optimize order of a few conditions in search\n\nAlso fix size of KingDanger array to reduce memory footprint.\n\nSmall speed up of around 0.5%\n\nNo functional change.\n",
       "subject": "Optimize order of a few conditions in search"
     },
     {
-      "commit_num": 3118,
+      "commit_num": 3141,
       "hash": "7f2eb10e",
       "short": "7f2eb10e",
       "author": "Stefano80 <stefano.cardanobile@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire linear imbalance\n\nRetire linear imbalance and compensate\nin piece values enumeration.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 43596 W: 8105 L: 8023 D: 27468\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 24482 W: 3352 L: 3237 D: 17893\n\nBench: 7777707\n",
       "subject": "Retire linear imbalance"
     },
     {
-      "commit_num": 3119,
+      "commit_num": 3142,
       "hash": "13b4444d",
       "short": "13b4444d",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change exclusion key setup\n\nShould depend on which move is excluded. This\nallow us to remove the dedicated Position::exclusion_key().\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 59814 W: 11136 L: 11083 D: 37595\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 31023 W: 4187 L: 4080 D: 22756\n\nbench 7553379\n",
       "subject": "Change exclusion key setup"
     },
     {
-      "commit_num": 3120,
+      "commit_num": 3143,
       "hash": "5c58d1f5",
       "short": "5c58d1f5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use per-thread counterMoveHistory\n\nDrops a scalability bottleneck due to memory contention\nof a single shared table across threads. The effect starts\nto be sensible with a high number of threads. Specifically\nwe have a small regression with 7 threads both at 60 and\n180 seconds TC:\n\n10000 @ 60+0.6 th 7\nELO: -2.46 +-3.2 (95%) LOS: 6.5%\nTotal: 9896 W: 1037 L: 1107 D: 7752\n\n5000 @ 180+0.6 th 7\nELO: -1.95 +-4.1 (95%) LOS: 17.7%\nTotal: 5000 W: 444 L: 472 D: 4084\n\nWe have a regression because counterMoveHistory table is\nquite big and it takes time for a single thread to fill it.\nSharing the table yields to a higher fill rate and better\nquality of moves and up to 7 threads the benefits of sharing\nmore then compensate the loss in speed due to contention.\nInterestingly even with a 3X longer TC, so with more time\nfor the single thread to catch up, the improvment is quite\nlimited and below noise level. It seems we really need much\nlonger TC to saturate the table.\n\nWhen we move to high threads number it's another story:\n\n5000 @ 60+0.6 th 22\nELO: 3.49 +-4.3 (95%) LOS: 94.6%\nTotal: 4880 W: 490 L: 441 D: 3949\n\n2000 @ 60+0.6 th 32\nELO: 8.34 +-6.9 (95%) LOS: 99.1%\nTotal: 2000 W: 229 L: 181 D: 1590\n\nAs expected the speed-up more than compensates the filling\nrate, and we expect that with tournament TC, where single\nthread is able to saturate the table, the difference will\nbe even stronger. For instance for TCEC 9 super-final time\ncontrol will be 180 minutes + 15 seconds and this scalability\nimprovement seems definitely the way to go.\n\nSo, summarizing:\n\nGOOD:\n\nMeasured big improvement in high core scenario\n\nSuitable for TCEC 9 superfinal (big hardware, very long TC)\n\nConsistent and natural patch that extends to counterMoveHistory\nwhat we already do for remaining history tables, that are all per-thread\n\nNon functional change for the common case of a single core\n\nVery simple (just 6 lines modified, no added ones)\n\nBAD:\n\nSmall regression (within 2-3 ELO) with few threads and short TC\n\nbench: 5341477\n",
       "subject": "Use per-thread counterMoveHistory"
     },
     {
-      "commit_num": 3121,
+      "commit_num": 3144,
       "hash": "6aa9308f",
       "short": "6aa9308f",
       "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tweak probcut threshold\n\nUse better threshold for capture move generation.\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 23265 W: 4415 L: 4188 D: 14662\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 36618 W: 5083 L: 4836 D: 26699\n\nbench: 7030088\n",
       "subject": "Tweak probcut threshold"
     },
     {
-      "commit_num": 3122,
+      "commit_num": 3145,
       "hash": "b4f6728e",
       "short": "b4f6728e",
       "author": "Andrew Grant <do57053@umbc.edu>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Removed an extra space\n\nNo functional change.\n",
       "subject": "Removed an extra space"
     },
     {
-      "commit_num": 3123,
+      "commit_num": 3146,
       "hash": "2b57b61c",
       "short": "2b57b61c",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move king tropism to evaluate_king\n\nNo functional change.\n",
       "subject": "Move king tropism to evaluate_king"
     },
     {
-      "commit_num": 3124,
+      "commit_num": 3147,
       "hash": "2731bbaf",
       "short": "2731bbaf",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove condition on killers in history pruning\n\nNow allows main killer to be history prune.\n\nSTC:\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 15852 W: 2910 L: 2781 D: 10161\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 56428 W: 7610 L: 7537 D: 41281\n\nBench: 8032058\n",
       "subject": "Remove condition on killers in history pruning"
     },
     {
-      "commit_num": 3125,
+      "commit_num": 3148,
       "hash": "0b944c71",
       "short": "0b944c71",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Silence some warnings with MSVC 2013\n\nNo functional change.\n",
       "subject": "Silence some warnings with MSVC 2013"
     },
     {
-      "commit_num": 3126,
+      "commit_num": 3149,
       "hash": "1ee28382",
       "short": "1ee28382",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire CheckInfo\n\nMove its content directly under StateInfo.\n\nVerified for no speed regression.\n\nNo functional change.\n",
       "subject": "Retire CheckInfo"
     },
     {
-      "commit_num": 3127,
+      "commit_num": 3150,
       "hash": "9bd856e2",
       "short": "9bd856e2",
       "author": "hxim <hxim.jo@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify stats update\n\nSimplify code by moving countermove and follow-up move\nhistory update into procedure.\n\nNo functional change.\n",
       "subject": "Simplify stats update"
     },
     {
-      "commit_num": 3128,
+      "commit_num": 3151,
       "hash": "13380885",
       "short": "13380885",
       "author": "gamander <gamander@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fixed wrong definition of WhiteCamp and BlackCamp\n\nNo functional change.\n",
       "subject": "Fixed wrong definition of WhiteCamp and BlackCamp"
     },
     {
-      "commit_num": 3129,
+      "commit_num": 3152,
       "hash": "3e739f88",
       "short": "3e739f88",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat stats update\n\nRewritten in a way to have explicit in the search\nthe bonus/penalty we apply: hopefully this will lead\nto further simplification/fix of current rather messy\nstats update code.\n\nNo functional change.\n",
       "subject": "Reformat stats update"
     },
     {
-      "commit_num": 3130,
+      "commit_num": 3153,
       "hash": "0b4f6e56",
       "short": "0b4f6e56",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Refutation penalty on captures\n\nApply refutation penalty for prior PV quiet move on captures\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 8208 W: 1153 L: 1008 D: 6047\nhttp://tests.stockfishchess.org/tests/view/57bc5a9f0ebc59030fbe47b5\n\nOnly LTC because a very similar patch already passed STC + LTC\n\nbench: 7038730\n",
       "subject": "Refutation penalty on captures"
     },
     {
-      "commit_num": 3131,
+      "commit_num": 3154,
       "hash": "4c5cbb1b",
       "short": "4c5cbb1b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Make engine ONE_PLY value independent\n\nThis non-functional change patch is a deep work to allow SF to be independent\nfrom the actual value of ONE_PLY (currently set to 1). I have verified SF is\nnow independent for ONE_PLY values 1, 2, 4, 8, 16, 32 and 256.\n\nThis patch gives consistency to search code and enables future work, opening\nthe door to safely tweaking the ONE_PLY value for any reason.\n\nVerified for no speed regression at STC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 95643 W: 17728 L: 17737 D: 60178\n\nNo functional change.\n",
       "subject": "Make engine ONE_PLY value independent"
     },
     {
-      "commit_num": 3132,
+      "commit_num": 3155,
       "hash": "e3af4921",
       "short": "e3af4921",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove a stale assignment\n\nNo more used after previous patch.\n\nSpotted by Jekaa .\n\nNo functional change.\n",
       "subject": "Remove a stale assignment"
     },
     {
-      "commit_num": 3133,
+      "commit_num": 3156,
       "hash": "8493c8c6",
       "short": "8493c8c6",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do LMR on captures\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 5361 W: 1086 L: 936 D: 3339\nhttp://tests.stockfishchess.org/tests/view/57b31b0f0ebc591c761f643d\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 54694 W: 7591 L: 7287 D: 39816\nhttp://tests.stockfishchess.org/tests/view/57b3442b0ebc591c761f6450\n\nbench: 6881120\n",
       "subject": "Do LMR on captures"
     },
     {
-      "commit_num": 3134,
+      "commit_num": 3157,
       "hash": "5596492f",
       "short": "5596492f",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify IID\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 30468 W: 5687 L: 5582 D: 19199\nhttp://tests.stockfishchess.org/tests/view/57b1ddd80ebc591c761f63e2\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 87406 W: 11756 L: 11725 D: 63925\nhttp://tests.stockfishchess.org/tests/view/57b212590ebc591c761f63f9\n\nbench: 6554900\n",
       "subject": "Simplify IID"
     },
     {
-      "commit_num": 3135,
+      "commit_num": 3158,
       "hash": "9585f8ef",
       "short": "9585f8ef",
       "author": "Stefano80 <stefano.cardanobile@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire pawn span\n\nRetire pawn span and replace with pawn count in evaluate_scale_factor.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 26482 W: 4929 L: 4818 D: 16735\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 61938 W: 8400 L: 8335 D: 45203\n\nBench: 7662861\n",
       "subject": "Retire pawn span"
     },
     {
-      "commit_num": 3136,
+      "commit_num": 3159,
       "hash": "7396c08b",
       "short": "7396c08b",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use predicted depth for history pruning\n\nSTC: (Yellow)\nLLR: -2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 69115 W: 12880 L: 12797 D: 43438\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 124163 W: 16923 L: 16442 D: 90798\n\nNote: Note based off past experiments / patches... history pruning\nis quite TC sensitive. I believe the reason for this TC dependency\nis that the CMH/FMH is a very large table that takes time to fill\nup with. In addition having more time for will increase the accuracy\nof the stats' value.\n\nBench: 7351698\n",
       "subject": "Use predicted depth for history pruning"
     },
     {
-      "commit_num": 3137,
+      "commit_num": 3160,
       "hash": "3d10cfcd",
       "short": "3d10cfcd",
       "author": "Luca Brivio <luca@camillo>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Cap space evaluation bonus\n\nWhen computing space evaluation, limit the bonus square count to 16.\n\nSTC @ 10+0.1 th 1:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 30793 W: 5910 L: 5648 D: 19235\n\nLTC @ 60+0.6 th 1:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 31361 W: 4410 L: 4184 D: 22767\n\nBench: 7165385\n",
       "subject": "Cap space evaluation bonus"
     },
     {
-      "commit_num": 3138,
+      "commit_num": 3161,
       "hash": "8abb9845",
       "short": "8abb9845",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -567,7 +546,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify space formula\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 16868 W: 3260 L: 3132 D: 10476\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 16910 W: 2381 L: 2255 D: 12274\n\nbench: 6663531\n",

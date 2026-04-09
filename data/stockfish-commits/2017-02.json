@@ -2,7 +2,7 @@
   "month": "2017-02",
   "commits": [
     {
-      "commit_num": 2967,
+      "commit_num": 2990,
       "hash": "1810c4d7",
       "short": "1810c4d7",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify skipping of plies with helper threads\n\nReplaces the HalfDensity array with an equivalent, compact implementation.\nIncludes suggestions by mcostalba & snicolet.\n\nNo functional change\n\nCloses #1004\n",
       "subject": "Simplify skipping of plies with helper threads"
     },
     {
-      "commit_num": 2968,
+      "commit_num": 2991,
       "hash": "8f7e032b",
       "short": "8f7e032b",
       "author": "snicolet <cassio@free.fr>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change definition of \"weak\" in threats calculation\n\nBy defining \"strongly protected\" as \"protected by a pawn, or protected\nby two pieces and not attacked by two enemy pieces\".\n\nPassed STC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 17050 W: 3128 L: 2931 D: 10991\n\nPassed LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 120995 W: 15852 L: 15343 D: 89800\n\nBench : 6269229\n\nCloses #1016\n",
       "subject": "Change definition of \"weak\" in threats calculation"
     },
     {
-      "commit_num": 2969,
+      "commit_num": 2992,
       "hash": "f1e3dfea",
       "short": "f1e3dfea",
       "author": "mstembera <MissingEmail@email>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reorder members of Material::Entry\n\nThis eliminates alignment padding and reduces size from 48 to 40 bytes.\nThis makes the material HashTable smaller and more cache friendly.\n\nNo functional change\n\nCloses #1013\n",
       "subject": "Reorder members of Material::Entry"
     },
     {
-      "commit_num": 2970,
+      "commit_num": 2993,
       "hash": "9f48e1ec",
       "short": "9f48e1ec",
       "author": "GuardianRM <strimr25@mail.ru>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pieces protecting king\n\nInitial protective idea by Snicolet for knight, for other pieces too\nPatch add penalties and bonuses for pieces, depending on the distance from the own king\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 21192 W: 3919 L: 3704 D: 13569\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 26177 W: 3642 L: 3435 D: 19100\n\nBench : 6687377\n\nCloses #1012\n",
       "subject": "Pieces protecting king"
     },
     {
-      "commit_num": 2971,
+      "commit_num": 2994,
       "hash": "eefbe967",
       "short": "eefbe967",
       "author": "snicolet <cassio@free.fr>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Keep pawns on both flanks\n\nPositions with pawns on only one flank tend to be more drawish. We add\na term to the initiative bonus to help the attacking player keep pawns\non both flanks.\n\nSTC: yellowish run stopped after 257137 games\nLLR: -0.92 (-2.94,2.94) [0.00,5.00]\nTotal: 257137 W: 46560 L: 45511 D: 165066\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 15602 W: 2125 L: 1956 D: 11521\n\nBench : 6976310\n\nCloses #1009\n",
       "subject": "Keep pawns on both flanks"
     },
     {
-      "commit_num": 2972,
+      "commit_num": 2995,
       "hash": "c243cd5f",
       "short": "c243cd5f",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Variable tuning\n\nA tuning patch which cover the following changes:\n\nincrease the importance of queen and rook mobility in endgame and\ndecrease it in mg, since if we use the heavy pieces too early in the game\nwe will just make opponent develop their pieces by threatening ours.\n\nKing Psqt:\n1)King will be encouraged more to stay in the first ranks in the MG\n2)and will be encouraged more to go to the middle of the board/last ranks in the EG\n\nBishop scale better in EG\nLogical changes on various psqt tables\n1/6 of the changes of the last tuning session on mobility tables\n\nSTC: LLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 227879 W: 41240 L: 40313 D: 146326\nLTC : LLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 167047 W: 21871 L: 21291 D: 123885\n\nBench: 5695960\n\nCloses #1008\n",
       "subject": "Variable tuning"
     },
     {
-      "commit_num": 2973,
+      "commit_num": 2996,
       "hash": "05cf45f2",
       "short": "05cf45f2",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Razor Simplification\n\nRemove code that restrict using tt-moves for razoring.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 67442 W: 12039 L: 11997 D: 43406\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 38541 W: 5044 L: 4947 D: 28550\n\nBench: 5667216\n\nCloses #1002\n",
       "subject": "Razor Simplification"
     },
     {
-      "commit_num": 2974,
+      "commit_num": 2997,
       "hash": "faedcf08",
       "short": "faedcf08",
       "author": "torfranz <tfranzer@gmx.de>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire loose enemies bonus\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 44727 W: 7943 L: 7862 D: 28922\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 148343 W: 19044 L: 19088 D: 110211\n\nBench: 5669076\n\nCloses #1005\n",
       "subject": "Retire loose enemies bonus"
     },
     {
-      "commit_num": 2975,
+      "commit_num": 2998,
       "hash": "83fb4547",
       "short": "83fb4547",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "search(): Move nullValue variable into local scope\n\nNo functional change\n\nCloses #1003\n",
       "subject": "search(): Move nullValue variable into local scope"
     },
     {
-      "commit_num": 2976,
+      "commit_num": 2999,
       "hash": "1e814e0c",
       "short": "1e814e0c",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix makefile: 32 bit builds without optimization.\n\nFixes failing build for\n\nmake ARCH=x86-32 clean && make ARCH=x86-32 optimize=no build\n\nby passing -m32 also to the link step.\n\nExtend travis testing accordingly.\n\nNo functional change.\n\nCloses #999\n",
       "subject": "Fix makefile: 32 bit builds without optimization."
     },
     {
-      "commit_num": 2977,
+      "commit_num": 3000,
       "hash": "e0d91f4c",
       "short": "e0d91f4c",
       "author": "torfranz <tfranzer@gmx.de>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire small bonus in passed pawn evaluation\n\nSTC: http://tests.stockfishchess.org/tests/view/5899824d0ebc59099759f3ee\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 33370 W: 6061 L: 5961 D: 21348\n\nLTC: http://tests.stockfishchess.org/tests/view/5899e3820ebc59099759f415\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 36206 W: 4664 L: 4563 D: 26979\n\nBench: 6072262\n\nCloses #998\n",
       "subject": "Retire small bonus in passed pawn evaluation"
     },
     {
-      "commit_num": 2978,
+      "commit_num": 3001,
       "hash": "a753e20b",
       "short": "a753e20b",
       "author": "Joona Kiiski <joona@zoox.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "A small tweak in doEasyMove()\n\nTime.elapsed() > Time.optimum() * 5 / 44\ninstaed of:\nTime.elapsed() > Time.optimum() * 5 / 42\n\nThis was yellow on STC:\nLLR: -2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 156856 W: 28317 L: 27942 D: 100597\n\nPassed on LTC:\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 36909 W: 4926 L: 4682 D: 27301\n\nNote: Patch was originally submitted by user GuardianRM.\nHowever his repo was deleted before merge.\n\nNo functional change\n\nCloses #995\n",
       "subject": "A small tweak in doEasyMove()"
     },
     {
-      "commit_num": 2979,
+      "commit_num": 3002,
       "hash": "5205d44f",
       "short": "5205d44f",
       "author": "Stefano80 <stefano.cardanobile@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify scale factor computation\n\nMinor non-functional simplifications in computing the scale factor.\n\nIn my opinion, the code is now slightly more readable:\n\n- remove one condition which can never be satisfied.\n- immediately return instead of assigning the sf variable.\n\nTested for non-regression:\n\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 62162 W: 11166 L: 11115 D: 39881\n\nNo functional change\n\nCloses #992\n",
       "subject": "Simplify scale factor computation"
     },
     {
-      "commit_num": 2980,
+      "commit_num": 3003,
       "hash": "0553b468",
       "short": "0553b468",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -359,7 +346,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify Queen Mobility\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 85997 W: 15550 L: 15540 D: 54907\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 25333 W: 3370 L: 3256 D: 18707\n\nBench: 6459194\n\nCloses #991\n",

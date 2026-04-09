@@ -2,7 +2,7 @@
   "month": "2012-12",
   "commits": [
     {
-      "commit_num": 4423,
+      "commit_num": 4446,
       "hash": "19374121",
       "short": "19374121",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove some obsolete asserts on TT values\n\nNow that insert_pv_in_tt() stores VALUE_NONE in\nTT's position evaluation those 2 asserts are\nobselete.\n\nNo functional change.\n",
       "subject": "Remove some obsolete asserts on TT values"
     },
     {
-      "commit_num": 4424,
+      "commit_num": 4447,
       "hash": "896420b1",
       "short": "896420b1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Allow to pass a 'seed' to RKISS\n\nThis somewhat simplifies the code.\n\nSuggested by Lucas Braesch.\n\nNo functional change.\n",
       "subject": "Allow to pass a 'seed' to RKISS"
     },
     {
-      "commit_num": 4425,
+      "commit_num": 4448,
       "hash": "009a0f88",
       "short": "009a0f88",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro-optimization in evaluate_space()\n\nSince &-ing with SpaceMask restricts the set to the home\nhalf of the board, it is possible to use just one popcount\ninstead of 2 by shifting \"safe\" to the other half of the\nboard. This gives a small speedup especially on systems\nwhere hardware popcount is not available.\n\nPatch kindly sent by Richard Vida.\n\nNo functional change.\n",
       "subject": "Micro-optimization in evaluate_space()"
     },
     {
-      "commit_num": 4426,
+      "commit_num": 4449,
       "hash": "e1d68145",
       "short": "e1d68145",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add 'mate' limit to 'bench' command\n\nIt is now possible to run SF on a 'mate in x' testsuite.\n\nFor instance in case of a file with fen strings of\npositions with mate in 10 we can now 'bench' on it:\n\nstockfish bench 128 1 10 mate_in_10.epd mate\n\nNo functional change.\n",
       "subject": "Add 'mate' limit to 'bench' command"
     },
     {
-      "commit_num": 4427,
+      "commit_num": 4450,
       "hash": "ce063f59",
       "short": "ce063f59",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Handle UCI command \"mate in x moves\"\n\nFollowing a user request I added the handling of UCI:\n\ngo mate x\n\nCurrently we just return from a PV node if x moves have been\ndone. Probably not the best approach. I have looked at Fruit/Toga\nsources and there is even simpler: engine falls back on a fixed\ndepth search.\n\nNo functional change.\n",
       "subject": "Handle UCI command \"mate in x moves\""
     },
     {
-      "commit_num": 4428,
+      "commit_num": 4451,
       "hash": "3cf64717",
       "short": "3cf64717",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert evaluation cache\n\nAnd return on using TT as backing store for position\nevaluations.\n\nTests (even on single thread) show eval cache was a regression.\nIn multi thread result should be even worst because eval cache\nis a per-thread struct, while TT is shared.\n\nAfter 4957 games at 15\"+0.05 (single thread)\neval cache vs master 969 - 1093 - 2895  -9 ELO\n\nSo previous reported result of +18 ELO was probably due to an\nissue in the testing framework (a bug in cutechess-cli) that\nhas been fixed in the meanwhile.\n\nbench: 5386711\n",
       "subject": "Revert evaluation cache"
     },
     {
-      "commit_num": 4429,
+      "commit_num": 4452,
       "hash": "f78b68b7",
       "short": "f78b68b7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add list of legal moves to Position::pretty()\n\nAlong the same lines of previous patch now we add\nthe list of the legal moves in the given position.\n\nNo functional change.\n",
       "subject": "Add list of legal moves to Position::pretty()"
     },
     {
-      "commit_num": 4430,
+      "commit_num": 4453,
       "hash": "e9ab7353",
       "short": "e9ab7353",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add checkers info to Position::pretty()\n\nIn case current position is under check, list the\nsquares of the checker(s) pieces.\n\nThis should satisfy a specific user request.\n\nNo functional change.\n",
       "subject": "Add checkers info to Position::pretty()"
     },
     {
-      "commit_num": 4431,
+      "commit_num": 4454,
       "hash": "9d1978e2",
       "short": "9d1978e2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove two obsolete asserts in prevents_move\n\nNow that this function is called also to calculate\nmove's extensions the asserts are no more valid.\n\nNo functional change.\n",
       "subject": "Remove two obsolete asserts in prevents_move"
     },
     {
-      "commit_num": 4432,
+      "commit_num": 4455,
       "hash": "db097921",
       "short": "db097921",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename yields_to_threat and prevents_threat\n\nFollow Lucas suggestions and better name these\ntwo functions.\n\nNo functional change.\n",
       "subject": "Rename yields_to_threat and prevents_threat"
     },
     {
-      "commit_num": 4433,
+      "commit_num": 4456,
       "hash": "b5b799b5",
       "short": "b5b799b5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a couple of extra spaces\n\nNo functional change.\n",
       "subject": "Fix a couple of extra spaces"
     },
     {
-      "commit_num": 4434,
+      "commit_num": 4457,
       "hash": "e8238270",
       "short": "e8238270",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire Position::in_check()\n\nIt is redundant with Position::checkers()\n\nNo functional change.\n",
       "subject": "Retire Position::in_check()"
     },
     {
-      "commit_num": 4435,
+      "commit_num": 4458,
       "hash": "3b49aeb4",
       "short": "3b49aeb4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire Position::move_is_legal()\n\nUse the new contains() method of struct MoveList\n\nNo functional change.\n",
       "subject": "Retire Position::move_is_legal()"
     },
     {
-      "commit_num": 4436,
+      "commit_num": 4459,
       "hash": "423c6d8a",
       "short": "423c6d8a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small tweak in is_pseudo_legal()\n\nThis is difficult code becuase a bug here could lead\nto very subtle crashes in case of SMP games where we\nhave TT move corruption due to concurrent access.\n\nAnyhow I have fully verified te code throwing at it\nrandom moves. It shoudl work.\n\nNo functional change.\n",
       "subject": "Small tweak in is_pseudo_legal()"
     },
     {
-      "commit_num": 4437,
+      "commit_num": 4460,
       "hash": "894c43a1",
       "short": "894c43a1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce Null Threat extension\n\nIn case of null search at low depths returns a fail low\ndue to a threat then, rather than return beta-1 (to cause\na re-search at full depth in the parent node), we set a flag\nthreatExtension = true (false by default) that will cause\nmoves that prevent the threat to be extended of one ply\nin the following search.\n\nIdea and patch is by Lucas Braesch.\n\nLucas also did the tests:\n1500 games in 5\"+0.05\":\nSF_threatExtension vs SF_20121222: 366 - 331 - 803 [51.2%] LOS=90.8%\n\n3000 games in 10\"+0.1\":\nSF_threatExtension vs SF_20121222: 610 - 559 - 1831 [50.8%] LOS=93.2%\n\nTests confirmed by Gary after 10570 games,\nELO: 2.79 +- 99%: 8.72 95%: 6.63\nLOS: 94.08%\nWins: 1523 Losses: 1438 Draws: 7607\n\nAnd finally by me at 15\"+0.05, single thread, 3824 games\nthreatExtension vs master 768 - 692 - 2364  +7 ELO\n\nbench 4918443\n",
       "subject": "Introduce Null Threat extension"
     },
     {
-      "commit_num": 4438,
+      "commit_num": 4461,
       "hash": "158014b3",
       "short": "158014b3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce namespace Pawns\n\nAnd retire old struct PawnTable along the same lines\nof previous patch.\n\nNo functional change.\n",
       "subject": "Introduce namespace Pawns"
     },
     {
-      "commit_num": 4439,
+      "commit_num": 4462,
       "hash": "231f62ba",
       "short": "231f62ba",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce namespace Material\n\nAnd retire old struct MaterialTable simplifying the code.\n\nNo functional change.\n",
       "subject": "Introduce namespace Material"
     },
     {
-      "commit_num": 4440,
+      "commit_num": 4463,
       "hash": "52bbf372",
       "short": "52bbf372",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't need to check for bestValue < beta to split\n\nWith rearrangement of fail high code this condition\nis no more necessary.\n\nFound by Jörg Oster.\n\nNo fuctional change.\n",
       "subject": "Don't need to check for bestValue < beta to split"
     },
     {
-      "commit_num": 4441,
+      "commit_num": 4464,
       "hash": "3ddf91d9",
       "short": "3ddf91d9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove an extra semicolon\n\nNo functional change.\n",
       "subject": "Remove an extra semicolon"
     },
     {
-      "commit_num": 4442,
+      "commit_num": 4465,
       "hash": "a2f46446",
       "short": "a2f46446",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert store of distinct upper and lower bounds\n\nTest by Joona prooves the new feature don't value 70 added lines of code.\n\nGrand totals after 10040 games (crashes: 0) for tt_both\n\nmaster_9edc7 - 6a93488_6a934: 1756 - 1688 - 6596 ELO +2 (+- 2.7)\n\nConfirmed by test of Gary:\n\nAfter 8680 games:\nELO: 0.80 +- 99%: 9.62 95%: 7.31\nLOS: 65.38%\nWins: 1288 Losses: 1268 Draws: 6130\n\nThanks a lot to both for testing it !!!\n\nbench 5149248\n",
       "subject": "Revert store of distinct upper and lower bounds"
     },
     {
-      "commit_num": 4443,
+      "commit_num": 4466,
       "hash": "9edc7d69",
       "short": "9edc7d69",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'eval_cache'\n\nUnusually good result. Defenitly needs further verifications.\n\nAfter 2160 games at 15\"+0.05\nMod vs Orig 486 - 367 - 1307 ELO +19\n\nbench: 6261882\n",
       "subject": "Merge branch 'eval_cache'"
     },
     {
-      "commit_num": 4444,
+      "commit_num": 4467,
       "hash": "55db8714",
       "short": "55db8714",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix comparison with alpha, not beta\n\nThis silly bug seems the reason of the unsual bench\nvalue.\n\nbench: 6261882\n",
       "subject": "Fix comparison with alpha, not beta"
     },
     {
-      "commit_num": 4445,
+      "commit_num": 4468,
       "hash": "da98a45b",
       "short": "da98a45b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Ensure valueLower <= valueUpper\n\nIn case a TTEntry stores both an upper and a lower bound\nensure that upper bound is not smaller than lower bound.\n\nbench 1813815\n",
       "subject": "Ensure valueLower <= valueUpper"
     },
     {
-      "commit_num": 4446,
+      "commit_num": 4469,
       "hash": "feeafb0a",
       "short": "feeafb0a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Store distinct upper and lower bound scores\n\nThis is more complex than what I'd like but I\nwas unable to split in small chunks.\n\nHere we add 2 slots to TTEntry (valueUpper and depthUpper)\nso that sizeof(TTEntry) returns to the original 16 bytes\nand we can pack exactly 4 entries in a 64 bytes cache line.\n\nNow we save an upper bound score alongside a lower (exact)\nscore. The idea is to increase TT cut-offs rates becuase\nthere is now an higher probability for a node to use TT info.\n\nThis patch is highly experimental and probably needs further\nsteps as is hinted by an unrealistic bench number:\n\nbench: 2022385\n",
       "subject": "Store distinct upper and lower bound scores"
     },
     {
-      "commit_num": 4447,
+      "commit_num": 4470,
       "hash": "22c557ca",
       "short": "22c557ca",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro-optimize color_of()\n\nIn almost all cases we already know in advance that\ncolor_of() argument is different from NO_PIECE.\n\nSo avoid the check for NO_PIECE in color_of() and\ntest at caller site in the very few places where\nthis case could occur.\n\nAs a nice side effect, this patch fixes a (bogus)\nwarning under some versions of gcc.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Micro-optimize color_of()"
     },
     {
-      "commit_num": 4448,
+      "commit_num": 4471,
       "hash": "6a934882",
       "short": "6a934882",
       "author": "thaspel <tobiashaspel@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update Readme.txt now that we support 64 threads\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Update Readme.txt now that we support 64 threads"
     },
     {
-      "commit_num": 4449,
+      "commit_num": 4472,
       "hash": "6fa83f51",
       "short": "6fa83f51",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'eval_cache'\n\nUse an eval cache instead of TT to store node\nposition evaluations.\n\nIt is already an improvment and, because it frees\ntwo TT entry slots, paves the way to extend TT to\nstore both upper and lower bounds.\n\nAfter 4855 games, single thread, 15\"+0.05\nMod vs Orig 1165 -920 - 2770 ELO +18\n\nbench: 5149248\n",
       "subject": "Merge branch 'eval_cache'"
     },
     {
-      "commit_num": 4450,
+      "commit_num": 4473,
       "hash": "ce248e79",
       "short": "ce248e79",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase MAX_THREADS to 64\n\nAnd document why this is an hard limit. It\nseems for some (lucky) people 32 threads\nare not enough.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Increase MAX_THREADS to 64"
     },
     {
-      "commit_num": 4451,
+      "commit_num": 4474,
       "hash": "23bdd064",
       "short": "23bdd064",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reintroduce eval optimizaion from null search\n\nNow that conversion to eval cache is finished\nwe can reintroduce this optimization.\n\nbench: 5149248\n",
       "subject": "Reintroduce eval optimizaion from null search"
     },
     {
-      "commit_num": 4452,
+      "commit_num": 4475,
       "hash": "98cd8239",
       "short": "98cd8239",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't save eval score in TT\n\nThis patch completes the removal of eval info\nin TT table.\n\nNo functional change.\n",
       "subject": "Don't save eval score in TT"
     },
     {
-      "commit_num": 4453,
+      "commit_num": 4476,
       "hash": "2a585b63",
       "short": "2a585b63",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't use TT just to save a node evaluation\n\nIn search(), after we evalute the position, in case there\nisn't any TT entry we create one with just the evaluation\nscore.\n\nThis patches removes that code. The reason becuase the patch\ndeserves a single commit it is becuase introduces a (very small)\nfunctional change due to the fact that the total number of\nTT stores is less now and this slightly alters the TT hits\nof our benchmark.\n\nbench: 4983262\n",
       "subject": "Don't use TT just to save a node evaluation"
     },
     {
-      "commit_num": 4454,
+      "commit_num": 4477,
       "hash": "a5ea3a20",
       "short": "a5ea3a20",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't read eval from TT anymore\n\nRely fully on eval cache. Note that we still save eval\ninfo to TT, this is not needed at this moment and will be\nremoved in future patches. We keep it so to have a \"non\nfunctional change\" patch.\n\nNo functional change.\n",
       "subject": "Don't read eval from TT anymore"
     },
     {
-      "commit_num": 4455,
+      "commit_num": 4478,
       "hash": "69de6703",
       "short": "69de6703",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire eval optimization from null search\n\nSimplify things preparing for further changes.\n\nbench: 4983282\n",
       "subject": "Retire eval optimization from null search"
     },
     {
-      "commit_num": 4456,
+      "commit_num": 4479,
       "hash": "4e5d834e",
       "short": "4e5d834e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,7 +846,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add eval cache infrastructure\n\nWith this patch series we want to introduce a per-thread\nevaluation cache to store node evaluation and do not\nrely anymore on the TT table for this.\n\nThis patch just introduces the infrastructure.\n\nNo functional change.\n",

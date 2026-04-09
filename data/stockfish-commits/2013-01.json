@@ -2,7 +2,7 @@
   "month": "2013-01",
   "commits": [
     {
-      "commit_num": 4385,
+      "commit_num": 4408,
       "hash": "58c9fbac",
       "short": "58c9fbac",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Extend full 3 fold detection to PvNodes\"\n",
       "subject": "Revert \"Extend full 3 fold detection to PvNodes\""
     },
     {
-      "commit_num": 4386,
+      "commit_num": 4409,
       "hash": "483c98a6",
       "short": "483c98a6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite do_castle_move()\n\nAnd handle the castle directly in do/undo_move().\nThis allow to greatly simplify the code.\n\nHere the beast is the nasty Chess960 that is\nreally tricky to get it right because could be\nthat 'from' and 'to' squares are the same or\nthat king's 'to' square is rook's 'from' square.\n\nAnyhow should work: verified on all Chess960\nstarting positions.\n\nNo functional and no speed change also in Chess960.\n",
       "subject": "Rewrite do_castle_move()"
     },
     {
-      "commit_num": 4387,
+      "commit_num": 4410,
       "hash": "2218a583",
       "short": "2218a583",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite do_null_move()\n\nUse a more traditional approach, along the same lines\nof do_move().\n\nIt is true that we copy more in do_null_move(), but we\nsave the work in undo_null_move(). Speed test shows the\nnew code to be even a bit faster.\n\nNo functional change.\n",
       "subject": "Rewrite do_null_move()"
     },
     {
-      "commit_num": 4388,
+      "commit_num": 4411,
       "hash": "76a0d3c0",
       "short": "76a0d3c0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Get rid of some locals in do_castle_move()\n\nRewrite the logic to get rid of kBefore and rBefore.\n\nNo functional change.\n",
       "subject": "Get rid of some locals in do_castle_move()"
     },
     {
-      "commit_num": 4389,
+      "commit_num": 4412,
       "hash": "52cab06f",
       "short": "52cab06f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't prefetch if not needed\n\nPrefetch access to hash tables only in case we\nhave changed pawn or material hash keys.\n\nNo functional change.\n",
       "subject": "Don't prefetch if not needed"
     },
     {
-      "commit_num": 4390,
+      "commit_num": 4413,
       "hash": "bd87ab9f",
       "short": "bd87ab9f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire generate_king_moves()\n\nWe have only one call place so inline its content.\nBTW, function is already declared as FORCE_INLINE.\n\nAlso some small refactoring while there.\n\nNo functional change.\n",
       "subject": "Retire generate_king_moves()"
     },
     {
-      "commit_num": 4391,
+      "commit_num": 4414,
       "hash": "57797822",
       "short": "57797822",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Bring back just bishop pins\n",
       "subject": "Bring back just bishop pins"
     },
     {
-      "commit_num": 4392,
+      "commit_num": 4415,
       "hash": "7062db7c",
       "short": "7062db7c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Clarify slavesMask usage\n\nWhen a thread is allocated a bit is set in slavesMask.\nThis bit corresponds to the thread's index field that,\nbecause it happens to be the position in the threads\narray, eventually it is equal to the loop index 'i'.\n\nBut instead of relying on this 'coincidence', explicitly\nuse the 'idx' field so to clarify slavesMask usage.\n\nBackported from c++11 branch.\n\nNo functional change.\n",
       "subject": "Clarify slavesMask usage"
     },
     {
-      "commit_num": 4393,
+      "commit_num": 4416,
       "hash": "496c7497",
       "short": "496c7497",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge branch 'simplify_eval' of https://github.com/glinscott/Stockfish\n\nTest results are looking good after 12500 games.\n\nELO: 6.55 +- 99%: 8.02 95%: 6.09\nLOS: 99.99%\nWins: 1968 Losses: 1732 Draws: 8813\n\nAlso, here are the noise.py results, which seem to have stabilized:\nGames: 12526 , result: [1969, 1734, 8823]\nEstimated ELO: 6.94963842777\nNoise as function of number of games:\n['81.89', '565.26', '110.87', '104.39', '38.22', '49.98', '18.56', '16.76',\n'11.02', '8.90', '17.36', '9.84', '10.81', '5.13', '6.22', '3.32', '5.83',\n'7.21', '15.27', '1.63', '4.04', '9.51', '0.54', '0.75', '1.06', '2.93',\n'4.59', '6.85', '13.62', '9.87', '14.74', '20.46', '22.18', '24.33', '31.02',\n'34.99', '35.22', '33.22', '32.46', '37.02', '29.10', '36.34', '42.11', '39.33',\n'26.16', '28.25', '35.42', '31.04', '29.26', '23.91', '22.52', '23.49', '20.00',\n'24.39', '17.22', '16.50', '10.69', '9.15', '9.57', '4.77', '6.67', '3.87', '2.57',\n'2.84', '2.60', '3.32', '2.08', '2.93', '4.47', '4.41', '4.83', '4.86', '6.40',\n'5.98', '6.10', '6.83', '5.83', '6.22', '5.71', '8.52', '9.25', '5.98', '7.52',\n'7.76', '8.76', '8.55', '8.64', '7.19', '5.83', '4.59', '4.77', '4.26', '4.98',\n'5.29', '5.41', '4.92', '5.59']\n\nbench: 5229106\n",
       "subject": "Merge branch 'simplify_eval' of https://github.com/glinscott/Stockfish"
     },
     {
-      "commit_num": 4394,
+      "commit_num": 4417,
       "hash": "e83b9075",
       "short": "e83b9075",
       "author": "Gary Linscott <glinscott@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify evaluation\n",
       "subject": "Simplify evaluation"
     },
     {
-      "commit_num": 4395,
+      "commit_num": 4418,
       "hash": "166cc029",
       "short": "166cc029",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Further push singular extension\"\n\nThis reverts commit 4c91dbc28e8bb6265f8\n\nSeems a regression on extended test by both Gary and me.\n",
       "subject": "Revert \"Further push singular extension\""
     },
     {
-      "commit_num": 4396,
+      "commit_num": 4419,
       "hash": "6950d07b",
       "short": "6950d07b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small reformat of split()\n\nNo functional chhange.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small reformat of split()"
     },
     {
-      "commit_num": 4397,
+      "commit_num": 4420,
       "hash": "054d117d",
       "short": "054d117d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an idiotic icc warning\n\nIntel Compiler has 'invented' this pearl:\n\nwarning #1476: field uses tail padding of a base class\n\nJust becuase we have subclassed MainThread and added\nthe field 'bool thinking'.\n\nPure nosense. Silence the warning.\n\nNo functional change.\n",
       "subject": "Fix an idiotic icc warning"
     },
     {
-      "commit_num": 4398,
+      "commit_num": 4421,
       "hash": "62b32a47",
       "short": "62b32a47",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Futher renaming in thread.cpp\n\nNo functional change.\n",
       "subject": "Futher renaming in thread.cpp"
     },
     {
-      "commit_num": 4399,
+      "commit_num": 4422,
       "hash": "588670e8",
       "short": "588670e8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Big renaming in thread stuff\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Big renaming in thread stuff"
     },
     {
-      "commit_num": 4400,
+      "commit_num": 4423,
       "hash": "c465f4c4",
       "short": "c465f4c4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix race while exiting\n\nFix again TimerThread::idle_loop() to prevent a\ntheoretical race with 'exit' flag in ~Thread().\n\nIndeed in Thread d'tor we raise 'exit' and then\ncall notify() that is lock protected, so we\nhave to check again for 'exit' before going to\nsleep in idle_loop().\n\nAlso same change in Thread::idle_loop() where we\nnow check for 'exit' before to go to sleep.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix race while exiting"
     },
     {
-      "commit_num": 4401,
+      "commit_num": 4424,
       "hash": "78a95317",
       "short": "78a95317",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a bug in timer loop\n\nSilly logic bug introduced in dda7de17e74d7e8\n\nTimer thread, when msec = 0, instead of going\nto sleep, calls check_time() in an endless loop.\n\nSpotted and reported by snino64 due to abnormally\nhigh CPU usage.\n\nNo functional change.\n",
       "subject": "Fix a bug in timer loop"
     },
     {
-      "commit_num": 4402,
+      "commit_num": 4425,
       "hash": "d1143794",
       "short": "d1143794",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Polymorphic Thread hierarchy\n\nSubclass MainThread and TimerThread and declare\nidle_loop() virtual. This allow us to cleanly\nremove a good bunch of hacks, relying on C++\npolymorphism to do the job.\n\nNo functional change.\n",
       "subject": "Polymorphic Thread hierarchy"
     },
     {
-      "commit_num": 4403,
+      "commit_num": 4426,
       "hash": "99ae4771",
       "short": "99ae4771",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Re-add the hack\n\nThis reverts commit 869c9244101\n\nI misunderstood here. Actually it can happen that\nthread is created but still not entered idle_loop\nand at the same time start_searching() is called.\n\nBecuase 'do_sleep' is set start_searching() will\nset it to false and start the search, but when,\nat last, the thread enters idle_loop(), resets\nthe flag and goes to sleep: not what we want.\n\nRevert the hack waiting for a better solution\nin the next patches.\n\nNo functional change.\n",
       "subject": "Re-add the hack"
     },
     {
-      "commit_num": 4404,
+      "commit_num": 4427,
       "hash": "e70eae2c",
       "short": "e70eae2c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't use do_sleep flag\n\nRename it is_finished and use it only in main\nthread to signal search is finished. This allows\nus to simplify the complex SMP logic.\n\nUltra tricky patch: deep test is required under\nwide conditions like pondering on and option\n\"Use Sleeping Threads\" set to false.\n\nNo functional change.\n",
       "subject": "Don't use do_sleep flag"
     },
     {
-      "commit_num": 4405,
+      "commit_num": 4428,
       "hash": "dda7de17",
       "short": "dda7de17",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire set_timer()\n\nAlso assure in Thread::timer_loop() that when\ntimer interval is 0 (timer is disabled) we\nnever call check_time()\n\nNo functional change.\n",
       "subject": "Retire set_timer()"
     },
     {
-      "commit_num": 4406,
+      "commit_num": 4429,
       "hash": "869c9244",
       "short": "869c9244",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire obsolete race hack\n\nThis hack was introduced in d282cf6964d493\nto workaround a race with start_searching(),\nbut these days is no more needed.\n\nNo functional change.\n",
       "subject": "Retire obsolete race hack"
     },
     {
-      "commit_num": 4407,
+      "commit_num": 4430,
       "hash": "ea6c1f7a",
       "short": "ea6c1f7a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire Threads wake_up() and sleep()\n\nThese functions are used in just one place.\nAnd generalize wait_for_stop()\n\nNo functional change.\n",
       "subject": "Retire Threads wake_up() and sleep()"
     },
     {
-      "commit_num": 4408,
+      "commit_num": 4431,
       "hash": "81cd7d78",
       "short": "81cd7d78",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename wake_up() to notify_one()\n\nTo align to C++ std::thread conventions.\n\nNo functional change.\n",
       "subject": "Rename wake_up() to notify_one()"
     },
     {
-      "commit_num": 4409,
+      "commit_num": 4432,
       "hash": "a523cea7",
       "short": "a523cea7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unify 'ponderhit' handling\n\nFinally we can now merge the 'ponderhit' case with\n'stop' and 'quit'.\n\nThe patches have been done step by step to help debugging\nbecuase this is really tricky code.\n\nNo functional change.\n",
       "subject": "Unify 'ponderhit' handling"
     },
     {
-      "commit_num": 4410,
+      "commit_num": 4433,
       "hash": "a66a7c38",
       "short": "a66a7c38",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small change to \"ponderhit\" handling\n\nReset Limits.ponder only if search continue, but if\nwe are going to stop the search there is no need\n(and is also confusing) to clear the 'ponder' flag.\n\nThis mimics the behaviour upon rceiving 'stop' when\npondering.\n\nNo functional change.\n",
       "subject": "Small change to \"ponderhit\" handling"
     },
     {
-      "commit_num": 4411,
+      "commit_num": 4434,
       "hash": "89a89eb6",
       "short": "89a89eb6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify and rename wait_for_stop_or_ponderhit()\n\nSetting stopOnPonderhit is now done by the caller.\n\nNo functional change.\n",
       "subject": "Simplify and rename wait_for_stop_or_ponderhit()"
     },
     {
-      "commit_num": 4412,
+      "commit_num": 4435,
       "hash": "3b14b176",
       "short": "3b14b176",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify a condition in search()\n\nAnd rearrange best value update in case of SpNode.\n\nNo functional change.\n",
       "subject": "Simplify a condition in search()"
     },
     {
-      "commit_num": 4413,
+      "commit_num": 4436,
       "hash": "3a836dab",
       "short": "3a836dab",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Clarify SAN disambiguation in case of a pinned piece\n\nIn SAN notation when two pieces of the same type can\nmove to a given destination square, a disambiguation\nadditional info (like starting file) shall be added\nto the SAN move.\n\nIf one of the two pieces is pinned, the corresponding\nmove _could_ be illegal and in this case disambiguation\nis not needed. But to be pinned alone it is not enough\nto deduce that the move is illegal, for instance in this\nposition:\n\nR3rk2/2r6/8/8/8/8/8/K7 b - - 0 1\n\nThe move Rc8 is ambiguous although the rook in e8 is pinned\nand the correct SAN notation should be Rcc8.\n\nNo functional change.\n",
       "subject": "Clarify SAN disambiguation in case of a pinned piece"
     },
     {
-      "commit_num": 4414,
+      "commit_num": 4437,
       "hash": "edce2a84",
       "short": "edce2a84",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert so called \"fromNull patch\"\n\nRevert patch c581b7ea3627482\n\nSeems a regression after testing from Gary:\nELO: 7.24 +- 99%: 17.03 95%: 12.93\nLOS: 97.86%\nWins: 439 Losses: 381 Draws: 1962\n\nAnd mine:\nAfter 5410 games at 15\"+0.05\nWins: 936 Losses: 1141 Draws: 3333  ELO -13\n\nMoreover we know that there is a regression in the range\nof patches which include the fromNull patch.\n\nProbably this is not the only regression since 2.3.1 and\nperhaps the idea under fromNull is good, but at the moment,\nwhile in deep regression hunting, better to be on the safe\nside and revert it entirely.\n\nMy guess on why this is a regression is that using the\nnegated evaluation of previous ply in case of null search\nfails to take in account the king safety asymmetry between\nthe two colors. This is of course just a guess.\n\nbench 5503830\n",
       "subject": "Revert so called \"fromNull patch\""
     },
     {
-      "commit_num": 4415,
+      "commit_num": 4438,
       "hash": "e1191b35",
       "short": "e1191b35",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Async 'stop' command\n\nDon't wait for the search to finish after a 'stop'\ncommand, but keep processing the GUI input if any.\n\nAlso explicitly wake up the main thread (that could be\nsleeping) after a 'stop' or 'quit' command and do not\nrely on wait_for_search_finished() doing it for us.\n\nThis patch cleans up the code and functions's definitions,\nbut it is risky and needs a good test under different\nconditions to be sure it does not introduces hungs up.\n\nNo functional change.\n",
       "subject": "Async 'stop' command"
     },
     {
-      "commit_num": 4416,
+      "commit_num": 4439,
       "hash": "9b1cf3cf",
       "short": "9b1cf3cf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Have fun with union in book.cpp\n\nFancy way to use an union to map polyglot\nzobrist keys in one go.\n\nAlso some renaming while there.\n\nNo functional change.\n",
       "subject": "Have fun with union in book.cpp"
     },
     {
-      "commit_num": 4417,
+      "commit_num": 4440,
       "hash": "bff65a21",
       "short": "bff65a21",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire 'Cowardice' and 'Aggressiveness' UCI options\n\nThey are not self-describing and create a lot of user\nrequests about them.\n\nGiven that the values are already well tuned there\nis no need to expose them as UCI options.\n\nNo functional change.\n",
       "subject": "Retire 'Cowardice' and 'Aggressiveness' UCI options"
     },
     {
-      "commit_num": 4418,
+      "commit_num": 4441,
       "hash": "2d60995c",
       "short": "2d60995c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire 'mate in x' hack\n\nSometimes is faster, but not always and on very long mates\nproduces strange scores probably due to truncation of PV\nartifacts.\n\nSo simply perform normal search also in case of UCI 'mate x'\ncommand, with the only difference that when a mate in x is\nfound search returns immediately.\n\nNo functional change.\n",
       "subject": "Retire 'mate in x' hack"
     },
     {
-      "commit_num": 4419,
+      "commit_num": 4442,
       "hash": "0454bbc5",
       "short": "0454bbc5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't exit if unable to find bench file\n\nNow that we can call 'bench' command also from\ninteractive terminal it makes no more sense to\nexit the application if the user types a wrong\nfile name.\n\nNo functional change.\n",
       "subject": "Don't exit if unable to find bench file"
     },
     {
-      "commit_num": 4420,
+      "commit_num": 4443,
       "hash": "900e2d4e",
       "short": "900e2d4e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Teach file_to_char() about upper/lower case\n\nThis allows to further simplify Position::fen()\n\nNo functional change.\n",
       "subject": "Teach file_to_char() about upper/lower case"
     },
     {
-      "commit_num": 4421,
+      "commit_num": 4444,
       "hash": "9d115157",
       "short": "9d115157",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat FEN construction\n\nSimplify and shrink code.\n\nNo functional change.\n",
       "subject": "Reformat FEN construction"
     },
     {
-      "commit_num": 4422,
+      "commit_num": 4445,
       "hash": "8737b26a",
       "short": "8737b26a",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -983,7 +946,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove Threat Extension\n\nGreat code simplification: - instead do not futility\nprune threat refutations. allows_move() is therefore removed.\n\n4000 games at 50,000 nodes/move:\n1085-989-1926 [51.2%] LOS=98.3%\n\n4000 games in 10\"+0.1\"\n756-751-2493 [50.1%] LOS=55.1%\n\nEDIT: I have retested the patch of Lucas in a slightly different form\n(without pruning in PvNode) and test mre or less confirms that\n60 lines of code are totally unuseful:\n\nAfter 6195 games at 15\"+0.05\"\n1333 - 1325 - 3537 ELO 0\n\nbench 5140990\n",

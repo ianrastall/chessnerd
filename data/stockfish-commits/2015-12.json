@@ -2,7 +2,7 @@
   "month": "2015-12",
   "commits": [
     {
-      "commit_num": 3240,
+      "commit_num": 3263,
       "hash": "7cafbab5",
       "short": "7cafbab5",
       "author": "Joona Kiiski <joona@zoox.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 7 Beta 2\n\nBench: 8355485\n\nNo functional change\n",
       "subject": "Stockfish 7 Beta 2"
     },
     {
-      "commit_num": 3241,
+      "commit_num": 3264,
       "hash": "6a79d5d1",
       "short": "6a79d5d1",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correct Pawn Trace Score + Code Clean up\n\nNo functional change\n\nResolves #542\n",
       "subject": "Correct Pawn Trace Score + Code Clean up"
     },
     {
-      "commit_num": 3242,
+      "commit_num": 3265,
       "hash": "3e4fed3a",
       "short": "3e4fed3a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix assert with very high score position\n\nIn case of a very high material score, we can\noverflow VALUE_INFINITE.\n\nThis patch fixes an assert with:\n\nposition fen 7k/QQQQR3/2B5/4KN1Q/3QQ3/8/8/4R3 b - - 0 1\ngo depth 1\n\nNo functional change.\n\nResolves #546\n",
       "subject": "Fix assert with very high score position"
     },
     {
-      "commit_num": 3243,
+      "commit_num": 3266,
       "hash": "a5c76d69",
       "short": "a5c76d69",
       "author": "Joona Kiiski <joona@zoox.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 7 Beta 1\n\nBench: 8355485\n\nNo functional change\n",
       "subject": "Stockfish 7 Beta 1"
     },
     {
-      "commit_num": 3244,
+      "commit_num": 3267,
       "hash": "1b5b900a",
       "short": "1b5b900a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move some globals into main thread scope\n\nMake it explicit that those variables are not globals, but\nare used only by main thread. I think it is a sensible\nclarification because easy move is already tricky enough\nand current patch makes the involved actors explicit.\n\nNo functional change.\n\nResolves #537\n",
       "subject": "Move some globals into main thread scope"
     },
     {
-      "commit_num": 3245,
+      "commit_num": 3268,
       "hash": "90f59373",
       "short": "90f59373",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Fix compiling of 32 bit binary on 64-bit Windows\"\n\nThis reverts commit 1e8836d921b3\n\nBroken compile on mingw under Windows:\n\nConfig:\ndebug: 'yes'\noptimize: 'yes'\narch: 'i386'\nbits: '32'\nprefetch: 'yes'\nbsfq: 'no'\npopcnt: 'no'\nsse: 'yes'\npext: 'no'\n\nFlags:\nCXX: i686-w64-mingw32-c++\nCXXFLAGS: -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++11  -Wextra -Wshadow -g -O3 -msse\nLDFLAGS:  -static\n\nTesting config sanity. If this fails, try 'make help' ...\n\nmingw32-make[1]: Leaving directory 'C:/stockfish/src'\nc:/MinGw/bin/mingw32-make ARCH=x86-32 COMP=mingw all\nmingw32-make[1]: Entering directory 'C:/stockfish/src'\nsh: C:\\Program: No such file or directory\ni686-w64-mingw32-c++ -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++11  -Wextra -Wshadow -g -O3 -msse   -c -o benchmark.o benchmark.cpp\n<builtin>: recipe for target 'benchmark.o' failed\nprocess_begin: CreateProcess(NULL, i686-w64-mingw32-c++ -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++11 -Wextra -Wshadow -g -O3 -msse -c -o benchmark.o benchmark.cpp, ...) failed.\nmake (e=2): Impossibile trovare il file specificato.\n\nmingw32-make[1]: *** [benchmark.o] Error 2\nmingw32-make[1]: Leaving directory 'C:/stockfish/src'\nmakefile:401: recipe for target 'build' failed\nmingw32-make: *** [build] Error 2\n\nNo functional change.\n",
       "subject": "Revert \"Fix compiling of 32 bit binary on 64-bit Windows\""
     },
     {
-      "commit_num": 3246,
+      "commit_num": 3269,
       "hash": "da34023c",
       "short": "da34023c",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "New mobility bonus\n\nTuned the global mobility factor for each piece, as well as some +- delta,\n\nThe master mobility factor was {266,334} and tuning gave\n{267, 362} +S(-2,-2) for the Knight\n{249, 328} +S( 0,-2) for the Bishop\n{298, 353} +S(1,1) for the Rook\n{265, 358} +S(2,-1) for the Queen\n\nPassed STC\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 49402 W: 9367 L: 9037 D: 30998\n\nand LTC\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 26831 W: 3871 L: 3658 D: 19302\n\nBench: 8355485\n\nResolves #536\n",
       "subject": "New mobility bonus"
     },
     {
-      "commit_num": 3247,
+      "commit_num": 3270,
       "hash": "e3c85c31",
       "short": "e3c85c31",
       "author": "DU-jdto <SNP_Tiranasta@hotmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove another unnecessary Search::Stack field\n\nNo functional change\n\nResolves #535\n",
       "subject": "Remove another unnecessary Search::Stack field"
     },
     {
-      "commit_num": 3248,
+      "commit_num": 3271,
       "hash": "5bbd9440",
       "short": "5bbd9440",
       "author": "loco-loco <loco-loco@users.noreply.github.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove unused field SearchStack::ttMove\n\nNo functional change\n\nResolves #533\n",
       "subject": "Remove unused field SearchStack::ttMove"
     },
     {
-      "commit_num": 3249,
+      "commit_num": 3272,
       "hash": "ed72a1e9",
       "short": "ed72a1e9",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove killer move conditions from LMR\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 8459 W: 1619 L: 1477 D: 5363\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 32239 W: 4404 L: 4299 D: 23536\n\nBench: 7597031\n\nResolves #534\n",
       "subject": "Remove killer move conditions from LMR"
     },
     {
-      "commit_num": 3250,
+      "commit_num": 3273,
       "hash": "1e8836d9",
       "short": "1e8836d9",
       "author": "braich <braichuk@tut.by>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix compiling of 32 bit binary on 64-bit Windows\n\nTwo versions of mingw-w64 (targeting Win64 and Win32)\ncan be installed on Windows too.\n\nNo functional change\n\nResolves #532\n",
       "subject": "Fix compiling of 32 bit binary on 64-bit Windows"
     },
     {
-      "commit_num": 3251,
+      "commit_num": 3274,
       "hash": "38adb487",
       "short": "38adb487",
       "author": "Guenther Demetz <guenther.demetz@wuerth-phoenix.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Distinct iteration paths for Lazy SMP threads\n\nSTC 5+0.1, threads 7\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 6026 W: 1047 L: 901 D: 4078\n\nLTC: 20+0.2, threads 7\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 19739 W: 2910 L: 2721 D: 14108\n\nSTC 5+0.1, threads 20\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 2493 W: 462 L: 331 D: 1700\n\nLTC 30+0.3, threads 20\nELO: 8.86 +-3.7 (95%) LOS: 100.0%\nTotal: 8000 W: 1076 L: 872 D: 6052\n\nBench: 8012530\n\nResolves #525\n",
       "subject": "Distinct iteration paths for Lazy SMP threads"
     },
     {
-      "commit_num": 3252,
+      "commit_num": 3275,
       "hash": "2c1797ab",
       "short": "2c1797ab",
       "author": "mstembera <MissingEmail@email>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix easy move bug in SMP mode\n\nFix a bug where we could stop the search after only 10% of time used due to a matching easy move but later switch to a different move that was never pre-screened as easy due to SMP thread select.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 27227 W: 4910 L: 4800 D: 17517\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 40368 W: 5826 L: 5733 D: 28809\n\nResolves #521\n",
       "subject": "Fix easy move bug in SMP mode"
     },
     {
-      "commit_num": 3253,
+      "commit_num": 3276,
       "hash": "9fac5774",
       "short": "9fac5774",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Threats retuned\n\nSTC:\n\nLLR: 2.96 (-2.94,2.94) [0.00,4.00]\nTotal: 45239 W: 8913 L: 8591 D: 27735\n\nLTC:\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 21046 W: 3200 L: 2989 D: 14857\n\nBench: 8012530\n\nResolves #526\n",
       "subject": "Threats retuned"
     },
     {
-      "commit_num": 3254,
+      "commit_num": 3277,
       "hash": "69240a98",
       "short": "69240a98",
       "author": "Leonid Pechenik <lp@home>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify time management and fix 'ponder on' bug\n\nSimplify time management code by removing hard stops for unchanging first root moves.\nSearch is now stopped earlier at the end iteration if it did not have fail-lows at root.\n\nThis simplification also fixes pondering bug. Ponder flag was true by default\nand cutechess-cli doesn't change it to false even though no pondering is possible.\nFix the issue by setting the default value of 'Ponder' flag to false.\n\n10+0.1:\nELO: 3.51 +-3.0 (95%) LOS: 99.0%\nTotal: 20000 W: 3898 L: 3696 D: 12406\n\n40+0.4:\nELO: 1.39 +-2.7 (95%) LOS: 84.7%\nTotal: 20000 W: 3104 L: 3024 D: 13872\n\n60+0.06:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 37231 W: 5333 L: 5236 D: 26662\n\nStopped run at 100+1:\nLLR: 1.09 (-2.94,2.94) [-3.00,1.00]\nTotal: 37253 W: 4862 L: 4856 D: 27535\n\nResolves #523\nFixes #510\n",
       "subject": "Simplify time management and fix 'ponder on' bug"
     },
     {
-      "commit_num": 3255,
+      "commit_num": 3278,
       "hash": "7904a7d9",
       "short": "7904a7d9",
       "author": "mstembera <MissingEmail@email>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix MultiPv and Skill in SMP.\n\n7 threads, 5+0.1:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 55460 W: 9665 L: 9601 D: 36194\n\nNo functional change in normal playing mode\n",
       "subject": "Fix MultiPv and Skill in SMP."
     },
     {
-      "commit_num": 3256,
+      "commit_num": 3279,
       "hash": "5d077bb4",
       "short": "5d077bb4",
       "author": "mstembera <MissingEmail@email>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Proper Makefile for cross compiling 64 or 32 bit PGO + LTO + static Windows binaries under Linux.\n\nNo functional change\n\nResolves #511\n",
       "subject": "Proper Makefile for cross compiling 64 or 32 bit PGO + LTO + static Windows binaries under Linux."
     },
     {
-      "commit_num": 3257,
+      "commit_num": 3280,
       "hash": "83156205",
       "short": "83156205",
       "author": "absimaldata <adpq11@gmail.com>",
@@ -463,7 +446,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "New Tuned Weights\n\nMore accurate evaluation weights\n\nPerformed better at STC\n\nLLR: 1.32 (-2.94,2.94) [0.00,4.00]\nTotal: 190043 W: 37433 L: 36675 D: 115935\n\nPassed LTC\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 30157 W: 4540 L: 4303 D: 21314\n\nBench: 9264977\n\nResolves #515\n",

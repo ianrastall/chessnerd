@@ -2,7 +2,7 @@
   "month": "2012-05",
   "commits": [
     {
-      "commit_num": 4630,
+      "commit_num": 4653,
       "hash": "0412f4a1",
       "short": "0412f4a1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an issue when adding a book during the game\n\nCurrently when we fail to open a book file, for instance\nif it doesn't exsist, we leave Book::open() with ifstream\nfailbit set. If then the book file is added, we correctly\nopen it at next attempt, but failbit is still set so that\nafter opening we exit because ifstream::good() returns false.\n\nThe fix is to reset failbit upon exiting.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix an issue when adding a book during the game"
     },
     {
-      "commit_num": 4631,
+      "commit_num": 4654,
       "hash": "68283258",
       "short": "68283258",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire PieceOffset[] in book.cpp\n\nAnd calculate piece offset on the fly. Also\nimprove comments.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire PieceOffset[] in book.cpp"
     },
     {
-      "commit_num": 4632,
+      "commit_num": 4655,
       "hash": "61a054b1",
       "short": "61a054b1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a possible 'Division by zero'\n\nIn case a book entry has 'count' field set to 0\nwe crash. Spotted by Clang's static analyzer.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a possible 'Division by zero'"
     },
     {
-      "commit_num": 4633,
+      "commit_num": 4656,
       "hash": "3361ad42",
       "short": "3361ad42",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename psq_score in ReducedStateInfo\n\nSo to be fully in sync with StateInfo, and move struct\nto position.h, just below StateInfo.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rename psq_score in ReducedStateInfo"
     },
     {
-      "commit_num": 4634,
+      "commit_num": 4657,
       "hash": "6c9c6dd9",
       "short": "6c9c6dd9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix book file regression\n\nRevision 2aac860db3d04881103a3b0d0 of 27 / 4 / 2012\nchanged can_castle() signatures from bool to int and\nthis broke the code that calculates polyglot hash key\nin book.cpp\n\nInstead of directly fixing the code we prefer to change\ncastling rights definitions to align to the polyglot ones\n(as we did in previous patch). After this step we can simply\ntake internal castle rights as they are and use them\ndirectly to calculate polyglot book hash key, as we do\nin this patch that fixes the regression.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix book file regression"
     },
     {
-      "commit_num": 4635,
+      "commit_num": 4658,
       "hash": "a358dfe9",
       "short": "a358dfe9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Redefine enum CastleRight\n\nTo be aligned with PolyGlot book castle right definitions.\n\nThis will be used by next patch.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Redefine enum CastleRight"
     },
     {
-      "commit_num": 4636,
+      "commit_num": 4659,
       "hash": "0ecc920a",
       "short": "0ecc920a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add a known draw case in kpk bitbase generation\n\nEarly classify as known draws the positions\nwhere white king is trapped on the rook file.\n\nSuggested by Dan Honeycutt.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add a known draw case in kpk bitbase generation"
     },
     {
-      "commit_num": 4637,
+      "commit_num": 4660,
       "hash": "f86182e7",
       "short": "f86182e7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify Position::print()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify Position::print()"
     },
     {
-      "commit_num": 4638,
+      "commit_num": 4661,
       "hash": "c19a6ef8",
       "short": "c19a6ef8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Don't split if reduced below min_split_depth\"\n\nAfter extensive testing (I was off line this week and let\nthe test go on) it seems this change is useless:\n\nAfter 33968 games on a QUAD (4 threads) at 15\"+0.05\nMod vs Orig 5425 - 5550 - 22993 ELO -1 (+-2.1)\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"Don't split if reduced below min_split_depth\""
     },
     {
-      "commit_num": 4639,
+      "commit_num": 4662,
       "hash": "ecb84464",
       "short": "ecb84464",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Improve previous patch\n\nOnly in case of promotion we care about an upper case\npromotion piece char, so std::transform() is overkill\nfor the task.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Improve previous patch"
     },
     {
-      "commit_num": 4640,
+      "commit_num": 4663,
       "hash": "1b2af05e",
       "short": "1b2af05e",
       "author": "Balint Pfliegel <balint.pfliegel@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Junior promotion patch\n\nAssumption: Junior sends promotions according to the side to move (ucase/lcase).\nFact: Stockfish generally handles promotion lcase.\nPatch: Handling position fen input moves always with lcase promotions.\n\nPorted back by Portfish. No functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Junior promotion patch"
     },
     {
-      "commit_num": 4641,
+      "commit_num": 4664,
       "hash": "caef3192",
       "short": "caef3192",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix compilation with Android NDK\n\nIt seems ADL lookup is broken with the STLPort library. Peter says:\n\nThe compiler is gcc 4.4.3, but I don't know how many patches they\nhave applied to it. I think gcc has had support for Koenig lookup\na long time. I think the problem is the type of the vector iterator.\nFor example, line 272 in search.cpp:\n\n if (bookMove && count(RootMoves.begin(), RootMoves.end(), bookMove))\n\ngives the error:\n\njni/stockfish/search.cpp:272: error: 'count' was not declared in this scope\n\nHere RootMoves is:\n\n std::vector<RootMove> RootMoves;\n\nIf std::vector<T>::iterator is implemented as T*, then Koenig lookup\nwould fail because RootMove* is not in namespace std.\n\nI compile with the stlport implementation of STL, which in its vector\nclass has:\n\n typedef value_type* iterator;\n\nI'm not sure if this is allowed by the C++ standard. I did not find\nanything that says the iterator type must belong to namespace std.\nThe consensus in this thread\n\nhttp://compgroups.net/comp.lang.c++.moderated/argument-dependent-lookup/433395\n\nis that the stlport iterator type is allowed.\n\nReport and patch by Peter Osterlund.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix compilation with Android NDK"
     },
     {
-      "commit_num": 4642,
+      "commit_num": 4665,
       "hash": "2f47844c",
       "short": "2f47844c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify attacks_bb()\n\nAnd some formatting while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify attacks_bb()"
     },
     {
-      "commit_num": 4643,
+      "commit_num": 4666,
       "hash": "b9bc6e82",
       "short": "b9bc6e82",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change pos.pieces() argument order\n\nLet first argument to be the 'color'. This allows to align\npos.pieces() signatures with piece_list(), piece_count() and\nall the other functions where 'color' argument is passed as\nfirst one.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Change pos.pieces() argument order"
     },
     {
-      "commit_num": 4644,
+      "commit_num": 4667,
       "hash": "5e905800",
       "short": "5e905800",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,7 +371,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert constants to decimal representation\n\nHex representation doesn't add any value in those cases.\nPreserve hex representation where more self-documenting\nfor instance for binary masks values.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

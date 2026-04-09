@@ -2,7 +2,7 @@
   "month": "2009-11",
   "commits": [
     {
-      "commit_num": 6100,
+      "commit_num": 6123,
       "hash": "ae0b9657",
       "short": "ae0b9657",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not crash if we are asked to search mate or stalemate position.\n\nWe might be asked to ponder mate or stalemate position.\nThis being the case, simply wait for stop or ponderhit.\nCurrently we crash.\n\nUCI specs aren't clear on the issue, but it cost nothing to\nadd little check.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not crash if we are asked to search mate or stalemate position."
     },
     {
-      "commit_num": 6101,
+      "commit_num": 6124,
       "hash": "455993b2",
       "short": "455993b2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix get_option_value() for strings with spaces\n\nProblem is that\n\nistream& operator>> (istream& is, char* str );\n\naccording to C++ documentation \"Ends extraction when the\nnext character is either a valid whitespace or a null character,\nor if the End-Of-File is reached.\"\n\nSo if the parameter value is a string with spaces the currently\nused instruction 'ss >> ret;' copies the chars only up to the first\nwhite space and not the whole string.\n\nUse a specialization of get_option_value() to fix this corner case.\n\nBug reported by xiaozhi\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix get_option_value() for strings with spaces"
     },
     {
-      "commit_num": 6102,
+      "commit_num": 6125,
       "hash": "c7a77dd3",
       "short": "c7a77dd3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire FutilityMargins[] array\n\nNow we use a formula to calculate margins on the fly.\n\nNode count has changed because we fixed a leftover when\nwe still where using FutilityMargins to calculate futilityValue\nin the case that we had the evaluation score in TT.\n\nAlso small indentation fix.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire FutilityMargins[] array"
     },
     {
-      "commit_num": 6103,
+      "commit_num": 6126,
       "hash": "25c22ffe",
       "short": "25c22ffe",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use move not ttMove in exclude search\n\nIf we arrive until the exclusion search call then\nwe know that move == ttMove == tte->move()\n\nBut using ttMove in search call while, during excluded search\nconditions we have used tte->Move()could be a little bit suboptimal.\nOn the other side using tte->move() also in search call is a bit ugly\nso opt for the third choice that is the most clean becasue from the\nconditions the reader easily understands that we are talking of ttMove\nand that we ant to exclude the move we are evaluating in that moment.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use move not ttMove in exclude search"
     },
     {
-      "commit_num": 6104,
+      "commit_num": 6127,
       "hash": "ae6157fc",
       "short": "ae6157fc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document previous patch\n\nIf tte->move() != MOVE_NONE then tte->move() == ttMove\n\nWhat could happen is that we have a ttMove without a tte, or,\nwe have a tte but tte->move() == MOVE_NONE\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better document previous patch"
     },
     {
-      "commit_num": 6105,
+      "commit_num": 6128,
       "hash": "1a7047f5",
       "short": "1a7047f5",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Drop OnlyMoveExt PV-condition from 8 plies to 6 plies\n\nOrig - Mod: 731 - 750\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Drop OnlyMoveExt PV-condition from 8 plies to 6 plies"
     },
     {
-      "commit_num": 6106,
+      "commit_num": 6129,
       "hash": "5bec768d",
       "short": "5bec768d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a possible crash in excluded search condition\n\nDue to IID we could have a ttMove and not a tte, or,\neven if we have a tte they could belong to different\nsearches so that the depth and type of tte don't\nhave the same origin of the ttMove.\n\nTo fix this we always use tte entry in excluded search\ncondition and, after an IID, we reprobe the TT table.\n\nNo functional change. Apart from possible crash fix.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a possible crash in excluded search condition"
     },
     {
-      "commit_num": 6107,
+      "commit_num": 6130,
       "hash": "af3dd21e",
       "short": "af3dd21e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "IncrementalFutilityMargin to 4 and increased pruning\n\nIncrease pruning at low depths while tone downa bit at\nhigher depths (linearize a bit the logaritmic behaviour)\n\nThis goes togheter with IncrementalFutilityMargin decreased\nto 4 compensate the bigger pruning effect.\n\nTotal pruned nodes are more or less the same. We go from 36%\nof nodes after prune to 37% with this patch.\n\nAfter 999 games at 1+0\nMod vs Orig +250 =526 -223 +9 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "IncrementalFutilityMargin to 4 and increased pruning"
     },
     {
-      "commit_num": 6108,
+      "commit_num": 6131,
       "hash": "6ae30e7c",
       "short": "6ae30e7c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document why we don't use TT to prune in search_pv()\n\nFrom a Joona' s post on talkchess.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Document why we don't use TT to prune in search_pv()"
     },
     {
-      "commit_num": 6109,
+      "commit_num": 6132,
       "hash": "5ea81679",
       "short": "5ea81679",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert last Only move extensions tweaks\n\nThey gave bad results:\n\nMod - Orig: 361 - 404\n\nMaster is now verified to be functional equivalent with F_63\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert last Only move extensions tweaks"
     },
     {
-      "commit_num": 6110,
+      "commit_num": 6133,
       "hash": "850c021f",
       "short": "850c021f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite messy LSN-code take 2\n\nWe already reset loseOnTime flag at the beginning of\na new game, so we can simplify a bit the ligic there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite messy LSN-code take 2"
     },
     {
-      "commit_num": 6111,
+      "commit_num": 6134,
       "hash": "48246468",
       "short": "48246468",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove 2 FIXMEs from search.cpp\n\n* First one is without any documentation, code is working just fine,\n  so there seems to be nothing that really should be fixed.\n\n* Second one requesting emergency measures on aspiration fail low\n  when we are running out of time and we are without good move.\n  After very long time, I've come to conclusion that this is\n  impossible to fix, so remove request.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove 2 FIXMEs from search.cpp"
     },
     {
-      "commit_num": 6112,
+      "commit_num": 6135,
       "hash": "cd0c7373",
       "short": "cd0c7373",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite messy LSN-code\n\n* New version is documented and logic should be easier to follow\n* Add extra check to not use LSN with x moves / y seconds time control\n* New code fixes some rear cases where old code (still) causes program to lose on time at move 1.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite messy LSN-code"
     },
     {
-      "commit_num": 6113,
+      "commit_num": 6136,
       "hash": "9a595359",
       "short": "9a595359",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove RootMoveList::scan_for_easy_move()\n\n* The function is called only in one place\n* It must not be called elsewhere\n* The function call easily replaced with simple one line condition\n\nNo functional change (tested with usual set + 2000 random positions)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove RootMoveList::scan_for_easy_move()"
     },
     {
-      "commit_num": 6114,
+      "commit_num": 6137,
       "hash": "55b5b032",
       "short": "55b5b032",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Speed up sorting of non-captures\n\nBecasue we have a lot of zero scores (around 30% of moves)\nit is a good idea to do a couple a presorting loops across\nthe move list and shuffle the moves a bit so that with a\nsmall effort we end up with 3 groups of moves: positives\nscores, zero scores and negative scores.\n\nWe have two advantages\n\n1) We don't need to sort zero scores\n\n2) Sort two small groups is faster then sort a single big one\n\nSpeed up is of about 2%\n\nBecause equal scored moves could be reordered in a different way\nthis is not a \"no functional change\" although I have verified\nthe output list is always correctly sorted.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Speed up sorting of non-captures"
     },
     {
-      "commit_num": 6115,
+      "commit_num": 6138,
       "hash": "2b6bc70f",
       "short": "2b6bc70f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document and cleanup new effective-single-reply code\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Document and cleanup new effective-single-reply code"
     },
     {
-      "commit_num": 6116,
+      "commit_num": 6139,
       "hash": "8b3fdec7",
       "short": "8b3fdec7",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Always extend full ply in PV\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Always extend full ply in PV"
     },
     {
-      "commit_num": 6117,
+      "commit_num": 6140,
       "hash": "58452de8",
       "short": "58452de8",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add mild extension in low depths\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add mild extension in low depths"
     },
     {
-      "commit_num": 6118,
+      "commit_num": 6141,
       "hash": "bc35f4c4",
       "short": "bc35f4c4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tone down a bit futility parameters\n\nAfter 999 games at 1+0\n\nMod vs Orig +239 =542 -218  +7 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Tone down a bit futility parameters"
     },
     {
-      "commit_num": 6119,
+      "commit_num": 6142,
       "hash": "93c9f342",
       "short": "93c9f342",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix currentMove bug\n\nOrig vs Master: +15 elo 887.5 - 812.5 (1700 games, finished) [4CPU]\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix currentMove bug"
     },
     {
-      "commit_num": 6120,
+      "commit_num": 6143,
       "hash": "889c8538",
       "short": "889c8538",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove 4*IncrementalFutilityMargin from futilityValue\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove 4*IncrementalFutilityMargin from futilityValue"
     },
     {
-      "commit_num": 6121,
+      "commit_num": 6144,
       "hash": "87507121",
       "short": "87507121",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Code style triviality\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Code style triviality"
     },
     {
-      "commit_num": 6122,
+      "commit_num": 6145,
       "hash": "16acf577",
       "short": "16acf577",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Only move extension based on exclusion search\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Only move extension based on exclusion search"
     },
     {
-      "commit_num": 6123,
+      "commit_num": 6146,
       "hash": "77eec9f9",
       "short": "77eec9f9",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Base work for exclusion search\n\nNo functional change\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Base work for exclusion search"
     },
     {
-      "commit_num": 6124,
+      "commit_num": 6147,
       "hash": "c52da3b8",
       "short": "c52da3b8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Logaritmic futility margins\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Logaritmic futility margins"
     },
     {
-      "commit_num": 6125,
+      "commit_num": 6148,
       "hash": "b599da01",
       "short": "b599da01",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Exponential futility margins\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Exponential futility margins"
     },
     {
-      "commit_num": 6126,
+      "commit_num": 6149,
       "hash": "98983320",
       "short": "98983320",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "In razor qsearch use corrected beta\n\nCorrect beta by razor margin when callin qsearch\n\nAfter 1019 games on Joona's QUAD\n\nMod - Orig: 524 - 495 (+10 elo)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "In razor qsearch use corrected beta"
     },
     {
-      "commit_num": 6127,
+      "commit_num": 6150,
       "hash": "89fe8bc0",
       "short": "89fe8bc0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro-optimize get_material_info()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Micro-optimize get_material_info()"
     },
     {
-      "commit_num": 6128,
+      "commit_num": 6151,
       "hash": "0eedf476",
       "short": "0eedf476",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Incremental Futility Margin\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Incremental Futility Margin"
     },
     {
-      "commit_num": 6129,
+      "commit_num": 6152,
       "hash": "52bca81d",
       "short": "52bca81d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "History pruning exponential limit\n\nUse an exponenital law instead of a linear one for\nhistory pruning.\n\nThis should prune more at low depths and a bit less\nat high depths.\n\nAfter 965 games\n\nMod vs Orig +233 =504 -228 +2 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "History pruning exponential limit"
     },
     {
-      "commit_num": 6130,
+      "commit_num": 6153,
       "hash": "4c58db0d",
       "short": "4c58db0d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert pawns evaluation to Score\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert pawns evaluation to Score"
     },
     {
-      "commit_num": 6131,
+      "commit_num": 6154,
       "hash": "71e852ea",
       "short": "71e852ea",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move game phase computation to MaterialInfo\n\nGame phase is a strictly function of the material\ncombination so its natural place is MaterialInfo,\nnot position.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move game phase computation to MaterialInfo"
     },
     {
-      "commit_num": 6132,
+      "commit_num": 6155,
       "hash": "314faa90",
       "short": "314faa90",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Null move dynamic reduction based on value\n\nAfter 994 games at 1+0\n\nMod vs Orig +244 =521 -229 50.75%  504.5/994 +5 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Null move dynamic reduction based on value"
     },
     {
-      "commit_num": 6133,
+      "commit_num": 6156,
       "hash": "a530fc2b",
       "short": "a530fc2b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use a more standard perft UCI interface\n\nCall directly 'perft 6' to search up to depth 6*OnePly\ninstead of the old 'perft depth 6'.\n\nIt is more in line to what other engines do. Also a bit\nof cleanup while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use a more standard perft UCI interface"
     },
     {
-      "commit_num": 6134,
+      "commit_num": 6157,
       "hash": "7d0e0ff9",
       "short": "7d0e0ff9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document king safety evaluation\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better document king safety evaluation"
     },
     {
-      "commit_num": 6135,
+      "commit_num": 6158,
       "hash": "764229a2",
       "short": "764229a2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rearrange table layout in evaluate.cpp\n\nA bit more cache friendly.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rearrange table layout in evaluate.cpp"
     },
     {
-      "commit_num": 6136,
+      "commit_num": 6159,
       "hash": "5e340346",
       "short": "5e340346",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove dcCandidates data member from SplitPoint\n\nIt is no more used now that we have CheckInfo.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove dcCandidates data member from SplitPoint"
     },
     {
-      "commit_num": 6137,
+      "commit_num": 6160,
       "hash": "ad44ff2b",
       "short": "ad44ff2b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire evaluate_mobility()\n\nMove the code to the caller and also move mob_area\ncomputation out of evaluate_pieces(). It is more clear\nthe code flow and it is also faster.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire evaluate_mobility()"
     },
     {
-      "commit_num": 6138,
+      "commit_num": 6161,
       "hash": "8e96149c",
       "short": "8e96149c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small sort_moves() deobfuscation\n\nWrite the for loop in a more idiomatic way, no assembly\nchange and of course no functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small sort_moves() deobfuscation"
     },
     {
-      "commit_num": 6139,
+      "commit_num": 6162,
       "hash": "bf395c6b",
       "short": "bf395c6b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove update_checkers()\n\nNow that we have CheckInfo we don't need it anymore.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove update_checkers()"
     },
     {
-      "commit_num": 6140,
+      "commit_num": 6163,
       "hash": "3c085775",
       "short": "3c085775",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't futility-prune ttMove\n\nAfter 933 games\nMod vs Orig +219 =505 -208 +4 ELO\n\nA small increase as expected.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't futility-prune ttMove"
     },
     {
-      "commit_num": 6141,
+      "commit_num": 6164,
       "hash": "dd5a3ae4",
       "short": "dd5a3ae4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Propagate \"move is check\" info to do_move()\n\nWhen false (common case) we avoid to update checkers\nbitboard that although not so costly slows down a bit\nthis very hot and critical path.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Propagate \"move is check\" info to do_move()"
     },
     {
-      "commit_num": 6142,
+      "commit_num": 6165,
       "hash": "f7f09b91",
       "short": "f7f09b91",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small update_checkers() cleanup\n\nAnd is a bit faster too.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small update_checkers() cleanup"
     },
     {
-      "commit_num": 6143,
+      "commit_num": 6166,
       "hash": "8a116ce6",
       "short": "8a116ce6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small update to pop_1st_bit()\n\nAvoid a 64 bit load using a pointer. It saves a couple of push/pop\ninstructions so advantage is only theorical, but anyway we use\npop_1st_bit() as a reference implementation for 32 bit systems so\nwe keep it more for documentation purposes then for other reasons.\n\nIdea of pointer is of Eric Mullins.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small update to pop_1st_bit()"
     },
     {
-      "commit_num": 6144,
+      "commit_num": 6167,
       "hash": "16626dd6",
       "short": "16626dd6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small CheckInfo fallout\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small CheckInfo fallout"
     },
     {
-      "commit_num": 6145,
+      "commit_num": 6168,
       "hash": "2f01d67a",
       "short": "2f01d67a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1191,14 +1146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fully convert move_is_check() internally\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fully convert move_is_check() internally"
     },
     {
-      "commit_num": 6146,
+      "commit_num": 6169,
       "hash": "975d5e9c",
       "short": "975d5e9c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1217,14 +1171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert move_is_check() to take a CheckInfo reference\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert move_is_check() to take a CheckInfo reference"
     },
     {
-      "commit_num": 6147,
+      "commit_num": 6170,
       "hash": "30075e4a",
       "short": "30075e4a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1243,14 +1196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use CheckInfo to compute dcCandidates\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use CheckInfo to compute dcCandidates"
     },
     {
-      "commit_num": 6148,
+      "commit_num": 6171,
       "hash": "37398d94",
       "short": "37398d94",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1269,14 +1221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce CheckInfo struct\n\nKeeps info used to speed-up move_is_check()\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce CheckInfo struct"
     },
     {
-      "commit_num": 6149,
+      "commit_num": 6172,
       "hash": "e0503915",
       "short": "e0503915",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1295,14 +1246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix operator/(Score s, int i)\n\nAnd remove some useless declarations\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix operator/(Score s, int i)"
     },
     {
-      "commit_num": 6150,
+      "commit_num": 6173,
       "hash": "f35ddb04",
       "short": "f35ddb04",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1321,14 +1271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't copy the key in do_move\n\nIt will be overwritten anyway.\n\nAlso other little small touches that seem to increase\nspeed more then the whole enum Score patch series :-(\n\nOptimization is really a black art.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't copy the key in do_move"
     },
     {
-      "commit_num": 6151,
+      "commit_num": 6174,
       "hash": "ef6fca98",
       "short": "ef6fca98",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1347,14 +1296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Define Score as an enum\n\nIncreases performance because now we use one integer\nfor both midgame and endgame scores.\n\nUnfortunatly the latest patches seem to have reduced a bit\nthe speed so at the end we are more or less at the same\nperformance level of the beginning. But this patch series\nintroduced also some code cleanup so it is the main reason\nwe commit anyway.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Define Score as an enum"
     },
     {
-      "commit_num": 6152,
+      "commit_num": 6175,
       "hash": "776c7df3",
       "short": "776c7df3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1373,14 +1321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Do not extend at low depths if not in PV\"\n\nOn Joona's QUAD:\nOrig - Mod: 414 - 373\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"Do not extend at low depths if not in PV\""
     },
     {
-      "commit_num": 6153,
+      "commit_num": 6176,
       "hash": "5e112f16",
       "short": "5e112f16",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1399,14 +1346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"IID in pv also when TT move depth is too small\"\n\nAfter almost 900 games we are at -2 ELO\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Revert \"IID in pv also when TT move depth is too small\""
     },
     {
-      "commit_num": 6154,
+      "commit_num": 6177,
       "hash": "fea46a82",
       "short": "fea46a82",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1425,14 +1371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Change Score definition to avoid the union\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Change Score definition to avoid the union"
     },
     {
-      "commit_num": 6155,
+      "commit_num": 6178,
       "hash": "15ec3e91",
       "short": "15ec3e91",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1451,14 +1396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Last conversions to Score in evaluate.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Last conversions to Score in evaluate.cpp"
     },
     {
-      "commit_num": 6156,
+      "commit_num": 6179,
       "hash": "1ecd8e13",
       "short": "1ecd8e13",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1477,14 +1421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert ThreatBonus to Score\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert ThreatBonus to Score"
     },
     {
-      "commit_num": 6157,
+      "commit_num": 6180,
       "hash": "444c7c51",
       "short": "444c7c51",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1503,14 +1446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert RookOn7thBonus and QueenOn7thBonus to be Score\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert RookOn7thBonus and QueenOn7thBonus to be Score"
     },
     {
-      "commit_num": 6158,
+      "commit_num": 6181,
       "hash": "e9757f76",
       "short": "e9757f76",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1529,14 +1471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert mobility bonus tables to Score\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert mobility bonus tables to Score"
     },
     {
-      "commit_num": 6159,
+      "commit_num": 6182,
       "hash": "1ab01f1c",
       "short": "1ab01f1c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1555,14 +1496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert apply_weight() to handle Score\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert apply_weight() to handle Score"
     },
     {
-      "commit_num": 6160,
+      "commit_num": 6183,
       "hash": "4626ec28",
       "short": "4626ec28",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1581,14 +1521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert MaterialInfo and PawnInfo to use Score\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert MaterialInfo and PawnInfo to use Score"
     },
     {
-      "commit_num": 6161,
+      "commit_num": 6184,
       "hash": "dda7e463",
       "short": "dda7e463",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1607,14 +1546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce PieceSquareTable[16][64]\n\nInstead of MgPieceSquareTable[16][64] and EgPieceSquareTable[16][64]\n\nThis allows to fetch mg and eg values from adjacent words in memory.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce PieceSquareTable[16][64]"
     },
     {
-      "commit_num": 6162,
+      "commit_num": 6185,
       "hash": "1ae8c59c",
       "short": "1ae8c59c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1633,14 +1571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert Position to use Score struct\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert Position to use Score struct"
     },
     {
-      "commit_num": 6163,
+      "commit_num": 6186,
       "hash": "06f06a9b",
       "short": "06f06a9b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1659,14 +1596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce Score struct\n\nSave mid and end game scores in an union so to\noperate on both values in one instruction.\n\nThis patch just introduces the infrastructure and changes\nEvalInfo to use a single Score value instead of mgValue\nand egValue.\n\nSpeed is more or less the same because we still don't use\nunified midgame-endgame tables where the single assignment\noptimization can prove effective.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce Score struct"
     },
     {
-      "commit_num": 6164,
+      "commit_num": 6187,
       "hash": "2f5ee9e4",
       "short": "2f5ee9e4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1685,14 +1621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix correct name of int64_t type\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix correct name of int64_t type"
     },
     {
-      "commit_num": 6165,
+      "commit_num": 6188,
       "hash": "dae7cacd",
       "short": "dae7cacd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1711,14 +1646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better big-endian support wording in Makefile\n\nSuggested by Joona.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Better big-endian support wording in Makefile"
     },
     {
-      "commit_num": 6166,
+      "commit_num": 6189,
       "hash": "7c0cb8e7",
       "short": "7c0cb8e7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1737,14 +1671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Enable POPCNT only through Makefile\n\nAlso remove some fallback templates that prevent a\ncompile error in case the user runs 'make icc-profile-popcnt'\nfrom a non supported machine.\n\nWe want to loudly fail in that case instead of silently\nfallback in a non-popcount compilation.\n\nUpdated documentation too.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Enable POPCNT only through Makefile"
     },
     {
-      "commit_num": 6167,
+      "commit_num": 6190,
       "hash": "dd884b65",
       "short": "dd884b65",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1763,14 +1696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Do not extend at low depths if not in PV\n\nOnly check extensions are allowed.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Do not extend at low depths if not in PV"
     },
     {
-      "commit_num": 6168,
+      "commit_num": 6191,
       "hash": "0fdc75c0",
       "short": "0fdc75c0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1789,14 +1721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "IID in pv also when TT move depth is too small\n\nTry an internal iterative deepening not only when we don't\nhave a TT move but also if search depth is more then 4*OnePly\nhigher then TT move depth.\n\nOn some tests it seems that in around 20% of cases ttMove changes !\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "IID in pv also when TT move depth is too small"
     },
     {
-      "commit_num": 6169,
+      "commit_num": 6192,
       "hash": "7a68916f",
       "short": "7a68916f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1815,14 +1746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small code-style touches in movegen.cpp\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Small code-style touches in movegen.cpp"
     },
     {
-      "commit_num": 6170,
+      "commit_num": 6193,
       "hash": "82a1e2d5",
       "short": "82a1e2d5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1841,14 +1771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a small warning under icc\n\nVariable 'f' in 'for' loop scope hides same named\none in outer scope.\n\nOf curse no functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a small warning under icc"
     },
     {
-      "commit_num": 6171,
+      "commit_num": 6194,
       "hash": "53ce6ce4",
       "short": "53ce6ce4",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -1867,14 +1796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add popcnt-support in Makefile\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Add popcnt-support in Makefile"
     },
     {
-      "commit_num": 6172,
+      "commit_num": 6195,
       "hash": "a9e536a7",
       "short": "a9e536a7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1893,14 +1821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a compile error in debug mode\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Fix a compile error in debug mode"
     },
     {
-      "commit_num": 6173,
+      "commit_num": 6196,
       "hash": "dc286d26",
       "short": "dc286d26",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1919,14 +1846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Big-endian compatible pop_1st_bit()\n\nThanks to Eric Mullins we have now endian friendly\npop_1st_bit() and also is removed the need to use\n-fno-strict-aliasing compiler option with GCC.\n\nSpeed is almost as fast, very small difference if any in\nperft test, so I assume almost no difference in real games.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Big-endian compatible pop_1st_bit()"
     },
     {
-      "commit_num": 6174,
+      "commit_num": 6197,
       "hash": "e59d0539",
       "short": "e59d0539",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1945,14 +1871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Enable PH_TT_MOVES during evasion generation\n\nThis allow us to avoid the generation of the\nevasion moves if we already have a TT move, and\nin case we have a cut-off we skip evasion generation\naltoghter.\n\nNode count is changed because now we try TT move _before_\nto generate evasions. The search on the TT move alters the\npiece lists so that when we come back to generate evasions\nwe build the move list with a diferent order and this alters\nthe node count.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Enable PH_TT_MOVES during evasion generation"
     },
     {
-      "commit_num": 6175,
+      "commit_num": 6198,
       "hash": "1c73c1c1",
       "short": "1c73c1c1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1971,14 +1896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Extend move_is_legal() to work also when in check\n\nThis patch is a prerequisite to use TT phase\nduring evasions.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Extend move_is_legal() to work also when in check"
     },
     {
-      "commit_num": 6176,
+      "commit_num": 6199,
       "hash": "423b8b9d",
       "short": "423b8b9d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1997,14 +1921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move locals definitions at the function start\n\nIt seems to me function are easier to read now.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move locals definitions at the function start"
     },
     {
-      "commit_num": 6177,
+      "commit_num": 6200,
       "hash": "94dcac1f",
       "short": "94dcac1f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2023,14 +1946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire MovePicker::discovered_check_candidates()\n\nIt is now no more needed to know dc candidates\ninside MovePicker, so avoid calculating there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire MovePicker::discovered_check_candidates()"
     },
     {
-      "commit_num": 6178,
+      "commit_num": 6201,
       "hash": "483a2576",
       "short": "483a2576",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2049,14 +1971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Speed up perft\n\nThere is no need to do / undo the move at the last ply\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Speed up perft"
     },
     {
-      "commit_num": 6179,
+      "commit_num": 6202,
       "hash": "0855d93d",
       "short": "0855d93d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2075,14 +1996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite generate_pawn_moves() and simplify evasions\n\nBig cleanup and semplification of pawns evasions that\nnow are pseudo-legal as the remaining moves. This\nallow us to remove a lot of tricky code.\n\nVerified against perft: no functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Rewrite generate_pawn_moves() and simplify evasions"
     },
     {
-      "commit_num": 6180,
+      "commit_num": 6203,
       "hash": "deecb375",
       "short": "deecb375",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2101,14 +2021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Generate pseudo-legal moves in generate_evasions()\n\nThis allow a big semplification in move generation\nthat will be committed with the next patch. And makes\nhandling of evasions similar to the other type of moves.\n\nThis patch plus the next seem to improve also on\nthe performance side because after 640 games to\nverify there are no hidden regressions we are at +9 ELO\n\nVerified with perft no functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Generate pseudo-legal moves in generate_evasions()"
     },
     {
-      "commit_num": 6181,
+      "commit_num": 6204,
       "hash": "53c2bf06",
       "short": "53c2bf06",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2127,14 +2046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Optimize generate_evasions()\n\nGenerate captures of checking piece and blocking\nevasions in one go.\n\nAlso reduce of one indentation level early returning\nwhen we have a double check.\n\nVerified with perft no functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Optimize generate_evasions()"
     },
     {
-      "commit_num": 6182,
+      "commit_num": 6205,
       "hash": "12461996",
       "short": "12461996",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2153,14 +2071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove SEE optimizations\n\nDon't seem to help, perhaps because we\nreturn an approximate SEE score instead of the\nreal negative score so that we have some bad capture\nor evasion sub-optimal ordering that compensates\nthe speed up.\n\nAnyhow after 999 games at 1+0\nMod vs Orig +240 =514 -245 -2 ELO\n\nSo almost no harm to remove and make the code simpler.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove SEE optimizations"
     },
     {
-      "commit_num": 6183,
+      "commit_num": 6206,
       "hash": "23de3e16",
       "short": "23de3e16",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2179,14 +2096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove castling moves in check generation\n\nCheck generation is used only in qsearch and\nonly at Depth(0), castling moves that give check\nare very rare overall and even almost not exsistent\nat Depth(0).\n\nSo retire this almost never used code that adds\na small but consistent slow down in the normal path.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Remove castling moves in check generation"
     },
     {
-      "commit_num": 6184,
+      "commit_num": 6207,
       "hash": "8ebe5075",
       "short": "8ebe5075",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -2205,7 +2121,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Optimize check generation\n\nBecause discovery checks are very rare it is better to handle\nthem all in one go and strip from usual check generation\nfunction.\n\nAlso rewrite direct checks generation to use piece lists instead\nof pop_1st_bit()\n\nOn perft test we have a +6% of speed up and is verified we\ngenerate the same moves, although in a different order.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

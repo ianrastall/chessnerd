@@ -2,7 +2,7 @@
   "month": "2017-07",
   "commits": [
     {
-      "commit_num": 2881,
+      "commit_num": 2904,
       "hash": "722e1e0d",
       "short": "722e1e0d",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove redundant if-statements\n\nNo functional change\n\nCloses #1173\n",
       "subject": "Remove redundant if-statements"
     },
     {
-      "commit_num": 2882,
+      "commit_num": 2905,
       "hash": "5410424e",
       "short": "5410424e",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a race on Limits::ponder\n\nLimits::ponder was used as a signal between uci and search threads,\nbut is not an atomic variable, leading to the following race as\nflagged by a sanitized binary.\n\nExpect input:\n```\n spawn  ./stockfish\n send \"uci\\n\"\n expect \"uciok\"\n send \"setoption name Ponder value true\\n\"\n send \"go wtime 4000 btime 4000\\n\"\n expect \"bestmove\"\n send \"position startpos e2e4 d7d5\\n\"\n send \"go wtime 4000 btime 4000 ponder\\n\"\n sleep 0.01\n send \"ponderhit\\n\"\n expect \"bestmove\"\n send \"quit\\n\"\n expect eof\n```\n\nRace:\n```\nWARNING: ThreadSanitizer: data race (pid=7191)\n  Read of size 4 at 0x0000005c2260 by thread T1:\n\n  Previous write of size 4 at 0x0000005c2260 by main thread:\n\n  Location is global 'Search::Limits' of size 88 at 0x0000005c2220 (stockfish+0x0000005c2260)\n```\n\nThe reason of teh race is that ponder is not just set in UCI go()\nassignment but also is signaled by an async ponderhit in uci.cpp:\n\n      else if (token == \"ponderhit\")\n          Search::Limits.ponder = 0; // Switch to normal search\n\nThe fix is to add an atomic bool to the threads structure to\nsignal the ponder status, letting Search::Limits to reflect just\nwhat was passed to 'go'.\n\nNo functional change.\n",
       "subject": "Fix a race on Limits::ponder"
     },
     {
-      "commit_num": 2883,
+      "commit_num": 2906,
       "hash": "a6ae2d3a",
       "short": "a6ae2d3a",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify aspiration window\n\nDon't modify alpha window on fail-high\n\nBench: 5875983\n\nCloses #1172\n",
       "subject": "Simplify aspiration window"
     },
     {
-      "commit_num": 2884,
+      "commit_num": 2907,
       "hash": "272e4d1a",
       "short": "272e4d1a",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Faster travis checks\n\nin the last month a couple of timeouts have been seen in travis valgrind testing, leading to undesired false positives. The precise cause of this is unclear: a normal valgrind instrumented run is about 6min, the timeout is 10min. Either there are rare hangs (not reproduced locally), or maybe the actual runtime fluctuates on the travis infrastructure (which uses VMs on AWS as far as I know). This patch leads to roughly a 2x speedup of the instrumented testing by reducing the depth from 10 to 9. If timeouts persist, it needs further analysis.\n\nNo functional change.\n\nCloses #1171\n",
       "subject": "Faster travis checks"
     },
     {
-      "commit_num": 2885,
+      "commit_num": 2908,
       "hash": "d31f0683",
       "short": "d31f0683",
       "author": "Joona Kiiski <joona@zoox.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Remove questionable gcc flags from profile-build\"\n\nThis reverts commit 0371a8f8c4a043cb3e7d08b5b8e7d08d49f28324.\n",
       "subject": "Revert \"Remove questionable gcc flags from profile-build\""
     },
     {
-      "commit_num": 2886,
+      "commit_num": 2909,
       "hash": "377d77db",
       "short": "377d77db",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Provide selective search depth info for each pv move\n\nNo functional change\n\nCloses #1166\n",
       "subject": "Provide selective search depth info for each pv move"
     },
     {
-      "commit_num": 2887,
+      "commit_num": 2910,
       "hash": "36a93d90",
       "short": "36a93d90",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move stop signal to Threads\n\nInstead of having Signals in the search namespace,\nmake the stop variables part of the Threads structure.\nThis moves more of the shared (atomic) variables towards\nthe thread-related structures, making their role more clear.\n\nNo functional change\n\nCloses #1149\n",
       "subject": "Move stop signal to Threads"
     },
     {
-      "commit_num": 2888,
+      "commit_num": 2911,
       "hash": "e551afba",
       "short": "e551afba",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move game_phase() to material.cpp\n\nFor some reason, although game phase is used\nonly in material, it is computed in Position.\n\nMove computation to material, where it belongs,\nand remove the useless call chain.\n\nNo functional change.\n",
       "subject": "Move game_phase() to material.cpp"
     },
     {
-      "commit_num": 2889,
+      "commit_num": 2912,
       "hash": "0371a8f8",
       "short": "0371a8f8",
       "author": "Joona Kiiski <joona@zoox.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove questionable gcc flags from profile-build\n\nOptimization options for official stockfish should be\nconsistent, easy, future proof and simple.\n\nWe don't want to optimize for any specific version of gcc\n\nNo functional change\n\nCloses #1165\n",
       "subject": "Remove questionable gcc flags from profile-build"
     },
     {
-      "commit_num": 2890,
+      "commit_num": 2913,
       "hash": "c8e5384c",
       "short": "c8e5384c",
       "author": "GuardianRM <strimr25@mail.ru>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Queen vs. Minors imbalance\n\nAddition of correction values in case of Imbalance of queens,\ndepending on the number of light pieces on the side without a queen.\n\nPassed patch:\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 29036 W: 5379 L: 5130 D: 18527\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 13680 W: 1836 L: 1674 D: 10170\n\nBench: 6258930\n\nCloses #1155\n",
       "subject": "Queen vs. Minors imbalance"
     },
     {
-      "commit_num": 2891,
+      "commit_num": 2914,
       "hash": "973ede00",
       "short": "973ede00",
       "author": "mstembera <MissingEmail@email>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tuned PSQT using a custom tuner.\n\nbench: 5878420\n\nCloses #1177\n",
       "subject": "Tuned PSQT using a custom tuner."
     },
     {
-      "commit_num": 2892,
+      "commit_num": 2915,
       "hash": "01b6cdb7",
       "short": "01b6cdb7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix some warnings with clang static analyzer\n\nOnly one remains (also in tbprobe.cpp), but is bougus.\n\nAs a side note, tbprobe.cpp is almost clean, only the last 3\nfunctions probe_wdl(), root_probe() and root_probe_wdl()\nare still the original ones and are quite hacky.\n\nSomewhere in the future we will reformat also the last 3\nones. The reason why has not been done before it is because\nthese functions are really wrong by design and should be\nrewritten entirely, not only reformatted.\n\nNo functional change.\n\nCloses #1160\n",
       "subject": "Fix some warnings with clang static analyzer"
     },
     {
-      "commit_num": 2893,
+      "commit_num": 2916,
       "hash": "802fca6f",
       "short": "802fca6f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't uselessy share rootDepth\n\nIt is not needed becuase the only case is a real special\none (bench on depth with many threads) and can be easily\nrewritten to avoid sharing rootDepth.\n\nVerified with ThreadSanitizer.\n\nNo functional change.\n\nCloses #1159\n",
       "subject": "Don't uselessy share rootDepth"
     },
     {
-      "commit_num": 2894,
+      "commit_num": 2917,
       "hash": "c0cb713a",
       "short": "c0cb713a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,7 +346,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Indentation fix in index()\n\nNo functional change.\n\nCloses #1158\n",

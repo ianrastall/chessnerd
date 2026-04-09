@@ -2,7 +2,7 @@
   "month": "2012-11",
   "commits": [
     {
-      "commit_num": 4457,
+      "commit_num": 4480,
       "hash": "45029176",
       "short": "45029176",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't double check for move legality\n\nIn case of a RootNode or a SpNode move has\nbeen already checked for legality so we can\nskip a redundant check.\n\nSpotted by Frank Genot.\n\nNo functional change.\n",
       "subject": "Don't double check for move legality"
     },
     {
-      "commit_num": 4458,
+      "commit_num": 4481,
       "hash": "5af81796",
       "short": "5af81796",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update bestValue when futility pruning\n\nIn qsearch we should update the bestValue as we do\nin case of futilityValue < beta, also when pruning\nmoves with non-positive see.\n\nSpotted by Lucas Braesch\n\nBench: 5695710\n",
       "subject": "Update bestValue when futility pruning"
     },
     {
-      "commit_num": 4459,
+      "commit_num": 4482,
       "hash": "55df3fa2",
       "short": "55df3fa2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid spamming the GUI in multipv search\n\nSend the PV lines to GUI only once at the end of the\nPV search loop or just in case of long searches.\n\nWe need to sync also sending of \"currmove\" info to\navoid sending info on current move without first\ninforming the GUI on the PV line we are searching on.\n\nNo functional change.\n",
       "subject": "Avoid spamming the GUI in multipv search"
     },
     {
-      "commit_num": 4460,
+      "commit_num": 4483,
       "hash": "8367cf15",
       "short": "8367cf15",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Triviality in move_gives_check()\n\nIt seems even a bit faster, although handling of the special\ncases is not the hot path.\n\nNo functional change.\n",
       "subject": "Triviality in move_gives_check()"
     },
     {
-      "commit_num": 4461,
+      "commit_num": 4484,
       "hash": "94298993",
       "short": "94298993",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document fail-high condition\n\nAt this point we have already verified (value > alpha)\nand this implies, in case of a non-PV node, where search\nwindow size is zero, that value >= beta.\n\nThis is not so self-evident, so document the code with\nan assert condition.\n\nNo functional change.\n",
       "subject": "Better document fail-high condition"
     },
     {
-      "commit_num": 4462,
+      "commit_num": 4485,
       "hash": "239d7b3f",
       "short": "239d7b3f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't access std::cout from Position::print()\n\nLet the caller to decide where to redirect (cout or cerr) the\nASCII representation of the position. Rename the function to\nreflect this.\n\nRenamed also from_fen() and to_fen() to set() and fen() respectively.\n\nNo functional change.\n",
       "subject": "Don't access std::cout from Position::print()"
     },
     {
-      "commit_num": 4463,
+      "commit_num": 4486,
       "hash": "116234d6",
       "short": "116234d6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore old BOUND_EXACT logic in qsearch\n\nIn case a PvNode node has a static evaluation above alpha but\nno available moves we want to flag the node as BOUND_EXACT,\nnot as BOUND_UPPER as is currently.\n\nThe behaviour was recently introduced with patch d471c49700fbe8281\nof 3/10/2012\n\nSpotted by Hongzhi Cheng.\n\nbench: 5558464\n",
       "subject": "Restore old BOUND_EXACT logic in qsearch"
     },
     {
-      "commit_num": 4464,
+      "commit_num": 4487,
       "hash": "c45a4e0b",
       "short": "c45a4e0b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Don't prune discovered checks\"\n\nBoth Lucas re-test and Jean-Francois confirrm it\nis a regression.\n\nHere Jean-Francois's results after 3600 games :\nScore of 96d3b1c92b8 vs 3b87314: 690 - 729 - 2181 [0.495] 3600\nELO: -3.86 +- 99%: 14.94 95%: 11.35\nLOS: 15.03%\nWins: 690 Losses: 729 Draws: 2181 Total: 3600\n\nBench: 5404066\n",
       "subject": "Revert \"Don't prune discovered checks\""
     },
     {
-      "commit_num": 4465,
+      "commit_num": 4488,
       "hash": "96d3b1c9",
       "short": "96d3b1c9",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't prune discovered checks\n\nDon't prune and eventually extend check moves of type\nDISCO_CHECK (pun intended, Lucas will understand :-) ).\n\nPatch from Lucas Braesch that has also tested it:\n\nResult: 879-661-2137, score=52.96%, LOS=100.00% (time 10\"+0.1\")\n\nI have started a verification test right now.\n\nbench: 6004966\n",
       "subject": "Don't prune discovered checks"
     },
     {
-      "commit_num": 4466,
+      "commit_num": 4489,
       "hash": "3b873143",
       "short": "3b873143",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Previous patch test results\n\nFrom Jean-Francois's\n\nFinal result after 5000 games :\nScore of c581b7e vs a878312: 1163 - 970 - 2867 [0.519] 5000\nELO: 13.35 +- 99%: 12.71 95%: 9.65\nLOS: 100.00%\nWins: 1163 Losses: 970 Draws: 2867 Total: 5000\n\nFrom me\n\nAfter 3266 games at 20\"+0,05\nScore of c581b7e vs a878312: 612 - 607 - 2047\n\nSo no regression at longer TC and perhaps a little gain at\nfast TC.\n",
       "subject": "Previous patch test results"
     },
     {
-      "commit_num": 4467,
+      "commit_num": 4490,
       "hash": "c581b7ea",
       "short": "c581b7ea",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Another attempt at evaluation shortcut\n\nIn this case we try a rather drastic\napproach: we simply don't futility prune\nin qsearch when arriving from a null move.\n\nSo we save evaluating and also save to mess\nwith eval margins at all because margin is used\nonly in futility.\n\nAlso accuracy should not be affected, actually it\nimproves because we don't prune anything anymore.\n\nbench: 5404066\n",
       "subject": "Another attempt at evaluation shortcut"
     },
     {
-      "commit_num": 4468,
+      "commit_num": 4491,
       "hash": "a5b1f477",
       "short": "a5b1f477",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Temporary revert previous patch\n\nPerforms well at very short TC of 40/4+0.05 (courtesy of Jean-Francois):\nWins: 2503 Losses: 2146 Draws: 5581 Total: 10230 +12 ELO\n\nBut is poor at longer TC of 20\"+0.05\nWins: 321 Losses: 373 Draws: 1141 Total: 1808 -10 ELO\n\nThe patch was clearly a tradoff between speed and accuracy and\nthe most interesting part of it are test results that can be\ncommented as follows:\n\n- A short TC is very sensible to any speed increase\n- A longer TC is more sensible to accuracy and less to speed\n\nSo a patch that does not change speed is suitable to be tested at\nshort TC, while a speed/accuracy compromise patch is IMO better to\nbe tested at longer TC to verify loss of accuracy can be tolerated.\n\nIn this case the revert is only temporary. We will come back again\nonce we will be able to preserve the evaluation margin.\n\nbench: 5809010\n",
       "subject": "Temporary revert previous patch"
     },
     {
-      "commit_num": 4469,
+      "commit_num": 4492,
       "hash": "37e98024",
       "short": "37e98024",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Skip evaluate() call after a null move\n\nReuse the evaluation of the parent with inverted sign and\nset margin to zero (this is an hack!).\n\nThis is done only in qsearch where almost 15% of calls are\nfrom a null move. In normal search the number of nodes where\n\n(ss-1)->currentMove == MOVE_NULL\n\nis almost zero and so there is no need of using this trick.\n\nThe big advantage of this patch is a speed-up due to skipped\nevaluate() calls, that are very costly.\n\nFunctionality is of course affected and we will need to proper\ntest it later. For now we just register a 3-4% speed up.\n\nSuggested by Hongzhi Cheng.\n\nbench: 5051328\n",
       "subject": "Skip evaluate() call after a null move"
     },
     {
-      "commit_num": 4470,
+      "commit_num": 4493,
       "hash": "a8783123",
       "short": "a8783123",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correctly fix \"break from split\" patch\n\nIn case split cut-offs we return with still\nsome moves to go but we really want to break\nout from the loop now.\n\nNo functional change.\n",
       "subject": "Correctly fix \"break from split\" patch"
     },
     {
-      "commit_num": 4471,
+      "commit_num": 4494,
       "hash": "dd5b3086",
       "short": "dd5b3086",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Relax constrain in prevents_threat()\n\nWhen testing if a move blocks the threat path there is no\nreason to require the threat to be a slider. Indeed threat\ncan be a double pawn push like in this example:\n\nr1bq1rk1/ppp1np1p/4n1p1/3p4/3P2Q1/2P1B3/PPBN2PP/R4RK1 w - - 0 16\n\nWhere white's move Rf6 blocks the threat f5.\n\nAs a nice side effect we can retire the now useless helper\npiece_is_slider().\n\nThis patch kicks in only very rare cases, indeed the bench is\nstill the same!\n\nbench: 5809010\n",
       "subject": "Relax constrain in prevents_threat()"
     },
     {
-      "commit_num": 4472,
+      "commit_num": 4495,
       "hash": "47f988f0",
       "short": "47f988f0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Sync connected_threat() and yields_to_threat()\n\nRename stuff so to sync as much as posisble the\ntwo related functions.\n\nNo functional change.\n",
       "subject": "Sync connected_threat() and yields_to_threat()"
     },
     {
-      "commit_num": 4473,
+      "commit_num": 4496,
       "hash": "07989712",
       "short": "07989712",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't 'break' upon returning from split()\n\nThere is no guarantee that split() consumes all the node's\nmoves. Indeed split() can return without performing any job\nfor instance because MAX_SPLITPOINTS_PER_THREAD is reached\nor becuase no available threads are found (this latter case\nis much more common).\n\nSo search must continue in those cases and we cannot force\nexiting from move's loop.\n\nBug introduced by 1ac417edb845 of 5/10/2012\n\nSpotted by Frank Genot.\n\nNo functional change.\n",
       "subject": "Don't 'break' upon returning from split()"
     },
     {
-      "commit_num": 4474,
+      "commit_num": 4497,
       "hash": "d0d69a53",
       "short": "d0d69a53",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove a redundant condition in connected_moves()\n\nIf a previous move attacks the king (with the piece\nof the threat move removed) then must be a discovered\ncheck, otherwise it means that first move gave check\nand we were not able to do a null move.\n\nAlso renamed stuff to better document the function's\ncontext.\n\nNo functional change.\n",
       "subject": "Remove a redundant condition in connected_moves()"
     },
     {
-      "commit_num": 4475,
+      "commit_num": 4498,
       "hash": "972de506",
       "short": "972de506",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Relax constrain in connected_moves()\n\nWhen testing if a piece is moving through the squares\nvacated by a previous move there is no reason to require\nthe piece to be a slider, indeed we can have a double\npawn push like in this example:\n\nr1q2rk1/2p1bppp/2Pp4/pN5b/Q1P1p3/4B2P/PP1R1PP1/1K5R w - - 3 18\n\nWhere black's move f5 is connected to previous move Be7 that\nfrees the path.\n\nOr we can have a castle move:\n\nr1bqkb1r/pppp1ppp/2n1pn2/1B6/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 1\n\nWhere a previous move Bb5 allows the white to castle king side.\n\nThis time patch is mine ;-)\n\nnew bench: 5809010\n",
       "subject": "Relax constrain in connected_moves()"
     },
     {
-      "commit_num": 4476,
+      "commit_num": 4499,
       "hash": "ed1574e4",
       "short": "ed1574e4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat connected_moves()\n\nPrepare code for the next patch that\nwill affect functionality.\n\nNo functional change.\n",
       "subject": "Reformat connected_moves()"
     },
     {
-      "commit_num": 4477,
+      "commit_num": 4500,
       "hash": "52f55179",
       "short": "52f55179",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an off-by-one bug in multi pv print\n\nWe send to GUI multi-pv info after each cycle,\nnot just once at the end of the PV loop. This is\nbecause at high depths a single root search can\nbe very slow and we want to update the gui as\nsoon as we have a new PV score.\n\nIdea is good but implementation is broken because\nsort() takes as arguments a pointer to the first\nelement and one past the last element.\n\nSo fix the bug and rename sort arguments to better\nreflect their meaning.\n\nAnother hit by Hongzhi Cheng.  Impressive!\n\nNo functional change.\n",
       "subject": "Fix an off-by-one bug in multi pv print"
     },
     {
-      "commit_num": 4478,
+      "commit_num": 4501,
       "hash": "bbdf9e47",
       "short": "bbdf9e47",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a condition in connected_moves()\n\nWhen checking if the moving piece p1 in a previous\nmove m1 defends the destination square of a move m2\nwe have to use the occupancy with the from square of\nm2 removed so to take in account the case in which\nf2 will block an x-ray attack from p1.\n\nFor instance in this position:\nr2k3r/p1pp1pb1/qn3np1/1N2P3/1p3P2/2B5/PPP3QP/R3K2R b KQ - 1 9\n\nThe move eXf6 is connected to the previous move Bc3 that\ndefends the destination square f6.\n\nWith this patch we have about 10% more moves detected as\n'connected'. Anyhow the absolute number is very low, about\n4000 more moves out of 6M nodes searched.\n\nAnother issue spotted by Hongzhi \"Hawk Eye\" Cheng ;-)\n\nnew bench: 5757373\n",
       "subject": "Fix a condition in connected_moves()"
     },
     {
-      "commit_num": 4479,
+      "commit_num": 4502,
       "hash": "e3b03278",
       "short": "e3b03278",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a warning under MSVC\n\nCompiler complies that 'cnt' is initialized but\nunused (in !CheckThreeFold case). Moving the\ndefinition of 'cnt'out of the loop  seems to do\nthe trick.\n\nNo functional change.\n",
       "subject": "Fix a warning under MSVC"
     },
     {
-      "commit_num": 4480,
+      "commit_num": 4503,
       "hash": "c039103b",
       "short": "c039103b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pass InCheck as template parameter of qsearch()\n\nInstead of use a variable so to resolve many conditions\nalready at compile time. In quiesce is also where we\nhave most of the InCheck nodes and is one of the most\nperformance critical code paths.\n\nSpeed up of 1.5% with Clang and 1% with gcc\n\nSuggested by Hongzhi Cheng.\n\nNo functional change.\n",
       "subject": "Pass InCheck as template parameter of qsearch()"
     },
     {
-      "commit_num": 4481,
+      "commit_num": 4504,
       "hash": "94ecdef8",
       "short": "94ecdef8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,7 +621,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Micro-optimize pop_lsb() for 64bit case\n\nOn Intel, perhaps due to 'lea' instruction this way of\nzeroing the lsb of *b seems faster than a shift+negate.\n\nOn perft (where any speed difference is magnified) I\ngot a 6% speed up on my Intel i5 64bit.\n\nSuggested by Hongzhi Cheng.\n\nNo functional change.\n",

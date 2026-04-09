@@ -2,7 +2,7 @@
   "month": "2013-10",
   "commits": [
     {
-      "commit_num": 4009,
+      "commit_num": 4032,
       "hash": "e8f9447b",
       "short": "e8f9447b",
       "author": "Ralph St��er <ralph.stoesser@ralph_stoesser.(none)>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use a formula for chain membership bonus\n\nPassed both short TC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 5087 W: 1072 L: 951 D: 3064\n\nAnd long TC:\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 28620 W: 5042 L: 4798 D: 18780\n\nbench: 7995098\n",
       "subject": "Use a formula for chain membership bonus"
     },
     {
-      "commit_num": 4010,
+      "commit_num": 4033,
       "hash": "ecd07e51",
       "short": "ecd07e51",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire eval margin and gains\n\n1/ eval margin and gains removed:\n - gains removed by Value(128): search() and qsearch() now behave consistently!\n\n2/ futility_margin()\n - testing showed that there is no added value in this weird (log(depth), movecount)\n   formula, and a much simpler linear formula is just as good. In fact, it is most\n   likely better, as it is not yet optimally tuned.\n - the new simplified formula also means we get rid of FutilityMargins[], its\n   initialization code, and more importantly ss->futilityMoveCount, and the hacky\n   code that updates it throughout the search().\n - the current formula gives negative futility margins, and there is a hidden interaction\n   between the move coutn pruning formula and the futility margin one: what happens is\n   that MCP is supposed to be triggered before we use the non-sensical negative futility\n   margins.\n\n3/ unify pre & post futility pruning\n - pre futility pruning (what SF calls value based pruning) used depth < 7 plies,\n   while post futility pruning (what SF calls static null move pruning) used depth < 4 plies.\n - also the condition depth < 7 in pre futility pruning was not obvious, and it seemd\n   to be depth < 16 (futility_margin() returns an infinite value when depth >= 7).\n\nTested with fixed number of games both at short TC:\nELO: 0.82 +-2.1 (95%) LOS: 77.3%\nTotal: 40000 W: 7939 L: 7845 D: 24216\n\nAnd long TC\nELO: 0.59 +-2.0 (95%) LOS: 71.9%\nTotal: 40000 W: 6876 L: 6808 D: 26316\n\nbench: 10206576\n",
       "subject": "Retire eval margin and gains"
     },
     {
-      "commit_num": 4011,
+      "commit_num": 4034,
       "hash": "3cc47edf",
       "short": "3cc47edf",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tweak bishop pair and knight weight\n\nA combo of two patches that failed SPRT with score\nhigher than 50% but togheter they succeed:\n\nSPRT at 60+0.05\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 7312 W: 1276 L: 1139 D: 4897\n\nbench: 8029334\n",
       "subject": "Tweak bishop pair and knight weight"
     },
     {
-      "commit_num": 4012,
+      "commit_num": 4035,
       "hash": "d454cd42",
       "short": "d454cd42",
       "author": "Matthew Sullivan <mattsullivan14916@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix divide by zero bug in late game\n\nIf the game got late enough that move_importance(currentPly) * slowMover / 100\nrounds to 0, then we ended up dividing 0 by 0 when only looking 1 move ahead.\n\nThis apparently caused the search to almost immediately abort and Stockfish\nwould blunder in long games. So convert thisMoveImportance to a double.\n\nNo functional change.\n",
       "subject": "Fix divide by zero bug in late game"
     },
     {
-      "commit_num": 4013,
+      "commit_num": 4036,
       "hash": "48f38f30",
       "short": "48f38f30",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire mirror()\n\nInline the only caller site.\n\nNo functional change.\n",
       "subject": "Retire mirror()"
     },
     {
-      "commit_num": 4014,
+      "commit_num": 4037,
       "hash": "281472e5",
       "short": "281472e5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prefer file_bb() to FileBB[]\n\nNo functional change.\n",
       "subject": "Prefer file_bb() to FileBB[]"
     },
     {
-      "commit_num": 4015,
+      "commit_num": 4038,
       "hash": "67b0da83",
       "short": "67b0da83",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further smplify pawn endgames\n\nDumb down a bit the code and trade some possible\nspeed (but this is far from hot path anyhow) for\nsome added readability for the layman.\n\nNo functional change.\n",
       "subject": "Further smplify pawn endgames"
     },
     {
-      "commit_num": 4016,
+      "commit_num": 4039,
       "hash": "3674f18b",
       "short": "3674f18b",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use flip_sq idea in endgame.cpp\n\nThe normalising transformation is computed all at\nonce by the helper function get_flip_sq and then\napplied immediately to the relevant squares as soon\nas they are loaded from the position class.\n\nbench: 8350690\n",
       "subject": "Use flip_sq idea in endgame.cpp"
     },
     {
-      "commit_num": 4017,
+      "commit_num": 4040,
       "hash": "fbfce213",
       "short": "fbfce213",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify futility margins formula\n\nNew formula mathces the old formula until d = 45\n\nTest code:\n\nint main() {\n\n  for(int d=1; d<=45; d++)\n  {\n     int a = int(log(double(d * d) / 2) / log(2.0) + 1.001);\n     int b = int(2.9 * log(double(d)));\n\n     if (a != b) std::cout << d << std::endl;\n  }\n\n  return 0;\n}\n\nbench: 8455956\n",
       "subject": "Simplify futility margins formula"
     },
     {
-      "commit_num": 4018,
+      "commit_num": 4041,
       "hash": "72f7282a",
       "short": "72f7282a",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify futility move count formula\n\nSimpler formula but introduces some slight changes if d >= 10\n\nOriginal code grows like  0.225 * d^1.8\nNew code grows like       0.222 * d^1.8\n\nFull list of values:\n\nd old new diff\n--------------\n0 2 2 0\n1 2 2 0\n2 3 3 0\n3 4 4 0\n4 5 5 0\n5 6 6 0\n6 7 7 0\n7 9 9 0\n8 11 11 0\n9 13 13 0\n10 15 16 1\n11 18 19 1\n12 21 21 0\n13 24 24 0\n14 27 28 1\n15 31 31 0\n16 35 35 0\n17 39 38 -1\n18 42 42 0\n19 47 46 -1\n20 51 51 0\n21 55 55 0\n22 60 60 0\n23 65 65 0\n24 70 70 0\n25 75 75 0\n26 81 80 -1\n27 87 86 -1\n28 92 91 -1\n29 98 97 -1\n30 104 103 -1\n31 111 109 -2\n\nTest code:\n\nint main() {\n\n  for(int d=0; d<32; d++)\n  {\n     int a = int(3 + 0.3 * pow(double(d), 1.8)) * 3/4 + (2 < d && d < 5);\n     int b = int(2.4 + 0.222 * pow(d + 0.0, 1.8));\n\n     std::cout << d << \" \" << a << \" \" << b << \" \" << b-a << std::endl;\n  }\n\n  return 0;\n}\n\nbench: 8350690\n",
       "subject": "Simplify futility move count formula"
     },
     {
-      "commit_num": 4019,
+      "commit_num": 4042,
       "hash": "2c825294",
       "short": "2c825294",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tweak again chain pawn bonus\n\nThis is the first chain bonus version\nfrom Ralph that also passed both\n\nShort TC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 23460 W: 4727 L: 4556 D: 14177\n\nAnd long TC:\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 31858 W: 5497 L: 5240 D: 21121\n\nAnd performed better against current\ncommitted version, always at 60secs:\n\nLLR: -2.94 (-2.94,2.94) [-3.00,3.00]\nTotal: 26301 W: 4477 L: 4580 D: 17244\n\nThis test was done by Leonid.\n\nbench: 8455956\n",
       "subject": "Tweak again chain pawn bonus"
     },
     {
-      "commit_num": 4020,
+      "commit_num": 4043,
       "hash": "f86d2aee",
       "short": "f86d2aee",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Re-add \"Further increase safe checks bonus\"\n\nAfter 40K games at 60 secs, result is still\nnot clear, but not a regression against SF 4\n\nAfter\nELO: 50.11 +-2.1 (95%) LOS: 100.0%\nTotal: 40000 W: 10547 L: 4817 D: 24636\n\nBefore\nELO: 49.51 +-2.1 (95%) LOS: 100.0%\nTotal: 40000 W: 10483 L: 4821 D: 24696\n\nSo re-apply the patch to avoid to\nspecial-case this one.\n\nbench: 7403882\n",
       "subject": "Re-add \"Further increase safe checks bonus\""
     },
     {
-      "commit_num": 4021,
+      "commit_num": 4044,
       "hash": "35ea39be",
       "short": "35ea39be",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore behaviour after count<ALL_PIECES> fix\n\nBecause pos.count<ALL_PIECES>(Us) was always zero,\nrewrite the formula as if this would still be\nthe case.\n\nbench: 8510004\n",
       "subject": "Restore behaviour after count<ALL_PIECES> fix"
     },
     {
-      "commit_num": 4022,
+      "commit_num": 4045,
       "hash": "97015afc",
       "short": "97015afc",
       "author": "Ralph Stößer <ralph.stoesser@ralph_stoesser.(none)>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further improve chain pawn evaluation\n\nPassed both short TC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 28299 W: 5854 L: 5667 D: 16778\n\nAnd long TC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 9738 W: 1797 L: 1644 D: 6297\n\nbench: 9294116\n",
       "subject": "Further improve chain pawn evaluation"
     },
     {
-      "commit_num": 4023,
+      "commit_num": 4046,
       "hash": "f22a63ce",
       "short": "f22a63ce",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix pos.count<ALL_PIECES>()\n\nIt was never updated !\n\nCurrently it only affects evaluate_passed_pawns()\nand in particularly the rule to increase the bonus\nif we have more non-pawn pieces. We could simply use\npopcount() instead and avoid the little slowdown\nin put_piece() and remove_piece(), but this would\nleave a very subtle and tricky hole where people\nare forced to remember that pos.count<ALL_PIECES>()\ndoes not work. This is not obvious and so dangerous.\n\nThanks to Ronald de Man for spotting this.\n\nbench: 7931424\n",
       "subject": "Fix pos.count<ALL_PIECES>()"
     },
     {
-      "commit_num": 4024,
+      "commit_num": 4047,
       "hash": "f011a5af",
       "short": "f011a5af",
       "author": "Jörg Oster <osterj165@googlemail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Penalty for Knight when enemy pawns are few\n\nThis seems more a material imbalance topic,\nanyhow test is good and so patch is applied\nas is.\n\nPassed both short TC:\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 17391 W: 3548 L: 3393 D: 10450\n\nAnd long TC:\nLLR: 3.00 (-2.94,2.94) [0.00,6.00]\nTotal: 34660 W: 5972 L: 5700 D: 22988\n\nbench: 8291883\n",
       "subject": "Penalty for Knight when enemy pawns are few"
     },
     {
-      "commit_num": 4025,
+      "commit_num": 4048,
       "hash": "67f91bc5",
       "short": "67f91bc5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Further increase safe checks bonus\"\n\nThis reverts commit 4bc2374450e30101392 for\ntwo reasons.\n\nFirst regression testing shows almost equal\nscore:\n\nBefore the patch:\nELO: 49.75 +-2.5 (95%) LOS: 100.0%\nTotal: 27205 W: 7113 L: 3244 D: 16848\n\nAfter the patch:\nELO: 48.87 +-2.9 (95%) LOS: 100.0%\nTotal: 20860 W: 5478 L: 2563 D: 12819\n\nSecond, and more sensible to me, this patch\nincreases safe check bonuses to 4 times their\noriginal value (!) and considering:\n\n- Values were already well tuned\n\n- Values are highly critical\n\n- King safety is highly critical, very TC\n  dependent and very difficult to test\n\n- Our testing coverage is partial (self-testing,\n  blitz times)\n\nI think is better to be safe than sorry and so\nI revert the patch.\n\nbench: 8440524\n",
       "subject": "Revert \"Further increase safe checks bonus\""
     },
     {
-      "commit_num": 4026,
+      "commit_num": 4049,
       "hash": "f5e872a0",
       "short": "f5e872a0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Some evaluation code reshuffle\n\nNo functional change.\n",
       "subject": "Some evaluation code reshuffle"
     },
     {
-      "commit_num": 4027,
+      "commit_num": 4050,
       "hash": "25cb851f",
       "short": "25cb851f",
       "author": "Jörg Oster <osterj165@googlemail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Score chain pawn also by rank\n\nUse the (rescaled) CandidatePassed[] table\nthat is already rank based.\n\nPassed both short TC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 11048 W: 2272 L: 2135 D: 6641\n\nAnd long TC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 4116 W: 769 L: 645 D: 2702\n\nbench: 8440524\n",
       "subject": "Score chain pawn also by rank"
     },
     {
-      "commit_num": 4028,
+      "commit_num": 4051,
       "hash": "4bc23744",
       "short": "4bc23744",
       "author": "Ralph Stößer <ralph.stoesser@ralph_stoesser.(none)>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further increase safe checks bonus\n\nPassed both short TC:\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 10466 W: 2087 L: 1953 D: 6426\n\nAnd long TC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 26334 W: 4540 L: 4310 D: 17484\n\nAnd also proved stronger than a slightly\ndifferent patch, also succesful against master:\n\nhttps://github.com/mcostalba/Stockfish/commit/dc6830a3b4ed12\n\nBut losing against current one in a match\nat 60secs with SPRT [-3, 3]:\n\nLLR: -2.96 (-2.94,2.94) [-3.00,3.00]\nTotal: 44484 W: 7360 L: 7463 D: 29661\n\nbench: 9160831\n",
       "subject": "Further increase safe checks bonus"
     },
     {
-      "commit_num": 4029,
+      "commit_num": 4052,
       "hash": "3cddb0c0",
       "short": "3cddb0c0",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplification of KPsK function\n\nAlso the drawing criteria has been slightly loosened.\nIt now detects a draw if the king is ahead of all the\npawns and on the same file or the adjacent file.\n\nbench: 7700683\n",
       "subject": "Simplification of KPsK function"
     },
     {
-      "commit_num": 4030,
+      "commit_num": 4053,
       "hash": "2bf18bfc",
       "short": "2bf18bfc",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Bug fix for KQKRPs endgame\n\nThis lost position 8/8/3q4/8/5k2/2P1R3/2K2P2/8 w - - 0 1\nwas previously evaluated as a draw.\n\nThe king and rook need to be correctly placed with\nrespect to the _same_ pawn.\n\n(Note also that the check for the pawn being on RANK_2\nin the old version is redundant: it must be on RANK_2 if\nit hopes to protect a rook on RANK_3)\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Bug fix for KQKRPs endgame"
     },
     {
-      "commit_num": 4031,
+      "commit_num": 4054,
       "hash": "0c68971c",
       "short": "0c68971c",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove a drawing rule from KBPsK function\n\nThe rule can be incorrect if the attacking king is\nwell placed e.g. 8/6K1/8/8/7k/1B6/7P/8 w - - 0 1\n\nbench: 8279065\n",
       "subject": "Remove a drawing rule from KBPsK function"
     },
     {
-      "commit_num": 4032,
+      "commit_num": 4055,
       "hash": "d9be0034",
       "short": "d9be0034",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Massive stronger/weaker renming\n\nNo functional change.\n",
       "subject": "Massive stronger/weaker renming"
     },
     {
-      "commit_num": 4033,
+      "commit_num": 4056,
       "hash": "027d85e8",
       "short": "027d85e8",
       "author": "Chris Caino <chricainogithub@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add helper function verify_material\n\nAllows to remove a lot of assert code in endgames.\n\nNo functional change.\n",
       "subject": "Add helper function verify_material"
     },
     {
-      "commit_num": 4034,
+      "commit_num": 4057,
       "hash": "3bc3c069",
       "short": "3bc3c069",
       "author": "ceebo <chricainogithub@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Add some knowledge for KRPKB endgame\n\nbench: 8279065\n",
       "subject": "Add some knowledge for KRPKB endgame"
     },
     {
-      "commit_num": 4035,
+      "commit_num": 4058,
       "hash": "e9366fa1",
       "short": "e9366fa1",
       "author": "ceebo <chricainogithub@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Improve KBPsK endgame\n\nBetter endgame with bishop and blocked g-pawn\n\nbench: 8279065\n",
       "subject": "Improve KBPsK endgame"
     },
     {
-      "commit_num": 4036,
+      "commit_num": 4059,
       "hash": "549b5c47",
       "short": "549b5c47",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove unuseful optimization in RKISS\n\nDon't need a struct here. Speed test shows\nresult is teh same. Moreover RKISS is used\nmainly at startup to compute magics, so\nprefer to keep it simple...RKISS ;-)\n\nAlso some assorted triviality while there.\n\nNo functional change.\n",
       "subject": "Remove unuseful optimization in RKISS"
     },
     {
-      "commit_num": 4037,
+      "commit_num": 4060,
       "hash": "5aeb907f",
       "short": "5aeb907f",
       "author": "Ralph Stößer <ralph.stoesser@ralph_stoesser.(none)>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Double king safety weights\n\nGood both at short TC:\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 5448 W: 1133 L: 1012 D: 3303\n\nAnd at long TC:\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 40509 W: 6836 L: 6541 D: 27132\n\nbench: 7700683\n",
       "subject": "Double king safety weights"
     },
     {
-      "commit_num": 4038,
+      "commit_num": 4061,
       "hash": "b15e148b",
       "short": "b15e148b",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Smoother transition for LMR\n\nPassed both short TC:\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 12376 W: 2596 L: 2454 D: 7326\n\nAnd long TC:\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 14798 W: 2584 L: 2409 D: 9805\n\nbench: 8279065\n",
       "subject": "Smoother transition for LMR"
     },
     {
-      "commit_num": 4039,
+      "commit_num": 4062,
       "hash": "984ee9d0",
       "short": "984ee9d0",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use TT refined value to stand pat\n\nPassed both short TC:\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 17811 W: 3520 L: 3366 D: 10925\n\nAnd long TC:\nLLR: 2.95 (-2.94,2.94) [0.00,6.00]\nTotal: 30255 W: 5070 L: 4825 D: 20360\n\nbench: 8340585\n",
       "subject": "Use TT refined value to stand pat"
     },
     {
-      "commit_num": 4040,
+      "commit_num": 4063,
       "hash": "bb83a417",
       "short": "bb83a417",
       "author": "Uri Blass <uriblass@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase slowmover and reduce instability\n\nThese two changes go in opposite directions and it\nseems that the combination is stronger than original.\n\nHere are the positive tests at various TC:\n\n15+0.05\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 24561 W: 4946 L: 4772 D: 14843\n\n60+0.05\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 15259 W: 2598 L: 2423 D: 10238\n\n40/30\nLLR: 2.96 (-2.94,2.94) [-3.00,3.00]\nTotal: 2570 W: 527 L: 422 D: 1621\n\nUnfortunately there is also a bad result\nwith one sec time increment that needs\nto be further investigated:\n\n12+1\nLLR: -2.97 (-2.94,2.94) [-3.00,3.00]\nTotal: 2694 W: 438 L: 543 D: 1713\n\nbench: 8340585\n",
       "subject": "Increase slowmover and reduce instability"
     },
     {
-      "commit_num": 4041,
+      "commit_num": 4064,
       "hash": "a0cc15cc",
       "short": "a0cc15cc",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use double everywhere\n\nRationale:\n\n- Speed of double and float is about the same (not on the hot path anyway)\n\n- Double makes code prettier (no need to write 1.0f, just 1.0)\n\n- Only practical advantage of float is to use less memory, but since we never\n  store large arrays of double, we don't care.\n\nNo functional change.\n",
       "subject": "Use double everywhere"
     },
     {
-      "commit_num": 4042,
+      "commit_num": 4065,
       "hash": "7f142d68",
       "short": "7f142d68",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -879,7 +846,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use prefix operators wherever possible\n\nNo functional change.\n",

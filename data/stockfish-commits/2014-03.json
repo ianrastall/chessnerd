@@ -2,7 +2,7 @@
   "month": "2014-03",
   "commits": [
     {
-      "commit_num": 3837,
+      "commit_num": 3860,
       "hash": "678425f2",
       "short": "678425f2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a warning with MSVC 2010\n\nWarning C4804: '<' : unsafe use of type 'bool' in operation\n\nNo functional change.\n",
       "subject": "Fix a warning with MSVC 2010"
     },
     {
-      "commit_num": 3838,
+      "commit_num": 3861,
       "hash": "1efc19ad",
       "short": "1efc19ad",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a compile error with Intel C++\n\nError: a value of type \"int\" cannot be assigned\nto an entity of type \"Value\"\n\nNo functional change.\n",
       "subject": "Fix a compile error with Intel C++"
     },
     {
-      "commit_num": 3839,
+      "commit_num": 3862,
       "hash": "422c9c2a",
       "short": "422c9c2a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Show evaluation from white POV in trace\n\nWe chose this instead of negamax sign convention\n(ie. from the point of view of the side to move)\nbecause it is more in line to how the eval\ntable is presented.\n\nAlso some tweak to formatting while there.\n\nNo functional change.\n",
       "subject": "Show evaluation from white POV in trace"
     },
     {
-      "commit_num": 3840,
+      "commit_num": 3863,
       "hash": "9350d0dc",
       "short": "9350d0dc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Raise VALUE_INFINITE\n\nIn some legal positions like this one:\nR6R/3Q4/1Q4Q1/4Q3/2Q4Q/Q4Q2/Np1Q4/kB1N1KB1  b -- 0 1\n\nWe can have a very high score, in this case 30177 and 29267\nfor midgame and endgame respectively, and because\nVALUE_INFINITE = 30001 we have an assert in interpolate()\n\nMidgame and endgame scores are stored in 16 bit signed integers\nso we can rise VALUE_INFINITE a little bit. This does not fix\nthe possibility of overflow in general case, just makes the\ncondition more difficult to trigger and anyhow better uses all\nthe score width.\n\nRaising VALUE_INFINITE to 32000 seems to fix the problem for this\nparticular case.\n\nNo functional change.\n",
       "subject": "Raise VALUE_INFINITE"
     },
     {
-      "commit_num": 3841,
+      "commit_num": 3864,
       "hash": "af0c13ba",
       "short": "af0c13ba",
       "author": "Stefan Geschwentner <Stefan.Geschwentner@web.de>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pinned pieces affect king safety\n\nHere the new idea is to link pinned pieces\nwith king safety.\n\nPassed both STC\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 10047 W: 1867 L: 1737 D: 6443\n\nAnd LTC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 10419 W: 1692 L: 1543 D: 7184\n\nbench: 8325087\n",
       "subject": "Pinned pieces affect king safety"
     },
     {
-      "commit_num": 3842,
+      "commit_num": 3865,
       "hash": "48338878",
       "short": "48338878",
       "author": "Jean-Francois Romang <jeanfrancois.romang@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further simplification of TT replace strategy\n\nNo functional change\n",
       "subject": "Further simplification of TT replace strategy"
     },
     {
-      "commit_num": 3843,
+      "commit_num": 3866,
       "hash": "c7cf4524",
       "short": "c7cf4524",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a bug in pawns eval tracing\n\nInstead of totals we were showing white and\nblack values.\n\nSpotted by Sven Schüle\n\nNo functional change.\n",
       "subject": "Fix a bug in pawns eval tracing"
     },
     {
-      "commit_num": 3844,
+      "commit_num": 3867,
       "hash": "f811a569",
       "short": "f811a569",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore old aspiration window to 16\n\nTested directly at LTC because previous long\ntest series on this topic shows it is TC dependant.\n\nTested with no-regression mode because gets rid of\nan ugly and ad-hoc rule.\n\nTest at LTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 67918 W: 10590 L: 10541 D: 46787\n\nbench: 7926803\n",
       "subject": "Restore old aspiration window to 16"
     },
     {
-      "commit_num": 3845,
+      "commit_num": 3868,
       "hash": "e7362dae",
       "short": "e7362dae",
       "author": "snicolet <cassio@free.fr>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce penalty for weak (=unsupported) pawns.\n\nWe add a penalty for each pawn which is not protected by another pawn\nof the same color.\n\nPassed both short TC\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 12107 W: 2411 L: 2272 D: 7424\n\nAnd long TC\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 9204 W: 1605 L: 1458 D: 6141\n\nbench: 7682173\n",
       "subject": "Introduce penalty for weak (=unsupported) pawns."
     },
     {
-      "commit_num": 3846,
+      "commit_num": 3869,
       "hash": "9e72e359",
       "short": "9e72e359",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an incorrect 'friend' declaration\n\nSpotted by Lee David.\n\nNo functional change.\n",
       "subject": "Fix an incorrect 'friend' declaration"
     },
     {
-      "commit_num": 3847,
+      "commit_num": 3870,
       "hash": "bc183b0c",
       "short": "bc183b0c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire last usage of operator|(File f, Rank r)\n\nThis for some reason was missed.\n\nNo functional change.\n",
       "subject": "Retire last usage of operator|(File f, Rank r)"
     },
     {
-      "commit_num": 3848,
+      "commit_num": 3871,
       "hash": "865b7130",
       "short": "865b7130",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify TT replace strategy\n\nTested for no-regression with SPRT[-3, 1] at STC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 32046 W: 6020 L: 5918 D: 20108\n\nNo functional change.\n",
       "subject": "Simplify TT replace strategy"
     },
     {
-      "commit_num": 3849,
+      "commit_num": 3872,
       "hash": "ffdf63ff",
       "short": "ffdf63ff",
       "author": "mstembera <MissingEmail@email>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Refresh TT entries generation automatically on probe\n\nAnd other assorted simplifications, tested with SPRT[-3, 1]\n\nPassed both short TC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 18814 W: 3600 L: 3475 D: 11739\n\nAnd long TC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 20731 W: 3217 L: 3096 D: 14418\n\nNo functional change.\n",
       "subject": "Refresh TT entries generation automatically on probe"
     },
     {
-      "commit_num": 3850,
+      "commit_num": 3873,
       "hash": "f12449d4",
       "short": "f12449d4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename score to value in ExtMove\n\nWe use 'score' for the value mid-endgame pair.\n\nNo functional change.\n",
       "subject": "Rename score to value in ExtMove"
     },
     {
-      "commit_num": 3851,
+      "commit_num": 3874,
       "hash": "441a34a1",
       "short": "441a34a1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Trivial formatting in ucioption.cpp\n\nNo functional change.\n",
       "subject": "Trivial formatting in ucioption.cpp"
     },
     {
-      "commit_num": 3852,
+      "commit_num": 3875,
       "hash": "5f12069c",
       "short": "5f12069c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire operator|(File f, Rank r)\n\nUse make_square() instead. Less fancy but\nmore clear.\n\nNo functional change.\n",
       "subject": "Retire operator|(File f, Rank r)"
     },
     {
-      "commit_num": 3853,
+      "commit_num": 3876,
       "hash": "4eee6034",
       "short": "4eee6034",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a subtle bug in UCI options printing\n\nWe want all the UCI options are printed in the order in which are\nassigned, so we use an index that, depending on Options.size(),\nincreases after each option is added to the map. The problem is\nthat, for instance, in the first assignment:\n\no[\"Write Debug Log\"] = Option(false, on_logger);\n\nOptions.size() can value 0 or 1 according if the l-value (that\nincrements the size) has been evaluated after or before the\nr-value (that uses the size value).\n\nThe culprit is that assignment operator in C++ is not a\nsequence point:\n\nhttp://en.wikipedia.org/wiki/Sequence_point\n\n(Note: to be nitpick here we actually use std::map::operator=()\n that being a function can evaluate its arguments in any order)\n\nSo there is no guarantee on what term is evaluated first and\nbehavior is undefined by standard in this case. The net result\nis that in case r-value is evaluated after l-value the last\nidx is not size() - 1, but size() and in the printing loop\nwe miss the last option!\n\nBug was there since ages but only recently has been exposed by\nthe removal of UCI_Analyze option so that the last one becomes\nUCI_Chess960 and when it is missing engine cannot play anymore\nChess960.\n\nThe fix is trivial (although a bit hacky): just increase the\nlast loop index.\n\nReported by Eric Mullins that found it on an ARM and MIPS\nplatforms with gcc 4.7\n\nNo functional change.\n",
       "subject": "Fix a subtle bug in UCI options printing"
     },
     {
-      "commit_num": 3854,
+      "commit_num": 3877,
       "hash": "c714b905",
       "short": "c714b905",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a typo\n\nSpotted by Isaac Haïk Dunn.\n\nNo functional change.\n",
       "subject": "Fix a typo"
     },
     {
-      "commit_num": 3855,
+      "commit_num": 3878,
       "hash": "aab5863d",
       "short": "aab5863d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase max threads to 128\n\nThanks to std::bitset we can easily increase\nthe limit of active threads above 64.\n\nThanks to Lucas Braesch for pointing at the\ncorrect solution of using std::bitset.\n\nNo functional change.\n",
       "subject": "Increase max threads to 128"
     },
     {
-      "commit_num": 3856,
+      "commit_num": 3879,
       "hash": "fa3f6dcb",
       "short": "fa3f6dcb",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a crash under MSVC\n\nUsing memset on a std::vector is undefined behavior,\nso manually init all the data memebers of LimitsType.\n\nBug intorduced in 41641e3b1eea0038ab6984\n\nNo functional change.\n",
       "subject": "Fix a crash under MSVC"
     },
     {
-      "commit_num": 3857,
+      "commit_num": 3880,
       "hash": "a091ae4c",
       "short": "a091ae4c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Split also if no slaves are found\n\nBecause we test for available slaves before\nentering split(), we almost always allocate a\nslave, only in the rare case of a race (less\nthen 2% of cases) this is not true, but to\nspecial case this occurrence is not worth\nthe added complexity.\n\nbench: 7451319\n",
       "subject": "Split also if no slaves are found"
     },
     {
-      "commit_num": 3858,
+      "commit_num": 3881,
       "hash": "a1a7bc84",
       "short": "a1a7bc84",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove \"Max Threads per Split Point\" UCI option\n\nExperimental patch to verify if drop of nps\nin endgames at very long TC is due to this.\n\nSuggested by Ronald de Man.\n\nbench: 7451319\n",
       "subject": "Remove \"Max Threads per Split Point\" UCI option"
     },
     {
-      "commit_num": 3859,
+      "commit_num": 3882,
       "hash": "6e4b4c42",
       "short": "6e4b4c42",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge default tests in pos_is_ok\n\nNo functional change.\n",
       "subject": "Merge default tests in pos_is_ok"
     },
     {
-      "commit_num": 3860,
+      "commit_num": 3883,
       "hash": "142874b0",
       "short": "142874b0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Microptimize castling in undo_move()\n\nWe don't need to set 'captured' and 'pt' after we\ncastle back.\n\nNo functional change.\n",
       "subject": "Microptimize castling in undo_move()"
     },
     {
-      "commit_num": 3861,
+      "commit_num": 3884,
       "hash": "36c38115",
       "short": "36c38115",
       "author": "Mysseno <jonoface@live.com.au>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Depth dependant aspiration window delta\n\nSplit delta value in aspiration window so that when\nsearch depth is less than 24 a smaller delta value\nis used. The idea is that the search is likely to\nbe more accurate at lower depths and so we can exclude\nmore possibilities, 25% to be exact.\n\nPassed STC\nLLR: 2.96 (-2.94, 2.94) [-1.50, 4.50]\nTotal: 20430 W: 3775 L: 3618 D: 13037\n\nAnd LTC\nLLR: 2.96 (-2.94, 2.94) [0.00, 6.00]\nTotal: 5032 W: 839 L: 715 D: 3478\n\nBench: 7451319\n",
       "subject": "Depth dependant aspiration window delta"
     },
     {
-      "commit_num": 3862,
+      "commit_num": 3885,
       "hash": "d0587f2c",
       "short": "d0587f2c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use legal positions for endgame initialization\n\nDuring endgame initialization we get the material\nhash key of each endgame forging and ad-hoc position\nthat in same cases is illegal (leaves teh king under\ncapture). This is not a problem for the material key,\nbut rises an assert when SF is run in debug mode with\n'testKingCapture' set in pos_is_ok().\n\nSo rewrite the code to always produce legal positions.\n\nNo functional change.\n",
       "subject": "Use legal positions for endgame initialization"
     },
     {
-      "commit_num": 3863,
+      "commit_num": 3886,
       "hash": "1f4798a1",
       "short": "1f4798a1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further work in pos_is_ok()\n\nNo functional change.\n",
       "subject": "Further work in pos_is_ok()"
     },
     {
-      "commit_num": 3864,
+      "commit_num": 3887,
       "hash": "61e44433",
       "short": "61e44433",
       "author": "Daylen Yang <services@daylenyang.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Re-add link time optimization on OS X\n\nIn the new version of clang, -O4 does not imply -flto, so we set the\nflag\n",
       "subject": "Re-add link time optimization on OS X"
     },
     {
-      "commit_num": 3865,
+      "commit_num": 3888,
       "hash": "6571acff",
       "short": "6571acff",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat do_castling()\n\nNo functional change.\n",
       "subject": "Reformat do_castling()"
     },
     {
-      "commit_num": 3866,
+      "commit_num": 3889,
       "hash": "6f3d7876",
       "short": "6f3d7876",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Further merge StateInfo setup functions\n\nNo functional change.\n",
       "subject": "Further merge StateInfo setup functions"
     },
     {
-      "commit_num": 3867,
+      "commit_num": 3890,
       "hash": "1e032ece",
       "short": "1e032ece",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -801,14 +771,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge hash key computation functions\n\nNo functional change.\n",
       "subject": "Merge hash key computation functions"
     },
     {
-      "commit_num": 3868,
+      "commit_num": 3891,
       "hash": "cc3002ff",
       "short": "cc3002ff",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -827,14 +796,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use std::count in pos_is_ok()\n\nNo functional change.\n",
       "subject": "Use std::count in pos_is_ok()"
     },
     {
-      "commit_num": 3869,
+      "commit_num": 3892,
       "hash": "c40d4e01",
       "short": "c40d4e01",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -853,14 +821,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small simplification in gives_check\n\nUse switch statement also for normal case.\n\nNo speed regression.\n\nNo functional change.\n",
       "subject": "Small simplification in gives_check"
     },
     {
-      "commit_num": 3870,
+      "commit_num": 3893,
       "hash": "ca0804df",
       "short": "ca0804df",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -879,14 +846,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Print dbg counters after bench\n\nPrint last debug counters update just\nbefore to exit benchmark.\n\nSuggested by Stephane Nicolet.\n\nNo functional change.\n",
       "subject": "Print dbg counters after bench"
     },
     {
-      "commit_num": 3871,
+      "commit_num": 3894,
       "hash": "d2a8ba32",
       "short": "d2a8ba32",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -905,14 +871,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify pseudo_legal()\n\nBig simplification of pawn move check.\n\nCode has been tested with a brute force approach: for\nevery position reached during a bench search, the function\nhas been called for each combinations of Move(from, to)\nand verified the result is the same of old code.\n\nActually this function is very critical becuase is the\none that ensures corrupted TT moves are discarded, so\nto properly test it a simple bench is not enough.\n\nVerified also speed is not changed.\n\nNo functional chnage.\n",
       "subject": "Simplify pseudo_legal()"
     },
     {
-      "commit_num": 3872,
+      "commit_num": 3895,
       "hash": "20ff12e1",
       "short": "20ff12e1",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -931,14 +896,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify generate<EVASIONS>\n\nNo speed regression, tested with both perft and\nbench.\n\nNo functional change.\n",
       "subject": "Simplify generate<EVASIONS>"
     },
     {
-      "commit_num": 3873,
+      "commit_num": 3896,
       "hash": "5cf9e0b2",
       "short": "5cf9e0b2",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -957,14 +921,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire SERIALIZE macros\n\nExplicitly write the 'while' loops. This adds some\ncode but makes clear what's the code behind the\nmacro.\n\nNo functional change.\n",
       "subject": "Retire SERIALIZE macros"
     },
     {
-      "commit_num": 3874,
+      "commit_num": 3897,
       "hash": "1d1b7df7",
       "short": "1d1b7df7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -983,14 +946,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename castling flag to castling right\n\nThis is a more conventional naming as\nreported also in:\n\nhttp://chessprogramming.wikispaces.com/Castling+rights\n\nNo functional change.\n",
       "subject": "Rename castling flag to castling right"
     },
     {
-      "commit_num": 3875,
+      "commit_num": 3898,
       "hash": "13b9e1e0",
       "short": "13b9e1e0",
       "author": "Stephane Nicolet <cassio@free.fr>",
@@ -1009,14 +971,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix dbg_mean_of() for negative numbers\n\nType should be int64_t instead of uint64_t\n\nNo functional change.\n",
       "subject": "Fix dbg_mean_of() for negative numbers"
     },
     {
-      "commit_num": 3876,
+      "commit_num": 3899,
       "hash": "bbd69c02",
       "short": "bbd69c02",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1035,14 +996,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert dynamic draw value\n\nWhen tested with weaker engines did not\nperformed as expected, actually it was even\na regression from standard version.\n\nbench: 8430785\n",
       "subject": "Revert dynamic draw value"
     },
     {
-      "commit_num": 3877,
+      "commit_num": 3900,
       "hash": "553ead42",
       "short": "553ead42",
       "author": "mstembera <MissingEmail@email>",
@@ -1061,14 +1021,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Some minor cleanup stuff\n\nI came across while browsing the code.\n\nNo functional change.\n",
       "subject": "Some minor cleanup stuff"
     },
     {
-      "commit_num": 3878,
+      "commit_num": 3901,
       "hash": "708cb311",
       "short": "708cb311",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1087,14 +1046,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pass CastlingFlag argument only\n\nInstead of Color and CastlingSide. Change functions API\naccordingly.\n\nNo functional change.\n",
       "subject": "Pass CastlingFlag argument only"
     },
     {
-      "commit_num": 3879,
+      "commit_num": 3902,
       "hash": "3e5470d8",
       "short": "3e5470d8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1113,14 +1071,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove limit of minimumSplitDepth\n\nThere is no reason why an user cannot set\nit at a value less than 4.\n\nNo functional change.\n",
       "subject": "Remove limit of minimumSplitDepth"
     },
     {
-      "commit_num": 3880,
+      "commit_num": 3903,
       "hash": "3d8c0f16",
       "short": "3d8c0f16",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1139,14 +1096,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename xxx_to_char() -> to_char()\n\nNo functional change.\n",
       "subject": "Rename xxx_to_char() -> to_char()"
     },
     {
-      "commit_num": 3881,
+      "commit_num": 3904,
       "hash": "de2ba708",
       "short": "de2ba708",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1165,14 +1121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify Bitboards::pretty\n\nNo functional change.\n",
       "subject": "Simplify Bitboards::pretty"
     },
     {
-      "commit_num": 3882,
+      "commit_num": 3905,
       "hash": "9f0485e3",
       "short": "9f0485e3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -1191,7 +1146,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire UCI_AnalyseMode option\n\nIt has been obsoleted out already some time ago\nand currently there is no point in changing eval\nscore according to if we are in game or analyzing.\n\nSo retire the option.\n\nNo functional change.\n",

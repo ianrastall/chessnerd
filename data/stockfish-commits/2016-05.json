@@ -2,7 +2,7 @@
   "month": "2016-05",
   "commits": [
     {
-      "commit_num": 3168,
+      "commit_num": 3191,
       "hash": "3549d98d",
       "short": "3549d98d",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tuned values for piece check and attack unit factors\n\nA middle ground patch of two successful tuning patches,\none at STC, the other at LTC, which now passed both.\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 67893 W: 12777 L: 12384 D: 42732\n\nLLR: 2.95 (-2.94,2.94) [0.00,4.00]\nTotal: 30165 W: 4189 L: 3960 D: 22016\n\nbench: 9209507\n",
       "subject": "Tuned values for piece check and attack unit factors"
     },
     {
-      "commit_num": 3169,
+      "commit_num": 3192,
       "hash": "6e2ca97d",
       "short": "6e2ca97d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix syzygy DTZ bug\n\nIn this position: 3K4/8/3k4/8/4p3/4B3/5P2/8 w - - 0 5\n\nCurrent DTZ probe returns 1 instead of 15\n\nWhat happens is that the double push f4 is erroneously detected as a win move.\n\nAfter the push we have:\n\n[D]3K4/8/3k4/8/4pP2/4B3/8/8 b - f3 0 5\n\nAnd here the code misses the possible ep capture exf3.\n\nThe bug is in probe_dtz_no_ep() where is used probe_ab() that is\nblind to ep captures so it returns v == 2 (win) for position\n\n3K4/8/3k4/8/4pP2/4B3/8/8 b - f3 0 5\n\nNote that at the caller site the original position did not have any\npossible ep capture, so probe_dtz() returns immediately after calling\nprobe_dtz_no_ep().\n\nThe fix is to call the ep-aware probe_wdl() instead of probe_ab()\n\nI have verified that DTZ is correct now and also there are no more\nmistmatches compared to the new 'syzygy' branch. Tested on a set of\nmore than 600 endgame positions, included some tricky ones.\n\nFor people interested to redo the test or doing additional tests\nplease pull branch tb_dbg from https://github.com/mcostalba/Stockfish repo.\n\nbench: 8450534 (bench unaffected because syzygy is not exercized during bench)\n",
       "subject": "Fix syzygy DTZ bug"
     },
     {
-      "commit_num": 3170,
+      "commit_num": 3193,
       "hash": "ab0f4c03",
       "short": "ab0f4c03",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify doubled pawn\n\nOnly use doubled pawn malus when the doubled pawns are on consecutive squares.\n\nPassed STC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 7678 W: 1469 L: 1325 D: 4884\n\nAnd LTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 26739 W: 3562 L: 3449 D: 19728\n\nBench: 8211685\n",
       "subject": "Simplify doubled pawn"
     },
     {
-      "commit_num": 3171,
+      "commit_num": 3194,
       "hash": "07b247f9",
       "short": "07b247f9",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Pins or discovered attacks on the opponent's queen\n\nBonus for pins or discovered attacks on the opponent's queen\n\nSTC:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 32020 W: 5914 L: 5652 D: 20454\n\nLTC:\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 10946 W: 1530 L: 1375 D: 8041\n\nBench: 7031649\n",
       "subject": "Pins or discovered attacks on the opponent's queen"
     },
     {
-      "commit_num": 3172,
+      "commit_num": 3195,
       "hash": "abac509c",
       "short": "abac509c",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Teach check_blockers to check also non-king pieces\n\nThis is a prerequisite for next patch\n\nNo functional change.\n",
       "subject": "Teach check_blockers to check also non-king pieces"
     },
     {
-      "commit_num": 3173,
+      "commit_num": 3196,
       "hash": "7cb8cbb4",
       "short": "7cb8cbb4",
       "author": "loco-loco <loco-loco@users.noreply.github.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Assorted pruning tweaks\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 38257 W: 5206 L: 4961 D: 28090\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 16550 W: 3110 L: 2914 D: 10526\n\nBench: 8428997\n",
       "subject": "Assorted pruning tweaks"
     },
     {
-      "commit_num": 3174,
+      "commit_num": 3197,
       "hash": "71bfbb22",
       "short": "71bfbb22",
       "author": "Leonid Pechenik <lp@home>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "More detailed dependence of time allocation on the magnitude of score change\n\n10+0.1:\nLLR: 2.96 (-2.94,2.94) [0.00,5.00]\nTotal: 5657 W: 1130 L: 979 D: 3548\n\n60+0.6:\nLLR: 2.95 (-2.94,2.94) [0.00,5.00]\nTotal: 36884 W: 5002 L: 4762 D: 27120\n\nbench: 8428997\n",
       "subject": "More detailed dependence of time allocation on the magnitude of score change"
     },
     {
-      "commit_num": 3175,
+      "commit_num": 3198,
       "hash": "16c603ce",
       "short": "16c603ce",
       "author": "Stéphane Nicolet <cassio@free.fr>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Double pawn simplification\n\nTry doubled pawn simplification, with psq\ntable compensation.\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 36094 W: 6558 L: 6463 D: 23073\n\nLTC:\nLLR: 2.94 (-2.94,2.94) [-3.00,1.00]\nTotal: 102352 W: 13417 L: 13404 D: 75531\n\nBench: 8716243\n",
       "subject": "Double pawn simplification"
     },
     {
-      "commit_num": 3176,
+      "commit_num": 3199,
       "hash": "4b9ed656",
       "short": "4b9ed656",
       "author": "Alain SAVARD <support@multicim.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Unsafe checks\n\nIntroducing a new multi-purpose penalty related to King safety, which\nincludes all kind of potential checks (from unsafe or unavailable\nsquares currently occupied by some other piece)\n\nThis will indirectly detect and reward some pins, discovered checks, and\nmotifs such as square vacation, or rook behind its pawn and aligned with\nKing (example Black Rg8, g7 against Kg1),\nand penalize some pawn blockers (if they move, it allows a discovered\ncheck by the pawn).\n\nAnd since it looks also at protected squares, it detects some potential\ndefense overloading.\n\nFinally, the rook contact checks had been removed some time ago. This\ntest will give a small bonus for them, as well as for bishop contact\nchecks.\n\nPassed STC\nhttp://tests.stockfishchess.org/tests/view/5729ec740ebc59301a354b36\nLLR: 2.94 (-2.94,2.94) [0.00,5.00]\nTotal: 13306 W: 2477 L: 2296 D: 8533\n\nand LTC\nhttp://tests.stockfishchess.org/tests/view/572a5be00ebc59301a354b65\nLLR: 2.97 (-2.94,2.94) [0.00,5.00]\nTotal: 20369 W: 2750 L: 2565 D: 15054\n\nbench: 9298175\n",
       "subject": "Unsafe checks"
     },
     {
-      "commit_num": 3177,
+      "commit_num": 3200,
       "hash": "96998240",
       "short": "96998240",
       "author": "loco-loco <loco-loco@users.noreply.github.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge good and bad quiets\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 58613 W: 10779 L: 10723 D: 37111\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 33608 W: 4539 L: 4436 D: 24633\n\nBench: 9441294\n",
       "subject": "Merge good and bad quiets"
     },
     {
-      "commit_num": 3178,
+      "commit_num": 3201,
       "hash": "5e4cd3fc",
       "short": "5e4cd3fc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire __popcnt64 intrinsic\n\nJust use _mm_popcnt_u64() that is available\nboth for MSVC abd Intel compiler.\n\nVerified on MSVC that the produced assembly\nhas the hardware 'popcnt' instruction.\n\nNo functional change.\n",
       "subject": "Retire __popcnt64 intrinsic"
     },
     {
-      "commit_num": 3179,
+      "commit_num": 3202,
       "hash": "3487eb9f",
       "short": "3487eb9f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a warning with MSVC\n\nIntroduced by 2dd24dc4e618dc7b (\"Use popcount intrinsic with Intel\")\n\nNo functional change.\n",
       "subject": "Fix a warning with MSVC"
     },
     {
-      "commit_num": 3180,
+      "commit_num": 3203,
       "hash": "2dd24dc4",
       "short": "2dd24dc4",
       "author": "erbsenzaehler <erbsenzaehler@users.noreply.github.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use popcount intrinsic with Interl compiler\n\nIt seems that icc used our fallback version of popcount.\nNow use intrinsics.\n\nicc version 16.0.2 (gcc version 5.3.0 compatibility)\nbmi2 compile\nuname -r 4.5.1-1-ARCH\n\n20xbench gives a nice speedup\n./stockfish-icc-master 2161515 +- 34462\n./stockfish-icc-sse42 2260857 +- 50349\n",
       "subject": "Use popcount intrinsic with Interl compiler"
     },
     {
-      "commit_num": 3181,
+      "commit_num": 3204,
       "hash": "5486911e",
       "short": "5486911e",
       "author": "VoyagerOne <excelgeek@gmail.com>",
@@ -359,7 +346,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify History LMR Formula\n\nSTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 41713 W: 7589 L: 7504 D: 26620\n\nLTC:\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 41353 W: 5484 L: 5391 D: 30478\n\nBench: 8946983\n",

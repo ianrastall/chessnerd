@@ -2,7 +2,7 @@
   "month": "2014-08",
   "commits": [
     {
-      "commit_num": 3665,
+      "commit_num": 3688,
       "hash": "95b24083",
       "short": "95b24083",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify idle_loop()\n\nNo functional change\n",
       "subject": "Simplify idle_loop()"
     },
     {
-      "commit_num": 3666,
+      "commit_num": 3689,
       "hash": "cd065dd5",
       "short": "cd065dd5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Small tweak to idle_loop()\n\nIn case of a succesful late join we set again\n'searching' flag, so we can restart search\nimmediately without an useless lock/unlock\ncycle.\n\nNo functional change.\n",
       "subject": "Small tweak to idle_loop()"
     },
     {
-      "commit_num": 3667,
+      "commit_num": 3690,
       "hash": "877313a4",
       "short": "877313a4",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire Search Log\n\nNo functional change\n\nBench: 7461881\n",
       "subject": "Retire Search Log"
     },
     {
-      "commit_num": 3668,
+      "commit_num": 3691,
       "hash": "a903ed07",
       "short": "a903ed07",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire move_to_san()\n\nNow \"Write Search Log\" will pring moves in UCI format, consistent with all the rest. This functionality is\nnot aimed at end-users anyway. It's hardly useful at all, in fact. Also, pretty-printing SAN moves is\nsomething that better belongs in the GUI than in the engine.\n\nNo functional change.\n",
       "subject": "Retire move_to_san()"
     },
     {
-      "commit_num": 3669,
+      "commit_num": 3692,
       "hash": "8b8885ab",
       "short": "8b8885ab",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix perft 1\n\nCompute correct number of moves for this corner case.\n\nA smal bug crept in after recent perft rework.\n\nNo functional change.\n",
       "subject": "Fix perft 1"
     },
     {
-      "commit_num": 3670,
+      "commit_num": 3693,
       "hash": "880e3cd7",
       "short": "880e3cd7",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move to_char() and to_string() to notation\nWhere they better belong.\n\nAlso, this removes '#include <string>' from types.h, which reduces the amount of code to compile (every\ntranslation unit includes types.h).\n\nNo functional change.\n",
       "subject": "Move to_char() and to_string() to notation"
     },
     {
-      "commit_num": 3671,
+      "commit_num": 3694,
       "hash": "a67c2261",
       "short": "a67c2261",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rework perft implementation\n\nUnify various perft functions and move all the code\nto search.cpp.\n\nAvoid perft implementation to be splitted between\nbenchmark.cpp (where it has no reason to be) and\nsearch.cpp\n\nNo functional and no speed change (tested).\n",
       "subject": "Rework perft implementation"
     },
     {
-      "commit_num": 3672,
+      "commit_num": 3695,
       "hash": "2efeded6",
       "short": "2efeded6",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Write perft(N-1) into cout\nSo that one can redirect cout to /dev/null and only print print cerr in the terminal (for more accurate speed\ntests).\n\nSuggested by Marco.\n\nNo functional change.\n",
       "subject": "Write perft(N-1) into cout"
     },
     {
-      "commit_num": 3673,
+      "commit_num": 3696,
       "hash": "6044f25d",
       "short": "6044f25d",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix Hash in bench\nThe compiler tries to cast Options[\"Hash\"] into a string, using:\n\nOption::operator std::string() const {\n  assert(type == \"string\");\n  return currentValue;\n}\n\nAnd, as expected, the assert() fails.\n\nstd::to_string() would be the right solution, but it's C++11. And using a stringstream is too much code to\nachieve so little. Let's keep it the way it was: hardcoded (ie. default hash defined in two places).\n\nNo functional change.\n",
       "subject": "Fix Hash in bench"
     },
     {
-      "commit_num": 3674,
+      "commit_num": 3697,
       "hash": "9da01551",
       "short": "9da01551",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove insufficient material rule\nThe eval already returns zero in KK, KBK, KNK (see material.cpp). The difference is:\n- we lose the \"TB pruning\" benefit of the draw rule (ie. search goes on even if eval is zero)\n- we gain some speed by removing a useless test from the hot path\n\nSTC:\nLLR: 0.05 (-2.94,2.94) [-3.00,1.00]\nTotal: 128000 W: 21357 L: 21560 D: 85083\n\nLTC:\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 33023 W: 4613 L: 4509 D: 23901\n\nbench 7461881\n",
       "subject": "Remove insufficient material rule"
     },
     {
-      "commit_num": 3675,
+      "commit_num": 3698,
       "hash": "888a1d34",
       "short": "888a1d34",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Remove useless code in Position::pretty()\nFirst, remove some dead code (function never called with a Move argument).\n\nThen, remove printing of legal moves, which does not belong here. Let's keep commands orthogonal and minimal:\n- the \"d\" command should display the board, nothing more, or less.\n- \"perft 1\" will display the list of legal moves.\n\nNo functional change.\n",
       "subject": "Remove useless code in Position::pretty()"
     },
     {
-      "commit_num": 3676,
+      "commit_num": 3699,
       "hash": "8b88ca90",
       "short": "8b88ca90",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reduce minimum memory requirement by 16MB\nStockfish allocates the default hash (32MB) in main(), before entering UCI::loop(). If there is not enough\nmemory, the program will crash even before UCI::loop() is entered and the GUI is given a change to specify a\nlower Hash value.\n\nThis defective design could be resolved by doing a lazy allocation upon \"isready\" command, as the UCI protocol\nguarantees that \"isready\" will be sent at least once before any search. But it's a bit cumbersome when using\nStockfish \"manually\" to have to remember to type \"isready\" everytime.\n\nSo leave the current design, but reduce the default hash to 16MB instread of 32MB. In order to perform such\nquick searches (depth=13), there is no reason to use so much Hash anyway. Another benefit is to introduce a\nbit of hash pressure in bench, which increases chances to detect rare bugs related to TT replacement, for\nexample.\n\nThis is not a functional change, although it obviously changes the bench.\n\nbench 7461879\n",
       "subject": "Reduce minimum memory requirement by 16MB"
     },
     {
-      "commit_num": 3677,
+      "commit_num": 3700,
       "hash": "94fe3667",
       "short": "94fe3667",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Default Hash defined in a single place\nInstead of defining it both in ucioption.cpp and benchmark.cpp. Obviously changing the default Hash will\nchange the bench as a result.\n\nNo functional change.\n",
       "subject": "Default Hash defined in a single place"
     },
     {
-      "commit_num": 3678,
+      "commit_num": 3701,
       "hash": "535f7008",
       "short": "535f7008",
       "author": "lucasart <lucas.braesch@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire divide command\nThe main purpose of perft is to help debugging. But without the breakdown in sum of perft(N-1), it is a\ncompletely useless debugging tool.\n\nSo perft now displays the breakdown, and divide is therefore removed.\n\nNo functional change.\n",
       "subject": "Retire divide command"
     },
     {
-      "commit_num": 3679,
+      "commit_num": 3702,
       "hash": "1b699108",
       "short": "1b699108",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Ensure printing UCI info in multi-pv case\n\nAfter commit 94b1bbb68be6b0bc3aaf1cb804841a022bcc7007, in case available root moves are less than multiPV, we\ncould never reach condition:\n\nPVIdx + 1 == multiPV\n\nand as a consequence UCI output is not printed.\n\nFixed suggested by Joerg Oster.\n\nNo functional change.\n",
       "subject": "Ensure printing UCI info in multi-pv case"
     },
     {
-      "commit_num": 3680,
+      "commit_num": 3703,
       "hash": "29451de8",
       "short": "29451de8",
       "author": "Oskar Werkelin Ahlin <oskarn@gmail.com>",
@@ -411,7 +396,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correct bench timing\n\nNo functional change.\n",

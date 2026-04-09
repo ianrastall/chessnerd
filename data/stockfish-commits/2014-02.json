@@ -2,7 +2,7 @@
   "month": "2014-02",
   "commits": [
     {
-      "commit_num": 3883,
+      "commit_num": 3906,
       "hash": "b917cd27",
       "short": "b917cd27",
       "author": "Joerg Oster <osterj165@googlemail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Dynamic draw value\n\nTry to avoid repetition draws at early midgame,\nthis should give an edge against weaker opponents\nand reduce draw rate.\n\nTested for regressions with SPRT[-3, 1] and\npassed both short TC\nLLR: 2.95 (-2.94,2.94) [-3.00,1.00]\nTotal: 68498 W: 12928 L: 12891 D: 42679\n\nAnd long TC\nLLR: 2.96 (-2.94,2.94) [-3.00,1.00]\nTotal: 40212 W: 6386 L: 6295 D: 27531\n\nbench: 7990513\n",
       "subject": "Dynamic draw value"
     },
     {
-      "commit_num": 3884,
+      "commit_num": 3907,
       "hash": "0949f06a",
       "short": "0949f06a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a warning with Intel compiler\n\nwarning #2259: non-pointer conversion from \"int\" to\n\"uint8_t={unsigned char}\" may lose significant bits\n\nNo functional change\n",
       "subject": "Fix a warning with Intel compiler"
     },
     {
-      "commit_num": 3885,
+      "commit_num": 3908,
       "hash": "012f20d6",
       "short": "012f20d6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix an assert in Probcut\n\nWhen running the following position:\n\n8/kPp5/2P3p1/p1P1p1P1/2PpPp2/3p1p2/3P1P2/5K2 w - - 0 1\n\nAn assert is raised at depth 92:\n\nassert(-VALUE_INFINITE <= alpha && alpha < beta && beta <= VALUE_INFINITE);\n\nThis is because it happens that beta = 29832,\nso rbeta = 30032 that is > VALUE_INFINITE\n\nBug spotted and analyzed by Uri, fix suggested by Joerg.\n\nOther fixes where possible but this one is pointed\nexactly at the source of the bug, so it is the best\nfrom a code documentation point of view.\n\nbench: 8430785\n",
       "subject": "Fix an assert in Probcut"
     },
     {
-      "commit_num": 3886,
+      "commit_num": 3909,
       "hash": "b8cfc255",
       "short": "b8cfc255",
       "author": "Leonid Pechenik <lp@home>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Distribute part of first move time to other moves\n\nPassed both short TC:\nLLR: 2.97 (-2.94,2.94) [-1.50,4.50]\nTotal: 18907 W: 3475 L: 3322 D: 12110\n\nAnd long TC:\nLLR: 2.96 (-2.94,2.94) [0.00,6.00]\nTotal: 19044 W: 2997 L: 2811 D: 13236\n\nbench: 8430785\n",
       "subject": "Distribute part of first move time to other moves"
     },
     {
-      "commit_num": 3887,
+      "commit_num": 3910,
       "hash": "9fcefb27",
       "short": "9fcefb27",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid recalculating CheckInfo in generate_castling()\n\nNo functional change.\n",
       "subject": "Avoid recalculating CheckInfo in generate_castling()"
     },
     {
-      "commit_num": 3888,
+      "commit_num": 3911,
       "hash": "64a71c3c",
       "short": "64a71c3c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't update pieceCount for ALL_PIECES\n\nIt is currently unused and only adds\noverhead for nothing.\n\nAlso set proper type of chess960.\n\nNo functional change.\n",
       "subject": "Don't update pieceCount for ALL_PIECES"
     },
     {
-      "commit_num": 3889,
+      "commit_num": 3912,
       "hash": "7b0a2f2a",
       "short": "7b0a2f2a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Update SEE to return a Value\n\nIt seems more natural because the actual returned\nvalue is from PieceValue[] array.\n\nNo functional change.\n",
       "subject": "Update SEE to return a Value"
     },
     {
-      "commit_num": 3890,
+      "commit_num": 3913,
       "hash": "17ffc222",
       "short": "17ffc222",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Sync code style in material.cpp\n\nUpdate to use common code style.\n\nNo functional change.\n",
       "subject": "Sync code style in material.cpp"
     },
     {
-      "commit_num": 3891,
+      "commit_num": 3914,
       "hash": "52ebf872",
       "short": "52ebf872",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase MAX_PLY from 100 to 120\n\nUnder some very rare case 100 plies of search\ncould be not enough. Increasing more could lead\nto crashes due to reached stack size limit on\nsome platforms.\n\nStrongly requested by Uri.\n\nbench: 8430785\n",
       "subject": "Increase MAX_PLY from 100 to 120"
     },
     {
-      "commit_num": 3892,
+      "commit_num": 3915,
       "hash": "d91079d4",
       "short": "d91079d4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix material key for King\n\nCurrently king has no material key associated because\nit can never happen to find a legal position without\nboth kings, so there is no need to keep track of it.\n\nThe consequence is that a position with only the two\nkings has material key set at zero and if the material\nhash table is empty any entry will match and this is\nwrong.\n\nNormally bug is hidden becuase the checking for a draw\nwith pos.is_draw() is done earlier than evaluate() call,\nso that we never check in gameplay the material key of a\nposition with two kings.\n\nNevertheless the bug is there and can be reproduced setting\nat startup a position with only two kings and typing\n'eval' from prompt.\n\nThe fix is very simple: add a random key also for the king.\n\nAlso fixed the condition in material.cpp to avoid asserting\nwhen a 'just 2 kings' postion is evaluated.\n\nNo functional change.\n",
       "subject": "Fix material key for King"
     },
     {
-      "commit_num": 3893,
+      "commit_num": 3916,
       "hash": "62c0dc5d",
       "short": "62c0dc5d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore PorbCut name\n\nActually MultiCut is too different from current scheme.\nNote that neither ProbCut is exactly what we do because\nwe try just a handful of captures instead of all moves,\nnevertheless it seems more in line with what we do.\n\nSuggested by Joona.\n\nNo functional change.\n",
       "subject": "Restore PorbCut name"
     },
     {
-      "commit_num": 3894,
+      "commit_num": 3917,
       "hash": "7bdb8c9c",
       "short": "7bdb8c9c",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat of eval tracing code\n\nAlso assorted rename while there.\n\nNo functional change.\n",
       "subject": "Reformat of eval tracing code"
     },
     {
-      "commit_num": 3895,
+      "commit_num": 3918,
       "hash": "33369631",
       "short": "33369631",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rename ProbCut to Multicut\n\nThe teqnique used is actually MultiCut:\n\nhttps://chessprogramming.wikispaces.com/Multi-Cut\n\nAnd not ProbCut:\n\nhttps://chessprogramming.wikispaces.com/ProbCut\n\nNo functional change.\n",
       "subject": "Rename ProbCut to Multicut"
     },
     {
-      "commit_num": 3896,
+      "commit_num": 3919,
       "hash": "4808d15a",
       "short": "4808d15a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Assorted renaming in search\n\nInspired by DON.\n\nNo functional change.\n",
       "subject": "Assorted renaming in search"
     },
     {
-      "commit_num": 3897,
+      "commit_num": 3920,
       "hash": "b3470d7a",
       "short": "b3470d7a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix magic boosters conversion\n\nFix small overflow error while converting\nmagic boosters from right rotate to left rotate,\nin particular booster 38 was converted to 4122\ninstead of the corrcet value 26.\n\nFormula used was:\n\ns1 = original & 63, s2 = (original >> 6) & 63;\nnew = (64 - s1) | ((64 - s2) << 6);\n\nInstead of:\n\ns1 = original & 63, s2 = (original >> 6) & 63;\nnew = ((64 - s1) & 63) | (((64 - s2) & 63) << 6);\n\nThis has no impact in number of cycles needed, but\njust in the resultig number that yields to a rotate\namount bigger than 63.\n\nSpotted by Ehsan Rashid.\n\nNo functional change.\n",
       "subject": "Fix magic boosters conversion"
     },
     {
-      "commit_num": 3898,
+      "commit_num": 3921,
       "hash": "e4695f15",
       "short": "e4695f15",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Additional renaming from DON\n\nAssorted renaming and triviality.\n\nNo functional change.\n",
       "subject": "Additional renaming from DON"
     },
     {
-      "commit_num": 3899,
+      "commit_num": 3922,
       "hash": "67f88f5e",
       "short": "67f88f5e",
       "author": "Joerg Oster <osterj165@googlemail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Return static eval when reaching MAX_PLY\n\nMakes more sense than returning a draw score. Tested\nwith reduced MAX_PLY = 30 and passed both short TC\nLLR: 2.95 (-2.94,2.94) [-1.50,4.50]\nTotal: 17434 W: 3345 L: 3194 D: 10895\n\nAnd long TC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 2610 W: 488 L: 373 D: 1749\n\nWith current limit of MAX_PLY = 100 the patch should not\nintroduce any measurable change, nevertheless is the correct\napproach.\n\nIdea of returning eval is from  Michel Van den Bergh.\n\nbench: 8430785\n",
       "subject": "Return static eval when reaching MAX_PLY"
     },
     {
-      "commit_num": 3900,
+      "commit_num": 3923,
       "hash": "e6523e56",
       "short": "e6523e56",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move magic random to RKISS\n\nWhen initializing the magic numbers used to\ncompute sliding attacks, we endless generate a\nrandom and test it as a possible magic.\n\nIn the general case this takes a lot of iterations,\nbut here, insteaad of picking a casual random, we\nrotate it a couple of times and generate a number that\nwe know has a good probability to be a magic candidate.\n\nThis is becuase the quantities by which we rotate the\nnumber are known in advance to produce quickly a good\ncanidate.\n\nThe patch, inspired by DON, just moves the shuffle to RKISS\nchanging the boosters to take in account a left rotation\ninstead of a right rotation as in the original.\n\nNo functional change.\n",
       "subject": "Move magic random to RKISS"
     },
     {
-      "commit_num": 3901,
+      "commit_num": 3924,
       "hash": "b534176d",
       "short": "b534176d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Retire null search verification\"\n\nAlthough does not change ELO level, it seems\nverification is useful in many zugzwang positions\nas reported by many sources.\n\nSo revert this simplification.\n\nbench: 8430785\n",
       "subject": "Revert \"Retire null search verification\""
     },
     {
-      "commit_num": 3902,
+      "commit_num": 3925,
       "hash": "72e8640f",
       "short": "72e8640f",
       "author": "Leonid Pechenik <lp@home>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify time management\n\nTested with simplification mode SPRT[-4, 0]\n\nPassed both short TC\nLLR: 2.95 (-2.94,2.94) [-4.00,0.00]\nTotal: 34102 W: 6184 L: 6144 D: 21774\n\nAnd long TC\nLLR: 2.96 (-2.94,2.94) [-4.00,0.00]\nTotal: 16518 W: 2647 L: 2545 D: 11326\n\nAnd also 40/10 TC\nLLR: 2.95 (-2.94,2.94) [-4.00,0.00]\nTotal: 22406 W: 4390 L: 4312 D: 13704\n\nbench: 8430785\n",
       "subject": "Simplify time management"
     },
     {
-      "commit_num": 3903,
+      "commit_num": 3926,
       "hash": "ffd6685f",
       "short": "ffd6685f",
       "author": "joergoster <osterj165@googlemail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a compiler warning\n\nLatest master triggers a compiler warning due\nto comparing int64_t to uint64_t.\n\nnotation.cpp: In Funktion »std::string pretty_pv(Position&, int, Value, int64_t, Move*)«:\nnotation.cpp:230:30: Warnung: Vergleich zwischen vorzeichenbehafteten und vorzeichenlosen Ganzzahlausdrücken [-Wsign-compare]\n\nThis patch should fix it.\n\nNo functional change.\n",
       "subject": "Fix a compiler warning"
     },
     {
-      "commit_num": 3904,
+      "commit_num": 3927,
       "hash": "41641e3b",
       "short": "41641e3b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Assorted tweaks from DON\n\nMainly renames and some little code style improvment,\ninspired by looking at DON sources:\n\nhttps://github.com/erashid/DON\n\nNo functional change.\n",
       "subject": "Assorted tweaks from DON"
     },
     {
-      "commit_num": 3905,
+      "commit_num": 3928,
       "hash": "2f5aaf7d",
       "short": "2f5aaf7d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rewrite previous patch removing the macro\n\nNo functional change.\n",
       "subject": "Rewrite previous patch removing the macro"
     },
     {
-      "commit_num": 3906,
+      "commit_num": 3929,
       "hash": "0a1092f6",
       "short": "0a1092f6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't fear races when are harmless\n\nActually race conditions do exist in an engine, just\nthink for a moment to TT concurrent access. Racy code\nis not a problem per se, if the consequences are well\nknown and correctly handled.\n\nIn case of TT access we ensure that the TT move is validated\nbefore to be tried, here we just retry the same move in less\nthat 1 case out of a million: this is totally harmless considering\nthat very probably the second time the move is tried we get\nimmediately a TT hit and search quickly returns.\n\nSo we simplify the code for no harm.\n\nNo fuctional change (in single thread case)\n",
       "subject": "Don't fear races when are harmless"
     },
     {
-      "commit_num": 3907,
+      "commit_num": 3930,
       "hash": "399968f1",
       "short": "399968f1",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire null search verification\n\nTested with SPRT in simplification mode [-4.00,0.00],\nthis ensures that the patch is (very probably) not\na regression.\n\nPassed both short TC\nLLR: 2.95 (-2.94,2.94) [-4.00,0.00]\nTotal: 27543 W: 4278 L: 4209 D: 19056\n\nAnd long TC\nLLR: 2.95 (-2.94,2.94) [-4.00,0.00]\nTotal: 39483 W: 7325 L: 7305 D: 24853\n\nbench: 8347121\n",
       "subject": "Retire null search verification"
     },
     {
-      "commit_num": 3908,
+      "commit_num": 3931,
       "hash": "ddeb0161",
       "short": "ddeb0161",
       "author": "Henri Wiechers <hwiechers@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Faster handling of king captures in Position::see\n\nAnother SEE speed up that passed the SPRT short TC test!\n\nLLR: 2.96 (-2.94,2.94) [-1.50,4.50]\nTotal: 81337 W: 15060 L: 14745 D: 51532\n\nNo functional change.\n",
       "subject": "Faster handling of king captures in Position::see"
     },
     {
-      "commit_num": 3909,
+      "commit_num": 3932,
       "hash": "e5c3effd",
       "short": "e5c3effd",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document null search window\n\nHopefully this patch makes the code more:\n\n* Self-documenting: Null search is always a zero window search,\n  because it is testing for a fail high. It should never be done\n  on a full window! The current code only works because we don't\n  do it at PV nodes, and therefore (alpha, beta) = (beta-1, beta):\n  that's the kind of \"clever\" trick we should avoid.\n\n* Idiot-proof: If we want to enable null search at PV nodes, all we\n  need to do now is comment out the !PvNode condition. It's that simple!\n\nIn theory, null search should not be done at PV nodes, because PV nodes\nshould never fail high. But in practice, they DO fail high, because of\naspiration windows, and search inconsistencies, for example. So it makes\nsense to keep that flexibility in the code.\n\nNo functional change.\n",
       "subject": "Better document null search window"
     },
     {
-      "commit_num": 3910,
+      "commit_num": 3933,
       "hash": "d48a3042",
       "short": "d48a3042",
       "author": "Thanar2 <fatherterry@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Inline common path of pos.gives_check\n\nTest for common case which, when running default\nstockfish bench, avoids 96% of 19 million calls to\npos.gives_check().\n\nYields to a 2-4% speed up according to platform.\n\nPassed fishtest at STC\nLLR: 2.97 (-2.94,2.94) [-1.50,4.50]\nTotal: 12441 W: 2333 L: 2196 D: 7912\nhttp://tests.stockfishchess.org/tests/view/52f02d790ebc5901df50f887\n\nPassed fishtest at LTC\nLLR: 2.97 (-2.94,2.94) [0.00,6.00]\nTotal: 42175 W: 6702 L: 6409 D: 29064\nhttp://tests.stockfishchess.org/tests/view/52f0dbe00ebc5901df50f8a0\n\nNo functional change.\n",
       "subject": "Inline common path of pos.gives_check"
     },
     {
-      "commit_num": 3911,
+      "commit_num": 3934,
       "hash": "e88ef801",
       "short": "e88ef801",
       "author": "Lucas Braesch <lucas.braesch@gmail.com>",
@@ -749,7 +721,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Better document razoring\n\nUse ralpha instead of rbeta\n\n* rbeta is confusing people. It took THREE attempts to code razoring\nat PV nodes correctly in a recent test, because of the rbeta trick.\nUnnecessary tricks should be avoided.\n\n* The more correct and self-documenting way of doing this, is to say\nthat we use a zero window around alpha-margin, not beta-margin.\nThe fact that, because we only do it at PV nodes, alpha happens to be\nbeta-1 and that the current stuff with rbeta works, may be correct,\nbut is confusing.\n\nRemove the misleading and partially erroneous comment about returning\nv + margin:\n\n* comments should explain what the code does, not what it could have done.\n\n* this comment is partially wrong in saying that v+margin is \"logical\",\n  and that it is \"surprising\" that is doesn't work.\n\nFrom a theoretical perspective, at least 3 ways of doing this are equally\ndefendable:\n\n1/ fail hard: return alpha: The most conservative. We bet that the search\nwill fail low, but we don't know by how much and don't want to take risks.\n\n2/ aggressive fail soft: return v (what the current code does). This\ncorresponds to normal fail soft, with the added assumption that we don't\ncare about the reduction effect (see below point 3/)\n\n3/ conservative fail soft: return v + margin. If the reduced search (qsearch)\ngives us a score <= v, we bet that the non reduced search will give us a\nscore <= v + margin.\n\n* Saying that 2/ is \"logical\" implies that 1/ and 3/ are not, which is\narguably wrong. Besides, experimental results tell us that 2/ beats 3/,\nand that's not something we can argue against: experimental results are\nthe only trusted metric.\n\n* Also, with the benefit of hindsight, I don't think the fact that 2/ is\nbetter than 3/ is surprising at all. The point is that it is YOUR turn to\nmove, and you are assuming that by NOT playing (and letting the opponent\ncapture your hanging pieces in QS) you cannot generally GAIN razor_margin(depth).\n\nNo functional change.\n",

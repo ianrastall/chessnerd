@@ -2,7 +2,7 @@
   "month": "2012-08",
   "commits": [
     {
-      "commit_num": 4570,
+      "commit_num": 4593,
       "hash": "831f91b8",
       "short": "831f91b8",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire Time::restart()\n\nSimplify API.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire Time::restart()"
     },
     {
-      "commit_num": 4571,
+      "commit_num": 4594,
       "hash": "1258c7aa",
       "short": "1258c7aa",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't need to memset HashTable\n\nDefault c'tor Entry() already initializes\nto zero all its POD members.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Don't need to memset HashTable"
     },
     {
-      "commit_num": 4572,
+      "commit_num": 4595,
       "hash": "8dcb4bc3",
       "short": "8dcb4bc3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Terminate threads before to exit main()\n\nIt is very difficult and risky to assure\nthat a running thread doesn't access a global\nvariable. This is currently true, but could\nchange in the future and we don't want to rely\non code that works 'by accident'. The threads\nare still running when ThreadPool destructor is\ncalled (after main() returns) and this could\nlead to crashes if a thread accesses a global\nthat has been already freed. The solution is to\nuse an exit() function and call it while we are\nstill in main(), ensuring global variables are\nstill alive at threads termination time.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Terminate threads before to exit main()"
     },
     {
-      "commit_num": 4573,
+      "commit_num": 4596,
       "hash": "0a003d3b",
       "short": "0a003d3b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Convert to sync_cout and sync_endl\n\nSerialize access to std::cout all over the code.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Convert to sync_cout and sync_endl"
     },
     {
-      "commit_num": 4574,
+      "commit_num": 4597,
       "hash": "92e759a6",
       "short": "92e759a6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce serialization of accesses to std::cout\n\nWhen many threds concurrently print you need to serialize\nthe access to std::cout to avoid output lines are intermixed\nwith the contents of each thread.\n\nThis is not strictly needed at the moment because\nonly main thread prints out, although some ad-hoc\ntest could trigger UCI::loop() printing while searching.\n\nAnyhow we want to lift this pretty avoidable constrain\nalso as a prerequisite for future work.\n\nThis patch just introduces the support, next one will enable\nthe serialization.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce serialization of accesses to std::cout"
     },
     {
-      "commit_num": 4575,
+      "commit_num": 4598,
       "hash": "3df2c01b",
       "short": "3df2c01b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Correctly handle handover of setup states\n\nBefore the search we setup the starting position doing all the\nmoves (sent by GUI) from start position to the position just\nbefore to start searching.\n\nTo do this we use a set of StateInfo records used by each\ndo_move() call. These records shall be kept valid during all\nthe search because repetition draw detection uses them to back\ntrack all the earlier positions keys. The problem is that, while\nsearching, the GUI could send another 'position' command, this\ncalls set_position() that clears the states! Of course a crash\nfollows shortly.\n\nBefore searching all the relevant parameters are copied in\nstart_searching() just for this reason: to fully detach data\naccessed during the search from the UCI protocol handling.\nSo the natural solution would be to copy also the setup states.\nUnfortunatly this approach does not work because StateInfo\ncontains a pointer to the previous record, so naively copying and\nthen freeing the original memory leads to a crash.\n\nThat's why we use two std::auto_ptr (one belonging to UCI and another\nto Search) to safely transfer ownership of the StateInfo records to\nthe search, after we have setup the root position.\n\nAs a nice side-effect all the possible memory leaks are magically\nsorted out for us by std::auto_ptr semantic.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Correctly handle handover of setup states"
     },
     {
-      "commit_num": 4576,
+      "commit_num": 4599,
       "hash": "8991a6f0",
       "short": "8991a6f0",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use std::deque to store setup states\n",
       "subject": "Use std::deque to store setup states"
     },
     {
-      "commit_num": 4577,
+      "commit_num": 4600,
       "hash": "16f380e5",
       "short": "16f380e5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document PolyGlotRandoms[] offsets\n\nShould be more clear from where the 'magic' numbers\ncome from.\n\nAlso bit of reformat while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Document PolyGlotRandoms[] offsets"
     },
     {
-      "commit_num": 4578,
+      "commit_num": 4601,
       "hash": "cbd7ce46",
       "short": "cbd7ce46",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Explicitly use threads.size()\n\nInstead of just size(). Although code is longer,\nshould be more immediate to understand when reading.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Explicitly use threads.size()"
     },
     {
-      "commit_num": 4579,
+      "commit_num": 4602,
       "hash": "b6883c87",
       "short": "b6883c87",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce struct Mutex and ConditionVariable\n\nTo mimics C++11 std::mutex and std::condition_variable,\nalso rename locks and condition variables to be more\nuniform across the classes.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce struct Mutex and ConditionVariable"
     },
     {
-      "commit_num": 4580,
+      "commit_num": 4603,
       "hash": "fde0b9e7",
       "short": "fde0b9e7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Slightly microptimize SEE\n\nReduce of one instruction. It seems a tad faster on\nthe profiler now. Very slightly but anyhow it is a\ncode semplification.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Slightly microptimize SEE"
     },
     {
-      "commit_num": 4581,
+      "commit_num": 4604,
       "hash": "7a282505",
       "short": "7a282505",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use size_t as operator[] argument type\n\nThis better mimics std::vector::operator[] and\nfixes a warning with MSVC 64bit.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use size_t as operator[] argument type"
     },
     {
-      "commit_num": 4582,
+      "commit_num": 4605,
       "hash": "4e619a13",
       "short": "4e619a13",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge generate_direct_checks() in generate_moves()\n\nFurther reduce redundancy in move generation.\nVeirifed no speed regression on MSVC, Clang and gcc.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Merge generate_direct_checks() in generate_moves()"
     },
     {
-      "commit_num": 4583,
+      "commit_num": 4606,
       "hash": "0de92576",
       "short": "0de92576",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Streamline generate_moves()\n\nGreatly simplify these very performace critical functions.\nAmazingly we don't have any speed regression actually under\nMSVC we have the same assembly for generate_moves() !\n\nIn generate_direct_checks() 'target' is calculated only\nonce being a loop invariant.\n\nOn Clang there is even a slight speed up.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Streamline generate_moves()"
     },
     {
-      "commit_num": 4584,
+      "commit_num": 4607,
       "hash": "b84af67f",
       "short": "b84af67f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Reformat piece values arrays\n\nAnd rename stuff while there.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Reformat piece values arrays"
     },
     {
-      "commit_num": 4585,
+      "commit_num": 4608,
       "hash": "7c8b7222",
       "short": "7c8b7222",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Move zobrist keys out of Position\n\nAre used by Position but do not belong to that class,\nthere is only one instance of them (that's why were\ndefined as static), so move to a proper namespace instead.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Move zobrist keys out of Position"
     },
     {
-      "commit_num": 4586,
+      "commit_num": 4609,
       "hash": "ec9038b7",
       "short": "ec9038b7",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire copy c'tor from class Position\n\nNot needed.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire copy c'tor from class Position"
     },
     {
-      "commit_num": 4587,
+      "commit_num": 4610,
       "hash": "ab65d3fd",
       "short": "ab65d3fd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prefer a reference to a pointer\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Prefer a reference to a pointer"
     },
     {
-      "commit_num": 4588,
+      "commit_num": 4611,
       "hash": "e8b7109e",
       "short": "e8b7109e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Use enums instead of constants for piece values\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Use enums instead of constants for piece values"
     },
     {
-      "commit_num": 4589,
+      "commit_num": 4612,
       "hash": "0c6ed592",
       "short": "0c6ed592",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document De Bruijn sequences\n\nInsted of raw magic numbers.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Document De Bruijn sequences"
     },
     {
-      "commit_num": 4590,
+      "commit_num": 4613,
       "hash": "2f4a9a14",
       "short": "2f4a9a14",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Avoid wake up master thread when useless\n\nCheck we are the last slave of the split point\nbefore to wake up the master. This should avoid\nspurious wakes up.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Avoid wake up master thread when useless"
     },
     {
-      "commit_num": 4591,
+      "commit_num": 4614,
       "hash": "dba1bc35",
       "short": "dba1bc35",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify idle_loop() signature\n\nWe can detect the split point master also from within idle_loop,\nso we can call the function without parameters and remove an\noverloaded member hack in Thread class.\n\nNote that we don't need to take a lock around curSplitPoint\nwhen entering idle_loop() because if we are the master then\ncurSplitPoint cannot change under our feet (because is_searching\nis set and so we cannot be reallocated), if we are a slave\nwe enter idle_loop() only upon Thread creation and in that case\nis always splitPointsCnt == 0. This is true even in the very rare\ncase that curSplitPoint != NULL, if we have been already allocated\neven before entering idle_loop().\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Simplify idle_loop() signature"
     },
     {
-      "commit_num": 4592,
+      "commit_num": 4615,
       "hash": "4b194301",
       "short": "4b194301",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Prefer size_t over int for array sizes\n\nAlign to standard library conventions.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Prefer size_t over int for array sizes"
     },
     {
-      "commit_num": 4593,
+      "commit_num": 4616,
       "hash": "7c1f8dbd",
       "short": "7c1f8dbd",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce namespace Bitbases\n\nLet's continue this namespace galore...\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce namespace Bitbases"
     },
     {
-      "commit_num": 4594,
+      "commit_num": 4617,
       "hash": "2c1ba2ab",
       "short": "2c1ba2ab",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Introduce namespace UCI\n\nAter previous patch it comes naturally to take this\nextra step.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Introduce namespace UCI"
     },
     {
-      "commit_num": 4595,
+      "commit_num": 4618,
       "hash": "b0118189",
       "short": "b0118189",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire struct OptionsMap\n\nDirectly use the underlying std::map instead and avoid\na useless inheritance.\n\nAs a nice side-effect Options global object has now a\ndefault c'tor avoiding possible issues with globals\ninitializations.\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Retire struct OptionsMap"
     },
     {
-      "commit_num": 4596,
+      "commit_num": 4619,
       "hash": "bc4de9ed",
       "short": "bc4de9ed",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Explicitly qualify STL functions\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Explicitly qualify STL functions"
     },
     {
-      "commit_num": 4597,
+      "commit_num": 4620,
       "hash": "9de4ee6d",
       "short": "9de4ee6d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,7 +696,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Retire MovePickerExt struct\n\nTempletize MovePicker::next_move() member function instead. It\nis easier and we also avoid the forwarding of MovePicker() c'tor\narguments in the common case.\n\nSuggested by Rein Halbersma.\n\nNo functional change.\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",

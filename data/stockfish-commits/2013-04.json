@@ -2,7 +2,7 @@
   "month": "2013-04",
   "commits": [
     {
-      "commit_num": 4271,
+      "commit_num": 4294,
       "hash": "e381951a",
       "short": "e381951a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -21,14 +21,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Restore development version\n\nNo functional change.\n",
       "subject": "Restore development version"
     },
     {
-      "commit_num": 4272,
+      "commit_num": 4295,
       "hash": "293c44bc",
       "short": "293c44bc",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -47,14 +46,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Cache line aligned TT\"\n\nThis reverts commit 083fe5812485597e13943b690cc24a8f25c0d140\n\nIt seems to break Android build\n\nNo functional change.\n",
       "subject": "Revert \"Cache line aligned TT\""
     },
     {
-      "commit_num": 4273,
+      "commit_num": 4296,
       "hash": "aa2368a6",
       "short": "aa2368a6",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -73,14 +71,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Stockfish 3\n\nStockfish bench signature is: 4176431\n",
       "subject": "Stockfish 3"
     },
     {
-      "commit_num": 4274,
+      "commit_num": 4297,
       "hash": "06b9140e",
       "short": "06b9140e",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -99,14 +96,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Temporary revert \"Expose EvalInfo struct to search\"\n\nIt is not needed for the release and introduces\na slowdown, although very small.\n\nProbably it will be readded after the release.\n\nNo functional change.\n",
       "subject": "Temporary revert \"Expose EvalInfo struct to search\""
     },
     {
-      "commit_num": 4275,
+      "commit_num": 4298,
       "hash": "15663574",
       "short": "15663574",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -125,14 +121,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a 'value > VALUE_INFINITE' assert\n\nThis fixes an assert while testing with debug on.\n\nAssert was due to static null pruning returning value\n\neval - futility_margin(depth, (ss-1)->futilityMoveCount)\n\nThat was sometimes higher than VALUE_INFINITE triggering\nan assert at the caller site.\n\nBecause eval con be equal to ttValue and anyhow is read from\nTT that can be corrupted in SMP case, we need to sanity\ncheck it before to use.\n\nbench: 4176431\n",
       "subject": "Fix a 'value > VALUE_INFINITE' assert"
     },
     {
-      "commit_num": 4276,
+      "commit_num": 4299,
       "hash": "083fe581",
       "short": "083fe581",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -151,14 +146,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Cache line aligned TT\n\nLet TT clusters (16*4=64 bytes) to hold on a singe cache line.\nThis avoids the need for the double prefetch.\n\nOriginal patches by Lucas and Jean-Francois that has also tested\non his AMD FX:\n\nBIG HASHTABLE\n\n./stockfish bench 1024 1 18 > /dev/null\n\nBefore:\n1437642 nps\n1426519 nps\n1438493 nps\n\nAfter:\n1474482 nps\n1476375 nps\n1475877 nps\n\nSMALL HASHTABLE\n\n./stockfish bench 128 1 18 > /dev/null\n\nBefore:\n1435207 nps\n1435586 nps\n1433741 nps\n\nAfter:\n1479143 nps\n1471042 nps\n1472286 nps\n\nNo functional change.\n",
       "subject": "Cache line aligned TT"
     },
     {
-      "commit_num": 4277,
+      "commit_num": 4300,
       "hash": "e508494a",
       "short": "e508494a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -177,14 +171,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix a crash introduced few days ago\n\nCrash is due to uninitialized ss->futilityMoveCount that\nwhen happens to be negative, yields to an out of range\naccess in futility_margin().\n\nBug is subtle because it shows itself only in SMP case.\nIndeed in single thread mode we only use the\n\nStack ss[MAX_PLY_PLUS_2];\n\nAllocated at the begin of id_loop() and due to pure\n(bad) luck, it happens that for all the MAX_PLY_PLUS_2\nelements, ss[i].futilityMoveCount >= 0\n\nNote that the patch does not prevent futilityMoveCount\nto be overwritten after, for instance singular search\nor null verification, but to keep things readable and\nbecause the effect is almost unmeasurable, we here\nprefer a slightly incorrect but simpler patch.\n\nbench: 4311634\n",
       "subject": "Fix a crash introduced few days ago"
     },
     {
-      "commit_num": 4278,
+      "commit_num": 4301,
       "hash": "2ef53ee3",
       "short": "2ef53ee3",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -203,14 +196,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Store Eval::Info in Search::Stack\n\nInstead of a pointer. This should fix the issue of\nremaining with a stale pointer when for instance calling\nIID, but also null search verification, singular search\nand razoring where we call search with the same ss\npointer. In this case ss->ei is overwritten in the\nsearch() call and upon returning remains stale.\n\nThis patch could have a performance hit because Eval::Info\nis big (176 bytes) and during splitting we copy 4 ss entries.\n\nOn the good side, this patch is a clean solution.\n\nProposed by Gary.\n\nNo functional change.\n",
       "subject": "Store Eval::Info in Search::Stack"
     },
     {
-      "commit_num": 4279,
+      "commit_num": 4302,
       "hash": "d810441b",
       "short": "d810441b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -229,14 +221,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Expose EvalInfo struct to search\n\nAllow to use EvalInfo struct, populated by\nevaluation(), in search.\n\nIn particular we allocate Eval::Info on the stack\nand pass a pointer to this to evaluate().\n\nAlso add to Search::Stack a pointer to Eval::Info,\nthis allows to reference eval info of previous/next\nnodes.\n\nWARNING: Eval::Info is NOT initialized and is populated\nby evaluate(), only if the latter is called, and this\ndoes not happen in all the code paths, so care should be\ntaken when accessing this struct.\n\nNo functional change.\n",
       "subject": "Expose EvalInfo struct to search"
     },
     {
-      "commit_num": 4280,
+      "commit_num": 4303,
       "hash": "289a767a",
       "short": "289a767a",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -255,14 +246,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge Joona's increased static null pruning\n\nThe idea is to fail high more easily in static\nnull test if in the parent node we are already\nvery deep in the move list, so the propability\nto fail high there is very low.\n\n[edit: I have slightly changed the functionality\nmoving\n\nss->futilityMoveCount = moveCount;\n\nAt the end of the pruning code, this should not affect\nELO in anyway, but makes code more natural and logic]\n\nTest with SPRT is good at 15+0.05\nLLR: 2.96 (-2.94,2.94)\nTotal: 50653 W: 10024 L: 9780 D: 30849\n\nAnd at 60+0.05\nLLR: 2.97 (-2.94,2.94)\nTotal: 40799 W: 7227 L: 6921 D: 26651\n\nbench: 4530093\n",
       "subject": "Merge Joona's increased static null pruning"
     },
     {
-      "commit_num": 4281,
+      "commit_num": 4304,
       "hash": "4381ea23",
       "short": "4381ea23",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -281,14 +271,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix cpu_count() on some platforms\n\nWhen we use sysconf(_SC_NPROCESSORS_ONLN) to get number of\ncores, we have to include sysconf library that is unistd.h\n\nSometimes it happens to work just becuase unistd.h indirectly\nincluded by some other libraries, but not always.\n\nReported and fixed by Eyal BD\n\nNo functional change.\n",
       "subject": "Fix cpu_count() on some platforms"
     },
     {
-      "commit_num": 4282,
+      "commit_num": 4305,
       "hash": "817ca182",
       "short": "817ca182",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -307,14 +296,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Fix potential overflow\n",
       "subject": "Fix potential overflow"
     },
     {
-      "commit_num": 4283,
+      "commit_num": 4306,
       "hash": "8df17204",
       "short": "8df17204",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -333,14 +321,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "More aggressive post-futility pruning\n",
       "subject": "More aggressive post-futility pruning"
     },
     {
-      "commit_num": 4284,
+      "commit_num": 4307,
       "hash": "f84f0474",
       "short": "f84f0474",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -359,14 +346,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Skip a couple of popcount in previous patch\n\nAnd some little tidy up\n\nNo functional change.\n",
       "subject": "Skip a couple of popcount in previous patch"
     },
     {
-      "commit_num": 4285,
+      "commit_num": 4308,
       "hash": "cc40d1c4",
       "short": "cc40d1c4",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -385,14 +371,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Merge Joona's bishop+pawn tweak\n\nThe idea is to penalize a bishop in case of\nits pawns are on the same colored squares.\n\nGood at short 15\"+0.05 TC\nLLR: 2.95 (-2.94,2.94)\nTotal: 4252 W: 925 L: 806 D: 2521\n\nAnd at longer 60\"+0.05 TC\nLLR: 2.95 (-2.94,2.94)\nTotal: 15006 W: 2743 L: 2564 D: 9699\n\nbench: 5274705\n",
       "subject": "Merge Joona's bishop+pawn tweak"
     },
     {
-      "commit_num": 4286,
+      "commit_num": 4309,
       "hash": "818e0b2d",
       "short": "818e0b2d",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -411,14 +396,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Try more aggressive version\n",
       "subject": "Try more aggressive version"
     },
     {
-      "commit_num": 4287,
+      "commit_num": 4310,
       "hash": "3e4dfb49",
       "short": "3e4dfb49",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -437,14 +421,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Give a small penalty for bishop for each pawn on the same colored square\n",
       "subject": "Give a small penalty for bishop for each pawn on the same colored square"
     },
     {
-      "commit_num": 4288,
+      "commit_num": 4311,
       "hash": "87436e55",
       "short": "87436e55",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -463,14 +446,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Skip a redundant check\n\nSpotted by Joona\n\nNo functional change.\n",
       "subject": "Skip a redundant check"
     },
     {
-      "commit_num": 4289,
+      "commit_num": 4312,
       "hash": "79bcb2ca",
       "short": "79bcb2ca",
       "author": "Ryan Schmitt <ryan.l.schmitt@gmail.com>",
@@ -489,14 +471,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase rook/queen on 7th bonus\n\nShows an increase at 15+0.05\nLLR: 3.01 (-2.94,2.94)\nTotal: 20450 W: 4091 L: 3927 D: 12432\n\nAnd at 60+0.05\nLLR: 2.97 (-2.94,2.94)\nTotal: 61432 W: 10849 L: 10441 D: 40142\n\nbench: 4493356\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Increase rook/queen on 7th bonus"
     },
     {
-      "commit_num": 4290,
+      "commit_num": 4313,
       "hash": "fe72c931",
       "short": "fe72c931",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -515,14 +496,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "De-templetize Position::is_draw()\n\nNow that we always check for repetition we don't\nneed a template anymore.\n\nNo functional change.\n",
       "subject": "De-templetize Position::is_draw()"
     },
     {
-      "commit_num": 4291,
+      "commit_num": 4314,
       "hash": "75221fcf",
       "short": "75221fcf",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -541,14 +521,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Always check repetition\n\nIt seems stronger both at fast 15+0.05 TC with fixed game number test:\nELO: 2.74 +-2.7 (95%) LOS: 97.6%\nTotal: 24000 W: 4698 L: 4509 D: 14793\n\nAnd also at long 60+0.05 TC with SPRT\nLLR: 3.05 (-2.94,2.94)\nTotal: 38986 W: 6845 L: 6547 D: 25594\n\nbench: 5157061\n",
       "subject": "Always check repetition"
     },
     {
-      "commit_num": 4292,
+      "commit_num": 4315,
       "hash": "a95cbca5",
       "short": "a95cbca5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -567,14 +546,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Simplify and speed up previous patch\n\nUse an optinal argument instead of a template\nparameter. Interestingly, not only is simpler,\nbut also faster, perhaps due to less L1 instruction\ncache pressure because we don't duplicate the very\nused SEE code path.\n\nNo functional change.\n",
       "subject": "Simplify and speed up previous patch"
     },
     {
-      "commit_num": 4293,
+      "commit_num": 4316,
       "hash": "d2345485",
       "short": "d2345485",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -593,14 +571,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Document asymmetric SEE pruning trick\n\nHere are the tests:\n\nsprt @ 60+0.05\nELO: 3.53 +-2.8 (95%) LOS: 99.3%\nTotal: 18794 W: 3098 L: 2907 D: 12789\n\n16000 @ 60+0.05\nELO: 1.39 +-3.1 (95%) LOS: 81.0%\nTotal: 16000 W: 2689 L: 2625 D: 10686\n\n16000 @ 15+0.05\nELO: 2.82 +-3.3 (95%) LOS: 95.1%\nTotal: 16000 W: 3148 L: 3018 D: 9834\n\nNo functional change\n\nSignature: 4969307\n",
       "subject": "Document asymmetric SEE pruning trick"
     },
     {
-      "commit_num": 4294,
+      "commit_num": 4317,
       "hash": "9498b2af",
       "short": "9498b2af",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -619,14 +596,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Rescale UCI parameters to 100\n\nAnd correspondingly modify internal ones\nto compensate it.\n\nNo functional change.\n",
       "subject": "Rescale UCI parameters to 100"
     },
     {
-      "commit_num": 4295,
+      "commit_num": 4318,
       "hash": "d3fe153f",
       "short": "d3fe153f",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -645,14 +621,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Re-add 'Cowardice' and 'Aggressiveness' UCI options\n\nI have lost my bet with Jean-Paul, so now I re-add\nthe two options...and I am glad of it :-)\n\nNo functional change.\n",
       "subject": "Re-add 'Cowardice' and 'Aggressiveness' UCI options"
     },
     {
-      "commit_num": 4296,
+      "commit_num": 4319,
       "hash": "c2902112",
       "short": "c2902112",
       "author": "Joona Kiiski <joona.kiiski@gmail.com>",
@@ -671,14 +646,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't treat king safety differently in AnalysisMode\n\nRationale:\n\n- Current settings seem to make engine *significantly* weaker in analysis mode.\n- In practice this setting only has effect when king safety scores are high.\n- Even in analysis mode its far more important to know if one side is getting mated,\nrather than get evaluation correct with 1cp accuracy.\n\nNo functional change\n",
       "subject": "Don't treat king safety differently in AnalysisMode"
     },
     {
-      "commit_num": 4297,
+      "commit_num": 4320,
       "hash": "2a5ae34b",
       "short": "2a5ae34b",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -697,14 +671,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Tweak some UCI parameters\n\nAccording to Jean-Paul this setup should be stronger\nthan default.\n\nAnd SPRT test seems to confirm it:\n\nAt fast TC 15\"+0.05\nELO: 3.33 +-2.7 (95%) LOS: 99.2%\nTotal: 25866 W: 5461 L: 5213 D: 15192\n\nAt longer TC 60\"+0.05\nELO: 7.27 +-5.0 (95%) LOS: 99.8%\nTotal: 6544 W: 1212 L: 1075 D: 4257\n\nbench: 5473339\n\nSigned-off-by: Marco Costalba <mcostalba@gmail.com>\n",
       "subject": "Tweak some UCI parameters"
     },
     {
-      "commit_num": 4298,
+      "commit_num": 4321,
       "hash": "0c1b40c5",
       "short": "0c1b40c5",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -723,14 +696,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Lower minimum allowed TT size to 1 MB\n\nSetting a very low TT size could be used\nfor some specific testing.\n\nNo functional change.\n",
       "subject": "Lower minimum allowed TT size to 1 MB"
     },
     {
-      "commit_num": 4299,
+      "commit_num": 4322,
       "hash": "8c10029d",
       "short": "8c10029d",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -749,14 +721,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Revert \"Double Impact of Gain tables\"\n\nThis reverts commit 36c82b751ce227c05bfb\n\nSeems a regression against 2.3.1 tested with 20K games at 60\"+0.05\n\nWith patch applied\nELO: 15.44 +-2.8 (95%) LOS: 100.0%\nTotal: 20000 W: 3928 L: 3040 D: 13032\n\nWithout patch applied\nELO: 18.76 +-2.8 (95%) LOS: 100.0%\nTotal: 20000 W: 3903 L: 2824 D: 13273\n\nbench: 4781239\n",
       "subject": "Revert \"Double Impact of Gain tables\""
     },
     {
-      "commit_num": 4300,
+      "commit_num": 4323,
       "hash": "88992204",
       "short": "88992204",
       "author": "Marco Costalba <mcostalba@gmail.com>",
@@ -775,14 +746,13 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Increase null verification threshold to 12 plies\n\nIncreasing depth limit to 10 plies seems stronger\nafter 16K games at 15\"+0.05 (ELO: +3.56) and also\nrepeating the test at 60\"+0.05 TC:\n\nELO: 2.08 +-3.1 (95%) LOS: 90.9%\nTotal: 16000 W: 2641 L: 2545 D: 10814\n\nMoreover setting the limit to 12 is proved stronger\nthen limit set to 10 by direct SPRT test at 15\"+0.05:\n\nELO: 2.56 +-2.0 (95%) LOS: 99.5%\nTotal: 46568 W: 9240 L: 8897 D: 28431\n\nSo we directly set the limit to 12, the strongest setup.\n\nbench: 4361224\n",
       "subject": "Increase null verification threshold to 12 plies"
     },
     {
-      "commit_num": 4301,
+      "commit_num": 4324,
       "hash": "6e2371a8",
       "short": "6e2371a8",
       "author": "Hiraoka Takuya <hiraoka64@gmail.com>",
@@ -801,7 +771,6 @@
         }
       ],
       "downloads": {
-        "abrok_eu": [],
         "github_actions_artifacts": []
       },
       "message": "Don't early stop if we have a mated score\n\nNo functional change.\n",
