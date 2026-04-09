@@ -4,8 +4,8 @@ import re
 
 def generate_engine_json():
     # --- CONFIGURATION ---
-    FILE_LIST = "data/rwbc.xlsx"
-    FILE_RATINGS = "data/rwbc-ratings.xlsx"
+    FILE_LIST = "../rwbc.xlsx"
+    FILE_RATINGS = "../rwbc-ratings.xlsx"
     OUTPUT_FILE = "data/engines.json"  # Outputting directly to your data folder
 
     print("Loading Excel files... (This takes a moment)")
