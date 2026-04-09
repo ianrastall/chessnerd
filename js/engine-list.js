@@ -20,7 +20,7 @@ const modal = document.getElementById('modal');
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     // Note: Ensure engines.json is in the same directory or adjust path
-    fetch('engines.json')
+    fetch('../data/engines.json')
         .then(response => response.json())
         .then(data => {
             allEngines = data;
