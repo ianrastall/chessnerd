@@ -6,7 +6,7 @@ import os
 def generate_engine_json():
     # --- CONFIGURATION ---
     FILE_LIST = "../rwbc.xlsx"
-    FILE_RATINGS = "ucerl.csv"
+    FILE_RATINGS = "ucerl.tsv" # Updated to your TSV file
     OUTPUT_FILE = "data/engines.json"
 
     print("Loading files... (This takes a moment)")
@@ -29,15 +29,15 @@ def generate_engine_json():
     col_date_first = "Y-M-D FR"
     col_date_last = "YM-LV"
 
-    # 2. LOAD RATINGS (Updated for Ordo CSV)
+    # 2. LOAD RATINGS
     try:
-        # Ordo CSVs are clean, so we can just read them directly
-        df_ratings = pd.read_csv(FILE_RATINGS)
+        # Use regex separator to handle tabs or multiple spaces
+        df_ratings = pd.read_csv(FILE_RATINGS, sep=r'\s{2,}|\t', engine='python')
     except FileNotFoundError:
         print(f"Error: Could not find {FILE_RATINGS}")
         return
 
-    # Find the correct columns dynamically just in case Ordo adds spacing
+    # Find the correct columns dynamically
     col_player = next((col for col in df_ratings.columns if 'PLAYER' in col.upper()), None)
     col_rating = next((col for col in df_ratings.columns if 'RATING' in col.upper()), None)
 
@@ -50,7 +50,7 @@ def generate_engine_json():
     df_ratings.columns = ['Player', 'Rating']
     df_ratings = df_ratings.dropna(subset=['Player', 'Rating'])
     
-    # Sort Ratings (Highest first, so the regex grabs the strongest version of an engine family)
+    # Sort Ratings
     df_ratings['Rating'] = pd.to_numeric(df_ratings['Rating'], errors='coerce')
     df_ratings = df_ratings.sort_values(by='Rating', ascending=False)
     ratings_list = df_ratings.to_dict('records') 
@@ -66,6 +66,9 @@ def generate_engine_json():
             continue
         
         name = raw_name.strip()
+        
+        # Clean name for matching (remove * and #)
+        clean_name = name.replace('*', '').replace('#', '').strip()
 
         # --- LINK HANDLING ---
         raw_link = str(row.get(col_link, ''))
@@ -89,13 +92,18 @@ def generate_engine_json():
 
         lang = get_val(col_lang)
         protocol = get_val(col_prot)
-        ver = get_val(col_ver)
+        
+        # Truncate version string so it doesn't break the UI
+        ver_raw = get_val(col_ver)
+        ver = ver_raw.split('\n')[0].strip() if ver_raw else None
+
         d_first = get_date(col_date_first)
         d_last = get_date(col_date_last)
 
         # --- MATCH RATING ---
         rating_val = None
-        safe_name = re.escape(name)
+        safe_name = re.escape(clean_name)
+        # Match the start of the string, allowing for versions to follow
         pattern = re.compile(rf"^{safe_name}(\s|$)", re.IGNORECASE)
 
         for r_entry in ratings_list:
@@ -103,7 +111,7 @@ def generate_engine_json():
             if pattern.match(r_player):
                 r_num = r_entry['Rating']
                 if pd.notna(r_num):
-                    rating_val = str(int(round(r_num)))
+                    rating_val = int(round(r_num))  # Save as integer
                 break
         
         # Build Object
@@ -120,7 +128,6 @@ def generate_engine_json():
         output_data.append(engine_obj)
 
     # 4. WRITE JSON
-    # Ensure output directory exists
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
