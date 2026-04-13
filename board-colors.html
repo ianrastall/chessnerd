@@ -12,6 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Colors - Chess Nerd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -46,7 +47,7 @@
         .metric-box small{ display:block; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.2rem; }
         .metric-box strong{ font-variant-numeric:tabular-nums; }
         .preview-shell{ padding:1rem; border-radius:18px; background:radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 36%), linear-gradient(160deg, rgba(0,0,0,0.14), rgba(0,0,0,0.28)), var(--bg-secondary); border:1px solid rgba(255,255,255,0.06); }
-        .board-wrap{ width:min(100%,720px); margin:0 auto; filter:drop-shadow(0 18px 34px rgba(0,0,0,0.32)); }
+        .board-wrap{ width:min(100%,360px); margin:0 auto; filter:drop-shadow(0 18px 34px rgba(0,0,0,0.32)); }
         .board-wrap svg{ display:block; width:100%; height:auto; }
         .preview-actions{ display:flex; flex-wrap:wrap; gap:0.75rem; justify-content:space-between; align-items:center; margin-top:1rem; }
         .preview-actions p{ margin:0; color:var(--text-secondary); line-height:1.5; }
@@ -223,7 +224,7 @@
 
         function boardSvg(palette) {
             const square = SIZE.square, border = SIZE.border, total = TOTAL, font = 20;
-            const textBase = `fill="${COORD_HEX}" font-family="Georgia, 'Times New Roman', serif" font-size="${font}" font-weight="700" text-anchor="middle" dominant-baseline="middle"`;
+            const textBase = `fill="${COORD_HEX}" font-family="Roboto, Arial, sans-serif" font-size="${font}" font-weight="700" text-anchor="middle" dominant-baseline="middle"`;
             const out = [`<svg xmlns="http://www.w3.org/2000/svg" width="${total}" height="${total}" viewBox="0 0 ${total} ${total}" role="img" aria-label="Empty chessboard with surrounding coordinates">`,`<rect width="${total}" height="${total}" fill="${palette.borderHex}"/>`];
             for (let row = 0; row < 8; row += 1) {
                 for (let col = 0; col < 8; col += 1) {

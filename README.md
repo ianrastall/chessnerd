@@ -1,62 +1,74 @@
 # Chess Nerd
 
-A suite of web-based chess tools.
+Chess Nerd is a static website of chess reference tools, data browsers, download pages, and lightweight analysis utilities published at `https://chessnerd.net/`.
 
-### Core Tools
+## Current Site
 
-  * **PGN Info & Analytics**: A client-side PGN parser that generates instant statistics, extracts player/event metadata, and validates file integrity without uploading data to an external server.
-  * **ECO Code Browser**: A hierarchical navigation tool for the Encyclopedia of Chess Openings (Volume A-E), allowing users to explore opening lines and variations.
-  * **Tournament Archive**: A curated download center for historical tournament PGNs. Includes automatic calculation of average Elo and FIDE Tournament Categories based on player ratings.
-  * **Engine Database**: A searchable reference for chess engines, filtering by name, author, language, and release details.
-  * **Chess.com API Reference**: Documentation and reference tools for interacting with public chess data APIs.
+The home page currently links to these public tools:
 
-### UI/UX
+- **CCC Archive**: Computer Chess Championship event PGNs with direct ZIP downloads.
+- **Chess.com API**: A formatted reference for the Chess.com published-data API.
+- **Chess.com Titled Players**: Browse titled Chess.com accounts with live profile details.
+- **ECO Codes**: Hierarchical browser for the Encyclopedia of Chess Openings.
+- **Engine Database**: Searchable engine catalog with language and release data.
+- **Engine Game**: Play against the Lozza engine in the browser.
+- **Board Colors**: Interactive board-palette designer with SVG/PNG export.
+- **FIDE 2200+ Players**: Browser for FIDE-rated players meeting the 2200 threshold.
+- **PGN Downloads**: Curated downloadable PGN collections.
+- **PGN Info**: Client-side PGN statistics and metadata extraction.
+- **Software Catalog**: Table of chess software projects with download and repository links.
+- **Stockfish Commits**: Browse historical Stockfish commits and related artifacts.
+- **Titled Tuesday Archive**: Organized Titled Tuesday download archive.
+- **Tournament Archive**: Curated tournament PGNs with calculated FIDE categories.
 
-  * **Theme Engine**: Robust theming support with persistent dark/light mode toggles.
-  * **Accent Customization**: Users can select from multiple color palettes (Burlywood, Teal, Cornflower, etc.) to match their aesthetic preference.
-  * **Responsive Design**: Built with modern CSS Grid and Flexbox to work seamlessly across desktop and mobile devices.
+There is also a standalone public page:
 
-## Tech Stack
+- **Engine List**: Alternate searchable engine listing page.
 
-  * **Frontend**: HTML5, CSS3 (CSS Variables for theming), Vanilla JavaScript (ES6+).
-  * **Data Format**: JSON (for structured data like ECO codes and engines) and PGN (Portable Game Notation).
-  * **Utilities**: Python (used for data scraping, calculating average Elo, and generating cross-tables).
+## Stack
 
-## Project Structure
+- **Frontend**: HTML, CSS, and vanilla JavaScript.
+- **Data**: Static JSON, text manifests, CSV/TSV, and PGN files.
+- **Maintenance scripts**: Python and PowerShell utilities for scraping, reshaping, and regenerating site data.
+
+## Repo Layout
 
 ```text
 chessnerd/
-├── css/                # Global styles and theme definitions
-├── js/                 # Application logic (PGN parsing, UI interaction)
-├── data/               # Static JSON databases (ECO codes, engines)
-├── tournaments/        # PGN archives and Python maintenance scripts
-│   ├── calc_avg_elo.py # Utility to calculate FIDE categories
-│   └── ...
-├── index.html          # Main dashboard
-└── [tool].html         # Individual tool interfaces
+├── css/                    # Shared styles
+├── data/                   # Static datasets used by the tools
+├── docs/                   # Reference notes and build context files
+├── img/                    # Icons and site images
+├── js/                     # Shared and tool-specific scripts
+├── tools/                  # Data generation helpers
+├── tours/                  # Archive/supporting assets
+├── index.html              # Home page
+├── *.html                  # Individual site tools/pages
+├── *.py                    # Maintenance scripts
+└── sitemap.xml             # Sitemap for the published site
 ```
 
-## Installation & Usage
+## Local Use
 
-### Running the Web Interface
+No build step is required.
 
-Because Chess Nerd is built as a static site, it requires no complex build process or package manager.
+1. Clone the repository:
 
-1.  **Clone the repository:**
+```bash
+git clone https://github.com/ianrastall/chessnerd.git
+cd chessnerd
+```
 
-    ```bash
-    git clone https://github.com/yourusername/chess-nerd.git
-    ```
+2. Open `index.html` directly, or run a local static server:
 
-2.  **Launch:**
-    Simply open `index.html` in any modern web browser.
+```bash
+python -m http.server 8000
+```
 
-      * *Note: For strict CORS policies (loading JSON data), it is recommended to run a local server.*
+3. Visit `http://localhost:8000/`.
 
-    <!-- end list -->
+## Notes
 
-    ```bash
-    # Python 3 example
-    cd chessnerd
-    python -m http.server 8000
-    ```
+- The site is intentionally static and deploys cleanly to GitHub Pages.
+- Some pages rely on local JSON assets or third-party public APIs, so running through a local server is safer than opening files directly.
+- `tool-template.html` is a development scaffold and is not part of the public site.
