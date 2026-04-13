@@ -29,7 +29,7 @@
         .slider-head label{ font-weight:600; }
         .slider-num{ min-width:3.4rem; text-align:center; font-variant-numeric:tabular-nums; padding:0.3rem 0.7rem; border-radius:999px; background:rgba(0,0,0,0.22); font-weight:700; }
         .slider-box input{ width:100%; }
-        .red{ accent-color:#d64747; } .green{ accent-color:#47a35d; } .blue{ accent-color:#477bd6; }
+        .red{ accent-color:#d64747; } .green{ accent-color:#47a35d; } .blue{ accent-color:#477bd6; } .vibrancy{ accent-color:#d6a447; } .brightness{ accent-color:#e7c96e; } .contrast{ accent-color:#8f6de7; } .gamma{ accent-color:#d66ec5; } .hue{ accent-color:#4fc8c8; } .warmth{ accent-color:#e77954; }
         .swatches{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0.75rem; margin-top:1rem; }
         .swatch-fill{ height:84px; }
         .swatch-copy{ padding:0.7rem; }
@@ -82,12 +82,18 @@
                     <section class="board-card">
                         <div class="card-head">
                             <h3>Dark Square Input</h3>
-                            <p>Choose the dark square with three RGB sliders. Border and light square colors are derived automatically while preserving the order Border &lt; Dark Square &lt; Light Square.</p>
+                            <p>Choose the dark square with RGB, then fine-tune the palette with vibrancy, brightness, contrast, gamma, hue, and warmth. Border and light square colors are derived automatically while preserving the order Border &lt; Dark Square &lt; Light Square.</p>
                         </div>
                         <div class="slider-stack">
                             <div class="slider-box"><div class="slider-head"><label for="redSlider">Red</label><span id="redValue" class="slider-num">118</span></div><input id="redSlider" class="red" type="range" min="0" max="255" value="118"></div>
                             <div class="slider-box"><div class="slider-head"><label for="greenSlider">Green</label><span id="greenValue" class="slider-num">150</span></div><input id="greenSlider" class="green" type="range" min="0" max="255" value="150"></div>
                             <div class="slider-box"><div class="slider-head"><label for="blueSlider">Blue</label><span id="blueValue" class="slider-num">86</span></div><input id="blueSlider" class="blue" type="range" min="0" max="255" value="86"></div>
+                            <div class="slider-box"><div class="slider-head"><label for="vibrancySlider">Vibrancy</label><span id="vibrancyValue" class="slider-num">100%</span></div><input id="vibrancySlider" class="vibrancy" type="range" min="0" max="200" value="100"></div>
+                            <div class="slider-box"><div class="slider-head"><label for="brightnessSlider">Brightness</label><span id="brightnessValue" class="slider-num">100%</span></div><input id="brightnessSlider" class="brightness" type="range" min="0" max="200" value="100"></div>
+                            <div class="slider-box"><div class="slider-head"><label for="contrastSlider">Contrast</label><span id="contrastSettingValue" class="slider-num">100%</span></div><input id="contrastSlider" class="contrast" type="range" min="0" max="200" value="100"></div>
+                            <div class="slider-box"><div class="slider-head"><label for="gammaSlider">Gamma</label><span id="gammaValue" class="slider-num">1.00</span></div><input id="gammaSlider" class="gamma" type="range" min="50" max="200" value="100"></div>
+                            <div class="slider-box"><div class="slider-head"><label for="hueSlider">Hue</label><span id="hueValue" class="slider-num">0°</span></div><input id="hueSlider" class="hue" type="range" min="-180" max="180" value="0"></div>
+                            <div class="slider-box"><div class="slider-head"><label for="warmthSlider">Warmth</label><span id="warmthValue" class="slider-num">0</span></div><input id="warmthSlider" class="warmth" type="range" min="-100" max="100" value="0"></div>
                         </div>
                         <div class="swatches">
                             <article class="swatch"><div id="borderSwatch" class="swatch-fill"></div><div class="swatch-copy"><small>Border</small><strong id="borderCode">#000000</strong></div></article>
@@ -146,9 +152,21 @@
         const redSlider = document.getElementById("redSlider");
         const greenSlider = document.getElementById("greenSlider");
         const blueSlider = document.getElementById("blueSlider");
+        const vibrancySlider = document.getElementById("vibrancySlider");
+        const brightnessSlider = document.getElementById("brightnessSlider");
+        const contrastSlider = document.getElementById("contrastSlider");
+        const gammaSlider = document.getElementById("gammaSlider");
+        const hueSlider = document.getElementById("hueSlider");
+        const warmthSlider = document.getElementById("warmthSlider");
         const redValue = document.getElementById("redValue");
         const greenValue = document.getElementById("greenValue");
         const blueValue = document.getElementById("blueValue");
+        const vibrancyValue = document.getElementById("vibrancyValue");
+        const brightnessValue = document.getElementById("brightnessValue");
+        const contrastSettingValue = document.getElementById("contrastSettingValue");
+        const gammaValue = document.getElementById("gammaValue");
+        const hueValue = document.getElementById("hueValue");
+        const warmthValue = document.getElementById("warmthValue");
         const borderSwatch = document.getElementById("borderSwatch");
         const darkSwatch = document.getElementById("darkSwatch");
         const lightSwatch = document.getElementById("lightSwatch");
@@ -175,6 +193,8 @@
         function hexToRgb(hex) { const c = hex.replace("#", ""); return { r: parseInt(c.slice(0, 2), 16), g: parseInt(c.slice(2, 4), 16), b: parseInt(c.slice(4, 6), 16) }; }
         function toRgbText(rgb) { return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`; }
         function named(hex) { return NAMED[hex.toUpperCase()] || "No exact HTML color name"; }
+        function fmtSigned(value, suffix = "") { return `${value > 0 ? "+" : ""}${value}${suffix}`; }
+        function wrapHue(h) { return ((h % 1) + 1) % 1; }
 
         function rgbToHsl(r, g, b) {
             r /= 255; g /= 255; b /= 255;
@@ -208,12 +228,49 @@
 
         function luminance(rgb) { return 0.2126 * lin(rgb.r) + 0.7152 * lin(rgb.g) + 0.0722 * lin(rgb.b); }
 
-        function derive(dark) {
-            const hsl = rgbToHsl(dark.r, dark.g, dark.b);
-            const sat = clamp(hsl.s || 0.34, 0.18, 0.88);
-            const border = hslToRgb(hsl.h, sat, clamp(hsl.l - 0.18, 0.06, Math.max(0.07, hsl.l - 0.06)));
-            const light = hslToRgb(hsl.h, sat * 0.78, clamp(hsl.l + 0.22, Math.min(0.92, hsl.l + 0.08), 0.92));
-            return { border, dark, light };
+        function applyWarmth(rgb, warmthAmount) {
+            const warmth = warmthAmount / 100;
+            return {
+                r: clamp(rgb.r + (38 * warmth), 0, 255),
+                g: clamp(rgb.g + (12 * warmth), 0, 255),
+                b: clamp(rgb.b - (44 * warmth), 0, 255)
+            };
+        }
+
+        function applyBrightnessContrastGamma(rgb, brightnessPercent, contrastPercent, gammaSetting) {
+            const brightness = brightnessPercent / 100;
+            const contrast = contrastPercent / 100;
+            const gamma = gammaSetting / 100;
+            const invGamma = 1 / Math.max(gamma, 0.01);
+
+            function adjust(channel) {
+                let value = (channel / 255) * brightness;
+                value = ((value - 0.5) * contrast) + 0.5;
+                value = clamp(value, 0, 1);
+                value = Math.pow(value, invGamma);
+                return Math.round(clamp(value, 0, 1) * 255);
+            }
+
+            return {
+                r: adjust(rgb.r),
+                g: adjust(rgb.g),
+                b: adjust(rgb.b)
+            };
+        }
+
+        function derive(baseDark, controls) {
+            const warmed = applyWarmth(baseDark, controls.warmth);
+            const inputHsl = rgbToHsl(warmed.r, warmed.g, warmed.b);
+            const adjustedHue = wrapHue(inputHsl.h + (controls.hue / 360));
+            const adjustedSat = clamp(inputHsl.s * (controls.vibrancy / 100), 0, 0.95);
+            const hueAdjusted = hslToRgb(adjustedHue, adjustedSat, inputHsl.l);
+            const dark = applyBrightnessContrastGamma(hueAdjusted, controls.brightness, controls.contrast, controls.gamma);
+            const darkHsl = rgbToHsl(dark.r, dark.g, dark.b);
+            const borderSat = clamp(darkHsl.s * 0.92, 0, 0.88);
+            const lightSat = clamp(darkHsl.s * 0.78, 0, 0.82);
+            const border = hslToRgb(darkHsl.h, borderSat, clamp(darkHsl.l - 0.18, 0.06, Math.max(0.07, darkHsl.l - 0.06)));
+            const light = hslToRgb(darkHsl.h, lightSat, clamp(darkHsl.l + 0.22, Math.min(0.92, darkHsl.l + 0.08), 0.92));
+            return { border, dark, light, darkHsl, inputHsl, warmed, hueAdjusted };
         }
 
         function paletteStatus(luma) {
@@ -260,9 +317,25 @@
         function setBar(message, type) { statusMessage.textContent = message; statusMessage.className = type; }
 
         function render() {
-            const dark = { r: Number(redSlider.value), g: Number(greenSlider.value), b: Number(blueSlider.value) };
-            redValue.textContent = dark.r; greenValue.textContent = dark.g; blueValue.textContent = dark.b;
-            const palette = derive(dark);
+            const baseDark = { r: Number(redSlider.value), g: Number(greenSlider.value), b: Number(blueSlider.value) };
+            const controls = {
+                vibrancy: Number(vibrancySlider.value),
+                brightness: Number(brightnessSlider.value),
+                contrast: Number(contrastSlider.value),
+                gamma: Number(gammaSlider.value),
+                hue: Number(hueSlider.value),
+                warmth: Number(warmthSlider.value)
+            };
+            redValue.textContent = baseDark.r;
+            greenValue.textContent = baseDark.g;
+            blueValue.textContent = baseDark.b;
+            vibrancyValue.textContent = `${controls.vibrancy}%`;
+            brightnessValue.textContent = `${controls.brightness}%`;
+            contrastSettingValue.textContent = `${controls.contrast}%`;
+            gammaValue.textContent = (controls.gamma / 100).toFixed(2);
+            hueValue.textContent = fmtSigned(controls.hue, "°");
+            warmthValue.textContent = fmtSigned(controls.warmth);
+            const palette = derive(baseDark, controls);
             const borderHex = rgbToHex(palette.border.r, palette.border.g, palette.border.b);
             const darkHex = rgbToHex(palette.dark.r, palette.dark.g, palette.dark.b);
             const lightHex = rgbToHex(palette.light.r, palette.light.g, palette.light.b);
@@ -283,6 +356,13 @@
             metadataOutput.value = [
                 "Board Colors Palette","====================","",
                 `Palette Status: ${status.label}`,
+                `Base Input RGB: ${toRgbText(baseDark)}`,
+                `Vibrancy (Saturation): ${controls.vibrancy}%`,
+                `Brightness: ${controls.brightness}%`,
+                `Contrast: ${controls.contrast}%`,
+                `Gamma: ${(controls.gamma / 100).toFixed(2)}`,
+                `Hue Shift: ${fmtSigned(controls.hue, "°")}`,
+                `Warmth: ${fmtSigned(controls.warmth)}`,
                 `Dark Square Luminance: ${darkLum.toFixed(6)}`,
                 `Palette Contrast Span: ${(lightLum - borderLum).toFixed(6)}`,"",
                 "Border",`  HEX: ${borderHex}`,`  RGB: ${toRgbText(palette.border)}`,`  HTML Name: ${named(borderHex)}`,`  Relative Luminance: ${borderLum.toFixed(6)}`,"",
@@ -319,7 +399,7 @@
             img.src = url;
         }
 
-        [redSlider, greenSlider, blueSlider].forEach((slider) => slider.addEventListener("input", render));
+        [redSlider, greenSlider, blueSlider, vibrancySlider, brightnessSlider, contrastSlider, gammaSlider, hueSlider, warmthSlider].forEach((slider) => slider.addEventListener("input", render));
         downloadSvgBtn.addEventListener("click", downloadSvg);
         downloadPngBtn.addEventListener("click", downloadPng);
         render();
