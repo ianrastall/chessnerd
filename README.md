@@ -48,5 +48,6 @@ Astro uses `build.format: 'file'`, so `src/pages/titled-players.astro` builds to
 - Merida chess pieces are in `public/img/merida` and mapped from shared CSS.
 - Data refresh and cron candidates are tracked in `docs/tools/data-refresh.md`.
 - Stockfish commit data is refreshed by `.github/workflows/update-stockfish-commits.yml`.
+- GitHub Pages should use `Settings > Pages > Build and deployment > Source: GitHub Actions`.
 - The first-pass rebuild order is tracked in `docs/rebuild-roadmap.md`.
 - Tool explainers live in `docs/tools/`.
