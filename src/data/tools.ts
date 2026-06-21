@@ -135,7 +135,7 @@ export const tools: ToolMeta[] = [
     href: '/software.html',
     icon: 'inventory_2',
     category: 'reference',
-    description: 'A compact catalog of chess software projects with download and repository links.',
+    description: 'My PGN tools, plus the essential chess databases, analysis suites, and engine tools players rely on.',
     status: 'ready'
   },
   {

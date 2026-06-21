@@ -2,57 +2,146 @@
 import ToolHeader from '../components/ToolHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const softwareEntries = [
+const myTools = [
   {
-    name: 'PgnSort',
-    releaseDate: '2025-12-09',
+    name: 'PGN Tools',
+    releaseDate: '2026-06-20',
     language: 'C#',
-    directUrl: 'https://github.com/ianrastall/PgnSort/releases/download/1.0.0/PgnSort-1.0-win64.zip',
-    repoUrl: 'https://github.com/ianrastall/PgnSort'
+    directUrl: 'https://github.com/ianrastall/PgnTools/releases/download/2.0.0/PgnTools-2.0.0-win-x64.exe',
+    repoUrl: 'https://github.com/ianrastall/PgnTools'
+  }
+];
+
+interface SoftwareLink {
+  label: string;
+  url: string;
+}
+
+interface Software {
+  name: string;
+  tag?: string;
+  description: string;
+  links: SoftwareLink[];
+}
+
+const essentialSoftware: Software[] = [
+  {
+    name: 'Cutechess',
+    tag: 'Free / Open source',
+    description:
+      'GUI and command-line tools for running matches and tournaments between chess engines. The de facto standard for engine testing.',
+    links: [
+      { label: 'Website', url: 'https://cutechess.com/' },
+      { label: 'Source', url: 'https://github.com/cutechess/cutechess' }
+    ]
   },
   {
-    name: 'TWIC DB Aggregator',
-    releaseDate: '2025-11-18',
-    language: 'C#',
-    directUrl: 'https://github.com/ianrastall/twic-db-aggregator/releases/download/1.1.0/TWICDBAggregator-1.1.0-win-x64.zip',
-    repoUrl: 'https://github.com/ianrastall/twic-db-aggregator'
+    name: 'ChessBase',
+    tag: 'Commercial',
+    description:
+      'The leading commercial database and analysis suite, with huge game collections (Mega Database) and deep engine integration.',
+    links: [{ label: 'Website', url: 'https://chessbase.com/' }]
+  },
+  {
+    name: 'SCID',
+    tag: 'Free / Open source',
+    description:
+      "Shane's Chess Information Database — a free program for storing, searching, and studying large collections of games.",
+    links: [{ label: 'Website', url: 'https://scid.sourceforge.net/' }]
+  },
+  {
+    name: 'Scid vs. PC',
+    tag: 'Free / Open source',
+    description:
+      'An actively maintained fork of SCID with a refined interface, gameplay, and analysis features. An excellent free database for most players.',
+    links: [{ label: 'Website', url: 'https://scidvspc.sourceforge.net/' }]
+  },
+  {
+    name: 'SCID Resources',
+    tag: 'Reference',
+    description:
+      "The SCID project's own hub of compatible add-ons — game databases, player data (ratings and photos), opening books, engines, and endgame tablebases.",
+    links: [{ label: 'Open', url: 'https://sourceforge.net/p/scid/wiki/GetResources/' }]
   }
 ];
 ---
-<BaseLayout title="Software Catalog" description="Downloadable PGN-oriented chess tools with pinned releases and repositories.">
+<BaseLayout title="Software Catalog" description="My PGN tools, plus the essential chess databases, analysis suites, and engine tools players rely on.">
   <main>
     <div class="tool-container">
       <ToolHeader title="Software Catalog" icon="inventory_2" />
 
-      <div class="software-table-wrap">
-        <table class="software-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Release</th>
-              <th>Language</th>
-              <th>Direct Link</th>
-              <th>Repository</th>
-            </tr>
-          </thead>
-          <tbody>
-            {softwareEntries.map((entry) => (
+      <section class="software-section">
+        <h2 class="software-section-title">My Contributions</h2>
+        <p class="software-section-intro">PGN Tools is my Windows desktop GUI for working with PGN files and databases &mdash; one program that replaces the older single-purpose utilities I used to publish.</p>
+
+        <div class="software-table-wrap">
+          <table class="software-table">
+            <thead>
               <tr>
-                <td>{entry.name}</td>
-                <td>{entry.releaseDate}</td>
-                <td><span class="language-tag">{entry.language}</span></td>
-                <td><a class="link-btn" href={entry.directUrl} target="_blank" rel="noopener noreferrer">Direct</a></td>
-                <td><a class="link-btn" href={entry.repoUrl} target="_blank" rel="noopener noreferrer">Repo</a></td>
+                <th>Name</th>
+                <th>Release</th>
+                <th>Language</th>
+                <th>Direct Link</th>
+                <th>Repository</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div class="table-note">These are pinned release links. Later, this can read GitHub release metadata during a scheduled refresh.</div>
+            </thead>
+            <tbody>
+              {myTools.map((entry) => (
+                <tr>
+                  <td>{entry.name}</td>
+                  <td>{entry.releaseDate}</td>
+                  <td><span class="language-tag">{entry.language}</span></td>
+                  <td><a class="link-btn" href={entry.directUrl} target="_blank" rel="noopener noreferrer">Direct</a></td>
+                  <td><a class="link-btn" href={entry.repoUrl} target="_blank" rel="noopener noreferrer">Repo</a></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="software-section">
+        <h2 class="software-section-title">Essential Chess Software</h2>
+        <p class="software-section-intro">
+          The databases, analysis suites, and engine tools most players end up wanting.
+        </p>
+
+        <div class="software-list">
+          {essentialSoftware.map((item) => (
+            <article class="software-item">
+              <div class="software-item-head">
+                <h3>{item.name}</h3>
+                {item.tag && <span class="software-tag">{item.tag}</span>}
+              </div>
+              <p>{item.description}</p>
+              <div class="software-item-links">
+                {item.links.map((link) => (
+                  <a class="link-btn" href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   </main>
 
   <style>
+    .software-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .software-section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .software-section-intro {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
     .software-table-wrap {
       overflow-x: auto;
     }
@@ -90,6 +179,52 @@ const softwareEntries = [
       background: var(--bg-secondary);
     }
 
+    .software-list {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .software-item {
+      padding: 1rem 1.1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .software-item-head {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .software-item-head h3 {
+      font-size: 1.05rem;
+      font-weight: 650;
+    }
+
+    .software-item p {
+      color: var(--text-primary);
+      margin-bottom: 0.7rem;
+      line-height: 1.45;
+    }
+
+    .software-item-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .software-tag {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 0.05rem 0.55rem;
+      white-space: nowrap;
+    }
+
     .language-tag {
       display: inline-flex;
       align-items: center;
@@ -107,7 +242,7 @@ const softwareEntries = [
       gap: 0.35rem;
       padding: 0.35rem 0.65rem;
       border-radius: 6px;
-      background: var(--bg-secondary);
+      background: var(--bg-tertiary);
       color: var(--text-primary);
       text-decoration: none;
       border: 1px solid var(--border-color);
@@ -118,12 +253,6 @@ const softwareEntries = [
     .link-btn:hover {
       border-color: var(--accent);
       color: var(--accent);
-    }
-
-    .table-note {
-      margin-top: 0.75rem;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
     }
   </style>
 </BaseLayout>
