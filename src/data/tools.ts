@@ -54,12 +54,11 @@ export const tools: ToolMeta[] = [
   {
     id: 'chesscom-api',
     name: 'Chess.com API',
-    href: '/chesscom-api.html',
+    href: '/chesscom-api',
     icon: 'api',
     category: 'data',
     description: 'Formatted reference for the Chess.com published-data API documentation.',
-    status: 'queued',
-    rebuildNote: 'Currently staged as reference material; needs a clean Astro rewrite of the API guide.'
+    status: 'ready',
   },
   {
     id: 'titled-players',
