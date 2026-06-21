@@ -1,0 +1,37 @@
+---
+import type { ToolMeta } from '../data/tools';
+import { categoryHref, categoryLabels } from '../data/tools';
+
+interface Props {
+  tool: ToolMeta;
+}
+
+const { tool } = Astro.props;
+const categoryLabel = categoryLabels[tool.category];
+const isReady = tool.status === 'ready';
+---
+<article class={`tool-card${tool.featured ? ' featured' : ''}${isReady ? '' : ' queued'}`}>
+  <a class="tag tag-link" href={categoryHref(tool.category)} aria-label={`View ${categoryLabel} tools`}>
+    {categoryLabel}
+  </a>
+  {isReady ? (
+    <a class="tool-card-link" href={tool.href}>
+      <span class="tool-icon material-icons" aria-hidden="true">{tool.icon}</span>
+      <div class="tool-card-title-row">
+        <h2>{tool.name}</h2>
+        <span class="status-badge ready">Ready</span>
+      </div>
+      <p>{tool.description}</p>
+    </a>
+  ) : (
+    <div class="tool-card-link" aria-disabled="true">
+      <span class="tool-icon material-icons" aria-hidden="true">{tool.icon}</span>
+      <div class="tool-card-title-row">
+        <h2>{tool.name}</h2>
+        <span class="status-badge queued">Queued</span>
+      </div>
+      <p>{tool.description}</p>
+      {tool.rebuildNote && <p class="tool-note">{tool.rebuildNote}</p>}
+    </div>
+  )}
+</article>

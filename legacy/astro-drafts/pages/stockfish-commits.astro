@@ -1,0 +1,298 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Stockfish Commits" description="Browse historical Stockfish commits with source archives, test links, and artifact links.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="Stockfish Commits" icon="history" />
+
+      <div class="options-panel" id="toolOptions">
+        <div class="options-grid sf-controls-row">
+          <div class="option-group">
+            <label for="yearSelect">Year</label>
+            <select id="yearSelect" class="color-dropdown"></select>
+          </div>
+          <div class="option-group">
+            <label for="monthSelect">Month</label>
+            <select id="monthSelect" class="color-dropdown"></select>
+          </div>
+          <div class="option-group sf-search-field">
+            <label for="searchBox">Search (hash / author / text)</label>
+            <input id="searchBox" type="text" placeholder="e.g., corrhist, 6478, c475024b..." />
+          </div>
+          <div class="option-group sf-link-toggle">
+            <label>Include link sets</label>
+            <label class="inline-check">
+              <input type="checkbox" id="showArtifacts" />
+              <span>Actions artifacts</span>
+            </label>
+          </div>
+          <div class="option-group">
+            <label for="pageSize">Page size</label>
+            <select id="pageSize" class="color-dropdown">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="io-container io-container-single">
+        <div class="io-panel">
+          <div class="io-label">
+            <span>Commits</span>
+            <span class="stats" id="mainStats">Ready</span>
+          </div>
+
+          <div id="toolContent" class="sf-content">
+            <div class="sf-toolbar">
+              <div class="left">
+                <span class="sf-muted" id="datasetMeta"></span>
+              </div>
+              <div class="right">
+                <button id="copyPageLinks" class="btn btn-secondary" type="button">
+                  <span class="material-icons" aria-hidden="true">content_copy</span>
+                  Copy page links
+                </button>
+              </div>
+            </div>
+
+            <div id="commitList" class="sf-list"></div>
+
+            <div class="sf-pagination">
+              <div class="group">
+                <button id="firstPage" class="btn btn-secondary" type="button">First</button>
+                <button id="prevPage" class="btn btn-secondary" type="button">Prev</button>
+                <span id="pageInfo" class="sf-muted"></span>
+                <button id="nextPage" class="btn btn-secondary" type="button">Next</button>
+                <button id="lastPage" class="btn btn-secondary" type="button">Last</button>
+              </div>
+              <div class="group">
+                <span id="toolStats" class="sf-muted"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div id="statusMessage" class="success">Ready</div>
+        <div id="toolStatsBottom"></div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .sf-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: end;
+    }
+
+    .sf-controls-row .option-group {
+      min-width: 180px;
+    }
+
+    .sf-search-field {
+      min-width: min(100%, 280px);
+      flex: 1 1 280px;
+    }
+
+    .sf-controls-row input[type="text"] {
+      width: 100%;
+    }
+
+    .inline-check {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .sf-content {
+      min-height: 300px;
+      background: var(--bg-tertiary);
+      padding: 1rem;
+      border-radius: 4px;
+    }
+
+    .sf-toolbar,
+    .sf-toolbar .left,
+    .sf-toolbar .right,
+    .sf-pagination,
+    .sf-pagination .group,
+    .sf-pills,
+    .sf-summary-top,
+    .sf-summary-meta,
+    .sf-summary-links,
+    .sf-linkrow-head,
+    .sf-linkrow-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .sf-toolbar,
+    .sf-pagination,
+    .sf-summary-top,
+    .sf-linkrow-head {
+      justify-content: space-between;
+    }
+
+    .sf-list,
+    .sf-linklist {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .sf-list {
+      margin-top: 0.75rem;
+    }
+
+    details.sf-commit,
+    .sf-linkrow {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    details.sf-commit summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.75rem;
+      display: block;
+    }
+
+    details.sf-commit summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .sf-summary-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .sf-summary-meta {
+      margin-top: 0.35rem;
+      gap: 0.5rem 0.85rem;
+      opacity: 0.9;
+    }
+
+    .sf-summary-links {
+      margin-top: 0.45rem;
+      gap: 0.4rem 0.6rem;
+    }
+
+    .sf-hash,
+    .sf-url,
+    .sf-message {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .sf-hash {
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+
+    .sf-date,
+    .sf-author,
+    .sf-muted {
+      color: var(--text-secondary);
+    }
+
+    .sf-date {
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .sf-pill,
+    .sf-linkchip {
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      padding: 0.12rem 0.45rem;
+    }
+
+    .sf-pill.warn {
+      border-color: rgba(255, 200, 0, 0.35);
+    }
+
+    .sf-linkchip {
+      display: inline-flex;
+      gap: 0.35rem;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .sf-linkchip .material-icons {
+      font-size: 18px;
+    }
+
+    .sf-body {
+      padding: 0.75rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .sf-linklist {
+      margin-top: 0.65rem;
+      gap: 0.55rem;
+    }
+
+    .sf-linkrow {
+      padding: 0.55rem 0.6rem;
+      background: var(--bg-tertiary);
+    }
+
+    .sf-linkrow-label,
+    .sf-section-title {
+      font-weight: 700;
+    }
+
+    .sf-url {
+      display: inline-block;
+      margin-top: 0.25rem;
+      font-size: 0.82rem;
+      word-break: break-all;
+      text-decoration: none;
+    }
+
+    .sf-section-title {
+      margin-top: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .sf-section-note {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.45rem;
+    }
+
+    .sf-message {
+      white-space: pre-wrap;
+      font-size: 0.85rem;
+      background: var(--bg-tertiary);
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+
+    .io-container.io-container-single {
+      display: block;
+      grid-template-columns: 1fr;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .io-container.io-container-single .io-panel {
+      width: 100%;
+      max-width: 100%;
+    }
+  </style>
+
+  <script is:inline src="/js/stockfish-commits.js"></script>
+</BaseLayout>

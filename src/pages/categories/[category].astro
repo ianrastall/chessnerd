@@ -1,0 +1,62 @@
+---
+import ToolCard from '../../components/ToolCard.astro';
+import {
+  categoryDescriptions,
+  categoryHref,
+  categoryLabels,
+  queuedTools,
+  readyTools,
+  toolCategories,
+  type ToolCategory
+} from '../../data/tools';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return toolCategories.map((category) => ({ params: { category } }));
+}
+
+const category = Astro.params.category as ToolCategory;
+const categoryReadyTools = readyTools.filter((tool) => tool.category === category);
+const categoryQueuedTools = queuedTools.filter((tool) => tool.category === category);
+const title = `${categoryLabels[category]} Tools`;
+---
+<BaseLayout title={title} description={categoryDescriptions[category]}>
+  <main>
+    <header class="category-header">
+      <div>
+        <h1>{title}</h1>
+        <p>{categoryDescriptions[category]}</p>
+      </div>
+      <a class="btn btn-secondary" href="/">All Tools</a>
+    </header>
+
+    <nav class="category-nav" aria-label="Tool categories">
+      <a class="category-chip" href="/">Ready <span>{readyTools.length}</span></a>
+      {toolCategories.map((item) => (
+        <a
+          class={`category-chip${item === category ? ' active' : ''}`}
+          href={categoryHref(item)}
+          aria-current={item === category ? 'page' : undefined}
+        >
+          {categoryLabels[item]} <span>{readyTools.filter((tool) => tool.category === item).length}</span>
+        </a>
+      ))}
+    </nav>
+
+    <section class="tool-grid" aria-label={`Ready ${categoryLabels[category]} tools`}>
+      {categoryReadyTools.map((tool) => <ToolCard tool={tool} />)}
+    </section>
+
+    {categoryQueuedTools.length > 0 && (
+      <section class="queue-section" aria-labelledby="queueHeading">
+        <div class="section-heading">
+          <h2 id="queueHeading">{categoryLabels[category]} Rebuild Queue</h2>
+          <p>{categoryQueuedTools.length} staged tools need a clean workflow pass before release.</p>
+        </div>
+        <div class="tool-grid compact" aria-label={`Queued ${categoryLabels[category]} tools`}>
+          {categoryQueuedTools.map((tool) => <ToolCard tool={tool} />)}
+        </div>
+      </section>
+    )}
+  </main>
+</BaseLayout>

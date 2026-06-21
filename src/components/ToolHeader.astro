@@ -1,0 +1,21 @@
+---
+interface Props {
+  title: string;
+  icon: string;
+  backHref?: string;
+}
+
+const { title, icon, backHref = '/' } = Astro.props;
+---
+<div class="tool-header">
+  <div class="tool-title">
+    <span class="material-icons" aria-hidden="true">{icon}</span>
+    <h1>{title}</h1>
+  </div>
+  <div class="tool-actions">
+    <a id="backButton" class="btn btn-secondary btn-compact" href={backHref}>
+      <span class="material-icons" aria-hidden="true">arrow_back</span>
+      Back
+    </a>
+  </div>
+</div>

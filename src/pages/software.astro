@@ -1,0 +1,129 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const softwareEntries = [
+  {
+    name: 'PgnSort',
+    releaseDate: '2025-12-09',
+    language: 'C#',
+    directUrl: 'https://github.com/ianrastall/PgnSort/releases/download/1.0.0/PgnSort-1.0-win64.zip',
+    repoUrl: 'https://github.com/ianrastall/PgnSort'
+  },
+  {
+    name: 'TWIC DB Aggregator',
+    releaseDate: '2025-11-18',
+    language: 'C#',
+    directUrl: 'https://github.com/ianrastall/twic-db-aggregator/releases/download/1.1.0/TWICDBAggregator-1.1.0-win-x64.zip',
+    repoUrl: 'https://github.com/ianrastall/twic-db-aggregator'
+  }
+];
+---
+<BaseLayout title="Software Catalog" description="Downloadable PGN-oriented chess tools with pinned releases and repositories.">
+  <main>
+    <div class="tool-container">
+      <ToolHeader title="Software Catalog" icon="inventory_2" />
+
+      <div class="software-table-wrap">
+        <table class="software-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Release</th>
+              <th>Language</th>
+              <th>Direct Link</th>
+              <th>Repository</th>
+            </tr>
+          </thead>
+          <tbody>
+            {softwareEntries.map((entry) => (
+              <tr>
+                <td>{entry.name}</td>
+                <td>{entry.releaseDate}</td>
+                <td><span class="language-tag">{entry.language}</span></td>
+                <td><a class="link-btn" href={entry.directUrl} target="_blank" rel="noopener noreferrer">Direct</a></td>
+                <td><a class="link-btn" href={entry.repoUrl} target="_blank" rel="noopener noreferrer">Repo</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="table-note">These are pinned release links. Later, this can read GitHub release metadata during a scheduled refresh.</div>
+    </div>
+  </main>
+
+  <style>
+    .software-table-wrap {
+      overflow-x: auto;
+    }
+
+    .software-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .software-table th,
+    .software-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .software-table th {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+    }
+
+    .software-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .software-table tbody tr:hover {
+      background: var(--bg-secondary);
+    }
+
+    .language-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      text-decoration: none;
+      border: 1px solid var(--border-color);
+      transition: border-color 0.2s, color 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .link-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .table-note {
+      margin-top: 0.75rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+  </style>
+</BaseLayout>

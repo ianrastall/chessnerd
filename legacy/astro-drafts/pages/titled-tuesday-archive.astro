@@ -1,0 +1,421 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Titled Tuesday Archive" description="Browse organized Chess.com Titled Tuesday event download links.">
+  <style is:global>
+.tt-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tt-table th,
+        .tt-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .tt-table th {
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        .tt-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tt-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .event-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .file-name {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.15rem;
+        }
+
+        .date-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.55rem;
+            border-radius: 999px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .session-badge {
+            display: inline-block;
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 0.25rem;
+        }
+
+        .session-early {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .session-late {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .table-note {
+            margin-top: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tt-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .tt-page-info {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .tt-page-size {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tt-page-size select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+        }
+  </style>
+
+  <main>
+    <div id="toolView">
+                    <div class="tool-header">
+                        <div class="tool-title">
+                            <span class="material-icons" id="toolIcon">event</span>
+                            <h2 id="toolName">Titled Tuesday Archive</h2>
+                        </div>
+                        <div class="tool-actions">
+                            <button id="backButton" class="btn btn-secondary">
+                                <span class="material-icons">arrow_back</span>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="io-container" style="display: block;">
+                        <div class="io-panel" style="width: 100%">
+                            <div class="io-label">
+                                <span>Titled Tuesday tournament files</span>
+                                <span class="stats" id="ttCount">Loading...</span>
+                            </div>
+    
+                            <div class="search-box">
+                                <input type="text" id="ttSearch" placeholder="Filter by date, session, or filename..." aria-label="Search Titled Tuesday archive">
+                            </div>
+    
+                            <div style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                                <div style="overflow-x: auto;">
+                                    <table class="tt-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Event</th>
+                                                <th style="text-align: center;">Games</th>
+                                                <th style="text-align: right;">Download</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ttTableBody">
+                                            <tr>
+                                                <td colspan="4">Loading Titled Tuesday archive...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tt-pagination">
+                                <div class="tt-page-size">
+                                    <label for="ttPageSize">Rows per page:</label>
+                                    <select id="ttPageSize">
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100" selected>100</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <button id="ttPrevPage" type="button" class="btn btn-secondary">
+                                        <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-right: 2px;">chevron_left</span>
+                                        Previous
+                                    </button>
+                                    <span id="ttPageInfo" class="tt-page-info">Page 1 of 1</span>
+                                    <button id="ttNextPage" type="button" class="btn btn-secondary">
+                                        Next
+                                        <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-left: 2px;">chevron_right</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-note">
+                                Built automatically from <code>tt_links.txt</code>, <code>tt_events.txt</code>, and <code>tt_game_counts.txt</code> (titled-tuesday-archive repo). Files stay in the order provided.
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="status-bar">
+                        <div id="statusMessage" class="success">Loading Titled Tuesday archive...</div>
+                    </div>
+                </div>
+  </main>
+
+  <script is:inline>
+document.getElementById('backButton').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+
+    const ttTableBody = document.getElementById('ttTableBody');
+    const ttCount = document.getElementById('ttCount');
+    const searchInput = document.getElementById('ttSearch');
+    const statusMessage = document.getElementById('statusMessage');
+    const prevBtnPage = document.getElementById('ttPrevPage');
+    const nextBtnPage = document.getElementById('ttNextPage');
+    const pageInfoEl = document.getElementById('ttPageInfo');
+    const pageSizeSelect = document.getElementById('ttPageSize');
+
+    let allEntries = [];
+    let filteredEntries = [];
+    let currentPage = 1;
+    let rowsPerPage = 100;
+
+    // FIX: Updated Regex to correctly capture date and optional session [ab]
+    function extractDateAndSession(filename) {
+        const withoutExt = filename.replace('.zip', '').replace('.pgn', '');
+        
+        // Match YYYY-MM-DD and an optional 'a' or 'b' immediately following
+        const match = withoutExt.match(/(\d{4}-\d{2}-\d{2})([ab])?/);
+        const date = match ? match[1] : '';
+        const session = match ? match[2] || '' : '';
+        
+        return { date, session };
+    }
+
+    function buildEventMap(text) {
+        const map = {};
+        text.split(/\r?\n/).forEach(line => {
+            if (!line.trim()) return;
+            const separatorIndex = line.indexOf(':');
+            if (separatorIndex === -1) return;
+            const filePart = line.slice(0, separatorIndex).trim();
+            const eventName = line.slice(separatorIndex + 1).trim();
+            if (!filePart || !eventName) return;
+            map[filePart] = eventName; // Keep .pgn for precise lookup
+            map[filePart.replace('.pgn', '')] = eventName;
+        });
+        return map;
+    }
+
+    function buildGameCountMap(text) {
+        const map = {};
+        text.split(/\r?\n/).forEach(line => {
+            if (!line.trim()) return;
+            const separatorIndex = line.indexOf(':');
+            if (separatorIndex === -1) return;
+            const filePart = line.slice(0, separatorIndex).trim();
+            const trailing = line.slice(separatorIndex + 1).trim();
+            
+            const numMatch = trailing.match(/(\d+)/);
+            if (!numMatch) return;
+            
+            const num = parseInt(numMatch[0], 10);
+            if (!filePart || Number.isNaN(num)) return;
+            
+            map[filePart] = num; // Keep .pgn
+            map[filePart.replace('.pgn', '')] = num;
+        });
+        return map;
+    }
+
+    function buildEntries(linksText, eventsMap, gameCountsMap) {
+        return linksText
+            .split(/\r?\n/)
+            .filter(Boolean)
+            .map(url => {
+                let zipFileName = url.split(/[\\/]/).pop();
+                
+                // Handle tabs in filename paths
+                if (zipFileName.includes('\t')) {
+                    zipFileName = zipFileName.split('\t').pop();
+                }
+                
+                const baseName = zipFileName.replace('.zip', '');
+                const pgnFileName = baseName + '.pgn';
+                
+                const { date, session } = extractDateAndSession(zipFileName);
+                
+                // Lookup using both .pgn name and base name for compatibility
+                const eventName = eventsMap[pgnFileName] || eventsMap[baseName] || `Titled Tuesday ${date}`;
+                const games = gameCountsMap[pgnFileName] || gameCountsMap[baseName] || null;
+                
+                let sessionDisplay = '';
+                let sessionClass = '';
+                if (session === 'a') {
+                    sessionDisplay = 'Early';
+                    sessionClass = 'session-early';
+                } else if (session === 'b') {
+                    sessionDisplay = 'Late';
+                    sessionClass = 'session-late';
+                }
+
+                return {
+                    eventName,
+                    date,
+                    session,
+                    sessionDisplay,
+                    sessionClass,
+                    url,
+                    zipFileName,
+                    games,
+                    eventLower: eventName.toLowerCase(),
+                    fileLower: zipFileName.toLowerCase(),
+                    sortKey: date + (session || 'z') // Sort 'a' before 'b'
+                };
+            })
+            .sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+    }
+
+    function formatNumber(val) {
+        if (val === null || val === undefined) return '—';
+        return Number(val).toLocaleString();
+    }
+
+    function renderPage() {
+        const total = filteredEntries.length;
+        const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        if (!total) {
+            ttTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem;">No matching events.</td></tr>';
+            ttCount.textContent = '0 files';
+        } else {
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const visible = filteredEntries.slice(startIndex, startIndex + rowsPerPage);
+
+            ttTableBody.innerHTML = visible.map(entry => `
+                <tr>
+                    <td>
+                        <span class="date-chip">${entry.date}</span>
+                        ${entry.sessionDisplay ? `<span class="session-badge ${entry.sessionClass}">${entry.sessionDisplay}</span>` : ''}
+                    </td>
+                    <td>
+                        <div class="event-name">${entry.eventName}</div>
+                        <div class="file-name">${entry.zipFileName}</div>
+                    </td>
+                    <td style="text-align: center;">${formatNumber(entry.games)}</td>
+                    <td style="text-align: right;">
+                        <a href="${entry.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener" download="${entry.zipFileName}">
+                            <span class="material-icons" style="font-size: 1.05em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>ZIP
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+
+            ttCount.textContent = `${total} ${total === 1 ? 'file' : 'files'}`;
+        }
+
+        if (pageInfoEl) {
+            pageInfoEl.textContent = total === 0 ? 'No results' : `Page ${currentPage} of ${totalPages}`;
+        }
+
+        prevBtnPage.disabled = currentPage <= 1;
+        nextBtnPage.disabled = currentPage >= totalPages;
+    }
+
+    function applyFilter(query) {
+        const q = query.toLowerCase();
+        filteredEntries = allEntries.filter(entry =>
+            entry.eventLower.includes(q) || 
+            entry.fileLower.includes(q) ||
+            entry.date.includes(q) ||
+            (q.includes('early') && entry.session === 'a') ||
+            (q.includes('late') && entry.session === 'b')
+        );
+        currentPage = 1;
+        renderPage();
+    }
+
+    async function loadTTArchive() {
+        try {
+            statusMessage.textContent = 'Loading Titled Tuesday archive...';
+            const [linksRes, eventsRes, countsRes] = await Promise.all([
+                fetch('tt_links.txt'),
+                fetch('tt_events.txt'),
+                fetch('tt_game_counts.txt')
+            ]);
+
+            if (!linksRes.ok || !eventsRes.ok || !countsRes.ok) {
+                throw new Error('Could not find data files. Ensure check_tt_files.py has run.');
+            }
+
+            const [linksText, eventsText, countsText] = await Promise.all([
+                linksRes.text(),
+                eventsRes.text(),
+                countsRes.text()
+            ]);
+
+            const eventsMap = buildEventMap(eventsText);
+            const gameCountsMap = buildGameCountMap(countsText);
+            allEntries = buildEntries(linksText, eventsMap, gameCountsMap);
+            filteredEntries = allEntries.slice();
+            
+            renderPage();
+            statusMessage.textContent = `Ready - ${allEntries.length} files loaded`;
+            statusMessage.className = 'success';
+        } catch (err) {
+            console.error(err);
+            statusMessage.textContent = 'Error: ' + err.message;
+            statusMessage.className = 'error';
+            ttTableBody.innerHTML = `<tr><td colspan="4" style="color: #ef4444; padding: 2rem; text-align: center;">${err.message}</td></tr>`;
+        }
+    }
+
+    searchInput.addEventListener('input', (e) => applyFilter(e.target.value));
+    pageSizeSelect.addEventListener('change', () => {
+        rowsPerPage = parseInt(pageSizeSelect.value, 10);
+        currentPage = 1;
+        renderPage();
+    });
+    prevBtnPage.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderPage(); } });
+    nextBtnPage.addEventListener('click', () => { if (currentPage < Math.ceil(filteredEntries.length / rowsPerPage)) { currentPage++; renderPage(); } });
+
+    loadTTArchive();
+  </script>
+</BaseLayout>

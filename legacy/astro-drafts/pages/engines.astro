@@ -1,0 +1,279 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Engine Database" description="Search a static chess engine database by name, rating, protocol, language, and release date.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="Engine Database" icon="memory" />
+
+      <div class="search-container">
+        <label class="visually-hidden" for="engineSearch">Search engines</label>
+        <input type="text" id="engineSearch" placeholder="Search engines, rating, languages..." autocomplete="off" />
+      </div>
+
+      <div class="table-wrapper">
+        <table class="engine-table">
+          <thead>
+            <tr>
+              <th><button type="button" data-sort="name">Name</button></th>
+              <th><button type="button" data-sort="rating">Rating</button></th>
+              <th><button type="button" data-sort="protocol">Prot</button></th>
+              <th><button type="button" data-sort="lang">Lang</button></th>
+              <th><button type="button" data-sort="d_first">First Release</button></th>
+              <th><button type="button" data-sort="d_last">Latest (Ver)</button></th>
+            </tr>
+          </thead>
+          <tbody id="engineList">
+            <tr><td colspan="6" class="loading">Loading database...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="countDisplay" class="engine-count"></div>
+    </div>
+  </main>
+
+  <style>
+    .search-container {
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .search-container input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .engine-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .engine-table th {
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      padding: 0;
+      text-align: left;
+    }
+
+    .engine-table th button {
+      width: 100%;
+      min-height: 0;
+      justify-content: flex-start;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--accent);
+      font-weight: 700;
+      padding: 1rem;
+      cursor: pointer;
+    }
+
+    .engine-table th button:hover {
+      color: var(--text-primary);
+    }
+
+    .engine-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .engine-table th:last-child,
+    .engine-table td:last-child {
+      border-right: none;
+    }
+
+    .engine-table tbody tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .engine-table tbody tr:hover {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .col-name {
+      font-weight: 600;
+      color: var(--text-primary) !important;
+      font-size: 0.95rem;
+    }
+
+    .col-rating {
+      font-weight: bold;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    .col-proto {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      opacity: 0.8;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .col-lang {
+      font-family: monospace;
+      opacity: 0.9;
+    }
+
+    .version-tag {
+      font-size: 0.85em;
+      opacity: 0.6;
+      margin-left: 6px;
+      font-style: italic;
+    }
+
+    .engine-link {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .engine-link:hover {
+      color: var(--accent);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      font-style: italic;
+    }
+
+    .engine-count {
+      margin-top: 0.8rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+  </style>
+
+  <script>
+    interface EngineRecord {
+      name?: string;
+      rating?: string;
+      protocol?: string;
+      lang?: string;
+      d_first?: string;
+      d_last?: string;
+      ver?: string;
+      link?: string;
+      [key: string]: string | undefined;
+    }
+
+    let engines: EngineRecord[] = [];
+    let sortDir = 1;
+
+    const tbody = document.getElementById('engineList') as HTMLTableSectionElement;
+    const countDisplay = document.getElementById('countDisplay') as HTMLElement;
+    const searchInput = document.getElementById('engineSearch') as HTMLInputElement;
+
+    function escapeHtml(value: unknown) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    async function loadEngines() {
+      try {
+        const response = await fetch('/data/engines.json');
+        if (!response.ok) throw new Error('File not found: /data/engines.json');
+        engines = await response.json();
+        renderEngines(engines);
+      } catch (error) {
+        tbody.innerHTML = `<tr><td colspan="6" class="error"><strong>Error:</strong> ${escapeHtml((error as Error).message)}</td></tr>`;
+      }
+    }
+
+    function renderEngines(data: EngineRecord[]) {
+      countDisplay.textContent = `${data.length} engines found`;
+
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="loading">No matches</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map((engine) => {
+        let link = engine.link || '#';
+        if (link !== '#' && !link.startsWith('http')) link = `https://${link}`;
+
+        const icon = link === '#' ? '' : '<span class="material-icons" style="font-size: 14px; opacity: 0.5;">open_in_new</span>';
+        const name = escapeHtml(engine.name || '-');
+        const nameCell = link === '#'
+          ? `<span class="engine-link">${name}</span>`
+          : `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="engine-link">${name} ${icon}</a>`;
+
+        const lastRelease = `${escapeHtml(engine.d_last || '-')}${engine.ver ? ` <span class="version-tag">(${escapeHtml(engine.ver)})</span>` : ''}`;
+
+        return `
+          <tr>
+            <td class="col-name">${nameCell}</td>
+            <td class="col-rating">${escapeHtml(engine.rating || '-')}</td>
+            <td class="col-proto">${escapeHtml(engine.protocol || '-')}</td>
+            <td class="col-lang">${escapeHtml(engine.lang || '-')}</td>
+            <td>${escapeHtml(engine.d_first || '-')}</td>
+            <td>${lastRelease}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function applySearch() {
+      const term = searchInput.value.toLowerCase();
+      renderEngines(engines.filter((engine) =>
+        (engine.name && engine.name.toLowerCase().includes(term)) ||
+        (engine.lang && engine.lang.toLowerCase().includes(term)) ||
+        (engine.rating && engine.rating.includes(term))
+      ));
+    }
+
+    function sortTable(field: string) {
+      sortDir *= -1;
+      const sorted = [...engines].sort((a, b) => {
+        let valA: string | number = a[field] || '';
+        let valB: string | number = b[field] || '';
+
+        if (field === 'rating') {
+          valA = parseInt(String(valA), 10) || 0;
+          valB = parseInt(String(valB), 10) || 0;
+          return valA > valB ? sortDir : -sortDir;
+        }
+
+        valA = String(valA).toLowerCase();
+        valB = String(valB).toLowerCase();
+        return valA > valB ? sortDir : -sortDir;
+      });
+      renderEngines(sorted);
+    }
+
+    searchInput.addEventListener('input', applySearch);
+    document.querySelectorAll<HTMLButtonElement>('[data-sort]').forEach((button) => {
+      button.addEventListener('click', () => sortTable(button.dataset.sort || 'name'));
+    });
+
+    loadEngines();
+  </script>
+</BaseLayout>

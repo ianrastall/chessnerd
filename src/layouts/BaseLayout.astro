@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Chess Nerd is a static collection of chess tools, data browsers, PGN downloads, and reference utilities.'
+} = Astro.props;
+const pageTitle = title === 'Chess Nerd' ? title : `${title} - Chess Nerd`;
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XQ7B0Z9FK3');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <slot name="head" />
+    <script is:inline>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem('theme');
+          const theme = storedTheme === 'light' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+
+          const storedAccent = localStorage.getItem('accentColor');
+          if (!storedAccent || !/^#[0-9a-fA-F]{6}$/.test(storedAccent)) return;
+
+          const normalized = storedAccent.toLowerCase();
+          document.documentElement.style.setProperty('--accent', normalized);
+
+          const parsed = parseInt(normalized.slice(1), 16);
+          const red = (parsed >> 16) & 255;
+          const green = (parsed >> 8) & 255;
+          const blue = parsed & 255;
+          document.documentElement.style.setProperty('--accent-rgb', `${red}, ${green}, ${blue}`);
+
+          const boost = 20;
+          const accentLight = '#' + (
+            (Math.min(red + boost, 255) << 16) |
+            (Math.min(green + boost, 255) << 8) |
+            Math.min(blue + boost, 255)
+          ).toString(16).padStart(6, '0');
+          document.documentElement.style.setProperty('--accent-light', accentLight);
+        } catch {
+          // Ignore storage access errors.
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a class="logo" href="/" aria-label="Chess Nerd home">
+          <span>Chess Nerd</span>
+        </a>
+
+        <nav class="site-network" aria-label="Network sites">
+          <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer">
+            <img src="/img/text-utils-icon.png" class="site-network-icon" alt="" width="16" height="16" />
+            <span>Text Utilities</span>
+            <span class="material-icons" aria-hidden="true">open_in_new</span>
+          </a>
+          <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer">
+            <img src="/img/github.png" class="site-network-icon" alt="" width="16" height="16" />
+            <span>GitHub</span>
+            <span class="material-icons" aria-hidden="true">open_in_new</span>
+          </a>
+        </nav>
+
+        <div class="controls">
+          <div class="accent-selector">
+            <label for="accentColor" class="visually-hidden">Accent color</label>
+            <span class="material-icons" aria-hidden="true">palette</span>
+            <select id="accentColor" class="color-dropdown" aria-label="Accent color"></select>
+          </div>
+          <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true">
+            <span class="material-icons" aria-hidden="true">dark_mode</span>
+          </button>
+        </div>
+      </header>
+
+      <slot />
+
+      <footer class="site-footer">
+        <p>&copy; Ian Rastall 2025<br />Contact: moving.form.of.dust@gmail.com<br />Donate: PayPal to merastall@gmail.com</p>
+      </footer>
+    </div>
+
+    <script is:inline src="/js/theme.js"></script>
+  </body>
+</html>

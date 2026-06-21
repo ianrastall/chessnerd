@@ -1,0 +1,496 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="FIDE 2200+ Players" description="Filter FIDE-rated players whose standard, rapid, or blitz rating is at least 2200.">
+  <style is:global>
+.container {
+            max-width: 100%;
+            padding: 1rem 2rem;
+        }
+
+        .filters-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .filter-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .input-group input[type="number"] {
+            width: 120px;
+        }
+
+        .input-group input[type="text"] {
+            width: 180px;
+        }
+
+        .input-group input[type="text"].search {
+            width: 240px;
+        }
+
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .results-count {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .players-table thead {
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .players-table th {
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .players-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .players-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .player-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .player-id {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.125rem;
+        }
+
+        .title-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--bg-primary);
+        }
+
+        .title-gm {
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .title-im {
+            color: #c0c0c0;
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+
+        .title-fm {
+            color: #cd7f32;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+        }
+
+        .title-wgm {
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .title-wim {
+            color: #c0c0c0;
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+
+        .title-wfm {
+            color: #cd7f32;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+        }
+
+        .rating-cell {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .load-more-area {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group input,
+            .input-group select {
+                width: 100% !important;
+            }
+
+            .players-table th:nth-child(4),
+            .players-table td:nth-child(4) {
+                display: none;
+            }
+
+            .player-id {
+                display: none;
+            }
+        }
+  </style>
+
+  <main>
+    <div id="toolView">
+                    <div class="tool-header">
+                        <div class="tool-title">
+                            <span class="material-icons">groups</span>
+                            <div>
+                                <h2 style="margin-bottom: 0;">FIDE 2200+ Players</h2>
+                                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem;">
+                                    FIDE-rated players with peak standard rating ≥ 2200
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tool-actions">
+                            <button id="backButton" class="btn btn-secondary">
+                                <span class="material-icons">arrow_back</span>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="filters-panel">
+                        <div class="filter-row">
+                            <div class="input-group">
+                                <label>Min Rating</label>
+                                <input type="number" id="minRating" value="2200" min="2200" step="50">
+                            </div>
+                            <div class="input-group">
+                                <label>Federation</label>
+                                <input type="text" id="federation" placeholder="e.g. USA" maxlength="3" style="text-transform: uppercase;">
+                            </div>
+                            <div class="input-group">
+                                <label>Search Name or ID</label>
+                                <input type="text" id="search" class="search" placeholder="Type to filter...">
+                            </div>
+                        </div>
+                        <div class="filter-row results-info">
+                            <div class="results-count" id="resultsCount">Loading database...</div>
+                            <button id="copyBtn" class="btn btn-secondary">
+                                <span class="material-icons">content_copy</span>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="table-wrapper">
+                        <table class="players-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Federation</th>
+                                    <th>Rating</th>
+                                    <th>Year</th>
+                                    <th style="text-align: right;">Profile</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                                        Loading players...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="loadMoreArea" class="load-more-area" style="display: none;">
+                            <button id="loadMoreBtn" class="btn btn-primary">
+                                Show More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+  </main>
+
+  <script is:inline>
+// Navigation
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // State
+        let allPlayers = [];
+        let filteredPlayers = [];
+        let displayLimit = 100;
+        const BATCH_SIZE = 100;
+        const MIN_RATING = 2200;
+
+        // Load JSON data
+        async function loadDatabase() {
+            try {
+                const response = await fetch('fide-2200.json');
+                if (!response.ok) throw new Error('Failed to load database');
+                const data = await response.json();
+                allPlayers = Array.isArray(data) ? data : [];
+                applyFilters();
+            } catch (err) {
+                console.error('Error loading database:', err);
+                document.getElementById('resultsCount').textContent = 'Error loading database';
+                document.getElementById('tableBody').innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--error);">
+                            Failed to load database. Please refresh the page.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Apply filters
+        function applyFilters() {
+            displayLimit = 100;
+
+            const minRating = Math.max(MIN_RATING, parseInt(document.getElementById('minRating').value) || MIN_RATING);
+            document.getElementById('minRating').value = minRating;
+
+            const federation = document.getElementById('federation').value.trim().toUpperCase();
+            const searchTerm = document.getElementById('search').value.trim().toLowerCase();
+
+            filteredPlayers = allPlayers.filter(player => {
+                // Rating filter
+                if ((player.std || 0) < minRating) return false;
+
+                // Federation filter
+                if (federation && player.country !== federation) return false;
+
+                // Search filter
+                if (searchTerm) {
+                    const name = (player.name || '').toLowerCase();
+                    const id = String(player.fideid || '');
+                    if (!name.includes(searchTerm) && !id.includes(searchTerm)) return false;
+                }
+
+                return true;
+            });
+
+            // Sort by rating descending, then by name
+            filteredPlayers.sort((a, b) => {
+                const ratingDiff = (b.std || 0) - (a.std || 0);
+                if (ratingDiff !== 0) return ratingDiff;
+                return (a.name || '').localeCompare(b.name || '');
+            });
+
+            updateDisplay();
+        }
+
+        // Update results count
+        function updateResultsCount() {
+            const count = filteredPlayers.length;
+            const minRating = parseInt(document.getElementById('minRating').value) || MIN_RATING;
+            
+            if (count === 0) {
+                document.getElementById('resultsCount').textContent = 'No players match filters';
+            } else {
+                document.getElementById('resultsCount').textContent = 
+                    `${count.toLocaleString()} player${count === 1 ? '' : 's'} (≥ ${minRating})`;
+            }
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const toShow = filteredPlayers.slice(0, displayLimit);
+
+            if (toShow.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            No players match your filters
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = toShow.map(player => {
+                const titles = [];
+                if (player.title) titles.push(player.title);
+                if (player.w_title) titles.push(player.w_title);
+                
+                const titleHtml = titles.map(title => {
+                    const upper = title.toUpperCase();
+                    let className = 'title-badge';
+                    if (upper === 'GM') className += ' title-gm';
+                    else if (upper === 'IM') className += ' title-im';
+                    else if (upper === 'FM') className += ' title-fm';
+                    else if (upper === 'WGM') className += ' title-wgm';
+                    else if (upper === 'WIM') className += ' title-wim';
+                    else if (upper === 'WFM') className += ' title-wfm';
+                    return `<span class="${className}">${escapeHtml(title)}</span>`;
+                }).join(' ');
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="player-name">${escapeHtml(player.name || '(No name)')}</div>
+                            <div class="player-id">FIDE ID: ${escapeHtml(String(player.fideid || ''))}</div>
+                        </td>
+                        <td>${titleHtml}</td>
+                        <td>${escapeHtml(player.country || '')}</td>
+                        <td class="rating-cell">${player.std || '—'}</td>
+                        <td>${player.year || ''}</td>
+                        <td style="text-align: right;">
+                            <a href="https://ratings.fide.com/profile/${player.fideid}" 
+                               target="_blank" 
+                               rel="noopener"
+                               class="btn btn-secondary"
+                               style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Show/hide load more button
+            const loadMoreArea = document.getElementById('loadMoreArea');
+            loadMoreArea.style.display = filteredPlayers.length > displayLimit ? 'block' : 'none';
+        }
+
+        // Update display
+        function updateDisplay() {
+            updateResultsCount();
+            renderTable();
+        }
+
+        // Copy to clipboard
+        function copyToClipboard() {
+            if (filteredPlayers.length === 0) return;
+
+            const headers = ['Name', 'Title', 'Federation', 'Rating', 'Year', 'FIDE ID'];
+            const rows = filteredPlayers.map(player => {
+                const titles = [];
+                if (player.title) titles.push(player.title);
+                if (player.w_title) titles.push(player.w_title);
+                
+                return [
+                    player.name || '',
+                    titles.join(' / '),
+                    player.country || '',
+                    player.std || '',
+                    player.year || '',
+                    player.fideid || ''
+                ];
+            });
+
+            const text = [headers, ...rows].map(row => row.join('\t')).join('\n');
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<span class="material-icons">check</span> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Utilities
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Event listeners
+        document.getElementById('minRating').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('federation').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('search').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            displayLimit += BATCH_SIZE;
+            renderTable();
+        });
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+        // Initialize
+        loadDatabase();
+  </script>
+</BaseLayout>

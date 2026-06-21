@@ -1,0 +1,742 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Chess.com Titled Players" description="Browse titled Chess.com accounts with live profile, rating, country, and leaderboard details.">
+  <style is:global>
+/* Tool specific styles */
+        .player-list {
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        .player-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .player-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .player-item.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .player-details {
+            height: 500px;
+            padding: 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow-y: auto;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            object-fit: cover;
+        }
+
+        .profile-info h3 {
+            margin-bottom: 0.25rem;
+            font-size: 1.5rem;
+        }
+
+        .profile-username {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .profile-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--error);
+            color: #fff;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-box {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+  </style>
+
+  <main>
+    <div id="toolView">
+                    <div class="tool-header">
+                        <div class="tool-title">
+                            <span class="material-icons" id="toolIcon">groups</span>
+                            <h2 id="toolName">Titled Players</h2>
+                        </div>
+                        <div class="tool-actions">
+                            <button id="backButton" class="btn btn-secondary btn-compact">
+                                <span class="material-icons">arrow_back</span>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="options-panel" id="toolOptions">
+                        <div class="options-grid">
+                            <div class="option-group">
+                                <label for="titleSelect">Title</label>
+                                <select id="titleSelect">
+                                    <option value="GM">Grandmaster (GM)</option>
+                                    <option value="WGM">Woman Grandmaster (WGM)</option>
+                                    <option value="IM">International Master (IM)</option>
+                                    <option value="WIM">Woman Intl. Master (WIM)</option>
+                                    <option value="FM">FIDE Master (FM)</option>
+                                    <option value="WFM">Woman FIDE Master (WFM)</option>
+                                    <option value="NM">National Master (NM)</option>
+                                    <option value="WNM">Woman National Master (WNM)</option>
+                                    <option value="CM">Candidate Master (CM)</option>
+                                    <option value="WCM">Woman Candidate Master (WCM)</option>
+                                </select>
+                            </div>
+                            <div class="option-group" style="justify-content: flex-end;">
+                                <button id="fetchPlayersBtn" class="btn btn-primary">
+                                    <span class="material-icons">download</span>
+                                    Fetch Players
+                                </button>
+                            </div>
+                            <div class="option-group">
+                                <label for="playerSearch">Filter List</label>
+                                <input type="search" id="playerSearch" placeholder="Type username..." disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="io-container">
+                        <div class="io-panel">
+                            <div class="io-label">
+                                <span>Players</span>
+                                <span class="stats pill muted" id="listStats">0 found</span>
+                            </div>
+                            <div id="playerList" class="player-list">
+                                <div style="padding: 1rem; color: var(--text-secondary); text-align: center;">
+                                    Select a title and click Fetch
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="io-panel">
+                            <div class="io-label">
+                                <span>Player Details</span>
+                            </div>
+                            <div id="playerDetails" class="player-details">
+                                <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                                    Select a player to view details
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="status-bar">
+                        <div id="statusMessage" class="success">Ready</div>
+                    </div>
+                </div>
+  </main>
+
+  <script is:inline>
+const titleSelect = document.getElementById('titleSelect');
+        const fetchBtn = document.getElementById('fetchPlayersBtn');
+        const searchInput = document.getElementById('playerSearch');
+        const playerListEl = document.getElementById('playerList');
+        const playerDetailsEl = document.getElementById('playerDetails');
+        const listStats = document.getElementById('listStats');
+        const statusMessage = document.getElementById('statusMessage');
+        const backButton = document.getElementById('backButton');
+
+        let allPlayers = [];
+        let selectedUsername = '';
+        let currentListRequestId = 0;
+        let currentRequestId = 0;
+        let listAbortController = null;
+        const profileCache = new Map();
+        const statsCache = new Map();
+        const countryCache = new Map();
+        const leaderboardRanksByUser = new Map();
+        let leaderboardFetchPromise = null;
+        let leaderboardReady = false;
+
+        function setStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = type;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatDate(seconds) {
+            const value = Number(seconds);
+            if (!Number.isFinite(value) || value <= 0) return 'Unknown';
+            return new Date(value * 1000).toLocaleDateString();
+        }
+
+        function safeUrl(value, fallback) {
+            const text = String(value ?? '').trim();
+            if (text) {
+                try {
+                    const parsed = new URL(text);
+                    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                        return text;
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+            return fallback;
+        }
+
+        function titleCase(text) {
+            if (!text) return '';
+            return text.charAt(0).toUpperCase() + text.slice(1);
+        }
+
+        function formatLeaderboardCategory(category) {
+            const known = {
+                live_rapid: 'Rapid',
+                live_blitz: 'Blitz',
+                live_bullet: 'Bullet',
+                live_chess960: 'Chess960',
+                live_bughouse: 'Bughouse',
+                live_crazyhouse: 'Crazyhouse',
+                live_kingofthehill: 'King of the Hill',
+                live_threecheck: '3 Check',
+                live_racingkings: 'Racing Kings',
+                daily: 'Daily',
+                daily960: 'Daily 960'
+            };
+
+            if (known[category]) return known[category];
+            if (category.startsWith('live_')) {
+                return category.slice(5).split('_').map(titleCase).join(' ');
+            }
+            if (category.startsWith('daily_')) {
+                return `Daily ${category.slice(6).split('_').map(titleCase).join(' ')}`;
+            }
+            return category.split('_').map(titleCase).join(' ');
+        }
+
+        function parseLeaderboardPayload(payload) {
+            const parsed = new Map();
+            if (!payload || typeof payload !== 'object') return parsed;
+
+            Object.entries(payload).forEach(([category, entries]) => {
+                if (!Array.isArray(entries)) return;
+
+                entries.forEach((entry, index) => {
+                    const username = String(entry?.username ?? '').toLowerCase();
+                    if (!username) return;
+
+                    const rankValue = Number(entry?.rank);
+                    const rank = Number.isFinite(rankValue) && rankValue > 0 ? rankValue : index + 1;
+
+                    if (!parsed.has(username)) {
+                        parsed.set(username, []);
+                    }
+                    parsed.get(username).push({ category, rank });
+                });
+            });
+
+            parsed.forEach(ranks => ranks.sort((a, b) => a.rank - b.rank));
+            return parsed;
+        }
+
+        async function ensureLeaderboardsLoaded() {
+            if (leaderboardReady) return;
+
+            if (!leaderboardFetchPromise) {
+                leaderboardFetchPromise = fetch('https://api.chess.com/pub/leaderboards')
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        const parsed = parseLeaderboardPayload(data);
+                        leaderboardRanksByUser.clear();
+                        parsed.forEach((ranks, username) => leaderboardRanksByUser.set(username, ranks));
+                        leaderboardReady = true;
+                    })
+                    .catch(error => {
+                        console.error('Leaderboards unavailable:', error);
+                        leaderboardReady = true;
+                    });
+            }
+
+            await leaderboardFetchPromise;
+        }
+
+        async function getLeaderboardRanksForUser(username) {
+            await ensureLeaderboardsLoaded();
+            const key = String(username ?? '').toLowerCase();
+            const ranks = leaderboardRanksByUser.get(key);
+            return Array.isArray(ranks) ? ranks : [];
+        }
+
+        function readNumber(value) {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : null;
+        }
+
+        function formatRatingValue(stats, key) {
+            const last = readNumber(stats?.[key]?.last?.rating);
+            if (last !== null && last > 0) return last.toLocaleString();
+
+            const best = readNumber(stats?.[key]?.best?.rating);
+            if (best !== null && best > 0) return best.toLocaleString();
+
+            return '-';
+        }
+
+        function formatTacticsValue(stats) {
+            const highest = readNumber(stats?.tactics?.highest?.rating);
+            return highest !== null && highest > 0 ? highest.toLocaleString() : '-';
+        }
+
+        function toBoolText(value) {
+            return value ? 'Yes' : 'No';
+        }
+
+        function formatFideValue(profile, stats) {
+            const fide = readNumber(stats?.fide ?? profile?.fide);
+            return fide !== null && fide > 0 ? fide.toLocaleString() : '-';
+        }
+
+        function parseCountryCode(countryValue) {
+            const raw = String(countryValue ?? '').trim();
+            if (!raw) return '';
+
+            if (/^[A-Za-z]{2}$/.test(raw)) {
+                return raw.toUpperCase();
+            }
+
+            try {
+                const parsed = new URL(raw);
+                const parts = parsed.pathname.split('/').filter(Boolean);
+                const candidate = parts[parts.length - 1] || '';
+                return candidate.toUpperCase();
+            } catch (_) {
+                return raw.toUpperCase();
+            }
+        }
+
+        async function fetchCountryInfo(countryValue) {
+            const raw = String(countryValue ?? '').trim();
+            const fallbackCode = parseCountryCode(raw);
+            const fallback = {
+                code: fallbackCode || '-',
+                name: fallbackCode || 'Unknown'
+            };
+
+            if (!raw) return fallback;
+            if (countryCache.has(raw)) return countryCache.get(raw);
+
+            if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
+                countryCache.set(raw, fallback);
+                return fallback;
+            }
+
+            try {
+                const response = await fetch(raw);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                const info = {
+                    code: String(data?.code ?? fallback.code).toUpperCase(),
+                    name: String(data?.name ?? fallback.name)
+                };
+                countryCache.set(raw, info);
+                return info;
+            } catch (error) {
+                console.error('Country lookup failed:', error);
+                countryCache.set(raw, fallback);
+                return fallback;
+            }
+        }
+
+        function setDetailsPlaceholder(message) {
+            playerDetailsEl.innerHTML = `
+                <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                    ${escapeHtml(message)}
+                </div>
+            `;
+        }
+
+        async function fetchTitlePlayers() {
+            const title = titleSelect.value;
+            const requestId = ++currentListRequestId;
+
+            if (listAbortController) {
+                listAbortController.abort();
+            }
+            listAbortController = new AbortController();
+
+            fetchBtn.disabled = true;
+            searchInput.disabled = true;
+            searchInput.value = '';
+            selectedUsername = '';
+            currentRequestId += 1;
+
+            setStatus(`Fetching ${title} list...`, 'warning');
+            listStats.textContent = '0 found';
+            playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center;">Loading...</div>';
+            setDetailsPlaceholder('Select a player to view details');
+
+            try {
+                const response = await fetch(`https://api.chess.com/pub/titled/${title}`, {
+                    signal: listAbortController.signal
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                if (requestId !== currentListRequestId) return;
+
+                allPlayers = Array.isArray(data.players) ? data.players : [];
+                searchInput.disabled = false;
+                renderPlayerList(allPlayers);
+                setStatus(`Loaded ${allPlayers.length} ${title} players.`, 'success');
+            } catch (error) {
+                if (error.name === 'AbortError') return;
+                console.error(error);
+                setStatus('Error fetching players list.', 'error');
+                playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--error);">Failed to load list.</div>';
+                listStats.textContent = '0 found';
+            } finally {
+                if (requestId === currentListRequestId) {
+                    fetchBtn.disabled = false;
+                    listAbortController = null;
+                }
+            }
+        }
+
+        async function fetchPlayerProfile(username) {
+            const key = String(username ?? '').toLowerCase();
+            if (profileCache.has(key)) {
+                return profileCache.get(key);
+            }
+
+            const response = await fetch(`https://api.chess.com/pub/player/${encodeURIComponent(username)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+            profileCache.set(key, data);
+            return data;
+        }
+
+        async function fetchPlayerStats(username) {
+            const key = String(username ?? '').toLowerCase();
+            if (statsCache.has(key)) {
+                return statsCache.get(key);
+            }
+
+            const response = await fetch(`https://api.chess.com/pub/player/${encodeURIComponent(username)}/stats`);
+            if (response.status === 404) {
+                statsCache.set(key, null);
+                return null;
+            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+            statsCache.set(key, data);
+            return data;
+        }
+
+        backButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        fetchBtn.addEventListener('click', fetchTitlePlayers);
+        titleSelect.addEventListener('change', fetchTitlePlayers);
+
+        function renderPlayerList(players) {
+            listStats.textContent = `${players.length} found`;
+
+            if (players.length === 0) {
+                playerListEl.innerHTML = '<div style="padding: 1rem; text-align: center;">No players found.</div>';
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            players.forEach(username => {
+                const item = document.createElement('div');
+                item.className = 'player-item';
+                item.textContent = username;
+
+                if (username === selectedUsername) {
+                    item.classList.add('active');
+                }
+
+                item.addEventListener('click', () => loadPlayerDetails(username, item));
+                fragment.appendChild(item);
+            });
+
+            playerListEl.innerHTML = '';
+            playerListEl.appendChild(fragment);
+        }
+
+        searchInput.addEventListener('input', (event) => {
+            const term = event.target.value.toLowerCase().trim();
+            const filtered = allPlayers.filter(player => player.toLowerCase().includes(term));
+            renderPlayerList(filtered);
+        });
+
+        async function loadPlayerDetails(username, itemElement) {
+            selectedUsername = username;
+            const requestId = ++currentRequestId;
+            document.querySelectorAll('.player-item.active').forEach(el => el.classList.remove('active'));
+            itemElement.classList.add('active');
+
+            const key = String(username ?? '').toLowerCase();
+            const hasCachedProfile = profileCache.has(key);
+            const hasCachedStats = statsCache.has(key);
+            const cachedProfile = hasCachedProfile ? profileCache.get(key) : null;
+            const cachedCountryRef = String(cachedProfile?.country ?? '').trim();
+            const hasCachedCountry = !cachedCountryRef || countryCache.has(cachedCountryRef);
+            if (!hasCachedProfile || !hasCachedStats) {
+                playerDetailsEl.innerHTML = `
+                    <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-secondary);">
+                        <div class="loading-spinner" style="width: 2rem; height: 2rem; border-color: var(--text-secondary); border-top-color: transparent;"></div>
+                        <span>Loading ${escapeHtml(username)}...</span>
+                    </div>
+                `;
+            }
+
+            try {
+                let statsUnavailable = false;
+                const profilePromise = fetchPlayerProfile(username);
+                const [profile, stats, leaderboardRanks, countryInfo] = await Promise.all([
+                    profilePromise,
+                    fetchPlayerStats(username).catch(error => {
+                        statsUnavailable = true;
+                        console.error(`Stats unavailable for ${username}:`, error);
+                        return null;
+                    }),
+                    getLeaderboardRanksForUser(username),
+                    profilePromise.then(profile => fetchCountryInfo(profile?.country))
+                ]);
+                if (requestId !== currentRequestId) return;
+
+                renderProfile(profile, stats, leaderboardRanks, countryInfo);
+
+                if (statsUnavailable) {
+                    setStatus(`Loaded profile for ${username}; ratings unavailable.`, 'warning');
+                } else if (hasCachedProfile && hasCachedStats && hasCachedCountry) {
+                    setStatus(`Loaded ${username} from cache.`, 'success');
+                } else {
+                    setStatus(`Loaded profile for ${username}.`, 'success');
+                }
+            } catch (error) {
+                console.error(error);
+                if (requestId !== currentRequestId) return;
+
+                playerDetailsEl.innerHTML = `<div style="padding: 1rem; color: var(--error);">Error loading profile for ${escapeHtml(username)}.</div>`;
+                setStatus(`Error loading ${username}.`, 'error');
+            }
+        }
+
+        function renderProfile(profile, stats, leaderboardRanks, countryInfo) {
+            const username = String(profile?.username ?? selectedUsername ?? '');
+            const displayName = String(profile?.name ?? username);
+            const title = String(profile?.title ?? '');
+            const location = String(profile?.location ?? '');
+            const followersNum = Number(profile?.followers);
+            const followers = Number.isFinite(followersNum) ? followersNum.toLocaleString() : '0';
+            const status = String(profile?.status ?? 'unknown');
+            const statusColor = status === 'closed' || status === 'closure_impacted' ? 'var(--error)' : 'var(--success)';
+            const joined = formatDate(profile?.joined);
+            const lastOnline = formatDate(profile?.last_online);
+            const avatarSrc = safeUrl(profile?.avatar, 'img/icon.png');
+            const memberUrl = safeUrl(profile?.url, `https://www.chess.com/member/${encodeURIComponent(username)}`);
+            const rapid = formatRatingValue(stats, 'chess_rapid');
+            const blitz = formatRatingValue(stats, 'chess_blitz');
+            const bullet = formatRatingValue(stats, 'chess_bullet');
+            const daily = formatRatingValue(stats, 'chess_daily');
+            const daily960 = formatRatingValue(stats, 'chess960_daily');
+            const tactics = formatTacticsValue(stats);
+            const fide = formatFideValue(profile, stats);
+            const league = String(profile?.league ?? '-');
+            const verified = toBoolText(Boolean(profile?.verified));
+            const streamer = toBoolText(Boolean(profile?.is_streamer));
+            const countryName = String(countryInfo?.name ?? 'Unknown');
+            const countryCode = String(countryInfo?.code ?? '-');
+            const countryDisplay = countryCode && countryCode !== '-'
+                ? `${countryName} (${countryCode})`
+                : countryName;
+            const bestLeaderboard = leaderboardRanks.length > 0 ? leaderboardRanks[0] : null;
+            const leaderboardDisplay = bestLeaderboard ? `#${bestLeaderboard.rank}` : 'N/A';
+            const leaderboardLabel = bestLeaderboard
+                ? formatLeaderboardCategory(bestLeaderboard.category)
+                : 'Not listed';
+            const leaderboardText = leaderboardRanks.length > 0
+                ? leaderboardRanks
+                    .slice(0, 5)
+                    .map(item => `${formatLeaderboardCategory(item.category)} #${item.rank}`)
+                    .map(escapeHtml)
+                    .join(' | ')
+                : 'Not present in current public leaderboards.';
+
+            const html = `
+                <div class="profile-header">
+                    <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(username)}" class="profile-avatar">
+                    <div class="profile-info">
+                        <span class="profile-username">@${escapeHtml(username)}</span>
+                        <h3>${escapeHtml(displayName)}</h3>
+                        ${title ? `<span class="profile-badge">${escapeHtml(title)}</span>` : ''}
+                        ${location ? `<div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);"><span class="material-icons" style="font-size: 1rem; vertical-align: text-bottom;">place</span> ${escapeHtml(location)}</div>` : ''}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <h4 style="margin: 0 0 0.75rem 0; color: var(--accent);">Ratings</h4>
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Rapid</div>
+                            <div class="stat-value">${escapeHtml(rapid)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Blitz</div>
+                            <div class="stat-value">${escapeHtml(blitz)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Bullet</div>
+                            <div class="stat-value">${escapeHtml(bullet)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Daily</div>
+                            <div class="stat-value">${escapeHtml(daily)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Daily 960</div>
+                            <div class="stat-value">${escapeHtml(daily960)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Tactics</div>
+                            <div class="stat-value">${escapeHtml(tactics)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Best Rank</div>
+                            <div class="stat-value">${escapeHtml(leaderboardDisplay)}</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong>${escapeHtml(leaderboardLabel)}:</strong> ${leaderboardText}
+                    </div>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Country</div>
+                        <div class="stat-value">${escapeHtml(countryDisplay)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">FIDE</div>
+                        <div class="stat-value">${escapeHtml(fide)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">League</div>
+                        <div class="stat-value">${escapeHtml(league)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Verified</div>
+                        <div class="stat-value">${escapeHtml(verified)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Streamer</div>
+                        <div class="stat-value">${escapeHtml(streamer)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Followers</div>
+                        <div class="stat-value">${followers}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Joined</div>
+                        <div class="stat-value">${escapeHtml(joined)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Last Online</div>
+                        <div class="stat-value">${escapeHtml(lastOnline)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" style="text-transform: capitalize; color: ${statusColor};">${escapeHtml(status)}</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); text-align: center;">
+                    <a href="${escapeHtml(memberUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                        View on Chess.com
+                        <span class="material-icons" style="font-size: 1rem;">open_in_new</span>
+                    </a>
+                </div>
+            `;
+
+            playerDetailsEl.innerHTML = html;
+        }
+
+        fetchTitlePlayers();
+  </script>
+</BaseLayout>

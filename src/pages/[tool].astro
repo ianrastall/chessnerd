@@ -1,0 +1,35 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import { queuedTools, type ToolMeta } from '../data/tools';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return queuedTools.map((tool) => ({
+    params: { tool: tool.id },
+    props: { tool }
+  }));
+}
+
+interface Props {
+  tool: ToolMeta;
+}
+
+const { tool } = Astro.props;
+---
+<BaseLayout title={`${tool.name} Rebuild`} description={tool.description}>
+  <main>
+    <div class="tool-container">
+      <ToolHeader title={tool.name} icon={tool.icon} />
+
+      <section class="queued-tool">
+        <span class="status-badge queued">Queued</span>
+        <p>{tool.description}</p>
+        {tool.rebuildNote && <p>{tool.rebuildNote}</p>}
+        <div class="queued-actions">
+          <a class="btn btn-primary" href="/">Ready Tools</a>
+          <a class="btn btn-secondary" href="/categories/data.html">Data Tools</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

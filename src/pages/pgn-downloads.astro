@@ -1,0 +1,105 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const downloads = [
+  {
+    file: 'chesscom-2500-checkmate.pgn',
+    meta: '1.56M games - 1.43 GB PGN - 423 MB ZIP - Updated 2025-12-24',
+    description: 'From a source of 11M games. All games are 2500+ for both players, between 10 and 250 moves, with bullet games deleted, and with all games ending in checkmate. Openings and beauty scores added.',
+    href: 'https://pixeldrain.com/u/5idM6itW'
+  },
+  {
+    file: 'iccf-251206.pgn',
+    meta: '1.2M games - 864 MB PGN - 213 MB ZIP - Updated 2025-12-06',
+    description: 'Archives of the ICCF, from the website, with all 0-move and non-standard games taken out.',
+    href: 'https://pixeldrain.com/u/S7tkr8rc'
+  },
+  {
+    file: 'canbase-251206.pgn',
+    meta: '201,899 games - 182 MB PGN - 44 MB ZIP - Updated 2025-12-06',
+    description: 'From the Canbase II site. Historical ratings, plycount, and beauty score added. Non-standard and zero-move games removed.',
+    href: 'https://pixeldrain.com/u/KK2ymjK9'
+  }
+];
+---
+<BaseLayout title="PGN Downloads" description="Download curated PGN collections for chess research and analysis.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="PGN Downloads" icon="cloud_download" />
+
+      <div class="search-box">
+        <label class="visually-hidden" for="fileSearch">Filter files</label>
+        <input type="text" id="fileSearch" placeholder="Filter files..." autocomplete="off" />
+      </div>
+
+      <div class="io-container table-shell">
+        <table class="download-table">
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="fileList">
+            {downloads.map((item) => (
+              <tr>
+                <td>
+                  <strong>{item.file}</strong>
+                  <span class="file-meta">{item.meta}</span>
+                </td>
+                <td>{item.description}</td>
+                <td><a href={item.href} class="btn btn-primary btn-compact" target="_blank" rel="noopener noreferrer">Download</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .table-shell {
+      display: block;
+      overflow-x: auto;
+    }
+
+    .download-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .download-table th,
+    .download-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    .download-table th {
+      background: var(--bg-tertiary);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .download-table tr:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .file-meta {
+      display: block;
+      font-size: 0.8em;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+  </style>
+
+  <script>
+    import '../scripts/pgn-downloads';
+  </script>
+</BaseLayout>

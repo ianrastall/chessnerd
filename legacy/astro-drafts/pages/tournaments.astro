@@ -1,0 +1,663 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Tournament Archive" description="Download curated tournament PGNs with calculated FIDE categories.">
+  <style is:global>
+/* Table Styles matching your theme */
+        .tour-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .tour-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            white-space: nowrap; /* Prevent headers from wrapping */
+        }
+        .tour-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+        .tour-table tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Category Badges */
+        .cat-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2rem;
+            height: 1.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: 'Monaco', monospace;
+            font-weight: bold;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+        }
+        .cat-elite {
+            color: var(--warning);
+            border: 1px solid var(--warning);
+            background: rgba(217, 119, 6, 0.1);
+        }
+        .tour-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .tour-filters-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1 1 200px;
+            min-width: 0;
+        }
+
+        .tour-search-icon {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .tour-search-input {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .tour-search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .tour-filters-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .tour-filter-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .tour-filter-select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input, var(--bg-primary));
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .tour-pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .tour-page-info {
+            white-space: nowrap;
+        }
+
+        .tour-pagination .btn {
+            padding-inline: 0.6rem;
+            font-size: 0.8rem;
+        }
+  </style>
+
+  <main>
+    <div id="toolView">
+                    <div class="tool-header">
+                        <div class="tool-title">
+                            <span class="material-icons" id="toolIcon">emoji_events</span>
+                            <h2 id="toolName">Tournament Archive</h2>
+                        </div>
+                        <div class="tool-actions">
+                            <button id="backButton" class="btn btn-secondary">
+                                <span class="material-icons">arrow_back</span>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="io-container" style="display: block;">
+                        <div class="io-panel" style="width: 100%"> 
+    					<div class="io-label">
+    						<span>Available Archives</span>
+    						<span class="stats" id="tourCount">13 tournaments</span>
+    					</div>
+    
+    					<div class="tour-controls">
+    						<div class="tour-filters-left">
+    							<span class="material-icons tour-search-icon">search</span>
+    							<input
+    								type="text"
+    								id="tourSearch"
+    								class="tour-search-input"
+    								placeholder="Filter by tournament name..."
+    								autocomplete="off"
+    							>
+    						</div>
+    						<div class="tour-filters-right">
+    							<label class="tour-filter-label">
+    								Century
+    								<select id="centuryFilter" class="tour-filter-select">
+    									<option value="all">All centuries</option>
+    									<!-- JS will populate actual centuries -->
+    								</select>
+    							</label>
+    							<label class="tour-filter-label">
+    								Decade
+    								<select id="decadeFilter" class="tour-filter-select">
+    									<option value="all">All decades</option>
+    									<!-- JS will populate actual decades -->
+    								</select>
+    							</label>
+    						</div>
+    					</div>
+    
+    					<div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+    
+                                <div style="overflow-x: auto;">
+                                    <table class="tour-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tournament</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th style="text-align: center;">Players</th>
+                                                <th style="text-align: center;">Games</th>
+                                                <th>Avg Elo</th>
+                                                <th>Category</th>
+                                                <th style="text-align: right;">File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+        <tr data-elo="2239">
+            <td style="font-weight: 500;">1st American Chess Congress</td>
+            <td style="white-space: nowrap;">1857-10-06</td>
+            <td style="white-space: nowrap;">1857-11-10</td>
+            <td style="text-align: center;">16</td>
+            <td style="text-align: center;">69</td>
+            <td style="font-family: monospace;">2239</td>
+            <td class="cat-cell"><span class="cat-badge">-</span></td>
+            <td style="text-align: right;">
+                <a href="tours/18571006-18571110-1st-american-chess-congress.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2608">
+            <td style="font-weight: 500;">World Chess Championship 1886</td>
+            <td style="white-space: nowrap;">1886-01-11</td>
+            <td style="white-space: nowrap;">1886-03-29</td>
+            <td style="text-align: center;">2</td>
+            <td style="text-align: center;">20</td>
+            <td style="font-family: monospace;">2608</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">15</span></td>
+            <td style="text-align: right;">
+                <a href="tours/18860111-18860329-world-chess-championship-1886.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2630">
+            <td style="font-weight: 500;">World Chess Championship 1889</td>
+            <td style="white-space: nowrap;">1889-01-20</td>
+            <td style="white-space: nowrap;">1889-02-24</td>
+            <td style="text-align: center;">2</td>
+            <td style="text-align: center;">17</td>
+            <td style="font-family: monospace;">2630</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">16</span></td>
+            <td style="text-align: right;">
+                <a href="tours/18890120-18890224-world-chess-championship-1889.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2596">
+            <td style="font-weight: 500;">World Chess Championship 1890</td>
+            <td style="white-space: nowrap;">1890-12-09</td>
+            <td style="white-space: nowrap;">1891-01-22</td>
+            <td style="text-align: center;">2</td>
+            <td style="text-align: center;">19</td>
+            <td style="font-family: monospace;">2596</td>
+            <td class="cat-cell"><span class="cat-badge ">14</span></td>
+            <td style="text-align: right;">
+                <a href="tours/18901209-18910122-world-chess-championship-1890.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2618">
+            <td style="font-weight: 500;">World Chess Championship 1892</td>
+            <td style="white-space: nowrap;">1892-01-01</td>
+            <td style="white-space: nowrap;">1892-02-28</td>
+            <td style="text-align: center;">2</td>
+            <td style="text-align: center;">23</td>
+            <td style="font-family: monospace;">2618</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">15</span></td>
+            <td style="text-align: right;">
+                <a href="tours/18920101-18920228-world-chess-championship-1892.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2776">
+            <td style="font-weight: 500;">7th Mikail Tal Memorial</td>
+            <td style="white-space: nowrap;">2012-06-08</td>
+            <td style="white-space: nowrap;">2012-06-18</td>
+            <td style="text-align: center;">10</td>
+            <td style="text-align: center;">45</td>
+            <td style="font-family: monospace;">2776</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">22</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20120608-20120618-7th-mikail-tal-memorial.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2522">
+            <td style="font-weight: 500;">65th Russian Chess Championship HL</td>
+            <td style="white-space: nowrap;">2012-06-16</td>
+            <td style="white-space: nowrap;">2012-06-27</td>
+            <td style="text-align: center;">46</td>
+            <td style="text-align: center;">253</td>
+            <td style="font-family: monospace;">2522</td>
+            <td class="cat-cell"><span class="cat-badge ">11</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20120616-20120627-65th-russian-chess-championship-hl.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2662">
+            <td style="font-weight: 500;">81st Ukrainian Chess Championship</td>
+            <td style="white-space: nowrap;">2012-07-31</td>
+            <td style="white-space: nowrap;">2012-08-06</td>
+            <td style="text-align: center;">12</td>
+            <td style="text-align: center;">36</td>
+            <td style="font-family: monospace;">2662</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">17</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20120731-20120806-81st-ukrainian-chess-championship.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2779">
+            <td style="font-weight: 500;">12th Norway Chess</td>
+            <td style="white-space: nowrap;">2024-05-27</td>
+            <td style="white-space: nowrap;">2024-06-07</td>
+            <td style="text-align: center;">6</td>
+            <td style="text-align: center;">51</td>
+            <td style="font-family: monospace;">2779</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">22</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20240527-20240607-12th-norway-chess.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2790">
+            <td style="font-weight: 500;">13th Norway Chess</td>
+            <td style="white-space: nowrap;">2025-05-26</td>
+            <td style="white-space: nowrap;">2025-06-06</td>
+            <td style="text-align: center;">6</td>
+            <td style="text-align: center;">45</td>
+            <td style="font-family: monospace;">2790</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">22</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20250526-20250606-13th-norway-chess.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2750">
+            <td style="font-weight: 500;">12th Sinquefield Cup</td>
+            <td style="white-space: nowrap;">2025-08-18</td>
+            <td style="white-space: nowrap;">2025-08-29</td>
+            <td style="text-align: center;">10</td>
+            <td style="text-align: center;">48</td>
+            <td style="font-family: monospace;">2750</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">20</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20250818-20250829-12th-sinquefield-cup.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2684">
+            <td style="font-weight: 500;">US Chess Championship 2025</td>
+            <td style="white-space: nowrap;">2025-10-12</td>
+            <td style="white-space: nowrap;">2025-10-25</td>
+            <td style="text-align: center;">12</td>
+            <td style="text-align: center;">66</td>
+            <td style="font-family: monospace;">2684</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">18</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20251012-20251025-us-chess-championship-2025.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        <tr data-elo="2667">
+            <td style="font-weight: 500;">15th London Chess Classic</td>
+            <td style="white-space: nowrap;">2025-11-26</td>
+            <td style="white-space: nowrap;">2025-12-07</td>
+            <td style="text-align: center;">10</td>
+            <td style="text-align: center;">45</td>
+            <td style="font-family: monospace;">2667</td>
+            <td class="cat-cell"><span class="cat-badge cat-elite">17</span></td>
+            <td style="text-align: right;">
+                <a href="tours/20251126-20251207-15th-london-chess-classic.pgn" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" download>
+                    <span class="material-icons" style="font-size: 1.1em; vertical-align: text-bottom; margin-right: 4px;">cloud_download</span>PGN
+                </a>
+            </td>
+        </tr>
+        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tour-pagination">
+                                <button id="prevPage" type="button" class="btn btn-secondary">
+                                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-right: 2px;">chevron_left</span>
+                                    Previous
+                                </button>
+                                <span id="pageInfo" class="tour-page-info">Page 1 of 1</span>
+                                <button id="nextPage" type="button" class="btn btn-secondary">
+                                    Next
+                                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-left: 2px;">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-bar">
+                        <div id="statusMessage" class="success">Ready</div>
+                    </div>
+                </div>
+  </main>
+
+  <script is:inline>
+// Back navigation
+		const backBtn = document.getElementById('backButton');
+		if (backBtn) {
+			backBtn.addEventListener('click', () => {
+				window.location.href = 'index.html';
+			});
+		}
+
+		document.addEventListener("DOMContentLoaded", function() {
+			const rows = Array.from(document.querySelectorAll("tbody tr[data-elo]"));
+			const tourCountEl = document.getElementById('tourCount');
+			if (tourCountEl) {
+				tourCountEl.innerText = `${rows.length} tournaments`;
+			}
+
+			const centuriesSet = new Set();
+			const decadesByCentury = {};  // { centuryString: Set(decades) }
+
+			// ---------------------------------------------------------
+			// 1) Compute category + derive year/century/decade per row
+			// ---------------------------------------------------------
+			rows.forEach(row => {
+				const eloAttr = row.getAttribute("data-elo");
+				const catCell = row.querySelector(".cat-cell");
+
+				// Category badge
+				if (eloAttr && catCell) {
+					const elo = parseInt(eloAttr, 10);
+
+					// FIDE Category Formula:
+					// Category 1 is 2251-2275.
+					// Floor((Elo - 2251) / 25) + 1
+					if (Number.isNaN(elo) || elo < 2251) {
+						catCell.innerHTML = '<span class="cat-badge">-</span>';
+					} else {
+						const category = Math.floor((elo - 2251) / 25) + 1;
+						const styleClass = category >= 15 ? "cat-elite" : "";
+						catCell.innerHTML = `<span class="cat-badge ${styleClass}">${category}</span>`;
+					}
+				}
+
+				// Year / century / decade from start date (2nd column)
+				const startCell = row.cells[1];
+				if (startCell) {
+					const dateText = startCell.textContent.trim();
+					const year = parseInt(dateText.slice(0, 4), 10);
+					if (!Number.isNaN(year)) {
+						const century = Math.floor((year - 1) / 100) + 1; // 19 => 1801-1900, etc.
+						const decade = Math.floor(year / 10) * 10;        // 1880, 1890, ...
+
+						const centuryKey = String(century);
+						const decadeVal = decade;
+
+						row.dataset.year = String(year);
+						row.dataset.century = centuryKey;
+						row.dataset.decade = String(decadeVal);
+
+						centuriesSet.add(century);
+
+						if (!decadesByCentury[centuryKey]) {
+							decadesByCentury[centuryKey] = new Set();
+						}
+						decadesByCentury[centuryKey].add(decadeVal);
+					}
+				}
+			});
+
+			// ---------------------------------------------------------
+			// 2) Wire up search, century/decade filters, pagination
+			// ---------------------------------------------------------
+			const searchInput   = document.getElementById('tourSearch');
+			const centurySelect = document.getElementById('centuryFilter');
+			const decadeSelect  = document.getElementById('decadeFilter');
+			const prevBtnPage   = document.getElementById('prevPage');
+			const nextBtnPage   = document.getElementById('nextPage');
+			const pageInfoEl    = document.getElementById('pageInfo');
+
+			const rowsPerPage = 100;
+			let filteredRows = rows.slice();
+			let currentPage = 1;
+
+			function ordinal(n) {
+				const s = ["th","st","nd","rd"];
+				const v = n % 100;
+				return n + (s[(v - 20) % 10] || s[v] || s[0]);
+			}
+
+			// Populate century select from data
+			if (centurySelect) {
+				const centuries = Array.from(centuriesSet).sort((a, b) => a - b);
+				centuries.forEach(c => {
+					const opt = document.createElement('option');
+					opt.value = String(c);
+					const startYear = (c - 1) * 100 + 1;
+					const endYear   = c * 100;
+					opt.textContent = `${ordinal(c)} century (${startYear}-${endYear})`;
+					centurySelect.appendChild(opt);
+				});
+			}
+
+			// Helper: (re)populate decade select based on selected century
+			function populateDecadesForCentury(centuryVal) {
+				if (!decadeSelect) return;
+
+				// Clear existing options
+				decadeSelect.innerHTML = "";
+
+				const optAll = document.createElement('option');
+				optAll.value = "all";
+				optAll.textContent = "All decades";
+				decadeSelect.appendChild(optAll);
+
+				// If "All centuries" or no per-century data, disable decade filter
+				if (centuryVal === "all" || !decadesByCentury[centuryVal]) {
+					decadeSelect.disabled = true;
+					decadeSelect.value = "all";
+					return;
+				}
+
+				const decSet = decadesByCentury[centuryVal];
+				const decs = Array.from(decSet).sort((a, b) => a - b);
+				decs.forEach(d => {
+					const opt = document.createElement('option');
+					opt.value = String(d);
+					opt.textContent = `${d}s`;
+					decadeSelect.appendChild(opt);
+				});
+
+				decadeSelect.disabled = false;
+				decadeSelect.value = "all";
+			}
+
+			// Initially, no specific century selected -> decade dropdown disabled
+			if (decadeSelect) {
+				decadeSelect.disabled = true;
+			}
+
+			function applyFilters() {
+				const query      = searchInput ? searchInput.value.trim().toLowerCase() : "";
+				const centuryVal = centurySelect ? centurySelect.value : "all";
+				const decadeVal  = decadeSelect  ? decadeSelect.value  : "all";
+
+				const useDecadeFilter =
+					decadeSelect &&
+					!decadeSelect.disabled &&
+					decadeVal !== "all";
+
+				filteredRows = rows.filter(row => {
+					// Name filter (substring anywhere in tournament name)
+					if (query) {
+						const nameCell = row.cells[0];
+						const nameText = nameCell ? nameCell.textContent.toLowerCase() : "";
+						if (!nameText.includes(query)) {
+							return false;
+						}
+					}
+
+					// Century filter
+					if (centuryVal !== "all") {
+						if (row.dataset.century !== centuryVal) {
+							return false;
+						}
+					}
+
+					// Decade filter (only if enabled and a concrete decade selected)
+					if (useDecadeFilter) {
+						if (row.dataset.decade !== decadeVal) {
+							return false;
+						}
+					}
+
+					return true;
+				});
+
+				currentPage = 1;
+				renderPage();
+			}
+
+			function renderPage() {
+				const total = filteredRows.length;
+				const totalPages = total === 0 ? 1 : Math.ceil(total / rowsPerPage);
+
+				if (currentPage > totalPages) {
+					currentPage = totalPages;
+				}
+
+				// Hide all, then show only current page rows
+				rows.forEach(row => {
+					row.style.display = "none";
+				});
+
+				if (total > 0) {
+					const startIndex = (currentPage - 1) * rowsPerPage;
+					const endIndex   = startIndex + rowsPerPage;
+					filteredRows.slice(startIndex, endIndex).forEach(row => {
+						row.style.display = "";
+					});
+				}
+
+				// Page info
+				if (pageInfoEl) {
+					if (total === 0) {
+						pageInfoEl.textContent = "No tournaments found";
+					} else {
+						const pages = Math.ceil(total / rowsPerPage);
+						pageInfoEl.textContent = `Page ${currentPage} of ${pages} (${total} shown)`;
+					}
+				}
+
+				// Button enable/disable
+				const pages = total === 0 ? 1 : Math.ceil(total / rowsPerPage);
+				if (prevBtnPage) {
+					prevBtnPage.disabled = currentPage <= 1;
+				}
+				if (nextBtnPage) {
+					nextBtnPage.disabled = currentPage >= pages;
+				}
+			}
+
+			// Event wiring
+			if (searchInput) {
+				searchInput.addEventListener('input', applyFilters);
+			}
+			if (centurySelect) {
+				centurySelect.addEventListener('change', () => {
+					const selectedCentury = centurySelect.value;
+					populateDecadesForCentury(selectedCentury);
+					applyFilters();
+				});
+			}
+			if (decadeSelect) {
+				decadeSelect.addEventListener('change', applyFilters);
+			}
+
+			if (prevBtnPage) {
+				prevBtnPage.addEventListener('click', () => {
+					if (currentPage > 1) {
+						currentPage -= 1;
+						renderPage();
+					}
+				});
+			}
+			if (nextBtnPage) {
+				nextBtnPage.addEventListener('click', () => {
+					const total = filteredRows.length;
+					const pages = total === 0 ? 1 : Math.ceil(total / rowsPerPage);
+					if (currentPage < pages) {
+						currentPage += 1;
+						renderPage();
+					}
+				});
+			}
+
+			// Initial render (no filters, page 1)
+			applyFilters();
+		});
+  </script>
+</BaseLayout>

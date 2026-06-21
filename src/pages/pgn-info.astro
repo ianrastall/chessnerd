@@ -1,0 +1,74 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="PGN Info" description="Analyze pasted or uploaded PGN text and extract game statistics, player lists, and event lists.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="PGN Info" icon="assessment" />
+
+      <div class="options-panel">
+        <div class="options-grid">
+          <div class="option-group">
+            <label for="pgnFile">Analyze from File (Max 50MB)</label>
+            <input type="file" id="pgnFile" accept=".pgn,text/plain" />
+          </div>
+        </div>
+      </div>
+
+      <div class="io-container">
+        <div class="io-panel">
+          <div class="io-label">
+            <span>Input PGN Text</span>
+            <span class="stats" id="inputStats">0 chars</span>
+          </div>
+          <textarea id="pgnText" placeholder="Paste PGN data here, or upload a file above..."></textarea>
+        </div>
+        <div class="io-panel">
+          <div class="io-label">
+            <span>Statistics Report</span>
+            <button id="copyBtn" class="btn btn-secondary btn-compact" type="button" title="Copy to clipboard" aria-label="Copy report">
+              <span class="material-icons" aria-hidden="true">content_copy</span>
+            </button>
+          </div>
+          <textarea id="statsOutput" class="output" readonly placeholder="Analysis results will appear here..."></textarea>
+        </div>
+      </div>
+
+      <div class="status-bar tool-status-actions">
+        <div id="statusMessage">Ready to analyze</div>
+        <button id="extractPlayersBtn" class="btn btn-secondary btn-compact" type="button">
+          <span class="material-icons" aria-hidden="true">people</span>
+          Players
+        </button>
+        <button id="extractEventsBtn" class="btn btn-secondary btn-compact" type="button">
+          <span class="material-icons" aria-hidden="true">event</span>
+          Events
+        </button>
+        <button id="analyzeBtn" class="btn btn-primary btn-compact" type="button">
+          <span class="material-icons" aria-hidden="true">play_arrow</span>
+          Analyze
+        </button>
+        <button id="clearBtn" class="btn btn-secondary btn-compact" type="button">
+          <span class="material-icons" aria-hidden="true">delete</span>
+          Clear
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .tool-status-actions {
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tool-status-actions #statusMessage {
+      flex: 1 1 220px;
+    }
+  </style>
+
+  <script>
+    import '../scripts/pgn-info';
+  </script>
+</BaseLayout>

@@ -1,0 +1,116 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Engine Game" description="Play a browser chess game against the Lozza JavaScript chess engine.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="Engine Game" icon="smart_toy" />
+
+      <div class="tool-description">
+        Play a quick game against the Lozza JavaScript engine. Click or drag pieces to move, follow the PGN on the right, and click any move to jump the board to that position.
+      </div>
+
+      <div class="options-panel">
+        <div class="options-grid">
+          <div class="option-group">
+            <label for="engineColor">Engine side</label>
+            <select id="engineColor">
+              <option value="b">Black (you start as White)</option>
+              <option value="w">White (you start as Black)</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="moveTime">Engine think time</label>
+            <input type="range" id="moveTime" min="200" max="3000" step="100" value="1500" />
+            <span class="stats" id="moveTimeLabel">1.5s</span>
+          </div>
+          <div class="option-group">
+            <label>Board actions</label>
+            <div class="pgn-actions">
+              <button id="newGameBtn" class="btn btn-secondary btn-compact" type="button">
+                <span class="material-icons" aria-hidden="true">refresh</span>
+                New Game
+              </button>
+              <button id="flipBoardBtn" class="btn btn-secondary btn-compact" type="button">
+                <span class="material-icons" aria-hidden="true">flip_camera_android</span>
+                Flip Board
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="io-container engine-grid">
+        <div class="io-panel">
+          <div class="io-label">
+            <span>Board</span>
+            <span class="stats" id="boardStats">White to move</span>
+          </div>
+          <div class="board-wrapper">
+            <div class="board-toolbar">
+              <div id="engineStatus" class="engine-chip warning">Lozza warming up...</div>
+              <div class="board-buttons">
+                <button id="undoBtn" class="btn btn-secondary btn-compact" type="button">
+                  <span class="material-icons" aria-hidden="true">undo</span>
+                  Undo
+                </button>
+                <button id="redoBtn" class="btn btn-secondary btn-compact" type="button">
+                  <span class="material-icons" aria-hidden="true">redo</span>
+                  Redo
+                </button>
+              </div>
+            </div>
+            <div class="board-shell">
+              <div class="board-files" id="filesTop"></div>
+              <div class="board-mid">
+                <div class="board-ranks" id="ranksLeft"></div>
+                <div id="chessBoard" class="chess-board" data-orientation="white"></div>
+                <div class="board-ranks" id="ranksRight"></div>
+              </div>
+              <div class="board-files" id="filesBottom"></div>
+            </div>
+            <div class="board-footer">
+              <div id="playerSide" class="color-pill">You: White</div>
+              <div id="engineSideLabel" class="color-pill engine">Lozza: Black</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="io-panel">
+          <div class="io-label">
+            <span>Moves & Log</span>
+            <span class="stats" id="moveStats">0 moves</span>
+          </div>
+          <div class="pgn-panel">
+            <div class="pgn-actions">
+              <button id="loadPgnBtn" class="btn btn-secondary btn-compact" type="button">
+                <span class="material-icons" aria-hidden="true">file_upload</span>
+                Load PGN
+              </button>
+              <button id="copyPgnBtn" class="btn btn-secondary btn-compact" type="button">
+                <span class="material-icons" aria-hidden="true">content_copy</span>
+                Copy PGN
+              </button>
+              <button id="analyzeGameBtn" class="btn btn-secondary btn-compact" type="button" disabled>
+                <span class="material-icons" aria-hidden="true">analytics</span>
+                <span class="btn-label">Analyze Game</span>
+              </button>
+            </div>
+            <div id="moveList" class="move-list"></div>
+            <textarea id="pgnText" class="output visually-hidden" readonly aria-hidden="true" tabindex="-1"></textarea>
+            <div class="engine-log" id="engineLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div id="statusMessage" class="success">Initializing Lozza...</div>
+        <div id="toolStats"></div>
+      </div>
+    </div>
+  </main>
+
+  <script is:inline src="/js/chess.min.js"></script>
+  <script is:inline src="/js/play-engine.js"></script>
+</BaseLayout>
