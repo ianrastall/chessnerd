@@ -1,46 +1,9 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XQ7B0Z9FK3');
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Formatted reference for the Chess.com published-data API documentation.">
-<title>Chess.com API - Chess Nerd</title>
-<link rel="icon" href="/favicon.ico">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<script>
-  (() => {
-    try {
-      const storedTheme = localStorage.getItem('theme');
-      const theme = storedTheme === 'light' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-      const storedAccent = localStorage.getItem('accentColor');
-      if (!storedAccent || !/^#[0-9a-fA-F]{6}$/.test(storedAccent)) return;
-      const normalized = storedAccent.toLowerCase();
-      document.documentElement.style.setProperty('--accent', normalized);
-      const parsed = parseInt(normalized.slice(1), 16);
-      const red = (parsed >> 16) & 255;
-      const green = (parsed >> 8) & 255;
-      const blue = parsed & 255;
-      document.documentElement.style.setProperty('--accent-rgb', `${red}, ${green}, ${blue}`);
-      const boost = 20;
-      const accentLight = '#' + (
-        (Math.min(red + boost, 255) << 16) |
-        (Math.min(green + boost, 255) << 8) |
-        Math.min(blue + boost, 255)
-      ).toString(16).padStart(6, '0');
-      document.documentElement.style.setProperty('--accent-light', accentLight);
-    } catch {}
-  })();
-</script>
-<link rel="stylesheet" href="/_astro/_tool_.Cy6cWUB9.css">
-<style>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+---
+<BaseLayout title="Chess.com API" description="Formatted reference for the Chess.com published-data API documentation.">
+<style is:global>
 /* ── Layout ─────────────────────────────────────────────────────── */
 .api-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:2rem;align-items:start;margin-top:1.25rem}
 
@@ -114,6 +77,11 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
 .sub-section-header h3{margin:0;font-size:.95rem;color:var(--text-secondary)}
 .sub-section-header .material-icons{font-size:1.05rem;color:var(--accent)}
 
+/* ── Downloads bar ───────────────────────────────────────────────── */
+.api-downloads{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.6rem;padding:.65rem .85rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px}
+.api-downloads span{font-size:.82rem;color:var(--text-secondary);margin-right:.25rem}
+.api-downloads a{font-size:.8rem}
+
 /* ── Game results table ──────────────────────────────────────────── */
 .results-wrap{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:10px;overflow:hidden}
 .results-table{width:100%;border-collapse:collapse;font-size:.88rem}
@@ -130,54 +98,22 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
   .api-sidebar{position:static;max-height:none}
 }
 </style>
-</head>
-<body>
-<div class="container">
-
-<header>
-  <a class="logo" href="/" aria-label="Chess Nerd home"><span>Chess Nerd</span></a>
-  <nav class="site-network" aria-label="Network sites">
-    <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer">
-      <img src="/img/text-utils-icon.png" class="site-network-icon" alt="" width="16" height="16">
-      <span>Text Utilities</span>
-      <span class="material-icons" aria-hidden="true">open_in_new</span>
-    </a>
-    <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer">
-      <img src="/img/github.png" class="site-network-icon" alt="" width="16" height="16">
-      <span>GitHub</span>
-      <span class="material-icons" aria-hidden="true">open_in_new</span>
-    </a>
-  </nav>
-  <div class="controls">
-    <div class="accent-selector">
-      <label for="accentColor" class="visually-hidden">Accent color</label>
-      <span class="material-icons" aria-hidden="true">palette</span>
-      <select id="accentColor" class="color-dropdown" aria-label="Accent color"></select>
-    </div>
-    <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true">
-      <span class="material-icons" aria-hidden="true">dark_mode</span>
-    </button>
-  </div>
-</header>
 
 <main>
 <div class="tool-container">
 
-  <div class="tool-header">
-    <div class="tool-title">
-      <span class="material-icons" aria-hidden="true">api</span>
-      <h1>Chess.com API</h1>
-    </div>
-    <div class="tool-actions">
-      <a id="backButton" class="btn btn-secondary btn-compact" href="/">
-        <span class="material-icons" aria-hidden="true">arrow_back</span>Back
-      </a>
-    </div>
+  <ToolHeader title="Chess.com API" icon="api" />
+
+  <div class="api-downloads">
+    <span>Download:</span>
+    <a class="btn btn-secondary btn-compact" href="/downloads/chesscom-api.md" download>
+      <span class="material-icons">download</span>Markdown
+    </a>
   </div>
 
   <div class="api-layout">
 
-    <!-- ── Sidebar TOC ─────────────────────────────────────────── -->
+    <!-- ── Sidebar TOC ──────────────────────────────────────── -->
     <aside class="api-sidebar">
       <h4>Contents</h4>
       <nav aria-label="API sections">
@@ -255,17 +191,17 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
       </nav>
     </aside>
 
-    <!-- ── Main content ───────────────────────────────────────── -->
+    <!-- ── Main content ────────────────────────────────────── -->
     <div class="api-content">
 
-      <!-- ── Overview ──────────────────────────────────────────── -->
+      <!-- Overview -->
       <section id="overview" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">info</span>
           <h2>Overview</h2>
         </div>
         <div class="api-intro">
-          <p>The PubAPI is a read-only REST API that responds with JSON-LD data. Its goal is to re-package all currently public data from the website and make it available programmatically. "Public Data" is information available to people who are not logged in — player data, game data, club/tournament information. Private information restricted to the logged-in user (game chat, conditional moves) is excluded.</p>
+          <p>The PubAPI is a read-only REST API that responds with JSON-LD data. Its goal is to re-package all currently public data from the website. "Public Data" is information available to people who are not logged in — player data, game data, club/tournament information. Private information restricted to the logged-in user (game chat, conditional moves) is excluded.</p>
           <p>This is <strong>read-only</strong> data. You cannot send game moves or other commands to Chess.com from this system.</p>
           <ol>
             <li>Determine the data you want, and compose the URL based on the endpoint URL pattern.</li>
@@ -276,7 +212,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
       </section>
 
-      <!-- ── General Use ────────────────────────────────────────── -->
+      <!-- General Use -->
       <section id="general" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">settings</span>
@@ -340,13 +276,13 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             <p>If you request faster than the <code class="ci">Cache-Control</code> max-age, the CDN may respond directly with cached values. Response headers may indicate a cache HIT, MISS, EXPIRED, or REVALIDATED.</p>
             <h3 style="margin-top:.85rem">HTTP Compression &amp; HTTP/2</h3>
             <p>Send <code class="ci">Accept-Encoding: gzip</code> to receive gzip-compressed responses for large payloads (generally &gt;200 bytes) — saving up to 80% of download bandwidth.</p>
-            <p>HTTP/2 requests receive HTTP/2 responses: header compression, binary transfer, and multiplexed responses for parallel downloads. Note the parallel rate-limiting caveats above.</p>
+            <p>HTTP/2 requests receive HTTP/2 responses: header compression, binary transfer, and multiplexed responses. Note the parallel rate-limiting caveats above.</p>
           </div>
 
         </div>
       </section>
 
-      <!-- ── Player Data ─────────────────────────────────────────── -->
+      <!-- Player Data -->
       <section id="player" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">person</span>
@@ -354,17 +290,16 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
         <div class="endpoint-cards">
 
-          <!-- Player Profile -->
           <div class="endpoint-card" id="player-profile">
             <div class="endpoint-card-head">
               <h3>Player Profile</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get additional details about a player.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "@id": "URL",        // the location of this profile (always self-referencing)
   "url": "URL",        // the chess.com user's profile page
   "username": "string",
@@ -375,13 +310,13 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
   "avatar": "URL",     // (optional) URL of a 200x200 image
   "location": "string",// (optional) city or location
   "country": "URL",    // API location of this player's country's profile
-  "joined": 1178556600,       // timestamp of registration on Chess.com
-  "last_online": 1500661803,  // timestamp of the most recent login
-  "followers": 17,     // number of players tracking this player's activity
+  "joined": 1178556600,
+  "last_online": 1500661803,
+  "followers": 17,
   "is_streamer": "boolean",
   "twitch_url": "Twitch.tv URL",
-  "fide": "integer"    // FIDE rating
-}</pre>
+  "fide": "integer"
+}`}</pre>
               </details>
               <p class="endpoint-note">The <code class="ci">player_id</code> is a convenience for detecting username changes. If a retrieved Profile has a player_id matching one you previously downloaded, the new Profile replaces the old. This ID will never change for a given account, though its future availability is not guaranteed.</p>
               <div class="endpoint-links">
@@ -391,22 +326,21 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Titled Players -->
           <div class="endpoint-card" id="titled-players">
             <div class="endpoint-card-head">
               <h3>Titled Players</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/titled/</span><span class="url-param">{title-abbrev}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/titled/</span><span class="url-param">&#123;title-abbrev&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of titled-player usernames.</p>
               <p class="endpoint-note">Valid title abbreviations: GM, WGM, IM, WIM, FM, WFM, NM, WNM, CM, WCM.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "players": [
     /* array of usernames for players with this title */
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/titled/GM" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -415,18 +349,17 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Player Stats -->
           <div class="endpoint-card" id="player-stats">
             <div class="endpoint-card-head">
               <h3>Player Stats</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/stats</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/stats</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Ratings, win/loss, and other stats about a player's game play, tactics, lessons, and Puzzle Rush score.</p>
               <p class="endpoint-note">The response contains "stats objects" identified by rules code + underscore + time-class code (e.g., <code class="ci">chess_daily</code>, <code class="ci">chess960_blitz</code>). If a player has not played a particular game type, no stats object is present.</p>
               <details class="df">
                 <summary>Data Format — Response Wrapper</summary>
-                <pre>{
+                <pre>{`{
   "chess_daily": { /* stats object for chess / daily */ },
   "chess960_daily": { /* stats object for chess960 / daily */ },
   "chess_blitz": { /* stats object for chess / blitz */ },
@@ -443,18 +376,18 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
     "daily": { "total_attempts": "integer", "score": "integer" },
     "best":  { "total_attempts": "integer", "score": "integer" }
   }
-}</pre>
+}`}</pre>
               </details>
               <details class="df">
                 <summary>Data Format — Each Game-Type Stats Object</summary>
-                <pre>{
+                <pre>{`{
   "last": {
     "date": 1509709165,    // timestamp of the last rated game finished
     "rating": 1642,        // most-recent rating
     "rd": 58               // Glicko "RD" value used to calculate ratings changes
   },
   "best": {
-    "date": 1256228875,    // timestamp of the best-win game
+    "date": 1256228875,
     "rating": 2065,        // highest rating achieved
     "game": "URL"          // URL of the best-win game
   },
@@ -466,12 +399,12 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
     "timeout_percent": 9.99     // timeout percentage in the last 90 days
   },
   "tournament": {
-    "count": 20,           // number of tournaments joined
-    "withdraw": 1,         // number of tournaments withdrawn from
-    "points": 39,          // total points earned in tournaments
-    "highest_finish": 1    // best tournament place
+    "count": 20,
+    "withdraw": 1,
+    "points": 39,
+    "highest_finish": 1
   }
-}</pre>
+}`}</pre>
               </details>
               <p class="endpoint-note">Stats objects only contain information that has been collected and is not at a default value. Tactics, Lessons, and Puzzle Rush stats may be absent depending on player activity.</p>
               <div class="endpoint-links">
@@ -480,19 +413,18 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Player Online Status -->
           <div class="endpoint-card" id="player-online">
             <div class="endpoint-card-head">
               <h3>Player Online Status</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/is-online</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/is-online</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Tells if a user has been online in the last five minutes.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "online": boolean
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/is-online" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -510,35 +442,33 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
         <div class="section-intro">
           <p>Five endpoints cover a player's games: current, to-move, archive list, monthly archive, and PGN download. The current, to-move, and monthly archive endpoints all wrap their arrays in:</p>
-          <pre style="margin:.45rem 0 0;padding:.55rem .8rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:6px;font-family:Consolas,Monaco,monospace;font-size:.8rem;line-height:1.45">{ "games": [ /* Game objects in ascending game-end-time order */ ] }</pre>
-          <p style="margin-top:.5rem">Shared game object fields across these endpoints: <code>pgn</code>, <code>rules</code> (chess, chess960, bughouse, kingofthehill, threecheck, crazyhouse), <code>time_class</code> (daily, rapid, blitz, bullet), <code>time_control</code>, <code>last_activity</code>.</p>
+          <pre style="margin:.45rem 0 0;padding:.55rem .8rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:6px;font-family:Consolas,Monaco,monospace;font-size:.8rem;line-height:1.45">{`{ "games": [ /* Game objects in ascending game-end-time order */ ] }`}</pre>
+          <p style="margin-top:.5rem">Shared game object fields: <code>pgn</code>, <code>rules</code> (chess, chess960, bughouse, kingofthehill, threecheck, crazyhouse), <code>time_class</code> (daily, rapid, blitz, bullet), <code>time_control</code>, <code>last_activity</code>.</p>
         </div>
         <div class="endpoint-cards">
 
-          <!-- Current Daily Chess -->
           <div class="endpoint-card" id="games-current">
             <div class="endpoint-card-head">
               <h3>Current Daily Chess</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/games</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/games</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Array of Daily Chess games that a player is currently playing.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "games": [
     {
       "white": "string",           // URL of the white player's profile
       "black": "string",           // URL of the black player's profile
-      "url": "string",             // URL of this game
+      "url": "string",
       "fen": "string",             // current FEN
       "pgn": "string",             // current PGN
       "turn": "black",             // player to move
-      "move_by": 1501765498,       // timestamp of when the next move must be made
-                                   // "0" if the player-to-move is on vacation
+      "move_by": 1501765498,       // "0" if the player-to-move is on vacation
       "draw_offer": "black",       // (optional) player who has made a draw offer
       "last_activity": 1509810789,
-      "start_time": 1254438881,    // timestamp of game start (Daily Chess only)
+      "start_time": 1254438881,    // Daily Chess only
       "time_control": "string",
       "time_class": "string",
       "rules": "string",
@@ -546,7 +476,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
       "match": "string"            // URL pointing to team match (if available)
     }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/games" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -555,27 +485,25 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- To-Move -->
           <div class="endpoint-card" id="games-tomove">
             <div class="endpoint-card-head">
               <h3>To-Move Daily Chess</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/games/to-move</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/games/to-move</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Array of Daily Chess games where it is the player's turn to act.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "games": [
     {
       "url": "string",
-      "move_by": 1254438881,        // timestamp of when the move must be made
-                                    // "0" if it is not this player's turn
+      "move_by": 1254438881,        // "0" if it is not this player's turn
       "draw_offer": true,           // (optional) this player has received a draw offer
       "last_activity": 1509810789
     }
   ]
-}</pre>
+}`}</pre>
               </details>
               <p class="endpoint-note">This list may sometimes include games where it is not the player's turn, if a draw offer has been made. In those cases <code class="ci">move_by</code> is "0" and the game is sorted to the top. Normal sorting is based on move deadline.</p>
               <div class="endpoint-links">
@@ -584,21 +512,20 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Archive List -->
           <div class="endpoint-card" id="games-archives">
             <div class="endpoint-card-head">
               <h3>List of Monthly Archives</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/games/archives</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/games/archives</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Array of monthly archives available for this player.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "archives": [
     /* array of URLs for monthly archives in ascending chronological order */
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/games/archives" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -607,22 +534,21 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Monthly Archive -->
           <div class="endpoint-card" id="games-monthly">
             <div class="endpoint-card-head">
               <h3>Complete Monthly Archive</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/games/</span><span class="url-param">{YYYY}</span><span class="url-base">/</span><span class="url-param">{MM}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/games/</span><span class="url-param">&#123;YYYY&#125;</span><span class="url-base">/</span><span class="url-param">&#123;MM&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Array of Live and Daily Chess games that a player has finished. YYYY is the four-digit year and MM is the two-digit month of game-end.</p>
               <details class="df">
                 <summary>Data Format — Each Game</summary>
-                <pre>{
+                <pre>{`{
   "white": {
     "username": "string",
-    "rating": 1492,                // rating after the game finished
+    "rating": 1492,
     "result": "string",            // see Game Results Codes
-    "@id": "string"                // URL of this player's profile
+    "@id": "string"
   },
   "black": {
     "username": "string",
@@ -630,21 +556,18 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
     "result": "string",
     "@id": "string"
   },
-  "accuracies": {                  // if previously calculated
-    "white": float,
-    "black": float
-  },
+  "accuracies": { "white": float, "black": float },
   "url": "string",
-  "fen": "string",                 // final FEN
-  "pgn": "string",                 // final PGN
+  "fen": "string",
+  "pgn": "string",
   "start_time": 1254438881,        // Daily Chess only
   "end_time": 1254670734,
   "time_control": "string",
   "rules": "string",
   "eco": "string",                 // URL pointing to ECO opening (if available)
-  "tournament": "string",          // URL pointing to tournament (if available)
-  "match": "string"                // URL pointing to team match (if available)
-}</pre>
+  "tournament": "string",
+  "match": "string"
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/games/2009/10" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -652,11 +575,10 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- PGN Download -->
           <div class="endpoint-card" id="games-pgn">
             <div class="endpoint-card-head">
               <h3>Multi-Game PGN Download</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/games/</span><span class="url-param">{YYYY}</span><span class="url-base">/</span><span class="url-param">{MM}</span><span class="url-base">/pgn</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/games/</span><span class="url-param">&#123;YYYY&#125;</span><span class="url-base">/</span><span class="url-param">&#123;MM&#125;</span><span class="url-base">/pgn</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Standard multi-game PGN file containing all games for a month. Not JSON-encoded — follows the PGN standard directly.</p>
@@ -667,28 +589,27 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Player Clubs -->
           <div class="endpoint-card" id="player-clubs">
             <div class="endpoint-card-head">
               <h3>Player's Clubs</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/clubs</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/clubs</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of clubs the player is a member of, with joined date and last activity date.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "clubs": [
     {
-      "@id": "URL",           // URL of Club API endpoint
+      "@id": "URL",
       "name": "string",
       "last_activity": "timestamp",
       "icon": "URL",
-      "url": "URL",           // Club's web URL
+      "url": "URL",
       "joined": "timestamp"
     }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/clubs" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -697,48 +618,36 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Player Matches -->
           <div class="endpoint-card" id="player-matches">
             <div class="endpoint-card-head">
               <h3>Player Matches</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/matches</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/matches</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of Team matches the player has attended, is participating in, or is currently registered for.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "finished": [
-    {
-      "name": "string",
-      "url": "URL",
-      "@id": "URL",           // URL of PubAPI match endpoint
-      "club": "URL",          // URL of player's club endpoint
-      "results": {
-        "played_as_white": "win",  // see Game Results Codes
-        "played_as_black": "win"
-      },
-      "board": "URL"          // URL of PubAPI match board endpoint
-    }
-  ],
-  "in_progress": [
     {
       "name": "string",
       "url": "URL",
       "@id": "URL",
       "club": "URL",
+      "results": {
+        "played_as_white": "win",  // see Game Results Codes
+        "played_as_black": "win"
+      },
       "board": "URL"
     }
   ],
+  "in_progress": [
+    { "name": "string", "url": "URL", "@id": "URL", "club": "URL", "board": "URL" }
+  ],
   "registered": [
-    {
-      "name": "string",
-      "url": "URL",
-      "@id": "URL",
-      "club": "URL"
-    }
+    { "name": "string", "url": "URL", "@id": "URL", "club": "URL" }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/matches" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -747,45 +656,32 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-          <!-- Player Tournaments -->
           <div class="endpoint-card" id="player-tournaments">
             <div class="endpoint-card-head">
               <h3>Player's Tournaments</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">{username}</span><span class="url-base">/tournaments</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/tournaments</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of tournaments the player is registered for, is attending, or has attended in the past.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "finished": [
     {
-      "url": "URL",           // Web URL of the tournament
-      "@id": "URL",           // PubAPI URL of the tournament
-      "wins": 3,
-      "losses": 5,
-      "draws": 0,
-      "points_awarded": 0,
-      "placement": 4,
-      "status": "eliminated", // winner, eliminated, withdrew, removed
+      "url": "URL", "@id": "URL",
+      "wins": 3, "losses": 5, "draws": 0,
+      "points_awarded": 0, "placement": 4,
+      "status": "eliminated",     // winner, eliminated, withdrew, removed
       "total_players": 5
     }
   ],
   "in_progress": [
-    {
-      "url": "URL",
-      "@id": "URL",
-      "status": "eliminated"
-    }
+    { "url": "URL", "@id": "URL", "status": "eliminated" }
   ],
   "registered": [
-    {
-      "url": "URL",
-      "@id": "URL",
-      "status": "invited"     // invited, registered
-    }
+    { "url": "URL", "@id": "URL", "status": "invited" }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/tournaments" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -794,46 +690,44 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </div>
           </div>
 
-        </div><!-- end player endpoint-cards -->
+        </div>
       </section>
 
-      <!-- ── Clubs ───────────────────────────────────────────────── -->
+      <!-- Clubs -->
       <section id="clubs" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">groups</span>
           <h2>Clubs</h2>
         </div>
         <div class="section-intro">
-          <p>All club-based URLs use the club's "URL ID": <code>https://api.chess.com/pub/club/{url-ID}</code>. The url-ID matches the club's URL on www.chess.com — for example, the url-ID for the Chess.com Developer Community is <code>chess-com-developer-community</code>.</p>
+          <p>All club-based URLs use the club's "URL ID": <code>https://api.chess.com/pub/club/&#123;url-ID&#125;</code>. The url-ID matches the club's URL on www.chess.com — for example, the url-ID for the Chess.com Developer Community is <code>chess-com-developer-community</code>.</p>
         </div>
         <div class="endpoint-cards">
 
           <div class="endpoint-card" id="club-profile">
             <div class="endpoint-card-head">
               <h3>Club Profile</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/club/</span><span class="url-param">{url-ID}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/club/</span><span class="url-param">&#123;url-ID&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get additional details about a club.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "@id": "URL",               // the location of this profile (always self-referencing)
+                <pre>{`{
+  "@id": "URL",
   "name": "string",
-  "club_id": 57796,           // the non-changing Chess.com ID of this club
+  "club_id": 57796,
   "icon": "URL",              // (optional) URL of a 200x200 image
-  "country": "URL",           // location of this club's country profile
+  "country": "URL",
   "average_daily_rating": 1376,
   "members_count": 54,
   "created": 1178556600,
   "last_activity": 1500661803,
   "visibility": "public",     // "public" or "private"
-  "join_request": "URL",      // URL to submit a request to join this club
-  "admin": [
-    /* array of URLs to player profiles for the admins of this club */
-  ],
+  "join_request": "URL",
+  "admin": [ /* array of URLs to player profiles for the admins */ ],
   "description": "string"
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/club/chess-com-developer-community" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -845,27 +739,21 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="club-members">
             <div class="endpoint-card-head">
               <h3>Club Members</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/club/</span><span class="url-param">{url-ID}</span><span class="url-base">/members</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/club/</span><span class="url-param">&#123;url-ID&#125;</span><span class="url-base">/members</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of club members (username and joined timestamp), grouped by club-activity frequency.</p>
               <p class="endpoint-note"><strong>Cache:</strong> refreshes at most once every 12 hours.</p>
-              <p class="endpoint-note">Club activity includes: viewing the club homepage, news, or forums; changing club settings; viewing tournament, match, or votechess lists; viewing membership lists or leaderboards. Playing a club game does <em>not</em> count as club activity.</p>
+              <p class="endpoint-note">Club activity includes: viewing the club homepage, news, or forums; changing club settings; viewing tournament, match, or votechess lists; viewing membership lists or leaderboards. Playing a club game does <em>not</em> count.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "weekly": [
-    { "username": "string", "joined": "integer" }
-  ],
-  "monthly": [
-    { "username": "string", "joined": "integer" }
-  ],
-  "all_time": [
-    { "username": "string", "joined": "integer" }
-  ]
-}</pre>
+                <pre>{`{
+  "weekly":   [ { "username": "string", "joined": "integer" } ],
+  "monthly":  [ { "username": "string", "joined": "integer" } ],
+  "all_time": [ { "username": "string", "joined": "integer" } ]
+}`}</pre>
               </details>
-              <p class="endpoint-note">These lists are only updated when members join, leave, or are banned. A member listed as monthly-active or "all_time" may not move to the weekly list for up to 24 hours after their next club activity.</p>
+              <p class="endpoint-note">Lists are only updated when members join, leave, or are banned. A member may not move to the weekly list for up to 24 hours after their next club activity.</p>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/club/chess-com-developer-community/members" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/context/ClubMembers.jsonld" target="_blank" rel="noopener">JSON-LD Context</a>
@@ -876,41 +764,27 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="club-matches">
             <div class="endpoint-card-head">
               <h3>Club Matches</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/club/</span><span class="url-param">{url-ID}</span><span class="url-base">/matches</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/club/</span><span class="url-param">&#123;url-ID&#125;</span><span class="url-base">/matches</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of daily and club matches, grouped by status (registered, in progress, finished).</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "finished": [
     {
-      "name": "string",
-      "@id": "URL",           // URL pointing to the team match endpoint
-      "opponent": "URL",      // URL pointing to the opponent club endpoint
-      "result": "win",        // see Game Results Codes
-      "start_time": 1305324926,
-      "time_class": "daily"
+      "name": "string", "@id": "URL", "opponent": "URL",
+      "result": "win", "start_time": 1305324926, "time_class": "daily"
     }
   ],
   "in_progress": [
-    {
-      "name": "string",
-      "@id": "URL",
-      "opponent": "URL",
-      "start_time": 1305324926,
-      "time_class": "daily"
-    }
+    { "name": "string", "@id": "URL", "opponent": "URL",
+      "start_time": 1305324926, "time_class": "daily" }
   ],
   "registered": [
-    {
-      "name": "string",
-      "@id": "URL",
-      "opponent": "URL",
-      "time_class": "daily"
-    }
+    { "name": "string", "@id": "URL", "opponent": "URL", "time_class": "daily" }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/club/team-usa-southwest/matches" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -922,56 +796,44 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
       </section>
 
-      <!-- ── Tournaments ─────────────────────────────────────────── -->
+      <!-- Tournaments -->
       <section id="tournaments" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">emoji_events</span>
           <h2>Tournaments</h2>
         </div>
         <div class="section-intro">
-          <p>All tournament-based URLs use the tournament's "URL ID": <code>https://api.chess.com/pub/tournament/{url-ID}</code>. The url-ID matches the URL on www.chess.com — for example, <code>-33rd-chesscom-quick-knockouts-1401-1600</code>.</p>
+          <p>All tournament-based URLs use the tournament's "URL ID": <code>https://api.chess.com/pub/tournament/&#123;url-ID&#125;</code>. The url-ID matches the URL on www.chess.com — for example, <code>-33rd-chesscom-quick-knockouts-1401-1600</code>.</p>
         </div>
         <div class="endpoint-cards">
 
           <div class="endpoint-card" id="tournament">
             <div class="endpoint-card-head">
               <h3>Tournament</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/tournament/</span><span class="url-param">{url-ID}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/tournament/</span><span class="url-param">&#123;url-ID&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get details about a daily, live, or arena tournament.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "name": "string",
-  "url": "URL",
-  "description": "string",
-  "creator": "string",           // username of creator
-  "status": "finished",          // finished, in_progress, registration
-  "finish_time": 1251846528,     // if tournament is finished
+                <pre>{`{
+  "name": "string", "url": "URL", "description": "string",
+  "creator": "string",          // username of creator
+  "status": "finished",         // finished, in_progress, registration
+  "finish_time": 1251846528,
   "settings": {
-    "type": "round_robin",
-    "rules": "string",
-    "time_class": "daily",
-    "time_control": "1/259200",
-    "is_rated": true,
-    "is_official": false,
-    "is_invite_only": false,
-    "initial_group_size": 5,
-    "user_advance_count": 1,
-    "use_tiebreak": true,
-    "allow_vacation": false,
-    "winner_places": 1,
-    "registered_user_count": 5,
-    "games_per_opponent": 2,
-    "total_rounds": 1,
+    "type": "round_robin", "rules": "string",
+    "time_class": "daily", "time_control": "1/259200",
+    "is_rated": true, "is_official": false, "is_invite_only": false,
+    "initial_group_size": 5, "user_advance_count": 1,
+    "use_tiebreak": true, "allow_vacation": false,
+    "winner_places": 1, "registered_user_count": 5,
+    "games_per_opponent": 2, "total_rounds": 1,
     "concurrent_games_per_opponent": 1
   },
-  "players": [
-    { "username": "string", "status": "eliminated" }
-  ],
-  "rounds": [ /* list of tournament round URLs */ ]
-}</pre>
+  "players": [ { "username": "string", "status": "eliminated" } ],
+  "rounds": [ /* list of round URLs */ ]
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -983,21 +845,18 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="tournament-round">
             <div class="endpoint-card-head">
               <h3>Tournament Round</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/tournament/</span><span class="url-param">{url-ID}</span><span class="url-base">/</span><span class="url-param">{round}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/tournament/</span><span class="url-param">&#123;url-ID&#125;</span><span class="url-base">/</span><span class="url-param">&#123;round&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get details about a tournament's round.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "groups": [ /* list of tournament round groups */ ],
   "players": [
-    {
-      "username": "string",
-      "is_advancing": false    // only present if tournament is completed
-    }
+    { "username": "string", "is_advancing": false }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600/1" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1009,31 +868,22 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="tournament-group">
             <div class="endpoint-card-head">
               <h3>Tournament Round Group</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/tournament/</span><span class="url-param">{url-ID}</span><span class="url-base">/</span><span class="url-param">{round}</span><span class="url-base">/</span><span class="url-param">{group}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/tournament/</span><span class="url-param">&#123;url-ID&#125;</span><span class="url-base">/</span><span class="url-param">&#123;round&#125;</span><span class="url-base">/</span><span class="url-param">&#123;group&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get details about a tournament's round group.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "fair_play_removals": [ /* usernames closed for fair play violation */ ],
   "games": [
     {
-      "white": "string",
-      "black": "string",
-      "url": "string",
-      "fen": "string",
-      "pgn": "string",
-      "turn": "black",
-      "move_by": 1501765498,
-      "draw_offer": "black",
-      "last_activity": 1509810789,
-      "start_time": 1254438881,
-      "time_control": "string",
-      "time_class": "string",
-      "rules": "string",
-      "eco": "string",
-      "tournament": "string"
+      "white": "string", "black": "string", "url": "string",
+      "fen": "string", "pgn": "string", "turn": "black",
+      "move_by": 1501765498, "draw_offer": "black",
+      "last_activity": 1509810789, "start_time": 1254438881,
+      "time_control": "string", "time_class": "string",
+      "rules": "string", "eco": "string", "tournament": "string"
     }
   ],
   "players": [
@@ -1044,7 +894,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
       "is_advancing": false
     }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/tournament/-33rd-chesscom-quick-knockouts-1401-1600/1/1" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1056,96 +906,70 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
       </section>
 
-      <!-- ── Team Matches ───────────────────────────────────────── -->
+      <!-- Team Matches -->
       <section id="team-matches" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">shield</span>
           <h2>Team Matches</h2>
         </div>
         <div class="section-intro">
-          <p>Daily team match URLs use the match ID: <code>https://api.chess.com/pub/match/{ID}</code>. The ID matches the URL on www.chess.com — for example, <a href="https://www.chess.com/club/matches/12803" target="_blank" rel="noopener">WORLD LEAGUE Round 5</a> has ID <code>12803</code>.</p>
-          <p>Live team match URLs use: <code>https://api.chess.com/pub/match/live/{ID}</code>.</p>
+          <p>Daily team match URLs use the match ID: <code>https://api.chess.com/pub/match/&#123;ID&#125;</code>. The ID matches the URL on www.chess.com — for example, <a href="https://www.chess.com/club/matches/12803" target="_blank" rel="noopener">WORLD LEAGUE Round 5</a> has ID <code>12803</code>.</p>
+          <p>Live team match URLs use: <code>https://api.chess.com/pub/match/live/&#123;ID&#125;</code>.</p>
         </div>
         <div class="endpoint-cards">
 
           <div class="endpoint-card" id="match-daily">
             <div class="endpoint-card-head">
               <h3>Daily Team Match</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/</span><span class="url-param">{ID}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/</span><span class="url-param">&#123;ID&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get details about a daily team match and players playing that match. After the match is finished, a link to each player's stats endpoint is provided for up-to-date information.</p>
               <details class="df">
                 <summary>Data Format — Registration Phase</summary>
-                <pre>{
-  "name": "string",
-  "url": "URL",
-  "description": "string",
+                <pre>{`{
+  "name": "string", "url": "URL", "description": "string",
   "start_time": "timestamp",
   "settings": {
-    "time_class": "daily",
-    "time_control": "string",
-    "initial_setup": "string",
-    "rules": "string",
-    "min_team_players": "integer",
-    "max_team_players": "integer",
-    "min_required_games": "integer",
-    "min_rating": "integer",
-    "max_rating": "integer",
-    "autostart": "boolean"
+    "time_class": "daily", "time_control": "string",
+    "rules": "string", "min_team_players": "integer",
+    "max_team_players": "integer", "min_required_games": "integer",
+    "min_rating": "integer", "max_rating": "integer", "autostart": "boolean"
   },
   "status": "registration",
   "boards": "integer",
   "teams": {
     "team1": {
-      "@id": "URL",          // API URL for the club profile
-      "url": "URL",          // Web URL for the club profile
-      "name": "string",
-      "score": "score",      // adjusted in case of fair play recalculations
+      "@id": "URL", "url": "URL", "name": "string", "score": "score",
       "players": [
-        {
-          "username": "string",
-          "board": "URL",
-          "rating": 1355,
-          "rd": 25.12,
-          "timeout_percent": 25.12,
-          "status": "basic"
-        }
+        { "username": "string", "board": "URL", "rating": 1355,
+          "rd": 25.12, "timeout_percent": 25.12, "status": "basic" }
       ]
     },
     "team2": { /* same structure as team1 */ }
   }
-}</pre>
+}`}</pre>
               </details>
               <details class="df">
                 <summary>Data Format — In Progress / Finished</summary>
-                <pre>{
-  "name": "string",
-  "url": "URL",
-  "description": "string",
+                <pre>{`{
+  "name": "string", "url": "URL", "description": "string",
   "start_time": "timestamp",
   "settings": {
-    "time_class": "string",
-    "time_control": "string",
-    "rules": "string",
-    "min_team_players": 0,
-    "max_team_players": 0,
-    "min_required_games": 0,
-    "autostart": false
+    "time_class": "string", "time_control": "string", "rules": "string",
+    "min_team_players": 0, "max_team_players": 0,
+    "min_required_games": 0, "autostart": false
   },
   "status": "string",          // finished or in_progress
   "boards": "integer",
   "teams": {
     "team1": {
-      "@id": "URL",
-      "name": "string",
-      "score": "score",
+      "@id": "URL", "name": "string", "score": "score",
       "players": [
         {
-          "username": "string",
-          "board": "URL",
-          "stats": "URL",      // URL to player's stats endpoint
-          "played_as_white": "string",  // see Game Results Codes (if finished)
+          "username": "string", "board": "URL",
+          "stats": "URL",        // URL to player's stats endpoint
+          "played_as_white": "string",
           "played_as_black": "string"
         }
       ],
@@ -1153,7 +977,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
     },
     "team2": { /* same structure as team1 */ }
   }
-}</pre>
+}`}</pre>
               </details>
               <p class="endpoint-note">Player statistics are not snapshotted during matches. After the registration phase, follow each player's stats link to get up-to-date statistics.</p>
               <div class="endpoint-links">
@@ -1166,47 +990,28 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="match-daily-board">
             <div class="endpoint-card-head">
               <h3>Daily Team Match Board</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/</span><span class="url-param">{ID}</span><span class="url-base">/</span><span class="url-param">{board}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/</span><span class="url-param">&#123;ID&#125;</span><span class="url-base">/</span><span class="url-param">&#123;board&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
-              <p class="endpoint-desc">Get details about a team match board. Only in-progress or finished games are included, so there may be one or two games in this list.</p>
+              <p class="endpoint-desc">Get details about a team match board. Only in-progress or finished games are included.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "board_scores": {
-    "player1": 0.5,           // adjusted in case of fair play recalculations
-    "player2": 1.5
-  },
+                <pre>{`{
+  "board_scores": { "player1": 0.5, "player2": 1.5 },
   "games": [
     {
-      "white": {
-        "username": "string",
-        "rating": 1492,
-        "result": "string",   // see Game Results Codes
-        "@id": "string",
-        "team": "URL"         // URL to club's profile
-      },
-      "black": {
-        "username": "string",
-        "rating": 1942,
-        "result": "string",
-        "@id": "string",
-        "team": "URL"
-      },
+      "white": { "username": "string", "rating": 1492, "result": "string",
+                 "@id": "string", "team": "URL" },
+      "black": { "username": "string", "rating": 1942, "result": "string",
+                 "@id": "string", "team": "URL" },
       "accuracies": { "white": float, "black": float },
-      "url": "string",
-      "fen": "string",
-      "pgn": "string",
-      "start_time": 1254438881,
-      "end_time": 1254670734,
-      "time_control": "string",
-      "time_class": "string",
-      "rules": "string",
-      "eco": "string",
-      "match": "string"
+      "url": "string", "fen": "string", "pgn": "string",
+      "start_time": 1254438881, "end_time": 1254670734,
+      "time_control": "string", "time_class": "string",
+      "rules": "string", "eco": "string", "match": "string"
     }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/match/12803/1" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1218,83 +1023,58 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="match-live">
             <div class="endpoint-card-head">
               <h3>Live Team Match</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/live/</span><span class="url-param">{ID}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/live/</span><span class="url-param">&#123;ID&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get details about a live team match and the players participating. After the match is finished, a stats link is provided for each player.</p>
               <details class="df">
                 <summary>Data Format — When Scheduled</summary>
-                <pre>{
+                <pre>{`{
   "@id": "https://api.chess.com/pub/match/live/5861",
-  "name": "Friendly 10|2 Rapid Open: Srbija Tim vs Team USA Live",
+  "name": "Friendly 10|2 Rapid Open",
   "url": "https://www.chess.com/club/matches/live/5861",
-  "start_time": 1579988425,
-  "status": "scheduled",
-  "boards": 0,
+  "start_time": 1579988425, "status": "scheduled", "boards": 0,
   "settings": {
-    "rules": "chess",
-    "time_class": "standard",
-    "time_control": 600,
-    "time_increment": 2,
-    "min_team_players": 1,
-    "min_required_games": 0,
-    "autostart": false
+    "rules": "chess", "time_class": "standard", "time_control": 600,
+    "time_increment": 2, "min_team_players": 1,
+    "min_required_games": 0, "autostart": false
   },
   "teams": {
     "team1": {
-      "@id": "https://api.chess.com/pub/club/srbija-tim",
-      "name": "Srbija Tim",
-      "url": "https://www.chess.com/club/srbija-tim",
-      "score": 0,
-      "players": [],
-      "fair_play_removals": []
+      "@id": "URL", "name": "string", "url": "URL",
+      "score": 0, "players": [], "fair_play_removals": []
     },
     "team2": { /* same structure */ }
   }
-}</pre>
+}`}</pre>
               </details>
               <details class="df">
                 <summary>Data Format — When Finished</summary>
-                <pre>{
+                <pre>{`{
   "@id": "https://api.chess.com/pub/match/live/5833",
   "name": "Friendly 5+2",
   "url": "https://www.chess.com/club/matches/live/5833",
-  "start_time": 1579471260,
-  "end_time": 1579472487,
-  "status": "finished",
-  "boards": 6,
-  "settings": {
-    "rules": "chess",
-    "time_class": "blitz",
-    "time_control": 300,
-    "time_increment": 2,
-    "min_team_players": 2,
-    "min_required_games": 0,
-    "autostart": false
-  },
+  "start_time": 1579471260, "end_time": 1579472487,
+  "status": "finished", "boards": 6,
+  "settings": { "rules": "chess", "time_class": "blitz", "time_control": 300,
+                "time_increment": 2, "min_team_players": 2,
+                "min_required_games": 0, "autostart": false },
   "teams": {
     "team1": {
-      "@id": "https://api.chess.com/pub/club/lynx-club",
-      "name": "Lynx Club",
-      "url": "https://www.chess.com/club/lynx-club",
-      "score": 7,
-      "result": "win",
+      "@id": "URL", "name": "string", "url": "URL",
+      "score": 7, "result": "win",
       "players": [
         {
-          "username": "guilhermekk",
-          "stats": "https://api.chess.com/pub/player/guilhermekk/stats",
-          "status": "premium",
-          "played_as_white": "win",
-          "played_as_black": "resigned",
-          "board": "https://api.chess.com/pub/match/5833/4"
+          "username": "string", "stats": "URL", "status": "premium",
+          "played_as_white": "win", "played_as_black": "resigned",
+          "board": "URL"
         }
-        /* ... */
       ],
       "fair_play_removals": []
     },
     "team2": { /* same structure */ }
   }
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/match/live/5833" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1306,43 +1086,28 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="match-live-board">
             <div class="endpoint-card-head">
               <h3>Live Team Match Board</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/live/</span><span class="url-param">{ID}</span><span class="url-base">/</span><span class="url-param">{board}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/match/live/</span><span class="url-param">&#123;ID&#125;</span><span class="url-base">/</span><span class="url-param">&#123;board&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get details about a live team match board. Only in-progress or finished games are included.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "board_scores": {
-    "player1": 1.5,
-    "player2": 0.5
-  },
+                <pre>{`{
+  "board_scores": { "player1": 1.5, "player2": 0.5 },
   "games": [
     {
-      "url": "https://www.chess.com/live/game/4415534343",
-      "pgn": "PGN of the game",
-      "time_control": "300+2",
-      "end_time": 1579471691,
-      "rated": true,
+      "url": "string", "pgn": "string", "time_control": "300+2",
+      "end_time": 1579471691, "rated": true,
       "fen": "r7/p4pN1/1pn4k/8/2bP3R/2P3R1/6PP/6K1 b - -",
-      "time_class": "blitz",
-      "rules": "chess",
-      "white": {
-        "rating": 1351,
-        "result": "win",
-        "@id": "https://api.chess.com/pub/player/stompall",
-        "username": "stompall"
-      },
-      "black": {
-        "rating": 1458,
-        "result": "checkmated",
-        "@id": "https://api.chess.com/pub/player/jydra21",
-        "username": "JYDRA21"
-      },
-      "eco": "https://www.chess.com/openings/Kings-Gambit-Accepted-Modern-Defense-4.exd5"
+      "time_class": "blitz", "rules": "chess",
+      "white": { "rating": 1351, "result": "win",
+                 "@id": "URL", "username": "string" },
+      "black": { "rating": 1458, "result": "checkmated",
+                 "@id": "URL", "username": "string" },
+      "eco": "URL"
     }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/match/live/5833/5" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1354,14 +1119,14 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
       </section>
 
-      <!-- ── Countries ──────────────────────────────────────────── -->
+      <!-- Countries -->
       <section id="countries" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">public</span>
           <h2>Countries</h2>
         </div>
         <div class="section-intro">
-          <p>All country-based URLs use the 2-character ISO 3166 code (capitalized): <code>https://api.chess.com/pub/country/{iso}</code>.</p>
+          <p>All country-based URLs use the 2-character ISO 3166 code (capitalized): <code>https://api.chess.com/pub/country/&#123;iso&#125;</code>.</p>
           <p>Chess.com also supports regions not in the ISO list, using user-assigned codes: <code>XA</code> Canary Islands, <code>XB</code> Basque Country, <code>XC</code> Catalonia, <code>XE</code> England, <code>XG</code> Galicia, <code>XK</code> Kosovo, <code>XP</code> Palestine, <code>XS</code> Scotland, <code>XW</code> Wales, <code>XX</code> International.</p>
         </div>
         <div class="endpoint-cards">
@@ -1369,17 +1134,17 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="country-profile">
             <div class="endpoint-card-head">
               <h3>Country Profile</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/country/</span><span class="url-param">{iso}</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/country/</span><span class="url-param">&#123;iso&#125;</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">Get additional details about a country.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "@id": "URL",
-  "name": "string",      // the human-readable name of this country
+  "name": "string",
   "code": "string"       // the ISO-3166-1 2-character code
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/country/IT" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1391,19 +1156,17 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="country-players">
             <div class="endpoint-card-head">
               <h3>Country Players</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/country/</span><span class="url-param">{iso}</span><span class="url-base">/players</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/country/</span><span class="url-param">&#123;iso&#125;</span><span class="url-base">/players</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of usernames for players who identify themselves as being in this country.</p>
               <p class="endpoint-note"><strong>Cache:</strong> refreshes at most once every 12 hours.</p>
-              <p class="endpoint-note">Complete lists of all players are not available. Requesting once per day yields all new registrants and currently active players who identify with this country. Players who switch country designation appear in the next generated list.</p>
+              <p class="endpoint-note">Complete lists of all players are not available. Requesting once per day yields all new registrants and currently active players who identify with this country.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "players": [
-    /* array of usernames for recently active players in this country */
-  ]
-}</pre>
+                <pre>{`{
+  "players": [ /* array of usernames for recently active players */ ]
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/country/IT/players" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1415,18 +1178,16 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <div class="endpoint-card" id="country-clubs">
             <div class="endpoint-card-head">
               <h3>Country Clubs</h3>
-              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/country/</span><span class="url-param">{iso}</span><span class="url-base">/clubs</span></div>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/country/</span><span class="url-param">&#123;iso&#125;</span><span class="url-base">/clubs</span></div>
             </div>
             <div class="endpoint-card-body">
               <p class="endpoint-desc">List of URLs for clubs identified as being in or associated with this country.</p>
               <p class="endpoint-note">The "country" of a club is self-reported and may indicate player location, meeting location, language spoken, or simply the country of the founder.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "clubs": [
-    /* array of profile URLs for clubs in this country */
-  ]
-}</pre>
+                <pre>{`{
+  "clubs": [ /* array of profile URLs for clubs in this country */ ]
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/country/IT/clubs" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1438,7 +1199,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
       </section>
 
-      <!-- ── Daily Puzzles ──────────────────────────────────────── -->
+      <!-- Daily Puzzles -->
       <section id="puzzles" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">extension</span>
@@ -1455,14 +1216,14 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
               <p class="endpoint-desc">Information about the daily puzzle found on www.chess.com.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "title": "string",
-  "url": "URL",            // URL to the daily puzzle on chess.com
+  "url": "URL",
   "publish_time": 1513584000,
   "fen": "string",
   "pgn": "string",
-  "image": "URL"           // link to the puzzle image
-}</pre>
+  "image": "URL"
+}`}</pre>
               </details>
               <p class="endpoint-note">If you publish the Daily Puzzle somewhere, please give credit to Chess.com with a clearly visible text link to the puzzle page URL.</p>
               <div class="endpoint-links">
@@ -1482,14 +1243,11 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
               <p class="endpoint-note">The puzzle doesn't change with every request — there is a caching latency of around 15 seconds. If you publish it, credit Chess.com with a text link to the puzzle page URL.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
-  "title": "string",
-  "url": "URL",
+                <pre>{`{
+  "title": "string", "url": "URL",
   "publish_time": 1513584000,
-  "fen": "string",
-  "pgn": "string",
-  "image": "URL"
-}</pre>
+  "fen": "string", "pgn": "string", "image": "URL"
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/puzzle/random" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1501,81 +1259,69 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
       </section>
 
-      <!-- ── Streamers ──────────────────────────────────────────── -->
+      <!-- Streamers -->
       <section id="streamers-section" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">videocam</span>
           <h2>Streamers</h2>
         </div>
         <div class="endpoint-cards">
-
           <div class="endpoint-card" id="streamers">
             <div class="endpoint-card-head">
               <h3>Streamers</h3>
               <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/streamers</span></div>
             </div>
             <div class="endpoint-card-body">
-              <p class="endpoint-desc">Information about Chess.com streamers.</p>
-              <p class="endpoint-note">This endpoint refreshes every 5 minutes.</p>
+              <p class="endpoint-desc">Information about Chess.com streamers. Refreshes every 5 minutes.</p>
               <details class="df">
                 <summary>Data Format</summary>
-                <pre>{
+                <pre>{`{
   "streamers": [
-    {
-      "username": "string",
-      "avatar": "URL",
-      "twitch_url": "Twitch.tv URL",
-      "url": "string"        // member profile URL
-    }
+    { "username": "string", "avatar": "URL",
+      "twitch_url": "Twitch.tv URL", "url": "string" }
   ]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/streamers" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
-      <!-- ── Leaderboards ───────────────────────────────────────── -->
+      <!-- Leaderboards -->
       <section id="leaderboards-section" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">leaderboard</span>
           <h2>Leaderboards</h2>
         </div>
         <div class="endpoint-cards">
-
           <div class="endpoint-card" id="leaderboards">
             <div class="endpoint-card-head">
               <h3>Leaderboards</h3>
               <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/leaderboards</span></div>
             </div>
             <div class="endpoint-card-body">
-              <p class="endpoint-desc">Information about the top 50 players for daily and live games, tactics, and lessons. Refreshes when one of the leaderboards is updated.</p>
-              <p class="endpoint-note">The response contains separate arrays for: <code class="ci">daily</code>, <code class="ci">daily960</code>, <code class="ci">live_rapid</code>, <code class="ci">live_blitz</code>, <code class="ci">live_bullet</code>, <code class="ci">live_bughouse</code>, <code class="ci">live_blitz960</code>, <code class="ci">live_threecheck</code>, <code class="ci">live_crazyhouse</code>, <code class="ci">live_kingofthehill</code>, <code class="ci">lessons</code>, <code class="ci">tactics</code>.</p>
+              <p class="endpoint-desc">Top 50 players for daily and live games, tactics, and lessons. Refreshes when one of the leaderboards is updated.</p>
+              <p class="endpoint-note">Arrays: <code class="ci">daily</code>, <code class="ci">daily960</code>, <code class="ci">live_rapid</code>, <code class="ci">live_blitz</code>, <code class="ci">live_bullet</code>, <code class="ci">live_bughouse</code>, <code class="ci">live_blitz960</code>, <code class="ci">live_threecheck</code>, <code class="ci">live_crazyhouse</code>, <code class="ci">live_kingofthehill</code>, <code class="ci">lessons</code>, <code class="ci">tactics</code>.</p>
               <details class="df">
-                <summary>Data Format — Each Leaderboard Entry</summary>
-                <pre>{
-  "player_id": "integer",
-  "@id": "URL",
-  "url": "URL",
-  "username": "string",
-  "score": "integer",
+                <summary>Data Format — Each Entry</summary>
+                <pre>{`{
+  "player_id": "integer", "@id": "URL", "url": "URL",
+  "username": "string", "score": "integer",
   "rank": "integer"      // [1..50]
-}</pre>
+}`}</pre>
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/leaderboards" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
-      <!-- ── Game Results Codes ─────────────────────────────────── -->
+      <!-- Game Results Codes -->
       <section id="game-results" class="api-section">
         <div class="api-section-header">
           <span class="material-icons" aria-hidden="true">table_chart</span>
@@ -1583,9 +1329,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
         <div class="results-wrap">
           <table class="results-table">
-            <thead>
-              <tr><th>Code</th><th>Description</th></tr>
-            </thead>
+            <thead><tr><th>Code</th><th>Description</th></tr></thead>
             <tbody>
               <tr><td>win</td><td>Win</td></tr>
               <tr><td>checkmated</td><td>Checkmated</td></tr>
@@ -1613,44 +1357,23 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
 </div><!-- end .tool-container -->
 </main>
 
-<footer class="site-footer">
-  <p>&copy; Ian Rastall 2025<br>Contact: moving.form.of.dust@gmail.com<br>Donate: PayPal to merastall@gmail.com</p>
-</footer>
-
-</div><!-- end .container -->
-
 <script>
 // Active TOC link tracking via IntersectionObserver
-(() => {
-  const links = Array.from(document.querySelectorAll('.toc-link[href^="#"]'));
-  if (!links.length) return;
-
+const links = Array.from(document.querySelectorAll('.toc-link[href^="#"]'));
+if (links.length) {
   const targets = links.map(l => document.getElementById(l.getAttribute('href').slice(1))).filter(Boolean);
-
-  let active = null;
-  function setActive(el) {
+  let active: Element | null = null;
+  function setActive(el: Element) {
     if (active === el) return;
     active = el;
     links.forEach(l => l.classList.remove('active'));
-    if (!el) return;
     const link = document.querySelector(`.toc-link[href="#${el.id}"]`);
     if (link) link.classList.add('active');
   }
-
   const obs = new IntersectionObserver(entries => {
-    // Find the topmost intersecting element
-    let top = null;
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        if (!top || e.boundingClientRect.top < top.boundingClientRect.top) top = e;
-      }
-    });
-    if (top) setActive(top.target);
+    entries.forEach(e => { if (e.isIntersecting) setActive(e.target); });
   }, { rootMargin: '0px 0px -55% 0px', threshold: 0 });
-
   targets.forEach(t => obs.observe(t));
-})();
+}
 </script>
-<script src="/js/theme.js"></script>
-</body>
-</html>
+</BaseLayout>

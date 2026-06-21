@@ -70,14 +70,15 @@ a:hover {
 }
 
 /* Header */
+.site-header,
 header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
+    gap: 1rem;
     padding: 1.2rem 0;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 2rem;
-    position: relative;
 }
 
 .logo {
@@ -107,18 +108,16 @@ header {
 
 .controls {
     display: flex;
-    gap: 1rem;
+    justify-content: flex-end;
+    gap: 0.5rem;
     align-items: center;
 }
 
 .site-network {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .site-network-link {
@@ -127,31 +126,15 @@ header {
     font-size: 0.9rem;
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    line-height: 1.2;
-}
-
-.site-network-link .material-icons {
-    font-size: 1rem;
-}
-
-.site-network-icon {
-    width: 1rem;
-    height: 1rem;
-    max-width: 1rem;
-    max-height: 1rem;
-    object-fit: contain;
-    flex: 0 0 auto;
-}
-
-.site-network-link > img.site-network-icon {
-    width: 1rem !important;
-    height: 1rem !important;
-    max-width: 1rem !important;
-    max-height: 1rem !important;
+    min-height: 2.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    white-space: nowrap;
 }
 
 .site-network-link:hover {
+    border-color: var(--accent);
     color: var(--accent);
 }
 
@@ -1130,20 +1113,22 @@ input[type="checkbox"], input[type="radio"] {
     }
 
     .site-network {
-        position: static;
-        transform: none;
-        order: 3;
-        width: 100%;
-        margin-top: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-        justify-content: center;
-        align-items: center;
+        justify-content: stretch;
+        align-items: stretch;
     }
 
+    .site-network-link {
+        justify-content: center;
+    }
+
+    .site-header,
     header {
-        flex-wrap: wrap;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    .controls {
+        justify-content: space-between;
     }
 }
 .io-container.puzzle-grid {
