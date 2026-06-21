@@ -83,13 +83,12 @@ export const tools: ToolMeta[] = [
   },
   {
     id: 'engines',
-    name: 'Engine Database',
+    name: 'Engine Releases',
     href: '/engines.html',
-    icon: 'memory',
+    icon: 'new_releases',
     category: 'reference',
-    description: 'Search chess engines by name, language, author, and release year.',
-    status: 'queued',
-    rebuildNote: 'Separate from the RWBC engine list, but still needs data provenance documented.'
+    description: 'A daily feed of the latest releases from open-source chess engines on GitHub, newest first.',
+    status: 'ready'
   },
   {
     id: 'play-engine',

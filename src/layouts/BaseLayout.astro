@@ -48,6 +48,9 @@ const pageTitle = title === 'Chess Nerd' ? title : `${title} - Chess Nerd`;
           const blue = parsed & 255;
           document.documentElement.style.setProperty('--accent-rgb', `${red}, ${green}, ${blue}`);
 
+          const luminance = 0.299 * red + 0.587 * green + 0.114 * blue;
+          document.documentElement.style.setProperty('--accent-contrast', luminance > 150 ? '#0b1220' : '#ffffff');
+
           const boost = 20;
           const accentLight = '#' + (
             (Math.min(red + boost, 255) << 16) |
@@ -65,6 +68,7 @@ const pageTitle = title === 'Chess Nerd' ? title : `${title} - Chess Nerd`;
     <div class="container">
       <header>
         <a class="logo" href="/" aria-label="Chess Nerd home">
+          <span class="brand-mark" aria-hidden="true">&#9822;</span>
           <span>Chess Nerd</span>
         </a>
 
@@ -82,11 +86,11 @@ const pageTitle = title === 'Chess Nerd' ? title : `${title} - Chess Nerd`;
         </nav>
 
         <div class="controls">
-          <div class="accent-selector">
-            <label for="accentColor" class="visually-hidden">Accent color</label>
-            <span class="material-icons" aria-hidden="true">palette</span>
-            <select id="accentColor" class="color-dropdown" aria-label="Accent color"></select>
-          </div>
+          <label class="color-picker-wrap" title="Accent color (double-click to reset)">
+            <span class="visually-hidden">Accent color</span>
+            <span class="color-swatch" id="accentSwatch" aria-hidden="true"></span>
+            <input type="color" id="accentColor" aria-label="Accent color" />
+          </label>
           <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true">
             <span class="material-icons" aria-hidden="true">dark_mode</span>
           </button>

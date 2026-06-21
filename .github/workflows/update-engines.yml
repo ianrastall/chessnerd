@@ -1,0 +1,56 @@
+name: Update Chess Engine Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 8 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: engine-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Update engine data
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/engines/update_engines.py
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Astro build
+        run: npm run build
+
+      - name: Commit generated data
+        shell: bash
+        run: |
+          if [ -z "$(git status --porcelain -- public/data/engines)" ]; then
+            echo "No engine data changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/engines
+          git commit -m "Update chess engine data"
+          git push

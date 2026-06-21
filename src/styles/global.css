@@ -8,6 +8,7 @@
     --accent: #0d9488;
     --accent-light: #14b8a6;
     --accent-rgb: 13, 148, 136;
+    --accent-contrast: #ffffff;
     --puzzle-accent: #8b5cf6;
     --success: #059669;
     --warning: #d97706;
@@ -29,6 +30,7 @@
     --accent: #0d9488;
     --accent-light: #14b8a6;
     --accent-rgb: 13, 148, 136;
+    --accent-contrast: #ffffff;
     --puzzle-accent: #7c3aed;
     --board-light: #f1e3c2;
     --board-dark: #c2965a;
@@ -72,7 +74,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: 1.2rem 0;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 2rem;
     position: relative;
@@ -81,15 +83,26 @@ header {
 .logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 600;
+    gap: 0.6rem;
+    font-size: 1.4rem;
+    font-weight: 800;
     color: inherit;
     text-decoration: none;
+    letter-spacing: -0.01em;
 }
 
-.logo span {
-    color: var(--accent);
+.brand-mark {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    line-height: 1;
 }
 
 .controls {
@@ -142,22 +155,43 @@ header {
     color: var(--accent);
 }
 
-.accent-selector {
-    display: flex;
+/* Accent color picker: a round swatch with a hidden native color input on top,
+   so a click opens the OS picker for any color. Double-click resets to default. */
+.color-picker-wrap {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-}
-
-.color-dropdown {
-    padding: 0.25rem 0.5rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-primary);
+    justify-content: center;
     cursor: pointer;
 }
 
-.color-dropdown:focus-visible,
+.color-swatch {
+    display: inline-block;
+    width: 1.65rem;
+    height: 1.65rem;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--border-color);
+    transition: border-color 0.15s, transform 0.15s;
+}
+
+.color-picker-wrap:hover .color-swatch {
+    border-color: var(--accent);
+    transform: scale(1.1);
+}
+
+.color-picker-wrap input[type="color"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.color-picker-wrap:focus-within .color-swatch,
 .btn:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;

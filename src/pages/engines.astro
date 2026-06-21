@@ -1,0 +1,247 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Engine Releases" description="A daily feed of the latest releases from open-source chess engines on GitHub, newest first.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="Engine Releases" icon="new_releases" />
+
+      <div class="options-panel">
+        <div class="engines-controls">
+          <div class="option-group">
+            <label for="enginesSort">Sort</label>
+            <select id="enginesSort">
+              <option value="released">Newest first</option>
+              <option value="name">Name (A&ndash;Z)</option>
+              <option value="stars">Most stars</option>
+            </select>
+          </div>
+          <div class="option-group engines-search">
+            <label for="enginesSearch">Search</label>
+            <input id="enginesSearch" type="search" placeholder="Name, author, language..." autocomplete="off" />
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar engines-status">
+        <div id="enginesStatus">Loading releases...</div>
+        <div id="enginesGenerated"></div>
+      </div>
+
+      <section id="enginesList" class="engines-list" aria-live="polite"></section>
+
+      <p class="engines-note">
+        The latest release from each watched open-source engine, pulled automatically from its
+        own public GitHub repository and refreshed daily. Independent and not derived from any
+        third-party engine list.
+      </p>
+    </div>
+  </main>
+
+  <!-- Global: the list is built dynamically in JS, so scoped styles would never
+       reach it. All selectors here are .engines-* namespaced, so this is safe. -->
+  <style is:global>
+    .engines-controls {
+      display: grid;
+      grid-template-columns: minmax(180px, 240px) minmax(240px, 1fr);
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .engines-search input,
+    #enginesSort {
+      width: 100%;
+      min-height: 2.2rem;
+      padding: 0.35rem 0.6rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+    }
+
+    .engines-search input:focus,
+    #enginesSort:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .engines-status {
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .engines-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .engine-card {
+      display: grid;
+      gap: 0.6rem;
+      align-content: start;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .engine-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .engine-name {
+      color: var(--text-primary);
+      font-weight: 650;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .engine-stars {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .engine-stars .material-icons {
+      font-size: 0.95rem;
+    }
+
+    .engine-author {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+    }
+
+    .engine-desc {
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .engine-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .engine-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.05rem 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .engine-release {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-tertiary);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .engine-release.is-empty {
+      color: var(--text-secondary);
+    }
+
+    .engine-release .material-icons {
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    .engine-version {
+      font-weight: 650;
+      overflow-wrap: anywhere;
+    }
+
+    .engine-release-date {
+      margin-left: auto;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .engine-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .engine-downloads summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 0.82rem;
+    }
+
+    .engine-downloads ul {
+      list-style: none;
+      margin: 0.5rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.3rem;
+      max-height: 220px;
+      overflow: auto;
+    }
+
+    .engine-downloads li {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .engine-downloads a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    .engine-downloads .asset-size {
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .engines-empty {
+      grid-column: 1 / -1;
+      padding: 1.25rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-secondary);
+    }
+
+    .engines-note {
+      margin-top: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+      .engines-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    import '../scripts/engines';
+  </script>
+</BaseLayout>

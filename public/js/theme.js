@@ -2,21 +2,6 @@
 (function() {
     'use strict';
 
-    const ACCENT_PALETTE = [
-        { value: '#0d9488', label: 'Teal' },
-        { value: '#3b82f6', label: 'Blue' },
-        { value: '#8b5cf6', label: 'Purple' },
-        { value: '#10b981', label: 'Emerald' },
-        { value: '#f59e0b', label: 'Amber' },
-        { value: '#ef4444', label: 'Red' },
-        { value: '#ec4899', label: 'Soft Pink' },
-        { value: '#fb7185', label: 'Coral' },
-        { value: '#5f9ea0', label: 'Cadet Blue' },
-        { value: '#6495ed', label: 'Cornflower' },
-        { value: '#deb887', label: 'Burlywood' },
-        { value: '#60a5fa', label: 'Cornflower Blue' },
-        { value: '#7c3aed', label: 'Violet' }
-    ];
     const DEFAULT_ACCENT = '#0d9488';
 
     let themeToggle = null;
@@ -93,41 +78,29 @@
         return `${red}, ${green}, ${blue}`;
     }
 
+    function contrastColor(color) {
+        const normalized = normalizeHexColor(color).slice(1);
+        const parsed = parseInt(normalized, 16);
+        const red = (parsed >> 16) & 0xFF;
+        const green = (parsed >> 8) & 0xFF;
+        const blue = parsed & 0xFF;
+        const luminance = 0.299 * red + 0.587 * green + 0.114 * blue;
+        return luminance > 150 ? '#0b1220' : '#ffffff';
+    }
+
     function applyAccent(color) {
         const normalized = normalizeHexColor(color);
         document.documentElement.style.setProperty('--accent', normalized);
         document.documentElement.style.setProperty('--accent-light', adjustColor(normalized, 20));
         document.documentElement.style.setProperty('--accent-rgb', hexToRgbTuple(normalized));
+        document.documentElement.style.setProperty('--accent-contrast', contrastColor(normalized));
         return normalized;
     }
 
-    function populateAccentDropdown(selectedColor) {
-        if (!accentColor) {
-            return;
+    function setAccentInput(selectedColor) {
+        if (accentColor) {
+            accentColor.value = normalizeHexColor(selectedColor);
         }
-
-        accentColor.innerHTML = '';
-
-        ACCENT_PALETTE.forEach(({ value, label }) => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = label;
-            accentColor.appendChild(option);
-        });
-
-        const normalizedSelected = normalizeHexColor(selectedColor);
-        const hasSavedColor = ACCENT_PALETTE.some(
-            ({ value }) => value.toLowerCase() === normalizedSelected
-        );
-
-        if (!hasSavedColor) {
-            const customOption = document.createElement('option');
-            customOption.value = normalizedSelected;
-            customOption.textContent = 'Custom';
-            accentColor.appendChild(customOption);
-        }
-
-        accentColor.value = normalizedSelected;
     }
 
     function updateThemeToggleIcon(theme) {
@@ -169,7 +142,7 @@
         const storedColor = safeStorageGet('accentColor');
         const savedColor = normalizeHexColor(storedColor || DEFAULT_ACCENT);
         const appliedColor = applyAccent(savedColor);
-        populateAccentDropdown(appliedColor);
+        setAccentInput(appliedColor);
         applyControlAccessibility();
     }
 
@@ -184,7 +157,7 @@
     function changeAccentColor(color) {
         const normalized = applyAccent(color);
         safeStorageSet('accentColor', normalized);
-        populateAccentDropdown(normalized);
+        setAccentInput(normalized);
     }
 
     function setupEventListeners() {
@@ -197,8 +170,13 @@
         }
 
         if (accentColor) {
-            accentColor.addEventListener('change', (event) => {
+            // Live preview while dragging in the native picker.
+            accentColor.addEventListener('input', (event) => {
                 changeAccentColor(event.target.value);
+            });
+            // Double-click the swatch to reset to the default accent.
+            accentColor.addEventListener('dblclick', () => {
+                changeAccentColor(DEFAULT_ACCENT);
             });
         }
 
@@ -261,6 +239,14 @@
     function safeStorageSet(key, value) {
         try {
             localStorage.setItem(key, value);
+        } catch (error) {
+            // Ignore storage write errors (privacy mode, quota, etc.).
+        }
+    }
+
+    function safeStorageRemove(key) {
+        try {
+            localStorage.removeItem(key);
         } catch (error) {
             // Ignore storage write errors (privacy mode, quota, etc.).
         }
