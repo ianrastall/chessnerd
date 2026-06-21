@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Redeploy after the daily Stockfish data refresh commits new data.
+  # The bot's commit can't trigger a `push` run (GitHub blocks that), so we
+  # chain off the data workflow's completion instead — the sanctioned pattern.
+  workflow_run:
+    workflows: ["Update Stockfish Commit Data"]
+    types: [completed]
 
 permissions:
   contents: read
