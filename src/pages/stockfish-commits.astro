@@ -33,7 +33,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </main>
 
-  <style>
+  <!-- Global: the commit list is built dynamically in JS, so scoped styles
+       (which only match elements Astro tags at build time) would never reach
+       it. All selectors here are .stockfish-* namespaced, so this is safe. -->
+  <style is:global>
     .stockfish-controls {
       display: grid;
       grid-template-columns: minmax(150px, 220px) minmax(240px, 1fr) auto;
