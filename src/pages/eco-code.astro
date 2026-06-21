@@ -1,0 +1,216 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="ECO Codes" description="Search Encyclopedia of Chess Openings codes and named lines, with a board diagram for every opening.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="ECO Codes" icon="menu_book" />
+
+      <div class="options-panel">
+        <div class="eco-controls">
+          <div class="option-group eco-search">
+            <label for="ecoSearch">Search</label>
+            <input id="ecoSearch" type="search" placeholder="Name or code — e.g. Najdorf, London, B90" autocomplete="off" />
+          </div>
+          <div class="option-group">
+            <label id="ecoVolumesLabel">Volume</label>
+            <div id="ecoVolumes" class="eco-volumes" role="group" aria-labelledby="ecoVolumesLabel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div id="ecoStatus">Loading openings…</div>
+      </div>
+
+      <section id="ecoList" class="eco-list" aria-live="polite"></section>
+
+      <p class="eco-note">
+        A searchable index of named opening lines and their ECO codes (A&ndash;E). Each line's board
+        is drawn from its moves. Opening names are a frozen snapshot of the public-domain
+        <a href="https://github.com/lichess-org/chess-openings" target="_blank" rel="noopener noreferrer">lichess-org/chess-openings</a> list.
+      </p>
+    </div>
+  </main>
+
+  <style is:global>
+    .eco-controls {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .eco-search input {
+      width: 100%;
+      min-height: 2.2rem;
+      padding: 0.35rem 0.6rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+    }
+
+    .eco-search input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .eco-volumes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .eco-chip {
+      min-width: 2.4rem;
+      padding: 0.35rem 0.7rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .eco-chip:hover {
+      color: var(--text-primary);
+    }
+
+    .eco-chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .eco-list {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .eco-row {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .eco-row-header {
+      display: grid;
+      grid-template-columns: 3.2rem minmax(0, 1fr);
+      grid-template-areas: 'badge name' 'badge moves';
+      column-gap: 0.75rem;
+      align-items: center;
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    .eco-row-header:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .eco-badge {
+      grid-area: badge;
+      align-self: center;
+      justify-self: start;
+      padding: 0.15rem 0.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background: var(--bg-tertiary);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .eco-name {
+      grid-area: name;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .eco-moves-preview {
+      grid-area: moves;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-family: 'Monaco', 'Menlo', monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .eco-detail {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 1rem;
+      padding: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-primary);
+    }
+
+    .eco-board {
+      width: 100%;
+    }
+
+    .eco-detail-side {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .eco-detail-moves {
+      margin: 0;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      overflow-wrap: anywhere;
+    }
+
+    .eco-detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .eco-detail-note {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .eco-note {
+      margin-top: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .eco-note a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .eco-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .eco-detail {
+        grid-template-columns: 1fr;
+      }
+
+      .eco-board {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+
+  <script is:inline src="/js/chess.min.js"></script>
+  <script>
+    import '../scripts/eco-code';
+  </script>
+</BaseLayout>

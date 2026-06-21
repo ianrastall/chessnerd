@@ -77,9 +77,8 @@ export const tools: ToolMeta[] = [
     href: '/eco-code.html',
     icon: 'menu_book',
     category: 'reference',
-    description: 'Browse Encyclopedia of Chess Openings codes by family, code, and named line.',
-    status: 'queued',
-    rebuildNote: 'Low workflow, but still needs the JSON data moved into src data ownership.'
+    description: 'Search Encyclopedia of Chess Openings codes and named lines, with a board diagram for every opening.',
+    status: 'ready'
   },
   {
     id: 'engines',
