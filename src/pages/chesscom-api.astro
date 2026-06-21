@@ -1361,9 +1361,11 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
 // Active TOC link tracking via IntersectionObserver
 const links = Array.from(document.querySelectorAll('.toc-link[href^="#"]'));
 if (links.length) {
-  const targets = links.map(l => document.getElementById(l.getAttribute('href').slice(1))).filter(Boolean);
+  const targets = links
+    .map(l => { const h = l.getAttribute('href'); return h ? document.getElementById(h.slice(1)) : null; })
+    .filter((t): t is HTMLElement => t !== null);
   let active: Element | null = null;
-  function setActive(el: Element) {
+  function setActive(el: Element): void {
     if (active === el) return;
     active = el;
     links.forEach(l => l.classList.remove('active'));
