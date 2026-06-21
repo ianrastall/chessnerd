@@ -1,0 +1,392 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+---
+<BaseLayout title="Chess.com Titled Players" description="Browse titled Chess.com accounts — filter by title, rating, country, and status.">
+<style is:global>
+/* ── Layout ───────────────────────────────────────────── */
+#tpView{display:flex;flex-direction:column;gap:1rem}
+
+/* ── Filter panel ─────────────────────────────────────── */
+.tp-filters{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:10px;padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.75rem}
+.tp-title-row{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem}
+.tp-title-row label{font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-right:.2rem}
+.tp-title-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .55rem;border-radius:5px;border:1px solid var(--border-color);background:var(--bg-tertiary);color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;user-select:none;transition:background .12s,border-color .12s,color .12s}
+.tp-title-btn input{display:none}
+.tp-title-btn.checked{background:rgba(var(--accent-rgb),.15);border-color:var(--accent);color:var(--accent)}
+.tp-title-sep{width:1px;height:1.2em;background:var(--border-color);margin:0 .1rem}
+.tp-toggle-btn{padding:.25rem .55rem;border-radius:5px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:.75rem;cursor:pointer;transition:color .12s,border-color .12s}
+.tp-toggle-btn:hover{color:var(--accent);border-color:var(--accent)}
+.tp-row2{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end}
+.tp-field{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+.tp-field label{font-size:.75rem;color:var(--text-secondary)}
+.tp-field select,.tp-field input[type="number"],.tp-field input[type="text"],.tp-field input[type="search"]{background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:5px;color:var(--text-primary);padding:.35rem .55rem;font-size:.85rem;height:2rem;min-width:0}
+.tp-field select:focus,.tp-field input:focus{outline:none;border-color:var(--accent)}
+.tp-field.wide{flex:1;min-width:160px}
+.tp-search-row{display:flex;gap:.6rem;align-items:flex-end}
+.tp-search-row .tp-field{flex:1}
+
+/* ── Status bar ───────────────────────────────────────── */
+.tp-status-bar{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;font-size:.83rem;color:var(--text-secondary)}
+.tp-count{font-weight:600;color:var(--text-primary)}
+.tp-updated{margin-left:auto;font-size:.78rem}
+.tp-export{margin-left:auto}
+
+/* ── Table ────────────────────────────────────────────── */
+.tp-table-wrap{overflow-x:auto;border:1px solid var(--border-color);border-radius:10px}
+.tp-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.tp-table th{padding:.5rem .75rem;background:var(--bg-secondary);color:var(--text-secondary);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;border-bottom:2px solid var(--border-color);cursor:pointer;user-select:none;position:sticky;top:0;z-index:1}
+.tp-table th:hover{color:var(--accent)}
+.tp-table th .sort-arrow{display:inline-block;margin-left:.3rem;opacity:.35;font-size:.7rem}
+.tp-table th.sort-asc .sort-arrow::after{content:"▲";opacity:1}
+.tp-table th.sort-desc .sort-arrow::after{content:"▼";opacity:1}
+.tp-table th:not(.sort-asc):not(.sort-desc) .sort-arrow::after{content:"⇅"}
+.tp-table td{padding:.45rem .75rem;border-bottom:1px solid var(--border-color);vertical-align:middle}
+.tp-table tbody tr:last-child td{border-bottom:none}
+.tp-table tbody tr:hover td{background:rgba(var(--accent-rgb),.04)}
+.tp-table td.td-rating{font-family:Consolas,Monaco,monospace;text-align:right;font-size:.84rem}
+.tp-table td.td-dash{color:var(--text-secondary)}
+.tp-table td.td-username a{color:var(--accent);text-decoration:none;font-weight:500}
+.tp-table td.td-username a:hover{text-decoration:underline}
+.tp-table td.td-name{color:var(--text-secondary);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tp-table td.td-country{font-size:.82rem;letter-spacing:.04em;color:var(--text-secondary)}
+
+/* ── Title badge ──────────────────────────────────────── */
+.title-badge{display:inline-block;padding:.15rem .4rem;border-radius:4px;font-size:.72rem;font-weight:700;letter-spacing:.04em;line-height:1.3}
+.title-badge.men{background:rgba(var(--accent-rgb),.18);color:var(--accent);border:1px solid rgba(var(--accent-rgb),.35)}
+.title-badge.women{background:transparent;color:var(--accent);border:1px solid var(--accent);opacity:.8}
+
+/* ── Status badge ─────────────────────────────────────── */
+.status-badge{display:inline-block;padding:.1rem .35rem;border-radius:4px;font-size:.7rem;font-weight:600}
+.status-badge.active{background:rgba(34,197,94,.15);color:#22c55e}
+.status-badge.inactive{background:rgba(var(--accent-rgb),.07);color:var(--text-secondary)}
+
+/* ── Footer ───────────────────────────────────────────── */
+.tp-footer{display:flex;align-items:center;gap:1rem;padding:.5rem 0}
+.tp-show-more{font-size:.85rem}
+.tp-page-info{font-size:.8rem;color:var(--text-secondary)}
+.tp-empty{padding:1.5rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:10px;color:var(--text-secondary);text-align:center}
+
+@media(max-width:700px){
+  .tp-row2{flex-direction:column}
+  .tp-field{width:100%}
+}
+</style>
+
+<main>
+<div class="tool-container">
+  <ToolHeader title="Chess.com Titled Players" icon="groups" />
+
+  <div id="tpView">
+
+    <!-- Filters -->
+    <div class="tp-filters">
+      <div class="tp-title-row">
+        <label>Titles</label>
+        {["GM","WGM","IM","WIM","FM","WFM","NM","WNM","CM","WCM"].map(t => (
+          <label class="tp-title-btn checked" data-title={t}>
+            <input type="checkbox" checked />{t}
+          </label>
+        ))}
+        <span class="tp-title-sep"></span>
+        <button class="tp-toggle-btn" id="tpSelectAll">All</button>
+        <button class="tp-toggle-btn" id="tpSelectNone">None</button>
+      </div>
+
+      <div class="tp-row2">
+        <div class="tp-field">
+          <label for="tpRating">Rating type</label>
+          <select id="tpRating">
+            <option value="blitz">Blitz</option>
+            <option value="rapid">Rapid</option>
+            <option value="bullet">Bullet</option>
+          </select>
+        </div>
+        <div class="tp-field">
+          <label for="tpMinElo">Min Elo</label>
+          <input type="number" id="tpMinElo" value="0" min="0" max="4000" step="50" style="width:90px" />
+        </div>
+        <div class="tp-field">
+          <label for="tpCountry">Country</label>
+          <input type="text" id="tpCountry" placeholder="e.g. US" maxlength="4" style="width:80px;text-transform:uppercase" />
+        </div>
+        <div class="tp-field">
+          <label for="tpStatus">Status</label>
+          <select id="tpStatus">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="tp-field wide">
+          <label for="tpSearch">Search username or name</label>
+          <input type="search" id="tpSearch" placeholder="Search…" autocomplete="off" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Status bar -->
+    <div class="tp-status-bar">
+      <span id="tpCount" class="tp-count">Loading…</span>
+      <button class="btn btn-secondary btn-compact tp-export" id="tpExport" disabled>
+        <span class="material-icons">download</span>Export CSV
+      </button>
+      <span id="tpUpdated" class="tp-updated"></span>
+    </div>
+
+    <!-- Table -->
+    <div class="tp-table-wrap" id="tpTableWrap">
+      <table class="tp-table" id="tpTable">
+        <thead>
+          <tr>
+            <th data-col="title" class="sort-asc">Title<span class="sort-arrow"></span></th>
+            <th data-col="username">Username<span class="sort-arrow"></span></th>
+            <th data-col="name">Name<span class="sort-arrow"></span></th>
+            <th data-col="country">Country<span class="sort-arrow"></span></th>
+            <th data-col="rapid" style="text-align:right">Rapid<span class="sort-arrow"></span></th>
+            <th data-col="blitz" style="text-align:right">Blitz<span class="sort-arrow"></span></th>
+            <th data-col="bullet" style="text-align:right">Bullet<span class="sort-arrow"></span></th>
+            <th data-col="status">Status<span class="sort-arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tpBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="tp-footer">
+      <button class="btn btn-secondary tp-show-more" id="tpShowMore" style="display:none">
+        Show more
+      </button>
+      <span class="tp-page-info" id="tpPageInfo"></span>
+    </div>
+
+  </div>
+</div>
+</main>
+
+<script>
+const TITLE_PRIORITY: Record<string, number> = {GM:0,IM:1,FM:2,NM:3,CM:4,WGM:5,WIM:6,WFM:7,WCM:8,WNM:9};
+const WOMEN_TITLES = new Set(["WGM","WIM","WFM","WNM","WCM"]);
+const PAGE_SIZE = 100;
+
+type Player = {
+  username: string; title: string; name: string; avatar: string;
+  country: string; rapid: number; blitz: number; bullet: number;
+  status: string; updated_at: string; fetch_ok: boolean;
+};
+
+// State
+let allPlayers: Player[] = [];
+let filtered: Player[] = [];
+let shownCount = PAGE_SIZE;
+let sortCol = "title";
+let sortDir: "asc" | "desc" = "asc";
+let dataUpdated = "";
+
+// --- DOM refs ---
+const tpBody = document.getElementById("tpBody") as HTMLTableSectionElement;
+const tpCount = document.getElementById("tpCount")!;
+const tpUpdated = document.getElementById("tpUpdated")!;
+const tpExport = document.getElementById("tpExport") as HTMLButtonElement;
+const tpShowMore = document.getElementById("tpShowMore") as HTMLButtonElement;
+const tpPageInfo = document.getElementById("tpPageInfo")!;
+const tpSearch = document.getElementById("tpSearch") as HTMLInputElement;
+const tpRating = document.getElementById("tpRating") as HTMLSelectElement;
+const tpMinElo = document.getElementById("tpMinElo") as HTMLInputElement;
+const tpCountry = document.getElementById("tpCountry") as HTMLInputElement;
+const tpStatus = document.getElementById("tpStatus") as HTMLSelectElement;
+const titleBtns = Array.from(document.querySelectorAll<HTMLElement>(".tp-title-btn"));
+
+function selectedTitles(): Set<string> {
+  return new Set(titleBtns.filter(b => b.classList.contains("checked")).map(b => b.dataset.title!));
+}
+
+function ratingVal(p: Player): number {
+  const t = tpRating.value;
+  return t === "rapid" ? p.rapid : t === "bullet" ? p.bullet : p.blitz;
+}
+
+function applyFilters(): void {
+  const titles = selectedTitles();
+  const minElo = parseInt(tpMinElo.value, 10) || 0;
+  const country = tpCountry.value.trim().toUpperCase();
+  const status = tpStatus.value;
+  const q = tpSearch.value.trim().toLowerCase();
+
+  filtered = allPlayers.filter(p => {
+    if (!titles.has(p.title)) return false;
+    if (country && p.country !== country) return false;
+    if (status !== "all" && p.status !== status) return false;
+    if (minElo > 0 && ratingVal(p) < minElo) return false;
+    if (q && !p.username.toLowerCase().includes(q) && !p.name.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  applySortInPlace();
+  shownCount = PAGE_SIZE;
+  render();
+}
+
+function applySortInPlace(): void {
+  const dir = sortDir === "asc" ? 1 : -1;
+  filtered.sort((a, b) => {
+    let va: string | number, vb: string | number;
+    if (sortCol === "title") {
+      va = TITLE_PRIORITY[a.title] ?? 99;
+      vb = TITLE_PRIORITY[b.title] ?? 99;
+    } else if (sortCol === "rapid" || sortCol === "blitz" || sortCol === "bullet") {
+      va = a[sortCol]; vb = b[sortCol];
+    } else if (sortCol === "status") {
+      va = a.status; vb = b.status;
+    } else if (sortCol === "username") {
+      va = a.username.toLowerCase(); vb = b.username.toLowerCase();
+    } else if (sortCol === "name") {
+      va = a.name.toLowerCase(); vb = b.name.toLowerCase();
+    } else if (sortCol === "country") {
+      va = a.country; vb = b.country;
+    } else {
+      va = 0; vb = 0;
+    }
+    if (va < vb) return -1 * dir;
+    if (va > vb) return 1 * dir;
+    // secondary: title priority then username
+    if (sortCol !== "title") {
+      const tp = (TITLE_PRIORITY[a.title] ?? 99) - (TITLE_PRIORITY[b.title] ?? 99);
+      if (tp !== 0) return tp;
+    }
+    return a.username.localeCompare(b.username) * dir;
+  });
+}
+
+function ratingCell(val: number): string {
+  if (!val) return `<td class="td-rating td-dash">—</td>`;
+  return `<td class="td-rating">${val.toLocaleString()}</td>`;
+}
+
+function render(): void {
+  const slice = filtered.slice(0, shownCount);
+  const rows = slice.map(p => {
+    const badge = `<span class="title-badge ${WOMEN_TITLES.has(p.title) ? "women" : "men"}">${p.title}</span>`;
+    const name = p.name ? `<td class="td-name" title="${p.name.replace(/"/g, "&quot;")}">${esc(p.name)}</td>` : `<td class="td-name td-dash">—</td>`;
+    const status = `<span class="status-badge ${p.status}">${p.status}</span>`;
+    return `<tr>
+      <td>${badge}</td>
+      <td class="td-username"><a href="https://www.chess.com/member/${p.username}" target="_blank" rel="noopener">${esc(p.username)}</a></td>
+      ${name}
+      <td class="td-country">${p.country === "??" ? "—" : p.country}</td>
+      ${ratingCell(p.rapid)}
+      ${ratingCell(p.blitz)}
+      ${ratingCell(p.bullet)}
+      <td>${status}</td>
+    </tr>`;
+  }).join("");
+
+  tpBody.innerHTML = rows || `<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-secondary)">No players match the current filters.</td></tr>`;
+
+  const total = filtered.length;
+  const shown = Math.min(shownCount, total);
+  tpCount.textContent = `${total.toLocaleString()} of ${allPlayers.length.toLocaleString()} players`;
+  tpShowMore.style.display = shown < total ? "" : "none";
+  tpPageInfo.textContent = shown < total ? `Showing ${shown.toLocaleString()} of ${total.toLocaleString()}` : `Showing all ${total.toLocaleString()}`;
+}
+
+function esc(s: string): string {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// --- Sort headers ---
+document.querySelectorAll<HTMLTableCellElement>(".tp-table th[data-col]").forEach(th => {
+  th.addEventListener("click", () => {
+    const col = th.dataset.col!;
+    if (sortCol === col) {
+      sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+      sortCol = col;
+      sortDir = ["rapid","blitz","bullet"].includes(col) ? "desc" : "asc";
+    }
+    document.querySelectorAll(".tp-table th").forEach(h => h.classList.remove("sort-asc","sort-desc"));
+    th.classList.add(sortDir === "asc" ? "sort-asc" : "sort-desc");
+    applySortInPlace();
+    shownCount = PAGE_SIZE;
+    render();
+  });
+});
+
+// --- Title toggle buttons ---
+titleBtns.forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    btn.classList.toggle("checked");
+    const cb = btn.querySelector("input") as HTMLInputElement;
+    cb.checked = btn.classList.contains("checked");
+    applyFilters();
+  });
+});
+
+document.getElementById("tpSelectAll")!.addEventListener("click", () => {
+  titleBtns.forEach(b => { b.classList.add("checked"); (b.querySelector("input") as HTMLInputElement).checked = true; });
+  applyFilters();
+});
+document.getElementById("tpSelectNone")!.addEventListener("click", () => {
+  titleBtns.forEach(b => { b.classList.remove("checked"); (b.querySelector("input") as HTMLInputElement).checked = false; });
+  applyFilters();
+});
+
+// --- Other filter controls ---
+let searchTimer = 0;
+tpSearch.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = window.setTimeout(applyFilters, 200); });
+tpRating.addEventListener("change", applyFilters);
+tpMinElo.addEventListener("change", applyFilters);
+tpCountry.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = window.setTimeout(applyFilters, 300); });
+tpStatus.addEventListener("change", applyFilters);
+
+// --- Show more ---
+tpShowMore.addEventListener("click", () => { shownCount += PAGE_SIZE; render(); });
+
+// --- CSV export ---
+tpExport.addEventListener("click", () => {
+  const ratingType = tpRating.value;
+  const headers = ["Title","Username","Name","Country","Rapid","Blitz","Bullet","Status"];
+  const rows = filtered.map(p =>
+    [p.title, p.username, p.name, p.country, p.rapid || "", p.blitz || "", p.bullet || "", p.status]
+      .map(v => `"${String(v).replace(/"/g,'""')}"`)
+      .join(",")
+  );
+  const csv = [headers.join(","), ...rows].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+  a.download = `titled-players-${ratingType}.csv`;
+  a.click();
+});
+
+// --- Load data ---
+async function init(): Promise<void> {
+  tpCount.textContent = "Loading data…";
+  try {
+    const resp = await fetch("/data/titled-players.json");
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const raw = await resp.json();
+    allPlayers = Array.isArray(raw) ? raw : (raw.players ?? []);
+
+    // Find most recent updated_at for display
+    let latest = "";
+    for (const p of allPlayers) {
+      if (p.updated_at && p.updated_at > latest) latest = p.updated_at;
+    }
+    if (latest) {
+      const d = new Date(latest);
+      tpUpdated.textContent = `Data as of ${d.toLocaleDateString(undefined, {year:"numeric",month:"short",day:"numeric"})}`;
+    }
+
+    tpExport.disabled = false;
+    applyFilters();
+  } catch (err) {
+    tpCount.textContent = "Failed to load player data.";
+    tpBody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-secondary)">Could not load titled-players.json: ${err}</td></tr>`;
+  }
+}
+
+init();
+</script>
+</BaseLayout>

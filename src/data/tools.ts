@@ -63,12 +63,11 @@ export const tools: ToolMeta[] = [
   {
     id: 'titled-players',
     name: 'Chess.com Titled Players',
-    href: '/titled-players.html',
+    href: '/titled-players',
     icon: 'groups',
     category: 'data',
-    description: 'Browse titled Chess.com accounts with live profile and rating details.',
-    status: 'queued',
-    rebuildNote: 'Live Chess.com API behavior and caching need a deliberate rebuild plan.'
+    description: 'Browse titled Chess.com accounts — filter by title, rating, country, and status.',
+    status: 'ready',
   },
   {
     id: 'eco-code',

@@ -1,0 +1,60 @@
+name: Sync Titled Players Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 0"   # Weekly — Sunday 03:00 UTC
+
+permissions:
+  contents: write
+
+concurrency:
+  group: titled-players-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330    # 5.5 h — script self-limits at 5 h, leaving headroom
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Python dependencies
+        run: pip install requests
+
+      - name: Sync titled player data
+        env:
+          MAX_RUN_SECONDS: "18000"   # 5 h — script exits cleanly if not finished
+        run: python scripts/sync-titled-players.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Validate Astro build
+        run: npm run build
+
+      - name: Commit updated data
+        shell: bash
+        run: |
+          if [ -z "$(git status --porcelain -- public/data/titled-players.json)" ]; then
+            echo "No changes to titled-players.json — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/titled-players.json
+          git commit -m "Update titled players data"
+          git push
