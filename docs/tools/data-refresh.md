@@ -4,7 +4,7 @@ These tools are the best candidates for scheduled GitHub Actions jobs.
 
 | Tool | Current Source | Suggested Cadence | Notes |
 | --- | --- | --- | --- |
-| Stockfish Commits | `tools/build_stockfish_commits_json.py`, `data/stockfish-commits/` | Daily | Good cron candidate. Fetch recent commits, update month JSON and index, commit only when data changes. |
+| Stockfish Commits | `scripts/stockfish_commits/update_stockfish_commits.py`, `data/stockfish-commits/`, `public/data/stockfish-commits/` | Daily | Implemented in `.github/workflows/update-stockfish-commits.yml`. Fetches GitHub commits only, then writes deterministic canonical and month JSON when data changes. |
 | Engine Database | `build_engine_list.py`, `build_engine_list_2.py`, `data/engines.json` | Monthly | Good cron candidate if source pages are stable. Needs validation because engine sources can change shape. |
 | FIDE 2200+ Players | `fide-2200.json` | Monthly | FIDE publishes rating lists monthly. Best automated from a clear upstream rating-list source. |
 | Chess.com Titled Players | Live Chess.com PubAPI | Weekly cache optional | The page works live. A generated cache could make first render faster and reduce API dependency. |

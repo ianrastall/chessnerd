@@ -1,0 +1,185 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Stockfish Commits" description="Browse Stockfish commit history with authors, dates, source snapshots, and messages.">
+  <main>
+    <div id="toolView">
+      <ToolHeader title="Stockfish Commits" icon="history" />
+
+      <div class="options-panel">
+        <div class="stockfish-controls">
+          <div class="option-group">
+            <label for="stockfishMonth">Month</label>
+            <select id="stockfishMonth" disabled></select>
+          </div>
+          <div class="option-group stockfish-search">
+            <label for="stockfishSearch">Search</label>
+            <input id="stockfishSearch" type="search" placeholder="Hash, author, message..." autocomplete="off" disabled />
+          </div>
+          <a class="btn btn-secondary stockfish-repo" href="https://github.com/official-stockfish/Stockfish" target="_blank" rel="noopener noreferrer">
+            <span class="material-icons" aria-hidden="true">open_in_new</span>
+            Repo
+          </a>
+        </div>
+      </div>
+
+      <div class="status-bar stockfish-status">
+        <div id="stockfishStatus">Loading commit data...</div>
+        <div id="stockfishGenerated"></div>
+      </div>
+
+      <section id="stockfishList" class="stockfish-list" aria-live="polite"></section>
+    </div>
+  </main>
+
+  <style>
+    .stockfish-controls {
+      display: grid;
+      grid-template-columns: minmax(150px, 220px) minmax(240px, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .stockfish-search input {
+      width: 100%;
+      min-height: 2.2rem;
+      padding: 0.35rem 0.6rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+    }
+
+    .stockfish-search input:focus,
+    #stockfishMonth:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .stockfish-repo {
+      justify-content: center;
+      min-height: 2.2rem;
+      white-space: nowrap;
+    }
+
+    .stockfish-status {
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .stockfish-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .stockfish-commit {
+      display: grid;
+      gap: 0.7rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .stockfish-commit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .stockfish-title {
+      display: grid;
+      gap: 0.25rem;
+      min-width: 0;
+    }
+
+    .stockfish-subject {
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .stockfish-meta {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+    }
+
+    .stockfish-short {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.75rem;
+      padding: 0.25rem 0.55rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--accent);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .stockfish-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .stockfish-message {
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.65rem;
+    }
+
+    .stockfish-message summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .stockfish-message pre {
+      margin-top: 0.65rem;
+      max-height: 420px;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.75rem;
+      color: var(--text-primary);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .stockfish-empty {
+      padding: 1.25rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 760px) {
+      .stockfish-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .stockfish-commit-header {
+        flex-direction: column;
+      }
+
+      .stockfish-short {
+        white-space: normal;
+      }
+    }
+  </style>
+
+  <script>
+    import '../scripts/stockfish-commits';
+  </script>
+</BaseLayout>

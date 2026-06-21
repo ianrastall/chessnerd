@@ -1,0 +1,572 @@
+{
+  "month": "2026-06",
+  "commits": [
+    {
+      "hash": "74a0a73715322608332038f7c0151ddf0609a59a",
+      "short": "74a0a737",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-06-14T07:52:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/74a0a73715322608332038f7c0151ddf0609a59a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/74a0a73715322608332038f7c0151ddf0609a59a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/74a0a73715322608332038f7c0151ddf0609a59a.tar.gz"
+        }
+      ],
+      "message": "Final fix for MultiPV mate PV corner cases\n\nThis PR fixes the remaining corner cases in the treatment of MultiPV\nmated-in PVs, as well as an oversight in #6886. See the discussion in\n\nIn particular:\n1. `previousScore` and `previousPV` can only be trusted, if that\n   rootmove was indeed fully searched in the previous iteration.\n2. A move beyond `pvIdx` (that was hence not fully searched) may have an\n   exact loss score that cannot be trusted. So if a MultiPV search gets\n   aborted while searching `pvIdx`, we mark all the following loss\n   scores as bounds.\n3. The forgotten mate logic also got broken in #6886, because the\n   `previousPV` of the forgotten mate's bestmove can only be trusted if\n   that move was fully searched in the previous iteration, something\n   that is not guaranteed. So we now store both `lastBestMoveScore` and\n   `lastBestMovePV`.\n\nHere some scenarios for MultiPV = 8 that explain how master was broken:\n1. Move A with an inexact mated-in-2 score from the previous iteration\n   (so outside the top8 moves) gets flushed into the top8 moves for the\n   current iteration, because the previous top8 move B is now scored as\n   a mated-in-1. Hence we cannot trust `previousScore` or `previousPV`\n   for move A, if the search gets aborted while it is being searched.\n2. In the scenario above, move B has `Score != -VALUE_INFINITE` and a\n   mated-in-1 score, which cannot be trusted as it was not fully\n   searched.\n3. Iteration N has bestmove A with mated-in-10, which gets recorded in\n   `lastBestMoveScore` (renamed from `lastIterationScore`). Iteration 11\n   forgets the mate and has bestmove B with a cp score, move A may have\n   an incomplete PV, and may even have a non-mate score. Iteration 12\n   gets aborted, and in trying to remember the forgotten mate, master\n   recovers the `previousScore` and `previousPV` of move A, which may be\n   neither mate nor complete.\n\nPassed STC non-reg:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 69728 W: 17748 L: 17573 D: 34407\nPtnml(0-2): 143, 7571, 19274, 7720, 156\nhttps://tests.stockfishchess.org/tests/view/6a2c40c60d5d4b19d08052f2\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6906\n\nNo functional change\n",
+      "subject": "Final fix for MultiPV mate PV corner cases"
+    },
+    {
+      "hash": "f9b002cf7db4a6ec53dd5f06d72601638e326b82",
+      "short": "f9b002cf",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-14T07:51:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f9b002cf7db4a6ec53dd5f06d72601638e326b82",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f9b002cf7db4a6ec53dd5f06d72601638e326b82.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f9b002cf7db4a6ec53dd5f06d72601638e326b82.tar.gz"
+        }
+      ],
+      "message": "Share continuation history between threads\n\nPassed 8th 5+0.05 https://tests.stockfishchess.org/tests/view/6a0bfdb46524d21ee79b879b\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 23472 W: 6103 L: 5823 D: 11546\nPtnml(0-2): 26, 2501, 6403, 2779, 27\n\nPassed 8th 20+0.2 https://tests.stockfishchess.org/tests/view/6a0c87196524d21ee79b885c\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 44692 W: 11640 L: 11319 D: 21733\nPtnml(0-2): 12, 4418, 13169, 4731, 16\n\nPassed 16th 5+0.05 https://tests.stockfishchess.org/tests/view/6a20533f818cacc1db0ad32b\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 14720 W: 3910 L: 3642 D: 7168\nPtnml(0-2): 6, 1434, 4223, 1680, 17\n\nPassed 64th 10+0.1 https://tests.stockfishchess.org/tests/view/6a20ae8e818cacc1db0ad369\n\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 34096 W: 8889 L: 8607 D: 16600\nPtnml(0-2): 4, 2974, 10808, 3260, 2\n\nContinuation history is fixed size so there's a much more false sharing and a larger speed loss here at high thread counts, unfortunately.\n\nvondele's machine, 4x70\n\n```\n==== master ====\nAverage (over 3):  294528128\n==== shared-conthist ====\nAverage (over 3):  282364217 (~4% slowdown)\n```\n\nmy machine, 8x32\n```\nNodes/second               : 243157385\nNodes/second               : 228374554 (~6% slowdown)\n```\n\nEvidently it still gains at 64th, but a few followup ideas to try get the speed back:\n- Add padding in `PieceToHistory` stats so there's less false sharing.\n- Subdivide continuation history more finely than shared correction history.\n- Scramble the `PieceToHistory` indexing so there's less false sharing\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6905\n\nNo functional change\n",
+      "subject": "Share continuation history between threads"
+    },
+    {
+      "hash": "f9beec5fa56540ee088a9c9e03a6444b4ec26af6",
+      "short": "f9beec5f",
+      "author": "zungur <zungur@users.noreply.github.com>",
+      "date": "2026-06-14T07:50:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f9beec5fa56540ee088a9c9e03a6444b4ec26af6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f9beec5fa56540ee088a9c9e03a6444b4ec26af6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f9beec5fa56540ee088a9c9e03a6444b4ec26af6.tar.gz"
+        }
+      ],
+      "message": "Reuse computed ray bitboard in update_piece_threats\n\nReuse the already-computed ray instead of calling ray_pass_bb a second time with identical arguments.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6899\n\nNo functional change\n",
+      "subject": "Reuse computed ray bitboard in update_piece_threats"
+    },
+    {
+      "hash": "ed8e35d759ed7953ab0e4543ed6d6d496067bfa0",
+      "short": "ed8e35d7",
+      "author": "zungur <zungur@users.noreply.github.com>",
+      "date": "2026-06-14T07:49:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ed8e35d759ed7953ab0e4543ed6d6d496067bfa0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed8e35d759ed7953ab0e4543ed6d6d496067bfa0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed8e35d759ed7953ab0e4543ed6d6d496067bfa0.tar.gz"
+        }
+      ],
+      "message": "Remove unused code from the post NNUE accumulator merge\n\nAfter merging the HalfKA and Threats accumulators (7c7fe322) and the\nsubsequent removal of the double-incremental/fused update, a number of\nNNUE helpers and fields became unreachable. Each was verified to have\nzero callers/readers across the source tree:\n\n- FusedUpdateData logic in FullThreats: the fused-update branch of\n  append_changed_indices and the FusedUpdateData parameter are unused;\n  the accumulator update no longer passes fused data.\n- FullThreats::requires_refresh: never called. The live king-bucket\n  refresh check is HalfKAv2_hm::requires_refresh (PSQFeatureSet), used\n  in nnue_accumulator.\n- HalfKAv2_hm::append_active_indices: never called. The live\n  active-index builder is FullThreats::append_active_indices\n  (ThreatFeatureSet).\n- DirtyThreats::us, prevKsq and ksq: written in do_move but only read by\n  the now-removed FullThreats::requires_refresh. Removing them also\n  drops three stores from the do_move path.\n- Unused feature Name constants and the unused FtOneVal / HiddenMaxVal\n  constants in nnue_common.h.\n- Two stale feature-header banner comments.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6898\n\nNo functional change\n",
+      "subject": "Remove unused code from the post NNUE accumulator merge"
+    },
+    {
+      "hash": "6e4e03fd282d5e1cba514197bf1ef326c990f0d2",
+      "short": "6e4e03fd",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-06-14T07:49:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6e4e03fd282d5e1cba514197bf1ef326c990f0d2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e4e03fd282d5e1cba514197bf1ef326c990f0d2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e4e03fd282d5e1cba514197bf1ef326c990f0d2.tar.gz"
+        }
+      ],
+      "message": "Replace Remaining Types\n\nSomehow a few size_t slipped through https://github.com/official-stockfish/Stockfish/pull/6874\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6897\n\nNo functional change\n",
+      "subject": "Replace Remaining Types"
+    },
+    {
+      "hash": "718a001e6a962242b36172ebd0f478ee35b55288",
+      "short": "718a001e",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-06-14T07:48:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/718a001e6a962242b36172ebd0f478ee35b55288",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/718a001e6a962242b36172ebd0f478ee35b55288.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/718a001e6a962242b36172ebd0f478ee35b55288.tar.gz"
+        }
+      ],
+      "message": "Fixup RelaxedAtomic operator Types\n\nAs pointed out in\nhttps://github.com/official-stockfish/Stockfish/commit/0111d11e2356147bad21c1f890b271a30d10a580#r188197707,\nthe parameter type should be `T` not `int`\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6896\n\nNo functional change\n",
+      "subject": "Fixup RelaxedAtomic operator Types"
+    },
+    {
+      "hash": "0dc19b61ae4d2f361787b043228191403bec8c22",
+      "short": "0dc19b61",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-06-14T07:47:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0dc19b61ae4d2f361787b043228191403bec8c22",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0dc19b61ae4d2f361787b043228191403bec8c22.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0dc19b61ae4d2f361787b043228191403bec8c22.tar.gz"
+        }
+      ],
+      "message": "More stable matetrack CI\n\nThis version handles aborting engine processes more gracefully. This\nalso test the engine prior to use, as the process is nevertheless not\nfully robust.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6893\n\nNo functional change\n",
+      "subject": "More stable matetrack CI"
+    },
+    {
+      "hash": "86f1df7134fa54fe93e90dc086d978e917256c2f",
+      "short": "86f1df71",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-10T21:01:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/86f1df7134fa54fe93e90dc086d978e917256c2f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86f1df7134fa54fe93e90dc086d978e917256c2f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86f1df7134fa54fe93e90dc086d978e917256c2f.tar.gz"
+        }
+      ],
+      "message": "Fix material key computation error\n\nFixes an error introduced in 278a755fb552131b7e2a5da24256b6a4b13246fc https://github.com/official-stockfish/Stockfish/pull/6891\n\nAlso enables more checking in debug builds\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6894\n\nNo functional change\n",
+      "subject": "Fix material key computation error"
+    },
+    {
+      "hash": "5595cb20ea51aedf1c1ddcf852fa62d3b1d6e5c7",
+      "short": "5595cb20",
+      "author": "zungur <zungur@users.noreply.github.com>",
+      "date": "2026-06-10T10:43:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5595cb20ea51aedf1c1ddcf852fa62d3b1d6e5c7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5595cb20ea51aedf1c1ddcf852fa62d3b1d6e5c7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5595cb20ea51aedf1c1ddcf852fa62d3b1d6e5c7.tar.gz"
+        }
+      ],
+      "message": "Fix FEN validation of pawns on first or eighth rank\n\nThe FEN validation check intended to reject pawns on the first or eighth rank uses the `Rank` enum values in a bitwise OR operation:\n\n`if (pieces(PAWN) & (RANK_1 | RANK_8))`\n\n`RANK_1 | RANK_8` evaluates to the integer `0 | 7 == 7` instead of a bitboard, so the expression only tests squares A1, B1 and C1. As a result, unsupported positions with pawns elsewhere on the first or eighth rank are silently accepted. For instance, `position fen 3P3k/8/8/8/8/8/8/3K4 w - - 0 1` is accepted even though the pawn on d8 makes the position unsupported.\n\nUse the `Rank1BB | Rank8BB` bitboard constants so any pawn on the first or eighth rank are correctly rejected.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6887\n\nNo functional change\n",
+      "subject": "Fix FEN validation of pawns on first or eighth rank"
+    },
+    {
+      "hash": "7b37032885b20d95472ef08fd38bad16f07ada25",
+      "short": "7b370328",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-06-10T10:42:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7b37032885b20d95472ef08fd38bad16f07ada25",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7b37032885b20d95472ef08fd38bad16f07ada25.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7b37032885b20d95472ef08fd38bad16f07ada25.tar.gz"
+        }
+      ],
+      "message": "Stop searching if we cannot find a better move\n\nIn a recent CCC event, Stockfish (probably through no fault of its own), lost some games on time when it was winning and when it had already found the move that delivers checkmate.\n\nThis patch stops the search when TM is active, and when mainthread can be certain that it is impossible to find a better move. That is if (i) it has found mate-in-1, (ii) it has found a mate-in-2 or (iii) it has found a mated-in-1.\n\npatch:\n```\nposition fen 5K2/8/2qk4/2nPp3/3r4/6B1/B7/3R4 w - e6\ngo wtime 100000000 winc 100000000\ninfo string Available processors: 0-7\ninfo string Using 1 thread\ninfo string NNUE evaluation using nn-71d6d32cb962.nnue (106MiB, (83248, 1024, 31, 32, 1))\ninfo string Network replica 1: Shared memory.\ninfo depth 1 seldepth 3 multipv 1 score mate 1 nodes 30 nps 30000 hashfull 0 tbhits 0 time 1 pv d5e6\nbestmove d5e6\n```\n\nmaster:\n```\nposition fen 5K2/8/2qk4/2nPp3/3r4/6B1/B7/3R4 w - e6\ngo wtime 100000000 winc 100000000\ninfo string Available processors: 0-7\ninfo string Using 1 thread\ninfo string NNUE evaluation using nn-71d6d32cb962.nnue (106MiB, (83248, 1024, 31, 32, 1))\ninfo string Network replica 1: Shared memory.\ninfo depth 1 seldepth 3 multipv 1 score mate 1 nodes 30 nps 15000 hashfull 0 tbhits 0 time 2 pv d5e6\n<snip>\ninfo depth 245 seldepth 2 multipv 1 score mate 1 nodes 5886 nps 367875 hashfull 0 tbhits 0 time 16 pv d5e6\nbestmove d5e6\n```\n\nNote: In MultiPV analysis (extremely rare with TM active), we take the point of view that the user would like to continue to search until none of the PVs can be improved anymore. This means we only stop if the worst searched line is at least a mate-in-2, or if the best searched line is a mated-in-1.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6879\n\nNo functional change\n",
+      "subject": "Stop searching if we cannot find a better move"
+    },
+    {
+      "hash": "278a755fb552131b7e2a5da24256b6a4b13246fc",
+      "short": "278a755f",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-06-10T10:37:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/278a755fb552131b7e2a5da24256b6a4b13246fc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/278a755fb552131b7e2a5da24256b6a4b13246fc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/278a755fb552131b7e2a5da24256b6a4b13246fc.tar.gz"
+        }
+      ],
+      "message": "Reorder operations in do_move\n\nPassed STC\n https://tests.stockfishchess.org/tests/view/6a2682ce351b79f679cc47c5\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 57248 W: 14730 L: 14399 D: 28119\nPtnml(0-2): 145, 6159, 15698, 6464, 158\n\nReordering operations in `do_move` allows us to effectively prefetch the TT entry earlier, since the piece moving helpers don't actually modify the position key.  I suspect that with threat inputs, `put_piece` and friends got a lot more expensive, and so this helps us a lot.\n\nvondele's machine:\n\n==== master ====\n1 Nodes/second : 294311526\n2 Nodes/second : 297068312\n3 Nodes/second : 297418763\nAverage (over 3):  296266200\n==== pfearly ====\n1 Nodes/second : 303986449\n2 Nodes/second : 304221719\n3 Nodes/second : 305302969\nAverage (over 3):  304503712 (+2.78%)\n\nLocally, `bench`:\n\nResult of 200 runs\nspeedup         = +0.0158\nP(speedup > 0) =  1.0000\n\nAs expected it helps even more in a large-hash, NUMA setting.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6891\n\nNo functional change\n",
+      "subject": "Reorder operations in do_move"
+    },
+    {
+      "hash": "7c7fe322eae6fa3a594c036eb4fc2553fd4e6a11",
+      "short": "7c7fe322",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-10T06:40:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7c7fe322eae6fa3a594c036eb4fc2553fd4e6a11",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c7fe322eae6fa3a594c036eb4fc2553fd4e6a11.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7c7fe322eae6fa3a594c036eb4fc2553fd4e6a11.tar.gz"
+        }
+      ],
+      "message": "Merge HalfKA and Threats accumulators\n\nPassed STC (https://tests.stockfishchess.org/tests/view/6a2893ad7c758d82accea129):\nLLR: 3.20 (-2.94,2.94) <0.00,2.00>\nTotal: 23328 W: 6145 L: 5838 D: 11345\nPtnml(0-2): 50, 2463, 6346, 2740, 65\n\nInstead of repeatedly doing the sum HalfKA + threats at the end, it's profitable to simply store one accumulator per side that combines them. This also avoids an extra/load store of an accumulator, and halves the cache footprint of the accumulators.\n\nFor full refreshes, we always compute both halfka and threats simultaneously. Any threat full refresh is always a halfka refresh because it occurs when the king crosses the center line, while halfka refreshes are required for ANY king move, so we don't need a separate detection path for threats.\n\nI get about a 2.5% speedup locally with this, but I'd appreciate other ppl's measurements.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6890\n\nNo functional change\n",
+      "subject": "Merge HalfKA and Threats accumulators"
+    },
+    {
+      "hash": "0111d11e2356147bad21c1f890b271a30d10a580",
+      "short": "0111d11e",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-09T19:52:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0111d11e2356147bad21c1f890b271a30d10a580",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0111d11e2356147bad21c1f890b271a30d10a580.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0111d11e2356147bad21c1f890b271a30d10a580.tar.gz"
+        }
+      ],
+      "message": "Add ability to disable performance-sensitive relaxed atomic operations at compile time\n\nAdds a `RelaxedAtomic`  wrapper around either `T` or `std::atomic<T>` and `USE_SLOPPY_ATOMICS` preprocessor define. The intent of this flag is to allow easy disabling of atomics on WASM, where even relaxed atomics are expensive because all atomics have `seq_cst` semantics.\n\nPassed non regression STC\nLLR: 2.99 (-2.94,2.94) <-1.75,0.25>\nTotal: 50624 W: 12976 L: 12776 D: 24872\nPtnml(0-2): 112, 5445, 14005, 5631, 119\nhttps://tests.stockfishchess.org/tests/view/6a1f690e818cacc1db0ad2c7\n\nPassed non-regression STC SMP\n LLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 163696 W: 41514 L: 41438 D: 80744\nPtnml(0-2): 162, 18272, 44904, 18348, 162\nhttps://tests.stockfishchess.org/tests/view/6a21fb97351b79f679cc44b3\n\nUsing this class for the TT also allows us to remove the TSAN suppressions, since the UB is fixed.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6877\n\nNo functional change\n",
+      "subject": "Add ability to disable performance-sensitive relaxed atomic operations at compile time"
+    },
+    {
+      "hash": "415ff793a09ec8d029b6253c0eba4c8c106e61e7",
+      "short": "415ff793",
+      "author": "Abdul Khan <khanabdulmuhaiman@gmail.com>",
+      "date": "2026-06-09T17:37:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/415ff793a09ec8d029b6253c0eba4c8c106e61e7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/415ff793a09ec8d029b6253c0eba4c8c106e61e7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/415ff793a09ec8d029b6253c0eba4c8c106e61e7.tar.gz"
+        }
+      ],
+      "message": "Fix test harness timeout enforcement\n\nFixes #6881.\n\n`timeout_decorator()` used a `ThreadPoolExecutor` context manager around blocking output waits. When `future.result(timeout=...)` timed out, leaving the context manager still waited for the worker thread to finish, so a blocked stdout read could keep the instrumented tests hanging past the configured timeout.\n\nThis change removes that executor wrapper for interactive Stockfish output waits. The harness now drains process output on a daemon reader thread, queues received lines, and applies the deadline directly while waiting for the next queued line. `TimeoutException` also initializes the base exception message so failures show useful text.\n\nValidation:\n- `python3 -m py_compile tests/testing.py tests/instrumented.py`\n- local timeout smoke test: a 0.2s no-output wait raises in ~0.204s\n- Stockfish smoke test: startup/`uciok` read succeeds, deliberate no-output wait raises in ~0.205s, engine exits 0\n- `make -C src -j4 build`\n- `../tests/signature.sh` -> `2814421`\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6882\n\nNo functional change\n",
+      "subject": "Fix test harness timeout enforcement"
+    },
+    {
+      "hash": "1eff8b0389d740c7e5b8b2edeacd1acd7f3afa0d",
+      "short": "1eff8b03",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-06-09T17:36:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1eff8b0389d740c7e5b8b2edeacd1acd7f3afa0d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1eff8b0389d740c7e5b8b2edeacd1acd7f3afa0d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1eff8b0389d740c7e5b8b2edeacd1acd7f3afa0d.tar.gz"
+        }
+      ],
+      "message": "Guarantee complete mate PVs in multiPV analysis\n\nThis PR introduces the additional `RootMove` attribute `previousPV` so that scores and PVs we send to the GUI in MultiPV analysis always match. This allows us in particular to extend our guarantee of exact mate (and TB win/loss) scores having a complete PV (leading to checkmate in the correct number of plies) to all PV lines. Recall that master fails here, since partially searched root moves may send to the GUI the previous score with the current/modified PV. See #6784.\n\nThe PR also uses the new attribute to extend the followPV logic to the analysis of sidelines, building on the idea in #6813 by @joergoster.\n\nPassed non-reg STC:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 166880 W: 42357 L: 42282 D: 82241\nPtnml(0-2): 394, 18685, 45177, 18820, 364\nhttps://tests.stockfishchess.org/tests/view/6a0dea55818cacc1db0abb6a\n\nFailed non-reg LTC:\nLLR: -2.97 (-2.94,2.94) <-1.75,0.25>\nTotal: 890520 W: 224168 L: 225282 D: 441070\nPtnml(0-2): 390, 91902, 261789, 90790, 389\nhttps://tests.stockfishchess.org/tests/view/6a1143ad818cacc1db0ac14c\n\nOpening as draft for discussion on how to proceed. In SinglePV analysis, the patch is completely nonfunctional. But it is maybe a (small?) slowdown because of the increased size of `RootMove`. I am not sure if there as an elegant way to enrich the class only for MultiPV analysis (but the switch can happen at any time through the UCI interface), or to mitigate the speed penalty in some other way.\n\nA local speedup test shows only a small slowdown on my system (but still high error bars):\n```\nsf_base =  1156928 +/-   1459 (95%)\nsf_test =  1155885 +/-   1283 (95%)\ndiff    =    -1043 +/-   1777 (95%)\nspeedup = -0.09021% +/- 0.154% (95%)\n```\n\nThe PR also adds the new MultiPV mate PV correctness check to the CI.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6886\n\nNo functional change\n",
+      "subject": "Guarantee complete mate PVs in multiPV analysis"
+    },
+    {
+      "hash": "8e711c29fe7d5d9b317de46ec5f0cd848e56fbaf",
+      "short": "8e711c29",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-09T17:35:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8e711c29fe7d5d9b317de46ec5f0cd848e56fbaf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8e711c29fe7d5d9b317de46ec5f0cd848e56fbaf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8e711c29fe7d5d9b317de46ec5f0cd848e56fbaf.tar.gz"
+        }
+      ],
+      "message": "Add wasm32 and wasm32-relaxed-simd targets, and light optimizations\n\nLichess maintains some patches on top of SF dev to get it working with Emscripten. This PR moves some of these patches into SF and adds WASM to CI. It also adds a few changes in places where the x86 intrinsics don't cleanly map onto WebAssembly SIMD instructions; otherwise, we use Emscripten's x86 compatibility layer and take SSE4.1 code paths.\n\nSummary of the compatibility changes:\n\n- Define `wasm32` and `wasm32-relaxed-simd` targets.\n    - We don't support wasm without SIMD; it'd be a waste of time.\n- Add option to disable TBs\n    - This is required because `tbprobe.cpp` pulls in `mmap`. This option can be used on any target, of course, but it's only enabled by default for wasm.\n- Add compilation job + test to CI\n\nAnd the changes for performance:\n\n- Disable atomics for shared history on wasm\n    - Atomics are always `seq_cst` there, which can be quite slow (even on the x86, stores are locked `xchg [mem], reg`)\n- Add SSE code path to `get_changed_pieces`, modeled after the AVX2 path\n- `_mm_mulhi_epi16` has a complicated emulation sequence, so for the pairwise multiplication, use an approach similar to the NEON impl.\n- __int128 is gets lowered to runtime functions on wasm, so use the fallback impl for `mul_hi64`\n- V8 does a poor job with the NNZ finding, so use a slightly different sequence there\n- Add relaxed simd support for `m128_dpbusd`.\n\nSome local perf figures (single-threaded speedtest):\n\n```\nwasm\nNodes/second               : 902523\nsse4.1\nNodes/second               : 1155380\navx512icl\nNodes/second               : 1676184\n```\n\nFurther avenues to explore:\n- Optimize for performance under V8's experimental AVX revectorizer (Currently it's about +10% in my testing, but could definittely be more)\n- Branch hinting. For example, run bench while collecting branch frequency info, then inject it late in the WASM compilation pipeline. I tried this locally and it didn't help much, but maybe I'm missing something.\n- PGO. Gives +1.5% NPS locally, but hard to integrate with WASM compilation wrokflows\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6875\n\nNo functional change\n",
+      "subject": "Add wasm32 and wasm32-relaxed-simd targets, and light optimizations"
+    },
+    {
+      "hash": "dd3e1c4a50fd358c8bf8051c9ef73219669ff6c0",
+      "short": "dd3e1c4a",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-06-08T17:54:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dd3e1c4a50fd358c8bf8051c9ef73219669ff6c0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dd3e1c4a50fd358c8bf8051c9ef73219669ff6c0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dd3e1c4a50fd358c8bf8051c9ef73219669ff6c0.tar.gz"
+        }
+      ],
+      "message": "Consistent Integer Types\n\nexample of using, to avoid mixed usage of std::uint/std::int and uint/int...\n```cpp\nusing u64 = std::uint64_t;\nusing u32 = std::uint32_t;\nusing u16 = std::uint16_t;\nusing u8  = std::uint8_t;\n\nusing i64 = std::int64_t;\nusing i32 = std::int32_t;\nusing i16 = std::int16_t;\nusing i8  = std::int8_t;\n\nusing usize = std::size_t;\nusing isize = std::ptrdiff_t;\n\n#if defined(__GNUC__) && defined(IS_64BIT)\n__extension__ using u128 = unsigned __int128;\n__extension__ using i128 = signed __int128;\n#endif\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6874\n\nNo functional change\n",
+      "subject": "Consistent Integer Types"
+    },
+    {
+      "hash": "e4a635486ab50df77b15563c23488dcd3025a498",
+      "short": "e4a63548",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-06-06T08:15:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e4a635486ab50df77b15563c23488dcd3025a498",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4a635486ab50df77b15563c23488dcd3025a498.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e4a635486ab50df77b15563c23488dcd3025a498.tar.gz"
+        }
+      ],
+      "message": "Simplify margin formula\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 46944 W: 11934 L: 11730 D: 23280\nPtnml(0-2): 95, 5403, 12273, 5605, 96\nhttps://tests.stockfishchess.org/tests/view/6a0b018d6524d21ee79b8680\n\nPassed LTC non-reg:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 535980 W: 135398 L: 135702 D: 264880\nPtnml(0-2): 241, 58385, 151023, 58119, 222\nhttps://tests.stockfishchess.org/tests/view/6a0c3ab86524d21ee79b87f2\n\nPassed VLTC non-reg:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 126632 W: 32068 L: 31961 D: 62603\nPtnml(0-2): 14, 12466, 38244, 12583, 9\nhttps://tests.stockfishchess.org/tests/view/6a1ac130818cacc1db0ad03c\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6880\n\nBench: 3493826\n",
+      "subject": "Simplify margin formula"
+    },
+    {
+      "hash": "92fe6b6f4cf081c12d00ad4feba2868af491baf1",
+      "short": "92fe6b6f",
+      "author": "dav1312 <63931154+dav1312@users.noreply.github.com>",
+      "date": "2026-06-06T08:13:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/92fe6b6f4cf081c12d00ad4feba2868af491baf1",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/92fe6b6f4cf081c12d00ad4feba2868af491baf1.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/92fe6b6f4cf081c12d00ad4feba2868af491baf1.tar.gz"
+        }
+      ],
+      "message": "Simplify RankAttacks initialization\n\nSimplify by replacing the manual ray-casting loop with a single call to the canonical sliding_attack() helper.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6869\n\nNo functional change\n",
+      "subject": "Simplify RankAttacks initialization"
+    },
+    {
+      "hash": "73826352d4ecdf09d7380fc37d79e1df088f429a",
+      "short": "73826352",
+      "author": "Adrian <adria@example.com>",
+      "date": "2026-06-06T08:12:36Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/73826352d4ecdf09d7380fc37d79e1df088f429a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/73826352d4ecdf09d7380fc37d79e1df088f429a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/73826352d4ecdf09d7380fc37d79e1df088f429a.tar.gz"
+        }
+      ],
+      "message": "Simplify quiet history update expression\n\nThis patch simplifies the quiet history update expression in search.cpp.\n\nThe change is behaviour\u2011identical and removes unnecessary complexity from\nthe update_quiet_histories call.\n\nPassed STC (non\u2011regression):\nhttps://tests.stockfishchess.org/tests/view/6a14367b818cacc1db0ac7c3\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 52224 W: 13338 L: 13135 D: 25751\nPtnml(0-2): 118, 6065, 13557, 6240, 132\n\nPassed LTC (non\u2011regression):\nhttps://tests.stockfishchess.org/tests/view/6a155046818cacc1db0ac94d\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 136812 W: 34689 L: 34586 D: 67537\nPtnml(0-2): 51, 14770, 38668, 14859, 58\n\nBoth STC and LTC passed. Patch rebased to latest master.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6863\n\nBench: 2549662\n",
+      "subject": "Simplify quiet history update expression"
+    },
+    {
+      "hash": "db11ca42d586f4eb23670ee3581036faf5a03620",
+      "short": "db11ca42",
+      "author": "Dubslow <bunslow@gmail.com>",
+      "date": "2026-06-06T08:08:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/db11ca42d586f4eb23670ee3581036faf5a03620",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/db11ca42d586f4eb23670ee3581036faf5a03620.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/db11ca42d586f4eb23670ee3581036faf5a03620.tar.gz"
+        }
+      ],
+      "message": "Guard tt depth edits from racy underflows\n\nTwo recent patches, involving editing TTEs, introduced potential racy underflows. Guarding against these doesn't appear to gain elo but does improve sanity.\n\nfixes https://github.com/official-stockfish/Stockfish/issues/6847\n\nSTC: https://tests.stockfishchess.org/tests/view/6a1c8c4b818cacc1db0ad158\nLLR: 3.85 (-2.94,2.94) <-1.75,0.25>\nTotal: 125984 W: 32248 L: 32055 D: 61681\nPtnml(0-2): 292, 13678, 34866, 13857, 299\n\nSMP STC: https://tests.stockfishchess.org/tests/view/6a1fb2ba818cacc1db0ad2e2\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 104272 W: 26524 L: 26385 D: 51363\nPtnml(0-2): 103, 11650, 28494, 11783, 106\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6883\n\nNo functional change\n",
+      "subject": "Guard tt depth edits from racy underflows"
+    },
+    {
+      "hash": "645b636dfa83648b1b5fdd79d9616e78c2316a0d",
+      "short": "645b636d",
+      "author": "Stefan Geschwentner <git config --global user.email>",
+      "date": "2026-06-06T08:05:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/645b636dfa83648b1b5fdd79d9616e78c2316a0d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/645b636dfa83648b1b5fdd79d9616e78c2316a0d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/645b636dfa83648b1b5fdd79d9616e78c2316a0d.tar.gz"
+        }
+      ],
+      "message": "Tweak best move history updates.\n\nIf not at an PV node, scale history bonus for the found best move up proportionally to the count of the other moves searched.\n\nPassed STC:\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 219712 W: 56104 L: 55525 D: 108083\nPtnml(0-2): 565, 25482, 57188, 26051, 570\nhttps://tests.stockfishchess.org/tests/view/6a1306fb818cacc1db0ac5b7\n\nPassed LTC:\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 53988 W: 13851 L: 13498 D: 26639\nPtnml(0-2): 22, 5779, 15051, 6108, 34\nhttps://tests.stockfishchess.org/tests/view/6a1b557e818cacc1db0ad0b8\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6871\n\nBench: 2935474\n",
+      "subject": "Tweak best move history updates."
+    },
+    {
+      "hash": "9eb836b3b5302483319daa83e6d58749ab2e31c0",
+      "short": "9eb836b3",
+      "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
+      "date": "2026-06-06T08:04:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9eb836b3b5302483319daa83e6d58749ab2e31c0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9eb836b3b5302483319daa83e6d58749ab2e31c0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9eb836b3b5302483319daa83e6d58749ab2e31c0.tar.gz"
+        }
+      ],
+      "message": "Compute simplified HQ r/rr at runtime\n\nHyperbola Quintessence works out without the \"... * 2\" in r and rr. This then is cheap enough to compute at runtime, instead of looking it up, for a minor speedup.\n\nPassed apple-silicon|armv8|loongarch64 STC:\nhttps://tests.stockfishchess.org/tests/view/6a15f031818cacc1db0aca49\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 410208 W: 104369 L: 103556 D: 202283\nPtnml(0-2): 758, 43951, 114883, 44744, 768\n\nVerified attacks_bb<ROOK>() and attacks_bb<BISHOP>() assembly remains unchanged on x86 (gcc 16.1.1).\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6870\n\nNo functional change\n",
+      "subject": "Compute simplified HQ r/rr at runtime"
+    },
+    {
+      "hash": "db6cba47d60f92cfb39be1423936b75647800ce7",
+      "short": "db6cba47",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-06T08:03:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/db6cba47d60f92cfb39be1423936b75647800ce7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/db6cba47d60f92cfb39be1423936b75647800ce7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/db6cba47d60f92cfb39be1423936b75647800ce7.tar.gz"
+        }
+      ],
+      "message": "More loongarch optimizations\n\nPassed STC:\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 113120 W: 29094 L: 28674 D: 55352\nPtnml(0-2): 362, 12619, 30248, 12899, 432\nhttps://tests.stockfishchess.org/tests/view/6a1486f7818cacc1db0ac832\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6862\n\nNo functional change\n",
+      "subject": "More loongarch optimizations"
+    },
+    {
+      "hash": "8416ccafff69698e2edd99ec08488147f8f37e34",
+      "short": "8416ccaf",
+      "author": "Berektassuly <berektasulymuhammedali@gmail.com>",
+      "date": "2026-06-06T08:01:37Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8416ccafff69698e2edd99ec08488147f8f37e34",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8416ccafff69698e2edd99ec08488147f8f37e34.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8416ccafff69698e2edd99ec08488147f8f37e34.tar.gz"
+        }
+      ],
+      "message": "fix Makefile universal build selection\n\nand remove armv8 left-over\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6876\n\nNo functional change\n",
+      "subject": "fix Makefile universal build selection"
+    },
+    {
+      "hash": "0c1001c93e694bc84845006ed0ebf452ff208eef",
+      "short": "0c1001c9",
+      "author": "Ciekce <44617491+Ciekce@users.noreply.github.com>",
+      "date": "2026-06-06T07:58:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0c1001c93e694bc84845006ed0ebf452ff208eef",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0c1001c93e694bc84845006ed0ebf452ff208eef.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0c1001c93e694bc84845006ed0ebf452ff208eef.tar.gz"
+        }
+      ],
+      "message": "Disable PEXT on AMD Excavator CPUs\n\nExcavator also supports BMI2, where it has the same microcoded performance implications as on Zen pre-3.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6868\n\nNo functional change\n",
+      "subject": "Disable PEXT on AMD Excavator CPUs"
+    },
+    {
+      "hash": "91045b2ff62526d30ed7eed0f1469ae7cbd2be47",
+      "short": "91045b2f",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-06-06T07:57:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/91045b2ff62526d30ed7eed0f1469ae7cbd2be47",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/91045b2ff62526d30ed7eed0f1469ae7cbd2be47.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/91045b2ff62526d30ed7eed0f1469ae7cbd2be47.tar.gz"
+        }
+      ],
+      "message": "[CI] Update SDE action\n\nmore robust and efficient installation process.\nThanks @ppetrovt\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6885\n\nNo functional change\n",
+      "subject": "[CI] Update SDE action"
+    }
+  ]
+}

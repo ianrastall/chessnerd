@@ -145,9 +145,8 @@ export const tools: ToolMeta[] = [
     href: '/stockfish-commits.html',
     icon: 'history',
     category: 'reference',
-    description: 'Browse Stockfish commits and related binaries, source snapshots, and metadata.',
-    status: 'queued',
-    rebuildNote: 'Needs the commit collection/update workflow made reproducible.'
+    description: 'Browse Stockfish commits, source snapshots, authors, dates, and messages.',
+    status: 'ready'
   },
   {
     id: 'titled-tuesday-archive',

@@ -13,6 +13,7 @@ These tools are low-workflow and are suitable for the first Astro release pass:
 - `pgn-info`: local PGN text/file analysis, now owned by `src/scripts/pgn-info.ts`.
 - `board-colors`: self-contained board palette generator.
 - `play-engine`: self-contained browser game using bundled `chess.min.js` and Lozza.
+- `stockfish-commits`: month-sharded commit browser with daily data automation.
 
 Only these tools are linked as ready from the home page. Queued tool URLs render a clean
 placeholder route until each tool is rebuilt.
@@ -32,7 +33,6 @@ These should wait until their source/update process is documented and automated:
 - `ccc-archive`: depends on archive link/event/count files from a separate workflow.
 - `titled-tuesday-archive`: similar archive workflow with separate input files.
 - `engine-list`: RWBC Google Sheet copy transformed by Python.
-- `stockfish-commits`: generated from a Stockfish commit collection process.
 - `tournaments`: generated event metadata plus PGN archive files.
 - `fide-2200`: large player dataset; needs source/update notes.
 - `titled-players`: live Chess.com API behavior and caching choices need design.
@@ -43,7 +43,7 @@ Likely scheduled jobs:
 
 - Refresh archive metadata and counts for CCC and Titled Tuesday.
 - Rebuild engine-list data from the RWBC sheet export.
-- Rebuild Stockfish commit month indexes.
+- Rebuild Stockfish commit month indexes. Implemented as a daily GitHub Action.
 - Refresh FIDE and Chess.com datasets with source timestamps.
 
 Each job should write a timestamped data artifact, commit only deterministic output, and update the relevant tool explainer.
