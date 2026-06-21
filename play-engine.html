@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"> <head><script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XQ7B0Z9FK3');
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Play a browser chess game against the Lozza JavaScript chess engine."><title>Engine Game - Chess Nerd</title><link rel="icon" href="/favicon.ico"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><script>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem('theme');
+          const theme = storedTheme === 'light' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+
+          const storedAccent = localStorage.getItem('accentColor');
+          if (!storedAccent || !/^#[0-9a-fA-F]{6}$/.test(storedAccent)) return;
+
+          const normalized = storedAccent.toLowerCase();
+          document.documentElement.style.setProperty('--accent', normalized);
+
+          const parsed = parseInt(normalized.slice(1), 16);
+          const red = (parsed >> 16) & 255;
+          const green = (parsed >> 8) & 255;
+          const blue = parsed & 255;
+          document.documentElement.style.setProperty('--accent-rgb', `${red}, ${green}, ${blue}`);
+
+          const boost = 20;
+          const accentLight = '#' + (
+            (Math.min(red + boost, 255) << 16) |
+            (Math.min(green + boost, 255) << 8) |
+            Math.min(blue + boost, 255)
+          ).toString(16).padStart(6, '0');
+          document.documentElement.style.setProperty('--accent-light', accentLight);
+        } catch {
+          // Ignore storage access errors.
+        }
+      })();
+    </script><link rel="stylesheet" href="/_astro/_tool_.Cy6cWUB9.css"></head> <body> <div class="container"> <header> <a class="logo" href="/" aria-label="Chess Nerd home"> <span>Chess Nerd</span> </a> <nav class="site-network" aria-label="Network sites"> <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer"> <img src="/img/text-utils-icon.png" class="site-network-icon" alt="" width="16" height="16"> <span>Text Utilities</span> <span class="material-icons" aria-hidden="true">open_in_new</span> </a> <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer"> <img src="/img/github.png" class="site-network-icon" alt="" width="16" height="16"> <span>GitHub</span> <span class="material-icons" aria-hidden="true">open_in_new</span> </a> </nav> <div class="controls"> <div class="accent-selector"> <label for="accentColor" class="visually-hidden">Accent color</label> <span class="material-icons" aria-hidden="true">palette</span> <select id="accentColor" class="color-dropdown" aria-label="Accent color"></select> </div> <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true"> <span class="material-icons" aria-hidden="true">dark_mode</span> </button> </div> </header>  <main> <div id="toolView"> <div class="tool-header"> <div class="tool-title"> <span class="material-icons" aria-hidden="true">smart_toy</span> <h1>Engine Game</h1> </div> <div class="tool-actions"> <a id="backButton" class="btn btn-secondary btn-compact" href="/"> <span class="material-icons" aria-hidden="true">arrow_back</span>
+Back
+</a> </div> </div> <div class="tool-description">
+Play a quick game against the Lozza JavaScript engine. Click or drag pieces to move, follow the PGN on the right, and click any move to jump the board to that position.
+</div> <div class="options-panel"> <div class="options-grid"> <div class="option-group"> <label for="engineColor">Engine side</label> <select id="engineColor"> <option value="b">Black (you start as White)</option> <option value="w">White (you start as Black)</option> </select> </div> <div class="option-group"> <label for="moveTime">Engine think time</label> <input type="range" id="moveTime" min="200" max="3000" step="100" value="1500"> <span class="stats" id="moveTimeLabel">1.5s</span> </div> <div class="option-group"> <label>Board actions</label> <div class="pgn-actions"> <button id="newGameBtn" class="btn btn-secondary btn-compact" type="button"> <span class="material-icons" aria-hidden="true">refresh</span>
+New Game
+</button> <button id="flipBoardBtn" class="btn btn-secondary btn-compact" type="button"> <span class="material-icons" aria-hidden="true">flip_camera_android</span>
+Flip Board
+</button> </div> </div> </div> </div> <div class="io-container engine-grid"> <div class="io-panel"> <div class="io-label"> <span>Board</span> <span class="stats" id="boardStats">White to move</span> </div> <div class="board-wrapper"> <div class="board-toolbar"> <div id="engineStatus" class="engine-chip warning">Lozza warming up...</div> <div class="board-buttons"> <button id="undoBtn" class="btn btn-secondary btn-compact" type="button"> <span class="material-icons" aria-hidden="true">undo</span>
+Undo
+</button> <button id="redoBtn" class="btn btn-secondary btn-compact" type="button"> <span class="material-icons" aria-hidden="true">redo</span>
+Redo
+</button> </div> </div> <div class="board-shell"> <div class="board-files" id="filesTop"></div> <div class="board-mid"> <div class="board-ranks" id="ranksLeft"></div> <div id="chessBoard" class="chess-board" data-orientation="white"></div> <div class="board-ranks" id="ranksRight"></div> </div> <div class="board-files" id="filesBottom"></div> </div> <div class="board-footer"> <div id="playerSide" class="color-pill">You: White</div> <div id="engineSideLabel" class="color-pill engine">Lozza: Black</div> </div> </div> </div> <div class="io-panel"> <div class="io-label"> <span>Moves & Log</span> <span class="stats" id="moveStats">0 moves</span> </div> <div class="pgn-panel"> <div class="pgn-actions"> <button id="loadPgnBtn" class="btn btn-secondary btn-compact" type="button"> <span class="material-icons" aria-hidden="true">file_upload</span>
+Load PGN
+</button> <button id="copyPgnBtn" class="btn btn-secondary btn-compact" type="button"> <span class="material-icons" aria-hidden="true">content_copy</span>
+Copy PGN
+</button> <button id="analyzeGameBtn" class="btn btn-secondary btn-compact" type="button" disabled> <span class="material-icons" aria-hidden="true">analytics</span> <span class="btn-label">Analyze Game</span> </button> </div> <div id="moveList" class="move-list"></div> <textarea id="pgnText" class="output visually-hidden" readonly aria-hidden="true" tabindex="-1"></textarea> <div class="engine-log" id="engineLog"></div> </div> </div> </div> <div class="status-bar"> <div id="statusMessage" class="success">Initializing Lozza...</div> <div id="toolStats"></div> </div> </div> </main> <script src="/js/chess.min.js"></script> <script src="/js/play-engine.js"></script>  <footer class="site-footer"> <p>&copy; Ian Rastall 2025<br>Contact: moving.form.of.dust@gmail.com<br>Donate: PayPal to merastall@gmail.com</p> </footer> </div> <script src="/js/theme.js"></script> </body> </html>

@@ -1,0 +1,1286 @@
+{
+  "month": "2026-04",
+  "commits": [
+    {
+      "hash": "5095cd16c97e7596f2d2a02eb05ed8e030af991f",
+      "short": "5095cd16",
+      "author": "Tony Wang <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-04-30T16:52:44Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5095cd16c97e7596f2d2a02eb05ed8e030af991f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5095cd16c97e7596f2d2a02eb05ed8e030af991f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5095cd16c97e7596f2d2a02eb05ed8e030af991f.tar.gz"
+        }
+      ],
+      "message": "Update main network to nn-fcf986aea78a.nnue\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/69ef80071e5788938e86a302\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 32000 W: 8549 L: 8231 D: 15220\nPtnml(0-2): 124, 3717, 8024, 3987, 148\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/69f046ba1e5788938e86a42f\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 149646 W: 38739 L: 38186 D: 72721\nPtnml(0-2): 119, 16353, 41326, 16906, 119\n\nNew trainer:\nofficial-stockfish/nnue-pytorch#430\n\nRecipe:\nTonyCongqianWang/nettest@104ed33\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6790\n\nBench: 2344696\n",
+      "subject": "Update main network to nn-fcf986aea78a.nnue"
+    },
+    {
+      "hash": "1a882efc7fc22b3b16893a406e6060916022fcc4",
+      "short": "1a882efc",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-26T07:43:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1a882efc7fc22b3b16893a406e6060916022fcc4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1a882efc7fc22b3b16893a406e6060916022fcc4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1a882efc7fc22b3b16893a406e6060916022fcc4.tar.gz"
+        }
+      ],
+      "message": "Simplify out double_inc_update\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/69e82e200e9667dd5a765631\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 115424 W: 29950 L: 29822 D: 55652\nPtnml(0-2): 318, 12712, 31544, 12800, 338\n\nPassed AVX2-only STC\nhttps://tests.stockfishchess.org/tests/view/69e953080e9667dd5a7657c0\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 134720 W: 34773 L: 34665 D: 65282\nPtnml(0-2): 344, 14958, 36694, 14974, 390\n\nNow that our L1 size is much smaller, the overhead of tracking diffs for\n`double_inc_update` is a larger share of the cost.\n\nInterestingly ces42 measured a -0.9% slowdown locally (avxvnni build).\nMeanwhile Torom and I find this branch to be 2% faster. I'm not sure exactly\nwhat's going on but more tests may be in order\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6776\n\nNo functional change\n",
+      "subject": "Simplify out double_inc_update"
+    },
+    {
+      "hash": "0e78190b72775d24e5e24747363c465d7307f7b7",
+      "short": "0e78190b",
+      "author": "Ryan Hirsch rhirsch123 <hirsch28@purdue.edu>",
+      "date": "2026-04-26T07:41:05Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0e78190b72775d24e5e24747363c465d7307f7b7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0e78190b72775d24e5e24747363c465d7307f7b7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0e78190b72775d24e5e24747363c465d7307f7b7.tar.gz"
+        }
+      ],
+      "message": "Speed up find_nnz on neon (Refactored)\n\nPassed STC:\nLLR: 2.97 (-2.94,2.94) <0.00,2.00>\nTotal: 349568 W: 90131 L: 89393 D: 170044\nPtnml(0-2): 725, 37712, 97280, 38234, 833\nhttps://tests.stockfishchess.org/tests/view/69e470510e9667dd5a765046\n\nThis is a refactor of https://github.com/official-stockfish/Stockfish/pull/6766 so we don't have to include nnue_architecture.h\nIt also includes the fix in https://github.com/official-stockfish/Stockfish/pull/6769 which was needed to make this work.\nmstembera made rhirsch123 the author.  credits also to anematode.\n\n[Edit] Also fixes a bug where _mm512_packus_epi32 was being used instead of the correct _mm512_packs_epi32 for the IceLake version.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6774\n\nNo functional change\n",
+      "subject": "Speed up find_nnz on neon (Refactored)"
+    },
+    {
+      "hash": "b35a064eaea827f67c9aab9283be50657d2e8875",
+      "short": "b35a064e",
+      "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
+      "date": "2026-04-26T07:39:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b35a064eaea827f67c9aab9283be50657d2e8875",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b35a064eaea827f67c9aab9283be50657d2e8875.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b35a064eaea827f67c9aab9283be50657d2e8875.tar.gz"
+        }
+      ],
+      "message": "ci: cancel stale workflow runs per PR or ref\n\nAdd workflow-level concurrency to the direct GitHub Actions entrypoints so a\nnewer run for the same pull request or repository ref cancels the older\nin-progress run.\n\nKeep the reusable workflow graph, release guards, triggers, and permissions\nunchanged while documenting the concurrency policy and the official GitHub\nreferences used for the change.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6773\n\nNo functional change.\n",
+      "subject": "ci: cancel stale workflow runs per PR or ref"
+    },
+    {
+      "hash": "692d90bd7499d0d3e32f610e71fac282dbd1d1b2",
+      "short": "692d90bd",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-04-26T07:37:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/692d90bd7499d0d3e32f610e71fac282dbd1d1b2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/692d90bd7499d0d3e32f610e71fac282dbd1d1b2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/692d90bd7499d0d3e32f610e71fac282dbd1d1b2.tar.gz"
+        }
+      ],
+      "message": "Simplify FullThreats::append_active_indices()\n\nAlso add an else to FullThreats::append_changed_indices() because dp2removed\ncan't be equal to both from and to simultaneously.\n\npassed STC\nhttps://tests.stockfishchess.org/tests/view/69e71a490e9667dd5a76549f\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 210688 W: 54362 L: 54335 D: 101991\nPtnml(0-2): 613, 23246, 57593, 23285, 607\n\nThanks to ces42 for an improvement suggestion.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6770\n\nNo functional change\n",
+      "subject": "Simplify FullThreats::append_active_indices()"
+    },
+    {
+      "hash": "c787509663dface7637dc3985bab516070736678",
+      "short": "c7875096",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-26T07:35:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c787509663dface7637dc3985bab516070736678",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c787509663dface7637dc3985bab516070736678.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c787509663dface7637dc3985bab516070736678.tar.gz"
+        }
+      ],
+      "message": "Simplify time management reduction logic\n\nSimplify the time management reduction logic by replacing the previous sigmoid\nfunction with the linear interpolate function introduced in #6729 , resulting\nin a cleaner and more efficient calculation of move stability that avoids\nunnecessary exponential operations.\n\nPassed STC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 161856 W: 41933 L: 41852 D: 78071\nPtnml(0-2): 418, 18137, 43792, 18108, 473\nhttps://tests.stockfishchess.org/tests/view/69e117a46f344a1917600148\n\nPassed LTC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 108726 W: 27819 L: 27692 D: 53215\nPtnml(0-2): 59, 11084, 31942, 11227, 51\nhttps://tests.stockfishchess.org/tests/view/69e563c00e9667dd5a7652ac\n\nThis is a follow-up for #6091  #6729\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6765\n\nNo functional change\n",
+      "subject": "Simplify time management reduction logic"
+    },
+    {
+      "hash": "767dcfe48d2e2acce4c6539d8c5169a3d3b5dec9",
+      "short": "767dcfe4",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-04-26T07:32:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/767dcfe48d2e2acce4c6539d8c5169a3d3b5dec9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/767dcfe48d2e2acce4c6539d8c5169a3d3b5dec9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/767dcfe48d2e2acce4c6539d8c5169a3d3b5dec9.tar.gz"
+        }
+      ],
+      "message": "Fix Universal build on Windows\n\nTRACKED_TOP previously used a shell pipeline (xargs, awk, sort) to extract\nunique top-level directory/file names from SRCS and HEADERS. When invoking make\nfrom cmd.exe on Windows, $(shell ...) uses cmd.exe rather than sh.exe, so the\npipeline fails because cmd.exe does not support Unix pipe syntax. Other MSYS2\ntools (e.g. the compiler) work fine because they are invoked directly as\ncommands, not through a shell pipeline. This caused TRACKED_TOP to be empty, so\nln -s never ran and the per-arch temp_builds subdirectories were left without a\nMakefile symlink, breaking the universal build with: \"No rule to make target\n'universal-object-nopgo'\". Fixed by replacing the shell pipeline with pure GNU\nmake built-in functions (sort, foreach, firstword, subst) which have no shell\nor PATH dependencies and work identically on Windows, Linux and macOS.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6762\n\nNo functional change\n",
+      "subject": "Fix Universal build on Windows"
+    },
+    {
+      "hash": "8f181af8fb51ee1a1d860fe174b1c1becf9ab48d",
+      "short": "8f181af8",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-26T07:30:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8f181af8fb51ee1a1d860fe174b1c1becf9ab48d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8f181af8fb51ee1a1d860fe174b1c1becf9ab48d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8f181af8fb51ee1a1d860fe174b1c1becf9ab48d.tar.gz"
+        }
+      ],
+      "message": "Get universal binary working for clang on Linux\n\nA few changes were necessary, mainly because clang LTO works a bit differently than GCC\n\nDoesn't yet work on Windows\n\nsmall Makefile cleanups\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6764\n\nNo functional change\n",
+      "subject": "Get universal binary working for clang on Linux"
+    },
+    {
+      "hash": "86853a60cea0c786c8e69bc27ffc102659cb31ad",
+      "short": "86853a60",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-04-26T07:28:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/86853a60cea0c786c8e69bc27ffc102659cb31ad",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86853a60cea0c786c8e69bc27ffc102659cb31ad.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86853a60cea0c786c8e69bc27ffc102659cb31ad.tar.gz"
+        }
+      ],
+      "message": "[bugfix] Send correct search depth in final UCI info line\n\nFor quite some time SF has reported a too low final search depth in rare cases\n(in multi-threaded search if a non-main thread was selected). Unfortunately,\nthe recent refactoring in #6704 means that this now happens for almost every\nstopped search.\n\nThis PR fixes this issue, which was first spotted and reported by joergoster,\nby ensuring that `rootDepth` always holds the last depth for which a search was\nstarted.\n\nFixes #6756.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6761\n\nNo functional change.\n",
+      "subject": "[bugfix] Send correct search depth in final UCI info line"
+    },
+    {
+      "hash": "e68ca3c187ac2166455392e97904640d44224ae8",
+      "short": "e68ca3c1",
+      "author": "Dieter Dobbelaere <dieter.dobbelaere@gmail.com>",
+      "date": "2026-04-26T07:27:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e68ca3c187ac2166455392e97904640d44224ae8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e68ca3c187ac2166455392e97904640d44224ae8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e68ca3c187ac2166455392e97904640d44224ae8.tar.gz"
+        }
+      ],
+      "message": "Rename Linux universal release package/binary\n\nRename Linux universal release package from\n`stockfish-ubuntu-x86-64-universal.tar.gz`  to\n`stockfish-linux-x86-64-universal.tar.gz` (and similar for the binary), as the\nbundled binary should run on any Linux distro with glibc >= 2.35 (which is the\nglibc version of the Ubuntu 22.04 build server).\n\nNote that the Linux universal binary is built with static libstdc++ linkage, so\nthis adds no extra dependency.\n\nThis change will hopefully make it less confusing for users, and in line with\nhow we show it on stockfishchess.org (as Linux).\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6760\n\nNo functional change\n",
+      "subject": "Rename Linux universal release package/binary"
+    },
+    {
+      "hash": "38d887ac644d114c242e273c9b605aca7fbb034d",
+      "short": "38d887ac",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-26T07:25:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/38d887ac644d114c242e273c9b605aca7fbb034d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/38d887ac644d114c242e273c9b605aca7fbb034d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/38d887ac644d114c242e273c9b605aca7fbb034d.tar.gz"
+        }
+      ],
+      "message": "Reuse Promotion Type Natively\n\nPiece promotion is generated, and then type_of(promotion) is used to retrieve\nthe underlying type. The class Move provides .promotion_type() natively,\nmeaning we can cache the type directly and avoid extracting it indirectly\nafterward.  By extracting pt = m.promotion_type(); up front, we don't need to\ncall type_of(promotion) iteratively inside the assertions or conditions below.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6759\n\nNo functional change\n",
+      "subject": "Reuse Promotion Type Natively"
+    },
+    {
+      "hash": "50e8ff1e23ad0f9c9f15f06cb5650b277129b744",
+      "short": "50e8ff1e",
+      "author": "Robert Nurnberg <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-04-26T07:24:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/50e8ff1e23ad0f9c9f15f06cb5650b277129b744",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/50e8ff1e23ad0f9c9f15f06cb5650b277129b744.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/50e8ff1e23ad0f9c9f15f06cb5650b277129b744.tar.gz"
+        }
+      ],
+      "message": "multiPV: protect mated-ins and allow thread selection\n\nThis PR is a replacement for #6652 and takes into account the changes made to this part of the code since then.\n\nIn multiPV analysis master may suppress genuine proven mated-in scores, if the iteration for a secondary PV line is aborted. In very rare cases, it may also evict a proven mated-in score from the best PV line with a score from an incomplete iteration of a secondary PV line. This PR avoids both.\n\nIn addition, we allow best thread selection in multithreaded multiPV searches. This was originally disabled in #524.\n\nSingle PV searches are not affected by this patch at all.\n\nFixes #6642.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6728\n\nNo functional change.\n",
+      "subject": "multiPV: protect mated-ins and allow thread selection"
+    },
+    {
+      "hash": "e17725f445e52544f749ef65107cda8ac93d0449",
+      "short": "e17725f4",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-26T07:17:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e17725f445e52544f749ef65107cda8ac93d0449",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e17725f445e52544f749ef65107cda8ac93d0449.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e17725f445e52544f749ef65107cda8ac93d0449.tar.gz"
+        }
+      ],
+      "message": "Constexpr attacks (pext only)\n\nLLR: 2.97 (-2.94,2.94) <0.00,2.00>\nTotal: 38400 W: 10057 L: 9749 D: 18594\nPtnml(0-2): 93, 4110, 10498, 4394, 105\nhttps://tests.stockfishchess.org/tests/view/69d2073261a12cebe17edc04\n\ncompile time generation leads to sharing tables through the binary, resulting\nin gain on fishtest, as well as reduced memory usage. The downside is slightly\nlonger compilation time.\n\nUsing pdep reduces table size 4x, and gains a little outside of fishtest as well.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6706\n\nNo functional change\n",
+      "subject": "Constexpr attacks (pext only)"
+    },
+    {
+      "hash": "ed651aab544a330a9c8ae0dc2d8d51d5d48a8112",
+      "short": "ed651aab",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-20T15:45:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ed651aab544a330a9c8ae0dc2d8d51d5d48a8112",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed651aab544a330a9c8ae0dc2d8d51d5d48a8112.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed651aab544a330a9c8ae0dc2d8d51d5d48a8112.tar.gz"
+        }
+      ],
+      "message": "Replacing std::clamp with std::min\n\nNo functional change\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6751\n\nNo functional change\n",
+      "subject": "Replacing std::clamp with std::min"
+    },
+    {
+      "hash": "7faecd75acedb8b0ea9c9f8d24883d2d56f5a35a",
+      "short": "7faecd75",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-20T15:43:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7faecd75acedb8b0ea9c9f8d24883d2d56f5a35a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7faecd75acedb8b0ea9c9f8d24883d2d56f5a35a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7faecd75acedb8b0ea9c9f8d24883d2d56f5a35a.tar.gz"
+        }
+      ],
+      "message": "Combine duplicated - tb.plies subtraction logic\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6752\n\nNo functional change\n",
+      "subject": "Combine duplicated - tb.plies subtraction logic"
+    },
+    {
+      "hash": "583e0c1c75b3474d4a1c5c44ca33a3ac47ca360e",
+      "short": "583e0c1c",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-04-20T15:42:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/583e0c1c75b3474d4a1c5c44ca33a3ac47ca360e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/583e0c1c75b3474d4a1c5c44ca33a3ac47ca360e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/583e0c1c75b3474d4a1c5c44ca33a3ac47ca360e.tar.gz"
+        }
+      ],
+      "message": "cleanup feature detection code\n\nmakes the main dispatch logic more easy to follow and possibly update\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6753\n\nNo functional change\n",
+      "subject": "cleanup feature detection code"
+    },
+    {
+      "hash": "9dd58542c9b2a80d21cbc62323dbb56b3f4ecec4",
+      "short": "9dd58542",
+      "author": "Dieter Dobbelaere <dieter.dobbelaere@gmail.com>",
+      "date": "2026-04-20T15:41:01Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9dd58542c9b2a80d21cbc62323dbb56b3f4ecec4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9dd58542c9b2a80d21cbc62323dbb56b3f4ecec4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9dd58542c9b2a80d21cbc62323dbb56b3f4ecec4.tar.gz"
+        }
+      ],
+      "message": "Compress Linux universal release package\n\n`stockfish-ubuntu-x86-64-universal.tar` goes from 94.8MiB to 67.4MiB (tar.gz)\n\nNote that the CI code is written such that it easy to select other compression\nschemes in the future (e.g. tar.xz) by simply changing the `archive_ext`\nparameter.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6746\n\nNo functional change\n",
+      "subject": "Compress Linux universal release package"
+    },
+    {
+      "hash": "20a8d8d3c01f78fe281fd723a6d6c1510c94e0ff",
+      "short": "20a8d8d3",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-20T15:38:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/20a8d8d3c01f78fe281fd723a6d6c1510c94e0ff",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20a8d8d3c01f78fe281fd723a6d6c1510c94e0ff.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20a8d8d3c01f78fe281fd723a6d6c1510c94e0ff.tar.gz"
+        }
+      ],
+      "message": "Remove git dependency from Makefile\n\nTo build the universal binaries, use already defined variables with sources and\nheaders, as well as Makefile and incbin explicitly.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6758\n\nNo functional change\n",
+      "subject": "Remove git dependency from Makefile"
+    },
+    {
+      "hash": "463f5a6ee122f7a7f4bff99d9640a59b09208d39",
+      "short": "463f5a6e",
+      "author": "ppigazzini <pasquale.pigazzini@gmail.com>",
+      "date": "2026-04-20T15:37:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/463f5a6ee122f7a7f4bff99d9640a59b09208d39",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/463f5a6ee122f7a7f4bff99d9640a59b09208d39.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/463f5a6ee122f7a7f4bff99d9640a59b09208d39.tar.gz"
+        }
+      ],
+      "message": "ci: pin root workflow actions to immutable SHAs\n\nPin every external action used by the root GitHub workflow set to a full-length\ncommit SHA and keep the selected release tag as a same-line comment.\n\nUpdate the root workflows to the latest stable tagged action versions found\nduring the audit while preserving existing release guards, permissions, and\nreusable workflow wiring.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6754\n\nNo functional change.\n",
+      "subject": "ci: pin root workflow actions to immutable SHAs"
+    },
+    {
+      "hash": "4a6c7e77a5a8eb1d5eec1ce1ff199773fb885f86",
+      "short": "4a6c7e77",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-04-19T11:49:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4a6c7e77a5a8eb1d5eec1ce1ff199773fb885f86",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4a6c7e77a5a8eb1d5eec1ce1ff199773fb885f86.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4a6c7e77a5a8eb1d5eec1ce1ff199773fb885f86.tar.gz"
+        }
+      ],
+      "message": "[CI] Cleanup artifact content (part 2)\n\nremoves temp_builds directory before packaging, even more.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6750\n\nNo functional change\n",
+      "subject": "[CI] Cleanup artifact content (part 2)"
+    },
+    {
+      "hash": "edfd021257458d6d2828821531be8fa9b61e00fa",
+      "short": "edfd0212",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-04-19T10:25:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/edfd021257458d6d2828821531be8fa9b61e00fa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/edfd021257458d6d2828821531be8fa9b61e00fa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/edfd021257458d6d2828821531be8fa9b61e00fa.tar.gz"
+        }
+      ],
+      "message": "[CI] Cleanup artifact content\n\nremoves temp_builds directory before packaging\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6745\n\nNo functional change\n",
+      "subject": "[CI] Cleanup artifact content"
+    },
+    {
+      "hash": "1e333b341ca0aa0fe4809527d7cd7859d540e06b",
+      "short": "1e333b34",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-19T09:07:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1e333b341ca0aa0fe4809527d7cd7859d540e06b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e333b341ca0aa0fe4809527d7cd7859d540e06b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e333b341ca0aa0fe4809527d7cd7859d540e06b.tar.gz"
+        }
+      ],
+      "message": "Add universal binaries to prerelease page\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6744\n\nNo functional change\n",
+      "subject": "Add universal binaries to prerelease page"
+    },
+    {
+      "hash": "ce7848f7cc4a7f7eecdcc58a68cf424ec0fcaf1c",
+      "short": "ce7848f7",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-19T05:23:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ce7848f7cc4a7f7eecdcc58a68cf424ec0fcaf1c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ce7848f7cc4a7f7eecdcc58a68cf424ec0fcaf1c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ce7848f7cc4a7f7eecdcc58a68cf424ec0fcaf1c.tar.gz"
+        }
+      ],
+      "message": "Remove the Redundant ply Variables in Benchmark Calculations\n\nIn setup_benchmark, the variables evaluating the current ply simply mirror the\nexact iterative progress of the string arrays loop (since ply just increments\nby 1 with every pass). We can delete the separate integer assignment and\nexecute it securely within the loop declaration.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6732\n\nNo functional change\n",
+      "subject": "Remove the Redundant ply Variables in Benchmark Calculations"
+    },
+    {
+      "hash": "c66acdac99e2e3570cd30337566d4647b1d1f5f5",
+      "short": "c66acdac",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-19T05:21:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c66acdac99e2e3570cd30337566d4647b1d1f5f5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c66acdac99e2e3570cd30337566d4647b1d1f5f5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c66acdac99e2e3570cd30337566d4647b1d1f5f5.tar.gz"
+        }
+      ],
+      "message": "Restructure Futility pruning\n\nto a simpler and cleaner version\n\nPassed non-reg test:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 175648 W: 45156 L: 45091 D: 85401\nPtnml(0-2): 459, 19228, 48383, 19297, 457\nhttps://tests.stockfishchess.org/tests/view/69d8d9263ca80bdf151d454a\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6733\n\nNo functional change\n",
+      "subject": "Restructure Futility pruning"
+    },
+    {
+      "hash": "40ac93b8f8b6e2f604fc561d0e33db3c0fceb137",
+      "short": "40ac93b8",
+      "author": "Maxim Masiutin <maxim@masiutin.com>",
+      "date": "2026-04-19T05:19:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/40ac93b8f8b6e2f604fc561d0e33db3c0fceb137",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/40ac93b8f8b6e2f604fc561d0e33db3c0fceb137.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/40ac93b8f8b6e2f604fc561d0e33db3c0fceb137.tar.gz"
+        }
+      ],
+      "message": "Fix MultiArray::at(); use operator[] on hot paths\n\nFix MultiArray::at() which was marked noexcept despite delegating to\nstd::array::at() that throws on out-of-range. Per review feedback, at() now\nkeeps standard bounds-checking semantics (only noexcept removed), and\noperator[] gains an assert for debug-mode safety.\n\nAll eight correction history lookups in search.cpp (correction_value and\nupdate_correction_history) are switched from .at(us) to [us].\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/69de7a735c67bee7d241ff92\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 77536 W: 20031 L: 19860 D: 37645\nPtnml(0-2): 221, 8411, 21338, 8572, 226\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6734\n\nNo functional change\n",
+      "subject": "Fix MultiArray::at(); use operator[] on hot paths"
+    },
+    {
+      "hash": "cc4637b52b23ecd26b653de254bbd55b3ade2d3c",
+      "short": "cc4637b5",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-19T05:17:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cc4637b52b23ecd26b653de254bbd55b3ade2d3c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cc4637b52b23ecd26b653de254bbd55b3ade2d3c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cc4637b52b23ecd26b653de254bbd55b3ade2d3c.tar.gz"
+        }
+      ],
+      "message": "Remove Redundant Cast in MovePicker\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6735\n\nNo functional change\n",
+      "subject": "Remove Redundant Cast in MovePicker"
+    },
+    {
+      "hash": "95f3680080799d1a9e1b39ceec78a1eff789c6c2",
+      "short": "95f36800",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-19T05:13:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/95f3680080799d1a9e1b39ceec78a1eff789c6c2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/95f3680080799d1a9e1b39ceec78a1eff789c6c2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/95f3680080799d1a9e1b39ceec78a1eff789c6c2.tar.gz"
+        }
+      ],
+      "message": "Replace constant LMR history divisor with depth-based array\n\nPassed STC:\nLLR: 2.97 (-2.94,2.94) <0.00,2.00>\nTotal: 677344 W: 175301 L: 174041 D: 328002\nPtnml(0-2): 2018, 79669, 174166, 80673, 2146\nhttps://tests.stockfishchess.org/tests/view/69cfae021668971c9da23b80\n\nPassed LTC:\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 46470 W: 11988 L: 11651 D: 22831\nPtnml(0-2): 37, 4877, 13055, 5244, 22\nhttps://tests.stockfishchess.org/tests/view/69dcd13c3ca80bdf151d4ab5\n\nPassed VLTC (non-reg.):\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 58986 W: 15120 L: 14947 D: 28919\nPtnml(0-2): 7, 5835, 17636, 6008, 7\nhttps://tests.stockfishchess.org/tests/view/69debc6c5c67bee7d241ffe9\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6741\n\nBench: 2723949\n",
+      "subject": "Replace constant LMR history divisor with depth-based array"
+    },
+    {
+      "hash": "de7b0cd7a64bb3e9c8c98905acb12708fa513635",
+      "short": "de7b0cd7",
+      "author": "sscg13 <iamdumbybear1@gmail.com>",
+      "date": "2026-04-19T05:10:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/de7b0cd7a64bb3e9c8c98905acb12708fa513635",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/de7b0cd7a64bb3e9c8c98905acb12708fa513635.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/de7b0cd7a64bb3e9c8c98905acb12708fa513635.tar.gz"
+        }
+      ],
+      "message": "Update trace eval\n\nUpdates the information printed in the \"eval\" command. Removes piece value estimation, and adds both small and big net eval information.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6743\n\nNo functional change\n",
+      "subject": "Update trace eval"
+    },
+    {
+      "hash": "c3bcf74925e0fe1a9bcfbed79ee9300f9900969e",
+      "short": "c3bcf749",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-19T04:57:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c3bcf74925e0fe1a9bcfbed79ee9300f9900969e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c3bcf74925e0fe1a9bcfbed79ee9300f9900969e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c3bcf74925e0fe1a9bcfbed79ee9300f9900969e.tar.gz"
+        }
+      ],
+      "message": "Universal binary for x86-64 Linux and Windows\n\nWe maintain support for quite a few x86 ISA extensions but relied on the end\nuser to select the binary that is best for their system.  We can detect at\nruntime which architecture to use, and ship a single binary (per OS/ISA\ncombination). This PR does so, maintaining performance.\n\nThis is what I've landed on after quite a few iterations. Basically, we build\neach arch separately, use `cpuid` to select one, and jump to that arch's main\nfunction. Some details:\n\n- The preprocessor macro `UNIVERSAL_BINARY` is defined when building for the universal binary.\n\n- The Makefile target `universal-object-[no]pgo` is added, which produces a `stockfish.o` in each arch's build directory.\n\n- To prevent symbol collisions between the multiple builds, we `#define Stockfish Stockfish_[arch]`. Furthermore we wrap the `main` function in `namespace Stockfish { }`.\n\n- We can still get PGO data by linking to a per-arch binary, with `Stockfish_x86_64_avx2::main` as `main`, and running `bench`.\n    - For arches not supported by the host we can use Intel SDE \u2013 this is what we do in CI.\n\n- When embedding the NNUE, we use C++26/C23 `#embed` instead of `INCBIN`. The issue with `INCBIN` is that it injects assembly directives that we have no control over.\n    - To ensure there's only one copy of the networks in the final binary, we define the network data as weak symbols in each per-arch build. Then, in the final link, we add a special nnue_embed.cpp which provides strong symbols.\n    - This does require GCC 15. Statically linking libstdc++ allows the binary to still run on older OSes though. And latest msys2 already does static linking + is based off GCC 15.2.0\n\nbuilding can be as simple as\n\nmake -j profile-build ARCH=x86-64-universal\n\nor using the sde if the host doesn't support all architectures supported in the\nuniversal binary, and the default host compiler is not recent enough.\n\nmake -j profile-build ARCH=x86-64-universal RUN_PREFIX=\"/path/to/sde -future --\" CXX=g++-15\n\nThis change is also integrated in CI, so universal binaries are available as\ndownloadable artifacts.\n\nNext we could also do ARM64, especially Android (all Apple silicon users use\nthe same binary). It also might be worth getting this to work with clang.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6740\n\nNo functional change\n",
+      "subject": "Universal binary for x86-64 Linux and Windows"
+    },
+    {
+      "hash": "b1fb50ae697265369d51c002603a621ffe8f9bfa",
+      "short": "b1fb50ae",
+      "author": "rn5f107s2 <clemens.lerchl@gmail.com>",
+      "date": "2026-04-15T18:35:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b1fb50ae697265369d51c002603a621ffe8f9bfa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b1fb50ae697265369d51c002603a621ffe8f9bfa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b1fb50ae697265369d51c002603a621ffe8f9bfa.tar.gz"
+        }
+      ],
+      "message": "Simplify away the special case for en passant in the legality check\n\nSince as of 94175524b1c06f1a4ce80a5640272a15120dcbbd the en passant square is\nonly set if there is a legal en passant capture, the special handling is\nredundant\n\nPassed Non-Regression STC:\nhttps://tests.stockfishchess.org/tests/view/696ffb6512ee1f6231b96fe8\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 79072 W: 20380 L: 20210 D: 38482.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6560\n\nNo functional change\n",
+      "subject": "Simplify away the special case for en passant in the legality check"
+    },
+    {
+      "hash": "45711fceb478d6162399a5dcc2b7d6e825558a89",
+      "short": "45711fce",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-04-15T18:29:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/45711fceb478d6162399a5dcc2b7d6e825558a89",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/45711fceb478d6162399a5dcc2b7d6e825558a89.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/45711fceb478d6162399a5dcc2b7d6e825558a89.tar.gz"
+        }
+      ],
+      "message": "Add PVMoves Struct\n\nUse a dedicated struct for keeping track of the pv moves.\n\nanematode pointed out that we can use the ValueList for this as well, left that open for a future patch.\n\nPassed Non Regression\nhttps://tests.stockfishchess.org/tests/view/69d399cfec2dc6794cf18376\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 267264 W: 68895 L: 68927 D: 129442\nPtnml(0-2): 790, 29238, 73566, 29290, 748\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6726\n\nNo functional change\n",
+      "subject": "Add PVMoves Struct"
+    },
+    {
+      "hash": "4bdeb6352cf266c3f3b9764d3eba95ed3582d74c",
+      "short": "4bdeb635",
+      "author": "87 <dev@87flowers.com>",
+      "date": "2026-04-15T18:21:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4bdeb6352cf266c3f3b9764d3eba95ed3582d74c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4bdeb6352cf266c3f3b9764d3eba95ed3582d74c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4bdeb6352cf266c3f3b9764d3eba95ed3582d74c.tar.gz"
+        }
+      ],
+      "message": "Remove unnecessary use of _mm512_zextsi256_si512\n\n[Some build environments](https://tests.stockfishchess.org/actions?max_count=400&sort=time&order=desc&action=failed_task&user=gaster319&text=executing) do not have this intrinsic.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6722\n\nNo functional change.\n",
+      "subject": "Remove unnecessary use of _mm512_zextsi256_si512"
+    },
+    {
+      "hash": "0694742a317a63c2b94d4345f41759873f5bab73",
+      "short": "0694742a",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-15T18:18:24Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0694742a317a63c2b94d4345f41759873f5bab73",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0694742a317a63c2b94d4345f41759873f5bab73.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0694742a317a63c2b94d4345f41759873f5bab73.tar.gz"
+        }
+      ],
+      "message": "Remove redundant std::skipws from fresh string streams\n\nIn C++, all standard input streams (including std::istringstream) are initialized with the skipws format flag enabled by default. Because these stream objects are scoped locally and freshly constructed on each loop iteration, we are guaranteed that skipws is already active.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6719\n\nNo functional change\n",
+      "subject": "Remove redundant std::skipws from fresh string streams"
+    },
+    {
+      "hash": "5f3dcb92ee097f3f1c3656570c4d1a473e95e3aa",
+      "short": "5f3dcb92",
+      "author": "J. Oster <osterj165@googlemail.com>",
+      "date": "2026-04-15T18:15:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5f3dcb92ee097f3f1c3656570c4d1a473e95e3aa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5f3dcb92ee097f3f1c3656570c4d1a473e95e3aa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5f3dcb92ee097f3f1c3656570c4d1a473e95e3aa.tar.gz"
+        }
+      ],
+      "message": "Simplify stalemate detection in qsearch.\n\nConditions for no pawn pushes, non-pawn material and last captured piece are already such restrictive that we don't need to artificially set checkers bitboard for legal move generation.\nAlso moving the check for available pawn pushes at first place, as it should already filter about 90% of cases.\n\nPassed STC and LTC non-regression tests.\n LLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 171232 W: 44202 L: 44131 D: 82899\nPtnml(0-2): 466, 18809, 47023, 18824, 494\nhttps://tests.stockfishchess.org/tests/view/69d3623b61a12cebe17ededa\n\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 55662 W: 14424 L: 14247 D: 26991\nPtnml(0-2): 38, 5479, 16609, 5678, 27\nhttps://tests.stockfishchess.org/tests/view/69d64cada07a818b0a25f95e\n\nAnd also neutral on 10k fixed games test with custom stalemate book.\n Elo: 0.24 \u00b1 0.9 (95%) LOS: 69.9%\nTotal: 10000 W: 4681 L: 4674 D: 645\nPtnml(0-2): 0, 87, 4819, 94, 0\nnElo: 1.81 \u00b1 6.8 (95%) PairsRatio: 1.08\nhttps://tests.stockfishchess.org/tests/view/69d7e4183ca80bdf151d43b8\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6715\n\nBench: 2984258\n",
+      "subject": "Simplify stalemate detection in qsearch."
+    },
+    {
+      "hash": "3cce65256435475ad536838785c5940d6300932d",
+      "short": "3cce6525",
+      "author": "Dubslow <bunslow@gmail.com>",
+      "date": "2026-04-15T18:13:16Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3cce65256435475ad536838785c5940d6300932d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3cce65256435475ad536838785c5940d6300932d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3cce65256435475ad536838785c5940d6300932d.tar.gz"
+        }
+      ],
+      "message": "Simplify relative_age and its constants\n\nSTC: https://tests.stockfishchess.org/tests/view/69cf29ed1668971c9da23a5a\nLLR: 3.47 (-2.94,2.94) <-1.75,0.25>\nTotal: 193760 W: 50142 L: 50051 D: 93567\nPtnml(0-2): 534, 21375, 52980, 21448, 543\n\n* Simplify retval and arithmetic semantics\n* Remove mixing of int and uint8_t\n\nI find this overall much easier to reason about\n\n(Also rename a DEPTH constant per mstembera's suggestion https://github.com/official-stockfish/Stockfish/pull/5766#issuecomment-2586449296)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6702\n\nNo functional change\n",
+      "subject": "Simplify relative_age and its constants"
+    },
+    {
+      "hash": "9bdf2f8d4ccb4058c307d3c3cb56bf66a353196e",
+      "short": "9bdf2f8d",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-04-15T18:05:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9bdf2f8d4ccb4058c307d3c3cb56bf66a353196e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9bdf2f8d4ccb4058c307d3c3cb56bf66a353196e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9bdf2f8d4ccb4058c307d3c3cb56bf66a353196e.tar.gz"
+        }
+      ],
+      "message": "Update main network to nn-f68ec79f0fe3.nnue\n\nTrained with the following yaml definition https://github.com/Disservin/nettest/blob/8da0a21503adb341bc89ca20b4e2f166c7c9720d/threats.yaml\n\nand the following trainer change\nhttps://github.com/official-stockfish/nnue-pytorch/commit/d87c248fbed584d08df59820ae0dd309e9b35c85\n\nInitially I saw a lot of weird 0 scores in the binpack, since then @linrock has explained to me/us their meaning and mentioned that they are actually mostly skipped.. except a very small percentage, however it seems this change was still beneficial.\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/69db95f43ca80bdf151d4913\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 106272 W: 27916 L: 27489 D: 50867\nPtnml(0-2): 420, 12533, 26841, 12884, 458\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/69ddd9003ca80bdf151d4c4d\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 29748 W: 7775 L: 7470 D: 14503\nPtnml(0-2): 24, 3136, 8247, 3445, 22\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6730\n\nBench: 3108996\n",
+      "subject": "Update main network to nn-f68ec79f0fe3.nnue"
+    },
+    {
+      "hash": "7959885747a40b8389a38c29c696758c792d493d",
+      "short": "79598857",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-04-15T17:55:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7959885747a40b8389a38c29c696758c792d493d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7959885747a40b8389a38c29c696758c792d493d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7959885747a40b8389a38c29c696758c792d493d.tar.gz"
+        }
+      ],
+      "message": "Interpolate highBestMoveEffort\n\nSTC: https://tests.stockfishchess.org/tests/view/69d586a64088e069540a22aa\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 63520 W: 16579 L: 16233 D: 30708\nPtnml(0-2): 138, 7179, 16825, 7435, 183\n\nLTC: https://tests.stockfishchess.org/tests/view/69d6ddd79ffee997bab13a98\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 227100 W: 58279 L: 57591 D: 111230\nPtnml(0-2): 95, 23435, 65828, 24071, 121\n\nTransition highBestMoveEffort smoothly instead of abruptly. May also be more amenable to future tuning.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6729\n\nBench: 2923401\n",
+      "subject": "Interpolate highBestMoveEffort"
+    },
+    {
+      "hash": "bb5f0100b033d7b337a7eb1a3ebcfd7619bd9f00",
+      "short": "bb5f0100",
+      "author": "Ryan Lefkowitz <rlefkowitz1800@yahoo.com>",
+      "date": "2026-04-15T17:03:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bb5f0100b033d7b337a7eb1a3ebcfd7619bd9f00",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb5f0100b033d7b337a7eb1a3ebcfd7619bd9f00.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb5f0100b033d7b337a7eb1a3ebcfd7619bd9f00.tar.gz"
+        }
+      ],
+      "message": "fix syzygy crash on Apple Silicon by unrolling tbprobe adjustment loop\n\nA bit tricky to identify, but in `apple-silicon` builds, specifying a value for\n`SyzygyPath` could still lead to crashes at certain depths from a\nSIGBUS/SIGSEGV.\n\nThis PR replaces the `std::count_if()` adjustment in `tbprobe.cpp`'s\n`do_probe_table()` with an annotated handwritten loop, avoiding the clang/LTO\nmiscompilation behind the crash.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6721\n\nNo functional change.\n",
+      "subject": "fix syzygy crash on Apple Silicon by unrolling tbprobe adjustment loop"
+    },
+    {
+      "hash": "b63bd7b78ec7ffc3ec3a30c304724619929d0677",
+      "short": "b63bd7b7",
+      "author": "Shawn Xu <xu107288696@gmail.com>",
+      "date": "2026-04-15T17:00:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b63bd7b78ec7ffc3ec3a30c304724619929d0677",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b63bd7b78ec7ffc3ec3a30c304724619929d0677.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b63bd7b78ec7ffc3ec3a30c304724619929d0677.tar.gz"
+        }
+      ],
+      "message": "Fix assert\n\nthe assert checks for `bestThreadDecisive && newThreadDecisive`. However `newThreadDecisive` is not guaranteed at this point, leading to assertion failures. This PR rearranges the conditions to ensure correctness.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6716\n\nNo functional change\n",
+      "subject": "Fix assert"
+    },
+    {
+      "hash": "bb4eb04a50244442f2925f6dad3b1b2fb1f82236",
+      "short": "bb4eb04a",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-04-09T19:47:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bb4eb04a50244442f2925f6dad3b1b2fb1f82236",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb4eb04a50244442f2925f6dad3b1b2fb1f82236.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb4eb04a50244442f2925f6dad3b1b2fb1f82236.tar.gz"
+        }
+      ],
+      "message": "Don't store stand pat return value in TT\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/69d2d3de61a12cebe17ede38\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 68384 W: 17646 L: 17459 D: 33279\nPtnml(0-2): 200, 8058, 17496, 8231, 207\n\nPassed non-regression LTC:\nhttps://tests.stockfishchess.org/tests/view/69d4293433584dad27b3c8cb\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 37290 W: 9582 L: 9380 D: 18328\nPtnml(0-2): 18, 3915, 10579, 4113, 20\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6711\n\nBench: 2923401\n",
+      "subject": "Don't store stand pat return value in TT"
+    },
+    {
+      "hash": "9db77822bddc5eadb1380647073d65c5e2a615fa",
+      "short": "9db77822",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-04-09T19:46:31Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9db77822bddc5eadb1380647073d65c5e2a615fa",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9db77822bddc5eadb1380647073d65c5e2a615fa.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9db77822bddc5eadb1380647073d65c5e2a615fa.tar.gz"
+        }
+      ],
+      "message": "Simplify best thread selection\n\nFor some time now we can trust the threads' exact win/loss scores. This\nallows for some simplification in the best thread selection code.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6708\n\nNo functional change\n",
+      "subject": "Simplify best thread selection"
+    },
+    {
+      "hash": "5ae13d2bd4bfae21250fc100e4f4287f1e295b79",
+      "short": "5ae13d2b",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-09T19:46:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ae13d2bd4bfae21250fc100e4f4287f1e295b79",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ae13d2bd4bfae21250fc100e4f4287f1e295b79.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5ae13d2bd4bfae21250fc100e4f4287f1e295b79.tar.gz"
+        }
+      ],
+      "message": "Remove Redundant Branchless Execution\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 102272 W: 26553 L: 26411 D: 49308\nPtnml(0-2): 269, 11212, 28036, 11346, 273\nhttps://tests.stockfishchess.org/tests/view/69d0f1c5e2b443cb2670b710\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6707\n\nNo functional change\n",
+      "subject": "Remove Redundant Branchless Execution"
+    },
+    {
+      "hash": "d3a4587fe881a531d08b17d45d9c12ded9680ee4",
+      "short": "d3a4587f",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-04-09T19:45:48Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d3a4587fe881a531d08b17d45d9c12ded9680ee4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d3a4587fe881a531d08b17d45d9c12ded9680ee4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d3a4587fe881a531d08b17d45d9c12ded9680ee4.tar.gz"
+        }
+      ],
+      "message": "Simplify uci pv output logic\n\nThe uci pv suppression and PV roll-back logic in master is a bit\nconvoluted, which makes it hard to reason about the code. In fact,\nsubtle bugs that led to wrong mated-in scores in game play or a mismatch\nbetween bestmove and first PV move were only recently fixed. Moreover,\nin master the uci pv output through `pv()` is called in four different\nplaces.\n\nThis PR proposes to simplify this logic. In this patch, the PV is sent\nto the GUI from within `iterative_deepening()` only (a) for fail\nhighs/lows or (b) when an iteration for a root move is completed. All\nother PV outputs are now handled by `start_searching()`, just before the\nbestmove extraction. This easily ensures that bestmove (and ponder move)\nwill always be in sync with the final PV output.\n\nThe only noticeable change to master is for multi-threaded searches that\ndo not involve `limits.depth`. Here master would show both the PV from\nthe aborted search in main thread, as well as the new PV from the\nselected best thread. This patch would only show the latter.\n\nWhile at it, we also remove the requirement to finish at least a depth 1\nsearch and simplify the logic around stalemates/checkmates at root and\nin particular avoid any PVs that start with `Move::none()`.\n\nPassed STC non-reg:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 72416 W: 18784 L: 18609 D: 35023\nPtnml(0-2): 200, 7762, 20127, 7901, 218\nhttps://tests.stockfishchess.org/tests/view/69d3ef0c33584dad27b3c85a\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6704\n\nNo functional change\n",
+      "subject": "Simplify uci pv output logic"
+    },
+    {
+      "hash": "df01cb7ed3c92ec65a0a8d8c6ed870bc664c27bb",
+      "short": "df01cb7e",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-04-09T19:44:44Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/df01cb7ed3c92ec65a0a8d8c6ed870bc664c27bb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/df01cb7ed3c92ec65a0a8d8c6ed870bc664c27bb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/df01cb7ed3c92ec65a0a8d8c6ed870bc664c27bb.tar.gz"
+        }
+      ],
+      "message": "Avoid branching before `ValueList::push_back`\n\nInstead of checking whether a threat index is valid and then writing to\na vector if it isn't, we can instead always write to the buffer of the\nvector, and only increase the size of the vector if the index is valid.\n\nThis saves some branch mispredictions.\n\npassed STC:\nhttps://tests.stockfishchess.org/tests/view/69ceb1689f7a7e3fdfc9a44b\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 205760 W: 53109 L: 52561 D: 100090\nPtnml(0-2): 603, 22552, 56076, 22992, 657\n\nlocal speedtest shows\n```\nResult of 100 runs (cycles)\n===========================\nbase (...ockfish.orig) =     296886  +/- 1645\ntest (...kfish.df0822) =     298862  +/- 1662\nspeedup %              =      +0.67  +/- 0.19\n                         [95% CI; t-statistic]\n\np(speedup > 0)   =  1.0000\np(speedup > .5%) =  0.9562\n\nCPU: 16 x Intel(R) Core(TM) Ultra 9 185H\nHyperthreading: on\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6703\n\nNo functional change\n",
+      "subject": "Avoid branching before `ValueList::push_back`"
+    },
+    {
+      "hash": "ead7e650da1dd07a2614ba4d8207470fe921a87b",
+      "short": "ead7e650",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-09T19:43:44Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ead7e650da1dd07a2614ba4d8207470fe921a87b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ead7e650da1dd07a2614ba4d8207470fe921a87b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ead7e650da1dd07a2614ba4d8207470fe921a87b.tar.gz"
+        }
+      ],
+      "message": "Fix weird indexing bug\n\n[Passed\nSTC](https://tests.stockfishchess.org/tests/live_elo/69cf6a5d1668971c9da23ae1)\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 51104 W: 13376 L: 13180 D: 24548\nPtnml(0-2): 134, 5555, 13963, 5781, 119\n\n[Passed\nLTC](https://tests.stockfishchess.org/tests/live_elo/69d00a7ee2b443cb2670b5c6)\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 101256 W: 25867 L: 25732 D: 49657\nPtnml(0-2): 59, 10423, 29520, 10576, 50\n\nWhen processing a promotion we add/remove nonsensical threats, namely,\npiece threats of pawns on the 1st or 8th rank. This is not only\ninefficient but also seems to lead to an obscure bug during a\npromotion\u2013capture + `double_inc_update` that causes a lingering invalid\nfeature. Currently \u2013 as an artifact of the training process \u2013 these\nparts of the net are filled with random values in [-1,1], which is why\nthere is a bench change.\n\n@ces42 did a helpful analysis:\n\n> checking bench with depth 17 actually shows that the bug in has been\nthere all the time since 8e5392d7 (when threat inputs was merged into\nmaster)\n> i.e. double_inc_update for ThreatFeatureSet has always been slightly\nbugged\n\nAfter this patch is applied we'll be able to better compress the net by\nfilling the invalid features with 0, w/o changing bench. I expect a\n15%-ish size savings.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6701\n\nBench: 2700393\n",
+      "subject": "Fix weird indexing bug"
+    },
+    {
+      "hash": "ef27b4db7b842f230282b35dd15547f870365c7e",
+      "short": "ef27b4db",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-09T19:43:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ef27b4db7b842f230282b35dd15547f870365c7e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ef27b4db7b842f230282b35dd15547f870365c7e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ef27b4db7b842f230282b35dd15547f870365c7e.tar.gz"
+        }
+      ],
+      "message": "Using the already existing pawn_single_push_bb\n\nUsing the already existing pawn_single_push_bb helper which encapsulates\nthe exact same logic.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6700\n\nNo functional change\n",
+      "subject": "Using the already existing pawn_single_push_bb"
+    },
+    {
+      "hash": "20b61d2fd49008f6431ace0f7d4886f70a502331",
+      "short": "20b61d2f",
+      "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
+      "date": "2026-04-09T19:42:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/20b61d2fd49008f6431ace0f7d4886f70a502331",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20b61d2fd49008f6431ace0f7d4886f70a502331.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20b61d2fd49008f6431ace0f7d4886f70a502331.tar.gz"
+        }
+      ],
+      "message": "Fix shell escaping in misc.o rule\n\nAfter 415f2ef1. Now works again with CXX paths like `A:\\path\\to\\g++`\nunder MSYS2. The cache files are no longer read in the rule itself and\nonly used as markers for change detection.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6699\n\nNo functional change\n",
+      "subject": "Fix shell escaping in misc.o rule"
+    },
+    {
+      "hash": "93ba8fb35ecf1b203c002c0a3561b0c810bf85c8",
+      "short": "93ba8fb3",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-04-09T19:42:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/93ba8fb35ecf1b203c002c0a3561b0c810bf85c8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93ba8fb35ecf1b203c002c0a3561b0c810bf85c8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93ba8fb35ecf1b203c002c0a3561b0c810bf85c8.tar.gz"
+        }
+      ],
+      "message": "CI: test for macOS g++ pretending to be clang++\n\nAvoids compilation errors on macOS by ensuring flags specific to g++ are\napplied to actual g++\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6709\n\nNo functional change\n",
+      "subject": "CI: test for macOS g++ pretending to be clang++"
+    },
+    {
+      "hash": "a42d328f21f76e1637135db36eb8e8bca72849e4",
+      "short": "a42d328f",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-04-09T19:42:09Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a42d328f21f76e1637135db36eb8e8bca72849e4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a42d328f21f76e1637135db36eb8e8bca72849e4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a42d328f21f76e1637135db36eb8e8bca72849e4.tar.gz"
+        }
+      ],
+      "message": "Fix compilation errors on macOS\n\n```\nclang++: error: unknown argument: '-fno-ipa-cp-clone'\nclang++: error: unknown argument: '-fno-ipa-cp-clone'\nmake[1]: *** [bitboard.o] Error 1\n```\n\nThe flag is unsupported by Clang, which pretends to be GCC on macOS, so\nonly passing -fno-ipa-cp-clone to real GCC fixes macOS builds.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6698\n\nNo functional change\n",
+      "subject": "Fix compilation errors on macOS"
+    },
+    {
+      "hash": "bb752eb2f6d55704ddb1bd3dcead348716b1a972",
+      "short": "bb752eb2",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-09T19:41:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bb752eb2f6d55704ddb1bd3dcead348716b1a972",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb752eb2f6d55704ddb1bd3dcead348716b1a972.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bb752eb2f6d55704ddb1bd3dcead348716b1a972.tar.gz"
+        }
+      ],
+      "message": "Remove step in update_accumulator_refresh_cache\n\nPassed simplification STC\nhttps://tests.stockfishchess.org/tests/live_elo/69c9c050a54395a76133504c\n\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 304544 W: 78502 L: 78574 D: 147468\nPtnml(0-2): 906, 33590, 83358, 33506, 912\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6697\n\nNo functional change\n",
+      "subject": "Remove step in update_accumulator_refresh_cache"
+    },
+    {
+      "hash": "969542e4f02c7aa396d727d9630da28fd8cef098",
+      "short": "969542e4",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-04-09T19:41:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/969542e4f02c7aa396d727d9630da28fd8cef098",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/969542e4f02c7aa396d727d9630da28fd8cef098.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/969542e4f02c7aa396d727d9630da28fd8cef098.tar.gz"
+        }
+      ],
+      "message": "Simplify HalfKAv2_hm::write_indices()\n\nhttps://tests.stockfishchess.org/tests/view/69bb1fafd7d60419badf31a3\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 116544 W: 30024 L: 29895 D: 56625\nPtnml(0-2): 317, 12875, 31729, 13064, 287\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6677\n\nNo functional change\n",
+      "subject": "Simplify HalfKAv2_hm::write_indices()"
+    },
+    {
+      "hash": "82908e0fd68a3a717e6152f66a297ecc97d9a6e9",
+      "short": "82908e0f",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-09T19:40:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/82908e0fd68a3a717e6152f66a297ecc97d9a6e9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82908e0fd68a3a717e6152f66a297ecc97d9a6e9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82908e0fd68a3a717e6152f66a297ecc97d9a6e9.tar.gz"
+        }
+      ],
+      "message": "Simplify mtg in time management\n\nPassed Stc:\nLLR: 3.05 (-2.94,2.94) <-1.75,0.25>\nTotal: 289088 W: 74727 L: 74773 D: 139588\nPtnml(0-2): 903, 30974, 80841, 30918, 908\nhttps://tests.stockfishchess.org/tests/view/699d9093eaae015cd278eda3\n\nPassed Ltc:\nLLR: 3.02 (-2.94,2.94) <-1.75,0.25>\nTotal: 144438 W: 36859 L: 36766 D: 70813\nPtnml(0-2): 62, 13391, 45235, 13454, 77\nhttps://tests.stockfishchess.org/tests/view/699f02913ece4c464328a264\n\nPassed Sudden death:\nLLR: 2.99 (-2.94,2.94) <-1.75,0.25>\nTotal: 53406 W: 13960 L: 13753 D: 25693\nPtnml(0-2): 265, 5848, 14253, 6089, 248\nhttps://tests.stockfishchess.org/tests/view/69a47548a70d5f3736be6482\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6644\n\nNo functional change\n",
+      "subject": "Simplify mtg in time management"
+    },
+    {
+      "hash": "19dec05602cf097b1a13309a58b05836fa77f7f2",
+      "short": "19dec056",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-04-09T19:40:37Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/19dec05602cf097b1a13309a58b05836fa77f7f2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/19dec05602cf097b1a13309a58b05836fa77f7f2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/19dec05602cf097b1a13309a58b05836fa77f7f2.tar.gz"
+        }
+      ],
+      "message": "Update a few outdated wrong comments\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6525\n\nNo functional change\n",
+      "subject": "Update a few outdated wrong comments"
+    },
+    {
+      "hash": "5eeca7392ee90b7a43da69e647e3d596e42992fd",
+      "short": "5eeca739",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-02T18:29:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5eeca7392ee90b7a43da69e647e3d596e42992fd",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5eeca7392ee90b7a43da69e647e3d596e42992fd.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5eeca7392ee90b7a43da69e647e3d596e42992fd.tar.gz"
+        }
+      ],
+      "message": "Update NNUE architecture to SFNNv14 and net nn-7bf13f9655c8.nnue\n\n[STC](https://tests.stockfishchess.org/tests/live_elo/69cb991bc025c305b7daa219)\n\nLLR: 2.97 (-2.94,2.94) <0.00,2.00>\nTotal: 47520 W: 12558 L: 12219 D: 22743\nPtnml(0-2): 190, 5474, 12102, 5795, 199\n\n[LTC](https://tests.stockfishchess.org/tests/live_elo/69cc6b42731dfb72d2e92128)\n\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 123756 W: 31996 L: 31497 D: 60263\nPtnml(0-2): 81, 13512, 34221, 13955, 109\n\nAdds features for pawns pushing against other pawns. For indexing, we\nuse the existing threats feature set by adding the forward square to the\nsquares threatened by a pawn. This threat is only enabled when another\npawn occupies that square. We then add appropriate logic changes in\n`update_piece_threats` and `features/full_threats.cpp`.\n\nThe wonderful Ciekce (of Stormphrax) and peregrine (of Reckless) also\nhad similar ideas with adding forward pawn movements to TI, and I\nappreciate their giving me motivation to figure out `nnue-pytorch` and\ntest it.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6694\n\nBench: 2926703\n",
+      "subject": "Update NNUE architecture to SFNNv14 and net nn-7bf13f9655c8.nnue"
+    },
+    {
+      "hash": "8a1b0f8b044ffbaf7341325de978d21382d7ef60",
+      "short": "8a1b0f8b",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-04-02T18:28:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8a1b0f8b044ffbaf7341325de978d21382d7ef60",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8a1b0f8b044ffbaf7341325de978d21382d7ef60.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8a1b0f8b044ffbaf7341325de978d21382d7ef60.tar.gz"
+        }
+      ],
+      "message": "Reorder NNUE accumulator evals\n\nMakes eval calls more cache-friendly on a hot path.\n\nHints of a speedup found locally:\n```\nResult of  30 runs\n==================\nbase (...ockfish-base) =    1754124  +/- 2887\ntest (...h-eval-order) =    1757848  +/- 2412\ndiff                   =      +3724  +/- 1368\n\nspeedup        = +0.0021\nP(speedup > 0) =  1.0000\n\nCPU: 16 x arm\nHyperthreading: off\n```\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/69c84f3cf40d95b975597c21\nLLR: 3.36 (-2.94,2.94) <0.00,2.00>\nTotal: 335840 W: 87022 L: 86257 D: 162561\nPtnml(0-2): 932, 36760, 91816, 37435, 977\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6693\n\nNo functional change\n",
+      "subject": "Reorder NNUE accumulator evals"
+    },
+    {
+      "hash": "171afd2b4d53a1beb25e2e1e2045f09ba70ad7ae",
+      "short": "171afd2b",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-04-02T18:27:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/171afd2b4d53a1beb25e2e1e2045f09ba70ad7ae",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/171afd2b4d53a1beb25e2e1e2045f09ba70ad7ae.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/171afd2b4d53a1beb25e2e1e2045f09ba70ad7ae.tar.gz"
+        }
+      ],
+      "message": "NEON: simplify updates in NNUE accumulator\n\nReduce # instructions using widening add/sub calls on AArch64.\nAdd shims for 32-bit ARM.\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/69c093d3f690a4b7f5fb0d6e\nLLR: 5.15 (-2.94,2.94) <-1.75,0.25>\nTotal: 338624 W: 86931 L: 86853 D: 164840\nPtnml(0-2): 667, 35888, 96079, 36056, 622\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6692\n\nNo functional change\n",
+      "subject": "NEON: simplify updates in NNUE accumulator"
+    },
+    {
+      "hash": "c41c9bb9733be48b232afd042c9331dde9000e03",
+      "short": "c41c9bb9",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-02T18:26:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c41c9bb9733be48b232afd042c9331dde9000e03",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c41c9bb9733be48b232afd042c9331dde9000e03.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c41c9bb9733be48b232afd042c9331dde9000e03.tar.gz"
+        }
+      ],
+      "message": "Add -fno-ipa-cp-clone on GCC\n\nPassed non-regression STC at\ntests.stockfishchess.org/tests/view/69c9b8c3a54395a761335044 (set to\ngainer bounds, *mea culpa*)\n\nThere's a major performance penalty when compiling the fish with GCC 16.\n@Torom 's measurements (similar to mine, but more precise):\n\n```\nGCC 15 (master) vs. 16 (master)\nsf_base =  2549174 +/-   2984 (95%)\nsf_test =  2435456 +/-   2239 (95%)\ndiff    =  -113718 +/-   3599 (95%)\nspeedup = -4.46100% +/- 0.141% (95%)\n\nGCC 15 (master) vs. 16 (patch)\nsf_base =  2544107 +/-   3091 (95%)\nsf_test =  2568837 +/-   3164 (95%)\ndiff    =    24729 +/-   4359 (95%)\nspeedup = 0.97204% +/- 0.171% (95%)\n```\n\nBased on looking at the disassembly + profiling data of the builds, the\nroot cause appears to be overly aggressive code duplication from\nconstant propagation of various functions especially in `search.cpp`.\nThe worst offender is `Worker::search`, which I think is being cloned\nand optimized based on the value of `cutNode`. `perf stat` indicates\nthat the instruction cache miss rate goes up by ~50% on the GCC 16\nbuild.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6691\n\nNo functional change\n",
+      "subject": "Add -fno-ipa-cp-clone on GCC"
+    },
+    {
+      "hash": "347fcaa392d32a03e7d405e413115b444565c14c",
+      "short": "347fcaa3",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-02T18:25:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/347fcaa392d32a03e7d405e413115b444565c14c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/347fcaa392d32a03e7d405e413115b444565c14c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/347fcaa392d32a03e7d405e413115b444565c14c.tar.gz"
+        }
+      ],
+      "message": "Stack allocate NNUE buffer\n\nPassed simp STC\n\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 29632 W: 7772 L: 7552 D: 14308\nPtnml(0-2): 76, 3155, 8147, 3349,\n\nId expect there to be a small speedup (bc the compiler can skip some\nstores) but i haven\u2019t tried to measure it\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6688\n\nNo functional change\n",
+      "subject": "Stack allocate NNUE buffer"
+    },
+    {
+      "hash": "8132dbcb5a998b4d151a33db29135cb0fb829dbf",
+      "short": "8132dbcb",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-04-02T18:23:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8132dbcb5a998b4d151a33db29135cb0fb829dbf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8132dbcb5a998b4d151a33db29135cb0fb829dbf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8132dbcb5a998b4d151a33db29135cb0fb829dbf.tar.gz"
+        }
+      ],
+      "message": "split affine_transform on VNNI as well\n\n```\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 184544 W: 47990 L: 47474 D: 89080\nPtnml(0-2): 551, 20238, 50206, 20698, 579\n```\n\nTorom measured\n\n```\nsf_base =  2538696 +/-   2915 (95%)\nsf_test =  2546510 +/-   3011 (95%)\ndiff    =     7814 +/-   4146 (95%)\nspeedup = 0.30782% +/- 0.163% (95%)\n```\n\nI get something similar. The benefit would be larger if we ever decide\nto further increase the L2 size I think\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6683\n\nNo functional change\n",
+      "subject": "split affine_transform on VNNI as well"
+    },
+    {
+      "hash": "f614ff90e21e0898008ac8e676d134abd5f7c679",
+      "short": "f614ff90",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-04-02T18:22:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f614ff90e21e0898008ac8e676d134abd5f7c679",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f614ff90e21e0898008ac8e676d134abd5f7c679.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f614ff90e21e0898008ac8e676d134abd5f7c679.tar.gz"
+        }
+      ],
+      "message": "Neon dotprod speedup in sparse-input affine transform\n\nAlso apply VNNI accumulator splitting strategy to NEON dotprod.\n\nSpeedup measured locally with profile-build, apple-silicon M3 Pro:\n```\nResult of  20 runs\n==================\nbase (...kfish-master) =    1582485  +/- 12985\ntest (...parse-affine) =    1605204  +/- 13801\ndiff                   =     +22720  +/- 1212\n\nspeedup        = +0.0144\nP(speedup > 0) =  1.0000\n\nCPU: 11 x arm\nHyperthreading: off\n```\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/69c04c71f690a4b7f5fb0cde\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 80576 W: 20748 L: 20391 D: 39437\nPtnml(0-2): 161, 8472, 22658, 8843, 154\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6682\n\nNo functional change\n",
+      "subject": "Neon dotprod speedup in sparse-input affine transform"
+    },
+    {
+      "hash": "b9f3273af12266b81c00993a360f5f544c345ce9",
+      "short": "b9f3273a",
+      "author": "Robert Nurnberg @ elitebook <robert.nurnberg@gmx.de>",
+      "date": "2026-04-02T18:22:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b9f3273af12266b81c00993a360f5f544c345ce9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b9f3273af12266b81c00993a360f5f544c345ce9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b9f3273af12266b81c00993a360f5f544c345ce9.tar.gz"
+        }
+      ],
+      "message": "Align ponder move and final PV output\n\nIn master for various reasons the given ponder move may get out of sync\nwith (the second move of) the last PV sent to the GUI:\n1. If a ponder move is extracted from the TT despite bestmove leading to\na game ending draw.\n2. If a ponder move is extracted from the TT from a fail high/low, since\nafter the ponder move extraction no new PV is sent to the GUI.\n3. If `syzygy_extend_pv()` from within the call to `pv()` changes the PV\nafter the ponder move has been selected.\n4. If the PV roll-back to protect mated-in scores differs in the second\nmove from the final PV sent to the GUI.\n\nThis PR keeps ponder move and the last printed PV in sync.\n\nFixes #6676.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6679\n\nNo functional change\n",
+      "subject": "Align ponder move and final PV output"
+    }
+  ]
+}

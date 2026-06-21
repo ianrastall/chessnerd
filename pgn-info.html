@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"> <head><script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ7B0Z9FK3"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XQ7B0Z9FK3');
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Analyze pasted or uploaded PGN text and extract game statistics, player lists, and event lists."><title>PGN Info - Chess Nerd</title><link rel="icon" href="/favicon.ico"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><script>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem('theme');
+          const theme = storedTheme === 'light' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+
+          const storedAccent = localStorage.getItem('accentColor');
+          if (!storedAccent || !/^#[0-9a-fA-F]{6}$/.test(storedAccent)) return;
+
+          const normalized = storedAccent.toLowerCase();
+          document.documentElement.style.setProperty('--accent', normalized);
+
+          const parsed = parseInt(normalized.slice(1), 16);
+          const red = (parsed >> 16) & 255;
+          const green = (parsed >> 8) & 255;
+          const blue = parsed & 255;
+          document.documentElement.style.setProperty('--accent-rgb', `${red}, ${green}, ${blue}`);
+
+          const boost = 20;
+          const accentLight = '#' + (
+            (Math.min(red + boost, 255) << 16) |
+            (Math.min(green + boost, 255) << 8) |
+            Math.min(blue + boost, 255)
+          ).toString(16).padStart(6, '0');
+          document.documentElement.style.setProperty('--accent-light', accentLight);
+        } catch {
+          // Ignore storage access errors.
+        }
+      })();
+    </script><link rel="stylesheet" href="/_astro/_tool_.Cy6cWUB9.css">
+<style>.tool-status-actions[data-astro-cid-uxxc4mb3]{gap:.5rem;flex-wrap:wrap}.tool-status-actions[data-astro-cid-uxxc4mb3] #statusMessage[data-astro-cid-uxxc4mb3]{flex:1 1 220px}
+</style></head> <body> <div class="container"> <header> <a class="logo" href="/" aria-label="Chess Nerd home"> <span>Chess Nerd</span> </a> <nav class="site-network" aria-label="Network sites"> <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer"> <img src="/img/text-utils-icon.png" class="site-network-icon" alt="" width="16" height="16"> <span>Text Utilities</span> <span class="material-icons" aria-hidden="true">open_in_new</span> </a> <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer"> <img src="/img/github.png" class="site-network-icon" alt="" width="16" height="16"> <span>GitHub</span> <span class="material-icons" aria-hidden="true">open_in_new</span> </a> </nav> <div class="controls"> <div class="accent-selector"> <label for="accentColor" class="visually-hidden">Accent color</label> <span class="material-icons" aria-hidden="true">palette</span> <select id="accentColor" class="color-dropdown" aria-label="Accent color"></select> </div> <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true"> <span class="material-icons" aria-hidden="true">dark_mode</span> </button> </div> </header>  <main data-astro-cid-uxxc4mb3> <div id="toolView" data-astro-cid-uxxc4mb3> <div class="tool-header"> <div class="tool-title"> <span class="material-icons" aria-hidden="true">assessment</span> <h1>PGN Info</h1> </div> <div class="tool-actions"> <a id="backButton" class="btn btn-secondary btn-compact" href="/"> <span class="material-icons" aria-hidden="true">arrow_back</span>
+Back
+</a> </div> </div> <div class="options-panel" data-astro-cid-uxxc4mb3> <div class="options-grid" data-astro-cid-uxxc4mb3> <div class="option-group" data-astro-cid-uxxc4mb3> <label for="pgnFile" data-astro-cid-uxxc4mb3>Analyze from File (Max 50MB)</label> <input type="file" id="pgnFile" accept=".pgn,text/plain" data-astro-cid-uxxc4mb3> </div> </div> </div> <div class="io-container" data-astro-cid-uxxc4mb3> <div class="io-panel" data-astro-cid-uxxc4mb3> <div class="io-label" data-astro-cid-uxxc4mb3> <span data-astro-cid-uxxc4mb3>Input PGN Text</span> <span class="stats" id="inputStats" data-astro-cid-uxxc4mb3>0 chars</span> </div> <textarea id="pgnText" placeholder="Paste PGN data here, or upload a file above..." data-astro-cid-uxxc4mb3></textarea> </div> <div class="io-panel" data-astro-cid-uxxc4mb3> <div class="io-label" data-astro-cid-uxxc4mb3> <span data-astro-cid-uxxc4mb3>Statistics Report</span> <button id="copyBtn" class="btn btn-secondary btn-compact" type="button" title="Copy to clipboard" aria-label="Copy report" data-astro-cid-uxxc4mb3> <span class="material-icons" aria-hidden="true" data-astro-cid-uxxc4mb3>content_copy</span> </button> </div> <textarea id="statsOutput" class="output" readonly placeholder="Analysis results will appear here..." data-astro-cid-uxxc4mb3></textarea> </div> </div> <div class="status-bar tool-status-actions" data-astro-cid-uxxc4mb3> <div id="statusMessage" data-astro-cid-uxxc4mb3>Ready to analyze</div> <button id="extractPlayersBtn" class="btn btn-secondary btn-compact" type="button" data-astro-cid-uxxc4mb3> <span class="material-icons" aria-hidden="true" data-astro-cid-uxxc4mb3>people</span>
+Players
+</button> <button id="extractEventsBtn" class="btn btn-secondary btn-compact" type="button" data-astro-cid-uxxc4mb3> <span class="material-icons" aria-hidden="true" data-astro-cid-uxxc4mb3>event</span>
+Events
+</button> <button id="analyzeBtn" class="btn btn-primary btn-compact" type="button" data-astro-cid-uxxc4mb3> <span class="material-icons" aria-hidden="true" data-astro-cid-uxxc4mb3>play_arrow</span>
+Analyze
+</button> <button id="clearBtn" class="btn btn-secondary btn-compact" type="button" data-astro-cid-uxxc4mb3> <span class="material-icons" aria-hidden="true" data-astro-cid-uxxc4mb3>delete</span>
+Clear
+</button> </div> </div> </main>  <script type="module" src="/_astro/pgn-info.astro_astro_type_script_index_0_lang.BadlrqQ3.js"></script>  <footer class="site-footer"> <p>&copy; Ian Rastall 2025<br>Contact: moving.form.of.dust@gmail.com<br>Donate: PayPal to merastall@gmail.com</p> </footer> </div> <script src="/js/theme.js"></script> </body> </html>
