@@ -8,14 +8,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <ToolHeader title="ECO Codes" icon="menu_book" />
 
       <div class="options-panel">
-        <div class="eco-controls">
-          <div class="option-group eco-search">
-            <label for="ecoSearch">Search</label>
-            <input id="ecoSearch" type="search" placeholder="Name or code — e.g. Najdorf, London, B90" autocomplete="off" />
+        <div class="eco-search option-group">
+          <label for="ecoSearch">Search</label>
+          <input id="ecoSearch" type="search" placeholder="Name or code — e.g. Najdorf, London, B90" autocomplete="off" />
+        </div>
+
+        <div class="eco-filters">
+          <div class="eco-filter-row" id="ecoVolumeRow">
+            <span class="eco-filter-label" id="ecoVolumesLabel">Volume</span>
+            <div id="ecoVolumes" class="eco-pills" role="group" aria-labelledby="ecoVolumesLabel"></div>
           </div>
-          <div class="option-group">
-            <label id="ecoVolumesLabel">Volume</label>
-            <div id="ecoVolumes" class="eco-volumes" role="group" aria-labelledby="ecoVolumesLabel"></div>
+          <div class="eco-filter-row" id="ecoTensRow" hidden>
+            <span class="eco-filter-label" id="ecoTensLabel">Group</span>
+            <div id="ecoTens" class="eco-pills" role="group" aria-labelledby="ecoTensLabel"></div>
+          </div>
+          <div class="eco-filter-row" id="ecoOnesRow" hidden>
+            <span class="eco-filter-label" id="ecoOnesLabel">Code</span>
+            <div id="ecoOnes" class="eco-pills" role="group" aria-labelledby="ecoOnesLabel"></div>
           </div>
         </div>
       </div>
@@ -35,13 +44,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </main>
 
   <style is:global>
-    .eco-controls {
-      display: grid;
-      grid-template-columns: minmax(240px, 1fr) auto;
-      gap: 1rem;
-      align-items: end;
-    }
-
     .eco-search input {
       width: 100%;
       min-height: 2.2rem;
@@ -57,7 +59,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       border-color: var(--accent);
     }
 
-    .eco-volumes {
+    .eco-filters {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .eco-filter-row[hidden] {
+      display: none;
+    }
+
+    .eco-filter-row {
+      display: grid;
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      align-items: start;
+      gap: 0.6rem;
+    }
+
+    .eco-filter-label {
+      padding-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .eco-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
@@ -194,8 +220,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     @media (max-width: 600px) {
-      .eco-controls {
+      .eco-filter-row {
         grid-template-columns: 1fr;
+        gap: 0.3rem;
+      }
+
+      .eco-filter-label {
+        padding-top: 0;
       }
 
       .eco-detail {

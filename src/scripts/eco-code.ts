@@ -24,7 +24,6 @@ interface ChessGame {
 type ChessConstructor = new (fen?: string) => ChessGame;
 
 const DATA_URL = '/data/eco-code/openings.json';
-const VOLUMES = ['A', 'B', 'C', 'D', 'E'] as const;
 const RENDER_CAP = 250;
 
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -32,13 +31,22 @@ const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
 let openings: Opening[] = [];
 let query = '';
+// Three cascading filter levels, each a single character of the ECO code:
+// volume = code[0] (A–E), tens = code[1] (0–9), ones = code[2] (0–9).
 let volume = '';
+let tens = '';
+let ones = '';
 let expandedKey: string | null = null;
 
 const searchEl = document.getElementById('ecoSearch') as HTMLInputElement | null;
-const volumesEl = document.getElementById('ecoVolumes');
 const statusEl = document.getElementById('ecoStatus');
 const listEl = document.getElementById('ecoList');
+
+const volumesEl = document.getElementById('ecoVolumes');
+const tensEl = document.getElementById('ecoTens');
+const onesEl = document.getElementById('ecoOnes');
+const tensRowEl = document.getElementById('ecoTensRow');
+const onesRowEl = document.getElementById('ecoOnesRow');
 
 function getChess(): ChessConstructor | null {
   return (window as unknown as { Chess?: ChessConstructor }).Chess ?? null;
@@ -49,9 +57,12 @@ function keyFor(opening: Opening, index: number): string {
 }
 
 function matches(opening: Opening): boolean {
-  if (volume && opening.eco[0] !== volume) return false;
+  const eco = opening.eco;
+  if (volume && eco[0] !== volume) return false;
+  if (tens && eco[1] !== tens) return false;
+  if (ones && eco[2] !== ones) return false;
   if (!query) return true;
-  const haystack = `${opening.eco} ${opening.name}`.toLowerCase();
+  const haystack = `${eco} ${opening.name}`.toLowerCase();
   return haystack.includes(query);
 }
 
@@ -208,33 +219,102 @@ function render(): void {
   listEl.appendChild(fragment);
 }
 
-function buildVolumeChips(): void {
-  if (!volumesEl) return;
-  const make = (value: string, label: string): HTMLButtonElement => {
+// Distinct values present in the data at one position of the ECO code, given a
+// fixed prefix. prefix '' → volumes (code[0]); 'A' → tens digits under A;
+// 'A3' → ones digits under A3.
+function valuesForPrefix(prefix: string): string[] {
+  const found = new Set<string>();
+  const pos = prefix.length;
+  for (const opening of openings) {
+    const eco = opening.eco;
+    if (eco.length <= pos) continue;
+    if (prefix && !eco.startsWith(prefix)) continue;
+    found.add(eco[pos]);
+  }
+  return [...found].sort();
+}
+
+interface PillItem {
+  value: string;
+  label: string;
+}
+
+function renderPillRow(
+  container: HTMLElement,
+  items: PillItem[],
+  selected: string,
+  onSelect: (value: string) => void
+): void {
+  container.innerHTML = '';
+  const all: PillItem = { value: '', label: 'All' };
+  [all, ...items].forEach((item) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'eco-chip';
-    btn.dataset.volume = value;
-    btn.textContent = label;
-    if (value === volume) btn.classList.add('active');
-    btn.addEventListener('click', () => {
+    btn.textContent = item.label;
+    if (item.value === selected) btn.classList.add('active');
+    btn.addEventListener('click', () => onSelect(item.value));
+    container.appendChild(btn);
+  });
+}
+
+// Rebuild all three filter rows from the current volume/tens/ones selection.
+// Lower rows are hidden until their parent level is chosen.
+function refreshFilters(): void {
+  if (volumesEl) {
+    const items = valuesForPrefix('').map((v) => ({ value: v, label: v }));
+    renderPillRow(volumesEl, items, volume, (value) => {
       volume = value;
+      tens = '';
+      ones = '';
       expandedKey = null;
-      volumesEl.querySelectorAll('.eco-chip').forEach((chip) => {
-        chip.classList.toggle('active', (chip as HTMLElement).dataset.volume === volume);
-      });
+      refreshFilters();
       render();
     });
-    return btn;
-  };
+  }
 
-  volumesEl.appendChild(make('', 'All'));
-  VOLUMES.forEach((vol) => volumesEl.appendChild(make(vol, vol)));
+  if (tensEl && tensRowEl) {
+    if (volume) {
+      const items = valuesForPrefix(volume).map((d) => ({
+        value: d,
+        label: `${volume}${d}`
+      }));
+      renderPillRow(tensEl, items, tens, (value) => {
+        tens = value;
+        ones = '';
+        expandedKey = null;
+        refreshFilters();
+        render();
+      });
+      tensRowEl.hidden = items.length === 0;
+    } else {
+      tensRowEl.hidden = true;
+      tensEl.innerHTML = '';
+    }
+  }
+
+  if (onesEl && onesRowEl) {
+    if (volume && tens) {
+      const items = valuesForPrefix(`${volume}${tens}`).map((o) => ({
+        value: o,
+        label: `${volume}${tens}${o}`
+      }));
+      renderPillRow(onesEl, items, ones, (value) => {
+        ones = value;
+        expandedKey = null;
+        refreshFilters();
+        render();
+      });
+      onesRowEl.hidden = items.length === 0;
+    } else {
+      onesRowEl.hidden = true;
+      onesEl.innerHTML = '';
+    }
+  }
 }
 
 function init(): void {
   if (!listEl || !statusEl) return;
-  buildVolumeChips();
 
   if (searchEl) {
     searchEl.addEventListener('input', () => {
@@ -252,6 +332,7 @@ function init(): void {
     })
     .then((payload) => {
       openings = Array.isArray(payload.openings) ? payload.openings : [];
+      refreshFilters();
       render();
     })
     .catch((error) => {
