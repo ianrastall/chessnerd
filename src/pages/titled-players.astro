@@ -85,7 +85,7 @@ import ToolHeader from '../components/ToolHeader.astro';
         <label>Titles</label>
         {["GM","WGM","IM","WIM","FM","WFM","NM","WNM","CM","WCM"].map(t => (
           <label class="tp-title-btn checked" data-title={t}>
-            <input type="checkbox" checked />{t}
+            <input type="checkbox" aria-label={`Toggle title ${t}`} checked />{t}
           </label>
         ))}
         <span class="tp-title-sep"></span>
@@ -96,7 +96,7 @@ import ToolHeader from '../components/ToolHeader.astro';
       <div class="tp-row2">
         <div class="tp-field">
           <label for="tpRating">Rating type</label>
-          <select id="tpRating">
+          <select id="tpRating" aria-label="Sort rating">
             <option value="blitz">Blitz</option>
             <option value="rapid">Rapid</option>
             <option value="bullet">Bullet</option>
@@ -104,15 +104,15 @@ import ToolHeader from '../components/ToolHeader.astro';
         </div>
         <div class="tp-field">
           <label for="tpMinElo">Min Elo</label>
-          <input type="number" id="tpMinElo" value="0" min="0" max="4000" step="50" style="width:90px" />
+          <input type="number" id="tpMinElo" value="0" min="0" max="4000" step="50" style="width:90px" aria-label="Minimum Elo rating" />
         </div>
         <div class="tp-field">
           <label for="tpCountry">Country</label>
-          <input type="text" id="tpCountry" placeholder="e.g. US" maxlength="4" style="width:80px;text-transform:uppercase" />
+          <input type="text" id="tpCountry" placeholder="e.g. US" maxlength="4" style="width:80px;text-transform:uppercase" aria-label="Country code" />
         </div>
         <div class="tp-field">
           <label for="tpStatus">Status</label>
-          <select id="tpStatus">
+          <select id="tpStatus" aria-label="Player activity status">
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -120,7 +120,7 @@ import ToolHeader from '../components/ToolHeader.astro';
         </div>
         <div class="tp-field wide">
           <label for="tpSearch">Search username or name</label>
-          <input type="search" id="tpSearch" placeholder="Search…" autocomplete="off" />
+          <input type="search" id="tpSearch" placeholder="Search…" autocomplete="off" aria-label="Search titled players" />
         </div>
       </div>
     </div>
