@@ -2,6 +2,195 @@
   "month": "2026-06",
   "commits": [
     {
+      "hash": "47575ebd8bc092b091e496ea776dc56d22972487",
+      "short": "47575ebd",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-06-25T11:11:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/47575ebd8bc092b091e496ea776dc56d22972487",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/47575ebd8bc092b091e496ea776dc56d22972487.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/47575ebd8bc092b091e496ea776dc56d22972487.tar.gz"
+        }
+      ],
+      "message": "Deduplicating Color-Specific Piece Validation\n\nDeduplicating Color-Specific Piece Validation.\n\nThe validation checks for the number of pawns and additional promoted pieces are duplicated for WHITE and BLACK. We can combine this logic into a single range-based for loop over both colors.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6922\n\nNo functional change\n",
+      "subject": "Deduplicating Color-Specific Piece Validation"
+    },
+    {
+      "hash": "3c858c19e6ea0c284ea6f4ca4e7bce3fd329a38e",
+      "short": "3c858c19",
+      "author": "Daniel Monroe <github.com@danielmonroe.net>",
+      "date": "2026-06-25T11:10:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3c858c19e6ea0c284ea6f4ca4e7bce3fd329a38e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c858c19e6ea0c284ea6f4ca4e7bce3fd329a38e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3c858c19e6ea0c284ea6f4ca4e7bce3fd329a38e.tar.gz"
+        }
+      ],
+      "message": "Two small simplifications\n\nPassed simplification STC\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 206368 W: 52592 L: 52560 D: 101216\nPtnml(0-2): 537, 24201, 53669, 24247, 530\nhttps://tests.stockfishchess.org/tests/view/6a2c5ab00d5d4b19d0805326\n\nPassed simplification LTC\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 109944 W: 27839 L: 27709 D: 54396\nPtnml(0-2): 61, 11938, 30844, 12068, 61\nhttps://tests.stockfishchess.org/tests/view/6a2dc6e70d5d4b19d08053aa\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6913\n\nBench: 2767133\n",
+      "subject": "Two small simplifications"
+    },
+    {
+      "hash": "782852b26a5bd22eb0ea6a834cbeb48d4356a07b",
+      "short": "782852b2",
+      "author": "zungur <zungur@users.noreply.github.com>",
+      "date": "2026-06-25T11:09:32Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/782852b26a5bd22eb0ea6a834cbeb48d4356a07b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/782852b26a5bd22eb0ea6a834cbeb48d4356a07b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/782852b26a5bd22eb0ea6a834cbeb48d4356a07b.tar.gz"
+        }
+      ],
+      "message": "Clear capturedPiece in do_null_move\n\ndo_null_move copies the whole StateInfo from the previous state, which leaves capturedPiece holding the piece captured by the last real move, so inside the null-move subtree captured_piece() reports a stale capture. The priorCapture consumers in search are all guarded by prevSq != SQ_NONE or (ss-1)->currentMove.is_ok(), which are false at the null-move child, but the stalemate verification gate in qsearch reads captured_piece() unguarded and can be spuriously triggered by the stale value.\n\nClear the field, since a null move captures nothing.\n\nPassed non-regression STC:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 82784 W: 21172 L: 21011 D: 40601\nPtnml(0-2): 194, 8976, 22923, 9073, 226\nhttps://tests.stockfishchess.org/tests/view/6a2b5b356b4aa63ddbf31518\n\nPassed non-regression LTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 118134 W: 30007 L: 29891 D: 58236\nPtnml(0-2): 66, 11856, 35108, 11970, 67\nhttps://tests.stockfishchess.org/tests/view/6a2c4c9c0d5d4b19d0805301\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6910\n\nNo functional change\n",
+      "subject": "Clear capturedPiece in do_null_move"
+    },
+    {
+      "hash": "5b87bc48cd73995f02bc790e50239a83d622f838",
+      "short": "5b87bc48",
+      "author": "zungur <zungur@users.noreply.github.com>",
+      "date": "2026-06-25T11:09:03Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5b87bc48cd73995f02bc790e50239a83d622f838",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5b87bc48cd73995f02bc790e50239a83d622f838.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5b87bc48cd73995f02bc790e50239a83d622f838.tar.gz"
+        }
+      ],
+      "message": "Remove unused search-layer APIs\n\nThe following have zero call sites repo-wide:\n\n    SearchManager::id: never read or written (also never initialized, nor was it ever used).\n    Search::Worker::elapsed_time(): never called. PV output uses tm.elapsed_time() (TimeManager) directly. (removed callers on 25361e5)\n    MovePicker::begin()/end(): unused private accessors. (removed callers on 8c2d21f)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6909\n\nNo functional change\n",
+      "subject": "Remove unused search-layer APIs"
+    },
+    {
+      "hash": "1ece3c030daebd9fb49870688de73dff10ba6052",
+      "short": "1ece3c03",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-06-25T11:07:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1ece3c030daebd9fb49870688de73dff10ba6052",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1ece3c030daebd9fb49870688de73dff10ba6052.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1ece3c030daebd9fb49870688de73dff10ba6052.tar.gz"
+        }
+      ],
+      "message": "Simplify Evasion Logic\n\nWhen the king is in check, a pseudo-legal move must be a valid evasion. Instead of duplicating the checking rules for king and non-king moves, we can leverage the existing MoveList<EVASIONS> class.\n\nPassed non-reg STC:\nLLR: 2.98 (-2.94,2.94) <-1.75,0.25>\nTotal: 187360 W: 47579 L: 47524 D: 92257\nPtnml(0-2): 418, 20266, 52263, 20309, 424\nhttps://tests.stockfishchess.org/tests/view/6a28aa5b7c758d82accea13c\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6902\n\nNo functional change\n",
+      "subject": "Simplify Evasion Logic"
+    },
+    {
+      "hash": "9fcd47a717cfdf8c44127710fdb3325218a12259",
+      "short": "9fcd47a7",
+      "author": "Shawn Xu <xu107288696@gmail.com>",
+      "date": "2026-06-25T11:06:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9fcd47a717cfdf8c44127710fdb3325218a12259",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9fcd47a717cfdf8c44127710fdb3325218a12259.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9fcd47a717cfdf8c44127710fdb3325218a12259.tar.gz"
+        }
+      ],
+      "message": "Update main network to nn-f8a759c05f9f.nnue\n\nThis network is further trained on a new BT4 distillation stage, fine tuning on ~2 billion positions relabeled with the value head output of `BT4-tf13tune.pb.gz`. The dataset can be found at https://huggingface.co/datasets/xushawn/test80-bt4-relabel. A modified branch of lc0 was used to derive this data: https://github.com/xu-shawn/lc0/tree/relabel_dual_stream_test\n\n2 billion positions represent a tiny subset of the total training data, and BT4 relabeling is inherently computationally expensive. I expect a lot more gains as more data are relabeled, but it will likely require coordinated community effort. Everyone is welcome to contribute, and yl25946 has made a spreadsheet to track progress: https://docs.google.com/spreadsheets/d/1yanofhusEzDg8ZnurAw799ikoTY6GcqsNMYfpswOIbw/edit.\n\nSpecial thanks to Viren6, who performed policy/value distillation experiments on Monty, and created the lc0 distillation fork that the current relabeler is based on; yl25946 for proposing the idea of large network distillations back in February 2025, running distillation experiments on the HL4096 network, and working on fine tuning attempts; vondele for nettest and suggesting the fine-tuning approach; and many others on the knowledge distillation thread in the SF Discord #ideas channel.\n\nnettest PR: https://github.com/vondele/nettest/pull/369\n\nOngoing STC:\n LLR: -0.01 (-2.94,2.94) <0.00,2.00>\nTotal: 72224 W: 18891 L: 18784 D: 34549\nPtnml(0-2): 336, 8437, 18332, 8798, 209\nhttps://tests.stockfishchess.org/tests/view/6a3ae7913036e45021aeb4a0\n\nPassed LTC:\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 25110 W: 6566 L: 6288 D: 12256\nPtnml(0-2): 27, 2625, 6957, 2935, 11\nhttps://tests.stockfishchess.org/tests/view/6a3b73513036e45021aeb51e\n\nPassed VLTC:\n LLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 18544 W: 4924 L: 4658 D: 8962\nPtnml(0-2): 5, 1730, 5533, 2002, 2\nhttps://tests.stockfishchess.org/tests/view/6a3bbe233036e45021aeb56e\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6924\n\nBench: 2710209\n\nCo-authored-by: Li Ying <121075683+yl25946@users.noreply.github.com>\nCo-authored-by: Viren6 <94880762+Viren6@users.noreply.github.com>\n",
+      "subject": "Update main network to nn-f8a759c05f9f.nnue"
+    },
+    {
+      "hash": "d64835051e9752ad1d9e8ebfb4655753da76741b",
+      "short": "d6483505",
+      "author": "Michael Chaly <Vizvezdenec@gmail.com>",
+      "date": "2026-06-25T11:04:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d64835051e9752ad1d9e8ebfb4655753da76741b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d64835051e9752ad1d9e8ebfb4655753da76741b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d64835051e9752ad1d9e8ebfb4655753da76741b.tar.gz"
+        }
+      ],
+      "message": "Do more aggressive probCut when improving.\n\nIf improving is true reduce depth of probCut search by 1.\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a2a6ceb17167cbe7100a909\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 119136 W: 30591 L: 30158 D: 58387\nPtnml(0-2): 323, 13831, 30845, 14228, 341\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/6a2d65a40d5d4b19d080537f\nLLR: 2.96 (-2.94,2.94) <0.50,2.50>\nTotal: 186552 W: 47377 L: 46755 D: 92420\nPtnml(0-2): 89, 20047, 52395, 20643, 102\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6914\n\nBench: 2422062\n",
+      "subject": "Do more aggressive probCut when improving."
+    },
+    {
+      "hash": "6f97594eda9e50dd22e237abcb636d426727ef07",
+      "short": "6f97594e",
+      "author": "Dalton Hanaway <dhanaway@u.rochester.edu>",
+      "date": "2026-06-25T11:03:44Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6f97594eda9e50dd22e237abcb636d426727ef07",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6f97594eda9e50dd22e237abcb636d426727ef07.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6f97594eda9e50dd22e237abcb636d426727ef07.tar.gz"
+        }
+      ],
+      "message": "prefetch the TT entry as soon as the move is known\n\nWorker::do_move computes the successor hash key via the new\nPosition::key_after(m) and prefetches the TT entry one full do_move\nearlier than the existing prefetch in Position::do_move. key_after does\nnot model castling, en passant or promotion keys exactly; for rare\nmoves the prefetch lands on an unused line.\n\n`key_after` has been around since 2014 (https://github.com/official-stockfish/Stockfish/commit/82d065b0) and was removed in (https://github.com/official-stockfish/Stockfish/pull/5770). Adding back `prefetch_key` helps in common, normal moves at the cost of extra compute.\n\nSpeedup (PGO vs PGO, interleaved paired bench, n=48 pairs, Apple M2\nPro / apple-silicon): +0.69% [0.47, 0.91]\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a291f8d7c758d82accea17f\nLLR: 4.24 (-2.94,2.94) <0.00,2.00>\nTotal: 473504 W: 121250 L: 120228 D: 232026\nPtnml(0-2): 1112, 51137, 131251, 52121, 1131\n\nNo functional change\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6911\n\nNo functional change\n",
+      "subject": "prefetch the TT entry as soon as the move is known"
+    },
+    {
+      "hash": "31e89adf70d56477e7b2ed3c8009eed7f76087e3",
+      "short": "31e89adf",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-06-25T11:03:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/31e89adf70d56477e7b2ed3c8009eed7f76087e3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/31e89adf70d56477e7b2ed3c8009eed7f76087e3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/31e89adf70d56477e7b2ed3c8009eed7f76087e3.tar.gz"
+        }
+      ],
+      "message": "[RfC] Make CI faster\n\nWe can straightforwardly parallelize the `check_universal.sh` script, which takes quite a bit of time for the x86 builds.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6919\n\nNo functional change\n",
+      "subject": "[RfC] Make CI faster"
+    },
+    {
       "hash": "74a0a73715322608332038f7c0151ddf0609a59a",
       "short": "74a0a737",
       "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
