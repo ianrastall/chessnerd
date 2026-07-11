@@ -2,6 +2,174 @@
   "month": "2026-07",
   "commits": [
     {
+      "hash": "924d29d3cab85f45a877a5da0eeeb73a52cb4b62",
+      "short": "924d29d3",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-07-10T18:19:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/924d29d3cab85f45a877a5da0eeeb73a52cb4b62",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/924d29d3cab85f45a877a5da0eeeb73a52cb4b62.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/924d29d3cab85f45a877a5da0eeeb73a52cb4b62.tar.gz"
+        }
+      ],
+      "message": "Simplify Reduction formula for first picked move (ttMove)\n\nPassed STC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 124864 W: 32270 L: 32151 D: 60443\nPtnml(0-2): 273, 13766, 34278, 13799, 316\nhttps://tests.stockfishchess.org/tests/view/6a44f4d9f97ff95f78795463\n\nPassed LTC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 335544 W: 87272 L: 87369 D: 160903\nPtnml(0-2): 157, 34355, 98852, 34244, 164\nhttps://tests.stockfishchess.org/tests/view/6a46a188f97ff95f787956a1\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6964\n\nBench: 2890786\n",
+      "subject": "Simplify Reduction formula for first picked move (ttMove)"
+    },
+    {
+      "hash": "9d4090e82685cca447265dcd7093d617cb34a107",
+      "short": "9d4090e8",
+      "author": "ayushthepiro11 <ayushthepiro11@gmail.com>",
+      "date": "2026-07-10T18:19:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9d4090e82685cca447265dcd7093d617cb34a107",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9d4090e82685cca447265dcd7093d617cb34a107.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9d4090e82685cca447265dcd7093d617cb34a107.tar.gz"
+        }
+      ],
+      "message": "Scale Null Move Pruning reduction dynamically based on evaluation margin\n\nThis patch introduces a dynamic scaling factor for Null Move Pruning (NMP) reductions. By scaling the reduction depth relative to the static evaluation margin against beta, the engine can afford more aggressive reductions in positions that are overwhelmingly favorable, optimizing CPU cycle utilization without compromising search integrity.\n\nPassed STC:\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 85504 W: 22383 L: 22000 D: 41121\nPtnml(0-2): 225, 9855, 22218, 10220, 234\nhttps://tests.stockfishchess.org/tests/view/6a4793daf97ff95f78795812\n\nPassed LTC:\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 205800 W: 53879 L: 53224 D: 98697\nPtnml(0-2): 98, 21747, 58561, 22390, 104\nhttps://tests.stockfishchess.org/tests/view/6a4b864ff97ff95f78795e52\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6963\n\nBench: 2513153\n",
+      "subject": "Scale Null Move Pruning reduction dynamically based on evaluation margin"
+    },
+    {
+      "hash": "fb1d777250c77532cf9a7d0f11598ed309b49c34",
+      "short": "fb1d7772",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-07-10T18:18:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/fb1d777250c77532cf9a7d0f11598ed309b49c34",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fb1d777250c77532cf9a7d0f11598ed309b49c34.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/fb1d777250c77532cf9a7d0f11598ed309b49c34.tar.gz"
+        }
+      ],
+      "message": "Split AVX-VNNI sparse affine accumulation two ways\n\nSpeedup measured by @anematode\n```\nResult of 100 runs\n==================\nbase (...h.master.exe) = 1504448 +/- 15119\ntest (./stockfish.exe) = 1519239 +/- 15980\ndiff = +14791 +/- 4113\n\nspeedup = +0.0098\nP(speedup > 0) = 1.0000\n\nCPU: Intel Core Ultra 9 285H\n```\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a4dc4c65529b8472df7fd56\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 48256 W: 12746 L: 12420 D: 23090\nPtnml(0-2): 144, 5310, 12913, 5598, 163\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6961\n\nNo functional change\n",
+      "subject": "Split AVX-VNNI sparse affine accumulation two ways"
+    },
+    {
+      "hash": "93ed4b53c4f602c4cc41dbdb67961a2a4712c60b",
+      "short": "93ed4b53",
+      "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-07-10T18:17:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/93ed4b53c4f602c4cc41dbdb67961a2a4712c60b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93ed4b53c4f602c4cc41dbdb67961a2a4712c60b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/93ed4b53c4f602c4cc41dbdb67961a2a4712c60b.tar.gz"
+        }
+      ],
+      "message": "Dynamic root score ema2\n\nImproves calculation of root move score averages by dynamically calculating weight based on effort\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/6a4ada97f97ff95f78795d5a\n```\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 157248 W: 41003 L: 40515 D: 75730\nPtnml(0-2): 419, 18320, 40644, 18836, 405\n```\n\nPassed LTC\n```\nLLR: 3.03 (-2.94,2.94) <0.50,2.50>\nTotal: 197460 W: 51626 L: 50982 D: 94852\nPtnml(0-2): 85, 20849, 56237, 21455, 104\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6960\n\nBench: 2388656\n",
+      "subject": "Dynamic root score ema2"
+    },
+    {
+      "hash": "9700f6f206da5102c5dfb2414c5e7e13d844fcbf",
+      "short": "9700f6f2",
+      "author": "Miloslav Mac\u016frek <macurek.m@gmail.com>",
+      "date": "2026-07-10T18:17:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9700f6f206da5102c5dfb2414c5e7e13d844fcbf",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9700f6f206da5102c5dfb2414c5e7e13d844fcbf.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9700f6f206da5102c5dfb2414c5e7e13d844fcbf.tar.gz"
+        }
+      ],
+      "message": "Fix crash with UCI_LimitStrength and tablebases at the root\n\n`Skill::pick_best()` assumes the root moves are sorted by score in descending order:\n\n```cpp\nValue topScore = rootMoves[0].score;\nint   delta    = std::min(topScore - rootMoves[multiPV - 1].score, int(PawnValue));\n```\n\nThat does not have to be so with Syzygy tablebases at the root, where the moves are ordered by `tbRank` instead. `rootMoves[0]` is then not the highest score and `delta` can go negative. Since `delta * (rng.rand<unsigned>() % int(weakness))` is evaluated as unsigned, a negative `delta` wraps to a large value and the `int(...)` cast overflows, so the `score + push >= maxScore` check never passes and `best` stays `Move::none()`. The caller\n\n```cpp\nstd::swap(rootMoves[0],\n          *std::find(rootMoves.begin(), rootMoves.end(),\n                     skill.best ? skill.best : skill.pick_best(rootMoves, multiPV)));\n```\n\nthen dereferences `end()`. The result is a crash, or sometimes `bestmove (none)` / an illegal move, in tablebase endgames when `UCI_LimitStrength` is set (or `Skill Level` is below 20).\n\nThe fix computes the score range over the candidate moves directly, so `delta` stays non-negative and a valid move is always returned.\n\n**To reproduce**:\n```\nsetoption name UCI_LimitStrength value true\nsetoption name UCI_Elo value 2900\nsetoption name SyzygyPath value <syzygy tablebases path>\nposition fen 8/8/8/4k3/8/8/3BKN2/8 b - - 0 1\ngo wtime 250 btime 250 winc 100 binc 100\n```\n\nYou need to call the go command a couple of times before crash, after which is ends with\n\n```\nbestmove a1e5 ponder (none)\n```\n\nand on the next `go wtime 250 btime 250 winc 100 binc 100` it crashes printing:\n\n```\ninfo string Available processors: 0-31\ninfo string Using 1 thread\ninfo string NNUE evaluation using nn-af1339a6dea3.nnue (106MiB, (83248, 1024, 31, 32, 1))\ninfo string Network replica 1: Shared memory.\n```\n\nBench is unchanged, since this code only runs under `UCI_LimitStrength` / `Skill Level`.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6957\n\nNo functional change\n",
+      "subject": "Fix crash with UCI_LimitStrength and tablebases at the root"
+    },
+    {
+      "hash": "2d239de4604f4b7ff3679d4c31ccc8249fde3d00",
+      "short": "2d239de4",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-07-10T18:16:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2d239de4604f4b7ff3679d4c31ccc8249fde3d00",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2d239de4604f4b7ff3679d4c31ccc8249fde3d00.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2d239de4604f4b7ff3679d4c31ccc8249fde3d00.tar.gz"
+        }
+      ],
+      "message": "Split NEON dense affine accumulation two ways\n\nSpeedup measured locally with apple-silicon M3 Pro:\n\n```\nResult of  50 runs\n==================\nbase (./sf-master    ) =    1570076  +/- 27215\ntest (...-neon-2chain) =    1578923  +/- 29000\ndiff                   =      +8847  +/- 5700\n\nspeedup        = +0.0056\nP(speedup > 0) =  0.9988\n\nCPU: 11 x arm\nHyperthreading: off\n```\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a49678cf97ff95f78795b38\nLLR: 4.43 (-2.94,2.94) <0.00,2.00>\nTotal: 137696 W: 36041 L: 35477 D: 66178\nPtnml(0-2): 289, 14663, 38396, 15195, 305\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6956\n\nNo functional change\n",
+      "subject": "Split NEON dense affine accumulation two ways"
+    },
+    {
+      "hash": "cd75d31127b2d351edde4a1eac33bb2ccbac0db2",
+      "short": "cd75d311",
+      "author": "Timothy Herchen <timothy.herchen@gmail.com>",
+      "date": "2026-07-10T18:16:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/cd75d31127b2d351edde4a1eac33bb2ccbac0db2",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cd75d31127b2d351edde4a1eac33bb2ccbac0db2.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/cd75d31127b2d351edde4a1eac33bb2ccbac0db2.tar.gz"
+        }
+      ],
+      "message": "Improve CLI error handling a bit\n\nReduce the number of *easy* ways to hit UB or an uncaught exception. This builds on Sopel's work on FEN validation.\n\nObviously SF is not and will never be a security boundary, but at least we can reduce the number of reports about uncaught `std::stoi` out of range, etc.\n\nI also added a gentle fallback to `NumaConfig` specifically because that's something that (as a dev) I frequently set by hand in the CLI, but happy to revert if that's too annoying of a change.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6844\n\nNo functional change\n",
+      "subject": "Improve CLI error handling a bit"
+    },
+    {
+      "hash": "48a9118251609a0902df7889f7fe241921ac358f",
+      "short": "48a91182",
+      "author": "Robert Nurnberg <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-07-10T18:12:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/48a9118251609a0902df7889f7fe241921ac358f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/48a9118251609a0902df7889f7fe241921ac358f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/48a9118251609a0902df7889f7fe241921ac358f.tar.gz"
+        }
+      ],
+      "message": "Minor cleanups June 2026\n\nIn the spirit of previous such PRs, this PR proposes a collection of nonfunctional changes.\n\nI am happy to incorporate changes from other devs, and revert some of the proposed changes if the maintainers ask me to.\n\nApart from trivial changes, the proposed changes so far include:\n\n* A requested edit to `AUTHORS` and a resorting of all entries, following DIN 5007 for the treatment of any special characters.\n* Exclude the two recent integer type renaming commits from git blame.\n* Tightening of some static asserts in `history.h` to avoid overflows. (Note that rounding errors for floating point types could lead to the assert in `operator<<` triggering at run-time.)\n* Re-instate the 0.5s maximal thinking time in case of a single legal move and reword the comment to make it clear that it should not be tuned.\n* ~~A small refactoring of the network loading code thanks to @dubslow.~~\n* A refactoring of the \"dtz is dtm\" code, also thanks to @dubslow.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6928\n\nNo functional change\n",
+      "subject": "Minor cleanups June 2026"
+    },
+    {
       "hash": "eca43a97efd2cf0c9b7153c71b85f35e0fd1f5ca",
       "short": "eca43a97",
       "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
