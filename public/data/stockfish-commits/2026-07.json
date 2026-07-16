@@ -2,6 +2,195 @@
   "month": "2026-07",
   "commits": [
     {
+      "hash": "86beb0f5406b5e4c110c1890ec88c4a86ff6103a",
+      "short": "86beb0f5",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-16T06:25:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/86beb0f5406b5e4c110c1890ec88c4a86ff6103a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86beb0f5406b5e4c110c1890ec88c4a86ff6103a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86beb0f5406b5e4c110c1890ec88c4a86ff6103a.tar.gz"
+        }
+      ],
+      "message": "Remove some dead fused code\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6971\n\nNo functional change\n",
+      "subject": "Remove some dead fused code"
+    },
+    {
+      "hash": "3e3ee33a75022e763bcd7ee8ce56ec2457fe9d69",
+      "short": "3e3ee33a",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-16T06:24:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/3e3ee33a75022e763bcd7ee8ce56ec2457fe9d69",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3e3ee33a75022e763bcd7ee8ce56ec2457fe9d69.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/3e3ee33a75022e763bcd7ee8ce56ec2457fe9d69.tar.gz"
+        }
+      ],
+      "message": "Simplify HalfKAv2_hm::write_indices()\n\nSTC: https://tests.stockfishchess.org/tests/view/6a4b4b32f97ff95f78795de9\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 196064 W: 51063 L: 51020 D: 93981\nPtnml(0-2): 367, 21491, 54292, 21496, 386\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6970\n\nNo functional change\n",
+      "subject": "Simplify HalfKAv2_hm::write_indices()"
+    },
+    {
+      "hash": "151e204cc83460d5fbfb2248616fd9115c709646",
+      "short": "151e204c",
+      "author": "Guy Vreuls <guyvreuls@gmail.com>",
+      "date": "2026-07-16T06:23:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/151e204cc83460d5fbfb2248616fd9115c709646",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/151e204cc83460d5fbfb2248616fd9115c709646.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/151e204cc83460d5fbfb2248616fd9115c709646.tar.gz"
+        }
+      ],
+      "message": "Simplify bitboards\n\nThis PR:\n- retires the unused distance() functions in bitboard.h including the 4K SquareDistance LUT,\n- makes the 64K PopCnt16 LUT constexpr and only compiles it in if we don't use  a popcount intrinsic (we can't fully remove the LUT because it's faster than the intrinsic in the absence of a popcount machine instruction),\n- retires Bitboards::init().\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a48e6d3f97ff95f78795a8f\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 162016 W: 42054 L: 41976 D: 77986\nPtnml(0-2): 383, 17375, 45454, 17373, 423\n\nI didn't run LTC because the changes only really impact workers without popcount and there aren't any present on fishtest ATM. The correctness of the constexpr PopCnt16 LUT was verified locally with a x86-64 build; the build yields the same signature as master.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6952\n\nNo functional change\n",
+      "subject": "Simplify bitboards"
+    },
+    {
+      "hash": "1c384d3a8774ec9906e2e85b5005b22e27489044",
+      "short": "1c384d3a",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-07-16T06:20:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1c384d3a8774ec9906e2e85b5005b22e27489044",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1c384d3a8774ec9906e2e85b5005b22e27489044.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1c384d3a8774ec9906e2e85b5005b22e27489044.tar.gz"
+        }
+      ],
+      "message": "AVX2 fused SqrClippedReLU + ClippedReLU\n\nSpeedup measured with profile-build x86-64-avx2:\n```\nResult of  50 runs\n==================\nbase (./sf-master    ) =     777661  +/- 8102\ntest (./sf-fused     ) =     796739  +/- 9127\ndiff                   =     +19077  +/- 3164\n\nspeedup        = +0.0245\nP(speedup > 0) =  1.0000\n\nCPU: 8 x AMD EPYC 7R13 Processor\n```\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a5049335529b8472df8013c\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 262624 W: 68444 L: 67815 D: 126365\nPtnml(0-2): 724, 28976, 71325, 29521, 766\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6976\n\nNo functional change\n",
+      "subject": "AVX2 fused SqrClippedReLU + ClippedReLU"
+    },
+    {
+      "hash": "4c78ba892049d5cb4faafd41de8443d37474ed63",
+      "short": "4c78ba89",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-07-16T06:20:08Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4c78ba892049d5cb4faafd41de8443d37474ed63",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4c78ba892049d5cb4faafd41de8443d37474ed63.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4c78ba892049d5cb4faafd41de8443d37474ed63.tar.gz"
+        }
+      ],
+      "message": "AVX-512 squared clipped ReLU\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a4dd1075529b8472df7fd5e\nLLR: 3.44 (-2.94,2.94) <0.00,2.00>\nTotal: 327136 W: 84861 L: 84124 D: 158151\nPtnml(0-2): 692, 34323, 92827, 35008, 718\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6974\n\nNo functional change\n",
+      "subject": "AVX-512 squared clipped ReLU"
+    },
+    {
+      "hash": "8ddea729178845b309d409fe762aced71d9d95e0",
+      "short": "8ddea729",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-16T06:19:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8ddea729178845b309d409fe762aced71d9d95e0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8ddea729178845b309d409fe762aced71d9d95e0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8ddea729178845b309d409fe762aced71d9d95e0.tar.gz"
+        }
+      ],
+      "message": "Add -fno-ipa-cp-clone for mingw\n\nAdd -fno-ipa-cp-clone for mingw just as we do for gcc.  I get about a 1% speedup.  My machine is pretty unreliable for bench so maybe someone can verify.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6973\n\nNo functional change\n",
+      "subject": "Add -fno-ipa-cp-clone for mingw"
+    },
+    {
+      "hash": "a255ad59e3ab9bc0e806954e1ee0205da13b4030",
+      "short": "a255ad59",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-16T06:18:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a255ad59e3ab9bc0e806954e1ee0205da13b4030",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a255ad59e3ab9bc0e806954e1ee0205da13b4030.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a255ad59e3ab9bc0e806954e1ee0205da13b4030.tar.gz"
+        }
+      ],
+      "message": "Optimize evasions in Position::pseudo_legal()\n\nSTC: https://tests.stockfishchess.org/tests/view/6a4be17d5529b8472df7fa60\nLLR: 3.68 (-2.94,2.94) <0.00,2.00>\nTotal: 405888 W: 105701 L: 104837 D: 195350\nPtnml(0-2): 872, 42472, 115373, 43374, 853\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6968\n\nNo functional change\n",
+      "subject": "Optimize evasions in Position::pseudo_legal()"
+    },
+    {
+      "hash": "057e9bf4da72df5f00bb1a1ae6de3f9154de234b",
+      "short": "057e9bf4",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-16T06:17:21Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/057e9bf4da72df5f00bb1a1ae6de3f9154de234b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/057e9bf4da72df5f00bb1a1ae6de3f9154de234b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/057e9bf4da72df5f00bb1a1ae6de3f9154de234b.tar.gz"
+        }
+      ],
+      "message": "Fix an MSVC debug break\n\nWith the latest master I started getting:\n\"A breakpoint instruction (__debugbreak() statement or a similar call) was executed in Stockfish.exe.\" when debugging in MSVC.\n\nI don't really understand the issue but Fable fixed it and I verified it works.\nHere is its summary:\nBug: Calling _get_wpgmptr() in CommandLine::get_binary_directory() triggered a debug CRT assertion failure (__debugbreak()) on Windows. The CRT only initializes the wide program name _wpgmptr when the application uses a wide entry point (wmain). Since Stockfish uses the narrow main(int, char**) entry point, _wpgmptr remains nullptr, and the debug CRT's parameter validation asserts when _get_wpgmptr is called.\n\nFix: Replaced _get_wpgmptr() with GetModuleFileNameW(), which queries the executable path directly from the OS and does not depend on the CRT entry point type. The implementation uses a grow-and-retry loop, so paths longer than MAX_PATH are handled correctly. If the API fails, the code falls back to the original argv0-based behavior. The #ifdef _MSC_VER guard was also removed, since the fix no longer relies on the MSVC CRT \u2014 non-MSVC Windows builds (e.g., MinGW) now benefit from the accurate path as well.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6972\n\nNo functional change\n",
+      "subject": "Fix an MSVC debug break"
+    },
+    {
+      "hash": "ca11d43709446e2cd12400d67b6ffad9da49d786",
+      "short": "ca11d437",
+      "author": "ConKirby <conckirby@gmail.com>",
+      "date": "2026-07-16T06:16:29Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ca11d43709446e2cd12400d67b6ffad9da49d786",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ca11d43709446e2cd12400d67b6ffad9da49d786.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ca11d43709446e2cd12400d67b6ffad9da49d786.tar.gz"
+        }
+      ],
+      "message": "Remove dead code left over from earlier refactors\n\nThe following have zero references repo-wide:\n\n    Move::to_sq_unchecked() (types.h): added in 542c30c2 for a\n    branchless correction-history update; its only caller was removed\n    in 5ae13d2b (\"Remove Redundant Branchless Execution\"), leaving the\n    method unused.\n\n    PipeDeleter (misc.h): the custom deleter for the std::unique_ptr<FILE,\n    PipeDeleter> that wrapped popen(\"lscpu\"). That pipe was removed in\n    c8375c2f (\"On linux use sysfs instead of lscpu\"), so the struct has\n    been unused since.\n\nDropping PipeDeleter also removes the last user of <cstdio> in misc.h, so that include is dropped as well.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6948\n\nNo functional change\n",
+      "subject": "Remove dead code left over from earlier refactors"
+    },
+    {
       "hash": "9a8dd81dd7f98cbf02f16c59b4377d174d6eb4b5",
       "short": "9a8dd81d",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
