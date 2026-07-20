@@ -2,6 +2,90 @@
   "month": "2026-07",
   "commits": [
     {
+      "hash": "f4bcd40409f94bd397a083c5d6243bac6dcc6d85",
+      "short": "f4bcd404",
+      "author": "sscg13 <iamdumbybear1@gmail.com>",
+      "date": "2026-07-20T09:04:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f4bcd40409f94bd397a083c5d6243bac6dcc6d85",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f4bcd40409f94bd397a083c5d6243bac6dcc6d85.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f4bcd40409f94bd397a083c5d6243bac6dcc6d85.tar.gz"
+        }
+      ],
+      "message": "Update nnue architecture to SFNNv16 and net nn-89cb98a217f7.nnue\n\nFailed STC (https://tests.stockfishchess.org/tests/view/6a4f36355529b8472df7ff7e):\nLLR: -2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 144768 W: 38003 L: 38051 D: 68714\nPtnml(0-2): 521, 17154, 37050, 17170, 489\n\nPassed LTC (https://tests.stockfishchess.org/tests/view/6a501dad5529b8472df80103):\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 189888 W: 49613 L: 48984 D: 91291\nPtnml(0-2): 122, 20406, 53256, 21041, 119\n\nPassed VLTC (https://tests.stockfishchess.org/tests/view/6a52892c5529b8472df80481):\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 46124 W: 12156 L: 11865 D: 22103\nPtnml(0-2): 12, 4523, 13696, 4824, 7\n\nPassed VVLTC (https://tests.stockfishchess.org/tests/view/6a566a285529b8472df80b84):\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 44698 W: 11805 L: 11507 D: 21386\nPtnml(0-2): 9, 3819, 14395, 4117, 9\n\nThis PR adds pawn pair features, a new set of features that is indexed by pairs of pawns occupying the same or adjacent files (hence \"3-wide\"). Because these are a superset of pawn\u2013pawn interactions in threat inputs (including the recently added pawn-pusher inputs), those are removed. HalfKA features remain unchanged.\n\nPawn-pair features were invented by Jonathan for Pawnocchio, based on his observation that in a net trained on *all* pairs of pawns, the most important pawn pairs were those differing by at most one file.\n\nsscg13 made the necessary changes to the trainer (https://github.com/official-stockfish/nnue-pytorch/pull/502) and initial changes to inference. The slowdown was originally far too large (some 10%); following major optimizations from Jonathan and a bit from me, the slowdown is small enough for a comfortable LTC pass; on my machine I get a 3.5% slowdown overall. I expect there are further \"easy\" speedups in the new code, so this gap should narrow a bit.\n\nNettest PR: https://github.com/vondele/nettest/pull/359\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6982\n\nBench: 2718396\n\nCo-Authored-By: anematode <timothy.herchen@gmail.com>\nCo-Authored-By: Jonathan Hallstr\u00f6m <lmj.hallstrom@gmail.com>\n",
+      "subject": "Update nnue architecture to SFNNv16 and net nn-89cb98a217f7.nnue"
+    },
+    {
+      "hash": "4d75fd4f70b811d6f454d2d4cf7cbbd0759cda18",
+      "short": "4d75fd4f",
+      "author": "Syine Mineta <skdty87@gmail.com>",
+      "date": "2026-07-20T09:01:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4d75fd4f70b811d6f454d2d4cf7cbbd0759cda18",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d75fd4f70b811d6f454d2d4cf7cbbd0759cda18.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4d75fd4f70b811d6f454d2d4cf7cbbd0759cda18.tar.gz"
+        }
+      ],
+      "message": "Always use pthread\n\nAfter a858defd332bddd828c9280a9e326a0b750b3dda, the pthread implementation of `NativeThread` is always used (except MSVC), as:\n\n1. `-DUSE_PTHREADS` is defined when `comp` is not `mingw`\n2. the pthread implementation is used anyways because MinGW defines `__MINGW32__` or `__MINGW64__` macro\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6985\n\nNo functional change\n",
+      "subject": "Always use pthread"
+    },
+    {
+      "hash": "d70dec7d6f132b0038c00d9b36c3ba4b97292275",
+      "short": "d70dec7d",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-20T08:59:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d70dec7d6f132b0038c00d9b36c3ba4b97292275",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d70dec7d6f132b0038c00d9b36c3ba4b97292275.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d70dec7d6f132b0038c00d9b36c3ba4b97292275.tar.gz"
+        }
+      ],
+      "message": "Optimize attacks\n\nSTC:  https://tests.stockfishchess.org/tests/view/6a57f12c5529b8472df80e2a\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 85856 W: 22400 L: 22037 D: 41419\nPtnml(0-2): 153, 8999, 24290, 9304, 182\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6983\n\nNo functional change\n",
+      "subject": "Optimize attacks"
+    },
+    {
+      "hash": "b4ea9205a67abeb749fcbec0004ccaa44ba7bc26",
+      "short": "b4ea9205",
+      "author": "anematode <timothy.herchen@gmail.com>",
+      "date": "2026-07-20T08:58:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b4ea9205a67abeb749fcbec0004ccaa44ba7bc26",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b4ea9205a67abeb749fcbec0004ccaa44ba7bc26.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b4ea9205a67abeb749fcbec0004ccaa44ba7bc26.tar.gz"
+        }
+      ],
+      "message": "Allow trailing whitespace in str_to_size_t\n\nFixes #6984, first reported by sqrmax on the Discord, causing incorrect detection of NUMA and L3 domains on Linux due to trailing whitespace when reading from sysfs.\n\nThis was introduced by #6844 which made `str_to_size_t` too strict, since `std::stoull` allows trailing characters (and leading whitespace, although this part is not relevant for us).\n\nBefore:\n$ ./bins/stockfish.master speedtest\nStockfish dev-20260716-ebcea3ef by the Stockfish developers (see AUTHORS file)\ninfo string Using 224 threads with NUMA node thread binding: 64/32:64/32:64/32:32/16\n\nAfter:\n$ ./stockfish speedtest\nStockfish dev-20260718-m-cb702902 by the Stockfish developers (see AUTHORS file)\ninfo string Using 224 threads with NUMA node thread binding: 32/32:32/32:32/32:32/32:32/32:32/32:32/32\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6989\n\nNo functional change\n",
+      "subject": "Allow trailing whitespace in str_to_size_t"
+    },
+    {
       "hash": "ebcea3efe9c1b8748e080111c727c33c544d7e06",
       "short": "ebcea3ef",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
