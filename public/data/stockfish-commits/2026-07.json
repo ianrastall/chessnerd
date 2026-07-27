@@ -2,6 +2,216 @@
   "month": "2026-07",
   "commits": [
     {
+      "hash": "23cf5d827388e84d4389b40025ef401db4925f25",
+      "short": "23cf5d82",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-07-26T10:52:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/23cf5d827388e84d4389b40025ef401db4925f25",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/23cf5d827388e84d4389b40025ef401db4925f25.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/23cf5d827388e84d4389b40025ef401db4925f25.tar.gz"
+        }
+      ],
+      "message": "Remove Unused Option Constructor\n\nThe constructor overload Option::Option(const OptionsMap* map) is never invoked. Options are constructed independently and assigned their parent pointers later during registration inside the OptionsMap::add function.\n\nLeftover from rework in https://github.com/official-stockfish/Stockfish/commit/c12dbdedd9366bc7ffb29b355038bc7dea5f9c48\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6999\n\nNo functional change\n",
+      "subject": "Remove Unused Option Constructor"
+    },
+    {
+      "hash": "a03ac5a63f3e87f1cae98a4f47c7e01a0e5ddd82",
+      "short": "a03ac5a6",
+      "author": "aba2222 <abcsss2035@gmail.com>",
+      "date": "2026-07-26T10:51:49Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a03ac5a63f3e87f1cae98a4f47c7e01a0e5ddd82",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a03ac5a63f3e87f1cae98a4f47c7e01a0e5ddd82.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a03ac5a63f3e87f1cae98a4f47c7e01a0e5ddd82.tar.gz"
+        }
+      ],
+      "message": "avoid duplicate legal move check\n\nRemove redundant legal move checks when search moves are limited. Because `UCIEngine::to_move` already performs this check.\n\nAlso remove the unused `legalMoves` variable.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6997\n\nNo functional change\n",
+      "subject": "avoid duplicate legal move check"
+    },
+    {
+      "hash": "ee72cf49fe161aeb3be8e191eca7293f338cdfc9",
+      "short": "ee72cf49",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-07-26T10:49:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ee72cf49fe161aeb3be8e191eca7293f338cdfc9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ee72cf49fe161aeb3be8e191eca7293f338cdfc9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ee72cf49fe161aeb3be8e191eca7293f338cdfc9.tar.gz"
+        }
+      ],
+      "message": "Optimize RankAttacks\n\nSTC: https://tests.stockfishchess.org/tests/view/6a5c1f185529b8472df816fd\nLLR: 3.01 (-2.94,2.94) <0.00,2.00>\nTotal: 212800 W: 55208 L: 54665 D: 102927\nPtnml(0-2): 466, 22131, 60704, 22592, 507\n\nReduce the size of RankAttacks by 4x and generate it at compile time.  Inspired by some @anematode comments about pdep/pext.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6998\n\nNo functional change\n",
+      "subject": "Optimize RankAttacks"
+    },
+    {
+      "hash": "356d7c5c12b982e10f400d35d2dffac62613f60e",
+      "short": "356d7c5c",
+      "author": "Shawn Xu <xu107288696@gmail.com>",
+      "date": "2026-07-26T10:47:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/356d7c5c12b982e10f400d35d2dffac62613f60e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/356d7c5c12b982e10f400d35d2dffac62613f60e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/356d7c5c12b982e10f400d35d2dffac62613f60e.tar.gz"
+        }
+      ],
+      "message": "Reintroduce static evaluation based NMP reduction\n\nModification of #6963, which was reverted due to poor matetrack performance. This patch uses a stricter beta margin to prevent mate finding issues when beta is in decisive range\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 206720 W: 53724 L: 53166 D: 99830\nPtnml(0-2): 491, 23993, 53815, 24589, 472\nhttps://tests.stockfishchess.org/tests/view/6a54efa65529b8472df808e1\n\nPassed LTC:\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 106344 W: 27926 L: 27472 D: 50946\nPtnml(0-2): 44, 11265, 30084, 11751, 28\nhttps://tests.stockfishchess.org/tests/view/6a5a3d2c5529b8472df81249\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6995\n\nBench: 3184328\n",
+      "subject": "Reintroduce static evaluation based NMP reduction"
+    },
+    {
+      "hash": "453f220763fc756b846187358231566f8dbe46d7",
+      "short": "453f2207",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-07-26T10:46:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/453f220763fc756b846187358231566f8dbe46d7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/453f220763fc756b846187358231566f8dbe46d7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/453f220763fc756b846187358231566f8dbe46d7.tar.gz"
+        }
+      ],
+      "message": "AVX-512 paired activations\n\nSpeedup measured by @anematode\n```\nResult of 100 runs\nbase (...kfish.master) = 1876128 +/- 4698\ntest (./stockfish ) = 1888088 +/- 3218\ndiff = +11960 +/- 5722\n\nspeedup = +0.0064\nP(speedup > 0) = 1.0000\n```\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a5be3ff5529b8472df81662\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 86752 W: 22568 L: 22209 D: 41975\nPtnml(0-2): 200, 8676, 25260, 9045, 195\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6994\n\nNo functional change\n",
+      "subject": "AVX-512 paired activations"
+    },
+    {
+      "hash": "c8b91a2b9a770f3e9bddbe7863fcf2358d462f05",
+      "short": "c8b91a2b",
+      "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-07-26T10:46:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c8b91a2b9a770f3e9bddbe7863fcf2358d462f05",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c8b91a2b9a770f3e9bddbe7863fcf2358d462f05.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c8b91a2b9a770f3e9bddbe7863fcf2358d462f05.tar.gz"
+        }
+      ],
+      "message": "Update main net to nn-ab28990d4ea3.nnue\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/6a5a05955529b8472df811c6\n```\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 35520 W: 9419 L: 9104 D: 16997\nPtnml(0-2): 103, 4119, 9016, 4404, 118\n```\n\nPassed LTC\nhttps://tests.stockfishchess.org/tests/view/6a5a4b3a5529b8472df81254\n```\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 97590 W: 25549 L: 25108 D: 46933\nPtnml(0-2): 60, 10413, 27405, 10860, 57\n```\n\nTrained net with slightly optimized recipe. Instead of completely changing the lambda for the last stages, instead use a smooth transition following a cosine schedule.\n\nRecipe can be found here\n\nhttps://github.com/vondele/nettest/pull/426\n\n~~Slight regression in classic matetrack that is currently being investigated.~~ Seems like the regression was only there before rebasing... Unclear what caused it exactly\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6993\n\nBench: 2467577\n",
+      "subject": "Update main net to nn-ab28990d4ea3.nnue"
+    },
+    {
+      "hash": "db98633b1f8bbcad850bee892ec143ff8723ba80",
+      "short": "db98633b",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-07-26T10:44:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/db98633b1f8bbcad850bee892ec143ff8723ba80",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/db98633b1f8bbcad850bee892ec143ff8723ba80.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/db98633b1f8bbcad850bee892ec143ff8723ba80.tar.gz"
+        }
+      ],
+      "message": "Avoid recomputing threat/pp accumulation for some king moves.\n\nSince the separate threat and psq accumulators were merged in 7c7fe322eae6fa3a594c036eb4fc2553fd4e6a11, any king move requires a full recomputation of the threat (and now also pawn-pair) accumulation, even though these only change when the king switches between the left and right half of the board. This patch adds a method `update_accumulator_hybrid` which incrementally computes the accumulator change of a king move as\n```\n<new acc> = <previous acc> - <previous psq acc> + <new psq acc> + <threat/pp changes>\n```\nthus avoiding re-adding all threat/pp features. `<previous psq acc>` and `<new psq acc>` can be computing efficiently using the accumulator cache (\"Finny table\"). When there are few pieces on the board there typically are only few threat/pp features so computing their sum from scratch is cheaper than computing `<previous psq acc>` from the cache entry. Therefore we only do \"hybrid\" updates for positions with at least `MIN_PC_COUNT_HYBRID = 15` pieces. For simplicity this also doesn't handle castling moves.\n\npassed STC: https://tests.stockfishchess.org/tests/view/6a5b8a7d5529b8472df8158b\n LLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 37792 W: 9855 L: 9557 D: 18380\nPtnml(0-2): 65, 3955, 10578, 4213, 85\n\nlocal benchmark:\n```\nResult of 100 runs (counting nodes/1B cycles)\n=============================================\nbase (...tockfish.f4bcd4) =  264725 +/- 3700\ntest (...tockfish.4e77c9) =  266318 +/- 3701\nspeedup %                 =   +0.60 +/- 0.08\n                             [95% CI; t-test]\n\nlikelihood(speedup > 0)   =  1.0000\n\nCPU: 16 x Intel(R) Core(TM) Ultra 9 185H\nHyperthreading: on\n```\n\nI don't know if `MIN_PC_COUNT_HYBRID = 15` is optimal. On my computer (avx-vnni) 12 was the optimum, but that did not perform well [on fishtest](https://tests.stockfishchess.org/tests/view/6a5769345529b8472df80d7e). It would be good if other devs could try benchmarking different thresholds and report.\n\nThe first version of this patch was coded up by gpt-5.5-high. I made many changes, but probably most of the lines of code are LLM-written.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6990\n\nNo functional change\n",
+      "subject": "Avoid recomputing threat/pp accumulation for some king moves."
+    },
+    {
+      "hash": "43d4d0ef8bf905b0516422048500ec643333d1ca",
+      "short": "43d4d0ef",
+      "author": "Olaf Bernstein <camel-cdr@protonmail.com>",
+      "date": "2026-07-26T10:43:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/43d4d0ef8bf905b0516422048500ec643333d1ca",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43d4d0ef8bf905b0516422048500ec643333d1ca.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/43d4d0ef8bf905b0516422048500ec643333d1ca.tar.gz"
+        }
+      ],
+      "message": "Optimize RVV affine transforms\n\nThis PR optimize the RVV implementations of the affine transforms.\n\nFor the dense transform it adds special cases, when the entire inner loop fits into a vector register, which gave a small speedup.\n\nThe sparse transform was optimized to use ChunkSize=1, because RVV currently  doesn't have a dpbusd like instruction and it makes sure we don't operate on zero inputs.\n\nSpacemiT X100 benchmarks of the changes:\n```py\n# pyshbench orig XXX 30\ndense: +0.0137x\nsparse +0.2898x\nboth:  +0.3204x\n```\n\n```py\n# stockfish bench\nX100: orig: 170061 nodes/second both: 206581 nodes/second\nA100: orig: 112999 nodes/second both: 128794 nodes/second\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6967\n\nNo functional change\n\nCo-authored-by: wCgiLKcH <111658515+43eayl5@users.noreply.github.com>\n",
+      "subject": "Optimize RVV affine transforms"
+    },
+    {
+      "hash": "01a799416eca45991bc13227e9c4141875f3ca4f",
+      "short": "01a79941",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-07-26T10:42:54Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/01a799416eca45991bc13227e9c4141875f3ca4f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01a799416eca45991bc13227e9c4141875f3ca4f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/01a799416eca45991bc13227e9c4141875f3ca4f.tar.gz"
+        }
+      ],
+      "message": "Add a standard .gitattributes\n\nensures checkouts are by default the same on linux and windows.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6991\n\nNo functional change\n",
+      "subject": "Add a standard .gitattributes"
+    },
+    {
+      "hash": "c0771d343e31dbd0d148828d5b4d88b25fc70bd7",
+      "short": "c0771d34",
+      "author": "Disservin <disservin.social@gmail.com>",
+      "date": "2026-07-26T10:42:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c0771d343e31dbd0d148828d5b4d88b25fc70bd7",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c0771d343e31dbd0d148828d5b4d88b25fc70bd7.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c0771d343e31dbd0d148828d5b4d88b25fc70bd7.tar.gz"
+        }
+      ],
+      "message": "Improve Speedtest Speed Timing\n\nThis tries to make the timing of the search function to be a bit more precise and start the timing at the start and right when the bestmove is send and thus avoids including any logic which happens in between (network verification, thread awakening etc.).\n\nIt also keeps the timepoint in chrono for the duration of the benchmark and converts to milliseconds only at the end.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7002\n\nNo functional change\n",
+      "subject": "Improve Speedtest Speed Timing"
+    },
+    {
       "hash": "f4bcd40409f94bd397a083c5d6243bac6dcc6d85",
       "short": "f4bcd404",
       "author": "sscg13 <iamdumbybear1@gmail.com>",
