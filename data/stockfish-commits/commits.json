@@ -1,5 +1,110 @@
 [
   {
+    "hash": "c5aef2bf1f77d94a3dd476f276af68fd71a0ac07",
+    "short": "c5aef2bf",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-08-01T04:50:02Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/c5aef2bf1f77d94a3dd476f276af68fd71a0ac07",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/c5aef2bf1f77d94a3dd476f276af68fd71a0ac07.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/c5aef2bf1f77d94a3dd476f276af68fd71a0ac07.tar.gz"
+      }
+    ],
+    "message": "Simplify Negative Extensions\n\nPassed STC non-reg:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 89280 W: 23332 L: 23169 D: 42779\nPtnml(0-2): 234, 10427, 23159, 10582, 238\nhttps://tests.stockfishchess.org/tests/view/6a5cee545529b8472df81bb2\n\nPassed LTC non-reg:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 71388 W: 18511 L: 18345 D: 34532\nPtnml(0-2): 30, 7531, 20411, 7687, 35\nhttps://tests.stockfishchess.org/tests/view/6a5f6f125529b8472df821f5\n\nPassed VVLTC non-reg:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 82480 W: 21426 L: 21288 D: 39766\nPtnml(0-2): 7, 7001, 27083, 7145, 4\nhttps://tests.stockfishchess.org/tests/view/6a60851f25028d004c922860\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7011\n\nBench: 2508687\n",
+    "subject": "Simplify Negative Extensions"
+  },
+  {
+    "hash": "218c74ec4d97807afaab3a4dbda94f43e6e02647",
+    "short": "218c74ec",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-08-01T04:49:10Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/218c74ec4d97807afaab3a4dbda94f43e6e02647",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/218c74ec4d97807afaab3a4dbda94f43e6e02647.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/218c74ec4d97807afaab3a4dbda94f43e6e02647.tar.gz"
+      }
+    ],
+    "message": "Multi cut pruning correction history\n\nSTC: https://tests.stockfishchess.org/tests/view/6a596dca5529b8472df81060\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 151072 W: 39154 L: 38677 D: 73241\nPtnml(0-2): 372, 17511, 39320, 17934, 399\n\nLTC: https://tests.stockfishchess.org/tests/view/6a6508b6c054e285ae028b5f\nLLR: 2.96 (-2.94,2.94) <0.50,2.50>\nTotal: 109866 W: 28697 L: 28240 D: 52929\nPtnml(0-2): 39, 11353, 31686, 11822, 33\n\nAs an experiment I pointed some LLMs at other engine github repos to look for ideas to port to SF.  Most failed.  This one by GPT 5.6 from https://github.com/Yoshie2000/PlentyChess passed.  Congrats and credit to PlentyChess!\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7012\n\nBench: 2148099\n\nCo-authored-by: Yoshie2000 <patrick.leonhardt@gmx.net>\n",
+    "subject": "Multi cut pruning correction history"
+  },
+  {
+    "hash": "7b5504097feb349a2262eec0702b2a18e426ccf6",
+    "short": "7b550409",
+    "author": "Bartosz Paprzycki <poczta@bpaprzycki.pl>",
+    "date": "2026-08-01T04:48:07Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7b5504097feb349a2262eec0702b2a18e426ccf6",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7b5504097feb349a2262eec0702b2a18e426ccf6.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7b5504097feb349a2262eec0702b2a18e426ccf6.tar.gz"
+      }
+    ],
+    "message": "Update NNUE perspectives together\n\nWhen both perspective accumulators can be updated incrementally, catch up the\nlagging perspective and traverse their common suffix once.\n\nDuring each shared transition:\n\n- decode FullThreats changes once while preserving perspective-specific indices;\n- enumerate non-AVX512 PP_3Wide topology once for both perspectives;\n- keep HalfKA indices and accumulator arithmetic perspective-specific;\n- retain the existing specialized AVX512 PP_3Wide generator.\n\nThis preserves feature indices, list ordering, accumulator arithmetic, and the\nresulting evaluation.\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a63233fc054e285ae028702\n\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 69632 W: 18217 L: 17881 D: 33534\nPtnml(0-2): 153, 7022, 20132, 7354, 155\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7006\n\nNo functional change\n",
+    "subject": "Update NNUE perspectives together"
+  },
+  {
+    "hash": "8e3b5b13f93365f7e148a5d0e0e705bc217cd4b5",
+    "short": "8e3b5b13",
+    "author": "Wencey Wang <wenceywang@dreamry.org>",
+    "date": "2026-08-01T04:47:28Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/8e3b5b13f93365f7e148a5d0e0e705bc217cd4b5",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/8e3b5b13f93365f7e148a5d0e0e705bc217cd4b5.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/8e3b5b13f93365f7e148a5d0e0e705bc217cd4b5.tar.gz"
+      }
+    ],
+    "message": "LSX/LASX NNUE paths optimizes\n\nOptimizes the LoongArch NNUE SIMD implementation, avoiding permutation and shuffle operations in `ClippedReLU` and `SqrClippedReLU`.\n\nAdds LSX path that widens and processes both halves of each signed-byte weight vector.\n\nPassed STC:\n\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 50528 W: 13459 L: 13130 D: 23939\nPtnml(0-2): 182, 5438, 13706, 5745, 193\nhttps://tests.stockfishchess.org/tests/view/6a607ab325028d004c922829\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7005\n\nNo functional change\n",
+    "subject": "LSX/LASX NNUE paths optimizes"
+  },
+  {
+    "hash": "fd3c762f6dabfafb6c4f6040989698cdedda1e4e",
+    "short": "fd3c762f",
+    "author": "anematode <timothy.herchen@gmail.com>",
+    "date": "2026-08-01T04:46:17Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/fd3c762f6dabfafb6c4f6040989698cdedda1e4e",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/fd3c762f6dabfafb6c4f6040989698cdedda1e4e.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/fd3c762f6dabfafb6c4f6040989698cdedda1e4e.tar.gz"
+      }
+    ],
+    "message": "Improved Linux shared memory implementation\n\nOur existing Linux shm implementation has worked quite well since its introduction after SF 17.1, for example substantially improving fishtest throughput. It does have a few pain points:\n\n- /dev/shm needs to have enough space for the network, some 100 MB;\n- some of the filesystem operations are racy, so sharing can non-deterministically fail;\n- the network is never cleaned up on SIGKILL. Obviously that's the fault of the user, but OpenBench uses SIGKILL, because some engines misbehave.\n\nThis prototype is a fleshed-out version of Sopel's comment https://github.com/official-stockfish/Stockfish/pull/6979#issuecomment-4986789088\n\n## The implementation\n\nAs usual we derive the shared memory name from the network contents, executable path and the NUMA node. Fishes rendezvous at a shared folder `/tmp/stockfish-[uid]/sfshm_...`, which has the following structure:\n\n```\n/tmp/stockfish-[uid]/sfshm_...\n\u251c\u2500 init_lock\n\u251c\u2500 [pid1].sock\n\u2502     ...\n\u2514\u2500 [pid2].sock\n```\n\nAn anonymous file containing the network is first created, sized, and initialized via `memfd_create` by a unique instance of Stockfish. This creator instance then sends the file descriptor using Unix sockets to other Stockfish instances. Each of those instances is also capable of sending the memfd to any other instance, so if the original creator instance exits, new instances can still receive access.\n\nMore specifically, all *initialized* shared memory instances have a background thread (see `make_server_thread`) which listens to the socket at `/tmp/stockfish-[uid]/sfshm_.../[pid].sock`. When a requestor sends a message to this socket, the background thread replies with the network memfd. The requestor can then map the fd, sharing the underlying memory with the other instances.\n\n### Initialization (`SharedMemory::open`)\n\nThe implementation first `flock`s the `init_lock` file to get an `InitLock`. While holding the lock, it:\n\n- enumerates all sockets in the shared folder;\n- attempts to receive the memfd from each of those sockets, stopping on the first success. (We also delete sockets that are found to belong to dead processes.)\n\nIf a memfd is received, it is mapped and the lock is released. If no memfd is found, then this process is the creator. We continue to hold the lock, call `memfd_create` and initialize it with the network (decompressed from disk). We then open the socket (guaranteed to have a unique name using our PID), and spawn the background server thread that listens on that socket. Finally, we release the lock.\n\n### De-initialization\n\nWhen a `SharedMemory<T>` is closed, the background thread is joined, the memory is unmapped, and file descriptors are closed. We also unlink the `.sock` file. When *exiting* the program, we skip joining the background thread and unmapping memory because these actions are unnecessary and could cause problems if called in an exit or signal handler.\n\n## Bookkeeping\n\nPassed non-regression STC\nLLR: 3.04 (-2.94,2.94) <-1.75,0.25>\nTotal: 252192 W: 65179 L: 65187 D: 121826\nPtnml(0-2): 549, 26214, 72561, 26240, 532\nhttps://tests.stockfishchess.org/tests/view/6a63b2dac054e285ae0287f3\n\nFixes #6977\n\ncloses https://github.com/official-stockfish/Stockfish/pull/6988\n\nNo functional change\n",
+    "subject": "Improved Linux shared memory implementation"
+  },
+  {
     "hash": "23cf5d827388e84d4389b40025ef401db4925f25",
     "short": "23cf5d82",
     "author": "FauziAkram <fauzi.dabat@hotmail.com>",
