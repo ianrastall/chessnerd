@@ -1,5 +1,89 @@
 [
   {
+    "hash": "1ef7f2fe2d1d2f865eb80666c504d4319eb49f05",
+    "short": "1ef7f2fe",
+    "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
+    "date": "2026-08-02T17:45:55Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/1ef7f2fe2d1d2f865eb80666c504d4319eb49f05",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1ef7f2fe2d1d2f865eb80666c504d4319eb49f05.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1ef7f2fe2d1d2f865eb80666c504d4319eb49f05.tar.gz"
+      }
+    ],
+    "message": "Simplify shm_unix using UniqueFd utility class\n\nThe SHM implementation now juggles quite a few file descriptors, so a RAII wrapper class helps to simplify resource management a bit.\n\nAlso use this to clarify ownership: The AtExit handler closes file descriptors still in use by the detached thread. Invalid file descriptors will not be transferred via SCM_RIGHTS, so currently the race condition is not a real bug -- but it assumes that no new file descriptors are concurrently created in unrelated code (which then might reuse the number and get incorrectly transferred).\n\nInstead:\n\n* The server thread can be given ownership of the memory fd. The memory map itself remains valid even if all related file descriptors are closed.\n* Unconditionally use pipe instead of eventfd, so that each side can get independent ownership of one half.\n\nFinally, apply the 1s timeout also to connect().\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7019\n\nNo functional change\n",
+    "subject": "Simplify shm_unix using UniqueFd utility class"
+  },
+  {
+    "hash": "b0ee144057cae0a6934b68de4f9bf81290863594",
+    "short": "b0ee1440",
+    "author": "Carlos Esparza <ca2010es@gmail.com>",
+    "date": "2026-08-02T17:45:30Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/b0ee144057cae0a6934b68de4f9bf81290863594",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b0ee144057cae0a6934b68de4f9bf81290863594.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b0ee144057cae0a6934b68de4f9bf81290863594.tar.gz"
+      }
+    ],
+    "message": "Extract loops for adding/subtracting features into functions\n\npassed STC: https://tests.stockfishchess.org/tests/view/6a662c7dc054e285ae028d31\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 89440 W: 23133 L: 22983 D: 43324\nPtnml(0-2): 210, 9236, 25655, 9432, 187\n\nIt uses always_inline and templates the sign to try to make sure that compilers won't emit calls or branches. It should generate almost identical code, but for some reason it is much faster on my computer.\n\n```\nResult of 60 runs (counting nodes/1B cycles)\n=============================================\nbase (...tockfish.23cf5d) =  263302 +/- 5280\ntest (...tockfish.daacee) =  266324 +/- 5492\nspeedup %                 =   +1.13 +/- 0.10\n                             [95% CI; t-test]\n\nlikelihood(speedup > 0)   =  1.0000\nlikelyhood(speedup > .5%) =  1.0000\n\nCPU: 16 x Intel(R) Core(TM) Ultra 9 185H\n```\n\nFishtest results (see also [[1]](https://tests.stockfishchess.org/tests/view/6a63f21ac054e285ae0288a2), [[2]](https://tests.stockfishchess.org/tests/view/6a6497e8c054e285ae028aac), [[3]](https://tests.stockfishchess.org/tests/view/6a64e0dfc054e285ae028b3e)) seem to suggest that this might be a sizable speedup on many machines, but also a sizable slowdown on some.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7013\n\nNo functional change\n",
+    "subject": "Extract loops for adding/subtracting features into functions"
+  },
+  {
+    "hash": "c85637b3f1e85dd802e4bdef6c68b63a4babbb7d",
+    "short": "c85637b3",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-08-02T11:16:59Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/c85637b3f1e85dd802e4bdef6c68b63a4babbb7d",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/c85637b3f1e85dd802e4bdef6c68b63a4babbb7d.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/c85637b3f1e85dd802e4bdef6c68b63a4babbb7d.tar.gz"
+      }
+    ],
+    "message": "Simplify futilityValue formula\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 51616 W: 13479 L: 13279 D: 24858\nPtnml(0-2): 134, 5897, 13530, 6129, 118\nhttps://tests.stockfishchess.org/tests/view/6a6524b7c054e285ae028b92\n\nPassed LTC non-reg:\nLLR: 2.97 (-2.94,2.94) <-1.75,0.25>\nTotal: 400380 W: 103781 L: 103944 D: 192655\nPtnml(0-2): 178, 43099, 113790, 42954, 169\nhttps://tests.stockfishchess.org/tests/view/6a6673d4c054e285ae028d93\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7017\n\nBench: 2829394\n",
+    "subject": "Simplify futilityValue formula"
+  },
+  {
+    "hash": "d077f9a8154df309b1b715e51d663e4cd6cf8e73",
+    "short": "d077f9a8",
+    "author": "anematode <timothy.herchen@gmail.com>",
+    "date": "2026-08-02T11:16:16Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d077f9a8154df309b1b715e51d663e4cd6cf8e73",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d077f9a8154df309b1b715e51d663e4cd6cf8e73.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d077f9a8154df309b1b715e51d663e4cd6cf8e73.tar.gz"
+      }
+    ],
+    "message": "Port Linux shared memory to BSDs and macOS\n\nPassed stc:\n LLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 13536 W: 3564 L: 3299 D: 6673\nPtnml(0-2): 20, 1334, 3810, 1569, 35\nhttps://tests.stockfishchess.org/tests/view/6a6dac3ac054e285ae029b30\n\nPretty straightforward port. Just need to work around the lack of close-on-exec in various places and replace `memfd_create` with a tempfile/unlink.\n\nNotably on macOS, `tmp` is disk backed (it's a symlink to `/private/tmp`), so this temporarily takes up ~110 MB of disk space, but it's unlikely that anything will actually be written to disk.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7016\n\nNo functional change\n",
+    "subject": "Port Linux shared memory to BSDs and macOS"
+  },
+  {
     "hash": "c5aef2bf1f77d94a3dd476f276af68fd71a0ac07",
     "short": "c5aef2bf",
     "author": "FauziAkram <fauzi.dabat@hotmail.com>",
