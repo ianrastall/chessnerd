@@ -1,5 +1,173 @@
 [
   {
+    "hash": "5062aee519a1ba262d472d8ab139851ced56573e",
+    "short": "5062aee5",
+    "author": "Adarsh Das <adarshdas950@gmail.com>",
+    "date": "2026-08-10T13:10:12Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5062aee519a1ba262d472d8ab139851ced56573e",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5062aee519a1ba262d472d8ab139851ced56573e.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5062aee519a1ba262d472d8ab139851ced56573e.tar.gz"
+      }
+    ],
+    "message": "Place continuation history on large pages.\n\nRequires THP madvise or always. With THP never, MADV_HUGEPAGE is ignored and there is no benefit.\n\n```\nResult of  50 runs (nps)\n==================\nspeedup         = +0.0176\npaired t-test   = t = 2.320, p = 0.0245\n\nResult of 200 runs (nps)\n==================\nspeedup         = +0.0104\npaired t-test   = t = 3.415, p = 0.0008\n```\n\nSTC passed:\nLLR: 3.42 (-2.94,2.94) <0.00,2.00>\nTotal: 231360 W: 60152 L: 59553 D: 111655\nhttps://tests.stockfishchess.org/tests/view/6a736a122cf557d58a2e1f51\n\nEdit: Removed wrong test details\nEdit2: Added result for 200 runs\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7041\n\nNo functional change\n",
+    "subject": "Place continuation history on large pages."
+  },
+  {
+    "hash": "fa8b6add9df33cbdd279a3480df6c2cb2f43d6f8",
+    "short": "fa8b6add",
+    "author": "Guy Vreuls <guyvreuls@gmail.com>",
+    "date": "2026-08-10T13:08:58Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/fa8b6add9df33cbdd279a3480df6c2cb2f43d6f8",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/fa8b6add9df33cbdd279a3480df6c2cb2f43d6f8.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/fa8b6add9df33cbdd279a3480df6c2cb2f43d6f8.tar.gz"
+      }
+    ],
+    "message": "Improve mate finding with a dynamic futility pruning depth cutoff\n\nThis PR improves mate finding with a dynamic futility pruning depth cutoff.\n\nThe pruning depth is reduced with the following formula:\n`depth = 13 + int(0.5 + 6 / (1 + pow(abs(eval) + abs(beta), 3) / 50'000'000'000))`\n\nThreshold values where the depth changes were put into a lookup table to increase performance.\n\nSTC non-regression:\n> LLR: 3.37 (-2.94,2.94) <-1.75,0.25>\n> Total: 203424 W: 52600 L: 52529 D: 98295\n> Ptnml(0-2): 402, 22402, 56093, 22353, 462\nhttps://tests.stockfishchess.org/tests/view/6a6e38fcc054e285ae029c59\n\nLTC non-regression :\n> LLR: 2.95 (-2.94,2.94) <-1.75,0.25>\n> Total: 253488 W: 65927 L: 65943 D: 121618\n> Ptnml(0-2): 95, 27128, 72307, 27126, 88\nhttps://tests.stockfishchess.org/tests/view/6a71e2be2cf557d58a2e1c60\n\nMatetrack results for default and classic:\n```\nUsing ./stockfish on ../../matetrack/matetrack.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260809-2e5a3739\nTotal FENs:    6554\nFound mates:   3155\nBest mates:    2205\n\nUsing ./stockfish on ../../matetrack/classic280.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260809-2e5a3739\nTotal FENs:    280\nFound mates:   141\nBest mates:    15\n```\n\nMatetrack results for master:\n```\nUsing /usr/games/stockfish/stockfish on matetrack.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260803-762dd1da\nTotal FENs:    6554\nFound mates:   3098\nBest mates:    2150\n\nUsing /usr/games/stockfish/stockfish on classic280.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260803-762dd1da\nTotal FENs:    280\nFound mates:   150\nBest mates:    13\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7040\n\nBench: 2884956\n",
+    "subject": "Improve mate finding with a dynamic futility pruning depth cutoff"
+  },
+  {
+    "hash": "439733ea339b1601e5acf5488b9369d65c9d68e0",
+    "short": "439733ea",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-08-10T13:07:43Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/439733ea339b1601e5acf5488b9369d65c9d68e0",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/439733ea339b1601e5acf5488b9369d65c9d68e0.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/439733ea339b1601e5acf5488b9369d65c9d68e0.tar.gz"
+      }
+    ],
+    "message": "Fix rm.exe \"Permission denied\" errors on Windows\n\nI haven't built a universal exe on Windows for a while.  Doing it today produced \"Permission denied\" errors afterward when running \"make clean\".  Claude fixed it and produced the following comment:\n\n\"On Windows, `ln -s` to a directory creates a native directory symlink that MSYS\nrm cannot unlink, so `rm -rf temp_builds` fails with `Permission denied` and\n`make clean` breaks after a universal build.\n\nFix: in universalclean, run `find ... -type l -exec rmdir {} +` first, which\nunlinks such a link without following it. On Linux/macOS rmdir refuses POSIX\nsymlinks; `|| true` absorbs the error and `rm -rf` behaves exactly as before.\"\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7038\n\nNo functional change\n",
+    "subject": "Fix rm.exe \"Permission denied\" errors on Windows"
+  },
+  {
+    "hash": "de948f0f48f5c3217bd384ea7b5714593666d1a4",
+    "short": "de948f0f",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-08-10T13:04:43Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/de948f0f48f5c3217bd384ea7b5714593666d1a4",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/de948f0f48f5c3217bd384ea7b5714593666d1a4.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/de948f0f48f5c3217bd384ea7b5714593666d1a4.tar.gz"
+      }
+    ],
+    "message": "Simplify optimism scaling formula\n\nPassed STC non-reg:\nLLR: 2.92 (-2.94,2.94) <-1.75,0.25>\nTotal: 110624 W: 28564 L: 28429 D: 53631\nPtnml(0-2): 169, 13076, 28801, 12983, 283\nhttps://tests.stockfishchess.org/tests/view/6a6dd611c054e285ae029b86\n\nPassed LTC non-reg:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 153366 W: 39831 L: 39746 D: 73789\nPtnml(0-2): 36, 16358, 43841, 16381, 67\nhttps://tests.stockfishchess.org/tests/view/6a6f96c82cf557d58a2e188b\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7037\n\nBench: 2119477\n",
+    "subject": "Simplify optimism scaling formula"
+  },
+  {
+    "hash": "358ab1bcbcb4e0795de950002014aa0d5f21c628",
+    "short": "358ab1bc",
+    "author": "Disservin <disservin.social@gmail.com>",
+    "date": "2026-08-10T13:03:10Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/358ab1bcbcb4e0795de950002014aa0d5f21c628",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/358ab1bcbcb4e0795de950002014aa0d5f21c628.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/358ab1bcbcb4e0795de950002014aa0d5f21c628.tar.gz"
+      }
+    ],
+    "message": "Cleanup FeatureTransformer Types\n\nLittle cleanup to also avoid line wraps\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7032\n\nNo functional change\n",
+    "subject": "Cleanup FeatureTransformer Types"
+  },
+  {
+    "hash": "881e0b4558069a5403b1e5c006a50d9c5d9dd89d",
+    "short": "881e0b45",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-08-10T13:02:44Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/881e0b4558069a5403b1e5c006a50d9c5d9dd89d",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/881e0b4558069a5403b1e5c006a50d9c5d9dd89d.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/881e0b4558069a5403b1e5c006a50d9c5d9dd89d.tar.gz"
+      }
+    ],
+    "message": "Class Default Member Initializers for Option\n\nThe Option class in ucioption.h contains several members (min, max, idx) that are initialized to 0 in initializer lists across multiple constructors in ucioption.cpp. Moving these default values directly into member declarations inside ucioption.h eliminates redundant constructor initializer list entries.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7031\n\nNo functional change\n",
+    "subject": "Class Default Member Initializers for Option"
+  },
+  {
+    "hash": "9dec2ead8a2949883888e26e0415c2e5a6054385",
+    "short": "9dec2ead",
+    "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
+    "date": "2026-08-10T13:01:59Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/9dec2ead8a2949883888e26e0415c2e5a6054385",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/9dec2ead8a2949883888e26e0415c2e5a6054385.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/9dec2ead8a2949883888e26e0415c2e5a6054385.tar.gz"
+      }
+    ],
+    "message": "Simplify shm_unix SharedMemoryRegistry\n\nThe SharedMemoryRegistry now directly keeps a list of socket paths to unlink in the atexit handler.\n\nBefore, there were two minor issues:\n\n- Unsynchronized access to some SharedMemory members between open() and close(AtExit), and close(AtExit) nulling data_ptr_ and search threads using it, though of course only when we were about to exit anyway.\n- Moved from socket_path_ not nescessarily emptied and would then be unlinked, though I don't think any C++ implementation actually does that.\n\nAlso now just one atomic linked list away from a signal-safe cleanup_at_exit(), but one step further from a shared memory implementation that needs more general global cleanup work.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7030\n\nNo functional change\n",
+    "subject": "Simplify shm_unix SharedMemoryRegistry"
+  },
+  {
+    "hash": "4150d22b86d1cc83b3a3b1111a63a3935590bcb3",
+    "short": "4150d22b",
+    "author": "Bartosz Paprzycki <poczta@bpaprzycki.pl>",
+    "date": "2026-08-10T13:01:09Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/4150d22b86d1cc83b3a3b1111a63a3935590bcb3",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/4150d22b86d1cc83b3a3b1111a63a3935590bcb3.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/4150d22b86d1cc83b3a3b1111a63a3935590bcb3.tar.gz"
+      }
+    ],
+    "message": "Prefetch continuation correction histories\n\nPrefetch the two continuation-correction history entries read by the child before updating the position, hiding part of their latency. The prefetched addresses exactly match the later reads for normal moves; castling and promotions may issue a harmless approximate prefetch.\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a6c4b56c054e285ae0298ee\n\nLLR: 3.35 (-2.94,2.94) <0.00,2.00>\nTotal: 480448 W: 124828 L: 123878 D: 231742\nPtnml(0-2): 1147, 51094, 134829, 51970, 1184\n\nArchitecture spot checks were positive on Graviton 3 (about 1.0% lower elapsed time) and Zen 3 AVX2 (about 0.5% lower), and neutral on Ice Lake AVX-512 (about +0.03% elapsed time). A fresh Graviton 3 bench after rebasing on current master reproduced about 1.0% lower elapsed time with identical nodes.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7025\n\nNo functional change\n",
+    "subject": "Prefetch continuation correction histories"
+  },
+  {
     "hash": "762dd1da9a5db458180b2c5db6c53dc40ec61e1a",
     "short": "762dd1da",
     "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
