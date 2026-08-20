@@ -1,5 +1,404 @@
 [
   {
+    "hash": "229f6339e537a097a79831cd06dbfdb3e623d4ac",
+    "short": "229f6339",
+    "author": "Disservin <disservin.social@gmail.com>",
+    "date": "2026-08-19T16:48:49Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/229f6339e537a097a79831cd06dbfdb3e623d4ac",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/229f6339e537a097a79831cd06dbfdb3e623d4ac.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/229f6339e537a097a79831cd06dbfdb3e623d4ac.tar.gz"
+      }
+    ],
+    "message": "Update Release Creation\n\nUpdate the release pipeline so that we can create immutable releases.\nThe problem of the previous pipeline was that the release was created first and only afterwards the binaries were added, which is not possible with immutable releases.\n\nhttps://github.com/Disservin/Stockfish/actions/runs/32180223600\n<img width=\"1113\" height=\"710\" alt=\"image\" src=\"https://github.com/user-attachments/assets/1e4945f7-3557-4c1f-afe2-7be0ed2b1060\" />\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7076\n\nNo functional change\n",
+    "subject": "Update Release Creation"
+  },
+  {
+    "hash": "ae3db60f534d3fedb384da388d8222d114909c2f",
+    "short": "ae3db60f",
+    "author": "Bartosz Paprzycki <poczta@bpaprzycki.pl>",
+    "date": "2026-08-19T16:47:54Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/ae3db60f534d3fedb384da388d8222d114909c2f",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ae3db60f534d3fedb384da388d8222d114909c2f.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ae3db60f534d3fedb384da388d8222d114909c2f.tar.gz"
+      }
+    ],
+    "message": "Align and collapse shared NNUE mappings\n\nMake the existing MADV_HUGEPAGE request effective for the Linux shared NNUE\nmapping.\n\nMap large shared objects at a 2 MiB-aligned address and request MADV_COLLAPSE\nafter the creating process initializes the network.\n\npyshbench, 30 runs:\n\n```text\nPlatform / target                  Speedup    95% CI\nGraviton 3 / armv8-dotprod         +2.675%    [+2.495%, +2.856%]\nAMD Zen 3 / x86-64-bmi2            +0.479%    [+0.182%, +0.776%]\nIntel Sapphire / x86-64-avx512icl  +2.073%    [+1.675%, +2.470%]\n```\n\nSTC passed:\n\n```text\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 37344 W: 9716 L: 9419 D: 18209\nPtnml(0-2): 54, 3890, 10497, 4167, 64\n```\n\nhttps://tests.stockfishchess.org/tests/view/6a80cc2adb2c105c37ecd9cf\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7058\n\nNo functional change\n",
+    "subject": "Align and collapse shared NNUE mappings"
+  },
+  {
+    "hash": "1b1b5f49a5b9f9d564120fc4ef513557267f1e4a",
+    "short": "1b1b5f49",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-08-19T16:43:21Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/1b1b5f49a5b9f9d564120fc4ef513557267f1e4a",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1b1b5f49a5b9f9d564120fc4ef513557267f1e4a.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1b1b5f49a5b9f9d564120fc4ef513557267f1e4a.tar.gz"
+      }
+    ],
+    "message": "Simplify Position::update_piece_threats()\n\nSTC Ice Lake: https://tests.stockfishchess.org/tests/view/6a7d0c325ebead9b2e78724a\nLLR: 4.20 (-2.94,2.94) <-1.75,0.25>\nTotal: 266880 W: 67650 L: 67577 D: 131653\nPtnml(0-2): 373, 28574, 75459, 28675, 359\n\nSTC Non Ice Lake: https://tests.stockfishchess.org/tests/view/6a7d6a8f5ebead9b2e7872d0\nLLR: 3.12 (-2.94,2.94) <-1.75,0.25>\nTotal: 278112 W: 71067 L: 71095 D: 135950\nPtnml(0-2): 485, 29231, 79629, 29249, 462\n\nThis is a fixed version of https://github.com/official-stockfish/Stockfish/pull/7048 which had a regression on Ice Lake.\nThanks to @Torom for catching it and to @anematode for suggesting separate tests.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7075\n\nNo functional change\n",
+    "subject": "Simplify Position::update_piece_threats()"
+  },
+  {
+    "hash": "30290aa0fffa491046ca95a285ce2a505d9c34cc",
+    "short": "30290aa0",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:42:34Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/30290aa0fffa491046ca95a285ce2a505d9c34cc",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/30290aa0fffa491046ca95a285ce2a505d9c34cc.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/30290aa0fffa491046ca95a285ce2a505d9c34cc.tar.gz"
+      }
+    ],
+    "message": "Clamp speedtest inputs to valid ranges\n\nspeedtest multiplied user-supplied seconds and threads in int, which could overflow and produce negative movetime or Hash values. Clamp each input to the range the option layer accepts and report corrections.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7070\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Clamp speedtest inputs to valid ranges"
+  },
+  {
+    "hash": "50221673b29b8f1d52261f3e53dbbef471bb7dfc",
+    "short": "50221673",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:41:00Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/50221673b29b8f1d52261f3e53dbbef471bb7dfc",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/50221673b29b8f1d52261f3e53dbbef471bb7dfc.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/50221673b29b8f1d52261f3e53dbbef471bb7dfc.tar.gz"
+      }
+    ],
+    "message": "Initialize shared continuation history once per NUMA node\n\nWorker::clear partitioned correctionHistory and pawnHistory by NUMA thread\nindex, but then filled the shared continuationHistory from every worker.\nSince continuationHistory is constant-size and shared only within a NUMA\nnode, have only thread 0 of each node initialize it\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7069\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Initialize shared continuation history once per NUMA node"
+  },
+  {
+    "hash": "ceb059eb48fb8e556df8feff6f8a24e45d03fa11",
+    "short": "ceb059eb",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:39:57Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/ceb059eb48fb8e556df8feff6f8a24e45d03fa11",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ceb059eb48fb8e556df8feff6f8a24e45d03fa11.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ceb059eb48fb8e556df8feff6f8a24e45d03fa11.tar.gz"
+      }
+    ],
+    "message": "Convert movetime when nodestime is in force\n\nelapsed() returns nodes while nodestime is active, but check_time compared it against limits.movetime in milliseconds without conversion, so movetime silently meant nodes. Convert movetime to nodes before init's early return.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7068\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Convert movetime when nodestime is in force"
+  },
+  {
+    "hash": "d68041e3201e6c5fc37d1219168f568647f0f93c",
+    "short": "d68041e3",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:39:23Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d68041e3201e6c5fc37d1219168f568647f0f93c",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d68041e3201e6c5fc37d1219168f568647f0f93c.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d68041e3201e6c5fc37d1219168f568647f0f93c.tar.gz"
+      }
+    ],
+    "message": "Read hash_bytes tail bytes as unsigned\n\nThe tail byte was read as signed char, so bytes >= 0x80 sign-extended and erased previously accumulated bytes in the hash. Read it as u8.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7067\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Read hash_bytes tail bytes as unsigned"
+  },
+  {
+    "hash": "49f8e667c0ebf146f3ce5a1ea2d49ac78b9f777e",
+    "short": "49f8e667",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:38:46Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/49f8e667c0ebf146f3ce5a1ea2d49ac78b9f777e",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/49f8e667c0ebf146f3ce5a1ea2d49ac78b9f777e.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/49f8e667c0ebf146f3ce5a1ea2d49ac78b9f777e.tar.gz"
+      }
+    ],
+    "message": "Avoid UB decoding LEB128, and guard against corrupted files\n\nread_leb_128_detail accumulated decoded bytes into a signed IntType. For int32 values, a 5-byte LEB128 encoding reaches shift 28, which causes signed-integer-overflow UB. Accumulate into u32 instead and cast to IntType only after sign extension.\n\nAlso harden the network reader against short or corrupted files: read_leb_128_detail now tracks the number of bytes actually read and fails the stream on a short read; read_header bounds the description string by the stream rather than a declared size; and the LEB128 magic and byte-balance checks are promoted from asserts to stream failures.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7066\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Avoid UB decoding LEB128, and guard against corrupted files"
+  },
+  {
+    "hash": "92c90f41e3175e8f0c4ef399dec70dde015015e1",
+    "short": "92c90f41",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:37:59Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/92c90f41e3175e8f0c4ef399dec70dde015015e1",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/92c90f41e3175e8f0c4ef399dec70dde015015e1.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/92c90f41e3175e8f0c4ef399dec70dde015015e1.tar.gz"
+      }
+    ],
+    "message": "Initialise time budgets on every path\n\nTimeManagement::init returned early when the side to move had no clock, before optimumTime and maximumTime were assigned. The guard still let the search read them, so a mismatched-colour clock used uninitialised values. Reproduce with:\n\n  position startpos\n  go depth 3 btime 1000\n\nAdd a CI test for this case and initialise the budgets to NoBound, writing NoBound on the early-return path.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7064\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Initialise time budgets on every path"
+  },
+  {
+    "hash": "5fd94536751fc8aafb7e24f18a5e1815a07afb68",
+    "short": "5fd94536",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:37:19Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5fd94536751fc8aafb7e24f18a5e1815a07afb68",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5fd94536751fc8aafb7e24f18a5e1815a07afb68.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5fd94536751fc8aafb7e24f18a5e1815a07afb68.tar.gz"
+      }
+    ],
+    "message": "Harden the tablebase reader against corrupted files\n\nAdd load-time bounds to the Syzygy tablebase parser so that values read from a file are validated before they are used as lengths, indices, or shift counts. Size symbol tables to the full 12-bit domain, refuse non-canonical Huffman tables, cyclic trees, and inconsistent flags, and bound the bitstream walk within the mapping. Abort if a corrupted table is detected.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7063\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Harden the tablebase reader against corrupted files"
+  },
+  {
+    "hash": "7c37212ec7eba49be3c89887640f646215269526",
+    "short": "7c37212e",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-19T16:36:32Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7c37212ec7eba49be3c89887640f646215269526",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7c37212ec7eba49be3c89887640f646215269526.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7c37212ec7eba49be3c89887640f646215269526.tar.gz"
+      }
+    ],
+    "message": "Refuse a failed large-page allocation\n\nmemory_allocator did not check the allocator return value, so a failed large-page allocation led to placement new at address 0. Check for null and report the failure.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7059\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Refuse a failed large-page allocation"
+  },
+  {
+    "hash": "e37429bb6de9b2e861411dff79768746d9357d38",
+    "short": "e37429bb",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-08-19T16:35:38Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/e37429bb6de9b2e861411dff79768746d9357d38",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e37429bb6de9b2e861411dff79768746d9357d38.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e37429bb6de9b2e861411dff79768746d9357d38.tar.gz"
+      }
+    ],
+    "message": "Simplify sliding_attack loop in attacks.h\n\nEliminates the nested while loop and redundant function-level dest variable.\nScopes dest locally to the iteration.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7052\n\nNo functional change\n",
+    "subject": "Simplify sliding_attack loop in attacks.h"
+  },
+  {
+    "hash": "a3a8372b1b5841fb1d1a66fe8f3cb492b0c4f3dc",
+    "short": "a3a8372b",
+    "author": "anematode <timothy.herchen@gmail.com>",
+    "date": "2026-08-19T16:34:50Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/a3a8372b1b5841fb1d1a66fe8f3cb492b0c4f3dc",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/a3a8372b1b5841fb1d1a66fe8f3cb492b0c4f3dc.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/a3a8372b1b5841fb1d1a66fe8f3cb492b0c4f3dc.tar.gz"
+      }
+    ],
+    "message": "More nnue_accumulator.cpp cleanup\n\nin the spirit of ces42's recent work, this unifies the vector/RVV/scalar paths into something that's much more readable at a glance, while staying efficient. My hope is that we can try more fancy update strategies without bloating the code\n\npassed STC:\nLLR: 2.97 (-2.94,2.94) <-1.75,0.25>\nTotal: 247872 W: 64122 L: 64131 D: 119619\nPtnml(0-2): 518, 26189, 70571, 26100, 558\nhttps://tests.stockfishchess.org/tests/view/6a6fa54e2cf557d58a2e18ba\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7050\n\nNo functional change\n",
+    "subject": "More nnue_accumulator.cpp cleanup"
+  },
+  {
+    "hash": "68f7925d5ca0f6806aed5d1a5fe57505d3ed2890",
+    "short": "68f7925d",
+    "author": "Carlos Esparza <ca2010es@gmail.com>",
+    "date": "2026-08-19T16:34:08Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/68f7925d5ca0f6806aed5d1a5fe57505d3ed2890",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/68f7925d5ca0f6806aed5d1a5fe57505d3ed2890.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/68f7925d5ca0f6806aed5d1a5fe57505d3ed2890.tar.gz"
+      }
+    ],
+    "message": "simplify FullThreats::append_active_indices\n\nalso requires de-templating shift\n\npassed STC: https://tests.stockfishchess.org/tests/view/6a78a8c1a7e815d01b5601c4\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 67904 W: 17662 L: 17490 D: 32752\nPtnml(0-2): 135, 7037, 19416, 7249, 115\n\nA benchmark also shows no regression:\n```\nResult of 100 runs (counting nodes/1B cycles)\n=============================================\nbase (...tockfish.5062ae) =  275495 +/- 3270\ntest (...tockfish.978b83) =  275951 +/- 3308\nspeedup %                 =   +0.16 +/- 0.07\n                             [95% CI; t-test]\n\nlikelihood(speedup > 0)   =  1.0000\n\nCPU: 16 x Intel(R) Core(TM) Ultra 9 185H\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7047\n\nNo functional change\n",
+    "subject": "simplify FullThreats::append_active_indices"
+  },
+  {
+    "hash": "6d215a03063d79782333970a67abcb6aea32912c",
+    "short": "6d215a03",
+    "author": "Adrian Ladoni <274005880+AdrianGHUB15@users.noreply.github.com>",
+    "date": "2026-08-19T16:33:31Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/6d215a03063d79782333970a67abcb6aea32912c",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/6d215a03063d79782333970a67abcb6aea32912c.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/6d215a03063d79782333970a67abcb6aea32912c.tar.gz"
+      }
+    ],
+    "message": "Simplify Away Second Razoring Number\n\nThis patch simplifies away the second razoring number and adds a small offset to compensate.\n\nPassed STC non regression:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 169600 W: 43837 L: 43764 D: 81999\nPtnml(0-2): 397, 19909, 44131, 19950, 413\nhttps://tests.stockfishchess.org/tests/view/6a7481672cf557d58a2e20ee\n\nPassed LTC non regression:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 28332 W: 7450 L: 7241 D: 13641\nPtnml(0-2): 5, 2895, 8169, 3080, 17\nhttps://tests.stockfishchess.org/tests/view/6a78946ea7e815d01b56019f\n\nOn new master, doesn't hurt matetrack results significantly:\n\nMaster results on 1th 1m nodes:\nTotal FENs: 6554\nFound mates: 3160\nBest mates: 2218\n\nNew results on 1th 1m nodes:\nTotal FENs: 6554\nFound mates: 3180\nBest mates: 2215\n\nOn new master, doesn't hurt matedtrack results significantly either:\n\nMaster results on 1th 1m nodes:\nTotal FENs: 6536\nFound mates: 3500\nBest mates: 2856\n\nNew results on 1th 1m nodes:\nTotal FENs: 6536\nFound mates: 3506\nBest mates: 2859\n\nMaybe even improves matetrack/matedtrack :)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7044\n\nBench: 2516158\n",
+    "subject": "Simplify Away Second Razoring Number"
+  },
+  {
+    "hash": "0c8c71f32717253b4d7aa798c78950bf156cad20",
+    "short": "0c8c71f3",
+    "author": "Disservin <disservin.social@gmail.com>",
+    "date": "2026-08-19T16:26:01Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/0c8c71f32717253b4d7aa798c78950bf156cad20",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0c8c71f32717253b4d7aa798c78950bf156cad20.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0c8c71f32717253b4d7aa798c78950bf156cad20.tar.gz"
+      }
+    ],
+    "message": "Extract perspective transform logic into a separate function\n\nMove some of the transform code into a separate transform_perspective function, to improve readability a bit by reducing the nesting.\n\nPassed Non-Regression STC:\nhttps://tests.stockfishchess.org/tests/view/6a722c0e2cf557d58a2e1ce9\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 138976 W: 36043 L: 35941 D: 66992\nPtnml(0-2): 286, 14530, 39760, 14620, 292\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7034\n\nNo functional change\n",
+    "subject": "Extract perspective transform logic into a separate function"
+  },
+  {
+    "hash": "5f7348f03f820038f5d246b82de544cbc1d8ffd2",
+    "short": "5f7348f0",
+    "author": "Adarsh Das <adarshdas950@gmail.com>",
+    "date": "2026-08-19T16:21:01Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5f7348f03f820038f5d246b82de544cbc1d8ffd2",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5f7348f03f820038f5d246b82de544cbc1d8ffd2.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5f7348f03f820038f5d246b82de544cbc1d8ffd2.tar.gz"
+      }
+    ],
+    "message": "Reduce LMR less aggressively in loose alpha windows\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/6a71da2b2cf557d58a2e1c45\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 90784 W: 23707 L: 23319 D: 43758\nPtnml(0-2): 191, 10444, 23757, 10786, 214\n\nPassed LTC\nhttps://tests.stockfishchess.org/tests/view/6a736ab02cf557d58a2e1f56\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 209640 W: 54841 L: 54179 D: 100620\nPtnml(0-2): 79, 22245, 59512, 22903, 81\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7045\n\nBench: 2132401\n",
+    "subject": "Reduce LMR less aggressively in loose alpha windows"
+  },
+  {
+    "hash": "f21610e51a436b69fabdcc89d8fe25ff0c2d5731",
+    "short": "f21610e5",
+    "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+    "date": "2026-08-19T16:20:34Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/f21610e51a436b69fabdcc89d8fe25ff0c2d5731",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/f21610e51a436b69fabdcc89d8fe25ff0c2d5731.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/f21610e51a436b69fabdcc89d8fe25ff0c2d5731.tar.gz"
+      }
+    ],
+    "message": "Update network: faster training with AdamW optimizer\n\nThe resulting net is less sparse and thus a little slower than before, but the better eval prevails at VVLTC. The reduction in training time aids future net experiments.\n\nThe training occurred at https://github.com/vondele/nettest/pull/448\n...using Tony's AdamW optimizer PR: https://github.com/official-stockfish/nnue-pytorch/pull/511\n\nThe main goal was to reduce resource usage during training.\n\nAs the currently used ranger21 variant uses lookahead and \"stable weight decay\", the training with adamw is around 5% faster (no stable weight decay) and uses less memory during training and for checkpoints (no lookahead).\n\nThe other effects came as somewhat of a surprise.\n\nIt is unclear what exactly causes the lower sparsity, around 50-52% vs 60+% which does cause a significant slowdown. It is also unclear what exactly causes the apparent better scaling.\n\nFailed STC nonreg: https://tests.stockfishchess.org/tests/view/6a6e1580c054e285ae029c2e\nLLR: -2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 376800 W: 97403 L: 98082 D: 181315\nPtnml(0-2): 1226, 44985, 96614, 44392, 1183\n\nNodestime STC nonreg: https://tests.stockfishchess.org/tests/view/6a72310d2cf557d58a2e1ced\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 22812 W: 6130 L: 5891 D: 10791\nPtnml(0-2): 89, 2537, 5920, 2766, 94\n\nLTC: https://tests.stockfishchess.org/tests/view/6a7205ef2cf557d58a2e1cb8\nPtnml(0-2): 135, 31150, 81387, 31468, 145\nLLR -0.64 <0.00,2.00>\nLLR: 7.72 <-1.75,0.25>\n\nPassed VLTC: https://tests.stockfishchess.org/tests/view/6a7a7b595ebead9b2e786ee7\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 139242 W: 36650 L: 36248 D: 66344\nPtnml(0-2): 13, 13245, 42711, 13631, 21\n\nPassed VVLTC: https://tests.stockfishchess.org/tests/view/6a72cbb02cf557d58a2e1e40\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 71720 W: 18989 L: 18641 D: 34090\nPtnml(0-2): 6, 6229, 23046, 6569, 10\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7043\n\nBench: 2522345\n",
+    "subject": "Update network: faster training with AdamW optimizer"
+  },
+  {
+    "hash": "ee515ad9b6bd7e928db808c3a2e9ca81d49819c1",
+    "short": "ee515ad9",
+    "author": "Robert Nurnberg <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-08-19T16:18:46Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/ee515ad9b6bd7e928db808c3a2e9ca81d49819c1",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ee515ad9b6bd7e928db808c3a2e9ca81d49819c1.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ee515ad9b6bd7e928db808c3a2e9ca81d49819c1.tar.gz"
+      }
+    ],
+    "message": "[bugfix] Allow root move PV to be longer than MAX_PLY plies\n\nThis PR fixes a bug that was introduced in 45711fceb478d6162399a5dcc2b7d6e825558a89.\n\nFor a debug build it can be triggered with these commands on master:\n```\nsetoption name SyzygyPath value /disk1/syzygy/3-4-5-6/WDL/:/disk2/syzygy/3-4-5-6/DTZ/\nposition fen 8/8/7B/3B3P/7k/8/5K2/3r4 w - - 0 1\ngo depth 1\n```\nresulting in:\n```\ninfo string Found 510 WDL and 510 DTZ tablebase files (up to 6-man).\ninfo string Available processors: 0-23\ninfo string Using 1 thread\ninfo string NNUE evaluation using nn-ab28990d4ea3.nnue (109MiB, (86896, 1024, 32, 32, 1))\ninfo string Network replica 1: Shared memory.\nstockfish: search.h:81: void Stockfish::Search::PVMoves::push_back(Stockfish::Move): Assertion `length < MAX_PLY + 1' failed.\nAborted\n```\nPatch passes this cleanly:\n```\ninfo string Found 510 WDL and 510 DTZ tablebase files (up to 6-man).\ninfo string Available processors: 0-23\ninfo string Using 1 thread\ninfo string NNUE evaluation using nn-ab28990d4ea3.nnue (109MiB, (86896, 1024, 32, 32, 1))\ninfo string Network replica 1: Shared memory.\ninfo depth 1 seldepth 2 multipv 1 score cp 20000 nodes 1 nps 7 hashfull 0 tbhits 24 time 138 pv d5f3 d1d3 f3e2 d3d7 h6c1 d7c7 c1a3 h4g5 e2d1 g5h4 a3b4 c7b7 b4c3 b7b6 f2g2 b6a6 d1e2 a6e6 e2f3 e6h6 c3b4 h4g5 b4e7 g5f4 g2f2 h6a6 e7f8 f4f5 f2g3 a6a4 f3d1 a4d4 d1e2 f5f6 f8a3 d4d2 e2c4 d2c2 c4d3 c2d2 d3g6 d2e2 g3f3 e2h2 a3c5 h2h4 c5b6 h4a4 b6d8 f6g7 f3g3 g7h6 d8b6 a4a3 g3g4 a3a4 g4f5 a4d4 f5e6 d4h4 b6e3 h6g7 e6f5 h4h3 e3c5 h3h2 c5g1 h2h1 g1d4 g7g8 f5g5 h1d1 d4b6 d1d6 b6e3 d6e6 e3f4 e6e1 g6f5 e1f1 f4e3 f1f3 e3d4 f3g3 g5f4 g3g2 h5h6 g2h2 f4g5 h2g2 g5f6 g2h2 d4e3 h2g2 e3c1 g2g1 c1d2 g1d1 d2e3 d1e1 e3b6 e1d1 f6g5 d1d5 b6c7 g8h8 c7h2 d5a5 h2g1 a5d5 g1e3 h8g8 e3f4 g8f7 f4c1 d5b5 c1d2 b5c5 d2b4 c5c1 f5e4 f7g8 b4d6 c1g1 g5h4 g8h8 d6e5 h8g8 h6h7 g8f7 h7h8n f7e6 e5g3 g1a1 h4g5 a1a4 e4c2 a4a5 g5f4 a5a3 g3e1 a3a1 e1h4 a1f1 f4e4 e6d6 c2b3 f1b1 h8f7 d6d7 b3c4 b1a1 e4d5 a1a5 d5d4 a5a1 h4g5 a1a4 f7e5 d7d6 g5d2 d6e7 d4d5 e7f6 d5d6 a4a7 c4d3 a7a3 d2e3 a3a8 e5g4 f6f7 e3g5 a8a7 g4e5 f7g7 d6e6 a7b7 g5f6 g7h6 d3c4 b7a7 e6f5 a7a5 f6d8 a5a3 f5f6 h6h5 f6g7 a3g3 g7h8 h5h6 c4f7 g3g7 d8b6 g7h7 h8g8 h7g7 g8f8 g7g2 b6e3 h6h7 f7c4 g2g7 e3c1 h7h8 e5f7 h8h7 c4d3 g7g6 d3g6 h7g6 f8e7 g6f5 f7d6 f5g4 e7e6 g4f3 d6f5 f3e4 c1e3 e4f3 e6d5 f3g2 d5e4 g2h2 e4f3 h2h3 e3f2 h3h2 f5g3 h2h3 f2g1 h3h4 g3e4 h4h5 g1d4 h5h4 d4e5 h4h3 e4f2 h3h4 e5f6 h4h5 f3f4 h5g6 f2e4 g6h6 f4f5 h6h5 e4g3 h5h6 f6b2 h6h7 f5f6 h7h6 b2a3 h6h7 g3f5 h7g8 f6g6 g8h8 a3b4 h8g8 f5h6 g8h8 b4c3\nbestmove d5f3 ponder d1d3\n```\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 45440 W: 11730 L: 11535 D: 22175\nPtnml(0-2): 71, 4723, 12947, 4898, 81\nhttps://tests.stockfishchess.org/tests/view/6a8482b19960adfadf924095\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7077\n\nNo functional change\n",
+    "subject": "[bugfix] Allow root move PV to be longer than MAX_PLY plies"
+  },
+  {
     "hash": "5062aee519a1ba262d472d8ab139851ced56573e",
     "short": "5062aee5",
     "author": "Adarsh Das <adarshdas950@gmail.com>",
