@@ -1,5 +1,131 @@
 [
   {
+    "hash": "598ae2c46500e6dc50b54919ea4bebfe213ddcd1",
+    "short": "598ae2c4",
+    "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-08-24T16:29:40Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/598ae2c46500e6dc50b54919ea4bebfe213ddcd1",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/598ae2c46500e6dc50b54919ea4bebfe213ddcd1.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/598ae2c46500e6dc50b54919ea4bebfe213ddcd1.tar.gz"
+      }
+    ],
+    "message": "Make extensions and futility pruning depend on new seekMate variable\n\nThis PR simplifies the recent patch https://github.com/official-stockfish/Stockfish/pull/7040, while still allowing Stockfish to consistently pass the CI `go mate` run involving 61 positions with DTM from 1 to 4 plies.\n\nResults of a deterministic th1 run covering these 61 positions are as follows.\n```\nLoaded 61 FENs with 61 bm values, with |bm| (min avg max): 1 2 2.\n\nMatetrack started for ./sf.master on matetrack.epd matedtrack.epd with --bmMax 2 --mate 0 ...\n100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 61/61 [00:17<00:00,  3.54it/s]\n\nUsing ./sf.master on matetrack.epd matedtrack.epd with --bmMax 2 --mate 0\nEngine ID:     Stockfish dev-20260819-229f6339\nTotal FENs:    61\nFound mates:   61\nBest mates:    61\n\nBest mate statistics:\n|bm| = 1 - mates found: 21 = 100.0% of 21; nodes (min avg max): 4 343 1372, depth (min avg max): 1 4 12\n|bm| = 2 - mates found: 40 = 100.0% of 40; nodes (min avg max): 16 402441 15454156, depth (min avg max): 1 10 24\nAll best mates found: 61 = 100.0% of 61; nodes (min avg max): 4 264014 15454156, depth (min avg max): 1 8 24\n```\n```\nLoaded 61 FENs with 61 bm values, with |bm| (min avg max): 1 2 2.\n\nMatetrack started for ./sf.patch on matetrack.epd matedtrack.epd with --bmMax 2 --mate 0 ...\n100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 61/61 [00:02<00:00, 24.64it/s]\n\nUsing ./sf.patch on matetrack.epd matedtrack.epd with --bmMax 2 --mate 0\nEngine ID:     Stockfish dev-20260824-1a3ceee9\nTotal FENs:    61\nFound mates:   61\nBest mates:    61\n\nBest mate statistics:\n|bm| = 1 - mates found: 21 = 100.0% of 21; nodes (min avg max): 4 343 1372, depth (min avg max): 1 4 12\n|bm| = 2 - mates found: 40 = 100.0% of 40; nodes (min avg max): 16 20068 255722, depth (min avg max): 1 9 21\nAll best mates found: 61 = 100.0% of 61; nodes (min avg max): 4 13277 255722, depth (min avg max): 1 8 21\n```\nThe above shows that patch outperforms master 2s:17s, and 13277:264014 nodes.\n\nIn addition, patch shows a healthy increase in (best) mates found on matetrack:\n```\nUsing ./sf.patch on matetrack.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260824-1a3ceee9\nTotal FENs:    6554\nFound mates:   3700\nBest mates:    2457\n```\nThis compares with 3202, 2263 for master, see https://github.com/vondele/matetrack/blob/c88991a2558b326e2119ca0e5cc9554d60e559ab/matetrack1000000.csv#L4530.\n\nThe numbers for the classic mate suite are:\n```\nLoaded 280 FENs with 280 bm values, with |bm| (min avg max): 10 15 21.\n\nMatetrack started for ./sf.patch on classic280.epd with --nodes 1000000 ...\n100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 56/56 [00:26<00:00,  2.13it/s]\n\nUsing ./sf.patch on classic280.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260824-1a3ceee9\nTotal FENs:    280\nFound mates:   128\nBest mates:    31\n```\nThis compares with 165, 24 for master, see https://github.com/vondele/matetrack/blob/c88991a2558b326e2119ca0e5cc9554d60e559ab/classic1000000.csv#L4530.\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 41504 W: 10764 L: 10559 D: 20181\nPtnml(0-2): 61, 4620, 11196, 4803, 72\nhttps://tests.stockfishchess.org/tests/view/6a85b5af9960adfadf924292\n\nPassed LTC non-reg:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 111234 W: 28827 L: 28702 D: 53705\nPtnml(0-2): 32, 11680, 32064, 11813, 28\nhttps://tests.stockfishchess.org/tests/view/6a86ef485b1b38ebda864e69\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7089\n\nBench: 2502027\n",
+    "subject": "Make extensions and futility pruning depend on new seekMate variable"
+  },
+  {
+    "hash": "7d9276c6a96797a2904231c491956a105555f5b3",
+    "short": "7d9276c6",
+    "author": "Timothy Herchen <timothy.herchen@gmail.com>",
+    "date": "2026-08-24T16:29:11Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7d9276c6a96797a2904231c491956a105555f5b3",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7d9276c6a96797a2904231c491956a105555f5b3.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7d9276c6a96797a2904231c491956a105555f5b3.tar.gz"
+      }
+    ],
+    "message": "Handle ANSI paths\n\nFixes https://github.com/official-stockfish/Stockfish/issues/7049\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7088\n\nNo functional change\n",
+    "subject": "Handle ANSI paths"
+  },
+  {
+    "hash": "53804033930d7ce954da1d88b7cc23b53b320059",
+    "short": "53804033",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-24T16:28:42Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/53804033930d7ce954da1d88b7cc23b53b320059",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/53804033930d7ce954da1d88b7cc23b53b320059.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/53804033930d7ce954da1d88b7cc23b53b320059.tar.gz"
+      }
+    ],
+    "message": "Fix valgrind harness for expected-failure tests\n\nFailure-path tests were masking valgrind leak reports because\n--error-exitcode=42 was being treated as the expected non-zero\nexit code. Add an expect_failure flag so these tests run valgrind\nwith --leak-check=no, while still checking ERROR SUMMARY for real\nmemory errors. Populate CLI output from stdout/stderr so valgrind\noutput is visible to postfix_check, and only print the captured\ntest output when a test fails.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7081\n\nNo functional change\n",
+    "subject": "Fix valgrind harness for expected-failure tests"
+  },
+  {
+    "hash": "bd85fb7fa3fc2225e72b7317f0ca822703180543",
+    "short": "bd85fb7f",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-08-24T16:27:54Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/bd85fb7fa3fc2225e72b7317f0ca822703180543",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/bd85fb7fa3fc2225e72b7317f0ca822703180543.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/bd85fb7fa3fc2225e72b7317f0ca822703180543.tar.gz"
+      }
+    ],
+    "message": "Fix MSVC warning C4141 ('inline' used more than once)\n\nBug: On MSVC sf_always_inline expands to ```__forceinline```, which already implies ```inline```, so definitions writing both triggered \"warning C4141 ('inline' used more than once)\".\n\nFix: Moved ```inline``` into the macro and removed it from all definition sites.\nGCC/Clang still get ```inline __attribute__((always_inline))```.   ```inline``` is in the macro since the attribute alone would not set linkage.\n\n[Edit]\nAlso adds MSVC coverage to CI as requested.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7078\n\nNo functional change\n",
+    "subject": "Fix MSVC warning C4141 ('inline' used more than once)"
+  },
+  {
+    "hash": "22dfb404b5ab1e5327ea00207bb95ae1606ed8e5",
+    "short": "22dfb404",
+    "author": "Timothy Herchen <timothy.herchen@gmail.com>",
+    "date": "2026-08-24T16:26:35Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/22dfb404b5ab1e5327ea00207bb95ae1606ed8e5",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/22dfb404b5ab1e5327ea00207bb95ae1606ed8e5.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/22dfb404b5ab1e5327ea00207bb95ae1606ed8e5.tar.gz"
+      }
+    ],
+    "message": "miscellaneous cleanups\n\nPer Rob's comment https://discord.com/channels/435943710472011776/813919248455827515/1539144885255536761 and in the spirit of similar PRs.\n\nFeel free to comment whatever uncontroversial claenups and I will apply them\n\nChanges:\n- Add Jonathan to `AUTHORS` which we missed when merging pawn-pair inputs\n- Mr. Dubslow's changes from https://github.com/official-stockfish/Stockfish/pull/6942\n- mstembera's style tweaks\n- niklasf's CLOEXEC enjoyment\n- lemtea's `.size() == 0` -> `empty()`\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7074\n\nNo functional change\n\nCo-authored-by: Dubslow <bunslow@gmail.com>\n",
+    "subject": "miscellaneous cleanups"
+  },
+  {
+    "hash": "3512dea68483f9daf3b014361c7ea36a44adb338",
+    "short": "3512dea6",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-24T16:24:30Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/3512dea68483f9daf3b014361c7ea36a44adb338",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/3512dea68483f9daf3b014361c7ea36a44adb338.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/3512dea68483f9daf3b014361c7ea36a44adb338.tar.gz"
+      }
+    ],
+    "message": "Native thread fixes\n\npthread_create's return value was ignored, so a failed spawn left the engine hanging forever waiting for a searching flag no thread would clear. Report the error and exit. Avoid using std::thread. Intends to consolidate #7060 and #7065 by making `NativeThread` more customizable.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7072\n\nNo functional change\n\nCo-authored-by: Timothy Herchen <timothy.herchen@gmail.com>\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Native thread fixes"
+  },
+  {
     "hash": "229f6339e537a097a79831cd06dbfdb3e623d4ac",
     "short": "229f6339",
     "author": "Disservin <disservin.social@gmail.com>",
