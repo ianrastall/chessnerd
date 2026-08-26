@@ -1,5 +1,131 @@
 [
   {
+    "hash": "2edd935bbb3ea6e484a1700f582a95e0ee773ec2",
+    "short": "2edd935b",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-08-25T16:38:28Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/2edd935bbb3ea6e484a1700f582a95e0ee773ec2",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/2edd935bbb3ea6e484a1700f582a95e0ee773ec2.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/2edd935bbb3ea6e484a1700f582a95e0ee773ec2.tar.gz"
+      }
+    ],
+    "message": "Simplify optimism scaling formula\n\nSimplify the optimism scaling formula, keeping the i64 cast for safety.\n\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 506336 W: 129447 L: 129738 D: 247151\nPtnml(0-2): 960, 59384, 132718, 59199, 907\nPassed STC non-reg:\n\nhttps://tests.stockfishchess.org/tests/view/6a79ff99a7e815d01b5603ad\n\nPassed LTC non-reg:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 138276 W: 35651 L: 35552 D: 67073\nPtnml(0-2): 37, 14851, 39261, 14954, 35\nhttps://tests.stockfishchess.org/tests/view/6a842ae29960adfadf924008\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7097\n\nBench: 2497913\n",
+    "subject": "Simplify optimism scaling formula"
+  },
+  {
+    "hash": "d945b4d920feb69db90d66dca8891bd922627497",
+    "short": "d945b4d9",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-25T16:38:04Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d945b4d920feb69db90d66dca8891bd922627497",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d945b4d920feb69db90d66dca8891bd922627497.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d945b4d920feb69db90d66dca8891bd922627497.tar.gz"
+      }
+    ],
+    "message": "Update Top CPU Contributors\n\nupdate to current\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7098\n\nNo functional change\n",
+    "subject": "Update Top CPU Contributors"
+  },
+  {
+    "hash": "7ab49b9bda97a608e500762c1fd1d1c5857936f0",
+    "short": "7ab49b9b",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-25T16:37:41Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7ab49b9bda97a608e500762c1fd1d1c5857936f0",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7ab49b9bda97a608e500762c1fd1d1c5857936f0.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7ab49b9bda97a608e500762c1fd1d1c5857936f0.tar.gz"
+      }
+    ],
+    "message": "Use mmap() for large aligned allocations to avoid cross-NUMA arena reuse\n\nWorker/SharedHistories allocations on Linux were served by glibc malloc arenas, which survive thread destruction and can be reused by threads bound to a different NUMA node. This caused non-deterministic remote memory and lower NPS when Threads was set multiple times.\n\nRoute aligned_large_pages_alloc_with_hint() through direct mmap() on Linux, storing the base/size so aligned_large_pages_free() can munmap() the original mapping. Merge the existing x86_64 MAP_HUGETLB bookkeeping into the same registry.\n\nfixes https://github.com/official-stockfish/Stockfish/issues/6516\n\nBenchmark: 288 threads, 36864 MB hash, depth 15 (10 runs per config)\n\n```\n| Build  | Case                     | Avg NPS     | Min NPS     | Max NPS     | Range     |\n|--------|--------------------------|-------------|-------------|-------------|-----------|\n| master | Case1 (Threads set x2)   | 253,196,264 | 252,034,443 | 254,396,860 | 2,362,417 |\n| master | Case2 (Threads set x1)   | 248,224,546 | 247,304,918 | 249,306,273 | 2,001,355 |\n| fix    | Case1 (Threads set x2)   | 254,675,607 | 253,991,054 | 255,600,403 | 1,609,349 |\n| fix    | Case2 (Threads set x1)   | 254,931,057 | 253,979,373 | 256,334,683 | 2,355,310 |\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7095\n\nNo functional change\n",
+    "subject": "Use mmap() for large aligned allocations to avoid cross-NUMA arena reuse"
+  },
+  {
+    "hash": "81d2cee9d61b0296f854e15107e0f55596ec1b3d",
+    "short": "81d2cee9",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-08-25T16:37:13Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/81d2cee9d61b0296f854e15107e0f55596ec1b3d",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/81d2cee9d61b0296f854e15107e0f55596ec1b3d.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/81d2cee9d61b0296f854e15107e0f55596ec1b3d.tar.gz"
+      }
+    ],
+    "message": "Cache qemu-user deb & syzygy in CI\n\nshould fix the common case of downloads not being successful.\n\nSimilarly cache the syzygy download.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7094\n\nNo functional change\n\nCo-authored-by: Joost VandeVondele <joost.vandevondele@gmail.com>\n",
+    "subject": "Cache qemu-user deb & syzygy in CI"
+  },
+  {
+    "hash": "7f73409c4e22a8a1c2058147d5a3bc9fbed1409e",
+    "short": "7f73409c",
+    "author": "Ste\u0301phane Nicolet <cassio@free.fr>",
+    "date": "2026-08-25T16:36:47Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7f73409c4e22a8a1c2058147d5a3bc9fbed1409e",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7f73409c4e22a8a1c2058147d5a3bc9fbed1409e.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7f73409c4e22a8a1c2058147d5a3bc9fbed1409e.tar.gz"
+      }
+    ],
+    "message": "Fix compile bug for Mac OS X 10.13.6\n\nMaster branch does not compile on some Unix systems since commit d077f9a8154df309b1b715e51d663e4cd6cf8e73 (for instance compilation fails on Mac OS X 10.13.6 using GNUC 10.4.2).\n\nThe problem is that on such systems CMSG_SPACE() is not a compile time constant, so it cannot be used to allocate the size of the message buffer we use in shm_unix.h\n\nThe fix is to use a dynamic array instead of a stack array for the buffer. We use a standard C++ vector to get automatic memory management, and align it with our utilities in memory.h.\n\nfixes  https://github.com/official-stockfish/Stockfish/issues/7092\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7093\n\nNo functional change\n",
+    "subject": "Fix compile bug for Mac OS X 10.13.6"
+  },
+  {
+    "hash": "19a02f44e1bfee44b5a00acf6e812c643b8fd54c",
+    "short": "19a02f44",
+    "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-08-25T16:36:24Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/19a02f44e1bfee44b5a00acf6e812c643b8fd54c",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/19a02f44e1bfee44b5a00acf6e812c643b8fd54c.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/19a02f44e1bfee44b5a00acf6e812c643b8fd54c.tar.gz"
+      }
+    ],
+    "message": "guarantee PV extension for nodestime and handle MultiPV\n\nThis PR fixes two minor issues with master's PV extension code.\n\n1. When 'nodestime' is active, master may abort PV extension if it takes too long (as measured in ms), rendering the produced results nondeterministic. The patch always completes the PV extensions. This has no effect on playing strength because the local calls to `pos.do_move()` do not update the global used nodes counter.\n\n2. If standard time management is active, and the game is played with `multiPV > 1`, then extending several PVs may repeatedly use up to `moveOverhead / 2` ms, possibly leading to time losses. The patch fixes this by only extending the PV of the best move during game play.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7079\n\nNo functional change\n",
+    "subject": "guarantee PV extension for nodestime and handle MultiPV"
+  },
+  {
     "hash": "598ae2c46500e6dc50b54919ea4bebfe213ddcd1",
     "short": "598ae2c4",
     "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
