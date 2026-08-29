@@ -2,6 +2,90 @@
   "month": "2026-08",
   "commits": [
     {
+      "hash": "8bc5caa2e4b1d4c189b1428e93158b10d3edb0b6",
+      "short": "8bc5caa2",
+      "author": "Timothy Herchen <timothy.herchen@gmail.com>",
+      "date": "2026-08-29T07:16:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8bc5caa2e4b1d4c189b1428e93158b10d3edb0b6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8bc5caa2e4b1d4c189b1428e93158b10d3edb0b6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8bc5caa2e4b1d4c189b1428e93158b10d3edb0b6.tar.gz"
+        }
+      ],
+      "message": "Peel off one iteration of the halfka incremental update\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/6a8ab17b08c0f6a39c9e79ae\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 96192 W: 24637 L: 24264 D: 47291\nPtnml(0-2): 136, 9961, 27552, 10288, 159\n\nPassed avx2 STC:\nhttps://tests.stockfishchess.org/tests/view/6a8cd16708c0f6a39c9e7e59\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 61024 W: 15789 L: 15457 D: 29778\nPtnml(0-2): 108, 6534, 16905, 6848, 117\n\nFailed avx512icl STC:\nhttps://tests.stockfishchess.org/tests/view/6a8cd14d08c0f6a39c9e7e57\nLLR: -2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 90368 W: 22968 L: 23088 D: 44312\nPtnml(0-2): 132, 9707, 25587, 9665, 93\n\nContext: https://github.com/official-stockfish/Stockfish/pull/7051#issuecomment-5285531017\nCredit to bobbypaper for inspiring the idea. Gated to AVX2 because it seems neutral at best on other architectures.\n\nLocally, despite the avx512icl failure:\n\nResult of 500 runs\nbase (...kfish.master) =    1907788  +/- 1384\ntest (./stockfish    ) =    1930017  +/- 1426\ndiff                   =     +22230  +/- 1978\n\nspeedup         = +0.0117\nP(speedup > 0) =  1.0000\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7096\n\nNo functional change\n",
+      "subject": "Peel off one iteration of the halfka incremental update"
+    },
+    {
+      "hash": "d96c183f5a4f240830ceccd815e1dce12117b0ae",
+      "short": "d96c183f",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-08-29T07:15:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d96c183f5a4f240830ceccd815e1dce12117b0ae",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d96c183f5a4f240830ceccd815e1dce12117b0ae.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d96c183f5a4f240830ceccd815e1dce12117b0ae.tar.gz"
+        }
+      ],
+      "message": "Simplify HalfKAv2_hm::write_indices()\n\npassed STC:\nhttps://tests.stockfishchess.org/tests/view/6a8d043108c0f6a39c9e7eba\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 289440 W: 73563 L: 73617 D: 142260\nPtnml(0-2): 356, 30896, 82225, 30932, 311\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7090\n\nNo functional change\n",
+      "subject": "Simplify HalfKAv2_hm::write_indices()"
+    },
+    {
+      "hash": "074b1eac474a774bfcf588f039a1788e38ff1f50",
+      "short": "074b1eac",
+      "author": "Ste\u0301phane Nicolet <cassio@free.fr>",
+      "date": "2026-08-29T07:14:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/074b1eac474a774bfcf588f039a1788e38ff1f50",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/074b1eac474a774bfcf588f039a1788e38ff1f50.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/074b1eac474a774bfcf588f039a1788e38ff1f50.tar.gz"
+        }
+      ],
+      "message": "Clean-up comments\n\nClean up and add some comments.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7100\n\nNo functional change\n",
+      "subject": "Clean-up comments"
+    },
+    {
+      "hash": "5cae0fab7dc5c2b46b583b02c6347e6ce6dc3c54",
+      "short": "5cae0fab",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-08-29T07:13:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/5cae0fab7dc5c2b46b583b02c6347e6ce6dc3c54",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5cae0fab7dc5c2b46b583b02c6347e6ce6dc3c54.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/5cae0fab7dc5c2b46b583b02c6347e6ce6dc3c54.tar.gz"
+        }
+      ],
+      "message": "Handle MAP_FAILED\n\nfixes incorrect handling of MAP_FAILED in\nhttps://github.com/official-stockfish/Stockfish/commit/7ab49b9bda97a608e500762c1fd1d1c5857936f0\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7102\n\nNo functional change\n",
+      "subject": "Handle MAP_FAILED"
+    },
+    {
       "hash": "2edd935bbb3ea6e484a1700f582a95e0ee773ec2",
       "short": "2edd935b",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
