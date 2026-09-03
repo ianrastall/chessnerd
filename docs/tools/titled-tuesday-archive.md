@@ -35,10 +35,11 @@ can use the public API or an existing `GITHUB_TOKEN` environment variable.
 
 ## Adding missing PGNs
 
-From `D:\GitHub\titled-tuesday-archive`, preview selected new files with:
+From `D:\GitHub\titled-tuesday-archive`, preview selected new files. For example,
+once a September 8 PGN is available:
 
 ```powershell
-python archive_metadata.py --import-pgn D:\chessnerd\tt\260714-titled-tuesday.pgn
+python archive_metadata.py --import-pgn D:\chessnerd\tt\260908-titled-tuesday.pgn
 ```
 
 This is an example for when that missing file is available. Add `--write` to
@@ -50,8 +51,12 @@ Publish the archive repository first, then run `npm run sync:tt`, `npm test`,
 and `npm run build` here. Commit the updated snapshot and push to `main`, or run
 the **Deploy to GitHub Pages** workflow manually to refresh the public page.
 
-The September 3, 2026 import used `D:\chessnerd\tt` for January 6,
+The initial September 3, 2026 import used `D:\chessnerd\tt` for January 6,
 `D:\dev\proj\chessnerd\New folder` for 26 further events, and
-`D:\dev\pgn\cc-events-new` for five July/August events. The 32 added events do not
-include July 14, July 21, or September 1, 2026; no local files were found
-for those dates at import time. The archive's 412 existing ZIPs were retained.
+`D:\dev\pgn\cc-events-new` for five July/August events. It added 32 events and
+retained the archive's 412 existing ZIPs.
+
+The follow-up import added July 14, July 21, and September 1 from
+`D:\dev\pgn\cc-events-new`, and refreshed July 7 with its newer export. The other
+five supplied files already matched the archive. The resulting snapshot contains
+447 events and 825,726 games, including 35 events in 2026 through September 1.
