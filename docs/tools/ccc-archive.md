@@ -10,6 +10,10 @@ download links go directly to the archive repository.
 
 Run `npm run sync:ccc` with Node 24 to fetch the published manifest, validate it,
 sort events newest first, and update `public/data/ccc-archive/manifest.json`.
+The sync resolves the archive's current `main` commit through GitHub's API and
+downloads that immutable revision, avoiding stale branch content in the raw-file
+cache. CI supplies its GitHub token for the API request; local runs can use the
+public API or an existing `GITHUB_TOKEN` environment variable.
 The output is deterministic and is only replaced after validation succeeds.
 Validation covers real dates, date order, year folders, filenames, nonnegative
 integer game counts, checksums, duplicate archives, and expected GitHub URLs.
@@ -46,15 +50,25 @@ from Chess.com.
    **Deploy to GitHub Pages** to refresh the live page from the published archive.
 4. Verify the latest event and its ZIP at the public route.
 
-The legacy ingest helper remains at `legacy/docs/rebuild_ccc_archive_metadata.py`.
-Its default paths predate the Astro migration. If using it, pass explicit paths:
+The archive repository now has a selective importer at `scripts/import_pgn.py`.
+Run it from `D:\GitHub\ccc-archive` with the new local PGN paths to preview the
+dates and counts, then add `--write` to import. For example (choose files that
+have not already been imported):
 
 ```powershell
-python legacy/docs/rebuild_ccc_archive_metadata.py --archive-root D:\GitHub\ccc-archive --no-sync-chessnerd
+python scripts/import_pgn.py D:\dev\pgn\ccc2\event-501.pgn D:\dev\pgn\ccc2\event-503.pgn
 ```
 
-That helper can move ingested raw PGNs into `raw/processed`; use
-`--raw-archive-mode keep` when they should stay in place. Review its output and
-publish the archive repository before running the site sync. The old root-level
+This importer leaves the source files in place, refuses existing or overlapping
+archives, and derives the date range across all games. Bare Event-only stubs are
+omitted from the ZIP copy and game counts; other game bytes are preserved.
+Publish the archive repository before running the site sync. The old root-level
 `ccc_links.txt`, `events.txt`, and `game_counts.txt` mirrors are no longer required
 by the active page.
+
+The September 3, 2026 refresh imported 27 available files numbered 469–503 from
+`D:\dev\pgn\ccc2`. `event-501.pgn` is CCC 26 Bullet: Qualifier #3
+(August 20–24; 1,056 games), and `event-503.pgn` is CCC 26 Bullet: Main
+(August 24–29; 1,584 games). The gap in event numbers reflects the local files
+available, not a claim that every numbered event exists. The all-stub
+`event-408.pgn` is not an importable game collection.

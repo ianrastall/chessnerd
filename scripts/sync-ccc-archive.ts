@@ -1,7 +1,22 @@
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { parseArchiveManifest } from '../src/lib/ccc-archive.ts';
 
-const source = 'https://raw.githubusercontent.com/ianrastall/ccc-archive/main/ccc_manifest.json';
+// Resolve main first: raw.githubusercontent.com can cache the previous branch
+// contents for several minutes after an archive push. Commit URLs are immutable.
+const headers: Record<string, string> = { Accept: 'application/vnd.github+json' };
+if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+const refResponse = await fetch('https://api.github.com/repos/ianrastall/ccc-archive/git/ref/heads/main', {
+  headers,
+  cache: 'no-store',
+  signal: AbortSignal.timeout(30_000)
+});
+if (!refResponse.ok) throw new Error(`CCC revision request failed: HTTP ${refResponse.status}`);
+const ref = await refResponse.json();
+const revision = ref.object?.sha;
+if (ref.object?.type !== 'commit' || typeof revision !== 'string' || !/^[a-f0-9]{40}$/.test(revision)) {
+  throw new Error('GitHub did not return a valid CCC archive revision.');
+}
+const source = `https://raw.githubusercontent.com/ianrastall/ccc-archive/${revision}/ccc_manifest.json`;
 const destination = new URL('../public/data/ccc-archive/manifest.json', import.meta.url);
 const response = await fetch(source, { signal: AbortSignal.timeout(30_000) });
 if (!response.ok) throw new Error(`CCC manifest request failed: HTTP ${response.status}`);
