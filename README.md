@@ -51,3 +51,4 @@ Astro uses `build.format: 'file'`, so `src/pages/titled-players.astro` builds to
 - GitHub Pages should use `Settings > Pages > Build and deployment > Source: GitHub Actions`.
 - The first-pass rebuild order is tracked in `docs/rebuild-roadmap.md`.
 - Tool explainers live in `docs/tools/`.
+- CCC Archive uses `npm run sync:ccc` to refresh published archive metadata; deployment runs it automatically. See `docs/tools/ccc-archive.md` for the two-repository workflow.

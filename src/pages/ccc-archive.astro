@@ -1,0 +1,114 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import manifest from '../../public/data/ccc-archive/manifest.json';
+import { archiveDate, parseArchiveManifest } from '../lib/ccc-archive';
+
+const entries = parseArchiveManifest(manifest);
+const games = entries.reduce((sum, entry) => sum + entry.games, 0);
+const latestDate = archiveDate(entries.reduce((latest, entry) => entry.end > latest ? entry.end : latest, entries[0].end));
+const number = (value: number) => value.toLocaleString('en-US');
+---
+<BaseLayout title="CCC Archive" description="Search Computer Chess Championship events and download PGNs, with event dates and game counts.">
+  <main>
+    <div id="toolView" class="ccc-archive">
+      <ToolHeader title="CCC Archive" icon="folder_zip" />
+      <p class="ccc-intro">Computer Chess Championship games, organized by event. Each ZIP contains a PGN file.</p>
+
+      <div class="ccc-summary">
+        <p><strong>{number(entries.length)}</strong> events <span aria-hidden="true">·</span> <strong>{number(games)}</strong> games</p>
+        <p>Latest archived games: <time datetime={latestDate}>{latestDate}</time></p>
+        <a href="https://github.com/ianrastall/ccc-archive" target="_blank" rel="noopener noreferrer">Archive on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <div id="cccControls" class="ccc-controls" hidden>
+        <div class="ccc-search">
+          <label for="cccSearch">Search events</label>
+          <input id="cccSearch" type="search" placeholder="Event name, filename, or date…" autocomplete="off" />
+        </div>
+        <div class="ccc-page-size">
+          <label for="cccPageSize">Rows per page</label>
+          <select id="cccPageSize">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100" selected>100</option>
+          </select>
+        </div>
+      </div>
+
+      <p id="cccStatus" class="ccc-status" role="status">{number(entries.length)} events, newest first</p>
+      <div class="ccc-table-wrap" role="region" aria-label="CCC event downloads" tabindex="0">
+        <table class="ccc-table">
+          <caption class="visually-hidden">Computer Chess Championship events, newest first</caption>
+          <thead>
+            <tr>
+              <th scope="col">Event</th>
+              <th scope="col">Start</th>
+              <th scope="col">End</th>
+              <th scope="col" class="ccc-number">Games</th>
+              <th scope="col"><span class="visually-hidden">Download</span></th>
+            </tr>
+          </thead>
+          <tbody id="cccTableBody">
+            {entries.map((entry) => (
+              <tr data-ccc-entry data-search={`${entry.event} ${entry.pgn} ${archiveDate(entry.start)} ${archiveDate(entry.end)}`.toLowerCase()}>
+                <th scope="row">
+                  <span class="ccc-event">{entry.event}</span>
+                  <span class="ccc-filename">{entry.pgn}</span>
+                </th>
+                <td class="ccc-date"><time datetime={archiveDate(entry.start)}>{archiveDate(entry.start)}</time></td>
+                <td class="ccc-date"><time datetime={archiveDate(entry.end)}>{archiveDate(entry.end)}</time></td>
+                <td class="ccc-number">{number(entry.games)}</td>
+                <td><a class="btn btn-secondary btn-compact ccc-download" href={entry.url} aria-label={`Download ${entry.event} PGN ZIP`}><span class="material-icons" aria-hidden="true">download</span>ZIP</a></td>
+              </tr>
+            ))}
+            <tr id="cccEmpty" hidden><td colspan="5">No events match your search. Try another name or date.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <nav id="cccPagination" class="ccc-pagination" aria-label="Archive pages" hidden>
+        <button id="cccPrevPage" type="button" class="btn btn-secondary" disabled>Previous</button>
+        <span id="cccPageInfo">Page 1 of 1</span>
+        <button id="cccNextPage" type="button" class="btn btn-secondary">Next</button>
+      </nav>
+      <noscript><p class="ccc-note">All events are listed. Enable JavaScript for search and pagination.</p></noscript>
+    </div>
+  </main>
+
+  <style>
+    .ccc-intro { margin-bottom: 1rem; }
+    .ccc-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+    .ccc-summary strong { color: var(--text-primary); }
+    .ccc-summary p:first-child span { padding: 0 0.4rem; }
+    .ccc-controls { display: flex; align-items: end; gap: 1rem; margin-bottom: 1rem; }
+    .ccc-controls[hidden], .ccc-pagination[hidden] { display: none; }
+    .ccc-search { flex: 1; }
+    .ccc-controls label { display: block; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .ccc-controls input, .ccc-controls select { width: 100%; min-height: 2.75rem; padding: 0.6rem 0.75rem; color: var(--text-primary); background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; font: inherit; }
+    .ccc-archive :is(input, select, a, button, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .ccc-status { margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; }
+    .ccc-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+    .ccc-table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); }
+    .ccc-table th, .ccc-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+    .ccc-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
+    .ccc-table tbody th { font-weight: 400; min-width: 18rem; }
+    .ccc-table tbody tr:hover { background: var(--bg-tertiary); }
+    .ccc-event { display: block; font-weight: 600; }
+    .ccc-filename { display: block; margin-top: 0.2rem; font-size: 0.875rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+    .ccc-table .ccc-number { text-align: right; font-variant-numeric: tabular-nums; }
+    .ccc-date { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+    .ccc-download { white-space: nowrap; min-height: 2.5rem; }
+    .ccc-pagination { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+    .ccc-pagination span, .ccc-note { color: var(--text-secondary); font-size: 0.9rem; }
+    .ccc-pagination button:disabled { opacity: 0.45; cursor: default; }
+    .ccc-note { margin-top: 1rem; }
+    @media (max-width: 600px) {
+      .ccc-controls { align-items: stretch; flex-direction: column; }
+      .ccc-table th, .ccc-table td { padding: 0.75rem; }
+      .ccc-pagination { justify-content: center; gap: 0.6rem; }
+    }
+  </style>
+  <script>
+    import '../scripts/ccc-archive';
+  </script>
+</BaseLayout>

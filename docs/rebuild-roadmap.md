@@ -14,6 +14,7 @@ These tools are low-workflow and are suitable for the first Astro release pass:
 - `board-colors`: self-contained board palette generator.
 - `play-engine`: self-contained browser game using bundled `chess.min.js` and Lozza.
 - `stockfish-commits`: month-sharded commit browser with daily data automation.
+- `ccc-archive`: searchable event downloads backed by a validated manifest synced from `ianrastall/ccc-archive` on every deployment. See `docs/tools/ccc-archive.md`.
 
 Only these tools are linked as ready from the home page. Queued tool URLs render a clean
 placeholder route until each tool is rebuilt.
@@ -30,7 +31,6 @@ These are not scary, but they need their data moved into better `src` ownership 
 
 These should wait until their source/update process is documented and automated:
 
-- `ccc-archive`: depends on archive link/event/count files from a separate workflow.
 - `titled-tuesday-archive`: similar archive workflow with separate input files.
 - `engine-list`: RWBC Google Sheet copy transformed by Python.
 - `tournaments`: generated event metadata plus PGN archive files.

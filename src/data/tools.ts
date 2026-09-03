@@ -48,8 +48,7 @@ export const tools: ToolMeta[] = [
     icon: 'folder_zip',
     category: 'data',
     description: 'Computer Chess Championship event PGNs with dates and direct ZIP links.',
-    status: 'queued',
-    rebuildNote: 'Needs the external CCC archive workflow mapped before it should be treated as rebuilt.'
+    status: 'ready'
   },
   {
     id: 'chesscom-api',
