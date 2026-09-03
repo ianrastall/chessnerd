@@ -150,8 +150,7 @@ export const tools: ToolMeta[] = [
     icon: 'event',
     category: 'data',
     description: 'Organized Chess.com Titled Tuesday event downloads.',
-    status: 'queued',
-    rebuildNote: 'Needs the separate archive repo workflow mapped before rebuild.'
+    status: 'ready'
   },
   {
     id: 'tournaments',

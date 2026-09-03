@@ -39,6 +39,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run sync:ccc
+      - name: Sync Titled Tuesday archive metadata
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run sync:tt
       - name: Audit dependencies
         run: npm audit || true
       - name: Test

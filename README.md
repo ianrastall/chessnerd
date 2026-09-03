@@ -52,3 +52,4 @@ Astro uses `build.format: 'file'`, so `src/pages/titled-players.astro` builds to
 - The first-pass rebuild order is tracked in `docs/rebuild-roadmap.md`.
 - Tool explainers live in `docs/tools/`.
 - CCC Archive uses `npm run sync:ccc` to refresh published archive metadata; deployment runs it automatically. See `docs/tools/ccc-archive.md` for the two-repository workflow.
+- Titled Tuesday Archive follows the same pattern with `npm run sync:tt`. See `docs/tools/titled-tuesday-archive.md` to add missing events later.
