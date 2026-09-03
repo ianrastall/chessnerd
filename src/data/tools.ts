@@ -51,6 +51,15 @@ export const tools: ToolMeta[] = [
     status: 'ready'
   },
   {
+    id: 'bullet-brawl-archive',
+    name: 'Bullet Brawl Archive',
+    href: '/bullet-brawl-archive.html',
+    icon: 'bolt',
+    category: 'data',
+    description: 'Organized Chess.com Bullet Brawl event downloads.',
+    status: 'ready'
+  },
+  {
     id: 'chesscom-api',
     name: 'Chess.com API',
     href: '/chesscom-api',

@@ -16,6 +16,7 @@ These tools are low-workflow and are suitable for the first Astro release pass:
 - `stockfish-commits`: month-sharded commit browser with daily data automation.
 - `ccc-archive`: searchable event downloads backed by a validated manifest synced from `ianrastall/ccc-archive` on every deployment. See `docs/tools/ccc-archive.md`.
 - `titled-tuesday-archive`: searchable event downloads with early/late sessions and a validated manifest synced on deployment. See `docs/tools/titled-tuesday-archive.md`.
+- `bullet-brawl-archive`: searchable event downloads backed by `ianrastall/bullet-brawl-archive`, with validated metadata synced on deployment. See `docs/tools/bullet-brawl-archive.md`.
 
 Only these tools are linked as ready from the home page. Queued tool URLs render a clean
 placeholder route until each tool is rebuilt.
@@ -41,7 +42,7 @@ These should wait until their source/update process is documented and automated:
 
 Likely scheduled jobs:
 
-- Refresh archive metadata and counts for CCC and Titled Tuesday.
+- Refresh archive metadata and counts for CCC, Titled Tuesday, and Bullet Brawl.
 - Rebuild engine-list data from the RWBC sheet export.
 - Rebuild Stockfish commit month indexes. Implemented as a daily GitHub Action.
 - Refresh FIDE and Chess.com datasets with source timestamps.

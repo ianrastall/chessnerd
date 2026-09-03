@@ -43,6 +43,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run sync:tt
+      - name: Sync Bullet Brawl archive metadata
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run sync:bb
       - name: Audit dependencies
         run: npm audit || true
       - name: Test
