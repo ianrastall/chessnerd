@@ -50,8 +50,14 @@ from Chess.com.
    **Deploy to GitHub Pages** to refresh the live page from the published archive.
 4. Verify the latest event and its ZIP at the public route.
 
+Archive filenames follow `cc_ccc_YYMMDD[a|b|c…].zip`, keyed on the event start
+date. When two or more events share a start date, `a`, `b`, `c…` suffixes are
+assigned in the order the events were added to the manifest. The manifest keeps
+the full `start` and `end` date range and the event name; only the filename is
+compressed to the start date.
+
 The archive repository now has a selective importer at `scripts/import_pgn.py`.
-Run it from `D:\GitHub\ccc-archive` with the new local PGN paths to preview the
+Run it from `D:\dev\proj\chessnerd\ccc-archive` with the new local PGN paths to preview the
 dates and counts, then add `--write` to import. For example (choose files that
 have not already been imported):
 

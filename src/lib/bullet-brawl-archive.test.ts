@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { parseBulletBrawlManifest, type BulletBrawlEntry } from './bullet-brawl-archive';
 
 function entry(date: string): BulletBrawlEntry {
-  const stem = `bullet-brawl-${date}`;
+  const yymmdd = date.slice(2, 4) + date.slice(5, 7) + date.slice(8, 10);
+  const stem = `cc_bullet-brawl_${yymmdd}`;
   return {
     date,
     year: Number(date.slice(0, 4)),

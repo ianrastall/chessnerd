@@ -39,8 +39,8 @@ export function parseArchiveManifest(value: unknown): ArchiveEntry[] {
     if (start > end || entry.year !== Number(start.slice(0, 4))) {
       throw new Error(`Inconsistent dates for ${entry.zip}.`);
     }
-    const prefix = `${entry.start}-${entry.end}-`;
-    if (!entry.zip.startsWith(prefix) || !/^\d{6}-\d{6}-[a-z0-9-]+\.zip$/.test(entry.zip)
+    const prefix = `cc_ccc_${entry.start}`;
+    if (!entry.zip.startsWith(prefix) || !/^cc_ccc_\d{6}[a-z]?\.zip$/.test(entry.zip)
       || entry.pgn !== entry.zip.replace(/\.zip$/, '.pgn')) {
       throw new Error(`Invalid archive filename: ${entry.zip}`);
     }

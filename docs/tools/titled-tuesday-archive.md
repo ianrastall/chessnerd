@@ -30,17 +30,21 @@ can use the public API or an existing `GITHUB_TOKEN` environment variable.
 - No JavaScript is needed to read the full table or download a ZIP.
 - Dates come from archive filenames. PGN game dates can cross midnight or reflect
   later corrections; they do not redefine the tournament's identity.
-- `a` and `b` filename suffixes mean early and late; no suffix is unspecified.
+- Archive filenames follow `cc_titled-tuesday_YYMMDD[a|b].zip`; `a` and `b` are
+  early and late sessions, and no suffix means the session is unspecified.
 - The page states that this growing collection is incomplete.
 
 ## Adding missing PGNs
 
-From `D:\GitHub\titled-tuesday-archive`, preview selected new files. For example,
-once a September 8 PGN is available:
+From `D:\dev\proj\chessnerd\titled-tuesday-archive`, preview selected new files.
+For example, once a September 8 PGN is available:
 
 ```powershell
 python archive_metadata.py --import-pgn D:\chessnerd\tt\260908-titled-tuesday.pgn
 ```
+
+The importer produces `cc_titled-tuesday_YYMMDD[a|b].zip` regardless of the input
+filename shape, and still accepts the legacy `titled-tuesday-YYYY-MM-DD…` inputs.
 
 This is an example for when that missing file is available. Add `--write` to
 create ZIPs and regenerate all metadata. Source files are kept unchanged;

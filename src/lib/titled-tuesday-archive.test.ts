@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { parseTitledTuesdayManifest, type TitledTuesdayEntry } from './titled-tuesday-archive';
 
 function entry(date: string, session: '' | 'early' | 'late' = ''): TitledTuesdayEntry {
-  const stem = `titled-tuesday-${date}${session === 'early' ? 'a' : session === 'late' ? 'b' : ''}`;
+  const yymmdd = date.slice(2, 4) + date.slice(5, 7) + date.slice(8, 10);
+  const stem = `cc_titled-tuesday_${yymmdd}${session === 'early' ? 'a' : session === 'late' ? 'b' : ''}`;
   return { date, session, year: Number(date.slice(0, 4)), pgn: `${stem}.pgn`, zip: `${stem}.zip`,
     event: 'Titled Tuesday', games: 1200, sha256: 'a'.repeat(64),
     url: `https://github.com/ianrastall/titled-tuesday-archive/raw/main/${date.slice(0, 4)}/${stem}.zip` };

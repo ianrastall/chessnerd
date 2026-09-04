@@ -25,7 +25,10 @@ sync before tests and the Astro build on every deployment.
 
 ## Adding PGNs
 
-From `D:\GitHub\bullet-brawl-archive`, preview selected new files. For example:
+Archive filenames follow `cc_bullet-brawl_YYMMDD.zip` (one event per date; no
+suffix needed).
+
+From `D:\dev\proj\chessnerd\bullet-brawl-archive`, preview selected new files. For example:
 
 ```powershell
 python archive_metadata.py --import-pgn D:\dev\pgn\bb\Bullet_Brawl_2025-08-02-11-00.pgn
