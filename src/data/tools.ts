@@ -106,14 +106,13 @@ export const tools: ToolMeta[] = [
     featured: true
   },
   {
-    id: 'fide-2200',
-    name: 'FIDE 2200+ Players',
-    href: '/fide-2200.html',
+    id: 'fide-2500',
+    name: 'FIDE 2500+ Players',
+    href: '/fide-2500.html',
     icon: 'groups',
     category: 'data',
-    description: 'Filter FIDE-rated players whose standard, rapid, or blitz rating is at least 2200.',
-    status: 'queued',
-    rebuildNote: 'Large generated dataset; needs an update workflow and source note before ready.'
+    description: 'Filter FIDE-rated players whose standard, rapid, or blitz rating is at least 2500.',
+    status: 'ready'
   },
   {
     id: 'pgn-downloads',
