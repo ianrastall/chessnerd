@@ -111,8 +111,16 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
                 .filter(Boolean)
                 .join(' ')
                 .toLowerCase();
+              const catClass =
+                entry.fideCategory == null
+                  ? ''
+                  : entry.fideCategory >= 20
+                    ? 'ta-cat-vhigh'
+                    : entry.fideCategory >= 15
+                      ? 'ta-cat-high'
+                      : '';
               return (
-                <tr data-ta-entry data-search={searchIndex}>
+                <tr data-ta-entry data-search={searchIndex} class={catClass}>
                   <th scope="row">
                     <span class="ta-event">{entry.name}</span>
                     <span class="ta-filename">{entry.zip}</span>
@@ -196,6 +204,15 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
     .ta-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
     .ta-table tbody th { font-weight: 400; min-width: 18rem; }
     .ta-table tbody tr:hover { background: var(--bg-tertiary); }
+    /* FIDE-category row shading, mirroring the CTML viewer: strong events
+       (cat 15-19, avg 2601-2725) get a light accent wash; super-elite
+       (cat 20+, avg 2726+) get the same accent at higher density plus a
+       leading rule. Both tints stack on the hover state below the accent. */
+    .ta-table tbody tr.ta-cat-high  { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .ta-table tbody tr.ta-cat-high:hover  { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+    .ta-table tbody tr.ta-cat-vhigh { background: color-mix(in srgb, var(--accent) 26%, transparent);
+                                      box-shadow: inset 3px 0 0 var(--accent); }
+    .ta-table tbody tr.ta-cat-vhigh:hover { background: color-mix(in srgb, var(--accent) 36%, transparent); }
     .ta-event { display: block; font-weight: 600; }
     .ta-filename { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: var(--text-secondary); overflow-wrap: anywhere; }
     .ta-dates { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
