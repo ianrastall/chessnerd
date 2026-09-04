@@ -20,7 +20,9 @@ function entry(overrides: Partial<TournamentEntry> = {}): TournamentEntry {
     cadence: 'mixed',
     eventType: 'round-robin',
     federation: 'NOR',
-    place: 'Oslo'
+    place: 'Oslo',
+    avgRating: 2763,
+    fideCategory: 21
   };
   return { ...base, ...overrides };
 }

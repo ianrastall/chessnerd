@@ -17,6 +17,13 @@ export interface TournamentEntry {
   eventType: string;
   federation: string;
   place: string;
+  /** Field-strength headline (headline averageRating from the CTML), or null
+   * when the source has no rated field (e.g. purely historical events). */
+  avgRating: number | null;
+  /** FIDE tournament category derived from the average rating: 1 is
+   * 2251–2275, 2 is 2276–2300, up to 23 (2801–2825), and so on in 25-point
+   * bands starting at 2251. null when the average is below 2251 or absent. */
+  fideCategory: number | null;
 }
 
 const REQUIRED_STRINGS = [
@@ -121,6 +128,20 @@ export function parseTournamentManifest(value: unknown): TournamentEntry[] {
     }
     if (!/^[a-f0-9]{64}$/i.test(entry.sha256)) {
       throw new Error(`Invalid checksum for ${entry.zip}.`);
+    }
+
+    // avgRating and fideCategory: optional numeric fields. Absent/null both
+    // display as an em-dash; an unreadable value (a string, a NaN, a negative
+    // rating) is refused rather than silently coerced.
+    for (const key of ['avgRating', 'fideCategory'] as const) {
+      const raw = (entry as unknown as Record<string, unknown>)[key];
+      if (raw === undefined || raw === null) {
+        (entry as unknown as Record<string, number | null>)[key] = null;
+        continue;
+      }
+      if (typeof raw !== 'number' || !Number.isFinite(raw) || raw < 0) {
+        throw new Error(`Invalid ${key} for ${entry.zip}: ${raw}`);
+      }
     }
 
     assertUrl(entry.url, entry.zip);

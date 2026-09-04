@@ -82,6 +82,8 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
               <th scope="col">Place</th>
               <th scope="col">Format</th>
               <th scope="col" class="ta-number">Games</th>
+              <th scope="col" class="ta-number" title="Field-strength headline rating from the CTML source (usually the FIDE standard mean).">Avg</th>
+              <th scope="col" class="ta-number" title="FIDE tournament category derived from the average rating (Cat 1 = 2251–2275, Cat 14 = 2576–2600, Cat 22 = 2776–2800, and so on in 25-point bands).">Cat</th>
               <th scope="col" class="ta-number">Size</th>
               <th scope="col"><span class="visually-hidden">Download</span></th>
             </tr>
@@ -102,7 +104,9 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
                 entry.place,
                 String(entry.year),
                 longDate(entry.start),
-                longDate(entry.end)
+                longDate(entry.end),
+                entry.avgRating != null ? String(entry.avgRating) : '',
+                entry.fideCategory != null ? `cat ${entry.fideCategory}` : ''
               ]
                 .filter(Boolean)
                 .join(' ')
@@ -125,6 +129,12 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
                     )}
                   </td>
                   <td class="ta-number">{number(entry.games)}</td>
+                  <td class="ta-number">
+                    {entry.avgRating != null ? number(entry.avgRating) : <span class="ta-muted">—</span>}
+                  </td>
+                  <td class="ta-number">
+                    {entry.fideCategory != null ? entry.fideCategory : <span class="ta-muted">—</span>}
+                  </td>
                   <td class="ta-number">{formatBytes(entry.bytes)}</td>
                   <td>
                     <a
@@ -139,7 +149,7 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
               );
             })}
             <tr id="taEmpty" hidden>
-              <td colspan="7">No tournaments match your search. Try another name, place, or year.</td>
+              <td colspan="9">No tournaments match your search. Try another name, place, or year.</td>
             </tr>
           </tbody>
         </table>
