@@ -161,14 +161,13 @@ export const tools: ToolMeta[] = [
     status: 'ready'
   },
   {
-    id: 'tournaments',
+    id: 'tournament-archive',
     name: 'Tournament Archive',
-    href: '/tournaments.html',
+    href: '/tournament-archive.html',
     icon: 'emoji_events',
     category: 'data',
-    description: 'Curated tournament PGNs with calculated FIDE categories.',
-    status: 'queued',
-    rebuildNote: 'Generated from event metadata and PGN files; needs source/update docs.'
+    description: 'Tournament PGNs from the PgnTours archive, generated from CTML sources with crosstables.',
+    status: 'ready'
   }
 ];
 

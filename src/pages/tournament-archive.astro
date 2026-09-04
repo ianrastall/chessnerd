@@ -1,0 +1,222 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import manifest from '../../public/data/tournament-archive/manifest.json';
+import { formatBytes, parseTournamentManifest } from '../lib/tournament-archive';
+
+const entries = parseTournamentManifest(manifest);
+const games = entries.reduce((sum, entry) => sum + entry.games, 0);
+const latest = entries[0];
+const earliest = entries[entries.length - 1];
+const totalBytes = entries.reduce((sum, entry) => sum + entry.bytes, 0);
+const number = (value: number) => value.toLocaleString('en-US');
+const longDate = (value: string) =>
+  new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${value}T00:00:00Z`)
+  );
+const shortDate = (value: string) =>
+  new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${value}T00:00:00Z`)
+  );
+const dateRange = (start: string, end: string) => (start === end ? shortDate(start) : `${shortDate(start)} – ${shortDate(end)}`);
+const placeText = (entry: (typeof entries)[number]) => {
+  const bits = [entry.place, entry.federation].filter(Boolean);
+  return bits.length ? bits.join(' · ') : entry.site && entry.site !== '?' ? entry.site : '';
+};
+const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventType].filter(Boolean);
+---
+<BaseLayout
+  title="Tournament Archive"
+  description="Download tournament PGNs from the PgnTours archive. Every ZIP holds one PGN of the event's games plus a crosstable."
+>
+  <main>
+    <div id="toolView" class="tournament-archive">
+      <ToolHeader title="Tournament Archive" icon="emoji_events" />
+      <p class="ta-intro">
+        Curated tournament PGNs from the <a
+          href="https://github.com/ianrastall/PgnTours"
+          target="_blank"
+          rel="noopener noreferrer">PgnTours archive</a
+        >. Each ZIP contains a PGN of every game in the event along with a crosstable, all generated from the corresponding
+        <a href="https://github.com/ianrastall/ctml" target="_blank" rel="noopener noreferrer">CTML</a> source where available.
+      </p>
+
+      <div class="ta-summary">
+        <p>
+          <strong>{number(entries.length)}</strong> tournaments <span aria-hidden="true">·</span>
+          <strong>{number(games)}</strong> games <span aria-hidden="true">·</span>
+          <strong>{formatBytes(totalBytes)}</strong> total
+        </p>
+        <p>
+          Newest: <time datetime={latest.start}>{longDate(latest.start)}</time>
+          <span aria-hidden="true">·</span>
+          Oldest: <time datetime={earliest.start}>{longDate(earliest.start)}</time>
+        </p>
+      </div>
+
+      <div id="taControls" class="ta-controls" hidden>
+        <div class="ta-search">
+          <label for="taSearch">Search tournaments</label>
+          <input id="taSearch" type="search" placeholder="Event, place, cadence, year…" autocomplete="off" />
+        </div>
+        <div class="ta-page-size">
+          <label for="taPageSize">Rows per page</label>
+          <select id="taPageSize">
+            <option value="25">25</option>
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+      </div>
+
+      <p id="taStatus" class="ta-status" role="status">
+        {number(entries.length)} tournaments, newest first
+      </p>
+      <div class="ta-table-wrap" role="region" aria-label="Tournament archive downloads" tabindex="0">
+        <table class="ta-table">
+          <caption class="visually-hidden">Tournament archive, newest first</caption>
+          <thead>
+            <tr>
+              <th scope="col">Event</th>
+              <th scope="col">Dates</th>
+              <th scope="col">Place</th>
+              <th scope="col">Format</th>
+              <th scope="col" class="ta-number">Games</th>
+              <th scope="col" class="ta-number">Size</th>
+              <th scope="col"><span class="visually-hidden">Download</span></th>
+            </tr>
+          </thead>
+          <tbody id="taTableBody">
+            {entries.map((entry) => {
+              const place = placeText(entry);
+              const formatBadges = badges(entry);
+              const searchIndex = [
+                entry.name,
+                entry.slug,
+                entry.zip,
+                entry.site,
+                entry.eco,
+                entry.cadence,
+                entry.eventType,
+                entry.federation,
+                entry.place,
+                String(entry.year),
+                longDate(entry.start),
+                longDate(entry.end)
+              ]
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase();
+              return (
+                <tr data-ta-entry data-search={searchIndex}>
+                  <th scope="row">
+                    <span class="ta-event">{entry.name}</span>
+                    <span class="ta-filename">{entry.zip}</span>
+                  </th>
+                  <td class="ta-dates">
+                    <time datetime={entry.start}>{dateRange(entry.start, entry.end)}</time>
+                  </td>
+                  <td class="ta-place">{place || <span class="ta-muted">—</span>}</td>
+                  <td class="ta-format">
+                    {formatBadges.length ? (
+                      formatBadges.map((badge) => <span class="ta-badge">{badge}</span>)
+                    ) : (
+                      <span class="ta-muted">—</span>
+                    )}
+                  </td>
+                  <td class="ta-number">{number(entry.games)}</td>
+                  <td class="ta-number">{formatBytes(entry.bytes)}</td>
+                  <td>
+                    <a
+                      class="btn btn-secondary btn-compact ta-download"
+                      href={entry.url}
+                      aria-label={`Download ${entry.name} PGN ZIP`}
+                    >
+                      <span class="material-icons" aria-hidden="true">download</span>ZIP
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+            <tr id="taEmpty" hidden>
+              <td colspan="7">No tournaments match your search. Try another name, place, or year.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <nav id="taPagination" class="ta-pagination" aria-label="Archive pages" hidden>
+        <button id="taPrevPage" type="button" class="btn btn-secondary" disabled>Previous</button>
+        <span id="taPageInfo">Page 1 of 1</span>
+        <button id="taNextPage" type="button" class="btn btn-secondary">Next</button>
+      </nav>
+      <p class="ta-note">
+        Older events are added as their CTML sources are digitised. Each ZIP is safe to open on any platform and contains a plain-text PGN plus an HTML crosstable.
+      </p>
+      <noscript>
+        <p class="ta-note">All tournaments are listed. Enable JavaScript for search and pagination.</p>
+      </noscript>
+    </div>
+  </main>
+
+  <style>
+    .ta-intro { margin-bottom: 1rem; }
+    .ta-intro a { color: var(--accent); }
+    .ta-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+    .ta-summary strong { color: var(--text-primary); }
+    .ta-summary p span[aria-hidden] { padding: 0 0.4rem; }
+    .ta-controls { display: flex; align-items: end; gap: 1rem; margin-bottom: 1rem; }
+    .ta-controls[hidden], .ta-pagination[hidden] { display: none; }
+    .ta-search { flex: 1; }
+    .ta-controls label { display: block; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .ta-controls input, .ta-controls select {
+      width: 100%;
+      min-height: 2.75rem;
+      padding: 0.6rem 0.75rem;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font: inherit;
+    }
+    .tournament-archive :is(input, select, a, button, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .ta-status { margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; }
+    .ta-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+    .ta-table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); }
+    .ta-table th, .ta-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+    .ta-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
+    .ta-table tbody th { font-weight: 400; min-width: 18rem; }
+    .ta-table tbody tr:hover { background: var(--bg-tertiary); }
+    .ta-event { display: block; font-weight: 600; }
+    .ta-filename { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+    .ta-dates { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+    .ta-place { font-size: 0.9rem; }
+    .ta-format { font-size: 0.85rem; }
+    .ta-badge {
+      display: inline-block;
+      margin: 0 0.3rem 0.2rem 0;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      font-size: 0.75rem;
+      text-transform: capitalize;
+      letter-spacing: 0.02em;
+    }
+    .ta-muted { color: var(--text-secondary); }
+    .ta-table .ta-number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .ta-download { white-space: nowrap; min-height: 2.5rem; }
+    .ta-pagination { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+    .ta-pagination span, .ta-note { color: var(--text-secondary); font-size: 0.9rem; }
+    .ta-pagination button:disabled { opacity: 0.45; cursor: default; }
+    .ta-note { margin-top: 1rem; }
+    @media (max-width: 700px) {
+      .ta-controls { align-items: stretch; flex-direction: column; }
+      .ta-table th, .ta-table td { padding: 0.75rem; }
+      .ta-pagination { justify-content: center; gap: 0.6rem; }
+    }
+  </style>
+  <script>
+    import '../scripts/tournament-archive';
+  </script>
+</BaseLayout>
