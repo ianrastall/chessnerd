@@ -173,5 +173,6 @@ export const tools: ToolMeta[] = [
   }
 ];
 
-export const readyTools = tools.filter((tool) => tool.status === 'ready');
-export const queuedTools = tools.filter((tool) => tool.status === 'queued');
+const byName = (a: ToolMeta, b: ToolMeta) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
+export const readyTools = tools.filter((tool) => tool.status === 'ready').sort(byName);
+export const queuedTools = tools.filter((tool) => tool.status === 'queued').sort(byName);
