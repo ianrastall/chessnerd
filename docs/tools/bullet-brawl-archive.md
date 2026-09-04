@@ -36,5 +36,5 @@ source file unchanged, verifies the PGN copied into the ZIP, and rejects
 duplicate dates. The archive README documents accepted filename formats.
 
 Publish the archive repository first, then run `npm run sync:bb`, `npm test`, and
-`npm run build` in Chess Nerd. The initial published snapshot contains 57 events
-and 171,545 games from August 2, 2025, through August 29, 2026.
+`npm run build` in Chess Nerd. The current published snapshot contains 99 events
+and 318,952 games from October 5, 2024, through August 29, 2026.
