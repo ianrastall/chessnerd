@@ -1,32 +1,22 @@
 ---
 import ToolCard from '../components/ToolCard.astro';
-import { categoryHref, categoryLabels, queuedTools, readyTools, toolCategories } from '../data/tools';
+import { allTools, categoryHref, categoryLabels, toolCategories } from '../data/tools';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Chess Nerd">
   <main>
     <h1 class="visually-hidden">Chess Nerd</h1>
     <nav class="category-nav home-category-nav" aria-label="Tool categories">
-      <a class="category-chip active" href="/" aria-current="page">Ready <span>{readyTools.length}</span></a>
+      <a class="category-chip active" href="/" aria-current="page">All <span>{allTools.length}</span></a>
       {toolCategories.map((category) => (
         <a class="category-chip" href={categoryHref(category)}>
-          {categoryLabels[category]} <span>{readyTools.filter((tool) => tool.category === category).length}</span>
+          {categoryLabels[category]} <span>{allTools.filter((tool) => tool.category === category).length}</span>
         </a>
       ))}
     </nav>
 
-    <section class="tool-grid" aria-label="Ready chess tools">
-      {readyTools.map((tool) => <ToolCard tool={tool} />)}
-    </section>
-
-    <section class="queue-section" aria-labelledby="queueHeading">
-      <div class="section-heading">
-        <h2 id="queueHeading">Rebuild Queue</h2>
-        <p>{queuedTools.length} tools held back until their data and update workflows are mapped.</p>
-      </div>
-      <div class="tool-grid compact" aria-label="Queued chess tools">
-        {queuedTools.map((tool) => <ToolCard tool={tool} />)}
-      </div>
+    <section class="tool-grid" aria-label="Chess tools">
+      {allTools.map((tool) => <ToolCard tool={tool} />)}
     </section>
   </main>
 </BaseLayout>

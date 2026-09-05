@@ -25,8 +25,6 @@ export interface ToolMeta {
   icon: string;
   category: ToolCategory;
   description: string;
-  status: 'ready' | 'queued';
-  rebuildNote?: string;
   featured?: boolean;
 }
 
@@ -38,7 +36,6 @@ export const tools: ToolMeta[] = [
     icon: 'palette',
     category: 'analysis',
     description: 'Tune a dark-square RGB color and generate a complete chessboard palette with exports.',
-    status: 'ready',
     featured: true
   },
   {
@@ -47,8 +44,7 @@ export const tools: ToolMeta[] = [
     href: '/ccc-archive.html',
     icon: 'folder_zip',
     category: 'data',
-    description: 'Computer Chess Championship event PGNs with dates and direct ZIP links.',
-    status: 'ready'
+    description: 'Computer Chess Championship event PGNs with dates and direct ZIP links.'
   },
   {
     id: 'bullet-brawl-archive',
@@ -56,8 +52,7 @@ export const tools: ToolMeta[] = [
     href: '/bullet-brawl-archive.html',
     icon: 'bolt',
     category: 'data',
-    description: 'Organized Chess.com Bullet Brawl event downloads.',
-    status: 'ready'
+    description: 'Organized Chess.com Bullet Brawl event downloads.'
   },
   {
     id: 'chesscom-api',
@@ -65,8 +60,7 @@ export const tools: ToolMeta[] = [
     href: '/chesscom-api',
     icon: 'api',
     category: 'data',
-    description: 'Formatted reference for the Chess.com published-data API documentation.',
-    status: 'ready',
+    description: 'Formatted reference for the Chess.com published-data API documentation.'
   },
   {
     id: 'titled-players',
@@ -74,8 +68,7 @@ export const tools: ToolMeta[] = [
     href: '/titled-players',
     icon: 'groups',
     category: 'data',
-    description: 'Browse titled Chess.com accounts — filter by title, rating, country, and status.',
-    status: 'ready',
+    description: 'Browse titled Chess.com accounts — filter by title, rating, country, and status.'
   },
   {
     id: 'eco-code',
@@ -83,8 +76,7 @@ export const tools: ToolMeta[] = [
     href: '/eco-code.html',
     icon: 'menu_book',
     category: 'reference',
-    description: 'Search Encyclopedia of Chess Openings codes and named lines, with a board diagram for every opening.',
-    status: 'ready'
+    description: 'Search Encyclopedia of Chess Openings codes and named lines, with a board diagram for every opening.'
   },
   {
     id: 'engines',
@@ -92,8 +84,7 @@ export const tools: ToolMeta[] = [
     href: '/engines.html',
     icon: 'new_releases',
     category: 'reference',
-    description: 'A daily feed of the latest releases from open-source chess engines on GitHub, newest first.',
-    status: 'ready'
+    description: 'A daily feed of the latest releases from open-source chess engines on GitHub, newest first.'
   },
   {
     id: 'play-engine',
@@ -102,7 +93,6 @@ export const tools: ToolMeta[] = [
     icon: 'smart_toy',
     category: 'analysis',
     description: 'Play a browser chess game against the bundled Lozza engine.',
-    status: 'ready',
     featured: true
   },
   {
@@ -111,8 +101,7 @@ export const tools: ToolMeta[] = [
     href: '/fide-2500.html',
     icon: 'groups',
     category: 'data',
-    description: 'Filter FIDE-rated players whose standard, rapid, or blitz rating is at least 2500.',
-    status: 'ready'
+    description: 'Filter FIDE-rated players whose standard, rapid, or blitz rating is at least 2500.'
   },
   {
     id: 'pgn-downloads',
@@ -120,8 +109,7 @@ export const tools: ToolMeta[] = [
     href: '/pgn-downloads.html',
     icon: 'cloud_download',
     category: 'data',
-    description: 'Download master games, tournament files, and opening libraries in PGN format.',
-    status: 'ready'
+    description: 'Download master games, tournament files, and opening libraries in PGN format.'
   },
   {
     id: 'pgn-info',
@@ -130,7 +118,6 @@ export const tools: ToolMeta[] = [
     icon: 'assessment',
     category: 'analysis',
     description: 'Analyze an uploaded PGN file to summarize tags, players, openings, and results.',
-    status: 'ready',
     featured: true
   },
   {
@@ -139,8 +126,7 @@ export const tools: ToolMeta[] = [
     href: '/software.html',
     icon: 'inventory_2',
     category: 'reference',
-    description: 'My PGN tools, plus the essential chess databases, analysis suites, and engine tools players rely on.',
-    status: 'ready'
+    description: 'My PGN tools, plus the essential chess databases, analysis suites, and engine tools players rely on.'
   },
   {
     id: 'stockfish-commits',
@@ -148,8 +134,7 @@ export const tools: ToolMeta[] = [
     href: '/stockfish-commits.html',
     icon: 'history',
     category: 'reference',
-    description: 'Browse Stockfish commits, source snapshots, authors, dates, and messages.',
-    status: 'ready'
+    description: 'Browse Stockfish commits, source snapshots, authors, dates, and messages.'
   },
   {
     id: 'titled-tuesday-archive',
@@ -157,8 +142,7 @@ export const tools: ToolMeta[] = [
     href: '/titled-tuesday-archive.html',
     icon: 'event',
     category: 'data',
-    description: 'Organized Chess.com Titled Tuesday event downloads.',
-    status: 'ready'
+    description: 'Organized Chess.com Titled Tuesday event downloads.'
   },
   {
     id: 'tournament-archive',
@@ -166,11 +150,9 @@ export const tools: ToolMeta[] = [
     href: '/tournament-archive.html',
     icon: 'emoji_events',
     category: 'data',
-    description: 'Tournament PGNs from the PgnTours archive, generated from CTML sources with crosstables.',
-    status: 'ready'
+    description: 'Tournament PGNs from the PgnTours archive, generated from CTML sources with crosstables.'
   }
 ];
 
 const byName = (a: ToolMeta, b: ToolMeta) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
-export const readyTools = tools.filter((tool) => tool.status === 'ready').sort(byName);
-export const queuedTools = tools.filter((tool) => tool.status === 'queued').sort(byName);
+export const allTools = [...tools].sort(byName);
