@@ -1,6 +1,6 @@
 function initPgnDownloads() {
   const search = document.getElementById('fileSearch') as HTMLInputElement | null;
-  const rows = Array.from(document.querySelectorAll<HTMLTableRowElement>('.fileList tr'));
+  const rows = Array.from(document.querySelectorAll<HTMLTableRowElement>('.fileList tr[data-file]'));
   const sections = Array.from(document.querySelectorAll<HTMLElement>('.dl-section'));
 
   search?.addEventListener('input', () => {
@@ -13,7 +13,7 @@ function initPgnDownloads() {
 
     // Hide entire section if all its rows are hidden
     for (const section of sections) {
-      const sectionRows = Array.from(section.querySelectorAll<HTMLTableRowElement>('.fileList tr'));
+      const sectionRows = Array.from(section.querySelectorAll<HTMLTableRowElement>('tr[data-file]'));
       const allHidden = sectionRows.length > 0 && sectionRows.every(r => r.hidden);
       section.hidden = allHidden;
     }

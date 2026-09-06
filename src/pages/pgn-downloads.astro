@@ -29,14 +29,13 @@ function fmtDate(iso: string): string {
 
 interface Section {
   title: string;
-  icon: string;
+  description?: string;
   items: Download[];
 }
 
 const sections: Section[] = [
   {
     title: 'General Databases',
-    icon: 'public',
     items: [
       pd('4YDEsXpN', 'twic-public-260905.zip', 909_016_671, '2026-09-05', {
         name: 'Publicly-Available TWIC',
@@ -50,7 +49,6 @@ const sections: Section[] = [
   },
   {
     title: 'Regional Databases',
-    icon: 'flag',
     items: [
       pd('VRrTJ86V', 'arg-base.zip', 8_204_760, '2026-09-05', {
         name: 'ARG-Base',
@@ -68,7 +66,7 @@ const sections: Section[] = [
   },
   {
     title: 'Online Databases',
-    icon: 'language',
+    description: '2800+, 10–150 moves, no 960, bots, or bullet.',
     items: [
       pd('9s3334cv', 'cc-2800-2603.zip', 34_535_469, '2026-09-05'),
       pd('CanR8Bmh', 'cc-2800-2604.zip', 32_510_614, '2026-09-05'),
@@ -92,66 +90,47 @@ const sections: Section[] = [
         <input type="text" id="fileSearch" placeholder="Filter files..." autocomplete="off" aria-label="Filter files" />
       </div>
 
-      {sections.map((section) => (
-        <section class="dl-section">
-          <h2 class="dl-section-title">
-            <span class="material-icons" aria-hidden="true">{section.icon}</span>
-            {section.title}
-          </h2>
-
-          <div class="io-container table-shell">
-            <table class="download-table">
-              <thead>
-                <tr>
-                  <th>{section.items.some((item) => item.name) ? 'Collection' : 'File'}</th>
-                  <th>Size</th>
-                  <th>Updated</th>
-                  <th>Action</th>
+      <div class="io-container table-shell">
+        <table class="download-table">
+          <thead>
+            <tr>
+              <th scope="col">Collection / File</th>
+              <th scope="col">Size</th>
+              <th scope="col">Updated</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          {sections.map((section) => (
+            <tbody class="fileList dl-section">
+              <tr class="section-header">
+                <th scope="rowgroup" colspan="4">
+                  <strong>{section.title}</strong>
+                  {section.description && <span class="section-desc"> — {section.description}</span>}
+                </th>
+              </tr>
+              {section.items.map((item) => (
+                <tr data-file={item.file}>
+                  <td>
+                    <strong>{item.name ?? item.file}</strong>
+                    {item.description && <span class="dl-description">{item.description}</span>}
+                  </td>
+                  <td class="dl-size">{fmtSize(item.size)}</td>
+                  <td class="dl-date">{fmtDate(item.date)}</td>
+                  <td>
+                    <a href={item.href} class="btn btn-primary btn-compact" target="_blank" rel="noopener noreferrer">
+                      Download
+                    </a>
+                  </td>
                 </tr>
-              </thead>
-              <tbody class="fileList">
-                {section.items.map((item) => (
-                  <tr data-file={item.file}>
-                    <td>
-                      <strong>{item.name ?? item.file}</strong>
-                      {item.description && <span class="dl-description">{item.description}</span>}
-                    </td>
-                    <td class="dl-size">{fmtSize(item.size)}</td>
-                    <td class="dl-date">{fmtDate(item.date)}</td>
-                    <td>
-                      <a href={item.href} class="btn btn-primary btn-compact" target="_blank" rel="noopener noreferrer">
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ))}
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </div>
     </div>
   </main>
 
   <style>
-    .dl-section {
-      margin-bottom: 2.5rem;
-    }
-
-    .dl-section-title {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-
-    .dl-section-title .material-icons {
-      font-size: 1.3rem;
-      color: var(--accent);
-    }
-
     .table-shell {
       display: block;
       overflow-x: auto;
@@ -182,12 +161,30 @@ const sections: Section[] = [
       letter-spacing: 0.4px;
     }
 
-    .download-table tr:last-child td {
+    .download-table tbody:last-child tr:last-child td {
       border-bottom: none;
     }
 
-    .download-table tbody tr:hover {
+    .download-table tbody tr:not(.section-header):hover {
       background: var(--bg-tertiary);
+    }
+
+    .section-header th {
+      padding: 0.7rem 1rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-weight: 400;
+      font-size: 0.9rem;
+    }
+
+    .download-table td:first-child {
+      min-width: 14rem;
     }
 
     .dl-description {
