@@ -27,14 +27,13 @@ function fmtDate(iso: string): string {
 
 interface Section {
   title: string;
-  icon: string;
+  description?: string;
   items: Download[];
 }
 
 const sections: Section[] = [
   {
     title: 'General Databases',
-    icon: 'public',
     items: [
       pd('4YDEsXpN', 'twic-public-260905.zip', 909_016_671, '2026-09-05'),
       pd('VfsSt1At', 'historical.zip', 28_197_461, '2026-09-05'),
@@ -42,7 +41,6 @@ const sections: Section[] = [
   },
   {
     title: 'Regional Databases',
-    icon: 'flag',
     items: [
       pd('VRrTJ86V', 'arg-base.zip', 8_204_760, '2026-09-05'),
       pd('CAodJC66', 'brit-base.zip', 28_543_793, '2026-09-05'),
@@ -51,7 +49,7 @@ const sections: Section[] = [
   },
   {
     title: 'Online Databases',
-    icon: 'language',
+    description: '2800+, 10\u2013150 moves, no 960, bots, or bullet.',
     items: [
       pd('9s3334cv', 'cc-2800-2603.zip', 34_535_469, '2026-09-05'),
       pd('CanR8Bmh', 'cc-2800-2604.zip', 32_510_614, '2026-09-05'),
@@ -75,24 +73,25 @@ const sections: Section[] = [
         <input type="text" id="fileSearch" placeholder="Filter files..." autocomplete="off" aria-label="Filter files" />
       </div>
 
-      {sections.map((section) => (
-        <section class="dl-section">
-          <h2 class="dl-section-title">
-            <span class="material-icons" aria-hidden="true">{section.icon}</span>
-            {section.title}
-          </h2>
-
-          <div class="io-container table-shell">
-            <table class="download-table">
-              <thead>
-                <tr>
-                  <th>File</th>
-                  <th>Size</th>
-                  <th>Updated</th>
-                  <th>Action</th>
+      <div class="io-container table-shell">
+        <table class="download-table">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Size</th>
+              <th>Updated</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="fileList">
+            {sections.map((section) => (
+              <>
+                <tr class="section-header">
+                  <td colspan="4">
+                    <strong>{section.title}</strong>
+                    {section.description && <span class="section-desc">&mdash; {section.description}</span>}
+                  </td>
                 </tr>
-              </thead>
-              <tbody class="fileList">
                 {section.items.map((item) => (
                   <tr>
                     <td><strong>{item.file}</strong></td>
@@ -105,33 +104,15 @@ const sections: Section[] = [
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 
   <style>
-    .dl-section {
-      margin-bottom: 2.5rem;
-    }
-
-    .dl-section-title {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-
-    .dl-section-title .material-icons {
-      font-size: 1.3rem;
-      color: var(--accent);
-    }
-
     .table-shell {
       display: block;
       overflow-x: auto;
@@ -166,8 +147,21 @@ const sections: Section[] = [
       border-bottom: none;
     }
 
-    .download-table tbody tr:hover {
+    .download-table tbody tr:not(.section-header):hover {
       background: var(--bg-tertiary);
+    }
+
+    .section-header td {
+      background: var(--bg-tertiary);
+      padding: 0.7rem 1rem;
+      font-size: 1.05rem;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-weight: 400;
+      font-size: 0.9rem;
+      margin-left: 0.3rem;
     }
 
     .dl-size,
