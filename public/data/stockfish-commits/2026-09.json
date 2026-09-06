@@ -2,6 +2,69 @@
   "month": "2026-09",
   "commits": [
     {
+      "hash": "edb0d9db6731067ec50ce619ff372b463bc4dd5d",
+      "short": "edb0d9db",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-09-05T07:52:51Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/edb0d9db6731067ec50ce619ff372b463bc4dd5d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/edb0d9db6731067ec50ce619ff372b463bc4dd5d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/edb0d9db6731067ec50ce619ff372b463bc4dd5d.tar.gz"
+        }
+      ],
+      "message": "Stockfish 19\n\nOfficial release version of Stockfish 19\n\nBench: 2497913\n\n---\n\nStockfish 19\n\nToday, we have the pleasure of announcing Stockfish 19, a new major\nrelease. As always, you can freely download it at\n[stockfishchess.org/download][1] and use it as a drop-in replacement in\nthe [GUI of your choice][2] to benefit from stronger play and more\naccurate analysis.\n\nWhether you can spare hours or days of CPU time, your help matters for\nthe ongoing development of Stockfish. Find out how you can contribute at\n[stockfishchess.org/get-involved][3]. Join our [Discord server][4] to\nget in touch with the community of developers and users of the project!\n\nQuality of Chess Play\n\nIn tests against Stockfish 18, this new release brings an Elo gain of\n[up to 44 points][5], and wins [more than three times as many game\npairs][6] as it loses.\n\nStockfish continues to set the standard for engine strength. Against the\nstrongest competition, it consistently secures the top spot in engine\nchampionships, continuing to [dominate the field][7].\n\nUpdate Highlights\n\nUniversal Binaries\n\nWe have transitioned to universal binaries for our releases, simplifying\nthe download process. These universal binaries automatically detect the\nfeatures of your CPU and run the optimal code, eliminating the need to\nmanually choose between AVX2, AVX-512, etc.\n\nUpgraded NNUE Architecture and Training\n\nThis release introduces the SFNNv16 network architecture, reducing\nbinary size by removing redundant threat features while increasing\nstrength by introducing new pawn-pair features. The secondary neural\nnetwork, introduced in Stockfish 16.1, has been retired, enhancing\nstrength in positions where the small net previously underperformed.\n\nThe training process has been further improved with the introduction of\nnew techniques, such as Quantization-Aware Training (QAT), and further\nparameter tweaks. These techniques have been applied to hundreds of\nbillions of training positions, all of which have been consistently\nrescored using a strong [Leela][8] net.\n\nExpanded Platform Support\n\nWe have added native support for RISC-V (RVV) and LoongArch (LSX/LASX),\n1GB Linux huge pages, as well as WebAssembly targets. The shared-memory\nimplementation for Linux, macOS, and BSD was also overhauled.\n\nStrict Position Validation\n\nWe have implemented stricter validation for board positions, FEN\nstrings, and UCI commands. The engine will now output an `info string\nCRITICAL ERROR` followed by the exact command and the reason it failed,\nand then immediately terminate the process. A good GUI will ensure you\nnever encounter these errors.\n\nThank You\n\nThe Stockfish project builds on a thriving community of enthusiasts\n(thanks to everybody!) who contribute their expertise, time, and\nresources to build a free and open-source chess engine that is robust,\nwidely available, and very strong.\n\nWe would like to express our gratitude for the 16.4k stars that light up\nour GitHub project. Thank you for your support and encouragement \u2013 your\nrecognition means a lot to us. Programmers can contribute to the project\neither directly to [Stockfish][9] (C++), to [Fishtest][10] (HTML, CSS,\nJavaScript, and Python), to our trainer [nnue-pytorch][11] (C++ and\nPython), or to our [website][12] (HTML, CSS/SCSS, and JavaScript).\n\nThe Stockfish team\n\n[1]: https://stockfishchess.org/download\n[2]: https://official-stockfish.github.io/docs/stockfish-wiki/Download-and-usage.html#download-a-chess-gui\n[3]: https://stockfishchess.org/get-involved/\n[4]: https://discord.gg/GWDRS3kU6R\n[5]: https://tests.stockfishchess.org/tests/view/6a85df4c5b1b38ebda864ccd\n[6]: https://tests.stockfishchess.org/tests/view/6a85df595b1b38ebda864ccf\n[7]: https://en.wikipedia.org/wiki/Stockfish_(chess)#Competition_results\n[8]: https://lczero.org/\n[9]: https://github.com/official-stockfish/Stockfish\n[10]: https://github.com/official-stockfish/fishtest\n[11]: https://github.com/official-stockfish/nnue-pytorch\n[12]: https://github.com/official-stockfish/stockfish-web\n",
+      "subject": "Stockfish 19"
+    },
+    {
+      "hash": "1dc0912d86dafb99e96d679a6ac76cbdf1553459",
+      "short": "1dc0912d",
+      "author": "Ste\u0301phane Nicolet <cassio@free.fr>",
+      "date": "2026-09-04T10:43:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1dc0912d86dafb99e96d679a6ac76cbdf1553459",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1dc0912d86dafb99e96d679a6ac76cbdf1553459.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1dc0912d86dafb99e96d679a6ac76cbdf1553459.tar.gz"
+        }
+      ],
+      "message": "Improve comments\n\n- Add a comment for each function of misc.cpp\n- Improve comment indentation in tt.h and tt.cpp\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7130\n\nNo functional change\n",
+      "subject": "Improve comments"
+    },
+    {
+      "hash": "6e4c77f51d09062180fbc2b9befd294abe412633",
+      "short": "6e4c77f5",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-09-04T10:42:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6e4c77f51d09062180fbc2b9befd294abe412633",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e4c77f51d09062180fbc2b9befd294abe412633.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6e4c77f51d09062180fbc2b9befd294abe412633.tar.gz"
+        }
+      ],
+      "message": "Fix bug in nodestime\n\nWhen `availableNodes` hits 0 in master, on the next move we hit UB in `TimeManagement::init()`. More generally, the UB can happen whenever `availableNodes < npmsec`.\n\nThat is because `limits.time[us] == 0` gets passed into `scaledTime`, which is then used in `log10` to define `logTimeInSec`, leading to `-inf` in `optConstant` and hence `+inf` in `optScale`, if `originalTimeAdjust < 0`. Casting that `+inf` double value to the integer valued `optimumTime` via `TimePoint(std::max(1.0, optScale * timeLeft))` is undefined behavior.\n\nThe patch clamps `scaledTime` from below to 1.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7129\n\nNo functional change\n",
+      "subject": "Fix bug in nodestime"
+    },
+    {
       "hash": "06675f704049c62e99dac5533fda42fd5c63aef4",
       "short": "06675f70",
       "author": "sscg13 <iamdumbybear1@gmail.com>",
