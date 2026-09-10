@@ -1,9 +1,11 @@
-"""Build a PgnTours-style ZIP (PGN + crosstable HTML) from a CTML file.
+"""Build PgnTours-style ZIPs (PGN + crosstable HTML) from CTML files.
 
 Usage:
-    python build_tournament_archive_zip.py <ctml-path> [--out <zip-path>]
+    python build_tournament_archive_zip.py <ctml-file-or-dir> [options]
 
-The output ZIP contains:
+Accepts a single .ctml file or a directory (all *.ctml inside it are
+processed).  Each output ZIP contains:
+
     <base>.pgn        SAN-notation PGN, one entry per <game> that carries
                       movetext; result-only and forfeit games are skipped
                       (the manifest 'games' count matches this).
@@ -11,22 +13,29 @@ The output ZIP contains:
                       Tournament Archive style: metadata, standings table,
                       and a games section grouped by @round.
 
-The script's default output layout matches the archive convention:
+The default output layout matches the archive convention:
     D:\\dev\\proj\\chessnerd\\PgnTours\\<decade>s\\<base>.zip
 where <base> is the CTML filename with any underscore replaced by a hyphen,
 and <decade> is the two-digit decade of the start year (e.g. 1870, 2020).
+
+After writing each ZIP the script updates the Chess Nerd tournament-archive
+manifest.json so the Tournament Archive page picks up the new data on the
+next deploy.  Pass --no-manifest to skip that step.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import io
+import json
 import re
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
-from pathlib import Path
 from collections import defaultdict
+from functools import cmp_to_key
+from pathlib import Path
 
 import chess
 import chess.pgn
@@ -73,6 +82,19 @@ def read_ctml(path: Path):
     place_ref = header.find(q("placeRef"))
     place_city = child_text(place_ref, "city") if place_ref is not None else ""
     place_country = child_text(place_ref, "country") if place_ref is not None else ""
+
+    # Headline average rating (prefer standard-scope FIDE)
+    avg_rating = None
+    for ar in header.findall(q("averageRating")):
+        try:
+            val = int((ar.text or "").strip())
+        except (TypeError, ValueError):
+            continue
+        if avg_rating is None:
+            avg_rating = val
+        if ar.get("scope", "standard") == "standard":
+            avg_rating = val
+            break
 
     # Participants
     parts = []
@@ -138,6 +160,7 @@ def read_ctml(path: Path):
         "federation": federation, "start": start_iso, "end": end_iso,
         "city": place_city, "country": place_country,
         "participants": parts, "games": game_list,
+        "avgRating": avg_rating,
     }
 
 
@@ -320,40 +343,161 @@ def decade_folder(start_iso: str) -> str:
     return f"{(year // 10) * 10}s"
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("ctml", type=Path, help="Path to CTML file")
-    ap.add_argument("--pgn-tours-root", type=Path,
-                    default=Path(r"D:\dev\proj\chessnerd\PgnTours"),
-                    help="Root of the PgnTours checkout")
-    ap.add_argument("--out", type=Path, help="Override output ZIP path")
-    args = ap.parse_args()
+MANIFEST_DEFAULT = Path(__file__).resolve().parent.parent / "public" / "data" / "tournament-archive" / "manifest.json"
+PGNTOURS_URL_BASE = "https://github.com/ianrastall/PgnTours/raw/main"
 
-    data = read_ctml(args.ctml)
-    # base name mirrors the CTML filename with underscore -> hyphen and no ext
-    base = args.ctml.stem.replace("_", "-")
+
+def _manifest_order(a, b):
+    """Newest-start first, then newest-end, then alphabetical slug."""
+    if a["start"] > b["start"]: return -1
+    if a["start"] < b["start"]: return 1
+    if a["end"] > b["end"]: return -1
+    if a["end"] < b["end"]: return 1
+    if a["slug"] < b["slug"]: return -1
+    if a["slug"] > b["slug"]: return 1
+    return 0
+
+
+def update_manifest(manifest_path: Path, new_entries: list[dict]):
+    """Upsert tournament entries in the Chess Nerd manifest.json."""
+    # Read existing manifest
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text("utf-8"))
+    else:
+        manifest = []
+
+    # Upsert: remove any existing entries whose slug matches, then add new ones
+    new_slugs = {e["slug"] for e in new_entries}
+    manifest = [e for e in manifest if e.get("slug") not in new_slugs]
+    manifest.extend(new_entries)
+    manifest.sort(key=cmp_to_key(_manifest_order))
+
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", "utf-8")
+    print(f"manifest: {manifest_path} ({len(manifest)} entries, {len(new_entries)} upserted)")
+
+
+def build_one(ctml_path: Path, pgn_tours_root: Path, out_override: Path | None = None) -> dict | None:
+    """Build a single ZIP from a CTML file.
+
+    Returns the manifest-entry dict on success, or None on failure.
+    """
+    try:
+        data = read_ctml(ctml_path)
+    except Exception as exc:
+        print(f"SKIP {ctml_path.name}: {exc}")
+        return None
+
+    base = ctml_path.stem.replace("_", "-")
     pgn_name = f"{base}.pgn"
     html_name = f"{base}.html"
 
     pgn_body = emit_pgn(data["name"], data, base)
     html_body = emit_html(data)
 
-    if args.out:
-        out_zip = args.out
+    if out_override:
+        out_zip = out_override
     else:
         dec = decade_folder(data["start"])
-        out_zip = args.pgn_tours_root / dec / f"{base}.zip"
+        out_zip = pgn_tours_root / dec / f"{base}.zip"
     out_zip.parent.mkdir(parents=True, exist_ok=True)
 
     with zipfile.ZipFile(out_zip, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         zf.writestr(pgn_name, pgn_body.encode("utf-8"))
         zf.writestr(html_name, html_body.encode("utf-8"))
 
-    # Count games written to PGN
     games_with_moves = sum(1 for g in data["games"] if g["moves_uci"])
     print(f"wrote {out_zip}")
     print(f"  pgn_games={games_with_moves}")
     print(f"  bytes={out_zip.stat().st_size}")
+
+    return _manifest_entry(base, data, out_zip, games_with_moves, ctml_path.name)
+
+
+def _manifest_entry(slug: str, data: dict, zip_path: Path, pgn_games: int, ctml_name: str) -> dict | None:
+    """Build a manifest entry dict from a completed ZIP build."""
+    if not data["start"] or not data["end"]:
+        return None
+
+    sha256 = hashlib.sha256(zip_path.read_bytes()).hexdigest()
+    decade = decade_folder(data["start"])
+    zip_name = f"{slug}.zip"
+    site = " ".join(p for p in (data["city"], data["country"]) if p) or ""
+
+    entry: dict = {
+        "slug": slug,
+        "zip": zip_name,
+        "decade": decade,
+        "year": int(data["start"][:4]),
+        "start": data["start"],
+        "end": data["end"],
+        "name": data["name"],
+        "site": site,
+        "eco": "",
+        "games": pgn_games,
+        "bytes": zip_path.stat().st_size,
+        "sha256": sha256,
+        "url": f"{PGNTOURS_URL_BASE}/{decade}/{zip_name}",
+        "ctml": ctml_name,
+        "cadence": data["cadence"],
+        "eventType": data["eventType"],
+        "federation": data["federation"],
+        "place": data["city"],
+    }
+
+    avg = data.get("avgRating")
+    if avg is not None:
+        entry["avgRating"] = avg
+        if avg >= 2251:
+            entry["fideCategory"] = (avg - 2251) // 25 + 1
+
+    return entry
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("ctml", type=Path,
+                    help="A .ctml file, or a directory of them (all *.ctml are processed)")
+    ap.add_argument("--pgn-tours-root", type=Path,
+                    default=Path(r"D:\dev\proj\chessnerd\PgnTours"),
+                    help="Root of the PgnTours checkout")
+    ap.add_argument("--out", type=Path,
+                    help="Override output ZIP path (single-file mode only)")
+    ap.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT,
+                    help="Path to tournament-archive manifest.json")
+    ap.add_argument("--no-manifest", action="store_true",
+                    help="Skip manifest.json update")
+    args = ap.parse_args()
+
+    # Collect CTML files
+    if args.ctml.is_dir():
+        ctml_files = sorted(args.ctml.glob("*.ctml"))
+        if not ctml_files:
+            print(f"No *.ctml files in {args.ctml}")
+            sys.exit(1)
+        if args.out:
+            ap.error("--out cannot be used with a directory (each file gets its own ZIP)")
+    else:
+        if not args.ctml.exists():
+            print(f"Not found: {args.ctml}")
+            sys.exit(1)
+        ctml_files = [args.ctml]
+
+    print(f"Processing {len(ctml_files)} CTML file(s)\n")
+
+    # Build ZIPs and collect manifest entries
+    entries: list[dict] = []
+    for ctml_path in ctml_files:
+        entry = build_one(ctml_path, args.pgn_tours_root,
+                          args.out if len(ctml_files) == 1 else None)
+        if entry is not None:
+            entries.append(entry)
+        print()
+
+    # Update manifest
+    if not args.no_manifest and entries:
+        update_manifest(args.manifest, entries)
 
 
 if __name__ == "__main__":
