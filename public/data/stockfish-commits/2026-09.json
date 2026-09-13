@@ -2,6 +2,153 @@
   "month": "2026-09",
   "commits": [
     {
+      "hash": "031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3",
+      "short": "031dfeb4",
+      "author": "ayushthepiro11 <ayushthepiro11@gmail.com>",
+      "date": "2026-09-13T07:34:19Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3.tar.gz"
+        }
+      ],
+      "message": "Remove unused constexpr_lsb and lsb_index64\n\nThe de Bruijn constexpr LSB helper and its 64-entry lookup table have zero references repo-wide. Runtime lsb() uses compiler intrinsics (__builtin_ctzll / _BitScanForward64), and compile-time table builds no longer need it. Leftover from earlier refactors, same class as PawnPushOrAttacks removal. Verified with repo-wide grep and syntax check on bitboard.cpp / position.cpp / attacks.cpp.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7158\n\nNo functional change\n",
+      "subject": "Remove unused constexpr_lsb and lsb_index64"
+    },
+    {
+      "hash": "86433ca703e808fb3b7b46b3efb3ee3fdbf53c22",
+      "short": "86433ca7",
+      "author": "Jack L <68789600+jackL999@users.noreply.github.com>",
+      "date": "2026-09-13T07:33:55Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/86433ca703e808fb3b7b46b3efb3ee3fdbf53c22",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86433ca703e808fb3b7b46b3efb3ee3fdbf53c22.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/86433ca703e808fb3b7b46b3efb3ee3fdbf53c22.tar.gz"
+        }
+      ],
+      "message": "Add iterator header to numa.h\n\nFix missing iterator include in numa.h that causes compilation to fail with clang version 23.1.1 and possibly other versions on Windows when using the command line \"make -j8 profile-build ARCH=native COMP=clang\". A sample of error messages follows,\n\n./numa.h:121:36:        error:     no member named 'inserter' in namespace 'std'\n...\n./numa.h:121:36: ./numa.h:121:36: error: In file included from timeman.cpp:25:\n...\nIn file included from ./search.h:37:\nno member ./numa.h:121:36: error: named 'inserter' in namespace 'std'error: no member named 'inserter' in namespace\n...\nno member named 'inserter' in namespace 'std'In file included from tt.cpp:32:\n\nAdding #include <iterator> to numa.h solves the problem and the compilation completes as expected.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7157\n\nNo functional change\n",
+      "subject": "Add iterator header to numa.h"
+    },
+    {
+      "hash": "82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32",
+      "short": "82d73d0a",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-09-13T07:33:22Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32.tar.gz"
+        }
+      ],
+      "message": "Optimize both_attacks_bb()\n\nSTC: https://tests.stockfishchess.org/tests/view/6a9e3aada8284b37a0a04dac\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 166432 W: 42797 L: 42332 D: 81303\nPtnml(0-2): 262, 17204, 47775, 17757, 218\n\nShorten the rook dependency chain.  _mm256_castsi256_si128() compiles away.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7154\n\nNo functional change\n",
+      "subject": "Optimize both_attacks_bb()"
+    },
+    {
+      "hash": "bc944563790bf0b46a7acd8d9de139315d1b974f",
+      "short": "bc944563",
+      "author": "Dubslow <bunslow@gmail.com>",
+      "date": "2026-09-13T07:32:04Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bc944563790bf0b46a7acd8d9de139315d1b974f",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bc944563790bf0b46a7acd8d9de139315d1b974f.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bc944563790bf0b46a7acd8d9de139315d1b974f.tar.gz"
+        }
+      ],
+      "message": "Update network: longer training\n\nUsing Tony's recipe, but with even longer training than previous attempts:\n\nhttps://github.com/vondele/nettest/pull/462\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6a9dd563a8284b37a0a04d1d\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 81024 W: 21009 L: 20633 D: 39382\nPtnml(0-2): 189, 9431, 20892, 9815, 185\n\nPassed LTC: https://tests.stockfishchess.org/tests/view/6a9fb71aa8284b37a0a0500e\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 100536 W: 26124 L: 25678 D: 48734\nPtnml(0-2): 42, 10755, 28240, 11177, 54\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7153\n\nBench: 1648567\n",
+      "subject": "Update network: longer training"
+    },
+    {
+      "hash": "b69288679a9a45e736e83e2661889334b9618a4d",
+      "short": "b6928867",
+      "author": "jainaman-umich <jainaman@umich.edu>",
+      "date": "2026-09-13T07:31:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b69288679a9a45e736e83e2661889334b9618a4d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b69288679a9a45e736e83e2661889334b9618a4d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b69288679a9a45e736e83e2661889334b9618a4d.tar.gz"
+        }
+      ],
+      "message": "Fail reproducibility checks on engine errors or missing node output\n\nEnable pipefail so Expect failures and grep's no-match status reach the existing error trap instead of being hidden by a successful final awk.\n\nOnly extract node counts from info lines. Expect echoes go nodes commands, which otherwise let a run without node reports pass even with pipefail.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7151\n\nNo functional change\n\nCo-authored-by: Naman Jain <113119796+jainaman-umich@users.noreply.github.com>\n",
+      "subject": "Fail reproducibility checks on engine errors or missing node output"
+    },
+    {
+      "hash": "0f602f90349885d6379c08984fdfcd5f3da429d0",
+      "short": "0f602f90",
+      "author": "Tony Wang <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-09-13T07:30:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0f602f90349885d6379c08984fdfcd5f3da429d0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0f602f90349885d6379c08984fdfcd5f3da429d0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0f602f90349885d6379c08984fdfcd5f3da429d0.tar.gz"
+        }
+      ],
+      "message": "Fail high recovery depth adjustement\n\nGradually increaese depth after fail high instead of jumping to normal depth directly.\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/6a8c1d4008c0f6a39c9e7d21\n```\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 163200 W: 41862 L: 41374 D: 79964\nPtnml(0-2): 270, 18918, 42755, 19368, 289\n```\n\nPassed LTC\nhttps://tests.stockfishchess.org/tests/view/6a913e4708c0f6a39c9e86bb\n```\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 172530 W: 44924 L: 44339 D: 83267\nPtnml(0-2): 43, 18265, 49070, 18838, 49\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7122\n\nBench: 1649498\n",
+      "subject": "Fail high recovery depth adjustement"
+    },
+    {
+      "hash": "4c991722447d27a3932448990187d9f05355ebf0",
+      "short": "4c991722",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-09-13T07:30:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4c991722447d27a3932448990187d9f05355ebf0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4c991722447d27a3932448990187d9f05355ebf0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4c991722447d27a3932448990187d9f05355ebf0.tar.gz"
+        }
+      ],
+      "message": "[CI] Increase number of go-mate test positions to 1000\n\nAdding more positions for this CI run means failure will become less random, and allow us to spot regressions timely.\n\nI also added a deterministic single threaded run as well.\n\nBoth runs now have a time out: each will fail after 30 minutes.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7073\n\nNo functional change\n",
+      "subject": "[CI] Increase number of go-mate test positions to 1000"
+    },
+    {
       "hash": "59aae690f91d6f69aac194f447d84b4a2c3be778",
       "short": "59aae690",
       "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
