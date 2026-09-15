@@ -27,7 +27,7 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
 ---
 <BaseLayout
   title="Tournament Archive"
-  description="Download tournament PGNs from the PgnTours archive. Every ZIP holds one PGN of the event's games plus a crosstable."
+  description="Download chess tournament records from the PgnTours archive. Each current ZIP holds CTML, PGN, and a Markdown tournament record."
 >
   <main>
     <div id="toolView" class="tournament-archive">
@@ -37,8 +37,8 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
           href="https://github.com/ianrastall/PgnTours"
           target="_blank"
           rel="noopener noreferrer">PgnTours archive</a
-        >. Each ZIP contains a PGN of every game in the event along with a crosstable, all generated from the corresponding
-        <a href="https://github.com/ianrastall/ctml" target="_blank" rel="noopener noreferrer">CTML</a> source where available.
+        >. Each current ZIP contains the authoritative
+        <a href="https://github.com/ianrastall/ctml" target="_blank" rel="noopener noreferrer">CTML</a> source, a PGN export of every game with movetext, and a Markdown tournament record with reported standings. Older ZIPs retain their original crosstable format until refreshed.
       </p>
 
       <div class="ta-summary">
@@ -168,7 +168,7 @@ const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventT
         <button id="taNextPage" type="button" class="btn btn-secondary">Next</button>
       </nav>
       <p class="ta-note">
-        Older events are added as their CTML sources are digitised. Each ZIP is safe to open on any platform and contains a plain-text PGN plus an HTML crosstable.
+        Older events are added as their CTML sources are digitised. Current ZIPs are safe to open on any platform and contain a UTF-8 CTML record, a plain-text PGN, and a Markdown tournament record.
       </p>
       <noscript>
         <p class="ta-note">All tournaments are listed. Enable JavaScript for search and pagination.</p>

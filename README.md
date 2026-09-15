@@ -54,3 +54,4 @@ Astro uses `build.format: 'file'`, so `src/pages/titled-players.astro` builds to
 - CCC Archive uses `npm run sync:ccc` to refresh published archive metadata; deployment runs it automatically. See `docs/tools/ccc-archive.md` for the two-repository workflow.
 - Titled Tuesday Archive follows the same pattern with `npm run sync:tt`. See `docs/tools/titled-tuesday-archive.md` to add missing events later.
 - Bullet Brawl Archive uses `npm run sync:bb`. See `docs/tools/bullet-brawl-archive.md` for its archive and update workflow.
+- Tournament Archive entries are generated one event at a time from canonical CTML with `python scripts/build_tournament_archive_zip.py D:\dev\proj\ctml\tours\<tournament>.ctml`; this writes a ZIP containing the exact CTML, a PGN compatibility export, and `README.md`, then upserts the site manifest.

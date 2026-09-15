@@ -1,4 +1,4 @@
-"""Build PgnTours-style ZIPs (PGN + crosstable HTML) from CTML files.
+"""Build PgnTours-style ZIPs (CTML + PGN + Markdown record) from CTML files.
 
 Usage:
     python build_tournament_archive_zip.py <ctml-file-or-dir> [options]
@@ -6,12 +6,12 @@ Usage:
 Accepts a single .ctml file or a directory (all *.ctml inside it are
 processed).  Each output ZIP contains:
 
+    <base>.ctml       The source CTML bytes, preserved verbatim.
     <base>.pgn        SAN-notation PGN, one entry per <game> that carries
                       movetext; result-only and forfeit games are skipped
                       (the manifest 'games' count matches this).
-    <base>.html       Dark-themed crosstable page in the existing Chess Nerd
-                      Tournament Archive style: metadata, standings table,
-                      and a games section grouped by @round.
+    README.md         Tournament record: event metadata, reported standings,
+                      archive checksums, and a concise CTML explainer.
 
 The default output layout matches the archive convention:
     D:\\dev\\proj\\chessnerd\\PgnTours\\<decade>s\\<base>.zip
@@ -55,6 +55,7 @@ def read_ctml(path: Path):
     root = tree.getroot()
     header = root.find(q("header"))
     participants_el = root.find(q("participants"))
+    teams_el = root.find(q("teams"))
     games_el = root.find(q("games"))
     if header is None or games_el is None:
         raise ValueError("CTML missing header/games")
@@ -129,6 +130,25 @@ def read_ctml(path: Path):
 
     id_to_display = {p["id"]: p["display"] for p in parts}
 
+    # Teams and their reported standings. Team-event standings belong to the
+    # teams, not to the individual participant rows.
+    teams = []
+    if teams_el is not None:
+        for team in teams_el.findall(q("team")):
+            standing = team.find(q("standing"))
+            roster = team.find(q("roster"))
+            member_ids = [member.get("participant", "") for member in roster.findall(q("member"))] if roster is not None else []
+            teams.append({
+                "id": team.get("id", ""),
+                "name": child_text(team, "name"),
+                "rank": child_text(standing, "rank") if standing is not None else "",
+                "matchPoints": child_text(standing, "matchPoints") if standing is not None else "",
+                "gamePoints": child_text(standing, "gamePoints") if standing is not None else "",
+                "placement": child_text(standing, "placement") if standing is not None else "",
+                "roster": [id_to_display.get(member_id, member_id) for member_id in member_ids],
+            })
+    id_to_team = {team["id"]: team["name"] for team in teams}
+
     # Games
     game_list = []
     for g in games_el.findall(q("game")):
@@ -148,9 +168,11 @@ def read_ctml(path: Path):
                     raise ValueError(f"Non-UCI notation in {gid}: {notation}")
                 moves_uci.append(m.get("value", ""))
         game_list.append({
-            "id": gid, "round": rnd,
+            "id": gid, "round": rnd, "board": g.get("board", ""),
             "white": id_to_display.get(white_id, white_id),
             "black": id_to_display.get(black_id, black_id),
+            "whiteTeam": id_to_team.get(g.get("whiteTeam", ""), ""),
+            "blackTeam": id_to_team.get(g.get("blackTeam", ""), ""),
             "result": result, "eco": eco, "termination": termination,
             "moves_uci": moves_uci,
         })
@@ -159,7 +181,7 @@ def read_ctml(path: Path):
         "name": name, "eventType": event_type, "cadence": cadence,
         "federation": federation, "start": start_iso, "end": end_iso,
         "city": place_city, "country": place_country,
-        "participants": parts, "games": game_list,
+        "participants": parts, "teams": teams, "games": game_list,
         "avgRating": avg_rating,
     }
 
@@ -209,6 +231,12 @@ def emit_pgn(event, tour_data, base_name) -> str:
             "Black": g["black"],
             "Result": g["result"],
         }
+        if g["board"]:
+            headers["Board"] = g["board"]
+        if g["whiteTeam"]:
+            headers["WhiteTeam"] = g["whiteTeam"]
+        if g["blackTeam"]:
+            headers["BlackTeam"] = g["blackTeam"]
         if g["eco"]:
             headers["ECO"] = g["eco"]
         headers["EventDate"] = event_date_pgn
@@ -228,6 +256,81 @@ def emit_pgn(event, tour_data, base_name) -> str:
 
 def html_escape(s):
     return html.escape(s or "", quote=True)
+
+
+def markdown_escape(value: str) -> str:
+    """Escape a value used in a Markdown table cell."""
+    return (value or "").replace("|", r"\\|").replace("\n", " ").strip()
+
+
+def reported_standings_markdown(tour_data: dict) -> str:
+    """Render reported standings only; do not calculate or infer them."""
+    if tour_data["teams"]:
+        rows = [
+            "## Reported team standings",
+            "",
+            "| Prelim | Team | Final | Match points | Game points |",
+            "| ---: | --- | --- | ---: | ---: |",
+        ]
+        for team in tour_data["teams"]:
+            rows.append(
+                "| {rank} | {name} | {placement} | {match_points} | {game_points} |".format(
+                    rank=markdown_escape(team["rank"]),
+                    name=markdown_escape(team["name"]),
+                    placement=markdown_escape(team["placement"]),
+                    match_points=markdown_escape(team["matchPoints"]),
+                    game_points=markdown_escape(team["gamePoints"]),
+                )
+            )
+        return "\n".join(rows)
+
+    ranked = [p for p in tour_data["participants"] if p["placement"] or p["score"]]
+    if not ranked:
+        return "## Reported standings\n\nNo final standings are recorded in this CTML document."
+    rows = [
+        "## Reported standings",
+        "",
+        "| # | Player | Title | Federation | Rating | Score |",
+        "| ---: | --- | --- | --- | ---: | ---: |",
+    ]
+    for player in ranked:
+        rows.append(
+            "| {placement} | {display} | {title} | {federation} | {rating} | {score} |".format(
+                placement=markdown_escape(player["placement"]),
+                display=markdown_escape(player["display"]),
+                title=markdown_escape(player["title"]),
+                federation=markdown_escape(player["fed"]),
+                rating=markdown_escape(player["rating"]),
+                score=markdown_escape(player["score"]),
+            )
+        )
+    return "\n".join(rows)
+
+
+def emit_readme(tour_data: dict, ctml_name: str, ctml_bytes: bytes,
+                pgn_name: str, pgn_games: int, template_path: Path) -> str:
+    """Fill the canonical CTML archive-record template for one event."""
+    template = template_path.read_text("utf-8")
+    place = ", ".join(x for x in (tour_data["city"], tour_data["country"]) if x) or "Not recorded"
+    dates = " – ".join(x for x in (tour_data["start"], tour_data["end"]) if x) or "Not recorded"
+    replacements = {
+        "event_name": tour_data["name"] or ctml_name,
+        "dates": dates,
+        "place": place,
+        "federation": tour_data["federation"] or "Not recorded",
+        "event_type": tour_data["eventType"] or "Not recorded",
+        "cadence": tour_data["cadence"] or "Not recorded",
+        "ctml_filename": ctml_name,
+        "ctml_sha256": hashlib.sha256(ctml_bytes).hexdigest(),
+        "pgn_games": str(pgn_games),
+        "pgn_filename": pgn_name,
+        "standings": reported_standings_markdown(tour_data),
+    }
+    for key, value in replacements.items():
+        template = template.replace("{{" + key + "}}", value)
+    if "{{" in template:
+        raise ValueError(f"Unresolved placeholder in {template_path}")
+    return template
 
 
 def group_games(games):
@@ -283,19 +386,38 @@ def emit_html(tour_data) -> str:
     meta_bits = [x for x in (tour_data["city"], tour_data["country"], tour_data["federation"]) if x]
     meta_line2 = " \u00b7 ".join(meta_bits)
 
-    # Standings
+    # Standings. Team events report standings on ctml:team; individual events
+    # retain the original participant table.
     standing_rows = []
-    for p in tour_data["participants"]:
-        standing_rows.append(
-            "<tr>"
-            f"<td>{html_escape(p['placement'])}</td>"
-            f"<td>{html_escape(p['display'])}</td>"
-            f"<td>{html_escape(p['title'])}</td>"
-            f"<td>{html_escape(p['fed'])}</td>"
-            f"<td>{html_escape(p['rating'])}</td>"
-            f"<td class=\"score-cell\">{html_escape(p['score'])}</td>"
-            "</tr>"
+    if tour_data["teams"]:
+        standings_header = (
+            '<th>Prelim</th><th>Team</th><th>Final</th><th>Match points</th>'
+            '<th>Game points</th><th>Roster</th>'
         )
+        for team in tour_data["teams"]:
+            standing_rows.append(
+                "<tr>"
+                f"<td>{html_escape(team['rank'])}</td>"
+                f"<td>{html_escape(team['name'])}</td>"
+                f"<td>{html_escape(team['placement'])}</td>"
+                f"<td class=\"score-cell\">{html_escape(team['matchPoints'])}</td>"
+                f"<td>{html_escape(team['gamePoints'])}</td>"
+                f"<td>{html_escape(', '.join(team['roster']))}</td>"
+                "</tr>"
+            )
+    else:
+        standings_header = '<th>#</th><th>Player</th><th>Title</th><th>Fed</th><th>Rating</th><th>Score</th>'
+        for p in tour_data["participants"]:
+            standing_rows.append(
+                "<tr>"
+                f"<td>{html_escape(p['placement'])}</td>"
+                f"<td>{html_escape(p['display'])}</td>"
+                f"<td>{html_escape(p['title'])}</td>"
+                f"<td>{html_escape(p['fed'])}</td>"
+                f"<td>{html_escape(p['rating'])}</td>"
+                f"<td class=\"score-cell\">{html_escape(p['score'])}</td>"
+                "</tr>"
+            )
 
     # Games grouped by round
     game_html_parts = []
@@ -310,11 +432,13 @@ def emit_html(tour_data) -> str:
             if g["termination"] == "forfeit":
                 result = result + " (F)" if result != "*" else "(F)"
             eco = g["eco"] if g["eco"] else ""
+            white = g["white"] + (f" · {g['whiteTeam']}" if g["whiteTeam"] else "")
+            black = g["black"] + (f" · {g['blackTeam']}" if g["blackTeam"] else "")
             game_html_parts.append(
                 '<div class="game-row">'
-                f'<div class="game-white">{html_escape(g["white"])}</div>'
+                f'<div class="game-white">{html_escape(white)}</div>'
                 f'<div class="game-result">{html_escape(result)}</div>'
-                f'<div class="game-black">{html_escape(g["black"])}</div>'
+                f'<div class="game-black">{html_escape(black)}</div>'
                 f'<div class="game-eco">{html_escape(eco)}</div>'
                 '</div>'
             )
@@ -327,8 +451,8 @@ def emit_html(tour_data) -> str:
         f'<p class="meta">{html_escape(meta_line1)}</p>'
         + (f'<p class="meta">{html_escape(meta_line2)}</p>' if meta_line2 else "")
         + '<h2>Standings</h2><table><thead><tr>'
-        '<th>#</th><th>Player</th><th>Title</th><th>Fed</th><th>Rating</th><th>Score</th>'
-        '</tr></thead><tbody>'
+        + standings_header
+        + '</tr></thead><tbody>'
         + "".join(standing_rows)
         + "</tbody></table>"
         + "<h2>Games</h2>"
@@ -377,7 +501,8 @@ def update_manifest(manifest_path: Path, new_entries: list[dict]):
     print(f"manifest: {manifest_path} ({len(manifest)} entries, {len(new_entries)} upserted)")
 
 
-def build_one(ctml_path: Path, pgn_tours_root: Path, out_override: Path | None = None) -> dict | None:
+def build_one(ctml_path: Path, pgn_tours_root: Path, readme_template: Path,
+              out_override: Path | None = None) -> dict | None:
     """Build a single ZIP from a CTML file.
 
     Returns the manifest-entry dict on success, or None on failure.
@@ -389,11 +514,15 @@ def build_one(ctml_path: Path, pgn_tours_root: Path, out_override: Path | None =
         return None
 
     base = ctml_path.stem.replace("_", "-")
+    ctml_name = ctml_path.name
     pgn_name = f"{base}.pgn"
-    html_name = f"{base}.html"
+    readme_name = "README.md"
 
     pgn_body = emit_pgn(data["name"], data, base)
-    html_body = emit_html(data)
+    ctml_bytes = ctml_path.read_bytes()
+    games_with_moves = sum(1 for g in data["games"] if g["moves_uci"])
+    readme_body = emit_readme(data, ctml_name, ctml_bytes, pgn_name,
+                              games_with_moves, readme_template)
 
     if out_override:
         out_zip = out_override
@@ -403,15 +532,16 @@ def build_one(ctml_path: Path, pgn_tours_root: Path, out_override: Path | None =
     out_zip.parent.mkdir(parents=True, exist_ok=True)
 
     with zipfile.ZipFile(out_zip, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr(ctml_name, ctml_bytes)
         zf.writestr(pgn_name, pgn_body.encode("utf-8"))
-        zf.writestr(html_name, html_body.encode("utf-8"))
+        zf.writestr(readme_name, readme_body.encode("utf-8"))
 
-    games_with_moves = sum(1 for g in data["games"] if g["moves_uci"])
     print(f"wrote {out_zip}")
     print(f"  pgn_games={games_with_moves}")
+    print(f"  ctml_sha256={hashlib.sha256(ctml_bytes).hexdigest()}")
     print(f"  bytes={out_zip.stat().st_size}")
 
-    return _manifest_entry(base, data, out_zip, games_with_moves, ctml_path.name)
+    return _manifest_entry(base, data, out_zip, games_with_moves, ctml_name)
 
 
 def _manifest_entry(slug: str, data: dict, zip_path: Path, pgn_games: int, ctml_name: str) -> dict | None:
@@ -466,6 +596,8 @@ def main():
                     help="Override output ZIP path (single-file mode only)")
     ap.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT,
                     help="Path to tournament-archive manifest.json")
+    ap.add_argument("--readme-template", type=Path,
+                    help="Canonical CTML archive README template (defaults to docs/ARCHIVE-README.md beside the CTML project)")
     ap.add_argument("--no-manifest", action="store_true",
                     help="Skip manifest.json update")
     args = ap.parse_args()
@@ -484,12 +616,17 @@ def main():
             sys.exit(1)
         ctml_files = [args.ctml]
 
+    default_template = ctml_files[0].resolve().parent.parent / "docs" / "ARCHIVE-README.md"
+    readme_template = args.readme_template or default_template
+    if not readme_template.is_file():
+        ap.error(f"README template not found: {readme_template}")
+
     print(f"Processing {len(ctml_files)} CTML file(s)\n")
 
     # Build ZIPs and collect manifest entries
     entries: list[dict] = []
     for ctml_path in ctml_files:
-        entry = build_one(ctml_path, args.pgn_tours_root,
+        entry = build_one(ctml_path, args.pgn_tours_root, readme_template,
                           args.out if len(ctml_files) == 1 else None)
         if entry is not None:
             entries.append(entry)
