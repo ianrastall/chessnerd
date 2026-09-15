@@ -1,5 +1,404 @@
 [
   {
+    "hash": "031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3",
+    "short": "031dfeb4",
+    "author": "ayushthepiro11 <ayushthepiro11@gmail.com>",
+    "date": "2026-09-13T07:34:19Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3.tar.gz"
+      }
+    ],
+    "message": "Remove unused constexpr_lsb and lsb_index64\n\nThe de Bruijn constexpr LSB helper and its 64-entry lookup table have zero references repo-wide. Runtime lsb() uses compiler intrinsics (__builtin_ctzll / _BitScanForward64), and compile-time table builds no longer need it. Leftover from earlier refactors, same class as PawnPushOrAttacks removal. Verified with repo-wide grep and syntax check on bitboard.cpp / position.cpp / attacks.cpp.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7158\n\nNo functional change\n",
+    "subject": "Remove unused constexpr_lsb and lsb_index64"
+  },
+  {
+    "hash": "86433ca703e808fb3b7b46b3efb3ee3fdbf53c22",
+    "short": "86433ca7",
+    "author": "Jack L <68789600+jackL999@users.noreply.github.com>",
+    "date": "2026-09-13T07:33:55Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/86433ca703e808fb3b7b46b3efb3ee3fdbf53c22",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/86433ca703e808fb3b7b46b3efb3ee3fdbf53c22.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/86433ca703e808fb3b7b46b3efb3ee3fdbf53c22.tar.gz"
+      }
+    ],
+    "message": "Add iterator header to numa.h\n\nFix missing iterator include in numa.h that causes compilation to fail with clang version 23.1.1 and possibly other versions on Windows when using the command line \"make -j8 profile-build ARCH=native COMP=clang\". A sample of error messages follows,\n\n./numa.h:121:36:        error:     no member named 'inserter' in namespace 'std'\n...\n./numa.h:121:36: ./numa.h:121:36: error: In file included from timeman.cpp:25:\n...\nIn file included from ./search.h:37:\nno member ./numa.h:121:36: error: named 'inserter' in namespace 'std'error: no member named 'inserter' in namespace\n...\nno member named 'inserter' in namespace 'std'In file included from tt.cpp:32:\n\nAdding #include <iterator> to numa.h solves the problem and the compilation completes as expected.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7157\n\nNo functional change\n",
+    "subject": "Add iterator header to numa.h"
+  },
+  {
+    "hash": "82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32",
+    "short": "82d73d0a",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-09-13T07:33:22Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/82d73d0a9e7cf3e1cd6c56c012ca69dff2f2ed32.tar.gz"
+      }
+    ],
+    "message": "Optimize both_attacks_bb()\n\nSTC: https://tests.stockfishchess.org/tests/view/6a9e3aada8284b37a0a04dac\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 166432 W: 42797 L: 42332 D: 81303\nPtnml(0-2): 262, 17204, 47775, 17757, 218\n\nShorten the rook dependency chain.  _mm256_castsi256_si128() compiles away.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7154\n\nNo functional change\n",
+    "subject": "Optimize both_attacks_bb()"
+  },
+  {
+    "hash": "bc944563790bf0b46a7acd8d9de139315d1b974f",
+    "short": "bc944563",
+    "author": "Dubslow <bunslow@gmail.com>",
+    "date": "2026-09-13T07:32:04Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/bc944563790bf0b46a7acd8d9de139315d1b974f",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/bc944563790bf0b46a7acd8d9de139315d1b974f.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/bc944563790bf0b46a7acd8d9de139315d1b974f.tar.gz"
+      }
+    ],
+    "message": "Update network: longer training\n\nUsing Tony's recipe, but with even longer training than previous attempts:\n\nhttps://github.com/vondele/nettest/pull/462\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6a9dd563a8284b37a0a04d1d\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 81024 W: 21009 L: 20633 D: 39382\nPtnml(0-2): 189, 9431, 20892, 9815, 185\n\nPassed LTC: https://tests.stockfishchess.org/tests/view/6a9fb71aa8284b37a0a0500e\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 100536 W: 26124 L: 25678 D: 48734\nPtnml(0-2): 42, 10755, 28240, 11177, 54\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7153\n\nBench: 1648567\n",
+    "subject": "Update network: longer training"
+  },
+  {
+    "hash": "b69288679a9a45e736e83e2661889334b9618a4d",
+    "short": "b6928867",
+    "author": "jainaman-umich <jainaman@umich.edu>",
+    "date": "2026-09-13T07:31:14Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/b69288679a9a45e736e83e2661889334b9618a4d",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b69288679a9a45e736e83e2661889334b9618a4d.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b69288679a9a45e736e83e2661889334b9618a4d.tar.gz"
+      }
+    ],
+    "message": "Fail reproducibility checks on engine errors or missing node output\n\nEnable pipefail so Expect failures and grep's no-match status reach the existing error trap instead of being hidden by a successful final awk.\n\nOnly extract node counts from info lines. Expect echoes go nodes commands, which otherwise let a run without node reports pass even with pipefail.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7151\n\nNo functional change\n\nCo-authored-by: Naman Jain <113119796+jainaman-umich@users.noreply.github.com>\n",
+    "subject": "Fail reproducibility checks on engine errors or missing node output"
+  },
+  {
+    "hash": "0f602f90349885d6379c08984fdfcd5f3da429d0",
+    "short": "0f602f90",
+    "author": "Tony Wang <35334345+TonyCongqianWang@users.noreply.github.com>",
+    "date": "2026-09-13T07:30:46Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/0f602f90349885d6379c08984fdfcd5f3da429d0",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0f602f90349885d6379c08984fdfcd5f3da429d0.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0f602f90349885d6379c08984fdfcd5f3da429d0.tar.gz"
+      }
+    ],
+    "message": "Fail high recovery depth adjustement\n\nGradually increaese depth after fail high instead of jumping to normal depth directly.\n\nPassed STC\nhttps://tests.stockfishchess.org/tests/view/6a8c1d4008c0f6a39c9e7d21\n```\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 163200 W: 41862 L: 41374 D: 79964\nPtnml(0-2): 270, 18918, 42755, 19368, 289\n```\n\nPassed LTC\nhttps://tests.stockfishchess.org/tests/view/6a913e4708c0f6a39c9e86bb\n```\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 172530 W: 44924 L: 44339 D: 83267\nPtnml(0-2): 43, 18265, 49070, 18838, 49\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7122\n\nBench: 1649498\n",
+    "subject": "Fail high recovery depth adjustement"
+  },
+  {
+    "hash": "4c991722447d27a3932448990187d9f05355ebf0",
+    "short": "4c991722",
+    "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-09-13T07:30:02Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/4c991722447d27a3932448990187d9f05355ebf0",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/4c991722447d27a3932448990187d9f05355ebf0.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/4c991722447d27a3932448990187d9f05355ebf0.tar.gz"
+      }
+    ],
+    "message": "[CI] Increase number of go-mate test positions to 1000\n\nAdding more positions for this CI run means failure will become less random, and allow us to spot regressions timely.\n\nI also added a deterministic single threaded run as well.\n\nBoth runs now have a time out: each will fail after 30 minutes.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7073\n\nNo functional change\n",
+    "subject": "[CI] Increase number of go-mate test positions to 1000"
+  },
+  {
+    "hash": "59aae690f91d6f69aac194f447d84b4a2c3be778",
+    "short": "59aae690",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-09-09T19:07:24Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/59aae690f91d6f69aac194f447d84b4a2c3be778",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/59aae690f91d6f69aac194f447d84b4a2c3be778.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/59aae690f91d6f69aac194f447d84b4a2c3be778.tar.gz"
+      }
+    ],
+    "message": "Add -ftrapv to CI\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7146\n\nNo functional change\n",
+    "subject": "Add -ftrapv to CI"
+  },
+  {
+    "hash": "342c24b4edd4c90e0bb5a2b605d0f9fde9e78d72",
+    "short": "342c24b4",
+    "author": "Disservin <disservin.social@gmail.com>",
+    "date": "2026-09-09T19:06:47Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/342c24b4edd4c90e0bb5a2b605d0f9fde9e78d72",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/342c24b4edd4c90e0bb5a2b605d0f9fde9e78d72.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/342c24b4edd4c90e0bb5a2b605d0f9fde9e78d72.tar.gz"
+      }
+    ],
+    "message": "Fix AVX2 Compiler Pipeline\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7147\n\nNo functional change\n",
+    "subject": "Fix AVX2 Compiler Pipeline"
+  },
+  {
+    "hash": "5e723b394065af7ed88c2bb6650f4dc9872991e7",
+    "short": "5e723b39",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-09-09T16:59:33Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5e723b394065af7ed88c2bb6650f4dc9872991e7",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5e723b394065af7ed88c2bb6650f4dc9872991e7.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5e723b394065af7ed88c2bb6650f4dc9872991e7.tar.gz"
+      }
+    ],
+    "message": "Remove unused PawnPushOrAttacks\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7141\n\nNo functional change\n",
+    "subject": "Remove unused PawnPushOrAttacks"
+  },
+  {
+    "hash": "e52ea9ac8d4fa099e8962d2109b3c71aff58ce66",
+    "short": "e52ea9ac",
+    "author": "lemteay <polylemtea@gmail.com>",
+    "date": "2026-09-09T16:58:55Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/e52ea9ac8d4fa099e8962d2109b3c71aff58ce66",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e52ea9ac8d4fa099e8962d2109b3c71aff58ce66.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e52ea9ac8d4fa099e8962d2109b3c71aff58ce66.tar.gz"
+      }
+    ],
+    "message": "Simplify quiet history bonus\n\nPassed non-regression STC\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 230240 W: 58691 L: 58684 D: 112865\nPtnml(0-2): 402, 26840, 60621, 26863, 394\nhttps://tests.stockfishchess.org/tests/view/6a95b22608c0f6a39c9e8fbe\n\nPassed non-regression LTC (rebased)\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 272106 W: 70243 L: 70278 D: 131585\nPtnml(0-2): 81, 29104, 77725, 29055, 88\nhttps://tests.stockfishchess.org/tests/view/6a9832e308c0f6a39c9e950f\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7138\n\nBench: 2031952\n",
+    "subject": "Simplify quiet history bonus"
+  },
+  {
+    "hash": "55cf867cf5f37471c159ed26d3164a6a1f01c828",
+    "short": "55cf867c",
+    "author": "Carlos Esparza <ca2010es@gmail.com>",
+    "date": "2026-09-09T16:50:03Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/55cf867cf5f37471c159ed26d3164a6a1f01c828",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/55cf867cf5f37471c159ed26d3164a6a1f01c828.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/55cf867cf5f37471c159ed26d3164a6a1f01c828.tar.gz"
+      }
+    ],
+    "message": "Make dbg_* methods return the inspected variable\n\nThis is intended as a small QoL improvement for devs: The idea is that if you want to investigate the branching in\n```cpp\nif (long_complicated_condition)\n```\nyou can just use\n```cpp\nif (dbg_hit_on(long_complicated_condition))\n```\ninstead of having to do\n```cpp\ndbg_hit_on(long_complicated_condition);\nif (long_complicated_condition)\n```\nor something even more complicated if evaluating the condition has side effects.\nSame idea for `dbg_mean_of`, `dbg_stdev_of` and `dbg_extremes_of`,\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7121\n\nNo functional change\n",
+    "subject": "Make dbg_* methods return the inspected variable"
+  },
+  {
+    "hash": "9287f1654a1e15fe12f3f417f1fb9763b09d39e1",
+    "short": "9287f165",
+    "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-09-09T16:47:40Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/9287f1654a1e15fe12f3f417f1fb9763b09d39e1",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/9287f1654a1e15fe12f3f417f1fb9763b09d39e1.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/9287f1654a1e15fe12f3f417f1fb9763b09d39e1.tar.gz"
+      }
+    ],
+    "message": "[bugfix] Apply cyclic TCs when in nodestime\n\nWhen using `nodestime`, master does not correctly apply cyclic time controls like 40/10. This patch fixes that.\n\nDetails of how game managers deal with these time controls can be found [here](https://github.com/Disservin/fastchess/blob/ccb85325b1db322658687b8be8cfe9f54c495840/app/src/game/timecontrol/timecontrol.cpp).\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7119\n\nNo functional change\n",
+    "subject": "[bugfix] Apply cyclic TCs when in nodestime"
+  },
+  {
+    "hash": "8f6a95de2fbe0a6fe139a78711a2ee8d58e5b148",
+    "short": "8f6a95de",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-09-09T16:46:41Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/8f6a95de2fbe0a6fe139a78711a2ee8d58e5b148",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/8f6a95de2fbe0a6fe139a78711a2ee8d58e5b148.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/8f6a95de2fbe0a6fe139a78711a2ee8d58e5b148.tar.gz"
+      }
+    ],
+    "message": "Use a local accumulator to eliminate redundant stores to m.value\n\nSTC: https://tests.stockfishchess.org/tests/view/6a94a8c708c0f6a39c9e8cad\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 89280 W: 22920 L: 22557 D: 43803\nPtnml(0-2): 120, 9273, 25515, 9588, 144\n\nExpected assembly changes verified by Claude.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7115\n\nNo functional change\n",
+    "subject": "Use a local accumulator to eliminate redundant stores to m.value"
+  },
+  {
+    "hash": "5ca4bfe72b9c0b1ba565c1da081d3531cce98a64",
+    "short": "5ca4bfe7",
+    "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+    "date": "2026-09-09T16:44:29Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5ca4bfe72b9c0b1ba565c1da081d3531cce98a64",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5ca4bfe72b9c0b1ba565c1da081d3531cce98a64.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5ca4bfe72b9c0b1ba565c1da081d3531cce98a64.tar.gz"
+      }
+    ],
+    "message": "Decrease time usage if engine has time disadvantage.\n\n This is skipped in two cases:\n    1. if the nodestime option is used we can't calculate the opponent nodes budget in a deterministic way.\n    2. if we use a cyclic time management (like 40/10) calculating time advantage for the last move (movestogo = 1)\n       can be vastly off, because if the opponent had done his last move before us his time budget includes already\n       the next cycle time increment but our not. This leads to a unnecessary big decrease in time usage which favors blunders.\n\nPassed STC 10+0.1:\nLLR: 2.97 (-2.94,2.94) <0.00,2.00>\nTotal: 127360 W: 32487 L: 32071 D: 62802\nPtnml(0-2): 169, 13235, 36487, 13589, 200\nhttps://tests.stockfishchess.org/tests/view/6a8738495b1b38ebda864ed0\n\nPassed LTC 60+0.6:\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 191328 W: 49624 L: 49029 D: 92675\nPtnml(0-2): 44, 18455, 58077, 19038, 50\nhttps://tests.stockfishchess.org/tests/view/6a8ade7a08c0f6a39c9e79cc\n\nPassed non-regression sudden death STC 15+0:\nLLR: 2.98 (-2.94,2.94) <-1.75,0.25>\nTotal: 33984 W: 8802 L: 8584 D: 16598\nPtnml(0-2): 111, 3503, 9589, 3635, 154\nhttps://tests.stockfishchess.org/tests/view/6a94002a08c0f6a39c9e8b31\n\nPassed non-regression STC 40/10 (test includes vondeles cyclic tm fix PR 7117):\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 47872 W: 12288 L: 12090 D: 23494\nPtnml(0-2): 83, 5181, 13255, 5289, 128\nhttps://tests.stockfishchess.org/tests/view/6a967e3408c0f6a39c9e91\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7113\n\nNo functional change\n",
+    "subject": "Decrease time usage if engine has time disadvantage."
+  },
+  {
+    "hash": "3a7b56a4e4e86b069a44df6577dedac6a94f7ab4",
+    "short": "3a7b56a4",
+    "author": "Adrian Ladoni <274005880+AdrianGHUB15@users.noreply.github.com>",
+    "date": "2026-09-09T16:43:03Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/3a7b56a4e4e86b069a44df6577dedac6a94f7ab4",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/3a7b56a4e4e86b069a44df6577dedac6a94f7ab4.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/3a7b56a4e4e86b069a44df6577dedac6a94f7ab4.tar.gz"
+      }
+    ],
+    "message": "Simplify quadratic depth in Razoring\n\nThis patch simplifies quadratic depth in razoring, and replaces it with seekMate.\nPassed gainer STC:\n\nhttps://tests.stockfishchess.org/tests/view/6a8d8a8608c0f6a39c9e7f96\n\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 152064 W: 39102 L: 38631 D: 74331\nPtnml(0-2): 270, 17473, 40064, 17966, 259\n\nPassed gainer LTC:\n\nhttps://tests.stockfishchess.org/tests/view/6a90cdf708c0f6a39c9e8602\n\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 109002 W: 28365 L: 27908 D: 52729\nPtnml(0-2): 29, 11437, 31112, 11894, 29\n\nMaster (Peel off one iteration of the halfka incremental update) matetrack:\n\nTotal FENs:    6554\nFound mates:   3725\nBest mates:    2480\n\nNew matetrack:\n\nTotal FENs:    6554\nFound mates:   3692\nBest mates:    2487\n\nMaster (Peel off one iteration of the halfka incremental update) matedtrack:\n\nTotal FENs:    6536\nFound mates:   3895\nBest mates:    3108\n\nNew matedtrack:\n\nTotal FENs:    6536\nFound mates:   3945\nBest mates:    3129\n\nso matedtrack improvement but matetrack loss (not too much tho)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7112\n\nBench: 2464633\n",
+    "subject": "Simplify quadratic depth in Razoring"
+  },
+  {
+    "hash": "0c5892a95e601a6e42b7a15605ef8fe1d0d23eb3",
+    "short": "0c5892a9",
+    "author": "Myself <63040919+AliceRoselia@users.noreply.github.com>",
+    "date": "2026-09-09T16:41:16Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/0c5892a95e601a6e42b7a15605ef8fe1d0d23eb3",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0c5892a95e601a6e42b7a15605ef8fe1d0d23eb3.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0c5892a95e601a6e42b7a15605ef8fe1d0d23eb3.tar.gz"
+      }
+    ],
+    "message": "Use the number of prior NMP Fail High in search\n\nPassed STC:\nLLR: 2.97 (-2.94,2.94) <0.00,2.00>\nTotal: 111680 W: 28682 L: 28265 D: 54733\nPtnml(0-2): 199, 12828, 29391, 13201, 221\nhttps://tests.stockfishchess.org/tests/view/6a8b1bec08c0f6a39c9e7a4e\n\nPassed LTC:\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 144576 W: 37740 L: 37212 D: 69624\nPtnml(0-2): 26, 15228, 41268, 15724, 42\nhttps://tests.stockfishchess.org/tests/view/6a8d1c7808c0f6a39c9e7f0b\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7111\n\nBench: 1997148\n",
+    "subject": "Use the number of prior NMP Fail High in search"
+  },
+  {
+    "hash": "0e24f3f205ac17f175eeb27bdca3b6a09d0b1aaa",
+    "short": "0e24f3f2",
+    "author": "Carlos Esparza <ca2010es@gmail.com>",
+    "date": "2026-09-09T16:38:49Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/0e24f3f205ac17f175eeb27bdca3b6a09d0b1aaa",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0e24f3f205ac17f175eeb27bdca3b6a09d0b1aaa.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0e24f3f205ac17f175eeb27bdca3b6a09d0b1aaa.tar.gz"
+      }
+    ],
+    "message": "use nullptr instead of Null object pattern for SearchManager\n\nThere might be a reason for this, or maybe it's a historical artifact, but wit seems to me that we can simplify Workers by using nullptr for the `std::unique_ptr<SearchManager>` of non-main threads.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7110\n\nNo functional change\n",
+    "subject": "use nullptr instead of Null object pattern for SearchManager"
+  },
+  {
+    "hash": "b180d657102667f13c59c036210ae6999ebe2cb2",
+    "short": "b180d657",
+    "author": "Disservin <disservin.social@gmail.com>",
+    "date": "2026-09-09T16:34:41Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/b180d657102667f13c59c036210ae6999ebe2cb2",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b180d657102667f13c59c036210ae6999ebe2cb2.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b180d657102667f13c59c036210ae6999ebe2cb2.tar.gz"
+      }
+    ],
+    "message": "Restore Development\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7137\n\nNo functional change\n",
+    "subject": "Restore Development"
+  },
+  {
     "hash": "edb0d9db6731067ec50ce619ff372b463bc4dd5d",
     "short": "edb0d9db",
     "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
