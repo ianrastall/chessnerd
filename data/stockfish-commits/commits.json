@@ -1,5 +1,152 @@
 [
   {
+    "hash": "17a6c8f1eb0da45c2ca405321919519bf4e211ba",
+    "short": "17a6c8f1",
+    "author": "disservin <disservin.social@gmail.com>",
+    "date": "2026-09-19T10:43:30Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/17a6c8f1eb0da45c2ca405321919519bf4e211ba",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/17a6c8f1eb0da45c2ca405321919519bf4e211ba.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/17a6c8f1eb0da45c2ca405321919519bf4e211ba.tar.gz"
+      }
+    ],
+    "message": "CI: Update Compiler Images (#7175)\n\nTake images from https://github.com/official-stockfish/compiler-images\n\n- adds testing for clang-22, clang-23 and gcc-16\n \ncloses https://github.com/official-stockfish/Stockfish/pull/7175\n\nNo functional change\n",
+    "subject": "CI: Update Compiler Images (#7175)"
+  },
+  {
+    "hash": "e7b67b9b13d05bced9b7976fe17cab21634c86e4",
+    "short": "e7b67b9b",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-09-18T19:01:21Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/e7b67b9b13d05bced9b7976fe17cab21634c86e4",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e7b67b9b13d05bced9b7976fe17cab21634c86e4.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e7b67b9b13d05bced9b7976fe17cab21634c86e4.tar.gz"
+      }
+    ],
+    "message": "Simplify TT cutoff and penalize condition checks\n\nIn Step 6 checks for an early TT cutoff and, if that fails due to a bound mismatch, penalizes the TT entry.\nBoth the cutoff check (if) and the penalize check (else if) share several identical preconditions:\n\n!PvNode\n!excludedMove\nis_valid(ttData.value)\nttData.depth > depth - (ttData.value <= beta)\n\nThis patch factors these common checks into an outer if block. This reduces code duplication and clarifies that TT penalization is only considered when depth criteria for a cutoff were already met.\n\nPassed Non-Reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 132800 W: 33818 L: 33712 D: 65270\nPtnml(0-2): 173, 13906, 38116, 14052, 153\nhttps://tests.stockfishchess.org/tests/view/6aa690a3a8284b37a0a05ba8\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7160\n\nNo functional change\n",
+    "subject": "Simplify TT cutoff and penalize condition checks"
+  },
+  {
+    "hash": "ce330df8be77dca150b541566459df0822d2b8d8",
+    "short": "ce330df8",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-09-18T19:00:46Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/ce330df8be77dca150b541566459df0822d2b8d8",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ce330df8be77dca150b541566459df0822d2b8d8.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ce330df8be77dca150b541566459df0822d2b8d8.tar.gz"
+      }
+    ],
+    "message": "Simplify LMR divisor\n\nPassed STC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 87072 W: 22323 L: 22161 D: 42588\nPtnml(0-2): 151, 10149, 22797, 10265, 174\nhttps://tests.stockfishchess.org/tests/view/6a842e989960adfadf92400d\n\nPassed LTC non-reg:\nLLR: 3.13 (-2.94,2.94) <-1.75,0.25>\nTotal: 360972 W: 92853 L: 92963 D: 175156\nPtnml(0-2): 113, 38725, 102907, 38641, 100\nhttps://tests.stockfishchess.org/tests/view/6a84f9cc9960adfadf92418b\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7114\n\nBench: 1687572\n",
+    "subject": "Simplify LMR divisor"
+  },
+  {
+    "hash": "248a8b86d789666d4aa2ae5e04dc18ae2a18fe95",
+    "short": "248a8b86",
+    "author": "Christian Felix <christian.coffe@protonmail.com>",
+    "date": "2026-09-18T19:00:12Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/248a8b86d789666d4aa2ae5e04dc18ae2a18fe95",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/248a8b86d789666d4aa2ae5e04dc18ae2a18fe95.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/248a8b86d789666d4aa2ae5e04dc18ae2a18fe95.tar.gz"
+      }
+    ],
+    "message": "Use ubuntu-slim for lightweight release jobs\n\nMove matrix preparation, release management, and artifact packaging to `ubuntu-slim`, as suggested in #7080. These jobs use shell tools and release APIs and do not require multiple CPU cores. Compilation jobs retain their existing runners.\n\nThe change consists of six runner-label replacements and my first-contribution entry in `AUTHORS`. No functional change.\n\nValidation:\n\n- `actionlint` passes for the candidate workflows (ShellCheck integration disabled).\n- [Fork validation](https://github.com/ofelixdev/Stockfish/actions/runs/34765627178) runs the affected steps on both `ubuntu-latest` and `ubuntu-slim`, using the eight real compilation artifacts from upstream run [34745589340](https://github.com/official-stockfish/Stockfish/actions/runs/34745589340).\n- All eight current packaging variants preserve file contents and permissions across runners. All 32 assets downloaded from the four temporary releases match the uploaded archive SHA-256 values.\n- Matrix outputs, real draft creation, previous-prerelease selection/deletion, uploads, and prerelease publication pass. Release-script checks cover 45 cases on each runner; the archive verifier has 13 tests on each runner.\n\nThe validation harness is on a separate branch in my fork and is not included in this patch. It uses fork-specific tags and repository bindings; the engine is not rebuilt by this validation.\n\nAI assistance was used for the patch and validation tooling.\n\nFixes #7080.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7166\n\nNo functional change\n",
+    "subject": "Use ubuntu-slim for lightweight release jobs"
+  },
+  {
+    "hash": "9c11e2317a02a87be0e2c0c4347c2a0370561e1c",
+    "short": "9c11e231",
+    "author": "Michael Chaly <Vizvezdenec@gmail.com>",
+    "date": "2026-09-18T18:59:44Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/9c11e2317a02a87be0e2c0c4347c2a0370561e1c",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/9c11e2317a02a87be0e2c0c4347c2a0370561e1c.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/9c11e2317a02a87be0e2c0c4347c2a0370561e1c.tar.gz"
+      }
+    ],
+    "message": "Allow razoring to be performed only at allNodes\n\nIdea is pretty similar to what we do in null move pruning. Null move pruning is performed only in cutnodes and is a fail high cutoff.\nRazoring is a fail low cutoff so it makes sense to perform it only at nodes of the opposite type to cutNode - so allNodes.\nMargin adjusted to produce roughly the same number of cutoffs.\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6aa9a826f648bce025258401\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 102496 W: 26351 L: 25952 D: 50193\nPtnml(0-2): 101, 11855, 26980, 12168, 144\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/6aabc542dbd128aac8fd51e1\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 42672 W: 11154 L: 10833 D: 20685\nPtnml(0-2): 5, 4363, 12283, 4676, 9\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7173\n\nBench: 1452016\n",
+    "subject": "Allow razoring to be performed only at allNodes"
+  },
+  {
+    "hash": "7a372f3fd71a036ed35d2d474f44a3138be69a0f",
+    "short": "7a372f3f",
+    "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+    "date": "2026-09-18T18:59:16Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7a372f3fd71a036ed35d2d474f44a3138be69a0f",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7a372f3fd71a036ed35d2d474f44a3138be69a0f.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7a372f3fd71a036ed35d2d474f44a3138be69a0f.tar.gz"
+      }
+    ],
+    "message": "Tweak evaluation correction factor.\n\nUpdate (ss - 6)->continuationCorrectionHistory and apply it to correction value calculation. Also scale down the other weights for compensation.\n\nPassed STC:\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 96576 W: 24676 L: 24283 D: 47617\nPtnml(0-2): 133, 11165, 25327, 11502, 161\nhttps://tests.stockfishchess.org/tests/view/6a9adaeea8284b37a0a047e5\n\nPassed LTC:\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 222570 W: 58024 L: 57343 D: 107203\nPtnml(0-2): 60, 23229, 64029, 23904, 63\nhttps://tests.stockfishchess.org/tests/view/6a9d3e22a8284b37a0a04b67\n\nPassed non-regression VVLTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 37320 W: 9914 L: 9735 D: 17671\nPtnml(0-2): 3, 3133, 12210, 3310, 4\nhttps://tests.stockfishchess.org/tests/view/6aa5a36ba8284b37a0a05aa3\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7163\n\nBench: 1399065\n",
+    "subject": "Tweak evaluation correction factor."
+  },
+  {
+    "hash": "1548538edecc4bd8aae119050c5f853935d25173",
+    "short": "1548538e",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-09-18T18:58:37Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/1548538edecc4bd8aae119050c5f853935d25173",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1548538edecc4bd8aae119050c5f853935d25173.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1548538edecc4bd8aae119050c5f853935d25173.tar.gz"
+      }
+    ],
+    "message": "Fix deep recursion.\n\nfixes https://github.com/official-stockfish/Stockfish/issues/7156\n\nThe issue is caused by LMR using negative reductions (i.e. extensions) in an uninterrupted chain ultimately extending to MAX_PLY. This patch fixes it by not allowing for such extensions once one is sufficiently deep in the search tree (twice rootDepth).\n\npassed STC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 154752 W: 39489 L: 39403 D: 75860\nPtnml(0-2): 222, 17300, 42226, 17426, 202\nhttps://tests.stockfishchess.org/tests/view/6aa4559ba8284b37a0a058c4\n\npassed LTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 55782 W: 14432 L: 14254 D: 27096\nPtnml(0-2): 11, 5664, 16367, 5834, 15\nhttps://tests.stockfishchess.org/tests/view/6aa772a1a8284b37a0a05cb9\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7170\n\nBench: 1660220\n",
+    "subject": "Fix deep recursion."
+  },
+  {
     "hash": "031dfeb437fa6b06cdbdf4ef89dfb82f6b83c4d3",
     "short": "031dfeb4",
     "author": "ayushthepiro11 <ayushthepiro11@gmail.com>",
