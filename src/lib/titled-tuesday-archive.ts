@@ -26,8 +26,7 @@ export function parseTitledTuesdayManifest(value: unknown): TitledTuesdayEntry[]
     }
     if (!['', 'early', 'late'].includes(entry.session)) throw new Error(`Invalid session for ${entry.zip}.`);
     const suffix = entry.session === 'early' ? 'a' : entry.session === 'late' ? 'b' : '';
-    const yymmdd = entry.date.slice(2, 4) + entry.date.slice(5, 7) + entry.date.slice(8, 10);
-    const stem = `cc_titled-tuesday_${yymmdd}${suffix}`;
+    const stem = `titled-tuesday_${entry.date}${suffix}`;
     if (entry.zip !== `${stem}.zip` || entry.pgn !== `${stem}.pgn`) throw new Error(`Invalid archive filename: ${entry.zip}`);
     if (!Number.isSafeInteger(entry.games) || entry.games <= 0 || !/^[a-f0-9]{64}$/i.test(entry.sha256)) {
       throw new Error(`Invalid count or checksum for ${entry.zip}.`);

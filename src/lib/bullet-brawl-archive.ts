@@ -24,10 +24,12 @@ export function parseBulletBrawlManifest(value: unknown): BulletBrawlEntry[] {
     if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== entry.date || entry.year !== Number(entry.date.slice(0, 4))) {
       throw new Error(`Inconsistent date or year for ${entry.zip}.`);
     }
-    const yymmdd = entry.date.slice(2, 4) + entry.date.slice(5, 7) + entry.date.slice(8, 10);
-    const stem = `cc_bullet-brawl_${yymmdd}`;
+    const stem = `bullet-brawl_${entry.date}`;
     if (entry.zip !== `${stem}.zip` || entry.pgn !== `${stem}.pgn`) throw new Error(`Invalid archive filename: ${entry.zip}`);
-    if (entry.event !== 'Bullet Brawl' || entry.sourceEvent !== 'Live Chess') throw new Error(`Unexpected event metadata for ${entry.zip}.`);
+    // Older downloads use the generic "Live Chess" Event tag; newer ones carry a
+    // descriptive tag (e.g. "2026 Bullet Brawl September 05"). Only require that
+    // the event label is Bullet Brawl and the source tag is present.
+    if (entry.event !== 'Bullet Brawl' || !entry.sourceEvent.trim()) throw new Error(`Unexpected event metadata for ${entry.zip}.`);
     if (!Number.isSafeInteger(entry.games) || entry.games <= 0 || !/^[a-f0-9]{64}$/i.test(entry.sha256)) {
       throw new Error(`Invalid count or checksum for ${entry.zip}.`);
     }

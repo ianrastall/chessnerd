@@ -39,20 +39,13 @@ export const tools: ToolMeta[] = [
     featured: true
   },
   {
-    id: 'ccc-archive',
-    name: 'CCC Archive',
-    href: '/ccc-archive.html',
-    icon: 'folder_zip',
+    id: 'chesscom-tournaments',
+    name: 'Chess.com Tournaments',
+    href: '/chesscom-tournaments.html',
+    icon: 'emoji_events',
     category: 'data',
-    description: 'Computer Chess Championship event PGNs with dates and direct ZIP links.'
-  },
-  {
-    id: 'bullet-brawl-archive',
-    name: 'Bullet Brawl Archive',
-    href: '/bullet-brawl-archive.html',
-    icon: 'bolt',
-    category: 'data',
-    description: 'Organized Chess.com Bullet Brawl event downloads.'
+    description: 'Event PGNs from Chess.com’s Titled Tuesday, Bullet Brawl, 3-0 Thursday, and Computer Chess Championship, with dates and direct ZIP links.',
+    featured: true
   },
   {
     id: 'chesscom-api',
@@ -135,14 +128,6 @@ export const tools: ToolMeta[] = [
     icon: 'history',
     category: 'reference',
     description: 'Browse Stockfish commits, source snapshots, authors, dates, and messages.'
-  },
-  {
-    id: 'titled-tuesday-archive',
-    name: 'Titled Tuesday Archive',
-    href: '/titled-tuesday-archive.html',
-    icon: 'event',
-    category: 'data',
-    description: 'Organized Chess.com Titled Tuesday event downloads.'
   },
   {
     id: 'tournament-archive',

@@ -1,0 +1,96 @@
+---
+import ToolHeader from '../components/ToolHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BulletBrawlArchivePanel from '../components/BulletBrawlArchivePanel.astro';
+import TitledTuesdayArchivePanel from '../components/TitledTuesdayArchivePanel.astro';
+import CccArchivePanel from '../components/CccArchivePanel.astro';
+import ThreeZeroThursdayArchivePanel from '../components/ThreeZeroThursdayArchivePanel.astro';
+
+const tabs = [
+  { key: 'titled-tuesday', label: 'Titled Tuesday' },
+  { key: 'bullet-brawl', label: 'Bullet Brawl' },
+  { key: 'three-zero-thursday', label: '3-0 Thursday' },
+  { key: 'ccc', label: 'CCC' }
+];
+---
+<BaseLayout
+  title="Chess.com Tournaments"
+  description="Download PGNs from Chess.com's recurring tournaments — Titled Tuesday, Bullet Brawl, 3-0 Thursday, and the Computer Chess Championship — searchable by event, date, and game count."
+>
+  <main>
+    <div id="toolView" class="chesscom-tournaments">
+      <ToolHeader title="Chess.com Tournaments" icon="emoji_events" />
+      <p class="cct-intro">
+        Archived PGNs from Chess.com's recurring tournament series. Pick a series, then search and download individual
+        events. Each ZIP holds one PGN with the games unchanged from the source.
+      </p>
+
+      <div class="cct-tabs" role="tablist" aria-label="Tournament series">
+        {tabs.map((tab, index) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${tab.key}`}
+            class="cct-tab"
+            data-tab={tab.key}
+            aria-controls={`panel-${tab.key}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            tabindex={index === 0 ? '0' : '-1'}
+          >{tab.label}</button>
+        ))}
+      </div>
+
+      <section role="tabpanel" id="panel-titled-tuesday" class="cct-panel" aria-labelledby="tab-titled-tuesday" data-panel="titled-tuesday">
+        <TitledTuesdayArchivePanel />
+      </section>
+      <section role="tabpanel" id="panel-bullet-brawl" class="cct-panel" aria-labelledby="tab-bullet-brawl" data-panel="bullet-brawl" hidden>
+        <BulletBrawlArchivePanel />
+      </section>
+      <section role="tabpanel" id="panel-three-zero-thursday" class="cct-panel" aria-labelledby="tab-three-zero-thursday" data-panel="three-zero-thursday" hidden>
+        <ThreeZeroThursdayArchivePanel />
+      </section>
+      <section role="tabpanel" id="panel-ccc" class="cct-panel" aria-labelledby="tab-ccc" data-panel="ccc" hidden>
+        <CccArchivePanel />
+      </section>
+    </div>
+  </main>
+
+  <style>
+    .cct-intro { margin-bottom: 1.25rem; max-width: 60ch; }
+    .cct-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .cct-tab {
+      appearance: none;
+      border: 1px solid transparent;
+      border-bottom: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font: inherit;
+      font-weight: 600;
+      padding: 0.6rem 1rem;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      margin-bottom: -1px;
+    }
+    .cct-tab:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+    .cct-tab[aria-selected='true'] {
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      border-color: var(--border-color);
+      border-bottom: 1px solid var(--bg-secondary);
+    }
+    .chesscom-tournaments :is(button, a, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .cct-panel[hidden] { display: none; }
+    @media (max-width: 600px) {
+      .cct-tab { flex: 1 1 auto; text-align: center; padding: 0.6rem 0.75rem; }
+    }
+  </style>
+  <script>
+    import '../scripts/chesscom-tournaments';
+  </script>
+</BaseLayout>

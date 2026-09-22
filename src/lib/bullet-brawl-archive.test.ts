@@ -2,8 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parseBulletBrawlManifest, type BulletBrawlEntry } from './bullet-brawl-archive';
 
 function entry(date: string): BulletBrawlEntry {
-  const yymmdd = date.slice(2, 4) + date.slice(5, 7) + date.slice(8, 10);
-  const stem = `cc_bullet-brawl_${yymmdd}`;
+  const stem = `bullet-brawl_${date}`;
   return {
     date,
     year: Number(date.slice(0, 4)),
@@ -27,7 +26,7 @@ describe('Bullet Brawl manifest', () => {
     { date: '2026-02-30' },
     { year: 2025 },
     { event: 'Community Bullet Brawl' },
-    { sourceEvent: 'Bullet Brawl' },
+    { sourceEvent: '' },
     { url: 'javascript:alert(1)' },
     { games: 0 },
     { games: 2.5 },
