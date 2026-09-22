@@ -5,17 +5,19 @@ import BulletBrawlArchivePanel from '../components/BulletBrawlArchivePanel.astro
 import TitledTuesdayArchivePanel from '../components/TitledTuesdayArchivePanel.astro';
 import CccArchivePanel from '../components/CccArchivePanel.astro';
 import ThreeZeroThursdayArchivePanel from '../components/ThreeZeroThursdayArchivePanel.astro';
+import EventsArchivePanel from '../components/EventsArchivePanel.astro';
 
 const tabs = [
   { key: 'titled-tuesday', label: 'Titled Tuesday' },
   { key: 'bullet-brawl', label: 'Bullet Brawl' },
   { key: 'three-zero-thursday', label: '3-0 Thursday' },
-  { key: 'ccc', label: 'CCC' }
+  { key: 'ccc', label: 'CCC' },
+  { key: 'events', label: 'Events' }
 ];
 ---
 <BaseLayout
   title="Chess.com Tournaments"
-  description="Download PGNs from Chess.com's recurring tournaments — Titled Tuesday, Bullet Brawl, 3-0 Thursday, and the Computer Chess Championship — searchable by event, date, and game count."
+  description="Download PGNs from Chess.com's recurring tournaments — Titled Tuesday, Bullet Brawl, 3-0 Thursday, the Computer Chess Championship, and other strong events — searchable by event, date, and game count."
 >
   <main>
     <div id="toolView" class="chesscom-tournaments">
@@ -51,6 +53,9 @@ const tabs = [
       </section>
       <section role="tabpanel" id="panel-ccc" class="cct-panel" aria-labelledby="tab-ccc" data-panel="ccc" hidden>
         <CccArchivePanel />
+      </section>
+      <section role="tabpanel" id="panel-events" class="cct-panel" aria-labelledby="tab-events" data-panel="events" hidden>
+        <EventsArchivePanel />
       </section>
     </div>
   </main>

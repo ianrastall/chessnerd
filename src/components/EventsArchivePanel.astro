@@ -1,0 +1,163 @@
+---
+import manifest from '../../public/data/cc-events-archive/manifest.json';
+import { formatBytes, parseEventsManifest } from '../lib/events-archive';
+
+const entries = parseEventsManifest(manifest);
+const games = entries.reduce((sum, entry) => sum + entry.games, 0);
+const totalBytes = entries.reduce((sum, entry) => sum + entry.bytes, 0);
+const latest = entries[0];
+const earliest = entries[entries.length - 1];
+const number = (value: number) => value.toLocaleString('en-US');
+const shortDate = (value: string) =>
+  new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${value}T00:00:00Z`)
+  );
+const longDate = (value: string) =>
+  new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${value}T00:00:00Z`)
+  );
+const dateRange = (start: string, end: string) => (start === end ? shortDate(start) : `${shortDate(start)} – ${shortDate(end)}`);
+---
+<div class="events-archive">
+  <p class="ev-intro">
+    Past Chess.com events with a 2300+ field, one PGN per event. Each ZIP holds a single PGN with the games unchanged
+    from the source. Sourced from the <a href="https://github.com/ianrastall/cc-events-archive" target="_blank" rel="noopener noreferrer">cc-events-archive</a>.
+  </p>
+
+  <div class="ev-summary">
+    <p>
+      <strong>{number(entries.length)}</strong> events <span aria-hidden="true">·</span>
+      <strong>{number(games)}</strong> games <span aria-hidden="true">·</span>
+      <strong>{formatBytes(totalBytes)}</strong> total
+    </p>
+    <p>
+      Newest: <time datetime={latest.start}>{longDate(latest.start)}</time>
+      <span aria-hidden="true">·</span>
+      Oldest: <time datetime={earliest.start}>{longDate(earliest.start)}</time>
+    </p>
+  </div>
+
+  <div id="evControls" class="ev-controls" hidden>
+    <div class="ev-search">
+      <label for="evSearch">Search events</label>
+      <input id="evSearch" type="search" placeholder="Event, place, year…" autocomplete="off" />
+    </div>
+    <div class="ev-page-size">
+      <label for="evPageSize">Rows per page</label>
+      <select id="evPageSize">
+        <option value="25">25</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+
+  <p id="evStatus" class="ev-status" role="status">{number(entries.length)} events, newest first</p>
+  <div class="ev-table-wrap" role="region" aria-label="Event archive downloads" tabindex="0">
+    <table class="ev-table">
+      <caption class="visually-hidden">Chess.com event archive, newest first</caption>
+      <thead>
+        <tr>
+          <th scope="col">Event</th>
+          <th scope="col">Dates</th>
+          <th scope="col">Place</th>
+          <th scope="col" class="ev-number">Games</th>
+          <th scope="col" class="ev-number" title="Mean rating of the rated players in the event.">Avg</th>
+          <th scope="col" class="ev-number">Size</th>
+          <th scope="col"><span class="visually-hidden">Download</span></th>
+        </tr>
+      </thead>
+      <tbody id="evTableBody">
+        {entries.map((entry) => {
+          const searchIndex = [
+            entry.name,
+            entry.slug,
+            entry.place,
+            String(entry.year),
+            longDate(entry.start),
+            longDate(entry.end),
+            entry.avgRating != null ? String(entry.avgRating) : ''
+          ]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase();
+          return (
+            <tr data-ev-entry data-search={searchIndex}>
+              <th scope="row">
+                <span class="ev-event">{entry.name}</span>
+                <span class="ev-filename">{entry.pgn}</span>
+              </th>
+              <td class="ev-dates"><time datetime={entry.start}>{dateRange(entry.start, entry.end)}</time></td>
+              <td class="ev-place">{entry.place || <span class="ev-muted">—</span>}</td>
+              <td class="ev-number">{number(entry.games)}</td>
+              <td class="ev-number">{entry.avgRating != null ? number(entry.avgRating) : <span class="ev-muted">—</span>}</td>
+              <td class="ev-number">{formatBytes(entry.bytes)}</td>
+              <td>
+                <a class="btn btn-secondary btn-compact ev-download" href={entry.url} aria-label={`Download ${entry.name} PGN ZIP`}>
+                  <span class="material-icons" aria-hidden="true">download</span>ZIP
+                </a>
+              </td>
+            </tr>
+          );
+        })}
+        <tr id="evEmpty" hidden><td colspan="7">No events match your search. Try another name, place, or year.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <nav id="evPagination" class="ev-pagination" aria-label="Archive pages" hidden>
+    <button id="evPrevPage" type="button" class="btn btn-secondary" disabled>Previous</button>
+    <span id="evPageInfo">Page 1 of 1</span>
+    <button id="evNextPage" type="button" class="btn btn-secondary">Next</button>
+  </nav>
+  <p class="ev-note">Events are kept when most of the rated field is 2300 or above. This is a growing collection.</p>
+  <noscript><p class="ev-note">All events are listed. Enable JavaScript for search and pagination.</p></noscript>
+</div>
+
+<style>
+  .ev-intro { margin-bottom: 1rem; }
+  .ev-intro a { color: var(--accent); }
+  .ev-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .ev-summary strong { color: var(--text-primary); }
+  .ev-summary p span[aria-hidden] { padding: 0 0.4rem; }
+  .ev-controls { display: flex; align-items: end; gap: 1rem; margin-bottom: 1rem; }
+  .ev-controls[hidden], .ev-pagination[hidden] { display: none; }
+  .ev-search { flex: 1; }
+  .ev-controls label { display: block; font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .ev-controls input, .ev-controls select {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.6rem 0.75rem;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font: inherit;
+  }
+  .events-archive :is(input, select, a, button, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .ev-status { margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .ev-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+  .ev-table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); }
+  .ev-table th, .ev-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+  .ev-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
+  .ev-table tbody th { font-weight: 400; min-width: 18rem; }
+  .ev-table tbody tr:hover { background: var(--bg-tertiary); }
+  .ev-event { display: block; font-weight: 600; }
+  .ev-filename { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+  .ev-dates { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+  .ev-place { font-size: 0.9rem; }
+  .ev-muted { color: var(--text-secondary); }
+  .ev-table .ev-number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ev-download { white-space: nowrap; min-height: 2.5rem; }
+  .ev-pagination { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+  .ev-pagination span, .ev-note { color: var(--text-secondary); font-size: 0.9rem; }
+  .ev-pagination button:disabled { opacity: 0.45; cursor: default; }
+  .ev-note { margin-top: 1rem; }
+  @media (max-width: 700px) {
+    .ev-controls { align-items: stretch; flex-direction: column; }
+    .ev-table th, .ev-table td { padding: 0.75rem; }
+    .ev-pagination { justify-content: center; gap: 0.6rem; }
+  }
+</style>
+<script>
+  import '../scripts/events-archive';
+</script>
