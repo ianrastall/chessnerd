@@ -2,6 +2,174 @@
   "month": "2026-09",
   "commits": [
     {
+      "hash": "0a215d6c9e48856ef630013b8ab8312941a59057",
+      "short": "0a215d6c",
+      "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
+      "date": "2026-09-22T16:05:37Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/0a215d6c9e48856ef630013b8ab8312941a59057",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0a215d6c9e48856ef630013b8ab8312941a59057.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/0a215d6c9e48856ef630013b8ab8312941a59057.tar.gz"
+        }
+      ],
+      "message": "Miscellaneous cleanups September 2026\n\n* remove unused get_working_directory()\n* fix typo alignement -> alignment\n* fix typo embeded -> embedded\n* fix typo priviliges -> privileges\n* remove some unused/redundant variables, declarations, includes\n* consistently add -latomics to LDFLAGS instead of CXXFLAGS\n* style tweaks\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7161\n\nNo functional change\n\nCo-authored-by: Yery Spark <yeryspark@gmail.com>\nCo-authored-by: Caleb Price <calebjohnprice2009@gmail.com>\nCo-authored-by: Vaibhav Srivastava <vaibhavsri1712@gmail.com>\n",
+      "subject": "Miscellaneous cleanups September 2026"
+    },
+    {
+      "hash": "f740707f9d45df53f15316beb3674bea7ebdc54a",
+      "short": "f740707f",
+      "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-09-22T16:04:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f740707f9d45df53f15316beb3674bea7ebdc54a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f740707f9d45df53f15316beb3674bea7ebdc54a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f740707f9d45df53f15316beb3674bea7ebdc54a.tar.gz"
+        }
+      ],
+      "message": "Replace nnueComplexity with simple_eval equivalent\n\nThis greatly eases future network arch simplifications, namely removing its `psqt` component.\n\nThis PR squashes and supersedes #7071, the first version, and #7105, the simplified form which was built atop the first version.\n\nThe vast majority of the credit goes to Tony, and Dubslow assisted in simplifying and admin.\n\nThe first version tests:\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6a72671d2cf557d58a2e1d5b\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 312288 W: 80020 L: 80103 D: 152165\nPtnml(0-2): 473, 37193, 81228, 36444, 806\n\nPassed LTC: https://tests.stockfishchess.org/tests/view/6a7a2a278b9c2482ffa9e00b\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 189792 W: 49500 L: 49452 D: 90840\nPtnml(0-2): 33, 20317, 54212, 20237, 97\n\nMeanwhile, this simplified form had its STC test against the first version, while the second LTC was directly against then-master.\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6a85694a9960adfadf924227\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 46624 W: 11969 L: 11764 D: 22891\nPtnml(0-2): 83, 5382, 12176, 5589, 82\n\nPassed LTC: https://tests.stockfishchess.org/tests/view/6a8778415b1b38ebda864f3e\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 250080 W: 64691 L: 64704 D: 120685\nPtnml(0-2): 68, 26659, 71582, 26680, 51\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7187\n\nBench: 1495562\n",
+      "subject": "Replace nnueComplexity with simple_eval equivalent"
+    },
+    {
+      "hash": "d8f77ce4450afcd03a442be29fd7df5821741dea",
+      "short": "d8f77ce4",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-09-22T16:03:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/d8f77ce4450afcd03a442be29fd7df5821741dea",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d8f77ce4450afcd03a442be29fd7df5821741dea.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/d8f77ce4450afcd03a442be29fd7df5821741dea.tar.gz"
+        }
+      ],
+      "message": "merge the template and non-template versions of attacks_bb\n\nIf we tell the compiler to inline properly, we can pass constexpr parameters of a function call as arguments instead of having to use templates, with no performance loss.\n\npassed non-reg STC: https://tests.stockfishchess.org/tests/view/6aa791c9a8284b37a0a05cd2\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 112544 W: 28589 L: 28463 D: 55492\nPtnml(0-2): 162, 11683, 32439, 11843, 145\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7171\n\nNo functional change\n",
+      "subject": "merge the template and non-template versions of attacks_bb"
+    },
+    {
+      "hash": "81bdd79622b822abe8d88f1a9c246c80b4a6d3a0",
+      "short": "81bdd796",
+      "author": "Robert Nurnberg <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-09-22T16:03:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/81bdd79622b822abe8d88f1a9c246c80b4a6d3a0",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/81bdd79622b822abe8d88f1a9c246c80b4a6d3a0.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/81bdd79622b822abe8d88f1a9c246c80b4a6d3a0.tar.gz"
+        }
+      ],
+      "message": "[CI] Reorder matetrack runs\n\nThis PR makes sure that we first run all the checks for correctness, and leave the `go mate` runs for last. This way the former will always complete (if they all pass).\n\nWhile at it, we tighten the checks for the MultiPV runs, using the new `_multipv.epd` files from the matetrack repo.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7174\n\nNo functional change\n",
+      "subject": "[CI] Reorder matetrack runs"
+    },
+    {
+      "hash": "bf45059688274b7b633ad48737751a9bf81d74cb",
+      "short": "bf450596",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-09-22T16:02:35Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/bf45059688274b7b633ad48737751a9bf81d74cb",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf45059688274b7b633ad48737751a9bf81d74cb.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/bf45059688274b7b633ad48737751a9bf81d74cb.tar.gz"
+        }
+      ],
+      "message": "Optimize HalfKAv2_hm::make_index()\n\nSTC: https://tests.stockfishchess.org/tests/view/6aa3fd45a8284b37a0a05832\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 123936 W: 31663 L: 31257 D: 61016\nPtnml(0-2): 163, 12786, 35652, 13216, 151\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7182\n\nNo functional change\n",
+      "subject": "Optimize HalfKAv2_hm::make_index()"
+    },
+    {
+      "hash": "205f005283fa67c2f691152f4ad2ec09ed654b42",
+      "short": "205f0052",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-09-22T16:02:11Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/205f005283fa67c2f691152f4ad2ec09ed654b42",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/205f005283fa67c2f691152f4ad2ec09ed654b42.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/205f005283fa67c2f691152f4ad2ec09ed654b42.tar.gz"
+        }
+      ],
+      "message": "Use permute in both_attacks_bb()\n\npassed first STC:\nhttps://tests.stockfishchess.org/tests/view/6aa33616a8284b37a0a05714\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 94080 W: 24281 L: 23914 D: 45885\nPtnml(0-2): 120, 9727, 26969, 10114, 110\n\npassed second STC:\n https://tests.stockfishchess.org/tests/view/6ab013c7dbd128aac8fd5a68\n LLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 104064 W: 26615 L: 26235 D: 51214\nPtnml(0-2): 124, 10745, 29910, 11133, 120\n\nGenerated with Astra\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7181\n\nNo functional change\n",
+      "subject": "Use permute in both_attacks_bb()"
+    },
+    {
+      "hash": "e8e9bcf5697b80d987295e58d658d69f72745ccc",
+      "short": "e8e9bcf5",
+      "author": "Timothy Herchen <timothy.herchen@gmail.com>",
+      "date": "2026-09-22T16:01:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e8e9bcf5697b80d987295e58d658d69f72745ccc",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8e9bcf5697b80d987295e58d658d69f72745ccc.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e8e9bcf5697b80d987295e58d658d69f72745ccc.tar.gz"
+        }
+      ],
+      "message": "add MACOSX_VERSION_MIN, use ndk r28b\n\nFix #7180, #7183\n\nmacOS github workflow is version 10.15 so it'll still be compatible with 10.15+. Local Apple clang builds will target the host macOS version.\n\nndk r28 drops support for some very old setups, but is necessary for working on newer setups per the report.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7188\n\nNo functional change\n",
+      "subject": "add MACOSX_VERSION_MIN, use ndk r28b"
+    },
+    {
+      "hash": "b69fd13039a734b5bb850c4c3d890314ccb8d432",
+      "short": "b69fd130",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-09-22T16:01:30Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/b69fd13039a734b5bb850c4c3d890314ccb8d432",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b69fd13039a734b5bb850c4c3d890314ccb8d432.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/b69fd13039a734b5bb850c4c3d890314ccb8d432.tar.gz"
+        }
+      ],
+      "message": "Use LLD w/ Clang for Universal builds\n\nI recently reset my Windows machine toolchain and the Clang built universal binaries started crashing.  The fix is to have the Makefile add ```-fuse-ld=lld``` to the final link for Windows Clang universal builds. This uses LLVM\u2019s linker instead of GNU\u2019s linker, which produced a crashing executable from the same object files.   I don't know why it didn't show up for me before but most likely my old Clang installation used LLD by default so the Makefile didn't need to specify it.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7185\n\nNo functional change\n",
+      "subject": "Use LLD w/ Clang for Universal builds"
+    },
+    {
       "hash": "17a6c8f1eb0da45c2ca405321919519bf4e211ba",
       "short": "17a6c8f1",
       "author": "disservin <disservin.social@gmail.com>",
