@@ -47,6 +47,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run sync:bb
+      - name: Sync 3-0 Thursday archive metadata
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run sync:t30
+      - name: Sync Chess.com events archive metadata
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run sync:events
       - name: Audit dependencies
         run: npm audit || true
       - name: Test
