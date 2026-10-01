@@ -1,6 +1,7 @@
 # Bullet Brawl Archive
 
-Public route: https://chessnerd.net/bullet-brawl-archive.html
+Public route: https://chessnerd.net/chesscom-tournaments.html#bullet-brawl
+(the old `/bullet-brawl-archive.html` route redirects there)
 
 ## Ownership and refresh
 
@@ -17,7 +18,8 @@ sync before tests and the Astro build on every deployment.
 
 ## Page behavior
 
-- `src/pages/bullet-brawl-archive.astro` renders every download at build time.
+- `src/components/BulletBrawlArchivePanel.astro` renders every download at build
+  time as a tab of `src/pages/chesscom-tournaments.astro`.
 - `src/scripts/bullet-brawl-archive.ts` adds search and 25/50/100-row pagination.
 - Search covers event names, filenames, ISO dates, and month names.
 - No JavaScript is needed to read the full table or download a ZIP.
@@ -25,20 +27,21 @@ sync before tests and the Astro build on every deployment.
 
 ## Adding PGNs
 
-Archive filenames follow `cc_bullet-brawl_YYMMDD.zip` (one event per date; no
+Archive filenames follow `bullet-brawl_YYYY-MM-DD.zip` (one event per date; no
 suffix needed).
 
-From `D:\dev\proj\chessnerd\bullet-brawl-archive`, preview selected new files. For example:
+The step-by-step import, publish, and site-sync procedure for every Chess.com
+series lives in one runbook: `D:\dev\proj\chessnerd\HOW-TO-ADD-CHESSCOM-PGNS.md`.
+Follow it rather than the notes here.
 
-```powershell
-python archive_metadata.py --import-pgn D:\dev\pgn\bb\Bullet_Brawl_2025-08-02-11-00.pgn
-```
+The importer (`archive_metadata.py --import-pgn` in
+`D:\dev\proj\chessnerd\bullet-brawl-archive`) keeps the source file unchanged,
+verifies the PGN copied into the ZIP, and rejects duplicate dates. It still
+accepts the raw Chess.com export names and the older `cc_bullet-brawl_YYMMDD`
+and `bullet-brawl-YYYY-MM-DD` names. The archive README documents accepted
+filename formats.
 
-Add `--write` to create ZIPs and regenerate all metadata. The importer keeps the
-source file unchanged, verifies the PGN copied into the ZIP, and rejects
-duplicate dates. The archive README documents accepted filename formats.
-
-Publish the archive repository first, then run `npm run sync:bb`, `npm test`, and
-`npm run build` in Chess Nerd. The current published snapshot contains 137 events
-and 421,095 games from January 6, 2024, through August 29, 2026. No source PGN is
-currently available for January 27 or October 26, 2024.
+As of the September 30, 2026 sync, the published snapshot contains 171 events and
+512,016 games from January 28, 2023, through September 26, 2026. Coverage is
+complete for 2024–2026 except January 27 and October 26, 2024, where no source
+PGN is currently available; 2023 is partial (30 events).

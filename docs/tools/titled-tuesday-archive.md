@@ -1,6 +1,7 @@
 # Titled Tuesday Archive
 
-Public route: https://chessnerd.net/titled-tuesday-archive.html
+Public route: https://chessnerd.net/chesscom-tournaments.html#titled-tuesday
+(the old `/titled-tuesday-archive.html` route redirects there)
 
 ## Ownership and refresh
 
@@ -24,36 +25,31 @@ can use the public API or an existing `GITHUB_TOKEN` environment variable.
 
 ## Page behavior
 
-- `src/pages/titled-tuesday-archive.astro` renders every download at build time.
+- `src/components/TitledTuesdayArchivePanel.astro` renders every download at build
+  time as a tab of `src/pages/chesscom-tournaments.astro`.
 - `src/scripts/titled-tuesday-archive.ts` adds search and 25/50/100-row pagination.
 - Search covers event names, filenames, ISO dates, month names, and early/late.
 - No JavaScript is needed to read the full table or download a ZIP.
 - Dates come from archive filenames. PGN game dates can cross midnight or reflect
   later corrections; they do not redefine the tournament's identity.
-- Archive filenames follow `cc_titled-tuesday_YYMMDD[a|b].zip`; `a` and `b` are
+- Archive filenames follow `titled-tuesday_YYYY-MM-DD[a|b].zip`; `a` and `b` are
   early and late sessions, and no suffix means the session is unspecified.
 - The page states that this growing collection is incomplete.
 
 ## Adding missing PGNs
 
-From `D:\dev\proj\chessnerd\titled-tuesday-archive`, preview selected new files.
-For example, once a September 8 PGN is available:
+The step-by-step import, publish, and site-sync procedure for every Chess.com
+series lives in one runbook: `D:\dev\proj\chessnerd\HOW-TO-ADD-CHESSCOM-PGNS.md`.
+Follow it rather than the notes here.
 
-```powershell
-python archive_metadata.py --import-pgn D:\chessnerd\tt\260908-titled-tuesday.pgn
-```
-
-The importer produces `cc_titled-tuesday_YYMMDD[a|b].zip` regardless of the input
-filename shape, and still accepts the legacy `titled-tuesday-YYYY-MM-DD…` inputs.
-
-This is an example for when that missing file is available. Add `--write` to
-create ZIPs and regenerate all metadata. Source files are kept unchanged;
-existing archives and duplicate selections are rejected. The archive README
-documents the accepted filename patterns and validation command.
-
-Publish the archive repository first, then run `npm run sync:tt`, `npm test`,
-and `npm run build` here. Commit the updated snapshot and push to `main`, or run
-the **Deploy to GitHub Pages** workflow manually to refresh the public page.
+The importer (`archive_metadata.py --import-pgn` in
+`D:\dev\proj\chessnerd\titled-tuesday-archive`) produces
+`titled-tuesday_YYYY-MM-DD[a|b].zip` regardless of the input filename shape. It
+still accepts the raw Chess.com export names and the older
+`cc_titled-tuesday_YYMMDD[a|b]` and `titled-tuesday-YYYY-MM-DD[a|b]` names.
+Source files are kept unchanged; existing archives and duplicate selections are
+rejected. The archive README documents the accepted filename patterns and
+validation command.
 
 The initial September 3, 2026 import used `D:\chessnerd\tt` for January 6,
 `D:\dev\proj\chessnerd\New folder` for 26 further events, and
