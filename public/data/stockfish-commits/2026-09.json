@@ -2,6 +2,153 @@
   "month": "2026-09",
   "commits": [
     {
+      "hash": "49ea5ded38315cff8e67f4a677a9e7811612fbf6",
+      "short": "49ea5ded",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-09-30T18:43:50Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/49ea5ded38315cff8e67f4a677a9e7811612fbf6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/49ea5ded38315cff8e67f4a677a9e7811612fbf6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/49ea5ded38315cff8e67f4a677a9e7811612fbf6.tar.gz"
+        }
+      ],
+      "message": "Simplify singularDepth from the bonus formula\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 124000 W: 31413 L: 31294 D: 61293\nPtnml(0-2): 139, 14508, 32614, 14573, 166\nhttps://tests.stockfishchess.org/tests/view/6aad39bddbd128aac8fd5609\n\nPassed LTC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 193296 W: 49385 L: 49341 D: 94570\nPtnml(0-2): 40, 20611, 55302, 20655, 40\nhttps://tests.stockfishchess.org/tests/view/6ab136585146babbc9b2b54b\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7191\n\nBench: 1714434\n",
+      "subject": "Simplify singularDepth from the bonus formula"
+    },
+    {
+      "hash": "af68fea3b9dec044e89b72c7d552ed417df7d125",
+      "short": "af68fea3",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-09-30T18:43:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/af68fea3b9dec044e89b72c7d552ed417df7d125",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/af68fea3b9dec044e89b72c7d552ed417df7d125.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/af68fea3b9dec044e89b72c7d552ed417df7d125.tar.gz"
+        }
+      ],
+      "message": "Remove Redundant file.close()\n\nIn `Benchmark::setup_bench()`, the `std::ifstream file(fenFile);` object is declared with local scope inside an `else` block. Right before the block terminates, `file.close()` is called explicitly.\n\nBecause `std::ifstream` follows RAII semantics, its destructor automatically flushes and closes the underlying file descriptor when the stream goes out of scope. The manual `file.close()` call is therefore redundant.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7190\n\nNo functional change\n",
+      "subject": "Remove Redundant file.close()"
+    },
+    {
+      "hash": "7954475e053163a37a0485f38cd68ab629409f7e",
+      "short": "7954475e",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-09-30T18:43:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7954475e053163a37a0485f38cd68ab629409f7e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7954475e053163a37a0485f38cd68ab629409f7e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7954475e053163a37a0485f38cd68ab629409f7e.tar.gz"
+        }
+      ],
+      "message": "Assert correct MaxChunkSize at compile time\n\nIf for example you change MaxChunkSize from 64 to 32 or 128 for an avx512 build it compiles fine but you get a crash or a wrong bench respectively when running the binary.  This static assert catches the issue at compile time.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7193\n\nNo functional change\n",
+      "subject": "Assert correct MaxChunkSize at compile time"
+    },
+    {
+      "hash": "e5c99a892ed3cd2272d7dc551ab12488797cd710",
+      "short": "e5c99a89",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-09-30T18:42:43Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e5c99a892ed3cd2272d7dc551ab12488797cd710",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e5c99a892ed3cd2272d7dc551ab12488797cd710.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e5c99a892ed3cd2272d7dc551ab12488797cd710.tar.gz"
+        }
+      ],
+      "message": "Balanced lto for gcc > 13\n\nThis greatly decreases compilation times on multi-core machines. E.g. on my computes profile-build goes from 27.5 to 14.5 seconds. Torom and anematode reported even bigger speedups on discord.\n\nI ran 3 STC tests for this:\nno filter: https://tests.stockfishchess.org/tests/view/6aaaa9efdbd128aac8fd5005\nonly gcc: https://tests.stockfishchess.org/tests/view/6aaac292dbd128aac8fd5029\nonly gcc >= 14: https://tests.stockfishchess.org/tests/view/6aacc6c6dbd128aac8fd5364  (paused at LLR=1.54)\n\nCombining the data gives `LLR = -2.77` for gcc  <= 13 and `LRR = 3.54` for gcc >= 14, which is why this patch is only for gcc version 14 and up.\n\nLocal speedtests by me (gcc 16.2.1) and Torom show no slowdown.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7177\n\nNo functional change\n",
+      "subject": "Balanced lto for gcc > 13"
+    },
+    {
+      "hash": "1bf75bb3cc722eb97d9461709b94cdcfb8e1807c",
+      "short": "1bf75bb3",
+      "author": "Noah Lee <noahjlee314@gmail.com>",
+      "date": "2026-09-30T18:41:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1bf75bb3cc722eb97d9461709b94cdcfb8e1807c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1bf75bb3cc722eb97d9461709b94cdcfb8e1807c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1bf75bb3cc722eb97d9461709b94cdcfb8e1807c.tar.gz"
+        }
+      ],
+      "message": "Optimize do_move capture handling\n\nAvoid recomputing the capture status in do_move when it has already been calculated.\n\npassed STC:\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 137152 W: 34973 L: 34548 D: 67631\nPtnml(0-2): 169, 14230, 39350, 14661, 166\nhttps://tests.stockfishchess.org/tests/view/6ab95654c109910452a9a6aa\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7199\n\nNo functional change\n",
+      "subject": "Optimize do_move capture handling"
+    },
+    {
+      "hash": "a17c0ce28d5a4cc40e3f2d0e8892cb1cb4234730",
+      "short": "a17c0ce2",
+      "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-09-30T18:41:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a17c0ce28d5a4cc40e3f2d0e8892cb1cb4234730",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a17c0ce28d5a4cc40e3f2d0e8892cb1cb4234730.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a17c0ce28d5a4cc40e3f2d0e8892cb1cb4234730.tar.gz"
+        }
+      ],
+      "message": "SFNNv17: Remove psqt accumulator and update default net\n\nUpdate NNUE arch to SFNNv17: remove PSQT output\n\nBig simplification in both stockfish as well as for nnue training:\n\n- Removed psqt accumulator/input and trained net with updated arch.\n- Training speed is significantly faster.\n\nPassed STC non-regression\nhttps://tests.stockfishchess.org/tests/view/6ab5859bc109910452a9a0f7\n```\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 40416 W: 10450 L: 10238 D: 19728\nPtnml(0-2): 72, 4636, 10575, 4858, 67\n```\n\nPassed LTC non-regression\nhttps://tests.stockfishchess.org/tests/view/6ab727dfc109910452a9a3c1\n```\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 36750 W: 9520 L: 9318 D: 17912\nPtnml(0-2): 18, 3871, 10386, 4091, 9\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7196\n\nBench: 1288278\n\nCo-authored-by: tony <35334345+tonycongqianwang@users.noreply.github.com>\n",
+      "subject": "SFNNv17: Remove psqt accumulator and update default net"
+    },
+    {
+      "hash": "a35e229ec92815450768cf45b42e1127d20a3426",
+      "short": "a35e229e",
+      "author": "Robert Nurnberg <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-09-30T18:40:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a35e229ec92815450768cf45b42e1127d20a3426",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a35e229ec92815450768cf45b42e1127d20a3426.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a35e229ec92815450768cf45b42e1127d20a3426.tar.gz"
+        }
+      ],
+      "message": "Smoothen seekMate trigger\n\nThis PR replaces the binary `seekMate` trigger with a smoother version.\n\nThe motivation for the idea comes from #7179. There it was found that master for some of the 4-ply mate puzzles reached a root eval just below the old trigger of 2000, and stayed at that for many iterations. In multi-threaded analysis this could at times lead to a failure of our matetrack CI.\n\nThis patch replaces the old trigger of 2000 (from depth 16 onwards) with a depth-dependent value. The smooth curve `750 + 220000 / (d*d)` approaches 750 towards infinity and goes through the points (10, 2950), (16, 1609), (20, 1300), (50, 838). These raw eval values for the current WDL model and at the material value 58 correspond to 970cp, 529cp, 427cp, 276cp, and all have W=100%.\n\nIndeed, patch on average and in the worst case finds the mates from our 4-ply CI set faster than master:\n```\nUsing ./sf.master on mates2head.epd with --mate 0 --threads 1\nEngine ID:     Stockfish dev-20260922-0a215d6c\nTotal FENs:    1000\nFound mates:   1000\nBest mates:    1000\n\nBest mate statistics:\n|bm| = 1 - mates found: 4 = 100.0% of 4; nodes (min avg max): 4 69 220, depth (min avg max): 1 1 1\n|bm| = 2 - mates found: 996 = 100.0% of 996; nodes (min avg max): 4 127441 53095641, depth (min avg max): 1 9 78\nAll best mates found: 1000 = 100.0% of 1000; nodes (min avg max): 4 126931 53095641, depth (min avg max): 1 9 78\n```\n```\nUsing ./sf.patch on mates2head.epd with --mate 0 --threads 1\nEngine ID:     Stockfish dev-20260926-m-ff6998f6\nTotal FENs:    1000\nFound mates:   1000\nBest mates:    1000\n\nBest mate statistics:\n|bm| = 1 - mates found: 4 = 100.0% of 4; nodes (min avg max): 4 69 220, depth (min avg max): 1 1 1\n|bm| = 2 - mates found: 996 = 100.0% of 996; nodes (min avg max): 4 23482 8342063, depth (min avg max): 1 8 63\nAll best mates found: 1000 = 100.0% of 1000; nodes (min avg max): 4 23389 8342063, depth (min avg max): 1 8 63\n```\nSo patch finds the mates on average with 23K nodes, master with 127K. And the maximum nodes are about 8M vs 53M in favour of patch.\n\nThe patch passed STC and LTC non-reg vs. master with `seekMate` disabled.\nSTC:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 173504 W: 44066 L: 44003 D: 85435\nPtnml(0-2): 215, 18265, 49709, 18368, 195\nhttps://tests.stockfishchess.org/tests/view/6ab230bbe28108115db44437\n\nLTC:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 375264 W: 96398 L: 96530 D: 182336\nPtnml(0-2): 80, 36928, 113741, 36810, 73\nhttps://tests.stockfishchess.org/tests/view/6ab56fae83e20a0615e67adb\n\nAnd even though that was not the original intention of the patch, it also shows a nice bump in our matetrack stats:\n```\nUsing ./sf.patch on matetrack.epd with --nodes 1000000\nEngine ID:     Stockfish dev-20260926-m-ff6998f6\nTotal FENs:    6554\nFound mates:   3765\nBest mates:    2535\n```\nThis compares with 3595, 2382 for master, see [matetrack](https://github.com/vondele/matetrack/blob/edee34f4ba4c45c2f7141ec0e7503baf3a1f7ef1/matetrack1000000.csv#L4588).\n\nFor the suite of classic mate puzzles the difference is minor: 107, 20 vs 107, 12 in favour of patch.\n\nFixes #7179.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7201\n\nBench: 1514301\n",
+      "subject": "Smoothen seekMate trigger"
+    },
+    {
       "hash": "0a215d6c9e48856ef630013b8ab8312941a59057",
       "short": "0a215d6c",
       "author": "Niklas Fiekas <niklas.fiekas@backscattering.de>",
