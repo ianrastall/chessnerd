@@ -17,11 +17,30 @@ const longDate = (value: string) =>
     new Date(`${value}T00:00:00Z`)
   );
 const dateRange = (start: string, end: string) => (start === end ? shortDate(start) : `${shortDate(start)} – ${shortDate(end)}`);
+// An event known only to the year or month shows just that much.
+const dates = (entry: (typeof entries)[number]) => {
+  if (entry.datePrecision === 'year') {
+    const first = entry.start.slice(0, 4);
+    const last = entry.end.slice(0, 4);
+    return first === last ? first : `${first} – ${last}`;
+  }
+  if (entry.datePrecision === 'month') {
+    const month = (value: string) =>
+      new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+        new Date(`${value}T00:00:00Z`)
+      );
+    return month(entry.start) === month(entry.end) ? month(entry.start) : `${month(entry.start)} – ${month(entry.end)}`;
+  }
+  return dateRange(entry.start, entry.end);
+};
+const place = (entry: (typeof entries)[number]) => [entry.place, entry.country].filter(Boolean).join(', ');
+const FORMATS: Record<string, string> = { 'round-robin': 'Round robin', match: 'Match', team: 'Team' };
+const reprocessed = entries.filter((entry) => !entry.legacy).length;
 ---
 <div class="events-archive">
   <p class="ev-intro">
-    Past Chess.com events with a 2300+ field, one PGN per event. Each ZIP holds a single PGN with the games unchanged
-    from the source. Sourced from the <a href="https://github.com/ianrastall/cc-events-archive" target="_blank" rel="noopener noreferrer">cc-events-archive</a>.
+    Past Chess.com events with a tournament average of 2300 or more and no player under 2000, by FIDE standard
+    rating at the time of the event. Each ZIP holds the event's PGN and a CTML record of the tournament. Sourced from the <a href="https://github.com/ianrastall/cc-events-archive" target="_blank" rel="noopener noreferrer">cc-events-archive</a>.
   </p>
 
   <div class="ev-summary">
@@ -40,7 +59,7 @@ const dateRange = (start: string, end: string) => (start === end ? shortDate(sta
   <div id="evControls" class="ev-controls" hidden>
     <div class="ev-search">
       <label for="evSearch">Search events</label>
-      <input id="evSearch" type="search" placeholder="Event, place, year…" autocomplete="off" />
+      <input id="evSearch" type="search" placeholder="Event, place, country, year, cat 19…" autocomplete="off" />
     </div>
     <div class="ev-page-size">
       <label for="evPageSize">Rows per page</label>
@@ -61,8 +80,11 @@ const dateRange = (start: string, end: string) => (start === end ? shortDate(sta
           <th scope="col">Event</th>
           <th scope="col">Dates</th>
           <th scope="col">Place</th>
+          <th scope="col" class="ev-number" title="Players with games in the file.">Players</th>
+          <th scope="col" class="ev-number" title="Scheduled rounds, where the event's crosstable states them.">Rds</th>
           <th scope="col" class="ev-number">Games</th>
-          <th scope="col" class="ev-number" title="Mean rating of the rated players in the event.">Avg</th>
+          <th scope="col" class="ev-number" title="Tournament average: mean FIDE standard rating of the players at the time of the event.">Avg</th>
+          <th scope="col" class="ev-number" title="FIDE category of the average. Category 1 starts at 2251; each category spans 25 points.">Cat</th>
           <th scope="col" class="ev-number">Size</th>
           <th scope="col"><span class="visually-hidden">Download</span></th>
         </tr>
@@ -74,9 +96,13 @@ const dateRange = (start: string, end: string) => (start === end ? shortDate(sta
             entry.slug,
             entry.place,
             String(entry.year),
+            entry.sourceName,
+            entry.country,
+            entry.format && FORMATS[entry.format],
             longDate(entry.start),
             longDate(entry.end),
-            entry.avgRating != null ? String(entry.avgRating) : ''
+            entry.avgRating != null ? String(entry.avgRating) : '',
+            entry.category != null ? `cat ${entry.category}` : ''
           ]
             .filter(Boolean)
             .join(' ')
@@ -85,12 +111,19 @@ const dateRange = (start: string, end: string) => (start === end ? shortDate(sta
             <tr data-ev-entry data-search={searchIndex}>
               <th scope="row">
                 <span class="ev-event">{entry.name}</span>
-                <span class="ev-filename">{entry.pgn}</span>
+                <span class="ev-filename">
+                  {entry.format && FORMATS[entry.format] ? `${FORMATS[entry.format]} · ` : ''}{entry.pgn}
+                </span>
               </th>
-              <td class="ev-dates"><time datetime={entry.start}>{dateRange(entry.start, entry.end)}</time></td>
-              <td class="ev-place">{entry.place || <span class="ev-muted">—</span>}</td>
+              <td class="ev-dates"><time datetime={entry.start}>{dates(entry)}</time></td>
+              <td class="ev-place">{place(entry) || <span class="ev-muted">—</span>}</td>
+              <td class="ev-number">{entry.players != null ? number(entry.players) : <span class="ev-muted">—</span>}</td>
+              <td class="ev-number">{entry.rounds != null ? entry.rounds : <span class="ev-muted">—</span>}</td>
               <td class="ev-number">{number(entry.games)}</td>
-              <td class="ev-number">{entry.avgRating != null ? number(entry.avgRating) : <span class="ev-muted">—</span>}</td>
+              <td class="ev-number" title={entry.avgStated ? "As stated in the event's crosstable" : undefined}>
+                {entry.avgRating != null ? number(entry.avgRating) : <span class="ev-muted">—</span>}
+              </td>
+              <td class="ev-number">{entry.category != null ? entry.category : <span class="ev-muted">—</span>}</td>
               <td class="ev-number">{formatBytes(entry.bytes)}</td>
               <td>
                 <a class="btn btn-secondary btn-compact ev-download" href={entry.url} aria-label={`Download ${entry.name} PGN ZIP`}>
@@ -100,7 +133,7 @@ const dateRange = (start: string, end: string) => (start === end ? shortDate(sta
             </tr>
           );
         })}
-        <tr id="evEmpty" hidden><td colspan="7">No events match your search. Try another name, place, or year.</td></tr>
+        <tr id="evEmpty" hidden><td colspan="10">No events match your search. Try another name, place, or year.</td></tr>
       </tbody>
     </table>
   </div>
@@ -109,7 +142,13 @@ const dateRange = (start: string, end: string) => (start === end ? shortDate(sta
     <span id="evPageInfo">Page 1 of 1</span>
     <button id="evNextPage" type="button" class="btn btn-secondary">Next</button>
   </nav>
-  <p class="ev-note">Events are kept when most of the rated field is 2300 or above. This is a growing collection.</p>
+  <p class="ev-note">
+    Ratings are the players' FIDE standard ratings in the month of the event, not the ratings in Chess.com's files,
+    which for events before October 2020 are the ratings of early 2021. Names, places, dates, rounds and categories
+    come from the event's published crosstable where one could be matched.
+    {reprocessed < entries.length &&
+      ` ${number(entries.length - reprocessed)} of the most recent events are still from the earlier collection and show no players, rounds or category; they are replaced as they are reprocessed.`}
+  </p>
   <noscript><p class="ev-note">All events are listed. Enable JavaScript for search and pagination.</p></noscript>
 </div>
 

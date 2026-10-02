@@ -11,12 +11,36 @@ export interface EventArchiveEntry {
   bytes: number;
   sha256: string;
   url: string;
-  /** Field average rating (mean of rated entries), or null when the event has
-   * no rated games. Reported for display only; it is not the cull criterion. */
+  /** Tournament average: the mean of the participants' FIDE standard ratings at
+   * the time of the event, or the figure the event's own crosstable states.
+   * Null only on entries from the earlier collection with no rated games. */
   avgRating: number | null;
+
+  // Everything below is absent on entries from the earlier collection
+  // (`legacy`), which carry only the fields above.
+  /** CTML tournament record inside the ZIP, beside the PGN. */
+  ctml?: string;
+  /** Chess.com's own name for the event, when `name` comes from a crosstable. */
+  sourceName?: string;
+  /** FIDE code of the host country. */
+  country?: string;
+  players?: number;
+  ratedPlayers?: number;
+  /** Scheduled rounds, where the event's crosstable states them. */
+  rounds?: number;
+  /** round-robin, match or team, where the pairings establish it. */
+  format?: string;
+  /** FIDE category of `avgRating` (category 1 starts at 2251). */
+  category?: number;
+  /** True when the crosstable itself states the average and category. */
+  avgStated?: boolean;
+  /** Set when only the year or month of the event is known. */
+  datePrecision?: 'year' | 'month';
+  legacy?: boolean;
 }
 
 const REQUIRED_STRINGS = ['slug', 'zip', 'pgn', 'start', 'end', 'name', 'sha256', 'url'] as const;
+const OPTIONAL_COUNTS = ['players', 'ratedPlayers', 'rounds', 'category'] as const;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function assertIsoDate(field: string, value: string): void {
@@ -67,6 +91,32 @@ export function parseEventsManifest(value: unknown): EventArchiveEntry[] {
       entry.avgRating = null;
     } else if (typeof raw !== 'number' || !Number.isFinite(raw) || raw < 0) {
       throw new Error(`Invalid avgRating for ${entry.zip}: ${raw}`);
+    }
+
+    const loose = entry as unknown as Record<string, unknown>;
+    for (const key of OPTIONAL_COUNTS) {
+      const value = loose[key];
+      if (value === undefined || value === null) delete loose[key];
+      else if (!Number.isSafeInteger(value) || (value as number) < 0) {
+        throw new Error(`Invalid ${key} for ${entry.zip}: ${value}`);
+      }
+    }
+    if (entry.ratedPlayers !== undefined && entry.players !== undefined && entry.ratedPlayers > entry.players) {
+      throw new Error(`More rated players than players for ${entry.zip}.`);
+    }
+    if (entry.ctml !== undefined && entry.ctml !== `${entry.slug}.ctml`) {
+      throw new Error(`Slug ${entry.slug} does not match ctml ${entry.ctml}.`);
+    }
+    if (entry.country !== undefined && !/^[A-Z]{3}$/.test(entry.country)) {
+      throw new Error(`Invalid country for ${entry.zip}: ${entry.country}`);
+    }
+    for (const key of ['sourceName', 'format'] as const) {
+      if (entry[key] !== undefined && typeof entry[key] !== 'string') {
+        throw new Error(`Invalid ${key} for ${entry.zip}.`);
+      }
+    }
+    if (entry.datePrecision !== undefined && entry.datePrecision !== 'year' && entry.datePrecision !== 'month') {
+      throw new Error(`Invalid datePrecision for ${entry.zip}: ${entry.datePrecision}`);
     }
 
     const expected = `https://github.com/ianrastall/cc-events-archive/raw/main/${entry.year}/${entry.zip}`;

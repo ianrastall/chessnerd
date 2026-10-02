@@ -40,7 +40,41 @@ describe('cc-events manifest', () => {
     expect(parseEventsManifest([clone])[0].place).toBe('');
   });
 
+  it('keeps the tournament details of a reprocessed event', () => {
+    const [row] = parseEventsManifest([
+      {
+        ...entry('corus-2010-a', '2010-01-16', '2010-01-31'),
+        ctml: 'corus-2010-a.ctml',
+        sourceName: 'Corus 2010 A',
+        country: 'NED',
+        players: 14,
+        ratedPlayers: 14,
+        rounds: null,
+        format: 'round-robin',
+        category: 19,
+        avgStated: true
+      }
+    ]);
+    expect(row.category).toBe(19);
+    expect(row.country).toBe('NED');
+    expect(row.rounds).toBeUndefined();
+  });
+
+  it('accepts an entry from the earlier collection, and a year-only date', () => {
+    const rows = parseEventsManifest([
+      { ...entry('old-open', '2025-03-01'), legacy: true },
+      { ...entry('1993-kassho', '1993-01-01', '1993-12-31'), datePrecision: 'year' }
+    ]);
+    expect(rows.map((row) => row.slug)).toEqual(['old-open', '1993-kassho']);
+  });
+
   it.each([
+    { category: -1 },
+    { players: 1.5 },
+    { players: 10, ratedPlayers: 11 },
+    { ctml: 'mismatch.ctml' },
+    { country: 'Netherlands' },
+    { datePrecision: 'decade' },
     { start: '2026-02-30' },
     { end: '2026-01-01', start: '2026-06-01' }, // start after end
     { year: 2025 },
