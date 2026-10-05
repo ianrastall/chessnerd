@@ -26,7 +26,7 @@ export interface EventArchiveEntry {
   country?: string;
   players?: number;
   ratedPlayers?: number;
-  /** Scheduled rounds, where the event's crosstable states them. */
+  /** Scheduled rounds where the event's crosstable states them, otherwise the rounds played in the file. */
   rounds?: number;
   /** round-robin, match or team, where the pairings establish it. */
   format?: string;

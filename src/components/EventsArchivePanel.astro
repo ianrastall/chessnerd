@@ -39,8 +39,8 @@ const reprocessed = entries.filter((entry) => !entry.legacy).length;
 ---
 <div class="events-archive">
   <p class="ev-intro">
-    Past Chess.com events with a tournament average of 2300 or more and no player under 2000, by FIDE standard
-    rating at the time of the event. Each ZIP holds the event's PGN and a CTML record of the tournament. Sourced from the <a href="https://github.com/ianrastall/cc-events-archive" target="_blank" rel="noopener noreferrer">cc-events-archive</a>.
+    Past Chess.com events with a tournament average of 2300 or more and no player under 2200, by FIDE standard
+    rating at the time of the event; fields of more than 200 players only need the average. Each ZIP holds the event's PGN and a CTML record of the tournament. Sourced from the <a href="https://github.com/ianrastall/cc-events-archive" target="_blank" rel="noopener noreferrer">cc-events-archive</a>.
   </p>
 
   <div class="ev-summary">
@@ -81,7 +81,7 @@ const reprocessed = entries.filter((entry) => !entry.legacy).length;
           <th scope="col">Dates</th>
           <th scope="col">Place</th>
           <th scope="col" class="ev-number" title="Players with games in the file.">Players</th>
-          <th scope="col" class="ev-number" title="Scheduled rounds, where the event's crosstable states them.">Rds</th>
+          <th scope="col" class="ev-number" title="Rounds: as scheduled where the event's crosstable states them, otherwise the rounds played in the file.">Rds</th>
           <th scope="col" class="ev-number">Games</th>
           <th scope="col" class="ev-number" title="Tournament average: mean FIDE standard rating of the players at the time of the event.">Avg</th>
           <th scope="col" class="ev-number" title="FIDE category of the average. Category 1 starts at 2251; each category spans 25 points.">Cat</th>
@@ -116,14 +116,14 @@ const reprocessed = entries.filter((entry) => !entry.legacy).length;
                 </span>
               </th>
               <td class="ev-dates"><time datetime={entry.start}>{dates(entry)}</time></td>
-              <td class="ev-place">{place(entry) || <span class="ev-muted">—</span>}</td>
+              <td class="ev-place">{place(entry) || <span class="ev-muted" title="No venue on record. Carried by Chess.com; most such events were played online.">Chess.com</span>}</td>
               <td class="ev-number">{entry.players != null ? number(entry.players) : <span class="ev-muted">—</span>}</td>
               <td class="ev-number">{entry.rounds != null ? entry.rounds : <span class="ev-muted">—</span>}</td>
               <td class="ev-number">{number(entry.games)}</td>
               <td class="ev-number" title={entry.avgStated ? "As stated in the event's crosstable" : undefined}>
                 {entry.avgRating != null ? number(entry.avgRating) : <span class="ev-muted">—</span>}
               </td>
-              <td class="ev-number">{entry.category != null ? entry.category : <span class="ev-muted">—</span>}</td>
+              <td class="ev-number">{entry.category != null ? entry.category : <span class="ev-muted" title="Average under 2251: below FIDE category 1.">&lt;1</span>}</td>
               <td class="ev-number">{formatBytes(entry.bytes)}</td>
               <td>
                 <a class="btn btn-secondary btn-compact ev-download" href={entry.url} aria-label={`Download ${entry.name} PGN ZIP`}>
