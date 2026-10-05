@@ -1,5 +1,5 @@
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
-import { parseEventsManifest } from '../src/lib/events-archive.ts';
+import { parseEventBundles, parseEventsManifest } from '../src/lib/events-archive.ts';
 
 // Resolve main first: raw.githubusercontent.com can cache the previous branch
 // contents for several minutes after an archive push. Commit URLs are immutable.
@@ -37,3 +37,12 @@ if (previous === content) {
   await rename(temporary, destination);
   console.log(`Synced ${entries.length} cc-events (${entries.reduce((sum, entry) => sum + entry.games, 0).toLocaleString('en-US')} games).`);
 }
+
+// The prepared databases (all events, 2600+, 2700+), rebuilt by the archive on every publish.
+const bundlesSource = `https://raw.githubusercontent.com/ianrastall/cc-events-archive/${revision}/cc_events_bundles.json`;
+const bundlesResponse = await fetch(bundlesSource, { signal: AbortSignal.timeout(30_000) });
+if (!bundlesResponse.ok) throw new Error(`cc-events bundles request failed: HTTP ${bundlesResponse.status}`);
+const bundles = parseEventBundles(await bundlesResponse.json());
+const bundlesDestination = new URL('../public/data/cc-events-archive/bundles.json', import.meta.url);
+await writeFile(bundlesDestination, `${JSON.stringify(bundles, null, 2)}\n`);
+console.log(`Synced ${bundles.length} cc-events databases.`);

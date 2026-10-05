@@ -133,6 +133,55 @@ export function parseEventsManifest(value: unknown): EventArchiveEntry[] {
   );
 }
 
+export interface EventBundleFile {
+  file: string;
+  bytes: number;
+  sha256: string;
+  events: number;
+  games: number;
+  /** First and last start year of the events in this file. */
+  from: string;
+  to: string;
+  url: string;
+}
+
+/** One prepared database: every event at or above `minAverage`, as one PGN
+ * (or, where GitHub's file limit requires it, a few consecutive ones). */
+export interface EventBundle {
+  id: string;
+  title: string;
+  minAverage: number;
+  events: number;
+  games: number;
+  bytes: number;
+  /** Start date of the newest event included. */
+  newest: string;
+  /** The day the database last changed. */
+  updated: string;
+  files: EventBundleFile[];
+}
+
+export function parseEventBundles(value: unknown): EventBundle[] {
+  if (!Array.isArray(value) || value.length === 0) throw new Error('Event bundles list must not be empty.');
+  return value.map((item: unknown) => {
+    const bundle = item as EventBundle;
+    if (!bundle || typeof bundle.id !== 'string' || typeof bundle.title !== 'string') throw new Error('Invalid event bundle.');
+    for (const key of ['minAverage', 'events', 'games', 'bytes'] as const) {
+      if (!Number.isSafeInteger(bundle[key]) || bundle[key] < 0) throw new Error(`Invalid ${key} for bundle ${bundle.id}.`);
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(bundle.updated)) throw new Error(`Invalid updated date for bundle ${bundle.id}.`);
+    if (!Array.isArray(bundle.files) || bundle.files.length === 0) throw new Error(`Bundle ${bundle.id} has no files.`);
+    for (const file of bundle.files) {
+      if (file.url !== `https://github.com/ianrastall/cc-events-archive/raw/main/bundles/${file.file}`) {
+        throw new Error(`Unexpected bundle download URL: ${file.url}`);
+      }
+      if (!Number.isSafeInteger(file.bytes) || file.bytes <= 0) throw new Error(`Invalid size for ${file.file}.`);
+      if (!/^[a-f0-9]{64}$/i.test(file.sha256)) throw new Error(`Invalid checksum for ${file.file}.`);
+    }
+    return bundle;
+  });
+}
+
 export function formatBytes(value: number): string {
   if (!Number.isFinite(value) || value <= 0) return '';
   if (value < 1024) return `${value} B`;

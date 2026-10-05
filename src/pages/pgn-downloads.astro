@@ -1,6 +1,8 @@
 ---
 import ToolHeader from '../components/ToolHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import eventBundles from '../../public/data/cc-events-archive/bundles.json';
+import { parseEventBundles } from '../lib/events-archive';
 
 interface Download {
   id: string;
@@ -24,7 +26,7 @@ function fmtSize(bytes: number): string {
 
 function fmtDate(iso: string): string {
   const d = new Date(iso);
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 }
 
 interface Section {
@@ -33,7 +35,30 @@ interface Section {
   items: Download[];
 }
 
+// The Chess.com events databases are rebuilt by the cc-events-archive
+// pipeline on every publish; this section follows its bundle list.
+const eventItems: Download[] = parseEventBundles(eventBundles).flatMap((bundle) =>
+  bundle.files.map((file) => {
+    const span = bundle.files.length > 1 ? `, ${file.from}–${file.to}` : '';
+    const tint = bundle.minAverage >= 2700 ? ' (the light green rows)' : bundle.minAverage >= 2600 ? ' (both green rows)' : '';
+    return {
+      id: file.file,
+      file: file.file,
+      name: `${bundle.minAverage ? `Chess.com Events ${bundle.minAverage}+` : 'Chess.com Events, all'}${span}`,
+      description: `${bundle.title}${tint}: ${file.events.toLocaleString('en-US')} events, ${file.games.toLocaleString('en-US')} games in one PGN.`,
+      size: file.bytes,
+      href: file.url,
+      date: bundle.updated,
+    };
+  })
+);
+
 const sections: Section[] = [
+  {
+    title: 'Chess.com Events',
+    description: 'From the Events tab of Chess.com Tournaments; tournament average 2300+, FIDE standard ratings at the time.',
+    items: eventItems,
+  },
   {
     title: 'General Databases',
     items: [

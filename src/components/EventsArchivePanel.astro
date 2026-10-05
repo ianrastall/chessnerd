@@ -1,6 +1,9 @@
 ---
 import manifest from '../../public/data/cc-events-archive/manifest.json';
-import { formatBytes, parseEventsManifest } from '../lib/events-archive';
+import bundleList from '../../public/data/cc-events-archive/bundles.json';
+import { formatBytes, parseEventBundles, parseEventsManifest } from '../lib/events-archive';
+
+const bundles = parseEventBundles(bundleList);
 
 const entries = parseEventsManifest(manifest);
 const games = entries.reduce((sum, entry) => sum + entry.games, 0);
@@ -36,11 +39,24 @@ const dates = (entry: (typeof entries)[number]) => {
 const place = (entry: (typeof entries)[number]) => [entry.place, entry.country].filter(Boolean).join(', ');
 const FORMATS: Record<string, string> = { 'round-robin': 'Round robin', match: 'Match', team: 'Team' };
 const reprocessed = entries.filter((entry) => !entry.legacy).length;
+// Row tint by tournament average: 2600+ and 2700+.
+const tier = (entry: (typeof entries)[number]) =>
+  entry.avgRating == null ? undefined : entry.avgRating >= 2700 ? 'ev-tier-2700' : entry.avgRating >= 2600 ? 'ev-tier-2600' : undefined;
+const count2700 = entries.filter((entry) => tier(entry) === 'ev-tier-2700').length;
+const count2600 = entries.filter((entry) => tier(entry) === 'ev-tier-2600').length;
 ---
 <div class="events-archive">
   <p class="ev-intro">
     Past Chess.com events with a tournament average of 2300 or more and no player under 2200, by FIDE standard
     rating at the time of the event; fields of more than 200 players only need the average. Each ZIP holds the event's PGN and a CTML record of the tournament. Sourced from the <a href="https://github.com/ianrastall/cc-events-archive" target="_blank" rel="noopener noreferrer">cc-events-archive</a>.
+  </p>
+
+  <p class="ev-intro">
+    Want them all at once? Three ready-made databases, rebuilt whenever events are added, are on the
+    <a href="/pgn-downloads.html">PGN Downloads</a> page:
+    {bundles.map((bundle, index) => (
+      <Fragment>{index > 0 && (index === bundles.length - 1 ? ' and ' : ', ')}{bundle.minAverage ? `the ${bundle.minAverage}+ events` : 'every event'} ({number(bundle.games)} games)</Fragment>
+    ))}.
   </p>
 
   <div class="ev-summary">
@@ -71,6 +87,10 @@ const reprocessed = entries.filter((entry) => !entry.legacy).length;
     </div>
   </div>
 
+  <p class="ev-legend">
+    <span class="ev-swatch ev-tier-2700" aria-hidden="true"></span> average 2700 or more ({number(count2700)})
+    <span class="ev-swatch ev-tier-2600" aria-hidden="true"></span> average 2600 to 2699 ({number(count2600)})
+  </p>
   <p id="evStatus" class="ev-status" role="status">{number(entries.length)} events, newest first</p>
   <div class="ev-table-wrap" role="region" aria-label="Event archive downloads" tabindex="0">
     <table class="ev-table">
@@ -108,7 +128,7 @@ const reprocessed = entries.filter((entry) => !entry.legacy).length;
             .join(' ')
             .toLowerCase();
           return (
-            <tr data-ev-entry data-search={searchIndex}>
+            <tr data-ev-entry data-search={searchIndex} class={tier(entry)}>
               <th scope="row">
                 <span class="ev-event">{entry.name}</span>
                 <span class="ev-filename">
@@ -180,6 +200,16 @@ const reprocessed = entries.filter((entry) => !entry.legacy).length;
   .ev-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
   .ev-table tbody th { font-weight: 400; min-width: 18rem; }
   .ev-table tbody tr:hover { background: var(--bg-tertiary); }
+  /* Strong events: a darker green for a 2600+ average, a lighter green for 2700+. */
+  .events-archive { --ev-2600: rgba(21, 128, 61, 0.30); --ev-2700: rgba(134, 239, 172, 0.34); }
+  .ev-table tbody tr.ev-tier-2600 { background: linear-gradient(var(--ev-2600), var(--ev-2600)), var(--bg-secondary); }
+  .ev-table tbody tr.ev-tier-2700 { background: linear-gradient(var(--ev-2700), var(--ev-2700)), var(--bg-secondary); }
+  .ev-table tbody tr.ev-tier-2600:hover { background: linear-gradient(var(--ev-2600), var(--ev-2600)), var(--bg-tertiary); }
+  .ev-table tbody tr.ev-tier-2700:hover { background: linear-gradient(var(--ev-2700), var(--ev-2700)), var(--bg-tertiary); }
+  .ev-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .ev-swatch { display: inline-block; width: 1.1rem; height: 1.1rem; border: 1px solid var(--border-color); border-radius: 3px; }
+  .ev-swatch.ev-tier-2600 { background: linear-gradient(var(--ev-2600), var(--ev-2600)), var(--bg-secondary); margin-left: 1rem; }
+  .ev-swatch.ev-tier-2700 { background: linear-gradient(var(--ev-2700), var(--ev-2700)), var(--bg-secondary); }
   .ev-event { display: block; font-weight: 600; }
   .ev-filename { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: var(--text-secondary); overflow-wrap: anywhere; }
   .ev-dates { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
