@@ -39,12 +39,12 @@ interface Section {
 // pipeline on every publish; this section follows its bundle list.
 const eventItems: Download[] = parseEventBundles(eventBundles).flatMap((bundle) =>
   bundle.files.map((file) => {
-    const span = bundle.files.length > 1 ? `, ${file.from}–${file.to}` : '';
+    const span = bundle.files.length > 1 ? `, ${file.from === file.to ? file.from : `${file.from}–${file.to}`}` : '';
     const tint = bundle.minAverage >= 2700 ? ' (the light green rows)' : bundle.minAverage >= 2600 ? ' (both green rows)' : '';
     return {
       id: file.file,
       file: file.file,
-      name: `${bundle.minAverage ? `Chess.com Events ${bundle.minAverage}+` : 'Chess.com Events, all'}${span}`,
+      name: `${bundle.minAverage ? `Events ${bundle.minAverage}+` : 'Events, all'}${span}`,
       description: `${bundle.title}${tint}: ${file.events.toLocaleString('en-US')} events, ${file.games.toLocaleString('en-US')} games in one PGN.`,
       size: file.bytes,
       href: file.url,
@@ -55,8 +55,8 @@ const eventItems: Download[] = parseEventBundles(eventBundles).flatMap((bundle) 
 
 const sections: Section[] = [
   {
-    title: 'Chess.com Events',
-    description: 'From the Events tab of Chess.com Tournaments; tournament average 2300+, FIDE standard ratings at the time.',
+    title: 'Tournament Events',
+    description: 'From the Events tab of Chess.com Tournaments: Chess.com events and historical tournaments (1834–1990) with a tournament average of 2300+.',
     items: eventItems,
   },
   {

@@ -34,6 +34,12 @@ export interface EventArchiveEntry {
   category?: number;
   /** True when the crosstable itself states the average and category. */
   avgStated?: boolean;
+  /** A historical tournament (1834-1989), not a Chess.com event: its ratings
+   * are Edo or Chessmetrics, and its file holds only the games between
+   * players rated 2400 or more. */
+  historical?: boolean;
+  /** Chess.com's id for the event, or the historical source file's name. */
+  sourceSlug?: string;
   /** Set when only the year or month of the event is known. */
   datePrecision?: 'year' | 'month';
   legacy?: boolean;
@@ -172,7 +178,8 @@ export function parseEventBundles(value: unknown): EventBundle[] {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(bundle.updated)) throw new Error(`Invalid updated date for bundle ${bundle.id}.`);
     if (!Array.isArray(bundle.files) || bundle.files.length === 0) throw new Error(`Bundle ${bundle.id} has no files.`);
     for (const file of bundle.files) {
-      if (file.url !== `https://github.com/ianrastall/cc-events-archive/raw/main/bundles/${file.file}`) {
+      const onGitHub = file.url === `https://github.com/ianrastall/cc-events-archive/raw/main/bundles/${file.file}`;
+      if (!onGitHub && !/^https:\/\/pixeldrain\.com\/u\/[A-Za-z0-9_-]{6,16}$/.test(file.url)) {
         throw new Error(`Unexpected bundle download URL: ${file.url}`);
       }
       if (!Number.isSafeInteger(file.bytes) || file.bytes <= 0) throw new Error(`Invalid size for ${file.file}.`);
