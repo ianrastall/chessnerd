@@ -124,7 +124,9 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
 
         <div class="toc-group">
           <div class="toc-group-label">General Use</div>
+          <a class="toc-link sub" href="#data-currency">Data Currency</a>
           <a class="toc-link sub" href="#rate-limits">Rate Limiting</a>
+          <a class="toc-link sub" href="#brand">Respecting the Brand</a>
           <a class="toc-link sub" href="#how-to">How to Get the Data</a>
           <a class="toc-link sub" href="#http-responses">HTTP Responses</a>
           <a class="toc-link sub" href="#jsonld">JSON-LD</a>
@@ -141,6 +143,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <a class="toc-link sub" href="#games-tomove">To-Move</a>
           <a class="toc-link sub" href="#games-archives">Archive List</a>
           <a class="toc-link sub" href="#games-monthly">Monthly Archive</a>
+          <a class="toc-link sub" href="#games-live">Live Games by Time Control</a>
           <a class="toc-link sub" href="#games-pgn">PGN Download</a>
           <a class="toc-link sub" href="#player-clubs">Clubs</a>
           <a class="toc-link sub" href="#player-matches">Matches</a>
@@ -201,7 +204,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <h2>Overview</h2>
         </div>
         <div class="api-intro">
-          <p>The PubAPI is a read-only REST API that responds with JSON-LD data. Its goal is to re-package all currently public data from the website. "Public Data" is information available to people who are not logged in — player data, game data, club/tournament information. Private information restricted to the logged-in user (game chat, conditional moves) is excluded.</p>
+          <p>The PubAPI is a read-only REST API that responds with JSON-LD data. It re-packages public data from the website — information available to people who are not logged in, such as player data, game data, and club/tournament information. Private information restricted to the logged-in user (game chat, conditional moves) is excluded.</p>
           <p>This is <strong>read-only</strong> data. You cannot send game moves or other commands to Chess.com from this system.</p>
           <ol>
             <li>Determine the data you want, and compose the URL based on the endpoint URL pattern.</li>
@@ -209,6 +212,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             <li>Enjoy the JSON.</li>
           </ol>
           <p>All time fields are Unix timestamps — the number of <strong>seconds</strong> since January 1, 1970 00:00:00 GMT.</p>
+          <p>Reference checked on <time datetime="2026-10-06">October 6, 2026</time> against the <a href="https://www.chess.com/news/view/published-data-api" target="_blank" rel="noopener">official documentation</a>, whose article update date is April 22, 2026. Its closing review note still says May 10, 2022.</p>
         </div>
       </section>
 
@@ -220,10 +224,10 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
         </div>
         <div class="general-grid">
 
-          <div class="general-item">
+          <div id="data-currency" class="general-item">
             <h3>Data Currency</h3>
-            <p>About 3% of players still use the old "v2" website for some actions. When those players modify data you are requesting, the data may be out of date. This does not apply to mobile app users.</p>
-            <p><strong>Default refresh:</strong> endpoints refresh at most once every 24 hours unless otherwise noted.</p>
+            <p>API data may be cached. The official documentation still includes a caveat about the old "v2" website and a 3% usage figure, without a current measurement date.</p>
+            <p><strong>Refresh guidance:</strong> the official page says 12 hours under General Use but 24 hours under Caching, unless otherwise noted. These statements conflict. Check each response's <code class="ci">Cache-Control</code>, <code class="ci">ETag</code>, and <code class="ci">Last-Modified</code> headers when deciding when to revalidate cached data; cache lifetime does not guarantee an upstream data refresh.</p>
           </div>
 
           <div class="general-item">
@@ -236,6 +240,11 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             <p>Serial access rate is unlimited — if you always wait for the previous response before making the next request, you should never encounter rate limiting.</p>
             <p>Parallel requests (threaded apps, webservers handling multiple simultaneous requests) may be blocked. Be prepared to handle a <code class="ci">429 Too Many Requests</code> response for any non-serial request.</p>
             <p>Abnormal or suspicious activity may result in your application being blocked entirely. Supplying a recognizable user-agent with contact information gives Chess.com a way to reach you if a block is necessary.</p>
+          </div>
+
+          <div id="brand" class="general-item">
+            <h3>Respecting the Brand</h3>
+            <p>Chess.com requires API users to respect its intellectual property, including board palettes, piece designs, sounds, and move classification glyphs. For questions about using those assets, contact <a href="mailto:legal@chess.com">legal@chess.com</a>.</p>
           </div>
 
           <div id="how-to" class="general-item">
@@ -441,7 +450,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
           <h3>Player Games</h3>
         </div>
         <div class="section-intro">
-          <p>Five endpoints cover a player's games: current, to-move, archive list, monthly archive, and PGN download. The current, to-move, and monthly archive endpoints all wrap their arrays in:</p>
+          <p>Six endpoints cover a player's games: current, to-move, archive list, monthly archive, live archive by time control, and PGN download. Game-list endpoints wrap their arrays in <code>games</code>; the archive list uses <code>archives</code>, and the PGN download returns a PGN file.</p>
           <pre style="margin:.45rem 0 0;padding:.55rem .8rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:6px;font-family:Consolas,Monaco,monospace;font-size:.8rem;line-height:1.45">{`{ "games": [ /* Game objects in ascending game-end-time order */ ] }`}</pre>
           <p style="margin-top:.5rem">Shared game object fields: <code>pgn</code>, <code>rules</code> (chess, chess960, bughouse, kingofthehill, threecheck, crazyhouse), <code>time_class</code> (daily, rapid, blitz, bullet), <code>time_control</code>, <code>last_activity</code>.</p>
         </div>
@@ -571,6 +580,55 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
               </details>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/games/2009/10" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="endpoint-card" id="games-live">
+            <div class="endpoint-card-head">
+              <h3>Complete Live Archive by Time Control</h3>
+              <div class="url-pattern"><span class="url-base">https://api.chess.com/pub/player/</span><span class="url-param">&#123;username&#125;</span><span class="url-base">/games/live/</span><span class="url-param">&#123;BASETIME&#125;</span><span class="url-base">/</span><span class="url-param">&#123;INCREMENT&#125;</span></div>
+            </div>
+            <div class="endpoint-card-body">
+              <p class="endpoint-desc">Array of completed Live Chess games for a specific time control. BASETIME is the starting clock time in seconds; INCREMENT is the number of seconds added per move. For example, <code class="ci">180/2</code> selects 3+2 games.</p>
+              <p class="endpoint-note">This is an archive of finished games. For Daily Chess games currently in progress, use the Current Daily Chess endpoint.</p>
+              <details class="df">
+                <summary>Data Format</summary>
+                <pre>{`{
+  "games": [
+    {
+      "url": "string",
+      "pgn": "string",             // final PGN
+      "time_control": "180+2",
+      "end_time": 1277170171,
+      "rated": true,
+      "accuracies": { "white": 0.0, "black": 0.0 }, // if calculated
+      "fen": "string",             // final FEN
+      "time_class": "blitz",
+      "rules": "chess",
+      "white": {
+        "rating": 1661,
+        "result": "string",        // see Game Results Codes
+        "@id": "URL",
+        "username": "string",
+        "uuid": "fe696c00-fcba-11db-8029-000000000000"
+      },
+      "black": {
+        "rating": 1577,
+        "result": "string",
+        "@id": "URL",
+        "username": "string",
+        "uuid": "d65c8c3a-5313-11df-805e-000000000000"
+      },
+      "eco": "URL"                 // opening URL, if available
+    }
+  ]
+}`}</pre>
+              </details>
+              <div class="endpoint-links">
+                <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/player/erik/games/live/180/2" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
+                <a class="btn btn-secondary btn-compact" href="https://api.chess.com/context/ChessGames.jsonld" target="_blank" rel="noopener">JSON-LD Context</a>
+                <a class="btn btn-secondary btn-compact" href="https://api.chess.com/context/ChessGame.jsonld" target="_blank" rel="noopener">Game Context</a>
               </div>
             </div>
           </div>
@@ -979,6 +1037,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
   }
 }`}</pre>
               </details>
+              <p class="endpoint-note">The official registration schema also lists <code class="ci">settings.initial_setup</code>, but leaves its value and type unspecified.</p>
               <p class="endpoint-note">Player statistics are not snapshotted during matches. After the registration phase, follow each player's stats link to get up-to-date statistics.</p>
               <div class="endpoint-links">
                 <a class="btn btn-secondary btn-compact" href="https://api.chess.com/pub/match/12803" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span>Example</a>
@@ -1349,7 +1408,7 @@ details.df pre{margin:0;padding:.8rem .95rem;max-height:380px;overflow:auto;back
             </tbody>
           </table>
         </div>
-        <p class="api-footer-note">Last reviewed: 2022-05-10 &mdash; <a href="https://www.chess.com/news/view/published-data-api#comments" target="_blank" rel="noopener">Comments &amp; bug reports</a> &mdash; <a href="https://gist.github.com/andreij/0e3309200c0a6bb26308817a168203f3/revisions" target="_blank" rel="noopener">Revision history</a></p>
+        <p class="api-footer-note">Reference checked: 2026-10-06 &mdash; <a href="https://www.chess.com/news/view/published-data-api" target="_blank" rel="noopener">Official documentation</a> &mdash; <a href="https://www.chess.com/clubs/forum/chess-com-developer-community" target="_blank" rel="noopener">Developer forums</a></p>
       </section>
 
     </div><!-- end .api-content -->

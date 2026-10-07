@@ -1,14 +1,15 @@
 # Chess.com Published Data API Reference
 
-> **Source:** Chess.com PubAPI — read-only REST/JSON-LD API  
-> **Last reviewed:** 2022-05-10  
+> **Source:** [Chess.com PubAPI official documentation](https://www.chess.com/news/view/published-data-api) — read-only REST/JSON-LD API\
+> **Reference checked:** 2026-10-06\
+> **Source article updated:** 2026-04-22; its closing review note still says 2022-05-10\
 > **All timestamps** are Unix timestamps (seconds since 1970-01-01 00:00:00 UTC)
 
 ---
 
 ## Overview
 
-The PubAPI re-packages all currently public data from chess.com — information available to people who are not logged in (player data, game data, club/tournament information). Private information restricted to the logged-in user (game chat, conditional moves) is excluded.
+The PubAPI re-packages public data from chess.com — information available to people who are not logged in, such as player data, game data, and club/tournament information. Private information restricted to the logged-in user (game chat, conditional moves) is excluded.
 
 This is **read-only** data. You cannot send game moves or other commands to Chess.com from this system.
 
@@ -23,9 +24,9 @@ This is **read-only** data. You cannot send game moves or other commands to Ches
 
 ### Data Currency
 
-About 3% of players still use the old "v2" website for some actions. When those players modify data you are requesting, the data may be out of date. This does not apply to mobile app users.
+API data may be cached. The official documentation still includes a caveat about the old "v2" website and a 3% usage figure, without a current measurement date.
 
-**Default refresh:** endpoints refresh at most once every 24 hours unless otherwise noted.
+**Refresh guidance:** the official page says 12 hours under General Use but 24 hours under Caching, unless otherwise noted. These statements conflict. Check each response's `Cache-Control`, `ETag`, and `Last-Modified` headers when deciding when to revalidate cached data; cache lifetime does not guarantee an upstream data refresh.
 
 ### Language
 
@@ -38,6 +39,10 @@ Serial access rate is unlimited — if you always wait for the previous response
 Parallel requests (threaded apps, webservers handling multiple simultaneous requests) may be blocked. Be prepared to handle a `429 Too Many Requests` response for any non-serial request.
 
 Abnormal or suspicious activity may result in your application being blocked entirely. Supplying a recognizable user-agent with contact information gives Chess.com a way to reach you if a block is necessary.
+
+### Respecting the Brand
+
+Chess.com requires API users to respect its intellectual property, including board palettes, piece designs, sounds, and move classification glyphs. For questions about using those assets, contact [legal@chess.com](mailto:legal@chess.com).
 
 ### How to Get the Data
 
@@ -218,6 +223,10 @@ Tells if a user has been online in the last five minutes.
 
 ---
 
+### Player Games
+
+Six endpoints cover a player's games: current, to-move, archive list, monthly archive, live archive by time control, and PGN download. Game-list endpoints wrap their arrays in `games`; the archive list uses `archives`, and the PGN download returns a PGN file.
+
 ### Current Daily Chess
 
 **URL:** `https://api.chess.com/pub/player/{username}/games`
@@ -336,6 +345,54 @@ Array of Live and Daily Chess games that a player has finished.
 ```
 
 **Example:** `https://api.chess.com/pub/player/erik/games/2009/10`
+
+---
+
+### Complete Live Archive by Time Control
+
+**URL:** `https://api.chess.com/pub/player/{username}/games/live/{BASETIME}/{INCREMENT}`
+
+Array of completed Live Chess games for a specific time control. BASETIME is the starting clock time in seconds; INCREMENT is the number of seconds added per move. For example, `180/2` selects 3+2 games.
+
+This is an archive of finished games. For Daily Chess games currently in progress, use the Current Daily Chess endpoint.
+
+```json
+{
+  "games": [
+    {
+      "url": "string",
+      "pgn": "string",
+      "time_control": "180+2",
+      "end_time": 1277170171,
+      "rated": true,
+      "accuracies": { "white": 0.0, "black": 0.0 },
+      "fen": "string",
+      "time_class": "blitz",
+      "rules": "chess",
+      "white": {
+        "rating": 1661,
+        "result": "string",
+        "@id": "URL",
+        "username": "string",
+        "uuid": "fe696c00-fcba-11db-8029-000000000000"
+      },
+      "black": {
+        "rating": 1577,
+        "result": "string",
+        "@id": "URL",
+        "username": "string",
+        "uuid": "d65c8c3a-5313-11df-805e-000000000000"
+      },
+      "eco": "URL"
+    }
+  ]
+}
+```
+
+`accuracies` is included if previously calculated; `eco` is the opening URL if available. Player `uuid` values identify members.
+
+**Example:** `https://api.chess.com/pub/player/erik/games/live/180/2`\
+**JSON-LD:** `https://api.chess.com/context/ChessGames.jsonld`, `https://api.chess.com/context/ChessGame.jsonld`
 
 ---
 
@@ -686,6 +743,8 @@ The ID matches the URL on www.chess.com.
 }
 ```
 
+**Schema note:** The official registration schema also lists `settings.initial_setup`, but leaves its value and type unspecified.
+
 **Note:** After the registration phase, follow each player's `stats` link for up-to-date statistics — they are not snapshotted during matches.
 
 **Example:** `https://api.chess.com/pub/match/12803`  
@@ -972,4 +1031,4 @@ Arrays: `daily`, `daily960`, `live_rapid`, `live_blitz`, `live_bullet`, `live_bu
 
 ---
 
-*Source: [chess.com/news/view/published-data-api](https://www.chess.com/news/view/published-data-api) — Last reviewed 2022-05-10*
+*Source: [Chess.com official documentation](https://www.chess.com/news/view/published-data-api) — Reference checked 2026-10-06*
