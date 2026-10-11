@@ -1,0 +1,131 @@
+{
+  "month": "2026-10",
+  "commits": [
+    {
+      "hash": "dcf1cd5a8045d49866c0cc56df5b8ba6fe41a659",
+      "short": "dcf1cd5a",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-10-10T13:40:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dcf1cd5a8045d49866c0cc56df5b8ba6fe41a659",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dcf1cd5a8045d49866c0cc56df5b8ba6fe41a659.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dcf1cd5a8045d49866c0cc56df5b8ba6fe41a659.tar.gz"
+        }
+      ],
+      "message": "Remove redundant curly braces on single-statement blocks\n\nIs any of those needed for clarity reasons? If so, please point them out so I can remove them from the PR.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7209\n\nNo functional change\n",
+      "subject": "Remove redundant curly braces on single-statement blocks"
+    },
+    {
+      "hash": "186d6a41c1303317e4af31ed1859673f6699c12b",
+      "short": "186d6a41",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-10-10T13:40:07Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/186d6a41c1303317e4af31ed1859673f6699c12b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/186d6a41c1303317e4af31ed1859673f6699c12b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/186d6a41c1303317e4af31ed1859673f6699c12b.tar.gz"
+        }
+      ],
+      "message": "One instance of reductions array\n\nSTC https://tests.stockfishchess.org/tests/view/6abc689cc109910452a9aa6d\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 144288 W: 36608 L: 36515 D: 71165\nPtnml(0-2): 189, 15260, 41141, 15377, 177\n\nUse just one reductions array by all workers instead of separate instances.\n(Now possible since we don't depend on thread count any more)\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7205\n\nNo functional change\n",
+      "subject": "One instance of reductions array"
+    },
+    {
+      "hash": "a43f36824bb5363d574c57f5d45ade27ae15a956",
+      "short": "a43f3682",
+      "author": "Anastasios Tsournos <48796551+anavalo@users.noreply.github.com>",
+      "date": "2026-10-10T13:39:20Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a43f36824bb5363d574c57f5d45ade27ae15a956",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a43f36824bb5363d574c57f5d45ade27ae15a956.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a43f36824bb5363d574c57f5d45ade27ae15a956.tar.gz"
+        }
+      ],
+      "message": "Simplification: Remove the ply-5 continuation history update\n\nSimplification: The ply-5 continuation history update was added in #5792 together with a matching read in move ordering. #5978 removed that read as a simplification but kept the update, which has the smallest weight of any ply (66). This patch removes the ply-5 update too and drops the last CMHC multiplier which is no longer reachable.\n\nPassed STC non-reg:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 27904 W: 7221 L: 7000 D: 13683\nPtnml(0-2): 25, 3171, 7350, 3370, 36\nhttps://tests.stockfishchess.org/tests/view/6ac40de55349156614d93bbd\n\nPassed LTC non-reg:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 74304 W: 19085 L: 18923 D: 36296\nPtnml(0-2): 10, 7765, 21442, 7923, 12\nhttps://tests.stockfishchess.org/tests/view/6ac4cb435349156614d93c6b\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7212\n\nBench: 1334778\n",
+      "subject": "Simplification: Remove the ply-5 continuation history update"
+    },
+    {
+      "hash": "04e0819783154eae2d3b136009ebec0f199404d4",
+      "short": "04e08197",
+      "author": "Kars <karstenwscholten@gmail.com>",
+      "date": "2026-10-10T13:38:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/04e0819783154eae2d3b136009ebec0f199404d4",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/04e0819783154eae2d3b136009ebec0f199404d4.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/04e0819783154eae2d3b136009ebec0f199404d4.tar.gz"
+        }
+      ],
+      "message": "Remove three always-true conditions in search\n\nremoves three conditions in search.cpp that can no longer be false:\n\nstep 6, Case B: this branch is only reached when the TT entry was deep enough but Case A did not apply. That means the bound is the opposite one-sided bound, so `ttData.bound != BOUND_EXACT` and the bound-direction check always hold. Only `depth > 5` needed\n\nthe branch before capture countermove bonus already handles `!priorCapture && prevSq != SQ_NONE`, so `priorCapture` is always true here.\nqsearch stand pat: `bestValue` is either the clamped static eval or a TT value that already passed `!is_decisive`, so it can never be decisive at this point (since b0870cf5).\n\npassed non-regression STC:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 32992 W: 8485 L: 8278 D: 16229\nPtnml(0-2): 38, 3385, 9439, 3600, 34\nhttps://tests.stockfishchess.org/tests/view/6ac395805349156614d93b2d\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7210\n\nNo functional change\n",
+      "subject": "Remove three always-true conditions in search"
+    },
+    {
+      "hash": "2d54ef335ac40832140cfa079d2d814b2bfb7916",
+      "short": "2d54ef33",
+      "author": "Dubslow <bunslow@gmail.com>",
+      "date": "2026-10-10T13:38:33Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2d54ef335ac40832140cfa079d2d814b2bfb7916",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2d54ef335ac40832140cfa079d2d814b2bfb7916.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2d54ef335ac40832140cfa079d2d814b2bfb7916.tar.gz"
+        }
+      ],
+      "message": "Update network: longer finetune with one-tenth LR\n\nhttps://github.com/vondele/nettest/pull/488\n\n:DropTheLR:\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6ac07c4c5349156614d93721\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 635776 W: 163157 L: 161987 D: 310632\nPtnml(0-2): 1106, 74329, 165866, 75463, 1124\n\nPassed LTC: https://tests.stockfishchess.org/tests/view/6ac5c7a75349156614d93d84\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 73356 W: 19089 L: 18703 D: 35564\nPtnml(0-2): 23, 7686, 20874, 8072, 23\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7213\n\nBench: 1635273\n",
+      "subject": "Update network: longer finetune with one-tenth LR"
+    },
+    {
+      "hash": "885813b0e3d68fb9b817182a813ba884c575ff2c",
+      "short": "885813b0",
+      "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+      "date": "2026-10-10T13:37:18Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/885813b0e3d68fb9b817182a813ba884c575ff2c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/885813b0e3d68fb9b817182a813ba884c575ff2c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/885813b0e3d68fb9b817182a813ba884c575ff2c.tar.gz"
+        }
+      ],
+      "message": "simplify delta-based reductions to constant PvNode discount\n\nRemoving dependence on delta and rootDelta for LMR calculation. The idea is to reduce unintended side effects like aspiration failures decreasing search effort.\n\nPassed non-reg STC\nhttps://tests.stockfishchess.org/tests/view/6a9aa810a8284b37a0a047a3\n\n```\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 119584 W: 30430 L: 30304 D: 58850\nPtnml(0-2): 211, 14017, 31183, 14197, 184\n```\n\nPassed non-reg LTC\nhttps://tests.stockfishchess.org/tests/view/6a9db9d2a8284b37a0a04cb7\n```\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 32832 W: 8581 L: 8376 D: 15875\nPtnml(0-2): 8, 3428, 9337, 3637, 6\n```\n\nPassed non-reg STC SMP\nhttps://tests.stockfishchess.org/tests/view/6ab2a19818e312e5332fdec3\n```\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 66432 W: 17012 L: 16838 D: 32582\nPtnml(0-2): 43, 7230, 18492, 7412, 39\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7148\n\nBench: 1143550\n",
+      "subject": "simplify delta-based reductions to constant PvNode discount"
+    }
+  ]
+}
