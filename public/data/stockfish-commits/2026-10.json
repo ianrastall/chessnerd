@@ -2,6 +2,69 @@
   "month": "2026-10",
   "commits": [
     {
+      "hash": "31275420c720e98fa5061c4e2a0bb4e716a85561",
+      "short": "31275420",
+      "author": "Dubslow <bunslow@gmail.com>",
+      "date": "2026-10-11T13:00:45Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/31275420c720e98fa5061c4e2a0bb4e716a85561",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/31275420c720e98fa5061c4e2a0bb4e716a85561.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/31275420c720e98fa5061c4e2a0bb4e716a85561.tar.gz"
+        }
+      ],
+      "message": "Two small cleanups\n\n- Eval scaling: shorter spelling and less redudant (Fauzi had removed the redundant parameter already; at that time, it was a functional change since there was a subtraction on this line, causing rounding-vs-division changes. The subtraction was removed in prep for no-psqt, so removing the redundant param is no functional change now.)\n\n- Mark a known *Scaler suspect based on these three tests:\n\n  Passed   STC in 26k games: https://tests.stockfishchess.org/tests/view/6aaa0388f648bce02525855e\n  Passed   LTC in 45k games: https://tests.stockfishchess.org/tests/view/6aaa79b9f648bce025258650\n  Failed VVLTC in 48k games: https://tests.stockfishchess.org/tests/view/6aab9719dbd128aac8fd5190\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7218\n\nNo functional change\n",
+      "subject": "Two small cleanups"
+    },
+    {
+      "hash": "513ce075215d4a297b42d22564783d2e6316b04e",
+      "short": "513ce075",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-10-11T13:00:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/513ce075215d4a297b42d22564783d2e6316b04e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/513ce075215d4a297b42d22564783d2e6316b04e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/513ce075215d4a297b42d22564783d2e6316b04e.tar.gz"
+        }
+      ],
+      "message": "Improve matefinding\n\nWhen seeking a mate, focus the search on forcing lines, with three search modifications that are guarded by the seekmate condition. On the matetrack suite this finds 4065 mates vs 3898 for master (+167), Measured in isolation the three terms contribute:\ncontribute +71 (null move reduction), +44 (small ProbCut) and +39 (LMR). A forth term tested in SPRT was dropped as there was no real gain on current master.\n\nAs done previously SPRT test vs a control build with seekMate disabled, to guarantee no drift in performance in game play.\n\npassed STC:\nLLR: 2.99 (-2.94,2.94) <-1.75,0.25>\nTotal: 356416 W: 90683 L: 90801 D: 174932\nPtnml(0-2): 429, 37985, 101469, 37925, 400\nhttps://tests.stockfishchess.org/tests/view/6ac166745349156614d93802\n\npassed LTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 131064 W: 33890 L: 33789 D: 63385\nPtnml(0-2): 14, 12699, 40019, 12772, 28\nhttps://tests.stockfishchess.org/tests/view/6ac5b99e5349156614d93d60\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7216\n\nBench: 1684318\n",
+      "subject": "Improve matefinding"
+    },
+    {
+      "hash": "400c23f978897b34d4a5ed5c4c6c6f858d40f976",
+      "short": "400c23f9",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-10-11T12:59:52Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/400c23f978897b34d4a5ed5c4c6c6f858d40f976",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/400c23f978897b34d4a5ed5c4c6c6f858d40f976.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/400c23f978897b34d4a5ed5c4c6c6f858d40f976.tar.gz"
+        }
+      ],
+      "message": "Only generate legal moves in movegen\n\nThe main changes here are by @rhirsch123. I have added some speedups and identified some more code that can be removed if we only ever deal with legal moves.\nThe only(?) important implementation detail of legal move generation is that we now keep a bitboard of squares threatened by `~sideToMove` in `Position`, to help with king move generation. For speed and conciseness, we include x-ray threats through the `sideToMove`-colored king (this only matters when `sideToMove` is in check). As a bonus, these bitboards get re-used in quiet move scoring.\n\nThings that can be simplified once we have legal movegen:\n- We can merge the `legal()` and `pseudo_legal()` methods\n- Since we have threat bitboards, we no longer need `attackers_to_exist()` in `legal()`, so we can remove that method\n- We don't need a separate `generate<LEGAL>` method that performs legality checks\n- This also means the `NON_EVASIONS` movegen target becomes redundant\n\nThe change to `ray_pass_bb()` is outdated but should still be beneficial for performance.\n\npassed gainer STC: https://tests.stockfishchess.org/tests/view/6ac2e35d5349156614d93a31\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 207232 W: 52791 L: 52245 D: 102196\nPtnml(0-2): 279, 23887, 54714, 24481, 255\n\npassed non-reg LTC: https://tests.stockfishchess.org/tests/view/6ac2e3785349156614d93a33\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 163212 W: 42028 L: 41955 D: 79229\nPtnml(0-2): 39, 17157, 47137, 17238, 35\n\n`speedtest 1 256 60` by @Torom:\n```\nsf_base =    2282060 +/-    6930 (95%)\nsf_test =    2332255 +/-    5742 (95%)\ndiff    =      50195 +/-   10399 (95%)\nspeedup =   2.19956% +/-  0.456% (95%)\n\nProbability candidate is faster than baseline by at least\n   0.00%: 100.00%\n   0.25%: 100.00%\n   0.50%: 100.00%\n   1.00%: 100.00%\n```\nA previous benchmark with shorter speedtests IIUC obtained `0.91296% +/-  0.108%`.\n\nThe number of saved LOC is very modest, but the extra code is mostly helper functions, so I would call this a big conceptual simplification.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7214\n\nBench: 1648623\n\nCo-authored-by: Ryan Hirsch <hirsch28@purdue.edu>\n",
+      "subject": "Only generate legal moves in movegen"
+    },
+    {
       "hash": "dcf1cd5a8045d49866c0cc56df5b8ba6fe41a659",
       "short": "dcf1cd5a",
       "author": "FauziAkram <fauzi.dabat@hotmail.com>",
