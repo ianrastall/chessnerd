@@ -4,7 +4,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const myTools = [
   {
-    name: 'PGN Tools',
+    name: 'PGN Simple Edit (Titania Tools)',
+    releaseDate: '2026-10-12',
+    language: 'C# / Rust',
+    directUrl: 'https://github.com/ianrastall/titania-tools/releases/download/v0.1.0/PgnSimpleEdit-0.1.0-Setup.exe',
+    repoUrl: 'https://github.com/ianrastall/titania-tools'
+  },
+  {
+    name: 'PGN Tools (older program)',
     releaseDate: '2026-06-20',
     language: 'C#',
     directUrl: 'https://github.com/ianrastall/PgnTools/releases/download/2.0.0/PgnTools-2.0.0-win-x64.exe',
@@ -25,6 +32,13 @@ interface Software {
 }
 
 const essentialSoftware: Software[] = [
+  {
+    name: 'ScanChess',
+    tag: 'Web app / Free tools + paid scanning',
+    description:
+      'Converts chessboard images to editable FEN positions and handwritten scoresheets to PGN games, with review and correction before export. Also offers browser-based analysis and PGN tools. Scanning requires an account and uses credits, with free starter credits on sign-up.',
+    links: [{ label: 'Website', url: 'https://scanchess.com/' }]
+  },
   {
     name: 'Cutechess',
     tag: 'Free / Open source',
@@ -65,14 +79,14 @@ const essentialSoftware: Software[] = [
   }
 ];
 ---
-<BaseLayout title="Software Catalog" description="My PGN tools, plus the essential chess databases, analysis suites, and engine tools players rely on.">
+<BaseLayout title="Software Catalog" description="Titania Tools and my older PGN Tools, plus chess databases, analysis suites, engine tools, and ScanChess image scanning.">
   <main>
     <div class="tool-container">
       <ToolHeader title="Software Catalog" icon="inventory_2" />
 
       <section class="software-section">
         <h2 class="software-section-title">My Contributions</h2>
-        <p class="software-section-intro">PGN Tools is my Windows desktop GUI for working with PGN files and databases &mdash; one program that replaces the older single-purpose utilities I used to publish.</p>
+        <p class="software-section-intro">Titania Tools is my new suite of chess tools for Windows. Its first GUI, PGN Simple Edit, reports on, joins, merges, splits, and sorts PGN files. It works with whole files rather than editing individual games. PGN Tools (PgnTools) is my older program and remains available below.</p>
 
         <div class="software-table-wrap">
           <table class="software-table">
@@ -103,7 +117,7 @@ const essentialSoftware: Software[] = [
       <section class="software-section">
         <h2 class="software-section-title">Essential Chess Software</h2>
         <p class="software-section-intro">
-          The databases, analysis suites, and engine tools most players end up wanting.
+          Databases, analysis suites, engine tools, and utilities for turning chess images and scoresheets into usable game data.
         </p>
 
         <div class="software-list">
