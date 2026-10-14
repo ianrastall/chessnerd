@@ -1,5 +1,26 @@
 [
   {
+    "hash": "5c4cef0bfe61fb3249178b2bcf21f5673557efe7",
+    "short": "5c4cef0b",
+    "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
+    "date": "2026-10-13T16:29:38Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5c4cef0bfe61fb3249178b2bcf21f5673557efe7",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5c4cef0bfe61fb3249178b2bcf21f5673557efe7.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5c4cef0bfe61fb3249178b2bcf21f5673557efe7.tar.gz"
+      }
+    ],
+    "message": "Update NNUE architecture to SFNNv18 and net nn-c9e480e92425.nnue\n\nIntroduce the SFNNv18 NNUE architecture:\n- Replace HalfKAv2_hm with K32Q2 feature set, conditioning on own king position (32 buckets) and opponent queen presence (2 states).\n- Expand layer stacks from 8 to 32, indexed by piece count and queen bucket (pc_bucket * 4 + queen_bucket).\n- Quantize feature transformer weights to int8 and simplify parameter serialization to uncompressed little-endian format, removing LEB128 routines.\n- Update accumulator management and Finny table caches to track opponent queen presence, requiring accumulator refresh on king moves and opponent queen captures or promotions.\n- Update default net to nn-c9e480e92425.nnue.\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6ac90b275349156614d9415f\n```\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 23808 W: 6198 L: 5910 D: 11700\nPtnml(0-2): 27, 2674, 6237, 2916, 50\n```\n\nPassed rebased LTC: https://tests.stockfishchess.org/tests/view/6ac9e0a15349156614d9425b\n```\nLLR: 2.97 (-2.94,2.94) <0.50,2.50>\nTotal: 28680 W: 7533 L: 7236 D: 13911\nPtnml(0-2): 7, 2913, 8203, 3210, 7\n```\n\nnodestime STC: https://tests.stockfishchess.org/tests/view/6acae0855349156614d943a8\n```\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 20032 W: 5518 L: 5200 D: 9314\nPtnml(0-2): 110, 2208, 5086, 2478, 134\n```\n\nnodestime LTC: https://tests.stockfishchess.org/tests/view/6acaeece5349156614d943b1\n```\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 16386 W: 4450 L: 4183 D: 7753\nPtnml(0-2): 6, 1564, 4785, 1833, 5\n```\n\nAblations (STC):\nhttps://tests.stockfishchess.org/tests/view/6acc23a320d2b3b562a7e927\nhttps://tests.stockfishchess.org/tests/view/6acc23c220d2b3b562a7e929\nhttps://tests.stockfishchess.org/tests/view/6acc23e120d2b3b562a7e92b\nhttps://tests.stockfishchess.org/tests/view/6acd7b39733e627f7058beac\n\nVerification Run (STC) for PR commit:\nhttps://tests.stockfishchess.org/tests/view/6ace1595733e627f7058bf74\n\nAll three single addition ablations failed non-reg SPRT against branch. The closest one seems to be output buckets only, which might have been a gainer on it's own.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7215\n\nBench: 1559611\n",
+    "subject": "Update NNUE architecture to SFNNv18 and net nn-c9e480e92425.nnue"
+  },
+  {
     "hash": "31275420c720e98fa5061c4e2a0bb4e716a85561",
     "short": "31275420",
     "author": "Dubslow <bunslow@gmail.com>",
