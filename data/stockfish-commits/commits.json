@@ -1,5 +1,89 @@
 [
   {
+    "hash": "effdc3fd3f6de6e75fe1374a51a7a7eed66f880b",
+    "short": "effdc3fd",
+    "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-10-17T11:25:09Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/effdc3fd3f6de6e75fe1374a51a7a7eed66f880b",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/effdc3fd3f6de6e75fe1374a51a7a7eed66f880b.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/effdc3fd3f6de6e75fe1374a51a7a7eed66f880b.tar.gz"
+      }
+    ],
+    "message": "Refactor totBestMoveChanges calculation\n\nKeep the updates local to where they are used. Also save some instructions in analysis mode.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7222\n\nNo functional change\n",
+    "subject": "Refactor totBestMoveChanges calculation"
+  },
+  {
+    "hash": "b877fbde5985f57d07dd137085f366588f36a717",
+    "short": "b877fbde",
+    "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+    "date": "2026-10-17T11:24:48Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/b877fbde5985f57d07dd137085f366588f36a717",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b877fbde5985f57d07dd137085f366588f36a717.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/b877fbde5985f57d07dd137085f366588f36a717.tar.gz"
+      }
+    ],
+    "message": "Optimize FullThreats LUTs and incremental index updates\n\nFold offsets into PieceType-indexed u16 lut2 table in a single ThreatLUTs struct to reduce FullThreats::make_index table lookups.\n\nSmall speedup measured:\n```\nResult of  10 runs (x86-64-avx512icl, speedtest 1 16 32)\n========================================================\nbase (base_5c4cef0b  ) =    1307427  +/- 25215\ntest (test_febee374  ) =    1314690  +/- 24522\ndiff                   =      +7263  +/- 5730\n\nspeedup        = +0.0056 (+0.56%)\nP(speedup > 0) =  0.9934\n```\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/6acd6e4b733e627f7058bea7\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 98784 W: 25285 L: 25145 D: 48354\nPtnml(0-2): 123, 10386, 28243, 10508, 132\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7230\n\nNo functional change\n",
+    "subject": "Optimize FullThreats LUTs and incremental index updates"
+  },
+  {
+    "hash": "6a9ec5c33d00c13edde7d19249194102867ae8c3",
+    "short": "6a9ec5c3",
+    "author": "Linmiao Xu <lin@robotmoon.com>",
+    "date": "2026-10-17T11:24:23Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/6a9ec5c33d00c13edde7d19249194102867ae8c3",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/6a9ec5c33d00c13edde7d19249194102867ae8c3.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/6a9ec5c33d00c13edde7d19249194102867ae8c3.tar.gz"
+      }
+    ],
+    "message": "Lazy compute threats\n\nSTC: https://tests.stockfishchess.org/tests/view/6acf2360733e627f7058c039\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 73376 W: 18866 L: 18527 D: 35983\nPtnml(0-2): 88, 7499, 21176, 7836, 89\n\nCompute threats lazily as needed.\nUnfortunately, this patch overlaps with https://github.com/official-stockfish/Stockfish/pull/7227 for which I apologize.\nI'm more than happy to give all credit to @linrock and make him the author.  I think the movegen stuff in the other patch could be tested separately.\n\nNo functional change.  Written by Claude.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7228\n\nNo functional change\n",
+    "subject": "Lazy compute threats"
+  },
+  {
+    "hash": "e08dfa8049ead33b64d92c874bda59f213702b42",
+    "short": "e08dfa80",
+    "author": "ayushthepiro11-design <237785622+ayushthepiro11-design@users.noreply.github.com>",
+    "date": "2026-10-17T11:04:06Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/e08dfa8049ead33b64d92c874bda59f213702b42",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e08dfa8049ead33b64d92c874bda59f213702b42.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e08dfa8049ead33b64d92c874bda59f213702b42.tar.gz"
+      }
+    ],
+    "message": "Pair int8 weight rows in accumulator updates\n\nSince SFNNv18 every feature-transformer weight row (piece-square, threat and pawn-pair features) is stored as int8 and widened to int16 while it is added to or subtracted from the accumulator. On x86 the widening is done with one sign extension (vpmovsxbw) per vector register, and the accumulator update is bound by the shuffle port that executes it.\n\nThis patch widens two rows at once: the bytes of the two rows are interleaved with unpacklo/unpackhi_epi8 and each pair is summed by a maddubs against a vector of ones, which costs one shuffle per two rows instead of one per row. The weight rows are permuted at load time (FeatureTransformer::WideningPairOrder, inverted again by export_net) so that the accumulator layout stays unchanged. Rows of all feature sets with the same sign are collected (WeightRows) and processed together so that nearly every row has a partner; a leftover row is widened on its own with unpack + shift. Enabled for SSSE3 and better; other targets are unchanged.\n\nMeasured with an interleaved bench comparison (1 thread) on an Ice Lake server core:\n\n  x86-64-avx512icl   +7.0% nps\n  x86-64-avx2        +5.2% nps\n  x86-64-sse41-popcnt +10.7% nps\n\nNon-functional change: node counts are identical to master for the avx512icl, avx2, sse41-popcnt, sse2 and scalar builds, including debug and sanitized builds, and export_net reproduces the original net file.\n\npassed STC:\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 20768 W: 5480 L: 5211 D: 10077\nPtnml(0-2): 23, 2092, 5888, 2355, 26\nhttps://tests.stockfishchess.org/tests/view/6ad04cd2733e627f7058c248\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7225\n\nNo functional change\n\nCo-authored-by: arena-agent <297053741+arena-agent@users.noreply.github.com>\n",
+    "subject": "Pair int8 weight rows in accumulator updates"
+  },
+  {
     "hash": "5c4cef0bfe61fb3249178b2bcf21f5673557efe7",
     "short": "5c4cef0b",
     "author": "tony <35334345+TonyCongqianWang@users.noreply.github.com>",
