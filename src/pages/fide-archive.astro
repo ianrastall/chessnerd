@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+import manifestData from '../../public/data/fide-archive/manifest.json';
+import { formatBytes, groupByPeriod, parseFideArchiveManifest, type FideArchiveFile } from '../lib/fide-archive';
+
+const manifest = parseFideArchiveManifest(manifestData);
+const fide = manifest.files.filter((file) => file.source === 'fide');
+const olimp = manifest.files.filter((file) => file.source === 'olimpbase');
+const fideRows = groupByPeriod(fide);
+const olimpRows = groupByPeriod(olimp.filter((file) => file.format !== 'html'));
+const olimpPages = olimp.filter((file) => file.format === 'html').length;
+
+const totalBytes = manifest.files.reduce((sum, file) => sum + file.bytes, 0);
+const number = (value: number) => value.toLocaleString('en-US');
+const years = (rows: { period: string }[]) => {
+  const dated = rows.map((row) => row.period.slice(0, 4)).filter((year) => /^\d{4}$/.test(year)).sort();
+  return dated.length ? `${dated[0]}–${dated[dated.length - 1]}` : 'none yet';
+};
+const generated = manifest.generated.slice(0, 10);
+const monthLabel = (period: string) => {
+  if (!/^\d{4}-\d{2}$/.test(period)) return period === 'undated' ? 'Undated' : period;
+  return new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${period}-01T00:00:00Z`));
+};
+const fideColumns = [
+  { key: 'standard', label: 'Standard' },
+  { key: 'rapid', label: 'Rapid' },
+  { key: 'blitz', label: 'Blitz' },
+  { key: 'combined', label: 'Combined' }
+];
+const cell = (files: FideArchiveFile[], key: string) =>
+  files.filter((file) => file.list === key || (key === 'combined' && file.list === 'combined-legacy'));
+const fmt = (file: FideArchiveFile) => (file.list === 'combined-legacy' ? `${file.format} (legacy)` : file.format);
+---
+<BaseLayout title="FIDE Archive" description="A mirror of old FIDE rating lists from FIDE and Olimpbase, in TXT and XML, with checksums.">
+  <ToolHeader title="FIDE Archive" icon="history_edu" />
+  <div class="fa">
+    <p class="fa-intro">
+      Old FIDE rating lists, kept as a backup and mirror of two sources: FIDE’s own <a href="https://ratings.fide.com/download_lists.phtml" target="_blank" rel="noopener noreferrer">download page</a>
+      and its older files, and Olimpbase’s <a href="https://www.olimpbase.org/Elo/summary.html" target="_blank" rel="noopener noreferrer">History of Elo ratings 1971–2001</a>.
+      Files are byte-for-byte as published, with their original names. Nothing is edited or repaired.
+    </p>
+
+    <div class="fa-summary">
+      <p><strong>{number(manifest.files.length)}</strong> files <span aria-hidden="true">·</span> <strong>{formatBytes(totalBytes)}</strong></p>
+      <p>FIDE {years(fideRows)} <span aria-hidden="true">·</span> Olimpbase {years(olimpRows)}</p>
+      <p>Manifest generated <time datetime={generated}>{generated}</time></p>
+      <a href={manifest.itemUrl} target="_blank" rel="noopener noreferrer">Whole collection on the Internet Archive <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <div class="fa-tabs" role="tablist" aria-label="Archive sources">
+      <button type="button" role="tab" id="faTabFide" aria-controls="faFide" aria-selected="true" class="fa-tab">FIDE ratings.fide.com <span>{number(fide.length)}</span></button>
+      <button type="button" role="tab" id="faTabOlimp" aria-controls="faOlimp" aria-selected="false" class="fa-tab" tabindex="-1">Olimpbase 1971–2009 <span>{number(olimp.length)}</span></button>
+    </div>
+
+    <section id="faFide" role="tabpanel" aria-labelledby="faTabFide">
+      <p class="fa-note">
+        FIDE publishes each list as a TXT zip and an XML zip. Before 2012 there is one combined TXT file per list (Jan 2001 onwards, quarterly then bimonthly then monthly).
+        The latest list is a rolling snapshot, so its combined files carry the date they were fetched.
+      </p>
+      <div class="fa-controls">
+        <label for="faFideSearch">Find a period</label>
+        <input id="faFideSearch" type="search" placeholder="2015, Mar 2019, 2019-03…" autocomplete="off" data-filter="faFideBody" />
+      </div>
+      <div class="fa-table-wrap" role="region" aria-label="FIDE rating lists" tabindex="0">
+        <table class="fa-table">
+          <caption class="visually-hidden">FIDE rating lists by month, newest first</caption>
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              {fideColumns.map((col) => <th scope="col">{col.label}</th>)}
+            </tr>
+          </thead>
+          <tbody id="faFideBody">
+            {fideRows.map((row) => (
+              <tr data-search={`${row.period} ${monthLabel(row.period)}`.toLowerCase()}>
+                <th scope="row"><time datetime={row.period}>{monthLabel(row.period)}</time></th>
+                {fideColumns.map((col) => (
+                  <td>
+                    {cell(row.files, col.key).map((file) => (
+                      <a class="fa-dl" href={file.archiveUrl} title={`${file.name} · SHA-256 ${file.sha256}`} aria-label={`Download ${col.label} ${monthLabel(row.period)} ${fmt(file)}`}>
+                        <span class="fa-fmt">{fmt(file)}</span> {formatBytes(file.bytes)}
+                      </a>
+                    ))}
+                    {cell(row.files, col.key).length === 0 && <span class="fa-none" aria-label="Not published">—</span>}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <tr id="faFideEmpty" hidden><td colspan={fideColumns.length + 1}>No periods match.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="faOlimp" role="tabpanel" aria-labelledby="faTabOlimp" hidden>
+      <p class="fa-note">
+        Olimpbase’s raw lists: the TXT, DBF and MDB files it collected for 1975–2009 and the scanned lists (ZIP of GIFs) for 1971–1991.
+        Its own warning applies: the data is unofficial and contains the errors of the originals, because ratings were once computed by hand.
+        {olimpPages > 0 && <>The {number(olimpPages)} HTML list pages and the summary are included too and are listed in the manifest.</>}
+      </p>
+      <div class="fa-controls">
+        <label for="faOlimpSearch">Find a period</label>
+        <input id="faOlimpSearch" type="search" placeholder="1985, Jul 1978…" autocomplete="off" data-filter="faOlimpBody" />
+      </div>
+      <div class="fa-table-wrap" role="region" aria-label="Olimpbase rating lists" tabindex="0">
+        <table class="fa-table">
+          <caption class="visually-hidden">Olimpbase rating list files by period, newest first</caption>
+          <thead>
+            <tr><th scope="col">Period</th><th scope="col">Files</th></tr>
+          </thead>
+          <tbody id="faOlimpBody">
+            {olimpRows.map((row) => (
+              <tr data-search={`${row.period} ${monthLabel(row.period)}`.toLowerCase()}>
+                <th scope="row">{monthLabel(row.period)}</th>
+                <td>
+                  {row.files.map((file) => (
+                    <a class="fa-dl" href={file.archiveUrl} title={`${file.name} · SHA-256 ${file.sha256}`} aria-label={`Download ${file.name}`}>
+                      <span class="fa-fmt">{file.name}</span> {formatBytes(file.bytes)}
+                    </a>
+                  ))}
+                </td>
+              </tr>
+            ))}
+            <tr id="faOlimpEmpty" hidden><td colspan="2">No periods match.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <h2 class="fa-h">Checksums and sources</h2>
+    <p class="fa-note">
+      Each file’s SHA-256 shows when you hover its link, and the full list, with the original source URL of every file, is in
+      <a href="/data/fide-archive/manifest.json">manifest.json</a>. This is an independent mirror, not affiliated with FIDE or Olimpbase.
+      Please use the original sites for anything that needs to be current.
+    </p>
+  </div>
+
+  <style is:global>
+    .fa-intro { margin-bottom: 1rem; max-width: 70ch; }
+    .fa-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.9rem; }
+    .fa-summary strong { color: var(--text-primary); }
+    .fa-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .fa-tab { display: inline-flex; gap: 0.5rem; align-items: center; padding: 0.45rem 0.8rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.88rem; font-weight: 600; cursor: pointer; }
+    .fa-tab span { font-weight: 400; font-size: 0.78rem; opacity: 0.8; }
+    .fa-tab[aria-selected="true"] { background: rgba(var(--accent-rgb), 0.15); border-color: var(--accent); color: var(--accent); }
+    .fa-note { color: var(--text-secondary); font-size: 0.88rem; max-width: 80ch; margin-bottom: 0.9rem; }
+    .fa-controls { display: flex; flex-direction: column; gap: 0.3rem; max-width: 22rem; margin-bottom: 0.9rem; }
+    .fa-controls label { font-size: 0.8rem; color: var(--text-secondary); }
+    .fa-controls input { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-primary); padding: 0.4rem 0.6rem; height: 2.1rem; font-size: 0.88rem; }
+    .fa-controls input:focus { outline: none; border-color: var(--accent); }
+    .fa-table-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--border-color); border-radius: 10px; }
+    .fa-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .fa-table thead th { position: sticky; top: 0; z-index: 1; text-align: left; padding: 0.5rem 0.75rem; background: var(--bg-secondary); color: var(--text-secondary); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+    .fa-table th[scope="row"], .fa-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-color); vertical-align: top; text-align: left; }
+    .fa-table th[scope="row"] { white-space: nowrap; font-weight: 600; }
+    .fa-table tbody tr:last-child > * { border-bottom: none; }
+    .fa-table tbody tr:hover > * { background: rgba(var(--accent-rgb), 0.04); }
+    .fa-dl { display: inline-block; margin: 0 0.8rem 0.15rem 0; color: var(--accent); text-decoration: none; font-size: 0.82rem; white-space: nowrap; }
+    .fa-dl:hover { text-decoration: underline; }
+    .fa-fmt { font-weight: 700; text-transform: uppercase; font-size: 0.74rem; }
+    .fa-none { color: var(--text-secondary); }
+    .fa-h { margin: 1.75rem 0 0.5rem; font-size: 1.05rem; }
+    [hidden] { display: none !important; }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var tabs = document.querySelectorAll('.fa-tab');
+      function show(tab) {
+        tabs.forEach(function (t) {
+          var on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          t.tabIndex = on ? 0 : -1;
+          document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+        });
+        try { history.replaceState(null, '', tab.id === 'faTabOlimp' ? '#olimpbase' : '#fide'); } catch (e) {}
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { show(t); });
+        t.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+          show(next); next.focus();
+        });
+      });
+      if (location.hash === '#olimpbase') show(document.getElementById('faTabOlimp'));
+      document.querySelectorAll('input[data-filter]').forEach(function (input) {
+        var body = document.getElementById(input.getAttribute('data-filter'));
+        var empty = body.querySelector('tr[id$="Empty"]');
+        input.addEventListener('input', function () {
+          var q = input.value.trim().toLowerCase();
+          var shown = 0;
+          body.querySelectorAll('tr[data-search]').forEach(function (row) {
+            var hit = !q || row.getAttribute('data-search').indexOf(q) !== -1;
+            row.hidden = !hit;
+            if (hit) shown++;
+          });
+          empty.hidden = shown !== 0;
+        });
+      });
+    })();
+  </script>
+</BaseLayout>
