@@ -8,8 +8,8 @@ to a FIDE ID.
 
 ## Data
 
-The page reads static files built by `D:\dev\projide-players` (see its `FORMAT.md`)
-from the yearly Parquet files in `D:\dev\projide-db-archive`:
+The page reads static files built by `D:\dev\proj\fide-players` (see its `FORMAT.md`)
+from the yearly Parquet files in `D:\dev\proj\fide-db-archive`:
 
 - `players/shards.json` lists the rating lists and the first FIDE ID of each shard.
 - `players/shard-NNNN.bin.gz` holds about 1000 players each, gzipped. A profile loads one
@@ -32,10 +32,10 @@ Local development reads them from disk instead. `.env.development` (git-ignored)
 to the build folder (also git-ignored):
 
 ```powershell
-cmd /c mklink /J publicide-players D:\dev\projide-players
+cmd /c mklink /J public\fide-players D:\dev\proj\fide-players
 ```
 
-Remove the junction (`rmdir publicide-players`) before `npm run build` on this machine,
+Remove the junction (`rmdir public\fide-players`) before `npm run build` on this machine,
 because the build copies `public/` into `dist`. CI never has it.
 
 ## What a profile does not have
