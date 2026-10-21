@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
+import { gzipSync, gunzipSync } from 'node:zlib';
 import {
   dateToYear,
   decodeShard,
+  gunzipIfNeeded,
   matchNames,
+  nameFileName,
   nameKey,
   parseNameEntries,
   shardFileName,
@@ -121,7 +124,8 @@ describe('directory helpers', () => {
     expect(shardIndexFor(dir, 19999)).toBe(0);
     expect(shardIndexFor(dir, 20000)).toBe(1);
     expect(shardIndexFor(dir, 5_000_000)).toBe(2);
-    expect(shardFileName(7)).toBe('shard-0007.bin');
+    expect(shardFileName(7)).toBe('shard-0007.bin.gz');
+    expect(nameFileName('ca')).toBe('ca.json.gz');
   });
 
   it('keys names like the builder', () => {
@@ -135,6 +139,16 @@ describe('directory helpers', () => {
     expect(dateToYear('2024-07')).toBeCloseTo(2024.5417, 3);
     expect(dateToYear('1969')).toBe(1969.5);
     expect(Number.isNaN(dateToYear('x'))).toBe(true);
+  });
+});
+
+describe('gunzipIfNeeded', () => {
+  it('unpacks gzip and passes plain data through', async () => {
+    const plain = new TextEncoder().encode('FPL1 hello').buffer as ArrayBuffer;
+    const packed = gzipSync(Buffer.from(plain));
+    const unpacked = await gunzipIfNeeded(packed.buffer.slice(packed.byteOffset, packed.byteOffset + packed.byteLength) as ArrayBuffer);
+    expect(new TextDecoder().decode(unpacked)).toBe('FPL1 hello');
+    expect(await gunzipIfNeeded(plain)).toBe(plain);
   });
 });
 
@@ -160,7 +174,7 @@ describe.skipIf(!existsSync(`${real}/shards.json`))('real shards', () => {
   it('decodes Magnus Carlsen', () => {
     const dir = JSON.parse(readFileSync(`${real}/shards.json`, 'utf8')) as ShardDirectory;
     const i = shardIndexFor(dir, 1503014);
-    const file = readFileSync(`${real}/${shardFileName(i)}`);
+    const file = gunzipSync(readFileSync(`${real}/${shardFileName(i)}`));
     const player = decodeShard(file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength) as ArrayBuffer, dir.lists).find(1503014);
     expect(player?.names.at(-1)?.name).toBe('Carlsen, Magnus');
     expect(player?.feds.at(-1)?.fed).toBe('NOR');

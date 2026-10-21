@@ -2,9 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 
-// Where the player shards live. The default is a folder beside this site; set
-// PUBLIC_FIDE_PLAYERS_BASE to a full URL (ending in /) to read them from another host.
-const base = import.meta.env.PUBLIC_FIDE_PLAYERS_BASE ?? '/fide-players/';
+// Where the player files live: the fide-players repo, served by GitHub Pages. Set
+// PUBLIC_FIDE_PLAYERS_BASE (a URL ending in /) to read them from somewhere else; local
+// development uses /fide-players/ via .env.development.
+const base = import.meta.env.PUBLIC_FIDE_PLAYERS_BASE ?? 'https://ianrastall.github.io/fide-players/';
 ---
 <BaseLayout title="FIDE Player Profiles" description="Look up a FIDE-rated player and see their full rating history from the archived FIDE rating lists, 1967 to now.">
   <ToolHeader title="FIDE Player Profiles" icon="person_search" backHref="/fide-archive.html" />

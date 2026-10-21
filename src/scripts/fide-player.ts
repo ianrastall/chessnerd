@@ -1,7 +1,9 @@
 import {
   dateToYear,
   decodeShard,
+  gunzipIfNeeded,
   matchNames,
+  nameFileName,
   nameKey,
   parseNameEntries,
   shardFileName,
@@ -66,7 +68,7 @@ function loadShard(index: number, dir: ShardDirectory): Promise<Shard> {
   if (!pending) {
     pending = fetch(`${BASE}players/${shardFileName(index)}`).then(async (r) => {
       if (!r.ok) throw new Error(`Shard ${index}: HTTP ${r.status}`);
-      return decodeShard(await r.arrayBuffer(), dir.lists);
+      return decodeShard(await gunzipIfNeeded(await r.arrayBuffer()), dir.lists);
     });
     shards.set(index, pending);
   }
@@ -76,7 +78,11 @@ function loadShard(index: number, dir: ShardDirectory): Promise<Shard> {
 function loadNames(key: string): Promise<NameEntry[]> {
   let pending = nameFiles.get(key);
   if (!pending) {
-    pending = fetch(`${BASE}names/${key}.json`).then(async (r) => (r.status === 404 ? [] : r.ok ? parseNameEntries(await r.json()) : Promise.reject(new Error(`names/${key}: HTTP ${r.status}`))));
+    pending = fetch(`${BASE}names/${nameFileName(key)}`).then(async (r) => {
+      if (r.status === 404) return [];
+      if (!r.ok) throw new Error(`names/${key}: HTTP ${r.status}`);
+      return parseNameEntries(JSON.parse(new TextDecoder().decode(await gunzipIfNeeded(await r.arrayBuffer()))));
+    });
     nameFiles.set(key, pending);
   }
   return pending;

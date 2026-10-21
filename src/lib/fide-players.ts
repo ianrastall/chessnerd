@@ -72,7 +72,23 @@ export function shardIndexFor(directory: Pick<ShardDirectory, 'shards'>, id: num
 }
 
 export function shardFileName(index: number): string {
-  return `shard-${String(index).padStart(4, '0')}.bin`;
+  return `shard-${String(index).padStart(4, '0')}.bin.gz`;
+}
+
+export function nameFileName(key: string): string {
+  return `${key}.json.gz`;
+}
+
+/**
+ * Gunzip a downloaded file. Shards and name files are stored gzipped; a server that already
+ * decoded them (Content-Encoding) hands back plain bytes, which are returned unchanged.
+ */
+export async function gunzipIfNeeded(buffer: ArrayBuffer): Promise<ArrayBuffer> {
+  const head = new Uint8Array(buffer, 0, Math.min(2, buffer.byteLength));
+  if (head[0] !== 0x1f || head[1] !== 0x8b) return buffer;
+  if (typeof DecompressionStream === 'undefined') throw new Error('This browser cannot unpack the player files (DecompressionStream is missing).');
+  const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'));
+  return new Response(stream).arrayBuffer();
 }
 
 /** Key of the name-index file for a surname: first two Latin letters, accents removed. */

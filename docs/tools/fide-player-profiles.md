@@ -8,31 +8,35 @@ to a FIDE ID.
 
 ## Data
 
-The page reads static files built by `D:\dev\proj\fide-players` (see its `FORMAT.md`)
-from the yearly Parquet files in `D:\dev\proj\fide-db-archive`:
+The page reads static files built by `D:\dev\projide-players` (see its `FORMAT.md`)
+from the yearly Parquet files in `D:\dev\projide-db-archive`:
 
 - `players/shards.json` lists the rating lists and the first FIDE ID of each shard.
-- `players/shard-NNNN.bin` holds about 1000 players each. A profile loads one shard
-  (about 135 KB gzipped).
-- `names/<xx>.json` is the name index, one file per first two letters of the surname.
+- `players/shard-NNNN.bin.gz` holds about 1000 players each, gzipped. A profile loads one
+  shard (about 135 KB).
+- `names/<xx>.json.gz` is the name index, one file per first two letters of the surname.
 
-`src/lib/fide-players.ts` decodes the shards; `src/scripts/fide-player.ts` is the page.
+`src/lib/fide-players.ts` unpacks (`DecompressionStream`) and decodes the shards;
+`src/scripts/fide-player.ts` is the page. A server that already decodes the gzip
+(`Content-Encoding`) is handled: plain bytes are used as they are.
 
 ## Where the files are served from
 
-The page uses `PUBLIC_FIDE_PLAYERS_BASE` (a URL ending in `/`), defaulting to
-`/fide-players/`. The shards are about 260 MB raw (around 45 MB gzipped), too large
-to commit to this repo on every rebuild, so for local work `public/fide-players` is a
-directory junction to the build folder and is git-ignored:
+The files are about 58 MB gzipped, kept in their own repository (`ianrastall/fide-players`)
+and served by GitHub Pages at `https://ianrastall.github.io/fide-players/`, which is the
+page's default. Set `PUBLIC_FIDE_PLAYERS_BASE` (a URL ending in `/`) to read them from
+somewhere else.
+
+Local development reads them from disk instead. `.env.development` (git-ignored) sets
+`PUBLIC_FIDE_PLAYERS_BASE=/fide-players/`, and `public/fide-players` is a directory junction
+to the build folder (also git-ignored):
 
 ```powershell
-cmd /c mklink /J public\fide-players D:\dev\proj\fide-players
+cmd /c mklink /J publicide-players D:\dev\projide-players
 ```
 
-Do not run `npm run build` with the junction in place unless you want the shards in
-`dist` (the build copies `public/`). For deployment, host the `players/` and `names/`
-folders somewhere that sends `Access-Control-Allow-Origin: *` (a GitHub Pages site for
-its own repo does) and set `PUBLIC_FIDE_PLAYERS_BASE` for the build.
+Remove the junction (`rmdir publicide-players`) before `npm run build` on this machine,
+because the build copies `public/` into `dist`. CI never has it.
 
 ## What a profile does not have
 
@@ -47,7 +51,7 @@ archive and are skipped in the profiles.
 
 ```powershell
 cd D:\dev\proj\fide-players
-python build_players.py        # about 7 minutes
+python build_players.py        # about 8 minutes
 python verify.py
 node verify.mjs
 ```
