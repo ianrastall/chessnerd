@@ -48,6 +48,11 @@ const fmt = (file: FideArchiveFile) => (file.list === 'combined-legacy' ? `${fil
       <a href={manifest.itemUrl} target="_blank" rel="noopener noreferrer">Whole collection on the Internet Archive <span aria-hidden="true">↗</span></a>
     </div>
 
+    <p class="fa-note fa-profiles">
+      <span class="material-icons" aria-hidden="true">person_search</span>
+      <a href="/fide-player.html">Look up a player</a>: full standard rating history, 1967 to now, from these lists.
+    </p>
+
     <div class="fa-tabs" role="tablist" aria-label="Archive sources">
       <button type="button" role="tab" id="faTabFide" aria-controls="faFide" aria-selected="true" class="fa-tab">FIDE ratings.fide.com <span>{number(fide.length)}</span></button>
       <button type="button" role="tab" id="faTabOlimp" aria-controls="faOlimp" aria-selected="false" class="fa-tab" tabindex="-1">Olimpbase 1971–2009 <span>{number(olimp.length)}</span></button>
@@ -145,6 +150,8 @@ const fmt = (file: FideArchiveFile) => (file.list === 'combined-legacy' ? `${fil
     .fa-tab span { font-weight: 400; font-size: 0.78rem; opacity: 0.8; }
     .fa-tab[aria-selected="true"] { background: rgba(var(--accent-rgb), 0.15); border-color: var(--accent); color: var(--accent); }
     .fa-note { color: var(--text-secondary); font-size: 0.88rem; max-width: 80ch; margin-bottom: 0.9rem; }
+    .fa-profiles { display: flex; align-items: center; gap: 0.4rem; }
+    .fa-profiles .material-icons { font-size: 1.15rem; color: var(--accent); }
     .fa-controls { display: flex; flex-direction: column; gap: 0.3rem; max-width: 22rem; margin-bottom: 0.9rem; }
     .fa-controls label { font-size: 0.8rem; color: var(--text-secondary); }
     .fa-controls input { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-primary); padding: 0.4rem 0.6rem; height: 2.1rem; font-size: 0.88rem; }
