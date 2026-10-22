@@ -27,7 +27,7 @@ function remember(){
 function node<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string,className?:string){const el=document.createElement(tag);if(text)el.textContent=text;if(className)el.className=className;return el;}
 function row(entry:ArchiveSearchEntry){
   const tr=node('tr'),name=node('td'),a=node('a',entry.name,'event-name');a.href=entry.page;
-  name.append(a,node('span',entry.collectionLabel+(entry.place ? ` · ${entry.place}` : ''),'event-source'));
+  name.append(a,node('span',entry.collectionLabel+(entry.place ? ` · ${entry.place}` : ''),'event-source'),node('span',`${displayArchiveDate(entry)} · ${entry.games.toLocaleString('en-US')} games`,'event-mobile-meta'));
   const date=node('td'),time=node('time',displayArchiveDate(entry));time.dateTime=displayArchiveDate(entry);date.append(time);
   const games=node('td',entry.games.toLocaleString('en-US'),'game-count');
   const download=node('td'),link=node('a','↓ ZIP','download-link');link.href=entry.url;link.title=`SHA-256: ${entry.sha256}`;link.setAttribute('aria-label',`Download ${entry.name} ZIP`);download.append(link);

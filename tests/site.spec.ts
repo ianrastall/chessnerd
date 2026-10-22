@@ -58,3 +58,9 @@ test('board palette exports remain independent of interface accent',async({page}
   await page.goto('/board-colors.html');const before=await page.locator('#darkCode').innerText();await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('input[name="accent-mode"][value="custom"]').check();await page.locator('#accent-picker').fill('#ff0000');await page.keyboard.press('Escape');await expect(page.locator('#darkCode')).toHaveText(before);
   const download=page.waitForEvent('download');await page.locator('#downloadSvgBtn').click();expect((await download).suggestedFilename()).toMatch(/\.svg$/);
 });
+
+test('phone archive rows keep downloads visible without sideways scrolling',async({page})=>{
+  await page.setViewportSize({width:320,height:900});await page.goto('/');await expect(page.locator('#archive-count')).toContainText('matching entries');
+  const link=page.locator('#archive-results .download-link').first();const box=await link.boundingBox();expect(box).not.toBeNull();expect(box!.x+box!.width).toBeLessThanOrEqual(320);
+  await expect(page.locator('#archive-results .event-mobile-meta').first()).toBeVisible();
+});
