@@ -1,4 +1,5 @@
 ---
+import ToolIcon from './ToolIcon.astro';
 import type { ToolMeta } from '../data/tools';
 import { categoryHref, categoryLabels } from '../data/tools';
 
@@ -14,7 +15,7 @@ const categoryLabel = categoryLabels[tool.category];
     {categoryLabel}
   </a>
   <a class="tool-card-link" href={tool.href}>
-    <span class="tool-icon material-icons" aria-hidden="true">{tool.icon}</span>
+    <span class="tool-icon"><ToolIcon name={tool.icon} /></span>
     <div class="tool-card-title-row">
       <h2>{tool.name}</h2>
     </div>

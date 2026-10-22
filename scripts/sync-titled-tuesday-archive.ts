@@ -1,3 +1,4 @@
+import { recordArchiveSource } from './lib/archive-provenance.ts';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { parseTitledTuesdayManifest } from '../src/lib/titled-tuesday-archive.ts';
 
@@ -37,3 +38,5 @@ if (previous === content) {
   await rename(temporary, destination);
   console.log(`Synced ${entries.length} Titled Tuesday events (${entries.reduce((sum, entry) => sum + entry.games, 0).toLocaleString('en-US')} games).`);
 }
+
+await recordArchiveSource('ianrastall/titled-tuesday-archive',revision,source,'data/titled-tuesday-archive/manifest.json',entries.length);

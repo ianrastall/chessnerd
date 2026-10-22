@@ -368,6 +368,9 @@ window.addEventListener('popstate', () => {
   }
 });
 
-const initial = Number(new URLSearchParams(location.search).get('id'));
-if (initial) void showPlayer(initial, false);
+const initialParams = new URLSearchParams(location.search);
+const initialQuery = (initialParams.get('q') || '').trim();
+const initial = Number(initialParams.get('id')) || (/^\d+$/.test(initialQuery) ? Number(initialQuery) : 0);
+if (initial) { idInput.value=String(initial); void showPlayer(initial,false); }
+else if (initialQuery.length >= 2) { searchInput.value=initialQuery; void runSearch(); }
 else setStatus('Search by surname, or enter a FIDE ID.');

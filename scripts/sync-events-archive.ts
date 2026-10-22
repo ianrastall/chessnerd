@@ -1,3 +1,4 @@
+import { recordArchiveSource } from './lib/archive-provenance.ts';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { parseEventBundles, parseEventsManifest } from '../src/lib/events-archive.ts';
 
@@ -46,3 +47,5 @@ const bundles = parseEventBundles(await bundlesResponse.json());
 const bundlesDestination = new URL('../public/data/cc-events-archive/bundles.json', import.meta.url);
 await writeFile(bundlesDestination, `${JSON.stringify(bundles, null, 2)}\n`);
 console.log(`Synced ${bundles.length} cc-events databases.`);
+
+await recordArchiveSource('ianrastall/cc-events-archive',revision,source,'data/cc-events-archive/manifest.json',entries.length);

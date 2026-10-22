@@ -1,0 +1,19 @@
+---
+import { Settings2, X } from '@lucide/astro';
+---
+<button id="appearance-open" disabled type="button" class="appearance-trigger" aria-haspopup="dialog"><Settings2 size={17} aria-hidden="true" /> <span>Settings</span></button>
+<dialog id="appearance-dialog" aria-labelledby="appearance-title">
+  <div class="dialog-heading"><div><p class="eyebrow">Settings</p><h2 id="appearance-title">Appearance</h2></div><button id="appearance-close" class="icon-button" type="button" aria-label="Close settings"><X size={20} aria-hidden="true" /></button></div>
+  <div class="field"><label for="theme-choice">Theme</label><select id="theme-choice"><option value="dark">Dark</option><option value="light">Light</option></select></div>
+  <fieldset class="accent-options"><legend>Accent color</legend>
+    <label class="radio-option"><input type="radio" name="accent-mode" value="system" checked /> Use Windows accent color</label>
+    <p class="setting-help" id="accent-help">Uses the system accent when your browser provides it; otherwise uses the Jupiter default.</p>
+    <label class="radio-option"><input type="radio" name="accent-mode" value="custom" /> Custom color</label>
+    <div class="custom-accent"><label for="accent-picker">Choose color</label><input id="accent-picker" type="color" value="#c8a96b" /><output id="accent-value" for="accent-picker">#C8A96B</output></div>
+  </fieldset>
+  <button id="accent-reset" type="button">Reset to Windows accent</button>
+  <p class="setting-help" id="appearance-feedback" role="status">Changes apply immediately and are saved in this browser.</p>
+</dialog>
+<script>
+  import '../../scripts/appearance';
+</script>

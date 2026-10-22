@@ -2,6 +2,8 @@
 
 Chess Nerd is a static Astro site of chess reference tools, data browsers, PGN downloads, and lightweight analysis utilities published at `https://chessnerd.net/`.
 
+The Jupiter redesign adds a cross-collection archive search homepage, direct ZIP downloads, player lookup, and persistent task navigation. See [the interface and migration record](docs/jupiter-web.md) and [the data/workflow dependency map](docs/data-dependencies.md).
+
 ## Stack
 
 - Astro for static `.html` output
@@ -30,8 +32,10 @@ chessnerd/
 
 ## Local Development
 
+Use Node 24.13.0 (`.nvmrc`).
+
 ```powershell
-npm install
+npm ci
 npm run dev
 ```
 

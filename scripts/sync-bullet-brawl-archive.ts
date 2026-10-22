@@ -1,3 +1,4 @@
+import { recordArchiveSource } from './lib/archive-provenance.ts';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { parseBulletBrawlManifest } from '../src/lib/bullet-brawl-archive.ts';
 
@@ -37,3 +38,5 @@ if (previous === content) {
   await rename(temporary, destination);
   console.log(`Synced ${entries.length} Bullet Brawl events (${entries.reduce((sum, entry) => sum + entry.games, 0).toLocaleString('en-US')} games).`);
 }
+
+await recordArchiveSource('ianrastall/bullet-brawl-archive',revision,source,'data/bullet-brawl-archive/manifest.json',entries.length);

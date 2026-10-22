@@ -29,6 +29,7 @@ export interface ToolMeta {
 }
 
 export const tools: ToolMeta[] = [
+  { id:'fide-player', name:'FIDE Player Profiles', href:'/fide-player.html', icon:'person_search', category:'data', description:'Search players by surname or FIDE ID and explore their archived rating histories.' },
   {
     id: 'board-colors',
     name: 'Board Colors',
@@ -50,7 +51,7 @@ export const tools: ToolMeta[] = [
   {
     id: 'chesscom-api',
     name: 'Chess.com API',
-    href: '/chesscom-api',
+    href: '/chesscom-api.html',
     icon: 'api',
     category: 'data',
     description: 'Formatted reference for the Chess.com published-data API documentation.'
@@ -58,7 +59,7 @@ export const tools: ToolMeta[] = [
   {
     id: 'titled-players',
     name: 'Chess.com Titled Players',
-    href: '/titled-players',
+    href: '/titled-players.html',
     icon: 'groups',
     category: 'data',
     description: 'Browse titled Chess.com accounts — filter by title, rating, country, and status.'

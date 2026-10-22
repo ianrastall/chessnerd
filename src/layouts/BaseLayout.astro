@@ -1,109 +1,70 @@
 ---
 import '../styles/global.css';
-
-interface Props {
-  title: string;
-  description?: string;
-}
-
-const {
-  title,
-  description = 'Chess Nerd is a static collection of chess tools, data browsers, PGN downloads, and reference utilities.'
-} = Astro.props;
-const pageTitle = title === 'Chess Nerd' ? title : `${title} - Chess Nerd`;
+import '../styles/jupiter.css';
+import Appearance from '../components/jupiter/Appearance.astro';
+import { ArrowUpRight, House, Search } from '@lucide/astro';
+import { navigation } from '../data/navigation';
+interface Props { title:string; description?:string; }
+const {title,description='Find chess games, explore player histories, and use free chess tools.'}=Astro.props;
+const current=Astro.url.pathname.replace(/\/index\.html$/, '/');
+const active=(href:string)=>current === href || current === href.replace('.html','');
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">
   <head>
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-466855WRX3"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-466855WRX3');
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <title>{pageTitle}</title>
-    <link rel="icon" href="/favicon.ico" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} /><title>{title === 'Chess Nerd' ? title : `${title} · Chess Nerd`}</title>
+    <link rel="icon" href="/favicon.ico" /><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <slot name="head" />
     <script is:inline>
-      (() => {
-        try {
-          const storedTheme = localStorage.getItem('theme');
-          const theme = storedTheme === 'light' ? 'light' : 'dark';
-          document.documentElement.setAttribute('data-theme', theme);
-
-          const storedAccent = localStorage.getItem('accentColor');
-          if (!storedAccent || !/^#[0-9a-fA-F]{6}$/.test(storedAccent)) return;
-
-          const normalized = storedAccent.toLowerCase();
-          document.documentElement.style.setProperty('--accent', normalized);
-
-          const parsed = parseInt(normalized.slice(1), 16);
-          const red = (parsed >> 16) & 255;
-          const green = (parsed >> 8) & 255;
-          const blue = parsed & 255;
-          document.documentElement.style.setProperty('--accent-rgb', `${red}, ${green}, ${blue}`);
-
-          const luminance = 0.299 * red + 0.587 * green + 0.114 * blue;
-          document.documentElement.style.setProperty('--accent-contrast', luminance > 150 ? '#0b1220' : '#ffffff');
-
-          const boost = 20;
-          const accentLight = '#' + (
-            (Math.min(red + boost, 255) << 16) |
-            (Math.min(green + boost, 255) << 8) |
-            Math.min(blue + boost, 255)
-          ).toString(16).padStart(6, '0');
-          document.documentElement.style.setProperty('--accent-light', accentLight);
-        } catch {
-          // Ignore storage access errors.
+      try {
+        const theme=localStorage.getItem('chessnerd-theme') || localStorage.getItem('theme');
+        document.documentElement.dataset.theme=theme === 'light' ? 'light' : 'dark';
+        const accent=localStorage.getItem('chessnerd-accent') || localStorage.getItem('accentColor');
+        if (accent && /^#[0-9a-f]{6}$/i.test(accent)) {
+          document.documentElement.style.setProperty('--accent',accent);
+          if (!localStorage.getItem('chessnerd-accent')) localStorage.setItem('chessnerd-accent',accent);
         }
-      })();
+        if (theme && !localStorage.getItem('chessnerd-theme')) localStorage.setItem('chessnerd-theme',theme);
+      } catch { /* Storage is optional. */ }
+    </script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-466855WRX3"></script>
+    <script is:inline>
+      window.dataLayer=window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-466855WRX3');
     </script>
   </head>
   <body>
-    <div class="container">
-      <header class="site-header">
-        <a class="logo" href="/" aria-label="Chess Nerd home">
-          <span class="brand-mark" aria-hidden="true">&#9822;</span>
-          <span>Chess Nerd</span>
-        </a>
-
-        <nav class="site-network" aria-label="Network sites">
-          <a href="https://github.com/ianrastall/chessnerd" class="site-network-link" target="_blank" rel="noopener noreferrer">
-            <span>GitHub</span>
-          </a>
-          <a href="https://text-utils.net" class="site-network-link" target="_blank" rel="noopener noreferrer">
-            <span>Text Utilities</span>
-          </a>
-          <a href="https://bookstacks.org" class="site-network-link" target="_blank" rel="noopener noreferrer">
-            <span>Bookstacks</span>
-          </a>
-        </nav>
-
-        <div class="controls">
-          <label class="color-picker-wrap" title="Accent color (double-click to reset)">
-            <span class="visually-hidden">Accent color</span>
-            <span class="color-swatch" id="accentSwatch" aria-hidden="true"></span>
-            <input type="color" id="accentColor" aria-label="Accent color" />
-          </label>
-          <button id="themeToggle" class="btn btn-secondary" type="button" aria-label="Toggle theme" aria-pressed="true">
-            <span class="material-icons" aria-hidden="true">dark_mode</span>
-          </button>
-        </div>
-      </header>
-
-      <slot />
-
-      <footer class="site-footer">
-        <p>Chess Nerd runs locally in your browser (some tools may make external requests).</p>
-        <p>&copy; Ian Rastall 2025<br />Contact: moving.form.of.dust@gmail.com<br />Donate: PayPal to merastall@gmail.com</p>
-      </footer>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Chess Nerd home"><span class="brand-mark" aria-hidden="true">♞</span><span>Chess Nerd<small>A Jupiter project</small></span></a>
+      <nav class="site-network" aria-label="Jupiter websites"><a href="https://text-utils.net">Text Utilities <ArrowUpRight size={13} aria-hidden="true" /></a><a class="network-current" href="/" aria-current="true">Chess Nerd</a><a href="https://bookstacks.org">Bookstacks <ArrowUpRight size={13} aria-hidden="true" /></a></nav>
+      <Appearance />
+    </header>
+    <div class="jupiter-workspace">
+      <aside class="jupiter-sidebar" aria-label="Chess Nerd navigation">
+        <a class:list={['overview-link',{active:current === '/'}]} href="/" aria-current={current === '/' ? 'page' : undefined}><House size={16} aria-hidden="true" /> Overview</a>
+        <details class="site-navigation" open><summary>Browse Chess Nerd</summary>
+          <label class="visually-hidden" for="navigation-search">Find a page or tool</label><div class="nav-search"><Search size={14} aria-hidden="true" /><input type="search" id="navigation-search" placeholder="Find a page or tool…" /></div>
+          <nav aria-label="Pages and tools">{navigation.map(group=><section class="nav-group"><h2>{group.name}</h2>{group.links.map(link=><a data-navigation-item data-search={`${link.name} ${link.keywords || ''}`.toLowerCase()} href={link.href} aria-current={active(link.href) ? 'page' : undefined}>{link.name}</a>)}</section>)}</nav>
+          <p id="navigation-empty" hidden>No matching pages.</p>
+        </details>
+        <div class="sidebar-note"><strong>A public chess library.</strong><p>Free tools, preserved games and open data. Downloads link to their source archives.</p><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a></div>
+      </aside>
+      <div class="jupiter-content" id="main-content" tabindex="-1">
+        <noscript><p class="notice">Interactive search and chess tools need JavaScript. Recent archive downloads and navigation remain available below.</p></noscript>
+        <slot />
+        <footer class="site-footer"><div><strong>Chess Nerd</strong><p>Tools, games and chess history.</p></div><nav aria-label="Project links"><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a><a href="https://ko-fi.com/ianrastall">Support this project ↗</a><a href="mailto:moving.form.of.dust@gmail.com">Contact</a></nav></footer>
+      </div>
     </div>
-
-    <script is:inline src="/js/theme.js"></script>
+    <script>
+      const search=document.querySelector<HTMLInputElement>('#navigation-search')!;
+      const navigation=document.querySelector<HTMLDetailsElement>('.site-navigation')!;
+      const desktop=matchMedia('(min-width:901px)');navigation.open=desktop.matches;desktop.addEventListener('change',()=>navigation.open=desktop.matches);
+      search.addEventListener('input',()=>{ const words=search.value.toLowerCase().trim().split(/\s+/);let count=0;
+        document.querySelectorAll<HTMLElement>('[data-navigation-item]').forEach(a=>{a.hidden=!words.every(word=>a.dataset.search!.includes(word));if(!a.hidden)count++;});
+        document.querySelectorAll<HTMLElement>('.nav-group').forEach(group=>group.hidden=!group.querySelector('a:not([hidden])'));
+        document.querySelector<HTMLElement>('#navigation-empty')!.hidden=!!count;
+      });
+    </script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+import { recordArchiveSource } from './lib/archive-provenance.ts';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { parseArchiveManifest } from '../src/lib/ccc-archive.ts';
 
@@ -37,3 +38,5 @@ if (previous === content) {
   await rename(temporary, destination);
   console.log(`Synced ${entries.length} CCC events (${entries.reduce((sum, entry) => sum + entry.games, 0).toLocaleString('en-US')} games).`);
 }
+
+await recordArchiveSource('ianrastall/ccc-archive',revision,source,'data/ccc-archive/manifest.json',entries.length);

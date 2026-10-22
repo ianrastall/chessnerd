@@ -1,4 +1,6 @@
 ---
+import ToolIcon from './ToolIcon.astro';
+import { ArrowLeft } from '@lucide/astro';
 interface Props {
   title: string;
   icon: string;
@@ -9,12 +11,12 @@ const { title, icon, backHref = '/' } = Astro.props;
 ---
 <div class="tool-header">
   <div class="tool-title">
-    <span class="material-icons" aria-hidden="true">{icon}</span>
+    <ToolIcon name={icon} />
     <h1>{title}</h1>
   </div>
   <div class="tool-actions">
     <a id="backButton" class="btn btn-secondary btn-compact" href={backHref}>
-      <span class="material-icons" aria-hidden="true">arrow_back</span>
+      <ArrowLeft size={14} aria-hidden="true" />
       Back
     </a>
   </div>

@@ -1,3 +1,4 @@
+import { recordArchiveSource } from './lib/archive-provenance.ts';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { parseThreeZeroThursdayManifest } from '../src/lib/three-zero-thursday-archive.ts';
 
@@ -37,3 +38,5 @@ if (previous === content) {
   await rename(temporary, destination);
   console.log(`Synced ${entries.length} 3-0 Thursday sessions (${entries.reduce((sum, entry) => sum + entry.games, 0).toLocaleString('en-US')} games).`);
 }
+
+await recordArchiveSource('ianrastall/3-0-thursday-archive',revision,source,'data/3-0-thursday-archive/manifest.json',entries.length);

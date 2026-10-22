@@ -1,0 +1,8 @@
+---
+import { Palette, Trophy, Braces, Users, BookOpen, Cpu, Swords, Archive, Download, FileSearch, Library, RotateCcwClock, Search } from '@lucide/astro';
+interface Props { name:string; size?:number; }
+const {name,size=22}=Astro.props;
+const icons={palette:Palette,emoji_events:Trophy,api:Braces,groups:Users,menu_book:BookOpen,new_releases:Cpu,smart_toy:Swords,history_edu:Archive,cloud_download:Download,assessment:FileSearch,inventory_2:Library,history:RotateCcwClock,person_search:Search};
+const Icon=icons[name as keyof typeof icons] || BookOpen;
+---
+<Icon size={size} aria-hidden="true" />

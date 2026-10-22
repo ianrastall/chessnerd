@@ -11,6 +11,7 @@ on:
     workflows:
       - "Update Stockfish Commit Data"
       - "Update Chess Engine Data"
+      - "Sync Titled Players Data"
     types: [completed]
 
 permissions:
@@ -24,6 +25,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,7 +33,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: '.nvmrc'
           cache: npm
       - name: Install dependencies
         run: npm ci
@@ -56,11 +58,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run sync:events
       - name: Audit dependencies
-        run: npm audit || true
+        run: npm run audit
       - name: Test
         run: npm run test
       - name: Build
         run: npm run build
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+      - name: Browser regression checks
+        run: npm run test:browser
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

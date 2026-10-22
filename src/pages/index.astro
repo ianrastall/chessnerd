@@ -1,22 +1,38 @@
 ---
-import ToolCard from '../components/ToolCard.astro';
-import { allTools, categoryHref, categoryLabels, toolCategories } from '../data/tools';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { ArrowDownToLine, Search, FileSearch, Swords, Palette, BookOpen, Cpu, RotateCcwClock } from '@lucide/astro';
+import { archiveCollections,loadArchiveIndex } from '../lib/archive-index';
+import { displayArchiveDate } from '../lib/archive-search';
+const entries=await loadArchiveIndex();
+const initial=entries.slice(0,12);
+const years=[...new Set(entries.map(entry=>entry.year))].sort((a,b)=>b-a);
+const collections=archiveCollections.map(c=>({...c,count:entries.filter(e=>e.collection===c.id).length}));
+const tasks=[{name:'Inspect a PGN',description:'Players, openings, tags and results',href:'/pgn-info.html',icon:FileSearch},{name:'Play an engine',description:'A game against Lozza, in your browser',href:'/play-engine.html',icon:Swords},{name:'Explore openings',description:'ECO codes, named lines and boards',href:'/eco-code.html',icon:BookOpen},{name:'Design a board palette',description:'Colors and ready-to-use exports',href:'/board-colors.html',icon:Palette}];
 ---
-<BaseLayout title="Chess Nerd">
-  <main>
-    <h1 class="visually-hidden">Chess Nerd</h1>
-    <nav class="category-nav home-category-nav" aria-label="Tool categories">
-      <a class="category-chip active" href="/" aria-current="page">All <span>{allTools.length}</span></a>
-      {toolCategories.map((category) => (
-        <a class="category-chip" href={categoryHref(category)}>
-          {categoryLabels[category]} <span>{allTools.filter((tool) => tool.category === category).length}</span>
-        </a>
-      ))}
-    </nav>
-
-    <section class="tool-grid" aria-label="Chess tools">
-      {allTools.map((tool) => <ToolCard tool={tool} />)}
-    </section>
+<BaseLayout title="Chess Nerd" description="Search tournament archives and download chess games. Find player rating histories, explore openings, and use free browser chess tools.">
+  <main class="dashboard">
+    <div class="dashboard-heading"><div><p class="eyebrow">A public chess library</p><h1>Find your next game.</h1><p>Tournament downloads, player histories and tools for the curious chess player.</p></div></div>
+    <nav class="dashboard-tabs" aria-label="Start a task"><a class="active" href="#games" aria-current="true">Find games</a><a href="#players">Find a player</a><a href="#tools">Use a tool</a><a href="/engines.html">Follow engines</a></nav>
+    <div class="dashboard-columns">
+      <section id="games" aria-labelledby="archive-heading">
+        <div class="section-title"><h2 id="archive-heading">Tournament archives</h2><p>{entries.length.toLocaleString('en-US')} entries · {collections.length} collections</p></div>
+        <div class="archive-controls">
+          <div class="field search-field"><label for="archive-query">Event, place or date</label><input id="archive-query" type="search" placeholder="Try Wijk aan Zee, 1972, Titled Tuesday…" disabled /></div>
+          <div class="field"><label for="archive-collection">Collection</label><select id="archive-collection" disabled><option value="">All collections</option>{collections.map(c=><option value={c.id}>{c.label}</option>)}</select></div>
+          <div class="field"><label for="archive-year">Year</label><select id="archive-year" disabled><option value="">All years</option>{years.map(year=><option value={year}>{year}</option>)}</select></div>
+        </div>
+        <div class="archive-summary"><span id="archive-count" role="status" aria-live="polite">Showing the {initial.length} most recent entries.</span><button class="btn btn-secondary btn-compact" id="archive-clear" type="button" hidden>Clear filters</button></div>
+        <div class="archive-table-wrap" tabindex="0" role="region" aria-label="Tournament downloads"><table class="archive-table"><thead><tr><th scope="col">Event / collection</th><th scope="col">Start date</th><th scope="col" class="game-count">Games</th><th scope="col">Download</th></tr></thead><tbody id="archive-results">{initial.map(entry=><tr><td><a class="event-name" href={entry.page}>{entry.name}</a><span class="event-source">{entry.collectionLabel}</span></td><td><time datetime={displayArchiveDate(entry)}>{displayArchiveDate(entry)}</time></td><td class="game-count">{entry.games.toLocaleString('en-US')}</td><td><a class="download-link" href={entry.url} title={`SHA-256: ${entry.sha256}`} aria-label={`Download ${entry.name} ZIP`}><ArrowDownToLine size={13} aria-hidden="true" /> ZIP</a></td></tr>)}</tbody></table></div>
+        <p id="archive-empty" class="archive-empty" hidden>No archive entries match these filters. Try fewer words, another year, or all collections.</p>
+        <div class="archive-pagination" hidden id="archive-pagination"><button id="archive-previous" type="button">← Previous</button><span id="archive-page"></span><button id="archive-next" type="button">Next →</button></div>
+        <p class="archive-note">Searches event metadata across the published collections, not the moves or players inside each PGN. Collections may overlap. Dates describe the event, not when it was added. ZIPs come directly from their source repositories; collection pages provide fuller context and checksums.</p>
+      </section>
+      <aside class="dashboard-rail" aria-label="More ways to explore">
+        <section class="rail-section" id="players"><h2>Find a player</h2><p>Explore a FIDE player's rating history.</p><form class="player-search" action="/fide-player.html" method="get"><label for="player-query">Surname or FIDE ID</label><input id="player-query" name="q" type="search" placeholder="Carlsen or 1503014" required minlength="2" /><button type="submit"><Search size={14} aria-hidden="true" /> Find player</button></form><div class="task-links"><a href="/fide-2500.html">Browse FIDE 2500+ players →</a><a href="/titled-players.html">Chess.com titled players →</a></div></section>
+        <section class="rail-section" id="tools"><h2>Work with chess</h2><div class="task-links">{tasks.map(task=>{const Icon=task.icon;return <a href={task.href}><Icon size={17} aria-hidden="true" /><span>{task.name}<small>{task.description}</small></span></a>})}</div></section>
+        <section class="rail-section"><h2>The collections</h2><div class="collection-list">{collections.map(c=><a href={c.page}>{c.label}<span>{c.count.toLocaleString('en-US')}</span></a>)}</div><div class="task-links"><a href="/fide-archive.html"><RotateCcwClock size={16} aria-hidden="true" /><span>Historical FIDE rating lists</span></a><a href="/engines.html"><Cpu size={16} aria-hidden="true" /><span>Engine releases</span></a></div></section>
+      </aside>
+    </div>
   </main>
 </BaseLayout>
+<script src="../scripts/dashboard.ts"></script>
