@@ -9,10 +9,10 @@ const years=[...new Set(entries.map(entry=>entry.year))].sort((a,b)=>b-a);
 const collections=archiveCollections.map(c=>({...c,count:entries.filter(e=>e.collection===c.id).length}));
 const tasks=[{name:'Inspect a PGN',description:'Players, openings, tags and results',href:'/pgn-info.html',icon:FileSearch},{name:'Play an engine',description:'A game against Lozza, in your browser',href:'/play-engine.html',icon:Swords},{name:'Explore openings',description:'ECO codes, named lines and boards',href:'/eco-code.html',icon:BookOpen},{name:'Design a board palette',description:'Colors and ready-to-use exports',href:'/board-colors.html',icon:Palette}];
 ---
-<BaseLayout title="Chess Nerd" description="Search tournament archives and download chess games. Find player rating histories, explore openings, and use free browser chess tools.">
+<BaseLayout title="Chess Nerd" description="Search tournament archives, download PGNs, look up player rating histories and use chess tools.">
   <main class="dashboard">
-    <div class="dashboard-heading"><div><p class="eyebrow">A public chess library</p><h1>Find your next game.</h1><p>Tournament downloads, player histories and tools for the curious chess player.</p></div></div>
-    <nav class="dashboard-tabs" aria-label="Start a task"><a class="active" href="#games" aria-current="true">Find games</a><a href="#players">Find a player</a><a href="#tools">Use a tool</a><a href="/engines.html">Follow engines</a></nav>
+    <div class="dashboard-heading"><div><h1>Chess Nerd</h1></div></div>
+    <nav class="dashboard-tabs" aria-label="Start a task"><a class="active" href="#games" aria-current="true">Find games</a><a href="#players">Find a player</a><a href="#tools">Use a tool</a><a href="/engines.html">Engine releases</a></nav>
     <div class="dashboard-columns">
       <section id="games" aria-labelledby="archive-heading">
         <div class="section-title"><h2 id="archive-heading">Tournament archives</h2><p>{entries.length.toLocaleString('en-US')} entries · {collections.length} collections</p></div>
@@ -28,9 +28,9 @@ const tasks=[{name:'Inspect a PGN',description:'Players, openings, tags and resu
         <p class="archive-note">Searches event metadata across the published collections, not the moves or players inside each PGN. Collections may overlap. Dates describe the event, not when it was added. ZIPs come directly from their source repositories; collection pages provide fuller context and checksums.</p>
       </section>
       <aside class="dashboard-rail" aria-label="More ways to explore">
-        <section class="rail-section" id="players"><h2>Find a player</h2><p>Explore a FIDE player's rating history.</p><form class="player-search" action="/fide-player.html" method="get"><label for="player-query">Surname or FIDE ID</label><input id="player-query" name="q" type="search" placeholder="Carlsen or 1503014" required minlength="2" /><button type="submit"><Search size={14} aria-hidden="true" /> Find player</button></form><div class="task-links"><a href="/fide-2500.html">Browse FIDE 2500+ players →</a><a href="/titled-players.html">Chess.com titled players →</a></div></section>
-        <section class="rail-section" id="tools"><h2>Work with chess</h2><div class="task-links">{tasks.map(task=>{const Icon=task.icon;return <a href={task.href}><Icon size={17} aria-hidden="true" /><span>{task.name}<small>{task.description}</small></span></a>})}</div></section>
-        <section class="rail-section"><h2>The collections</h2><div class="collection-list">{collections.map(c=><a href={c.page}>{c.label}<span>{c.count.toLocaleString('en-US')}</span></a>)}</div><div class="task-links"><a href="/fide-archive.html"><RotateCcwClock size={16} aria-hidden="true" /><span>Historical FIDE rating lists</span></a><a href="/engines.html"><Cpu size={16} aria-hidden="true" /><span>Engine releases</span></a></div></section>
+        <section class="rail-section" id="players"><h2>Find a player</h2><form class="player-search" action="/fide-player.html" method="get"><label for="player-query">Surname or FIDE ID</label><input id="player-query" name="q" type="search" placeholder="Carlsen or 1503014" required minlength="2" /><button type="submit"><Search size={14} aria-hidden="true" /> Find player</button></form><div class="task-links"><a href="/fide-2500.html">Browse FIDE 2500+ players →</a><a href="/titled-players.html">Chess.com titled players →</a></div></section>
+        <section class="rail-section" id="tools"><h2>Tools</h2><div class="task-links">{tasks.map(task=>{const Icon=task.icon;return <a href={task.href}><Icon size={17} aria-hidden="true" /><span>{task.name}<small>{task.description}</small></span></a>})}</div></section>
+        <section class="rail-section"><h2>Collections</h2><div class="collection-list">{collections.map(c=><a href={c.page}>{c.label}<span>{c.count.toLocaleString('en-US')}</span></a>)}</div><div class="task-links"><a href="/fide-archive.html"><RotateCcwClock size={16} aria-hidden="true" /><span>Historical FIDE rating lists</span></a><a href="/engines.html"><Cpu size={16} aria-hidden="true" /><span>Engine releases</span></a></div></section>
       </aside>
     </div>
   </main>

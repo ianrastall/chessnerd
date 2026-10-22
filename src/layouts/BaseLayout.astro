@@ -5,7 +5,7 @@ import Appearance from '../components/jupiter/Appearance.astro';
 import { ArrowUpRight, House, Search } from '@lucide/astro';
 import { navigation } from '../data/navigation';
 interface Props { title:string; description?:string; }
-const {title,description='Find chess games, explore player histories, and use free chess tools.'}=Astro.props;
+const {title,description='Chess tournament archives, player rating histories and browser tools.'}=Astro.props;
 const current=Astro.url.pathname.replace(/\/index\.html$/, '/');
 const active=(href:string)=>current === href || current === href.replace('.html','');
 ---
@@ -48,12 +48,12 @@ const active=(href:string)=>current === href || current === href.replace('.html'
           <nav aria-label="Pages and tools">{navigation.map(group=><section class="nav-group"><h2>{group.name}</h2>{group.links.map(link=><a data-navigation-item data-search={`${link.name} ${link.keywords || ''}`.toLowerCase()} href={link.href} aria-current={active(link.href) ? 'page' : undefined}>{link.name}</a>)}</section>)}</nav>
           <p id="navigation-empty" hidden>No matching pages.</p>
         </details>
-        <div class="sidebar-note"><strong>A public chess library.</strong><p>Free tools, preserved games and open data. Downloads link to their source archives.</p><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a></div>
+        <div class="sidebar-note"><p>Downloads link to their source archives.</p><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a></div>
       </aside>
       <div class="jupiter-content" id="main-content" tabindex="-1">
         <noscript><p class="notice">Interactive search and chess tools need JavaScript. Recent archive downloads and navigation remain available below.</p></noscript>
         <slot />
-        <footer class="site-footer"><div><strong>Chess Nerd</strong><p>Tools, games and chess history.</p></div><nav aria-label="Project links"><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a><a href="https://ko-fi.com/ianrastall">Support this project ↗</a><a href="mailto:moving.form.of.dust@gmail.com">Contact</a></nav></footer>
+        <footer class="site-footer"><div><strong>Chess Nerd</strong></div><nav aria-label="Project links"><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a><a href="https://ko-fi.com/ianrastall">Support this project ↗</a><a href="mailto:moving.form.of.dust@gmail.com">Contact</a></nav></footer>
       </div>
     </div>
     <script>
