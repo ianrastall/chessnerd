@@ -4,11 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Engine Game" description="Play a browser chess game against the Lozza JavaScript chess engine.">
   <main>
-    <div id="toolView">
+    <div id="toolView" class="engine-game">
       <ToolHeader title="Engine Game" icon="smart_toy" />
 
       <div class="tool-description">
-        Play a quick game against the Lozza JavaScript engine. Click or drag pieces to move, follow the PGN on the right, and click any move to jump the board to that position.
+        Click or drag pieces to play against Lozza. Select a move in the list to review that position.
       </div>
 
       <div class="options-panel">
@@ -42,7 +42,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <div class="io-container engine-grid">
-        <div class="io-panel">
+        <div class="io-panel engine-board-panel">
           <div class="io-label">
             <span>Board</span>
             <span class="stats" id="boardStats">White to move</span>
@@ -51,6 +51,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div class="board-toolbar">
               <div id="engineStatus" class="engine-chip warning">Lozza warming up...</div>
               <div class="board-buttons">
+                <button id="fullscreenBtn" class="btn btn-secondary btn-compact" type="button" aria-pressed="false" aria-controls="toolView">
+                  <span id="fullscreenLabel">Fullscreen</span>
+                </button>
                 <button id="undoBtn" class="btn btn-secondary btn-compact" type="button">
                   <span class="material-icons" aria-hidden="true">undo</span>
                   Undo
@@ -114,3 +117,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <script is:inline src="/js/chess.min.js"></script>
   <script is:inline src="/js/play-engine.js"></script>
 </BaseLayout>
+
+<style is:global>
+  #toolView.engine-game .board-shell {
+    width: min(100%, calc(var(--engine-board-size, 50dvh) + 52px));
+  }
+  #toolView.engine-game .chess-board {
+    min-width: 0; min-height: 0;
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+  }
+  #toolView.engine-game .board-mid { display: block; position: relative; padding-inline: 26px; }
+  #toolView.engine-game .board-ranks {
+    position: absolute; top: 0; bottom: 0; width: 20px;
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+    font-size: min(.85rem, calc(var(--engine-board-size, 50dvh) / 10));
+  }
+  #toolView.engine-game #ranksLeft { left: 0; }
+  #toolView.engine-game #ranksRight { right: 0; }
+  #toolView.engine-game .board-files { padding-inline: 26px; }
+  #toolView.engine-game:fullscreen,
+  #toolView.engine-game.is-fullscreen {
+    width: 100%; height: 100dvh; padding: 16px;
+    background: var(--bg-primary); color: var(--text-primary); overflow: auto;
+  }
+  #toolView.engine-game.is-fullscreen { position: fixed; inset: 0; z-index: 1000; }
+  html.engine-fullscreen { overflow: hidden; }
+  #toolView.engine-game:fullscreen .tool-header,
+  #toolView.engine-game:fullscreen .tool-description,
+  #toolView.engine-game.is-fullscreen .tool-header,
+  #toolView.engine-game.is-fullscreen .tool-description { display: none; }
+  @media (min-width: 800px) {
+    #toolView.engine-game:fullscreen .engine-grid,
+    #toolView.engine-game.is-fullscreen .engine-grid {
+      grid-template-columns: minmax(0, 1.3fr) minmax(260px, .9fr);
+    }
+  }
+  @media (min-width: 700px) and (max-height: 600px) {
+    #toolView.engine-game:fullscreen,
+    #toolView.engine-game.is-fullscreen {
+      display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .9fr);
+      gap: 16px; align-content: start; align-items: start;
+    }
+    #toolView.engine-game:fullscreen .engine-grid,
+    #toolView.engine-game.is-fullscreen .engine-grid { display: contents; }
+    #toolView.engine-game:fullscreen .options-panel,
+    #toolView.engine-game.is-fullscreen .options-panel { grid-column: 2; margin: 0; }
+    #toolView.engine-game:fullscreen .engine-board-panel,
+    #toolView.engine-game.is-fullscreen .engine-board-panel { grid-column: 1; grid-row: 1 / span 2; }
+    #toolView.engine-game:fullscreen .status-bar,
+    #toolView.engine-game.is-fullscreen .status-bar { grid-column: 1 / -1; }
+  }
+</style>

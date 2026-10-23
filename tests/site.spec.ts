@@ -52,7 +52,62 @@ test('archive series deep links and keyboard tabs remain usable',async({page})=>
 
 test('engine board accepts a legal opening move',async({page})=>{
   await page.goto('/play-engine.html');await expect(page.locator('#chessBoard .square')).toHaveCount(64);
+  await expect(page.locator('#engineStatus')).toHaveText('Lozza ready');
+  await page.locator('#moveTime').fill('200');await page.locator('#moveTime').dispatchEvent('input');
   await page.locator('#chessBoard [data-coord="e2"]').click();await page.locator('#chessBoard [data-coord="e4"]').click();await expect(page.locator('#pgnText')).toHaveValue(/e4/);
+  await expect(page.locator('#moveStats')).toHaveText('2 moves');
+});
+
+test('engine board fits viewport height and fullscreen preserves the game',async({page})=>{
+  await page.goto('/play-engine.html');
+  const board=page.locator('#chessBoard');
+  for(const viewport of [{width:1440,height:900},{width:1366,height:768},{width:1024,height:768},{width:390,height:844},{width:320,height:568}]) {
+    await page.setViewportSize(viewport);
+    await expect.poll(async()=>{
+      const rect=await board.boundingBox();
+      return !!rect && Math.abs(rect.width-rect.height)<2 && rect.height<viewport.height && (viewport.width<1100 || rect.y+rect.height<=viewport.height);
+    },{message:`board fits ${viewport.width}×${viewport.height}`}).toBe(true);
+  }
+  await page.setViewportSize({width:1366,height:768});
+  await expect(page.locator('#engineStatus')).toHaveText('Lozza ready');
+  await page.locator('#chessBoard [data-coord="e2"]').click();
+  await page.locator('#chessBoard [data-coord="e4"]').click();
+  const button=page.locator('#fullscreenBtn');
+  await button.click();
+  await expect(button).toHaveText('Exit fullscreen');
+  await expect(button).toHaveAttribute('aria-pressed','true');
+  expect(await page.evaluate(()=>document.fullscreenElement?.id)).toBe('toolView');
+  await expect.poll(async()=>{const rect=await board.boundingBox();return !!rect && rect.y+rect.height<=768;}).toBe(true);
+  await expect(page.locator('#pgnText')).toHaveValue(/e4/);
+  await expect(page.locator('#flipBoardBtn')).toBeVisible();
+  await expect(page.locator('#moveStats')).toHaveText('2 moves');
+  const from=await page.locator('#chessBoard [data-coord="g1"]').boundingBox();
+  const to=await page.locator('#chessBoard [data-coord="f3"]').boundingBox();
+  await page.mouse.move(from!.x+from!.width/2,from!.y+from!.height/2);
+  await page.mouse.down();
+  await page.mouse.move(to!.x+to!.width/2,to!.y+to!.height/2,{steps:5});
+  await expect(page.locator('#toolView .drag-ghost')).toBeVisible();
+  await page.mouse.up();
+  await expect(page.locator('#pgnText')).toHaveValue(/Nf3/);
+  await button.click();
+  await expect(button).toHaveText('Fullscreen');
+  await expect(button).toHaveAttribute('aria-pressed','false');
+  expect(await page.evaluate(()=>document.fullscreenElement)).toBeNull();
+});
+
+test('fullscreen fallback supports phone resizing and Escape',async({page})=>{
+  await page.addInitScript(()=>Object.defineProperty(document,'fullscreenEnabled',{get:()=>false}));
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/play-engine.html');
+  await page.locator('#fullscreenBtn').click();
+  await expect(page.locator('#toolView')).toHaveClass(/is-fullscreen/);
+  for(const viewport of [{width:390,height:844},{width:844,height:390}]) {
+    await page.setViewportSize(viewport);
+    await expect.poll(async()=>{const rect=await page.locator('#chessBoard').boundingBox();return !!rect && rect.y+rect.height<=viewport.height && rect.x+rect.width<=viewport.width;}).toBe(true);
+  }
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#fullscreenBtn')).toHaveAttribute('aria-pressed','false');
+  await expect(page.locator('#toolView')).not.toHaveClass(/is-fullscreen/);
 });
 test('board palette exports remain independent of interface accent',async({page})=>{
   await page.goto('/board-colors.html');const before=await page.locator('#darkCode').innerText();await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('input[name="accent-mode"][value="custom"]').check();await page.locator('#accent-picker').fill('#ff0000');await page.keyboard.press('Escape');await expect(page.locator('#darkCode')).toHaveText(before);

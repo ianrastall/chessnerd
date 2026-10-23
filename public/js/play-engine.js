@@ -20,6 +20,8 @@
     const engineSideLabel = document.getElementById('engineSideLabel');
     const engineLogEl = document.getElementById('engineLog');
     const analyzeGameBtn = document.getElementById('analyzeGameBtn');
+    const gameView = document.getElementById('toolView');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
     const dragThreshold = 6;
 
     if (!boardEl) return;
@@ -462,7 +464,7 @@
         const rect = pieceEl.getBoundingClientRect();
         ghost.style.width = `${rect.width}px`;
         ghost.style.height = `${rect.height}px`;
-        document.body.appendChild(ghost);
+        gameView.appendChild(ghost);
         return ghost;
     }
 
@@ -1143,6 +1145,7 @@
     }
 
     function initControls() {
+        initViewportControls();
         document.getElementById('backButton')?.addEventListener('click', () => {
             window.location.href = 'index.html';
         });
@@ -1170,6 +1173,70 @@
             engineSide = e.target.value;
             newGame(false);
         });
+    }
+
+    function initViewportControls() {
+        const wrapper = gameView.querySelector('.board-wrapper');
+        let layoutFrame;
+        const isFullscreen = () => document.fullscreenElement === gameView || gameView.classList.contains('is-fullscreen');
+        const resizeBoard = () => {
+            cancelAnimationFrame(layoutFrame);
+            layoutFrame = requestAnimationFrame(() => {
+                // Account for actual wrapped controls and coordinate labels, rather
+                // than assuming a fixed header height at every screen size.
+                const viewportHeight = window.visualViewport?.height || window.innerHeight;
+                const top = wrapper.getBoundingClientRect().top + (isFullscreen() ? gameView.scrollTop : window.scrollY);
+                const chrome = wrapper.getBoundingClientRect().height - boardEl.getBoundingClientRect().height;
+                // On narrow pages the settings may precede the board by more
+                // than a screenful. Keep a usable board that fits when scrolled
+                // into view, while keeping it above the fold on wider screens.
+                const boardTop = isFullscreen() ? top : Math.min(top, viewportHeight * .4);
+                const size = Math.max(80, Math.floor(viewportHeight - boardTop - chrome - 16));
+                gameView.style.setProperty('--engine-board-size', `${size}px`);
+            });
+        };
+        const updateFullscreen = () => {
+            const active = isFullscreen();
+            fullscreenBtn.setAttribute('aria-pressed', String(active));
+            document.getElementById('fullscreenLabel').textContent = active ? 'Exit fullscreen' : 'Fullscreen';
+            document.documentElement.classList.toggle('engine-fullscreen', active);
+            cancelActiveDrag();
+            resizeBoard();
+        };
+        fullscreenBtn.addEventListener('click', async () => {
+            if (document.fullscreenElement === gameView) {
+                try { await document.exitFullscreen(); }
+                catch { setStatus('Could not exit fullscreen. Press Escape to exit.', 'warning'); }
+            } else if (gameView.classList.contains('is-fullscreen')) {
+                gameView.classList.remove('is-fullscreen');
+                updateFullscreen();
+            } else {
+                try {
+                    if (!document.fullscreenEnabled || !gameView.requestFullscreen) throw new Error('Fullscreen unavailable');
+                    await gameView.requestFullscreen();
+                } catch {
+                    // Keep an expanded interface available on mobile browsers that
+                    // do not support the Fullscreen API for arbitrary elements.
+                    gameView.classList.add('is-fullscreen');
+                }
+                updateFullscreen();
+            }
+            fullscreenBtn.focus({ preventScroll: true });
+        });
+        document.addEventListener('fullscreenchange', updateFullscreen);
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && gameView.classList.contains('is-fullscreen')) {
+                gameView.classList.remove('is-fullscreen');
+                updateFullscreen();
+                fullscreenBtn.focus({ preventScroll: true });
+            }
+        });
+        const observer = new ResizeObserver(resizeBoard);
+        observer.observe(wrapper);
+        observer.observe(gameView.querySelector('.options-panel'));
+        window.addEventListener('resize', resizeBoard);
+        window.visualViewport?.addEventListener('resize', resizeBoard);
+        resizeBoard();
     }
 
     function init() {
