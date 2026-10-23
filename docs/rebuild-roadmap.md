@@ -1,5 +1,10 @@
 # Chess Nerd Astro Rebuild Roadmap
 
+> **Historical (September 2026).** Every tool below has since been rebuilt in Astro and is linked
+> from the site navigation; `fide-2200` became `fide-2500`, and `engine-list` and `tournaments`
+> became `engines` and `tournament-archive`. Kept as planning history. For current sources and
+> refresh jobs see `docs/tools/data-refresh.md` and `docs/data-dependencies.md`.
+
 This repo now treats the old static site as reference material in `legacy/static-site`.
 Active work belongs in `src`, with passive deploy assets in `public`.
 Generated Astro drafts from the first migration are kept in `legacy/astro-drafts`.

@@ -29,6 +29,7 @@ USER_AGENT = "chessnerd-titled-players-sync/1.6 (contact: moving.form.of.dust@gm
 REQUEST_TIMEOUT = 10
 STALE_AFTER_DAYS = 30
 PROGRESS_SAVE_EVERY = 50
+MAX_REMOVED_SHARE = 0.1  # refuse to drop more than this share of saved players in one run
 ACTIVE_STATUSES = {"basic", "premium", "staff", "gold", "platinum", "diamond"}
 MAX_RUN_SECONDS = int(os.environ.get("MAX_RUN_SECONDS", "0")) or None
 
@@ -139,10 +140,14 @@ def main():
     # 2. Fetch master title lists
     print("Phase 1: Fetching master lists...")
     username_to_title: dict[str, str] = {}
+    lists_complete = True
     for title in TITLES:
         print(f"  Fetching {title}...")
         resp = safe_request(f"https://api.chess.com/pub/titled/{title}")
-        if resp and "players" in resp:
+        if not resp or "players" not in resp:
+            print(f"  [!] Could not fetch the {title} list.")
+            lists_complete = False
+        else:
             for u in resp["players"]:
                 if u in username_to_title:
                     if TITLE_RANK.get(title, 99) < TITLE_RANK.get(username_to_title[u], 99):
@@ -151,6 +156,19 @@ def main():
                     username_to_title[u] = title
 
     print(f"  Found {len(username_to_title):,} titled players in total.")
+
+    # Drop players who are no longer on any title list (title removed, account
+    # closed). Only when every list arrived, so a failed fetch can't empty a title.
+    departed = [u for u in existing if u not in username_to_title]
+    if departed and len(departed) > MAX_REMOVED_SHARE * len(existing):
+        print(f"  [!] {len(departed):,} saved players are missing from the lists; that looks like a bad API response, so none are removed.")
+    elif lists_complete:
+        for u in departed:
+            del existing[u]
+        if departed:
+            print(f"  Removed {len(departed):,} players no longer on any title list.")
+    else:
+        print("  Keeping players missing from the lists, because not every list was fetched.")
 
     # 3. Identify stale / new players
     now = datetime.now(timezone.utc)

@@ -32,7 +32,8 @@ The rebuild roadmap is historical planning evidence. Compare it against current 
 
 Current source candidates:
 
-- [D:/dev/proj/chessnerd/chessnerd](<D:/dev/proj/chessnerd/chessnerd>)
+- [D:/jupiter/chessnerd](<D:/jupiter/chessnerd>) (the site, since 21 October 2026)
+- D:/dev/proj/chessnerd/chessnerd (the pre-Jupiter clone; no longer used for publishing)
 
 The source map records associated inventory entries; grouping is a review relationship, not automatic ownership or permission to move every related folder.
 

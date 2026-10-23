@@ -7,9 +7,14 @@ src/
   components/       Reusable Astro components
   data/             Typed site/tool metadata
   layouts/          Shared page shell
+  lib/              Data parsers and helpers, with their unit tests
   pages/            Astro routes that build to .html files
+  scripts/          Browser TypeScript bundled into pages
   styles/           Shared CSS source
+data/               Canonical generated data not served directly
 public/             Static assets copied as-is to the built site
+scripts/            Data refresh and sync scripts
+tests/              Playwright browser checks (`npm run test:browser`)
 legacy/             Old static site kept as reference, not active routes
 ```
 
@@ -25,13 +30,15 @@ Astro is configured with `build.format: 'file'`, so routes such as `src/pages/ti
 
 - New public routes should be authored under `src/pages`.
 - Shared page chrome belongs in `src/layouts/BaseLayout.astro`.
-- Homepage cards belong in `src/data/tools.ts`.
+- Site navigation belongs in `src/data/navigation.ts`; category pages read `src/data/tools.ts`.
 - Reusable page bits belong in `src/components`.
 - Static data and assets that must be fetched by browser JavaScript belong in `public`.
 
 Some older tools still use browser scripts copied into `public/js`. Those are intentionally referenced with `is:inline` script tags so Astro emits normal browser script tags rather than trying to bundle legacy globals.
 
-The root-level static site files have been moved into `legacy/static-site`. New work should not add new public routes there. Treat it as source material while rebuilding the tool properly in Astro.
+The old static site lives in `legacy/static-site`. New work should not add public routes there; treat it as source material only.
+
+`sitemap.xml` is generated at build time by `src/pages/sitemap.xml.ts` from the files in `src/pages`, so new routes are listed automatically.
 
 ## Merida Pieces
 

@@ -219,11 +219,17 @@ function historyRows(p: Player): { date: string; cells: Partial<Record<RatingTyp
   return [...byDate.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([date, cells]) => ({ date, cells }));
 }
 
+/** Quote a CSV field when it holds a comma, quote or line break. */
+function csvField(value: string | number): string {
+  const text = String(value);
+  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
 function csv(p: Player): string {
   const lines = ['list,type,rating,games,k,flag,section'];
   for (const row of historyRows(p).reverse()) {
     for (const [type, c] of Object.entries(row.cells) as [RatingType, NonNullable<ReturnType<typeof historyRows>[number]['cells'][RatingType]>][]) {
-      lines.push([row.date, type, c.rating ?? '', c.games ?? '', c.k ?? '', c.flag ?? '', c.section ?? ''].join(','));
+      lines.push([row.date, type, c.rating ?? '', c.games ?? '', c.k ?? '', c.flag ?? '', c.section ?? ''].map(csvField).join(','));
     }
   }
   return lines.join('\n') + '\n';
@@ -308,7 +314,8 @@ function render(p: Player, dir: ShardDirectory) {
     const url = URL.createObjectURL(new Blob([csv(p)], { type: 'text/csv' }));
     const a = node('a', { href: url, download: `fide-${p.id}.csv` });
     a.click();
-    URL.revokeObjectURL(url);
+    // Revoking in the same tick can cancel the download in some browsers.
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
   const fideLink = node('a', { class: 'btn btn-secondary btn-compact', href: `https://ratings.fide.com/profile/${p.id}`, target: '_blank', rel: 'noopener noreferrer' }, 'FIDE profile ↗');
 
@@ -327,7 +334,9 @@ function render(p: Player, dir: ShardDirectory) {
   profile.hidden = false;
 }
 
+let playerToken = 0;
 async function showPlayer(id: number, push: boolean) {
+  const token = ++playerToken;
   profile.hidden = true;
   if (!Number.isSafeInteger(id) || id <= 0) {
     setStatus('Enter a FIDE ID (digits only).');
@@ -338,6 +347,8 @@ async function showPlayer(id: number, push: boolean) {
     const dir = await loadDirectory();
     const index = shardIndexFor(dir, id);
     const player = index < 0 ? null : (await loadShard(index, dir)).find(id);
+    // A later lookup started while this one was loading; let it win.
+    if (token !== playerToken) return;
     if (!player) {
       setStatus(`No player with FIDE ID ${id} in the archive.`);
       return;
@@ -347,6 +358,7 @@ async function showPlayer(id: number, push: boolean) {
     results.replaceChildren();
     render(player, dir);
   } catch (error) {
+    if (token !== playerToken) return;
     setStatus(`Could not load player data from ${BASE}: ${(error as Error).message}`);
   }
 }

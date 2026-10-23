@@ -39,7 +39,7 @@ reachable by name but are not linked from it. A missing name returns an HTML
 ## Run it
 
 ```powershell
-cd D:\dev\proj\chessnerd\chessnerd
+cd D:\jupiter\chessnerd
 python -I scripts/fide_archive.py discover   # probes every candidate name (about 2.5 minutes), writes plan.json
 python -I scripts/fide_archive.py fetch      # resumable; add --source fide or --source olimpbase
 python -I scripts/fide_archive.py manifest   # zip test, SHA-256, writes manifests

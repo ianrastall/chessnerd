@@ -26,8 +26,9 @@ chessnerd/
 ├── data/                   # Canonical generated data not served directly
 ├── public/                 # Static assets copied to dist
 ├── scripts/                # Maintenance and data-refresh scripts
+├── tests/                  # Playwright browser checks
 ├── docs/                   # Tool explainers and maintenance notes
-└── legacy/                 # Old static site kept for reference during rebuild
+└── legacy/                 # Old static site kept for reference
 ```
 
 ## Local Development
@@ -47,13 +48,23 @@ npm run build
 
 Astro uses `build.format: 'file'`, so `src/pages/titled-players.astro` builds to `dist/titled-players.html`.
 
+## Checks
+
+```powershell
+npm test               # unit tests (Vitest)
+npm run audit          # npm audit, fails on high severity
+npm run build          # astro check, then build
+npm run test:browser   # Playwright against the built site
+```
+
+Deployment runs all four.
+
 ## Maintenance Notes
 
 - Merida chess pieces are in `public/img/merida` and mapped from shared CSS.
-- Data refresh and cron candidates are tracked in `docs/tools/data-refresh.md`.
-- Stockfish commit data is refreshed by `.github/workflows/update-stockfish-commits.yml`.
+- Every data source, scheduled job and manual refresh is listed in `docs/tools/data-refresh.md`.
 - GitHub Pages should use `Settings > Pages > Build and deployment > Source: GitHub Actions`.
-- The first-pass rebuild order is tracked in `docs/rebuild-roadmap.md`.
+- `docs/rebuild-roadmap.md` is the historical Astro rebuild plan; every tool in it has been rebuilt.
 - Tool explainers live in `docs/tools/`.
 - CCC Archive uses `npm run sync:ccc` to refresh published archive metadata; deployment runs it automatically. See `docs/tools/ccc-archive.md` for the two-repository workflow.
 - Titled Tuesday Archive follows the same pattern with `npm run sync:tt`. See `docs/tools/titled-tuesday-archive.md` to add missing events later.
