@@ -15,7 +15,6 @@ data/               Canonical generated data not served directly
 public/             Static assets copied as-is to the built site
 scripts/            Data refresh and sync scripts
 tests/              Playwright browser checks (`npm run test:browser`)
-legacy/             Old static site kept as reference, not active routes
 ```
 
 The public site is generated with:
@@ -35,8 +34,6 @@ Astro is configured with `build.format: 'file'`, so routes such as `src/pages/ti
 - Static data and assets that must be fetched by browser JavaScript belong in `public`.
 
 Some older tools still use browser scripts copied into `public/js`. Those are intentionally referenced with `is:inline` script tags so Astro emits normal browser script tags rather than trying to bundle legacy globals.
-
-The old static site lives in `legacy/static-site`. New work should not add public routes there; treat it as source material only.
 
 `sitemap.xml` is generated at build time by `src/pages/sitemap.xml.ts` from the files in `src/pages`, so new routes are listed automatically.
 

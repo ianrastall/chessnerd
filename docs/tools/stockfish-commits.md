@@ -25,8 +25,6 @@ public/data/stockfish-commits/index.json
 public/data/stockfish-commits/YYYY-MM.json
 ```
 
-On first run, it seeds `commits.json` from the legacy snapshot in `legacy/static-site/tools/stockfish_commits_full.json`.
-
 On later runs, it:
 
 1. Fetches new commits from `official-stockfish/Stockfish`.

@@ -27,8 +27,7 @@ chessnerd/
 ├── public/                 # Static assets copied to dist
 ├── scripts/                # Maintenance and data-refresh scripts
 ├── tests/                  # Playwright browser checks
-├── docs/                   # Tool explainers and maintenance notes
-└── legacy/                 # Old static site kept for reference
+└── docs/                   # Tool explainers and maintenance notes
 ```
 
 ## Local Development
@@ -52,12 +51,12 @@ Astro uses `build.format: 'file'`, so `src/pages/titled-players.astro` builds to
 
 ```powershell
 npm test               # unit tests (Vitest)
-npm run audit          # npm audit, fails on high severity
+npm run audit          # npm audit, reports high-severity advisories
 npm run build          # astro check, then build
 npm run test:browser   # Playwright against the built site
 ```
 
-Deployment runs all four.
+Deployment runs all four; the audit is report-only there and does not block a deploy.
 
 ## Maintenance Notes
 

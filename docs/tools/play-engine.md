@@ -23,8 +23,6 @@ Updated 22 October 2026 from Lozza 8 to [Lozza 11.0](https://github.com/op12no2/
 
 `7e7e61326022b7944f239fd8a898cfdfbf437086846152811b40a39b4ad7236b`
 
-The historical top-level `js/` and `legacy/` copies are not served by Astro and remain reference material.
-
 ## Automation
 
 No cron job is needed for gameplay itself. Useful automation would be test-oriented:

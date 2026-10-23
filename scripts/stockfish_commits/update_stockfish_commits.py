@@ -23,7 +23,6 @@ SOURCE_URL = f"https://github.com/{OWNER}/{REPO}"
 COMMITS_API = f"https://api.github.com/repos/{OWNER}/{REPO}/commits"
 DEFAULT_CANONICAL = Path("data/stockfish-commits/commits.json")
 DEFAULT_OUTDIR = Path("public/data/stockfish-commits")
-LEGACY_SEED = Path("legacy/static-site/tools/stockfish_commits_full.json")
 
 
 def parse_args() -> argparse.Namespace:
@@ -182,9 +181,6 @@ def load_seed_commits(canonical: Path) -> list[dict[str, Any]]:
     if canonical.exists():
         print(f"Loading canonical commits from {canonical}.")
         return read_json(canonical, [])
-    if LEGACY_SEED.exists():
-        print(f"Seeding canonical commits from {LEGACY_SEED}.")
-        return read_json(LEGACY_SEED, [])
     return []
 
 
