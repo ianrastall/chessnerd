@@ -42,6 +42,10 @@ class FideTests(unittest.TestCase):
                'url': f'https://github.com/{sync.REPO}/releases/download/{tag}/{name}.zip', 'effectiveFrom': period + '-01T00:00:00Z', 'metadata': metadata}
         sync.save(source / 'players.json', [{'id': 1, 'name': 'Test', 'active': True, 'std': 2600, 'rapid': 0, 'blitz': 0}])
         sync.save(source / 'players.meta.json', {'period': period, 'count': 1, 'min_rating': 2500, 'sources': sources})
+        # Reproduce Windows-origin release bytes even when tests run on Linux.
+        for filename in ('players.json', 'players.meta.json'):
+            path = source / filename
+            path.write_bytes(path.read_bytes().rstrip(b'\r\n') + b'\r\n')
         assets = [{'name': p.name, 'bytes': p.stat().st_size, 'sha256': sync.digest(p.read_bytes())} for p in source.iterdir() if p.suffix != '.sqlite']
         sync.save(source / 'monthly.json', {'schema': 1, 'period': period, 'effectiveFrom': row['effectiveFrom'], 'repository': sync.REPO, 'release': tag,
                                            'sourceRevision': 'a' * 40, 'list': row, 'sources': sources, 'counts': {'standard': 1}, 'assets': assets})
@@ -57,6 +61,8 @@ class FideTests(unittest.TestCase):
             before = (root / 'public/data/fide-players.json').read_bytes()
             sync.sync('2026-11', root, source, datetime(2026, 10, 31, 23, 59, tzinfo=timezone.utc))
             self.assertEqual((root / 'public/data/fide-players.json').read_bytes(), before)
+            self.assertEqual((root / 'public/data/fide-monthly/2026-11/players.json').read_bytes(), (source / 'players.json').read_bytes())
+            self.assertEqual((root / 'public/data/fide-monthly/2026-11/players.meta.json').read_bytes(), (source / 'players.meta.json').read_bytes())
             catalog = json.loads((root / 'public/data/fide-archive/standard-lists.json').read_text())
             self.assertEqual(catalog['lists'][1]['url'], 'existing-url')
             sync.sync('2026-11', root, source, datetime(2026, 11, 1, tzinfo=timezone.utc))

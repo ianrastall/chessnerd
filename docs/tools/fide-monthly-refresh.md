@@ -44,6 +44,10 @@ hashes, restored SQLite integrity/schema/count/date/meta, player data and source
 provenance before writing public files. Validation failures block commit and
 deployment.
 
+Versioned JSON is stored byte-for-byte with Git text normalization disabled
+for that directory. The site build independently checks those payload hashes
+in the actual checkout, including on Linux, before deployment.
+
 Versioned files live at `/data/fide-monthly/YYYY-MM/`; `/data/fide-monthly.json`
 indexes effective dates and payload hashes. The archive manifest gains a new
 period with its own release/revision/effective date. Existing periods and their

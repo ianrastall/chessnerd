@@ -1,6 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import monthlyIndex from '../../public/data/fide-monthly.json';
+import { parseMonthlyIndex } from '../lib/fide-monthly';
+
+// Validate exact checked-out bytes, including newline preservation, before deploy.
+for (const entry of parseMonthlyIndex(monthlyIndex)) {
+  for (const key of ['data', 'meta'] as const) {
+    const bytes = readFileSync(`public${entry[key]}`);
+    if (createHash('sha256').update(bytes).digest('hex') !== entry[`${key}Sha256`]) throw new Error(`Invalid staged FIDE ${key}: ${entry.period}`);
+  }
+}
 ---
 <BaseLayout title="FIDE 2500+ Players" description="Filter FIDE-rated players whose standard, rapid, or blitz rating is at least 2500.">
 <style is:global>

@@ -49,6 +49,13 @@ def save(path, value, indent=None):
     temp.replace(path)
 
 
+def save_bytes(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + '.tmp')
+    temp.write_bytes(data)
+    temp.replace(path)
+
+
 def sync(period, root=ROOT, directory=None, now=None):
     if not re.fullmatch(r'\d{4}-(0[1-9]|1[0-2])', period):
         raise ValueError('Invalid monthly period')
@@ -154,8 +161,8 @@ def sync(period, root=ROOT, directory=None, now=None):
         raise ValueError('Previously staged monthly snapshot changed')
     index['snapshots'] = sorted([e for e in index['snapshots'] if e['period'] != period] + [entry], key=lambda e: e['period'])
     # All network, checksum and schema checks finish before any public write.
-    save(public / f'fide-monthly/{period}/players.json', players)
-    save(public / f'fide-monthly/{period}/players.meta.json', meta)
+    save_bytes(public / f'fide-monthly/{period}/players.json', players_data)
+    save_bytes(public / f'fide-monthly/{period}/players.meta.json', meta_data)
     save(public / f'fide-monthly/{period}/monthly.json', receipt)
     if json.dumps(catalog) != original_catalog:
         save(public / 'fide-archive/standard-lists.json', catalog, indent=1)
