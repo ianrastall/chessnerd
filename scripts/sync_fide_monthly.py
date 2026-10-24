@@ -163,7 +163,7 @@ def sync(period, root=ROOT, directory=None, now=None):
     # All network, checksum and schema checks finish before any public write.
     save_bytes(public / f'fide-monthly/{period}/players.json', players_data)
     save_bytes(public / f'fide-monthly/{period}/players.meta.json', meta_data)
-    save(public / f'fide-monthly/{period}/monthly.json', receipt)
+    save_bytes(public / f'fide-monthly/{period}/monthly.json', receipt_data)
     if json.dumps(catalog) != original_catalog:
         save(public / 'fide-archive/standard-lists.json', catalog, indent=1)
     save(index_path, index)

@@ -49,6 +49,8 @@ class FideTests(unittest.TestCase):
         assets = [{'name': p.name, 'bytes': p.stat().st_size, 'sha256': sync.digest(p.read_bytes())} for p in source.iterdir() if p.suffix != '.sqlite']
         sync.save(source / 'monthly.json', {'schema': 1, 'period': period, 'effectiveFrom': row['effectiveFrom'], 'repository': sync.REPO, 'release': tag,
                                            'sourceRevision': 'a' * 40, 'list': row, 'sources': sources, 'counts': {'standard': 1}, 'assets': assets})
+        path = source / 'monthly.json'
+        path.write_bytes(path.read_bytes().rstrip(b'\r\n') + b'\r\n')
         sync.save(root / 'public/data/fide-archive/standard-lists.json', {'lists': [{'period': '2026-10', 'rows': 1, 'url': 'existing-url'}]})
         sync.save(root / 'public/data/fide-players.meta.json', {'period': '2026-10'})
         sync.save(root / 'public/data/fide-players.json', [{'name': 'October'}])
@@ -63,6 +65,7 @@ class FideTests(unittest.TestCase):
             self.assertEqual((root / 'public/data/fide-players.json').read_bytes(), before)
             self.assertEqual((root / 'public/data/fide-monthly/2026-11/players.json').read_bytes(), (source / 'players.json').read_bytes())
             self.assertEqual((root / 'public/data/fide-monthly/2026-11/players.meta.json').read_bytes(), (source / 'players.meta.json').read_bytes())
+            self.assertEqual((root / 'public/data/fide-monthly/2026-11/monthly.json').read_bytes(), (source / 'monthly.json').read_bytes())
             catalog = json.loads((root / 'public/data/fide-archive/standard-lists.json').read_text())
             self.assertEqual(catalog['lists'][1]['url'], 'existing-url')
             sync.sync('2026-11', root, source, datetime(2026, 11, 1, tzinfo=timezone.utc))
