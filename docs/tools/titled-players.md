@@ -14,20 +14,27 @@ request every player's profile from the visitor's browser.
 cohort, so it is not a replacement for the complete titled-player lists.
 
 Ratings refresh once per UTC day, profiles weekly. Requests run serially with
-an identifying User-Agent, bounded retries and a five-hour total budget. The
+an identifying User-Agent, bounded retries and a five-and-a-half-hour total
+budget (`MAX_RUN_SECONDS=19800`). The Actions job allows six hours, leaving
+30 minutes for setup, checkpoint saving and build validation. The
 API may serve cached data; fetch time does not claim real-time rating currency.
 
 All title lists must succeed, and removals greater than 10% fail validation.
 Known data is never mutated by a partial player response. A failed stats or
 required profile fetch cannot zero known ratings or advance its timestamp.
 An empty successful stats object means an account with no rated games and is
-distinct from a failed request.
+distinct from a failed request. A stats HTTP 404 is still a failed request,
+even when the profile endpoint succeeds; it must not be interpreted as zero
+ratings or silently omitted from the cohort.
 
 Private progress is saved every 50 players in `.cache/titled-players.json`,
 restored/saved by Actions cache even on failure. Only successful daily stats
 checkpoints are reused as fresh; legacy `updated_at` values cannot establish
 freshness. Failed/incomplete/time-limited runs exit unsuccessfully and leave
-the public snapshot untouched. A subsequent run resumes valid progress.
+the public snapshot untouched. A subsequent run on the same UTC day resumes
+valid stats progress; on a later UTC day, stats must be fetched again.
+Increasing the budget addresses runtime exhaustion, but persistent API errors
+still block publication. Retry the workflow after the upstream error clears.
 
 After the whole daily cohort succeeds, the job writes the existing flat-array
 schema plus optional `stats_updated_at` and `profile_updated_at` fields, and a

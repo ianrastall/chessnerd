@@ -51,6 +51,78 @@ class TitledTests(unittest.TestCase):
                 sync.safe_request('https://api.chess.com/pub/player/test/stats')
         sleep.assert_not_called()
 
+    def test_stats_404_is_not_an_unrated_player(self):
+        old = {'username': 'test', 'rapid': 2700, 'stats_updated_at': '2026-10-01T00:00:00Z'}
+        response = Mock(status_code=404)
+        with patch.object(sync.session, 'get', return_value=response) as request, patch.object(sync.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(ValueError, 'API HTTP 404'):
+                sync.get_player_data('test', 'GM', old)
+        request.assert_called_once()
+        sleep.assert_not_called()
+        self.assertEqual(old['rapid'], 2700)
+        self.assertEqual(old['stats_updated_at'], '2026-10-01T00:00:00Z')
+
+    def test_timeout_saves_checkpoint_and_same_day_retry_resumes(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output, meta, checkpoint = (root / name for name in ('public.json', 'meta.json', 'checkpoint.json'))
+            old = [{'username': user, 'title': 'GM', 'rapid': 2700,
+                    'stats_updated_at': '2026-10-01T00:00:00Z'} for user in ('alice', 'bob')]
+            output.write_text(json.dumps(old))
+            meta.write_text('{"previous":true}')
+            before = output.read_bytes(), meta.read_bytes()
+            now = datetime(2026, 10, 24, 6, tzinfo=timezone.utc)
+
+            def request(url):
+                if '/titled/' in url:
+                    return {'players': ['alice', 'bob']}
+                if url.endswith('/stats'):
+                    return {'chess_rapid': {'last': {'rating': 2800}}}
+                if url.endswith('/bob'):
+                    raise TimeoutError('Refresh time limit reached')
+                return {'username': 'alice', 'status': 'basic'}
+
+            with patch.multiple(sync, OUTPUT_FILE=output, META_FILE=meta, CHECKPOINT_FILE=checkpoint), patch.object(sync, 'utc_now', return_value=now):
+                # Time out after one complete player and the next player's stats.
+                with patch.object(sync, 'safe_request', side_effect=request):
+                    with self.assertRaises(TimeoutError):
+                        sync.main()
+                self.assertEqual((output.read_bytes(), meta.read_bytes()), before)
+                saved = sync.load(checkpoint)
+                self.assertEqual(saved['alice']['rapid'], 2800)
+                self.assertTrue(sync.stats_current(saved['alice'], now))
+                self.assertEqual(saved['bob'], old[1])
+
+                def retry(url):
+                    if url.endswith('/bob'):
+                        return {'username': 'bob', 'status': 'basic'}
+                    return request(url)
+
+                with patch.object(sync, 'safe_request', side_effect=retry) as resumed:
+                    sync.main()
+                self.assertFalse(any('/player/alice' in call.args[0] for call in resumed.call_args_list))
+                self.assertEqual(len(sync.load(output)), 2)
+                self.assertEqual(json.loads(meta.read_text())['refreshed'], 1)
+
+    def test_stats_404_blocks_publication(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output, meta, checkpoint = (root / name for name in ('public.json', 'meta.json', 'checkpoint.json'))
+            output.write_text(json.dumps([{'username': 'test', 'title': 'GM', 'rapid': 2700}]))
+            meta.write_text('{"previous":true}')
+            before = output.read_bytes(), meta.read_bytes()
+
+            def request(url):
+                if '/titled/' in url:
+                    return {'players': ['test']}
+                raise ValueError('API HTTP 404')
+
+            with patch.multiple(sync, OUTPUT_FILE=output, META_FILE=meta, CHECKPOINT_FILE=checkpoint), patch.object(sync, 'safe_request', side_effect=request):
+                with self.assertRaisesRegex(RuntimeError, 'Incomplete daily snapshot'):
+                    sync.main()
+            self.assertEqual((output.read_bytes(), meta.read_bytes()), before)
+            self.assertEqual(sync.load(checkpoint)['test']['rapid'], 2700)
+
     def run_fixture(self, root, failed=False, bad_title=False):
         output = root / 'public.json'
         meta = root / 'meta.json'
