@@ -1,5 +1,6 @@
 import { test,expect } from '@playwright/test';
-import { readdir } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 const pages=(await readdir('src/pages')).filter(path=>path.endsWith('.astro')).map(path=>path==='index.astro' ? '/' : '/'+path.replace('.astro','.html'));
 test.beforeEach(async({page})=>{await page.route('https://www.googletagmanager.com/**',r=>r.abort());await page.route('https://fonts.googleapis.com/**',r=>r.abort());});
 for(const path of [...pages,'/categories/analysis.html','/categories/data.html','/categories/reference.html'])test(`route and responsive shell: ${path}`,async({page})=>{
@@ -123,7 +124,8 @@ test('FIDE standard-rating periods have individual SQLite downloads on narrow sc
   await page.setViewportSize({width:390,height:844});
   await page.goto('/fide-archive.html');
   await expect(page.locator('.fa-table thead th')).toHaveText(['Period','Rows','Download']);
-  await expect(page.locator('#faBody tr[data-search]')).toHaveCount(283);
+  const manifest=JSON.parse(await readFile('public/data/fide-archive/standard-lists.json','utf8'));
+  await expect(page.locator('#faBody tr[data-search]')).toHaveCount(manifest.lists.length);
   await expect(page.locator('a[href*="archive.org"], a[href*="pixeldrain.com/l/"]')).toHaveCount(0);
   await page.getByText('Original files and player lists (Pixeldrain)',{exact:true}).click();
   await expect(page.locator('a[href^="https://pixeldrain.com/u/"]')).toHaveCount(8);
@@ -139,4 +141,44 @@ test('FIDE standard-rating periods have individual SQLite downloads on narrow sc
   await expect(page.locator('#faEmpty')).toBeVisible();
   await expect(page.locator('#faCount')).toHaveText('0 periods');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
+
+test('staged FIDE table changes at midnight UTC and retains data on failed refresh',async({page})=>{
+  await page.clock.install({time:new Date('2099-10-31T23:59:59Z')});
+  const snapshots=[];
+  for(const [period,name] of [['2099-10','October, Player'],['2099-11','November, Player']]) {
+    const data=JSON.stringify([{id:1,name,country:'USA',sex:'M',title:'GM',std:2600,rapid:0,blitz:0,born:1990,active:true}]);
+    const meta=JSON.stringify({period,count:1,min_rating:2500});
+    const entry={period,effectiveFrom:`${period}-01T00:00:00Z`,data:`/data/fide-monthly/${period}/players.json`,meta:`/data/fide-monthly/${period}/players.meta.json`,dataSha256:createHash('sha256').update(data).digest('hex'),metaSha256:createHash('sha256').update(meta).digest('hex'),receipt:`https://github.com/ianrastall/fide-db-archive/releases/download/standard-sqlite-${period}-monthly/monthly.json`};
+    snapshots.push(entry);
+    await page.route(`**${entry.data}`,r=>r.fulfill({contentType:'application/json',body:data}));
+    await page.route(`**${entry.meta}`,r=>r.fulfill({contentType:'application/json',body:meta}));
+  }
+  let failed=false;
+  await page.route('**/data/fide-monthly.json',r=>failed ? r.fulfill({status:503}) : r.fulfill({contentType:'application/json',body:JSON.stringify({schema:1,snapshots})}));
+  await page.goto('/fide-2500.html');
+  await expect(page.locator('#fpBody')).toContainText('October, Player');
+  await expect(page.locator('#fpBody')).not.toContainText('November, Player');
+  await page.clock.runFor(1002);
+  await expect(page.locator('#fpBody')).toContainText('November, Player');
+  await expect(page.locator('#fpUpdated')).toContainText('2099-11');
+  failed=true;
+  await page.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));
+  await expect(page.locator('#fpBody')).toContainText('November, Player');
+});
+
+test('staged FIDE archive period becomes visible at midnight UTC',async({page})=>{
+  await page.clock.install({time:new Date('2099-10-31T23:59:59Z')});
+  await page.route('**/fide-archive.html',async route=>{
+    const response=await route.fetch();
+    const body=(await response.text()).replace(/(<tbody[^>]*id="faBody"[^>]*>)/,'$1<tr data-search="2099-11 nov 2099" data-period="2099-11" data-rows="1" data-effective="2099-11-01T00:00:00Z" hidden><th>Nov 2099</th><td>1</td><td><a href="#fixture">SQLite ZIP</a></td></tr>');
+    await route.fulfill({response,body});
+  });
+  await page.goto('/fide-archive.html');
+  const future=page.locator('#faBody tr[data-period="2099-11"]');
+  await expect(future).toBeHidden();
+  await page.clock.runFor(1002);
+  await expect(future).toBeVisible();
+  await page.locator('#faSearch').fill('2099-11');
+  await expect(page.locator('#faCount')).toHaveText('1 periods');
 });

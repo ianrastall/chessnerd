@@ -9,6 +9,9 @@ export interface StandardRatingList {
   zipSha256: string;
   url: string;
   metadata: Record<string, string>;
+  release?: string;
+  sourceRevision?: string;
+  effectiveFrom?: string;
 }
 export interface StandardRatingManifest {
   schema: number;
@@ -31,7 +34,10 @@ export function parseStandardRatingManifest(value: unknown): StandardRatingManif
     if (typeof row.period !== 'string' || !/^\d{4}(-(0[1-9]|1[0-2]))?$/.test(row.period) || periods.has(row.period)) throw new Error('Invalid or duplicate standard-rating period.');
     periods.add(row.period);
     if (row.databaseName !== `fide-standard-${row.period}.sqlite` || row.name !== `${row.databaseName}.zip`) throw new Error('Unexpected standard-rating filename.');
-    if (row.url !== `https://github.com/${doc.repository}/releases/download/${doc.release}/${row.name}`) throw new Error('Unexpected standard-rating download URL.');
+    const release = row.release ?? doc.release;
+    if (row.release && (release !== `standard-sqlite-${row.period}-monthly` || !/^[a-f0-9]{40}$/.test(row.sourceRevision ?? '') || row.effectiveFrom !== `${row.period}-01T00:00:00Z`)) throw new Error('Invalid monthly rating provenance.');
+    if (row.effectiveFrom && row.effectiveFrom !== `${row.period}-01T00:00:00Z`) throw new Error('Invalid monthly effective date.');
+    if (row.url !== `https://github.com/${doc.repository}/releases/download/${release}/${row.name}`) throw new Error('Unexpected standard-rating download URL.');
     for (const size of [row.rows, row.databaseBytes, row.zipBytes]) if (!Number.isSafeInteger(size) || size <= 0) throw new Error('Invalid standard-rating size or count.');
     for (const hash of [row.databaseSha256, row.zipSha256]) if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('Invalid standard-rating checksum.');
     if (!row.metadata || row.metadata.list_date !== row.period || row.metadata.rows !== String(row.rows) || !/^[a-f0-9]{64}$/.test(row.metadata.source_sha256)) throw new Error('Standard-rating provenance does not match its period.');

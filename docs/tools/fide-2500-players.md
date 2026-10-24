@@ -4,10 +4,13 @@ Public route: https://chessnerd.net/fide-2500.html
 
 ## Ownership and refresh
 
-The FIDE monthly `standard_rating_list` XML dump is the source. Chess Nerd owns
-the tool and the derived JSON snapshot.
+The FIDE monthly rolling registry is the source, checked against explicitly
+dated standard, rapid and blitz lists by the independent archive's producer.
+The table refreshes monthly at **00:00 UTC** using pre-staged verified data.
+See [monthly FIDE operation](fide-monthly-refresh.md) for ownership, scheduling,
+failure handling and manual recovery.
 
-Regenerate the snapshot from a downloaded XML with:
+The older manual converter remains available for reference/ad hoc XML work:
 
 ```powershell
 python scripts/build_fide_players.py D:\fide\fide_players_list-YYYY-MM.xml

@@ -174,6 +174,7 @@ import ToolHeader from '../components/ToolHeader.astro';
 </main>
 
 <script>
+import { currentSnapshot, parseMonthlyIndex, untilUtcMidnight, verifiedJson } from '../lib/fide-monthly';
 const TITLE_PRIORITY: Record<string, number> = {GM:0,IM:1,WGM:2,FM:3,WIM:4,CM:5,WFM:6,NM:7,WCM:8,WNM:9};
 const WOMEN_TITLES = new Set(["WGM","WIM","WFM","WNM","WCM"]);
 const PAGE_SIZE = 100;
@@ -385,26 +386,42 @@ fpExport.addEventListener("click", () => {
 
 // --- Load data ---
 async function init(): Promise<void> {
-  fpCount.textContent = "Loading data…";
+  if (!allPlayers.length) fpCount.textContent = "Loading data…";
   try {
-    const [dataResp, metaResp] = await Promise.all([
-      fetch("/data/fide-players.json"),
-      fetch("/data/fide-players.meta.json").catch(() => null),
-    ]);
-    if (!dataResp.ok) throw new Error(`HTTP ${dataResp.status}`);
-    allPlayers = await dataResp.json();
-    if (metaResp && metaResp.ok) {
-      const meta = await metaResp.json() as Meta;
-      if (meta.period) fpUpdated.textContent = `Data as of FIDE ${meta.period} list`;
+    const indexResp = await fetch('/data/fide-monthly.json', { cache: 'no-store' });
+    if (!indexResp.ok) throw new Error(`Monthly index HTTP ${indexResp.status}`);
+    const selected = currentSnapshot(parseMonthlyIndex(await indexResp.json()));
+    let data: Player[], meta: Meta;
+    if (selected) {
+      if (selected.period === loadedPeriod) return;
+      [data, meta] = await Promise.all([
+        verifiedJson(selected.data, selected.dataSha256), verifiedJson(selected.meta, selected.metaSha256)
+      ]) as [Player[], Meta];
+      if (meta.period !== selected.period || meta.count !== data.length) throw new Error('Monthly period/count mismatch.');
+    } else {
+      const [dataResp, metaResp] = await Promise.all([fetch('/data/fide-players.json'), fetch('/data/fide-players.meta.json')]);
+      if (!dataResp.ok || !metaResp.ok) throw new Error('Could not load the current snapshot.');
+      [data, meta] = await Promise.all([dataResp.json(), metaResp.json()]);
     }
+    if (!Array.isArray(data) || !data.length || meta.period > new Date().toISOString().slice(0, 7)) throw new Error('Invalid or premature monthly snapshot.');
+    allPlayers = data;
+    loadedPeriod = meta.period;
+    fpUpdated.textContent = `Data as of FIDE ${meta.period} list`;
     fpExport.disabled = false;
     applyFilters();
   } catch (err) {
+    if (allPlayers.length) return; // Retain the last validated table if a refresh fails.
     fpCount.textContent = "Failed to load player data.";
     fpBody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:1.5rem;color:var(--text-secondary)">Could not load fide-players.json: ${err}</td></tr>`;
   }
 }
 
+let loadedPeriod = '';
+function scheduleActivation(): void {
+  window.setTimeout(() => { void init(); scheduleActivation(); }, untilUtcMidnight());
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) void init(); });
+scheduleActivation();
 init();
 </script>
 </BaseLayout>

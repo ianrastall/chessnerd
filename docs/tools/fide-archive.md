@@ -4,9 +4,12 @@ Public route: https://chessnerd.net/fide-archive.html
 
 One SQLite database per available standard-rating period. The page lists only
 period, source row count and an individual SQLite ZIP download. It has no
-rapid/blitz columns, player-registry downloads, collection link or fixed-height
+rapid/blitz columns, player-registry table, collection link or fixed-height
 scroll region. Period search works on the static table; downloads remain
 available without JavaScript.
+
+New monthly lists use the [scheduled monthly producer and UTC activation](fide-monthly-refresh.md).
+The original 283-period publication and its URLs remain unchanged.
 
 ## Existing data and authority
 
@@ -75,3 +78,7 @@ manifests, Pixeldrain receipts and download URLs are retained for compatibility
 and provenance, but are not the website's rating-list catalogue. Older player
 registries are reference material only; no dates or missing player information
 are inferred from them for this publication.
+
+The collapsed **Original files and player lists (Pixeldrain)** disclosure links
+to all eight individual uploaded bundles, including the two saved-player-list
+bundles. It deliberately has no Pixeldrain collection/set link.

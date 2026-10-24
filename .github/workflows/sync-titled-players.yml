@@ -3,7 +3,7 @@ name: Sync Titled Players Data
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * 0"   # Weekly — Sunday 03:00 UTC
+    - cron: "23 3 * * *"   # Daily, 03:23 UTC
 
 permissions:
   contents: write
@@ -29,10 +29,27 @@ jobs:
       - name: Install Python dependencies
         run: pip install requests
 
+      - name: Restore player checkpoints
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/titled-players.json
+          key: titled-checkpoint-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: titled-checkpoint-v2-
+
+      - name: Test refresh failure handling
+        run: python -m unittest discover -s scripts/tests -p "test_titled_players.py"
+
       - name: Sync titled player data
         env:
-          MAX_RUN_SECONDS: "18000"   # 5 h — script exits cleanly if not finished
+          MAX_RUN_SECONDS: "18000"   # Incomplete runs fail and retain the public snapshot.
         run: python scripts/sync-titled-players.py
+
+      - name: Save player checkpoints
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/titled-players.json
+          key: titled-checkpoint-v2-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -49,13 +66,13 @@ jobs:
       - name: Commit updated data
         shell: bash
         run: |
-          if [ -z "$(git status --porcelain -- public/data/titled-players.json)" ]; then
+          if [ -z "$(git status --porcelain -- public/data/titled-players.json public/data/titled-players.meta.json)" ]; then
             echo "No changes to titled-players.json — nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/titled-players.json
+          git add public/data/titled-players.json public/data/titled-players.meta.json
           git commit -m "Update titled players data"
           for attempt in 1 2 3; do
             git pull --rebase && git push && exit 0

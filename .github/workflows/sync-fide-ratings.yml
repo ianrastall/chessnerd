@@ -1,0 +1,56 @@
+name: Sync FIDE Ratings Data
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: 'Optional YYYY-MM override (normally calculated in UTC)'
+        required: false
+        type: string
+  schedule:
+    - cron: '43 12,18,21,23 28-31 * *'
+    - cron: '43 0,3 1,2 * *'
+permissions:
+  contents: write
+concurrency:
+  group: fide-ratings-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Test monthly publication handling
+        run: python -m unittest discover -s scripts/tests -p 'test_fide_monthly.py'
+      - name: Verify and stage monthly data
+        env:
+          PERIOD: ${{ inputs.period }}
+        shell: bash
+        run: |
+          args=()
+          if [ -n "$PERIOD" ]; then args+=(--period "$PERIOD"); fi
+          python scripts/sync_fide_monthly.py "${args[@]}"
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Commit verified data
+        shell: bash
+        run: |
+          paths=(public/data/fide-archive/standard-lists.json public/data/fide-monthly.json public/data/fide-monthly public/data/fide-players.json public/data/fide-players.meta.json)
+          if [ -z "$(git status --porcelain -- "${paths[@]}")" ]; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "${paths[@]}"
+          git commit -m 'Update verified monthly FIDE ratings'
+          for attempt in 1 2 3; do
+            git pull --rebase && git push && exit 0
+            sleep 15
+          done
+          exit 1

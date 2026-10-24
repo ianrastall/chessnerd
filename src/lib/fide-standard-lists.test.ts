@@ -18,6 +18,14 @@ describe('standard-rating publications', () => {
     expect(ratingPeriodLabel('1969')).toBe('1969 (month unknown)');
     expect(ratingPeriodLabel('2019-03')).toBe('Mar 2019');
   });
+  it('accepts independently verified monthly releases without changing historical URLs', () => {
+    const doc = fixture();
+    const row = doc.lists[0];
+    const monthly = { ...row, release: 'standard-sqlite-2026-10-monthly', sourceRevision: 'f'.repeat(40), effectiveFrom: '2026-10-01T00:00:00Z',
+      url: row.url.replace('standard-sqlite-2026-10/', 'standard-sqlite-2026-10-monthly/') };
+    expect(parseStandardRatingManifest({ ...doc, lists: [monthly] }).lists[0].url).toBe(monthly.url);
+    expect(() => parseStandardRatingManifest({ ...doc, lists: [{ ...monthly, effectiveFrom: '2026-09-30T23:00:00Z' }] })).toThrow();
+  });
   it.each([
     { url: 'https://example.com/download.zip' },
     { period: '2026-13' },

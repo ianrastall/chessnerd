@@ -8,8 +8,9 @@ import { formatBytes } from '../lib/fide-archive';
 import { parseStandardRatingManifest, ratingPeriodLabel } from '../lib/fide-standard-lists';
 
 const manifest = parseStandardRatingManifest(manifestData);
+const activeLists = manifest.lists.filter(row => !row.effectiveFrom || Date.parse(row.effectiveFrom) <= Date.now());
 const number = (value: number) => value.toLocaleString('en-US');
-const totalRows = manifest.lists.reduce((sum, row) => sum + row.rows, 0);
+const totalRows = activeLists.reduce((sum, row) => sum + row.rows, 0);
 const references = [...originalDownloads.bundles, ...savedDownloads.bundles];
 for (const file of references) {
   if (file.url !== `https://pixeldrain.com/u/${file.id}` || !/^[A-Za-z0-9]+$/.test(file.id) || !/^[a-f0-9]{64}$/.test(file.sha256) || file.bytes <= 0) throw new Error('Invalid original-file download.');
@@ -19,7 +20,7 @@ for (const file of references) {
   <ToolHeader title="FIDE Archive" icon="history_edu" />
   <div class="fa">
     <p>One SQLite database per available rating-list period, containing standard ratings and player information.</p>
-    <p class="fa-note">{number(manifest.lists.length)} periods · {number(totalRows)} source rows · {manifest.lists.at(-1)!.period.slice(0, 4)}–{manifest.lists[0].period.slice(0, 4)}</p>
+    <p class="fa-note" id="faSummary">{number(activeLists.length)} periods · {number(totalRows)} source rows · {activeLists.at(-1)!.period.slice(0, 4)}–{activeLists[0].period.slice(0, 4)}</p>
     <p class="fa-note">Extract the ZIP to open its SQLite database.</p>
     <p class="fa-note">Early lists were published less frequently, and some contain only partial lists or changes. These databases preserve the available rows and missing values; they do not reconstruct missing periods. Dates retain their original precision.</p>
     <p><a href="/fide-player.html">Look up a player’s rating history</a></p>
@@ -32,13 +33,13 @@ for (const file of references) {
       <label for="faSearch">Find a period</label>
       <input id="faSearch" type="search" placeholder="1985, Mar 2019, 2019-03…" autocomplete="off" />
     </div>
-    <p id="faCount" class="fa-note" aria-live="polite">{number(manifest.lists.length)} periods</p>
+    <p id="faCount" class="fa-note" aria-live="polite">{number(activeLists.length)} periods</p>
     <table class="fa-table">
       <caption class="visually-hidden">Standard FIDE rating lists by period, newest first</caption>
       <thead><tr><th scope="col">Period</th><th scope="col">Rows</th><th scope="col">Download</th></tr></thead>
       <tbody id="faBody">
         {manifest.lists.map(row => (
-          <tr data-search={`${row.period} ${ratingPeriodLabel(row.period)}`.toLowerCase()}>
+          <tr data-search={`${row.period} ${ratingPeriodLabel(row.period)}`.toLowerCase()} data-period={row.period} data-rows={row.rows} data-effective={row.effectiveFrom ?? ''} hidden={!!row.effectiveFrom && Date.parse(row.effectiveFrom) > Date.now()}>
             <th scope="row"><time datetime={row.period}>{ratingPeriodLabel(row.period)}</time></th>
             <td class="fa-rows">{number(row.rows)}</td>
             <td><a href={row.url} title={`ZIP SHA-256 ${row.zipSha256}`} aria-label={`Download standard ratings ${ratingPeriodLabel(row.period)} as SQLite ZIP`}>SQLite ZIP</a><span class="fa-size">{formatBytes(row.zipBytes)}</span></td>
@@ -75,18 +76,27 @@ for (const file of references) {
     @media (max-width: 480px) { .fa-table th, .fa-table td { padding: 0.6rem 0.3rem; } .fa-size { display: block; margin: 0.2rem 0 0; } }
     [hidden] { display: none !important; }
   </style>
-  <script is:inline>
-    const input = document.getElementById('faSearch');
-    const rows = document.querySelectorAll('#faBody tr[data-search]');
-    input.addEventListener('input', () => {
+  <script>
+    import { untilUtcMidnight } from '../lib/fide-monthly';
+    const input = document.getElementById('faSearch') as HTMLInputElement;
+    const rows = Array.from(document.querySelectorAll<HTMLTableRowElement>('#faBody tr[data-search]'));
+    function filter() {
       const query = input.value.trim().toLowerCase();
       let count = 0;
+      const active = rows.filter(row => !row.dataset.effective || Date.parse(row.dataset.effective) <= Date.now());
       rows.forEach(row => {
-        row.hidden = !row.dataset.search.includes(query);
+        row.hidden = !active.includes(row) || !row.dataset.search!.includes(query);
         if (!row.hidden) count++;
       });
-      document.getElementById('faEmpty').hidden = count !== 0;
-      document.getElementById('faCount').textContent = `${count.toLocaleString('en-US')} periods`;
-    });
+      document.getElementById('faEmpty')!.hidden = count !== 0;
+      document.getElementById('faCount')!.textContent = `${count.toLocaleString('en-US')} periods`;
+      const total = active.reduce((sum, row) => sum + Number(row.dataset.rows), 0);
+      document.getElementById('faSummary')!.textContent = `${active.length.toLocaleString('en-US')} periods · ${total.toLocaleString('en-US')} source rows · ${active.at(-1)!.dataset.period!.slice(0, 4)}–${active[0].dataset.period!.slice(0, 4)}`;
+    }
+    function schedule() { window.setTimeout(() => { filter(); schedule(); }, untilUtcMidnight()); }
+    input.addEventListener('input', filter);
+    document.addEventListener('visibilitychange', filter);
+    filter();
+    schedule();
   </script>
 </BaseLayout>

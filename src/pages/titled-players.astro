@@ -173,7 +173,7 @@ const PAGE_SIZE = 100;
 type Player = {
   username: string; title: string; name: string; avatar: string;
   country: string; rapid: number; blitz: number; bullet: number;
-  status: string; updated_at: string; fetch_ok: boolean;
+  status: string; updated_at: string; fetch_ok: boolean; stats_updated_at?: string;
 };
 
 // State
@@ -368,14 +368,12 @@ async function init(): Promise<void> {
     const raw = await resp.json();
     allPlayers = Array.isArray(raw) ? raw : (raw.players ?? []);
 
-    // Find most recent updated_at for display
-    let latest = "";
-    for (const p of allPlayers) {
-      if (p.updated_at && p.updated_at > latest) latest = p.updated_at;
-    }
-    if (latest) {
-      const d = new Date(latest);
-      tpUpdated.textContent = `Data as of ${d.toLocaleDateString(undefined, {year:"numeric",month:"short",day:"numeric"})}`;
+    // Show the whole cohort's date range, including legacy mixed-age snapshots.
+    const verifiedDates = allPlayers.every(p => !!p.stats_updated_at);
+    const stamps = allPlayers.map(p => p.stats_updated_at || p.updated_at).filter(Boolean).sort();
+    if (stamps.length) {
+      const first = stamps[0].slice(0, 10), last = stamps.at(-1)!.slice(0, 10);
+      tpUpdated.textContent = `${verifiedDates ? 'Ratings fetched' : 'Record dates'} ${first === last ? first : `${first}–${last}`} (UTC)`;
     }
 
     tpExport.disabled = false;
