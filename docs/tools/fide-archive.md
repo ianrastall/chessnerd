@@ -2,122 +2,76 @@
 
 Public route: https://chessnerd.net/fide-archive.html
 
-A mirror of old FIDE rating lists from two sources, kept as downloaded:
+One SQLite database per available standard-rating period. The page lists only
+period, source row count and an individual SQLite ZIP download. It has no
+rapid/blitz columns, player-registry downloads, collection link or fixed-height
+scroll region. Period search works on the static table; downloads remain
+available without JavaScript.
 
-- **FIDE** (`https://ratings.fide.com/download/`): every list from January 2001,
-  as TXT and XML zips for standard, rapid and blitz, plus the rolling combined
-  files (`players_list*.zip`, snapshots of the current month).
-- **Olimpbase** (`https://www.olimpbase.org/Elo/`): the raw lists in `Elo/data/`
-  (TXT, DBF, MDB, scanned-GIF ZIPs, 1971–2009) and the `Elo*.html` list pages.
+## Existing data and authority
 
-## Where things live
+The existing per-list conversions are reused from
+`D:/fide/fide-archive/sqlite`. Their inventory belongs to the independent
+`ianrastall/fide-db-archive` repository, locally at
+`D:/fide/fide-db-archive/data/inventory.json`. The October 2026 snapshot contains
+283 periods, 1967 through October 2026, and 62,312,616 source rows.
 
-| What | Where |
-| --- | --- |
-| The files (about 8 GB) | `D:\fide-archive` (not in git) |
-| Public copy | Pixeldrain ZIP bundles; published IDs and checksums in `public/data/fide-archive/pixeldrain.json` |
-| Manifest for the page | `public/data/fide-archive/manifest.json` (in git) |
-| Script | `scripts/fide_archive.py` |
+Each database has the original 22-column `players` table and key/value `meta`
+table. These contain only standard-rating data and player information: names,
+FIDE IDs where supplied, federations, sex, titles, birth information, rating,
+games, K-factor, flags and original row details. No rapid/blitz ratings or
+combined player registries are imported into these files.
 
-The files are too big for GitHub Pages. The site holds metadata, links to
-Pixeldrain bundles and links to original source downloads. The source manifest
-retains the planned Internet Archive URLs for compatibility and provenance;
-those URLs are not used as the site's download targets after publication.
+Historical partial/change lists remain partial. Year-only dates remain
+year-only. Missing names, identifiers or biographical values are not guessed
+or copied from later lists. Nulls, zero values, duplicate rows, row order and
+original source metadata are retained. The existing converter is
+`D:/dev/proj/chessnerd/chessnerd/scripts/fide_to_sqlite.py`; the independent
+FIDE workspace also has supplemental XML/HTML converters. Reuse those tools
+when adding a new source format rather than changing historical source data.
 
-## Naming FIDE uses
+## Publication
 
-| Period | Name |
-| --- | --- |
-| 2001 – early 2012 | `jan01frl.zip` (combined TXT only; quarterly, then bimonthly, then monthly) |
-| 2012 – now | `standard_sep26frl.zip`, `standard_sep26frl_xml.zip`, and `rapid_` / `blitz_` likewise |
-| Current month only | `players_list.zip`, `players_list_xml.zip`, `players_list_legacy.zip`, `players_list_xml_legacy.zip`, `players_list_foa.zip`, `players_list_xml_foa.zip` |
-
-FIDE's download page lists Feb 2015 onwards in its dropdown; older files are
-reachable by name but are not linked from it. A missing name returns an HTML
-404 page with status 404, which the script treats as "not published".
-
-## Run it
-
-```powershell
-cd D:\jupiter\chessnerd
-python -I scripts/fide_archive.py discover   # probes every candidate name (about 2.5 minutes), writes plan.json
-python -I scripts/fide_archive.py fetch      # resumable; add --source fide or --source olimpbase
-python -I scripts/fide_archive.py manifest   # zip test, SHA-256, writes manifests
-npm test
-git add public/data/fide-archive scripts/fide_archive.py
-```
-
-`fetch` skips files whose size matches the plan, so interrupt and re-run freely.
-`manifest` re-hashes only files whose size changed, and fails on a corrupt zip.
-
-## Adding the next month
-
-FIDE publishes on the 1st. Re-run the three steps; discovery adds the new month.
-Prepare and upload updated Pixeldrain bundles, copy the verified publication
-metadata to the site, then commit both manifests. A source manifest refresh
-without matching bundle coverage blocks the website build.
-
-## Pixeldrain publication
-
-The Internet Archive location above was planned but has not been verified as
-published. Do not treat its URLs as evidence of a completed upload.
-
-Prepare independent ZIP bundles from exactly the files in the local manifest:
+`scripts/publish_fide_sqlite.py` validates each database against the verified
+archive inventory: filename, SHA-256, size, schema, SQLite integrity, period
+and actual row count. It rejects active/changing databases. Each independent
+ZIP contains one SQLite file, whose restored SHA-256 is checked before upload.
 
 ```powershell
-python -I scripts/publish_fide_pixeldrain.py prepare
-python -I scripts/publish_fide_pixeldrain.py upload
+python -I scripts/publish_fide_sqlite.py prepare
+python -I scripts/publish_fide_sqlite.py publish
 ```
 
-The preparation step checks every original SHA-256, groups whole years by
-source with a 2 GB input-size target, and verifies the ZIP contents against
-those checksums. Each ZIP contains its own source manifest and can be extracted
-independently. Outputs go to `D:/fide-archive/pixeldrain`, outside Git. The
-derived SQLite databases are not part of the original-file archive. Existing
-bundles are reused when their checksums and embedded file records still match,
-so unchanged historical groups retain their existing upload IDs.
+Outputs are outside Git in `D:/fide/standard-list-downloads`. The publication
+is a separate GitHub release in the existing `fide-db-archive` repository,
+with tag `standard-sqlite-2026-10`. The existing binary release, independent
+Git history and unrelated uncommitted local changes are untouched. GitHub
+credentials come from the existing `gh` login; no Pixeldrain key is needed.
 
-Save the API key alone in
-`C:/Users/Ian/.config/chessnerd/pixeldrain-api-key.txt`, or supply the
-`PIXELDRAIN_API_KEY` environment variable. The script never prints the key.
-Uploads use Pixeldrain's authenticated PUT endpoint; the public file metadata
-must match the bundle's size, name and SHA-256 before an upload is recorded.
-Verified receipts are saved locally after each upload. Rerunning uploads
-rechecks and skips those completed files. After all files have been verified,
-the script creates and verifies a Pixeldrain collection and writes
-`D:/fide-archive/pixeldrain/pixeldrain.json`. Copy that file to
-`public/data/fide-archive/pixeldrain.json` before building the site. Website links
-must be updated only after all required uploads have succeeded and been
-verified. The account's regular-file inactivity expiry applies; local originals
-and upload receipts remain available for restoration.
+The script uploads to a draft release and verifies every server-reported
+asset SHA-256 and byte count before publishing. An upload or validation failure
+blocks publication. Rerunning skips verified completed assets. Published
+assets are not overwritten. For a new snapshot, use a new `--tag` and the
+verified source archive `--revision`, with the updated `--inventory`.
 
-### Saved player lists
+After successful publication, copy
+`D:/fide/standard-list-downloads/standard-lists.json` to
+`public/data/fide-archive/standard-lists.json`. This checked-in manifest records
+individual download URLs, SQLite and ZIP hashes, row counts, original source
+metadata, inventory checksum and archive revision. The website validates it
+before building. Run unit tests, build, browser checks and required archive
+syncs before deploying the site.
 
-Twelve distinct original ZIPs were recovered from `D:/tournaments` (including
-`playchess`), `D:/tools` (including `EDO-SSP`) and `D:/__pgn-extract/cegt`.
-Their bytes were copied into `D:/fide-archive/local-snapshots`, using checksum
-directories to preserve duplicate filenames. Their separate manifest records
-ZIP member timestamps and explicitly does not claim those are publication
-dates. Originals at their discovery locations were left untouched.
+`sourceInventorySha256` hashes the local inventory file exactly as read,
+including working-tree line endings. Its JSON content matches the inventory
+at `sourceRevision`; a raw Git blob can have different newline bytes. SQLite
+and ZIP checksums always describe exact binary bytes.
 
-The same prepare/upload script supports this store with `--store` and
-`--output` overrides. Its verified supplemental bundle and file metadata are
-published separately in `public/data/fide-archive/local-snapshots.json`; these
-locally recovered copies do not replace the authoritative source manifest.
+## Reference material
 
-Nine distinct TXT/XML files were also recovered from
-`D:/__Chess Nerd/site/fide/players_list_xml.xml` and
-`D:/fide/fide_old/players-lists`. These are copied to
-`D:/fide-archive/local-text-snapshots`, preserving names and recording local
-modification times without inferring publication dates. An independent ZIP
-holds these files; SHA-256 duplicates are omitted. Its preparation uses
-`--max-bytes 8000000000` because the uncompressed inputs exceed the normal
-target; the resulting download is compressed. Both supplemental bundles are
-listed in the site's local-snapshot metadata after remote verification.
-
-## Caveats
-
-- Olimpbase says its data is unofficial and carries the errors of the original
-  lists; they are mirrored as is.
-- Some FIDE months do not exist (pre-2012 lists were not monthly).
-- The page deliberately does not parse or rehost the contents; it is a backup.
+Original TXT/XML/DBF/MDB/HTML lists, scans and saved `players_list*` files remain
+unchanged in the existing local archive and reference stores. Earlier source
+manifests, Pixeldrain receipts and download URLs are retained for compatibility
+and provenance, but are not the website's rating-list catalogue. Older player
+registries are reference material only; no dates or missing player information
+are inferred from them for this publication.

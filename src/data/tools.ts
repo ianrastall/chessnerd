@@ -95,7 +95,7 @@ export const tools: ToolMeta[] = [
     href: '/fide-archive.html',
     icon: 'history_edu',
     category: 'data',
-    description: 'A mirror of old FIDE rating lists from FIDE and Olimpbase, as TXT and XML, with checksums.'
+    description: 'Standard FIDE ratings and player information, with one SQLite download per available period.'
   },
   {
     id: 'fide-2500',
