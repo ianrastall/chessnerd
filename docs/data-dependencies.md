@@ -38,4 +38,11 @@ Archive pushes have no new direct cross-repository dispatch in this change. They
 
 ## Operational boundaries
 
+The restored local inbox is `D:/jupiter/chessnerd/workspace/`: drop Chess.com
+PGNs there and run `File PGNs.bat`. Its Python script delegates to the existing
+archive importers under `D:/dev/proj/chessnerd`, pushes archives before website
+syncs, and stops website publication if a sync, test or build fails. Preview
+with `python workspace/file_pgns.py --dry-run`; this uses local archive state
+without pulling. See [the workspace instructions](../workspace/README.md).
+
 Keep acquisition, curation, manifest validation and presentation distinct. Add events in the owning archive before refreshing the site. Do not publish empty substitutes after a failed fetch. Do not run heavyweight corpus rebuilds merely to change a homepage. Existing source-specific documentation under `docs/tools/` remains authoritative for archive maintenance and file formats.

@@ -60,6 +60,7 @@ Deployment runs all four; the audit is report-only there and does not block a de
 
 ## Maintenance Notes
 
+- To file new Chess.com tournament PGNs, put them in `workspace/` and double-click `workspace/File PGNs.bat`. See [workspace instructions](workspace/README.md).
 - Merida chess pieces are in `public/img/merida` and mapped from shared CSS.
 - Every data source, scheduled job and manual refresh is listed in `docs/tools/data-refresh.md`.
 - GitHub Pages should use `Settings > Pages > Build and deployment > Source: GitHub Actions`.
