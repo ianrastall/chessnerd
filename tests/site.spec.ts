@@ -124,7 +124,9 @@ test('FIDE standard-rating periods have individual SQLite downloads on narrow sc
   await page.goto('/fide-archive.html');
   await expect(page.locator('.fa-table thead th')).toHaveText(['Period','Rows','Download']);
   await expect(page.locator('#faBody tr[data-search]')).toHaveCount(283);
-  await expect(page.locator('a[href*="pixeldrain.com"], a[href*="archive.org"]')).toHaveCount(0);
+  await expect(page.locator('a[href*="archive.org"], a[href*="pixeldrain.com/l/"]')).toHaveCount(0);
+  await page.getByText('Original files and player lists (Pixeldrain)',{exact:true}).click();
+  await expect(page.locator('a[href^="https://pixeldrain.com/u/"]')).toHaveCount(8);
   await expect(page.getByRole('heading',{name:'Saved player lists',exact:true})).toHaveCount(0);
   const links=await page.locator('#faBody a').evaluateAll(els=>els.map(el=>(el as HTMLAnchorElement).href));
   expect(links.every(url=>/^https:\/\/github.com\/ianrastall\/fide-db-archive\/releases\/download\/standard-sqlite-[^/]+\/fide-standard-\d{4}(-\d{2})?\.sqlite\.zip$/.test(url))).toBe(true);

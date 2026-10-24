@@ -2,12 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import manifestData from '../../public/data/fide-archive/standard-lists.json';
+import originalDownloads from '../../public/data/fide-archive/pixeldrain.json';
+import savedDownloads from '../../public/data/fide-archive/local-snapshots.json';
 import { formatBytes } from '../lib/fide-archive';
 import { parseStandardRatingManifest, ratingPeriodLabel } from '../lib/fide-standard-lists';
 
 const manifest = parseStandardRatingManifest(manifestData);
 const number = (value: number) => value.toLocaleString('en-US');
 const totalRows = manifest.lists.reduce((sum, row) => sum + row.rows, 0);
+const references = [...originalDownloads.bundles, ...savedDownloads.bundles];
+for (const file of references) {
+  if (file.url !== `https://pixeldrain.com/u/${file.id}` || !/^[A-Za-z0-9]+$/.test(file.id) || !/^[a-f0-9]{64}$/.test(file.sha256) || file.bytes <= 0) throw new Error('Invalid original-file download.');
+}
 ---
 <BaseLayout title="FIDE Archive" description="Standard FIDE rating lists, with one SQLite database per available rating-list period.">
   <ToolHeader title="FIDE Archive" icon="history_edu" />
@@ -17,6 +23,11 @@ const totalRows = manifest.lists.reduce((sum, row) => sum + row.rows, 0);
     <p class="fa-note">Extract the ZIP to open its SQLite database.</p>
     <p class="fa-note">Early lists were published less frequently, and some contain only partial lists or changes. These databases preserve the available rows and missing values; they do not reconstruct missing periods. Dates retain their original precision.</p>
     <p><a href="/fide-player.html">Look up a player’s rating history</a></p>
+    <details class="fa-reference">
+      <summary>Original files and player lists (Pixeldrain)</summary>
+      <p>Reference downloads of the original files. The rating databases are listed separately below.</p>
+      <ul>{references.map(file => <li><a href={file.url} target="_blank" rel="noopener noreferrer" title={`SHA-256 ${file.sha256}`}>{file.name}</a> · {formatBytes(file.bytes)}</li>)}</ul>
+    </details>
     <div class="fa-controls">
       <label for="faSearch">Find a period</label>
       <input id="faSearch" type="search" placeholder="1985, Mar 2019, 2019-03…" autocomplete="off" />
@@ -60,6 +71,7 @@ const totalRows = manifest.lists.reduce((sum, row) => sum + row.rows, 0);
     .fa-reference { max-width: 78ch; margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; }
     .fa-reference summary { color: var(--text-primary); cursor: pointer; margin-bottom: 0.75rem; }
     .fa-reference p { margin-bottom: 0.75rem; }
+    .fa-reference li { margin-bottom: 0.4rem; overflow-wrap: anywhere; }
     @media (max-width: 480px) { .fa-table th, .fa-table td { padding: 0.6rem 0.3rem; } .fa-size { display: block; margin: 0.2rem 0 0; } }
     [hidden] { display: none !important; }
   </style>
