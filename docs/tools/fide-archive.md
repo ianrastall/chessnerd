@@ -15,14 +15,14 @@ A mirror of old FIDE rating lists from two sources, kept as downloaded:
 | What | Where |
 | --- | --- |
 | The files (about 8 GB) | `D:\fide-archive` (not in git) |
-| Public copy | Internet Archive item `fide-rating-lists-archive` (set `ITEM` in the script) |
+| Public copy | Pixeldrain ZIP bundles; published IDs and checksums in `public/data/fide-archive/pixeldrain.json` |
 | Manifest for the page | `public/data/fide-archive/manifest.json` (in git) |
 | Script | `scripts/fide_archive.py` |
 
-The files are far too big for GitHub or Pages, so the site holds only the
-manifest and links to `https://archive.org/download/<item>/<path>`. The path
-inside the item is the path under `D:\fide-archive`, so uploading the folder
-as it is makes every link resolve.
+The files are too big for GitHub Pages. The site holds metadata, links to
+Pixeldrain bundles and links to original source downloads. The source manifest
+retains the planned Internet Archive URLs for compatibility and provenance;
+those URLs are not used as the site's download targets after publication.
 
 ## Naming FIDE uses
 
@@ -53,7 +53,67 @@ git add public/data/fide-archive scripts/fide_archive.py
 ## Adding the next month
 
 FIDE publishes on the 1st. Re-run the three steps; discovery adds the new month.
-Upload the new files to the Internet Archive item, then commit the manifest.
+Prepare and upload updated Pixeldrain bundles, copy the verified publication
+metadata to the site, then commit both manifests. A source manifest refresh
+without matching bundle coverage blocks the website build.
+
+## Pixeldrain publication
+
+The Internet Archive location above was planned but has not been verified as
+published. Do not treat its URLs as evidence of a completed upload.
+
+Prepare independent ZIP bundles from exactly the files in the local manifest:
+
+```powershell
+python -I scripts/publish_fide_pixeldrain.py prepare
+python -I scripts/publish_fide_pixeldrain.py upload
+```
+
+The preparation step checks every original SHA-256, groups whole years by
+source with a 2 GB input-size target, and verifies the ZIP contents against
+those checksums. Each ZIP contains its own source manifest and can be extracted
+independently. Outputs go to `D:/fide-archive/pixeldrain`, outside Git. The
+derived SQLite databases are not part of the original-file archive. Existing
+bundles are reused when their checksums and embedded file records still match,
+so unchanged historical groups retain their existing upload IDs.
+
+Save the API key alone in
+`C:/Users/Ian/.config/chessnerd/pixeldrain-api-key.txt`, or supply the
+`PIXELDRAIN_API_KEY` environment variable. The script never prints the key.
+Uploads use Pixeldrain's authenticated PUT endpoint; the public file metadata
+must match the bundle's size, name and SHA-256 before an upload is recorded.
+Verified receipts are saved locally after each upload. Rerunning uploads
+rechecks and skips those completed files. After all files have been verified,
+the script creates and verifies a Pixeldrain collection and writes
+`D:/fide-archive/pixeldrain/pixeldrain.json`. Copy that file to
+`public/data/fide-archive/pixeldrain.json` before building the site. Website links
+must be updated only after all required uploads have succeeded and been
+verified. The account's regular-file inactivity expiry applies; local originals
+and upload receipts remain available for restoration.
+
+### Saved player lists
+
+Twelve distinct original ZIPs were recovered from `D:/tournaments` (including
+`playchess`), `D:/tools` (including `EDO-SSP`) and `D:/__pgn-extract/cegt`.
+Their bytes were copied into `D:/fide-archive/local-snapshots`, using checksum
+directories to preserve duplicate filenames. Their separate manifest records
+ZIP member timestamps and explicitly does not claim those are publication
+dates. Originals at their discovery locations were left untouched.
+
+The same prepare/upload script supports this store with `--store` and
+`--output` overrides. Its verified supplemental bundle and file metadata are
+published separately in `public/data/fide-archive/local-snapshots.json`; these
+locally recovered copies do not replace the authoritative source manifest.
+
+Nine distinct TXT/XML files were also recovered from
+`D:/__Chess Nerd/site/fide/players_list_xml.xml` and
+`D:/fide/fide_old/players-lists`. These are copied to
+`D:/fide-archive/local-text-snapshots`, preserving names and recording local
+modification times without inferring publication dates. An independent ZIP
+holds these files; SHA-256 duplicates are omitted. Its preparation uses
+`--max-bytes 8000000000` because the uncompressed inputs exceed the normal
+target; the resulting download is compressed. Both supplemental bundles are
+listed in the site's local-snapshot metadata after remote verification.
 
 ## Caveats
 

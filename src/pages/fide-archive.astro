@@ -2,9 +2,43 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import manifestData from '../../public/data/fide-archive/manifest.json';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { formatBytes, groupByPeriod, parseFideArchiveManifest, type FideArchiveFile } from '../lib/fide-archive';
 
 const manifest = parseFideArchiveManifest(manifestData);
+type Bundle = { name: string; url: string; sha256: string; bytes: number; fileCount: number; paths: string[] };
+const publicationPath = resolve('public/data/fide-archive/pixeldrain.json');
+const publication: { sourceGenerated: string; listUrl: string; bundles: Bundle[] } | null = existsSync(publicationPath) ? JSON.parse(readFileSync(publicationPath, 'utf8')) : null;
+type LocalSnapshot = { name: string; path: string; bytes: number; sha256: string; localModified?: string; members?: { name: string; timestamp: string }[] };
+const snapshotPath = resolve('public/data/fide-archive/local-snapshots.json');
+const snapshots: { bundles: Bundle[]; files: LocalSnapshot[] } | null = existsSync(snapshotPath) ? JSON.parse(readFileSync(snapshotPath, 'utf8')) : null;
+if (snapshots) {
+  if (snapshots.files.length !== snapshots.bundles.reduce((count, bundle) => count + bundle.fileCount, 0)) throw new Error('Invalid local FIDE snapshot count.');
+  const paths = new Set<string>();
+  for (const bundle of snapshots.bundles) {
+    if (!/^https:\/\/pixeldrain.com\/u\/[A-Za-z0-9]+$/.test(bundle.url) || !/^[a-f0-9]{64}$/.test(bundle.sha256) || bundle.fileCount !== bundle.paths.length) throw new Error('Invalid local FIDE snapshot publication.');
+    for (const path of bundle.paths) {
+      if (paths.has(path)) throw new Error('Duplicate local FIDE snapshot.');
+      paths.add(path);
+    }
+  }
+  if (paths.size !== snapshots.files.length || snapshots.files.some(file => !paths.has(file.path) || !/^[a-f0-9]{64}$/.test(file.sha256) || !Number.isSafeInteger(file.bytes) || file.bytes <= 0)) throw new Error('Local FIDE snapshot coverage mismatch.');
+}
+if (publication) {
+  if (!/^https:\/\/pixeldrain.com\/l\/[A-Za-z0-9]+$/.test(publication.listUrl)) throw new Error('Invalid FIDE collection URL.');
+  if (publication.sourceGenerated !== manifest.generated || !Array.isArray(publication.bundles) || !publication.bundles.length) throw new Error('FIDE publication does not match the source manifest.');
+  const paths = new Set<string>();
+  for (const bundle of publication.bundles) {
+    if (!/^https:\/\/pixeldrain.com\/u\/[A-Za-z0-9]+$/.test(bundle.url) || !/^[a-f0-9]{64}$/.test(bundle.sha256) || !Number.isSafeInteger(bundle.bytes) || bundle.bytes <= 0) throw new Error('Invalid FIDE bundle.');
+    if (!Array.isArray(bundle.paths) || bundle.fileCount !== bundle.paths.length || !bundle.fileCount) throw new Error('Invalid FIDE bundle file count.');
+    for (const path of bundle.paths) {
+      if (paths.has(path)) throw new Error('Duplicate bundled FIDE file.');
+      paths.add(path);
+    }
+  }
+  if (paths.size !== manifest.files.length || manifest.files.some(file => !paths.has(file.path))) throw new Error('FIDE bundles do not cover the manifest.');
+}
 // FIDE's own downloads and Olimpbase's collected copies are the same FIDE lists, so they
 // share one table. Olimpbase files sit in the Combined column, labelled by file name.
 const lists = manifest.files.filter((file) => file.format !== 'html');
@@ -38,7 +72,7 @@ const origin = (file: FideArchiveFile) => (file.source === 'olimpbase' ? 'Olimpb
   <ToolHeader title="FIDE Archive" icon="history_edu" />
   <div class="fa">
     <p class="fa-intro">
-      Old FIDE rating lists, kept as a backup and mirror of two sources: FIDE’s own <a href="https://ratings.fide.com/download_lists.phtml" target="_blank" rel="noopener noreferrer">download page</a>
+      Old FIDE rating lists, kept as a backup and mirror of two sources: FIDE’s own <a href="https://ratings.fide.com/download_lists.phtml" target="_blank" rel="noopener noreferrer">download page</a>{' '}
       and its older files, and Olimpbase’s <a href="https://www.olimpbase.org/Elo/summary.html" target="_blank" rel="noopener noreferrer">History of Elo ratings 1971–2001</a>.
       Files are byte-for-byte as published, with their original names. Nothing is edited or repaired.
     </p>
@@ -47,19 +81,38 @@ const origin = (file: FideArchiveFile) => (file.source === 'olimpbase' ? 'Olimpb
       <p><strong>{number(manifest.files.length)}</strong> files <span aria-hidden="true">·</span> <strong>{formatBytes(totalBytes)}</strong></p>
       <p>Lists {years(rows)}</p>
       <p>Manifest generated <time datetime={generated}>{generated}</time></p>
-      <a href={manifest.itemUrl} target="_blank" rel="noopener noreferrer">Whole collection on the Internet Archive <span aria-hidden="true">↗</span></a>
+      {publication && <a href={publication.listUrl} target="_blank" rel="noopener noreferrer">Whole collection on Pixeldrain <span aria-hidden="true">↗</span></a>}
     </div>
+
+    {publication && <section aria-labelledby="faBundles">
+      <h2 id="faBundles" class="fa-h">Archive bundles</h2>
+      <p class="fa-note">Each ZIP can be extracted independently and includes original files, source URLs and SHA-256 checksums. Download all bundles for the whole collection.</p>
+      <ul class="fa-bundles">
+        {publication.bundles.map((bundle) => <li><a href={bundle.url} target="_blank" rel="noopener noreferrer" title={`SHA-256 ${bundle.sha256}`}>{bundle.name}</a> · {formatBytes(bundle.bytes)} · {number(bundle.fileCount)} files</li>)}
+      </ul>
+    </section>}
 
     <p class="fa-note fa-profiles">
       <span class="material-icons" aria-hidden="true">person_search</span>
       <a href="/fide-player.html">Look up a player</a>: full standard rating history, 1967 to now, from these lists.
     </p>
 
+    {snapshots && <section aria-labelledby="faSnapshots">
+      <h2 id="faSnapshots" class="fa-h">Saved player lists</h2>
+      <p class="fa-note">Additional player-list files recovered from local copies, with original bytes, filenames and SHA-256 checksums. Dates are ZIP member timestamps or local file modification times; publication dates are unconfirmed.</p>
+      <ul class="fa-bundles">{snapshots.bundles.map((bundle, index) => <li><a href={bundle.url} target="_blank" rel="noopener noreferrer">{index === 0 ? 'Download saved player lists' : 'Download saved TXT and XML lists'}</a> · {formatBytes(bundle.bytes)} · {number(bundle.fileCount)} files</li>)}</ul>
+      <p class="fa-note"><a href="/data/fide-archive/local-snapshots.json">Files and checksums</a></p>
+      <details class="fa-snapshots"><summary>Show saved files</summary><ul class="fa-bundles">
+        {snapshots.files.map(file => <li><strong>{file.name}</strong> · {file.members?.length ? `ZIP timestamp ${file.members[0].timestamp.slice(0, 10)}` : file.localModified ? `File modified ${file.localModified.slice(0, 10)} (UTC)` : 'Publication date unknown'} · {formatBytes(file.bytes)}</li>)}
+      </ul></details>
+    </section>}
+
     <section aria-labelledby="faListsHeading">
       <h2 id="faListsHeading" class="visually-hidden">Rating lists</h2>
       <p class="fa-note">
         From 2012 FIDE publishes separate standard, rapid and blitz lists, each as a TXT zip and an XML zip. Before that there is one combined list per period
         (quarterly, then bimonthly, then monthly). The latest list is a rolling snapshot, so its combined files carry the date they were fetched.
+        {publication && <> Table links open the original sources; preserved copies are in the archive bundles above. Rolling source files change over time.</>}
       </p>
       <p class="fa-note">
         File names in the Combined column are the copies Olimpbase collected for 1967–2009: TXT, DBF and MDB lists, and scanned lists (ZIP of GIFs) for 1971–1991.
@@ -86,7 +139,7 @@ const origin = (file: FideArchiveFile) => (file.source === 'olimpbase' ? 'Olimpb
                 {columns.map((col) => (
                   <td>
                     {cell(row.files, col.key).map((file) => (
-                      <a class="fa-dl" href={file.archiveUrl} title={`${file.name} · ${origin(file)} · SHA-256 ${file.sha256}`} aria-label={`Download ${col.label} ${monthLabel(row.period)} ${fmt(file)}`}>
+                      <a class="fa-dl" href={publication ? file.url : file.archiveUrl} title={`${file.name} · ${origin(file)} · SHA-256 ${file.sha256}`} aria-label={`Download ${col.label} ${monthLabel(row.period)} ${fmt(file)}`}>
                         <span class={file.source === 'olimpbase' ? 'fa-name' : 'fa-fmt'}>{fmt(file)}</span> {formatBytes(file.bytes)}
                       </a>
                     ))}
@@ -104,7 +157,9 @@ const origin = (file: FideArchiveFile) => (file.source === 'olimpbase' ? 'Olimpb
     <h2 class="fa-h">Checksums and sources</h2>
     <p class="fa-note">
       Each file’s SHA-256 shows when you hover its link, and the full list, with the original source URL of every file, is in
-      <a href="/data/fide-archive/manifest.json">manifest.json</a>. This is an independent mirror, not affiliated with FIDE or Olimpbase.
+      <a href="/data/fide-archive/manifest.json">manifest.json</a>.{' '}
+      {publication && <>Bundle checksums and file coverage are in <a href="/data/fide-archive/pixeldrain.json">pixeldrain.json</a>.{' '}</>}
+      This is an independent mirror, not affiliated with FIDE or Olimpbase.
       Please use the original sites for anything that needs to be current.
     </p>
   </div>
@@ -121,13 +176,17 @@ const origin = (file: FideArchiveFile) => (file.source === 'olimpbase' ? 'Olimpb
     .fa-controls input { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-primary); padding: 0.4rem 0.6rem; height: 2.1rem; font-size: 0.88rem; }
     .fa-controls input:focus { outline: none; border-color: var(--accent); }
     .fa-table-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--border-color); border-radius: 10px; }
-    .fa-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .fa-table { width: 100%; min-width: 42rem; border-collapse: collapse; font-size: 0.86rem; }
+    .fa-bundles { margin-bottom: 1.25rem; padding-left: 1.25rem; overflow-wrap: anywhere; }
+    .fa-bundles li { margin-bottom: 0.4rem; }
+    .fa-snapshots { margin-bottom: 1.25rem; }
+    .fa-table td { max-width: 20rem; }
     .fa-table thead th { position: sticky; top: 0; z-index: 1; text-align: left; padding: 0.5rem 0.75rem; background: var(--bg-secondary); color: var(--text-secondary); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
     .fa-table th[scope="row"], .fa-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-color); vertical-align: top; text-align: left; }
     .fa-table th[scope="row"] { white-space: nowrap; font-weight: 600; }
     .fa-table tbody tr:last-child > * { border-bottom: none; }
     .fa-table tbody tr:hover > * { background: rgba(var(--accent-rgb), 0.04); }
-    .fa-dl { display: inline-block; margin: 0 0.8rem 0.15rem 0; color: var(--accent); text-decoration: none; font-size: 0.82rem; white-space: nowrap; }
+    .fa-dl { display: block; margin: 0 0 0.3rem; color: var(--accent); text-decoration: none; font-size: 0.82rem; overflow-wrap: anywhere; }
     .fa-dl:hover { text-decoration: underline; }
     .fa-fmt { font-weight: 700; text-transform: uppercase; font-size: 0.74rem; }
     .fa-name { font-weight: 600; font-size: 0.78rem; }

@@ -119,3 +119,20 @@ test('phone archive rows keep downloads visible without sideways scrolling',asyn
   const link=page.locator('#archive-results .download-link').first();const box=await link.boundingBox();expect(box).not.toBeNull();expect(box!.x+box!.width).toBeLessThanOrEqual(320);
   await expect(page.locator('#archive-results .event-mobile-meta').first()).toBeVisible();
 });
+test('FIDE bundles and original-source links remain usable on narrow screens',async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/fide-archive.html');
+  await expect(page.getByRole('heading',{name:'Archive bundles',exact:true})).toBeVisible();
+  const bundles=page.locator('.fa-bundles a');
+  expect(await bundles.count()).toBeGreaterThan(1);
+  for(const link of await bundles.all()) await expect(link).toHaveAttribute('href',/^https:\/\/pixeldrain\.com\/u\/[A-Za-z0-9]+$/);
+  await expect(page.locator('a[href^="https://archive.org/"]')).toHaveCount(0);
+  await expect(page.getByRole('heading',{name:'Saved player lists',exact:true})).toBeVisible();
+  await expect(page.getByRole('link',{name:'Download saved player lists',exact:true})).toHaveAttribute('href',/^https:\/\/pixeldrain\.com\/u\/[A-Za-z0-9]+$/);
+  await page.getByText('Show saved files',{exact:true}).click();
+  await expect(page.locator('.fa-snapshots li').first()).toBeVisible();
+  await expect(page.locator('#faBody .fa-dl').first()).toHaveAttribute('href',/^https:\/\/(ratings\.fide\.com|www\.olimpbase\.org)\//);
+  await page.locator('#faSearch').fill('2019-03');
+  await expect(page.locator('#faBody tr[data-search]:visible')).toHaveCount(1);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
