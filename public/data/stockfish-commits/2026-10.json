@@ -2,6 +2,237 @@
   "month": "2026-10",
   "commits": [
     {
+      "hash": "dbe600b7438662e9ade60b31fa0625259dcd0077",
+      "short": "dbe600b7",
+      "author": "xiangqishare <100093845+xiangqishare@users.noreply.github.com>",
+      "date": "2026-10-24T18:14:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/dbe600b7438662e9ade60b31fa0625259dcd0077",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dbe600b7438662e9ade60b31fa0625259dcd0077.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/dbe600b7438662e9ade60b31fa0625259dcd0077.tar.gz"
+        }
+      ],
+      "message": "Unroll NNUE feature updates\n\nClang 23.1.4 leaves the fixed-size loops in `apply_feature_single()` and `apply_feature_pair()` rolled for `x86-64-avx512` and `x86-64-vnni512`. Since `Tile` is passed and returned by value, this causes repeated 1 KiB stack copies during feature updates, including with PGO.\n\nRequest full unrolling with `#pragma clang loop unroll(full)` for Clang and `#pragma GCC unroll(Tiling::NumRegs / 2)` for GCC, without an AVX512-specific guard. Clang needs its own spelling because Clang 11 does not recognize `#pragma GCC unroll`.\n\nThe initial Clang-only patch improved NPS by about 41% in a short local non-PGO test on Linux with a Xeon Platinum 8573C, Clang 23.1.4 (`7a941dfb2877`) and full LTO: three alternating before/after pairs, one pinned thread, 256 MiB hash, and four positions at 1M nodes each. No Fishtest run yet.\n\nCompatibility checks, all with `-Werror`:\n\n| Compiler | Targets and checks |\n|---|---|\n| GCC 9.3 | AVX2 and AVX512 accumulator compilation |\n| Clang 11.1 | AVX2 full LTO build; SSE4.1, AVX2 and AVX512 accumulator compilation; AVX2 unoptimized debug accumulator |\n| GCC 13.3 | AVX2 and AVX512 accumulator objects unchanged |\n| Clang 20.1.2 | AVX2 and AVX512 accumulator objects unchanged |\n| Clang 23.1.5 | SSE4.1, AVX2, AVX512 and VNNI512 accumulator objects unchanged; AVX512 full LTO binary unchanged |\n\n\u201cUnchanged\u201d means byte-for-byte identical to the previous PR revision (`b63a546`). Both full builds retain bench `1559611` and identical scores, PVs and node counts across all 51 default positions at 20k nodes. These compatibility checks are not new speed measurements.\n\nPrepared with assistance from OpenAI Codex.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7251\n\nNo functional change\n",
+      "subject": "Unroll NNUE feature updates"
+    },
+    {
+      "hash": "a1e94f955c167e42de47b92ad7fd72d2b801b785",
+      "short": "a1e94f95",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-10-24T18:12:10Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/a1e94f955c167e42de47b92ad7fd72d2b801b785",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a1e94f955c167e42de47b92ad7fd72d2b801b785.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/a1e94f955c167e42de47b92ad7fd72d2b801b785.tar.gz"
+        }
+      ],
+      "message": "Simplify FullThreats LUT init\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/6ad68f6a733e627f7058c93f\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 81856 W: 20850 L: 20693 D: 40313\nPtnml(0-2): 84, 8671, 23270, 8810, 93\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7245\n\nNo functional change\n",
+      "subject": "Simplify FullThreats LUT init"
+    },
+    {
+      "hash": "17a0e6648ce1db9763b9d5bcc688fbf4a2d58cc8",
+      "short": "17a0e664",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-10-24T18:11:41Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/17a0e6648ce1db9763b9d5bcc688fbf4a2d58cc8",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/17a0e6648ce1db9763b9d5bcc688fbf4a2d58cc8.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/17a0e6648ce1db9763b9d5bcc688fbf4a2d58cc8.tar.gz"
+        }
+      ],
+      "message": "rework movepicker stages\n\nThis is supposed to be a general cleanup of the `MovePicker` class. The main points are\n- merging the `*_TT` and `*_INIT` movepicker stages. The \"kind\" (qsearch/evasions/probcut/normal) of a movepicker instance is now encoded stored in the `first_stage` variable instead of being implicit in `stage`\n- move bad quiet moves next to bad captures so we can merge the `BAD_CAPTURES` and `BAD_QUIETS` stages\n- the logic for quiet move skipping is moved from `next_move()` to `skip_quiets()`\n\npassed non-reg STC: https://tests.stockfishchess.org/tests/view/6ad33e37733e627f7058c598\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 100032 W: 25521 L: 25381 D: 49130\nPtnml(0-2): 99, 10553, 28604, 10629, 131\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7235\n\nNo functional change\n",
+      "subject": "rework movepicker stages"
+    },
+    {
+      "hash": "6706f98a82c4ed17a2589dd6f6416eb7c8a88526",
+      "short": "6706f98a",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-10-24T18:11:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/6706f98a82c4ed17a2589dd6f6416eb7c8a88526",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6706f98a82c4ed17a2589dd6f6416eb7c8a88526.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/6706f98a82c4ed17a2589dd6f6416eb7c8a88526.tar.gz"
+        }
+      ],
+      "message": "Deduplicate changed PSQ index calculation\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/6ad08304733e627f7058c28a\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 126080 W: 32256 L: 32146 D: 61678\nPtnml(0-2): 132, 13115, 36427, 13243, 123\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7234\n\nNo functional change\n",
+      "subject": "Deduplicate changed PSQ index calculation"
+    },
+    {
+      "hash": "ed2f9bdce55ed155f50738aef82e94a543eef55d",
+      "short": "ed2f9bdc",
+      "author": "Linmiao Xu <linmiao.xu@gmail.com>",
+      "date": "2026-10-24T18:10:38Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ed2f9bdce55ed155f50738aef82e94a543eef55d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed2f9bdce55ed155f50738aef82e94a543eef55d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ed2f9bdce55ed155f50738aef82e94a543eef55d.tar.gz"
+        }
+      ],
+      "message": "Remove duplicate TT prefetch\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/6acc48cb20d2b3b562a7e94f\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 496736 W: 126451 L: 126714 D: 243571\nPtnml(0-2): 564, 52772, 141944, 52539, 549\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7250\n\nNo functional change\n",
+      "subject": "Remove duplicate TT prefetch"
+    },
+    {
+      "hash": "e46d2249ce77ceeadb46fb12528d2995e63afece",
+      "short": "e46d2249",
+      "author": "Cole Munz <Munzzyy1@proton.me>",
+      "date": "2026-10-24T18:10:13Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e46d2249ce77ceeadb46fb12528d2995e63afece",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e46d2249ce77ceeadb46fb12528d2995e63afece.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e46d2249ce77ceeadb46fb12528d2995e63afece.tar.gz"
+        }
+      ],
+      "message": "CI: pin the checkout action in official_release.yml to a commit\n\nEvery other workflow has pinned its external actions to full commit SHAs since 463f5a6ee122. `official_release.yml` was added after that and still uses the mutable `v4` tag, in the one job that runs with `contents: write`. This switches it to the same v6.0.2 commit that stockfish.yml already uses, with the same inputs.\n\nI can't dry-run the release workflow from a fork, so this is validated as YAML only.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7253\n\nNo functional change\n",
+      "subject": "CI: pin the checkout action in official_release.yml to a commit"
+    },
+    {
+      "hash": "4265c149d27c01a8119c9cc42030e3b25c2cc6f5",
+      "short": "4265c149",
+      "author": "Cole Munz <Munzzyy1@proton.me>",
+      "date": "2026-10-24T18:09:53Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/4265c149d27c01a8119c9cc42030e3b25c2cc6f5",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4265c149d27c01a8119c9cc42030e3b25c2cc6f5.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/4265c149d27c01a8119c9cc42030e3b25c2cc6f5.tar.gz"
+        }
+      ],
+      "message": "Makefile: read only the major version for the gcc LTO partition check\n\nGCC only prints a bare major number from `-dumpversion` when it was configured with `--with-gcc-major-version-only`, which the distro packages do. The official gcc docker images and toolchains built from source print the full version, so the gcc <= 13 guard from e5c99a892ed3 ends up running `test \"13.5.0\" -le 13`, which fails with \"Illegal number\" and quietly picks `-flto-partition=balanced` for exactly the compilers it was written to exclude. This takes the major number the way the clang branch already does.\n\nChecked in the official `gcc:13` image, where `g++ -dumpversion` prints 13.5.0: `make -n build ARCH=x86-64-avx2 COMP=gcc` selects balanced on master and one with this patch, the build is clean and bench is 1559611. On gcc 16 here nothing changes.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7252\n\nNo functional change\n",
+      "subject": "Makefile: read only the major version for the gcc LTO partition check"
+    },
+    {
+      "hash": "f59408947bc5ab843091467b4e3facc29df12f0b",
+      "short": "f5940894",
+      "author": "Godsdar <ildar.popov.dev@gmail.com>",
+      "date": "2026-10-24T18:09:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/f59408947bc5ab843091467b4e3facc29df12f0b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f59408947bc5ab843091467b4e3facc29df12f0b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/f59408947bc5ab843091467b4e3facc29df12f0b.tar.gz"
+        }
+      ],
+      "message": "Scale the single-root-move time cap in nodestime mode\n\nThe single-root-move time cap is expressed in milliseconds, but `totalTime` and `elapsed()` use nodes when `nodestime` is enabled. The unscaled `500.0` therefore caps the allocation at 500 nodes regardless of the configured nodes per millisecond. Scale this cap by `limits.npmsec`, using 1 when nodestime is disabled.\n\nThis affects positions with one legal move and searches restricted to one root move with `searchmoves`. The existing 0.5-second policy is unchanged with the default `nodestime=0`.\n\nTo reproduce, send these commands interactively and wait for `bestmove`:\n\n```text\nsetoption name nodestime value 1000\nucinewgame\nisready\nposition fen 7k/8/8/8/8/r7/1N6/K7 w - - 0 1\ngo wtime 120000 btime 120000 nodes 2000000\n```\n\nAgainst master `effdc3fd3f6de6e75fe1374a51a7a7eed66f880b`, with one thread and the default network:\n\n| nodestime | Master nodes / depth | Patched nodes / depth |\n| --- | --- | --- |\n| 1 | 666 / 8 | 666 / 8 |\n| 10 | 666 / 8 | 13351 / 11 |\n| 100 | 666 / 8 | 54330 / 14 |\n| 1000 | 666 / 8 | 591911 / 28 |\n\nThe cap is checked between iterations, so these node counts can exceed the allocation. The same issue and correction were reproduced with Black to move and with `position startpos` plus `searchmoves e2e4`. Unrestricted start-position searches retained identical node counts, depths, and best moves at all four nodestime settings.\n\nValidation: all 75 instrumented tests passed in both optimized and ASan+UBSan debug builds on Apple Silicon; the 16-case reproduction matrix also passed with sanitizers. Clang-format 20.1.8 and the signature test passed.\n\nDefault bench unchanged: **1559611**. No Fishtest run or playing-strength gain is claimed.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7238\n\nNo functional change\n",
+      "subject": "Scale the single-root-move time cap in nodestime mode"
+    },
+    {
+      "hash": "7316ef4e86a7a4fcb1bfb909369dc35860a79e3d",
+      "short": "7316ef4e",
+      "author": "Godsdar <ildar.popov.dev@gmail.com>",
+      "date": "2026-10-24T18:08:59Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7316ef4e86a7a4fcb1bfb909369dc35860a79e3d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7316ef4e86a7a4fcb1bfb909369dc35860a79e3d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7316ef4e86a7a4fcb1bfb909369dc35860a79e3d.tar.gz"
+        }
+      ],
+      "message": "Reject oversized Syzygy symbol tables\n\n`set_sizes()` reads the symbol count from the tablebase as a `u16`, but `btreeBuf`, `symlen` and `colour` have only `SymCount` (4096) entries. The existing `fits()` check bounds the source bytes, so a malformed table with a larger count can pass that check and overrun the destination in `memcpy()` and the subsequent symbol loop.\n\nReject counts greater than `SymCount` through the existing corrupt-table path before copying or iterating. Counts up to and including `SymCount` keep their existing handling. This applies to both WDL and DTZ loading.\n\nValidation on macOS arm64 with Apple Clang:\n\n- Optimized Apple silicon build; changed translation unit compiled with `-Werror`.\n- All 75 upstream instrumented tests passed on a debug build with AddressSanitizer and UndefinedBehaviorSanitizer, including the Syzygy tests.\n- Baseline and patched default benches both searched 1,559,611 nodes.\n- `tests/signature.sh 1559611` and `git diff --check` passed.\n\nThe bounds error was identified and checked by source inspection; a malformed-tablebase runtime reproducer was not run. Windows and Linux validation remain for CI.\n\nPrepared with OpenAI Codex, including source analysis and testing.\n\nNo functional change for valid tablebases.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7237\n\nNo functional change\n",
+      "subject": "Reject oversized Syzygy symbol tables"
+    },
+    {
+      "hash": "90fbc48cc23ed7d1fe0b4292226ac5f389739934",
+      "short": "90fbc48c",
+      "author": "Godsdar <ildar.popov.dev@gmail.com>",
+      "date": "2026-10-24T18:08:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/90fbc48cc23ed7d1fe0b4292226ac5f389739934",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/90fbc48cc23ed7d1fe0b4292226ac5f389739934.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/90fbc48cc23ed7d1fe0b4292226ac5f389739934.tar.gz"
+        }
+      ],
+      "message": "Propagate failed NNUE downloads from net.sh\n\nWhen both NNUE download mirrors fail (or both return invalid content), `fetch_network` returns 1, but the following embedding `if` statement overwrites that status. Consequently, `make net` reports success; the universal-build path with argument `0` also creates an empty network dump.\n\nExit immediately when fetching the network fails. The PR contains this one-line fix and the first-time contributor entry required by CONTRIBUTING.md. The offline regression test and its workflow step were removed as requested in review; the test was retained outside the repository for local verification.\n\nValidation:\n- Local offline regression checks cover failed downloads and invalid checksums in all three invocation modes, fallback downloads, cached files, and successful primary downloads. They failed against the original script and pass against the final fix.\n- `sh -n scripts/net.sh` and `git diff --check`\n- Real `make net` download and checksum validation; cached-network reuse rechecked after the revision\n- Clean Apple silicon build with Clang and Xcode's macOS 26.4 SDK before the test removal; engine sources are unchanged by the revision\n- `tests/signature.sh 1559611` rechecked after the revision\n\nPrepared with OpenAI Codex. A second Codex agent independently reviewed the original change and reproduced the regression against the base revision, with no findings.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7232\n\nNo functional change\n",
+      "subject": "Propagate failed NNUE downloads from net.sh"
+    },
+    {
+      "hash": "8875da570bf333551f699dbe2c9859745ddb0b80",
+      "short": "8875da57",
+      "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+      "date": "2026-10-24T18:07:47Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/8875da570bf333551f699dbe2c9859745ddb0b80",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8875da570bf333551f699dbe2c9859745ddb0b80.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/8875da570bf333551f699dbe2c9859745ddb0b80.tar.gz"
+        }
+      ],
+      "message": "Combine int8 pairing with pointer hoisting\n\nSTC: https://tests.stockfishchess.org/tests/view/6ad44115733e627f7058c6d1\nLLR: 2.96 (-2.94,2.94) <0.00,2.00>\nTotal: 126080 W: 32234 L: 31819 D: 62027\nPtnml(0-2): 127, 13397, 35598, 13770, 148\n\nTested on top of https://tests.stockfishchess.org/tests/view/6ad3a2d2733e627f7058c639 by @linrock which passed w/\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 185248 W: 47061 L: 47010 D: 91177\nPtnml(0-2): 205, 19425, 53314, 19474, 206\n\nWritten by Astra.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7248\n\nNo functional change\n",
+      "subject": "Combine int8 pairing with pointer hoisting"
+    },
+    {
       "hash": "effdc3fd3f6de6e75fe1374a51a7a7eed66f880b",
       "short": "effdc3fd",
       "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
