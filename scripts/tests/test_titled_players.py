@@ -55,7 +55,7 @@ class TitledTests(unittest.TestCase):
         old = {'username': 'test', 'rapid': 2700, 'stats_updated_at': '2026-10-01T00:00:00Z'}
         response = Mock(status_code=404)
         with patch.object(sync.session, 'get', return_value=response) as request, patch.object(sync.time, 'sleep') as sleep:
-            with self.assertRaisesRegex(ValueError, 'API HTTP 404'):
+            with self.assertRaisesRegex(sync.NotFound, 'API HTTP 404'):
                 sync.get_player_data('test', 'GM', old)
         request.assert_called_once()
         sleep.assert_not_called()
@@ -104,7 +104,47 @@ class TitledTests(unittest.TestCase):
                 self.assertEqual(len(sync.load(output)), 2)
                 self.assertEqual(json.loads(meta.read_text())['refreshed'], 1)
 
-    def test_stats_404_blocks_publication(self):
+    def run_404_fixture(self, root, players, missing):
+        output, meta, checkpoint = (root / name for name in ('public.json', 'meta.json', 'checkpoint.json'))
+        output.write_text(json.dumps([{'username': u, 'title': 'GM', 'rapid': 2700} for u in players]))
+        meta.write_text('{"previous":true}')
+
+        def request(url):
+            if '/titled/' in url:
+                return {'players': players}
+            username = url.split('/player/')[1].split('/')[0]
+            if username in missing:
+                raise sync.NotFound(f'API HTTP 404: {url}')
+            if url.endswith('/stats'):
+                return {'chess_rapid': {'last': {'rating': 2800}}}
+            return {'username': username, 'status': 'basic'}
+
+        patches = patch.multiple(sync, OUTPUT_FILE=output, META_FILE=meta, CHECKPOINT_FILE=checkpoint)
+        return output, meta, checkpoint, patches, request
+
+    def test_404_players_are_omitted_and_counted(self):
+        with tempfile.TemporaryDirectory() as temp:
+            players = [f'p{i:03}' for i in range(200)]
+            output, meta, checkpoint, patches, request = self.run_404_fixture(Path(temp), players, {'p007'})
+            with patches, patch.object(sync, 'safe_request', side_effect=request):
+                sync.main()
+            published = sync.load(output)
+            self.assertEqual(len(published), 199)
+            self.assertNotIn('p007', published)
+            self.assertEqual(json.loads(meta.read_text())['unavailable'], ['p007'])
+            self.assertEqual(sync.load(checkpoint)['p007']['rapid'], 2700)
+
+    def test_widespread_404s_block_publication(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output, meta, checkpoint, patches, request = self.run_404_fixture(Path(temp), ['test'], {'test'})
+            before = output.read_bytes(), meta.read_bytes()
+            with patches, patch.object(sync, 'safe_request', side_effect=request):
+                with self.assertRaisesRegex(RuntimeError, 'Unavailable guard'):
+                    sync.main()
+            self.assertEqual((output.read_bytes(), meta.read_bytes()), before)
+            self.assertEqual(sync.load(checkpoint)['test']['rapid'], 2700)
+
+    def test_invalid_response_blocks_publication(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             output, meta, checkpoint = (root / name for name in ('public.json', 'meta.json', 'checkpoint.json'))
@@ -115,7 +155,7 @@ class TitledTests(unittest.TestCase):
             def request(url):
                 if '/titled/' in url:
                     return {'players': ['test']}
-                raise ValueError('API HTTP 404')
+                raise ValueError('API HTTP 403')
 
             with patch.multiple(sync, OUTPUT_FILE=output, META_FILE=meta, CHECKPOINT_FILE=checkpoint), patch.object(sync, 'safe_request', side_effect=request):
                 with self.assertRaisesRegex(RuntimeError, 'Incomplete daily snapshot'):

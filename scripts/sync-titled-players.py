@@ -1,7 +1,9 @@
 """Daily Chess.com snapshot; failed runs keep public data and save checkpoints.
 
 All ten title lists and required player requests must succeed before publication.
-Ratings are fetched once per UTC day, profiles weekly. MAX_RUN_SECONDS bounds
+Listed accounts whose stats or profile endpoint returns HTTP 404 are omitted from
+that day's snapshot and counted in metadata, up to MAX_UNAVAILABLE_SHARE of the
+cohort. Ratings are fetched once per UTC day, profiles weekly. MAX_RUN_SECONDS bounds
 the whole run, including request retries and backoff.
 """
 import json
@@ -21,10 +23,15 @@ META_FILE = Path('public/data/titled-players.meta.json')
 CHECKPOINT_FILE = Path('.cache/titled-players.json')
 MAX_RUN_SECONDS = int(os.environ.get('MAX_RUN_SECONDS', '19800'))
 MAX_REMOVED_SHARE = 0.1
+MAX_UNAVAILABLE_SHARE = 0.01
 ACTIVE_STATUSES = {'basic', 'premium', 'staff', 'gold', 'platinum', 'diamond', 'mod'}
 session = requests.Session()
 session.headers['User-Agent'] = 'chessnerd-titled-players-sync/2.0 (contact: moving.form.of.dust@gmail.com)'
 deadline = float('inf')
+
+
+class NotFound(ValueError):
+    pass
 
 
 def utc_now():
@@ -50,6 +57,8 @@ def safe_request(url):
                 if not isinstance(value, dict):
                     raise ValueError(f'Unexpected API response: {url}')
                 return value
+            if response.status_code == 404:
+                raise NotFound(f'API HTTP 404: {url}')
             if response.status_code != 429 and response.status_code < 500:
                 raise ValueError(f'API HTTP {response.status_code}: {url}')
             retry = response.headers.get('Retry-After', '')
@@ -147,6 +156,7 @@ def main():
         raise ValueError(f'Removal guard: {len(departed)} of {len(public)} saved players missing')
     working = {u: dict(p, title=title_map[u]) for u, p in existing.items() if u in title_map}
     failures = []
+    unavailable = []
     refreshed = 0
     try:
         for index, username in enumerate(sorted(title_map), 1):
@@ -157,22 +167,31 @@ def main():
             try:
                 working[username] = get_player_data(username, title_map[username], old)
                 refreshed += 1
+            except NotFound as exc:
+                # Listed but not served (closed or temporarily unavailable). Known
+                # data stays in the checkpoint; the player is left out of today's snapshot.
+                unavailable.append(username)
+                print(f'Unavailable {username}: {exc}', flush=True)
             except (ValueError, RuntimeError, requests.RequestException) as exc:
                 failures.append(username)
                 print(f'Failed {username}: {exc}', flush=True)
             if index % 50 == 0:
                 save(CHECKPOINT_FILE, sorted(working.values(), key=sort_key))
-                print(f'{index}/{len(title_map)} checked; {refreshed} refreshed; {len(failures)} failed', flush=True)
-        if failures or len(working) != len(title_map) or any(not stats_current(p, utc_now()) for p in working.values()):
+                print(f'{index}/{len(title_map)} checked; {refreshed} refreshed; {len(failures)} failed; {len(unavailable)} unavailable', flush=True)
+        if len(unavailable) > MAX_UNAVAILABLE_SHARE * len(title_map):
+            raise RuntimeError(f'Unavailable guard: {len(unavailable)} of {len(title_map)} players returned 404; public data retained')
+        skipped = set(unavailable)
+        published = {u: p for u, p in working.items() if u not in skipped}
+        if failures or len(published) != len(title_map) - len(skipped) or any(not stats_current(p, utc_now()) for p in published.values()):
             raise RuntimeError(f'Incomplete daily snapshot ({len(failures)} failed); public data retained')
-        result = sorted(working.values(), key=sort_key)
+        result = sorted(published.values(), key=sort_key)
         stamps = [p['stats_updated_at'] for p in result]
         meta = {'schema': 1, 'source': 'https://api.chess.com/pub/titled/{title}', 'started': started, 'completed': iso(),
                 'count': len(result), 'refreshed': refreshed, 'oldestStats': min(stamps), 'newestStats': max(stamps),
-                'removed': len(departed), 'failed': 0, 'titles': TITLES}
+                'removed': len(departed), 'failed': 0, 'unavailable': sorted(unavailable), 'titles': TITLES}
         save(OUTPUT_FILE, result)
         save(META_FILE, meta)
-        print(f'Published complete daily snapshot: {len(result)} players, {refreshed} refreshed', flush=True)
+        print(f'Published complete daily snapshot: {len(result)} players, {refreshed} refreshed, {len(unavailable)} unavailable', flush=True)
     finally:
         save(CHECKPOINT_FILE, sorted(working.values(), key=sort_key))
 

@@ -23,9 +23,12 @@ All title lists must succeed, and removals greater than 10% fail validation.
 Known data is never mutated by a partial player response. A failed stats or
 required profile fetch cannot zero known ratings or advance its timestamp.
 An empty successful stats object means an account with no rated games and is
-distinct from a failed request. A stats HTTP 404 is still a failed request,
-even when the profile endpoint succeeds; it must not be interpreted as zero
-ratings or silently omitted from the cohort.
+distinct from a failed request. A stats or profile HTTP 404 is never
+interpreted as zero ratings. Chess.com lists some accounts whose stats endpoint
+returns 404 while the profile loads, sometimes only for a day. Those players
+are left out of that day's snapshot and listed in the metadata's `unavailable`
+field; their known data stays in the checkpoint for later runs. If more than 1%
+of the cohort returns 404, the run fails and the public snapshot is kept.
 
 Private progress is saved every 50 players in `.cache/titled-players.json`,
 restored/saved by Actions cache even on failure. Only successful daily stats
@@ -38,7 +41,8 @@ still block publication. Retry the workflow after the upstream error clears.
 
 After the whole daily cohort succeeds, the job writes the existing flat-array
 schema plus optional `stats_updated_at` and `profile_updated_at` fields, and a
-metadata sibling recording counts, coverage times, removals and zero failures.
+metadata sibling recording counts, coverage times, removals, unavailable
+accounts and zero failures.
 It validates the site build before committing and chains deployment only on
 success. The page displays the cohort's full date range, not its single newest
 record; old snapshots are labelled with record dates until verified timestamps
