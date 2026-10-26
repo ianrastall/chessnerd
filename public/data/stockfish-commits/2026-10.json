@@ -2,6 +2,111 @@
   "month": "2026-10",
   "commits": [
     {
+      "hash": "ff3a6c508ed731f0dcf253f4ddf646df19a62f84",
+      "short": "ff3a6c50",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-10-25T20:13:40Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ff3a6c508ed731f0dcf253f4ddf646df19a62f84",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ff3a6c508ed731f0dcf253f4ddf646df19a62f84.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ff3a6c508ed731f0dcf253f4ddf646df19a62f84.tar.gz"
+        }
+      ],
+      "message": "21 bit tt keys with SWAR\n\nThis patch restructures TT clusters and extends the TT keys inside the cluster from 16 to 21 bits (thus using 15 of the unused 16 bits in the old layout). This should make hash collisions 32 times less likely.\n\nThis could improve the frequency with which issues such as https://github.com/official-stockfish/Stockfish/issues/7221 and https://github.com/official-stockfish/Stockfish/issues/5174 occur\n\npassed non-reg STC: https://tests.stockfishchess.org/tests/view/6ad492fb733e627f7058c711\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 51552 W: 13180 L: 12986 D: 25386\nPtnml(0-2): 59, 5703, 14059, 5895, 60\n\npassed non-reg LTC: https://tests.stockfishchess.org/tests/view/6ad70b25733e627f7058cda3\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 71394 W: 18358 L: 18195 D: 34841\nPtnml(0-2): 16, 7341, 20819, 7506, 15\n\nalso passed non-reg SMP STC with high hash pressure: https://tests.stockfishchess.org/tests/view/6ad71654733e627f7058cdb5\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 107224 W: 27527 L: 27390 D: 52307\nPtnml(0-2): 184, 11916, 29288, 12027, 197\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7236\n\nBench: 2389370\n",
+      "subject": "21 bit tt keys with SWAR"
+    },
+    {
+      "hash": "20eab0ba8c855064cb3171ea75faf34083490b37",
+      "short": "20eab0ba",
+      "author": "Prahlad Gowtham <prahladgowtham@gmail.com>",
+      "date": "2026-10-25T20:13:14Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/20eab0ba8c855064cb3171ea75faf34083490b37",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20eab0ba8c855064cb3171ea75faf34083490b37.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20eab0ba8c855064cb3171ea75faf34083490b37.tar.gz"
+        }
+      ],
+      "message": "Makefile: fix universal build when source directory path contains spaces\n\nGNU Make uses unescaped whitespace as separators in target and prerequisite lists. In Section 6 (Universal binary driver), defining `TEMP_DIR`, `UNIVERSAL_EXE`, and `UNIVERSAL_SRC_DIR` using `$(CURDIR)` causes Make to split paths containing spaces into multiple nonexistent targets. This produces recipe override warnings, circular dependency warnings, and missing target errors during universal builds (as reported in #7259).\n\n### Changes\n- Use relative paths for `TEMP_DIR` (`temp_builds`), `UNIVERSAL_EXE` (`$(EXE)`), and `UNIVERSAL_SRC_DIR` (`universal`).\n- Wrap the standard single-arch `$(EXE): $(OBJS)` rule with `ifeq ($(UNIVERSAL_BUILD),false)` to avoid duplicate rule warnings against `$(UNIVERSAL_EXE)`.\n- Pass relative `NNUE_EMBED_OBJ=../nnue_embed.o` to per-arch sub-make invocations.\n- Use relative symlinks `ln -s ../../$(f)` in the `.setup` rule.\n- Use relative `--embed-dir=.` and `--embed-dir=../..` rather than absolute paths.\n- Quote shell command paths in recipes (`cd \"$(CURDIR)\"`, `$(MAKE) -C \"$(TEMP_DIR)/$*\"`, etc.).\n- Add contributor to `AUTHORS`.\n\n### Testing\n- Tested `make -n ARCH=x86-64-universal COMP=clang build` in a path containing spaces (`.../Stockfish Path With Spaces/src`). Before this patch it failed immediately during Makefile parsing; with this patch it parses cleanly with 0 warnings.\n- Tested `make -j4 build ARCH=x86-64-universal COMP=clang` in a path containing spaces: successfully compiled and linked all slices.\n- Tested `make build ARCH=apple-silicon COMP=clang` and ran `./stockfish bench 16 1 1`: all 51 positions evaluated identically.\n- Tested `make universalclean` and `make clean`.\n\nFixes #7259\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7260\n\nNo functional change\n",
+      "subject": "Makefile: fix universal build when source directory path contains spaces"
+    },
+    {
+      "hash": "7347cc2f4e7ec1262f4ee2e4cc164ceacf7326be",
+      "short": "7347cc2f",
+      "author": "mike-vel <mikevelasquez1974@gmail.com>",
+      "date": "2026-10-25T20:12:46Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/7347cc2f4e7ec1262f4ee2e4cc164ceacf7326be",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7347cc2f4e7ec1262f4ee2e4cc164ceacf7326be.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/7347cc2f4e7ec1262f4ee2e4cc164ceacf7326be.tar.gz"
+        }
+      ],
+      "message": "Simplify the optimism evaluation\n\nIt simplifies optimism evaluation and improves precision.\n\nPassed non-regression STC:\nhttps://tests.stockfishchess.org/tests/view/6ada618b733e627f7058d2a9\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 40672 W: 10411 L: 10202 D: 20059\nPtnml(0-2): 37, 4746, 10580, 4917, 56\n\nPassed non-regression LTC:\nhttps://tests.stockfishchess.org/tests/view/6adb76af733e627f7058d394\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 63192 W: 16397 L: 16224 D: 30571\nPtnml(0-2): 14, 6583, 18224, 6766, 9\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7258\n\nBench: 2719250\n",
+      "subject": "Simplify the optimism evaluation"
+    },
+    {
+      "hash": "23df82905b5d9a1456d66d290e7e1ab638041f93",
+      "short": "23df8290",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-10-25T20:12:23Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/23df82905b5d9a1456d66d290e7e1ab638041f93",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/23df82905b5d9a1456d66d290e7e1ab638041f93.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/23df82905b5d9a1456d66d290e7e1ab638041f93.tar.gz"
+        }
+      ],
+      "message": "Sanitize negative time values\n\nA GUI or game manager should never send negative time remaining, and rather assign a time loss. But as discussed on discord, some GUIs do, and this can confuse our recently added time-advantage calculations in #7113 (cc @locutus2). So this PR sanitizes negative values for the remaining-time variables to 1. The values for `binc` and `winc` are left unchanged.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7257\n\nNo functional change\n",
+      "subject": "Sanitize negative time values"
+    },
+    {
+      "hash": "72d52bbec20e245d52ffc34b26fb50ca946d378c",
+      "short": "72d52bbe",
+      "author": "Torsten Hellwig <torsten.hellwig93@gmail.com>",
+      "date": "2026-10-25T20:11:57Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/72d52bbec20e245d52ffc34b26fb50ca946d378c",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/72d52bbec20e245d52ffc34b26fb50ca946d378c.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/72d52bbec20e245d52ffc34b26fb50ca946d378c.tar.gz"
+        }
+      ],
+      "message": "Ensure valid score range for seekMate\n\nWith MultiPV, score is set to -VALUE_INFINITE on fail low.\nThese lines are then incorrectly searched with seekMate\nstarting at depth 3 (seekMate threshold 25194).\nIf score is just checked against -VALUE_INFINITE,\nseekMate would barely be used in MultiPV lines anymore.\nWith this patch, we use previousScore for MultiPV to use the\nbest available scores and check for -VALUE_INFINITE.\nIn addition, it includes a patch by @HappyNoah-1 that only calculates\nseekMateThreshold once when rootDepth is increased.\nNo Fishtest test, as it is non-functional with MultiPV 1.\nThe issue came up during a Codex review in another repository.\n\nSTC for the @HappyNoah-1 patch\nhttps://tests.stockfishchess.org/tests/view/6ad67dc7733e627f7058c938\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7239\n\nNo functional change\n\nCo-authored-by: Robert Nurnberg <28635489+robertnurnberg@users.noreply.github.com>\nCo-authored-by: Noah Lee <noahjlee314@gmail.com>\n",
+      "subject": "Ensure valid score range for seekMate"
+    },
+    {
       "hash": "dbe600b7438662e9ade60b31fa0625259dcd0077",
       "short": "dbe600b7",
       "author": "xiangqishare <100093845+xiangqishare@users.noreply.github.com>",
