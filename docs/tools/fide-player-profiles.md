@@ -3,7 +3,7 @@
 Public route: https://chessnerd.net/fide-player.html (`?id=<FIDE id>` opens a profile)
 
 A player's full standard-rating history from the archived FIDE lists, 1967 to now,
-as a stat block, chart, table, and CSV download. Search by surname or go straight
+as a stat block, date lookup, chart, detailed table, and CSV download. Search by surname or go straight
 to a FIDE ID.
 
 ## Data
@@ -38,11 +38,40 @@ cmd /c mklink /J public\fide-players D:\dev\proj\fide-players
 Remove the junction (`rmdir public\fide-players`) before `npm run build` on this machine,
 because the build copies `public/` into `dist`. CI never has it.
 
-## What a profile does not have
+## Profile layout and biographical sources
+
+Profiles show archive identity and standard peak/latest values first. A year
+and archived-list selector gives direct access to individual observations;
+missing periods are not filled in and year-only dates are labelled as such.
+The compact trend chart follows. Detailed history starts collapsed, initially
+renders twelve lists, and can show every list in a bounded scroll region.
+The CSV always includes all observations regardless of the selected date or
+whether the detail table is expanded. Archive names/title/federation changes
+have their own disclosure.
+
+`src/lib/fide-biography.ts` optionally queries Wikidata through its public
+SPARQL endpoint, matching only the exact FIDE ID (P1440). It supplies an English
+description, birth/death dates at the precision recorded, birthplace and an
+English Wikipedia biography link when available. Ambiguous entity matches are
+rejected. These fields are separate from archive facts, with a Wikidata source
+link. Availability varies by player and by the external service.
+
+Photos use Wikidata's image claim and Wikimedia Commons imageinfo metadata.
+A thumbnail is displayed only with author/credit, license and source links.
+Third-party HTML metadata is converted to text, never inserted as live HTML.
+Missing photos are stated explicitly. A failed biography request has a retry;
+neither biography nor image failures prevent archive rating lookup or export.
+These requests run in the visitor's browser, with twelve-second timeouts; they
+are not archived biographical snapshots. No new paid API or server is required.
+
+Source contracts: https://www.wikidata.org/wiki/Property:P1440 and
+https://www.mediawiki.org/wiki/API:Imageinfo.
+
+## What the rating archive does not have
 
 Only what the rating lists contain: rating, games, K-factor, flag, names,
 federations, titles as listed, sex, birth year. No results, game lists, or title
-award dates; the page links to the player's FIDE profile for those. Rows from before
+award dates in the archive itself; the page links to the player's FIDE profile for those. Rows from before
 FIDE IDs existed cannot be linked to a person and are not in any profile. FIDE's
 January 2006 list ends with ten placeholder rows ("Name", "Fed"); they stay in the
 archive and are skipped in the profiles.

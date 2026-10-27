@@ -39,6 +39,12 @@ Archive pushes have no new direct cross-repository dispatch in this change. They
 
 ## Operational boundaries
 
+The existing consolidated historical FIDE SQLite master, its verified scope,
+and a publication/update proposal are documented in
+[the historical database assessment](tools/fide-history-master.md). It is a
+local preservation artifact; the website still consumes compact player shards
+and the existing per-list release downloads.
+
 The restored local inbox is `D:/jupiter/chessnerd/workspace/`: drop Chess.com
 PGNs there and run `File PGNs.bat`. Its Python script delegates to the existing
 archive importers under `D:/dev/proj/chessnerd`, pushes archives before website

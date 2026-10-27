@@ -15,6 +15,7 @@ import {
   type Shard,
   type ShardDirectory
 } from '../lib/fide-players';
+import { loadBiography, loadPortrait } from '../lib/fide-biography';
 
 const root = document.getElementById('fpRoot') as HTMLElement;
 const BASE = (root.dataset.base || '/fide-players/').replace(/\/?$/, '/');
@@ -33,6 +34,8 @@ const TYPE_COLOR: Record<RatingType, string> = { standard: 'var(--accent)', rapi
 let directory: ShardDirectory | null = null;
 const shards = new Map<number, Promise<Shard>>();
 const nameFiles = new Map<string, Promise<NameEntry[]>>();
+let redrawChart: (() => void) | null = null;
+window.addEventListener('resize', () => redrawChart?.());
 
 function node<K extends keyof HTMLElementTagNameMap>(tag: K, props: Record<string, string> = {}, ...children: (Node | string)[]): HTMLElementTagNameMap[K] {
   const e = document.createElement(tag);
@@ -148,8 +151,8 @@ function titleLine(p: Player, dir: ShardDirectory): string {
 
 function chart(p: Player, shown: Set<RatingType>): SVGSVGElement {
   const ns = 'http://www.w3.org/2000/svg';
-  const W = 800;
-  const H = 300;
+  const W = Math.max(280, Math.min(800, root.clientWidth - 16));
+  const H = 210;
   const pad = { l: 46, r: 12, t: 12, b: 26 };
   const points = (Object.entries(p.series) as [RatingType, RatingSeries][])
     .filter(([type]) => shown.has(type))
@@ -179,7 +182,7 @@ function chart(p: Player, shown: Set<RatingType>): SVGSVGElement {
     add('line', { x1: String(pad.l), x2: String(W - pad.r), y1: String(sy(y)), y2: String(sy(y)), class: 'fp-grid' });
     add('text', { x: String(pad.l - 6), y: String(sy(y) + 4), 'text-anchor': 'end', class: 'fp-axis' }, String(y));
   }
-  const yearStep = Math.max(1, Math.ceil((x1 - x0) / 8));
+  const yearStep = Math.max(1, Math.ceil((x1 - x0) / Math.max(2, Math.floor(W / 100))));
   for (let year = Math.ceil(x0 / yearStep) * yearStep; year <= x1; year += yearStep) {
     add('text', { x: String(sx(year)), y: String(H - 8), 'text-anchor': 'middle', class: 'fp-axis' }, String(year));
   }
@@ -259,6 +262,46 @@ function render(p: Player, dir: ShardDirectory) {
   const grid = node('dl', { class: 'fp-stats' });
   for (const [k, v] of stats) if (v) grid.append(node('div', {}, node('dt', {}, k), node('dd', {}, v)));
 
+  const biography = node('section', { class: 'fp-bio', 'aria-label': 'Biography' });
+  const bioStatus = node('p', { class: 'fp-note', role: 'status' }, 'Loading biographical information…');
+  biography.append(bioStatus);
+  const enrich = async () => {
+    bioStatus.textContent = 'Loading biographical information…';
+    try {
+      const bio = await loadBiography(p.id);
+      if (!biography.isConnected) return;
+      if (!bio) { bioStatus.textContent = 'No additional biography found in Wikidata.'; return; }
+      biography.replaceChildren();
+      const details = node('div');
+      if (bio.description) details.append(node('p', {}, bio.description));
+      const facts = [['Born', bio.born], ['Birthplace', bio.birthplace], ['Died', bio.died]].filter(([, v]) => v);
+      for (const [label, value] of facts) details.append(node('p', {}, node('strong', {}, `${label}: `), value));
+      const sources = node('p', { class: 'fp-note' }, node('a', { href: bio.source, target: '_blank', rel: 'noopener noreferrer' }, 'Biography source: Wikidata'));
+      if (bio.article) sources.append(' · ', node('a', { href: bio.article, target: '_blank', rel: 'noopener noreferrer' }, 'Read biography on Wikipedia'));
+      details.append(sources);
+      biography.append(details);
+      if (bio.image) {
+        const photoStatus = node('p', { class: 'fp-note' }, 'Loading player photo…');
+        details.append(photoStatus);
+        try {
+          const photo = await loadPortrait(bio.image);
+          if (!photo) { photoStatus.textContent = 'No photo with complete attribution available.'; return; }
+          const image = node('img', { src: photo.url, alt: name, width: '160', decoding: 'async', referrerpolicy: 'no-referrer' });
+          image.addEventListener('error', () => { image.hidden = true; photoStatus.textContent = 'Player photo unavailable.'; });
+          const caption = node('figcaption', {}, photo.attribution, ' · ', node('a', { href: photo.licenseUrl, target: '_blank', rel: 'noopener noreferrer' }, photo.license), ' · ', node('a', { href: photo.source, target: '_blank', rel: 'noopener noreferrer' }, 'Photo source'));
+          biography.prepend(node('figure', { class: 'fp-portrait' }, image, caption));
+          photoStatus.textContent = '';
+        } catch { photoStatus.textContent = 'Player photo unavailable.'; }
+      } else details.append(node('p', { class: 'fp-note' }, 'No player photo in Wikidata.'));
+    } catch {
+      if (!biography.isConnected) return;
+      bioStatus.textContent = 'Biographical information is temporarily unavailable. ';
+      const retry = node('button', { type: 'button', class: 'btn btn-secondary btn-compact' }, 'Retry biography');
+      retry.addEventListener('click', () => { retry.remove(); void enrich(); });
+      bioStatus.append(retry);
+    }
+  };
+
   const notes: Node[] = [];
   if (p.titles.length) notes.push(node('p', {}, node('strong', {}, 'Titles in the lists: '), titleLine(p, dir)));
   if (p.names.length > 1) notes.push(node('p', {}, node('strong', {}, 'Also listed as: '), p.names.slice(0, -1).map((n) => n.name).join('; ')));
@@ -268,6 +311,7 @@ function render(p: Player, dir: ShardDirectory) {
   const shown = new Set<RatingType>(types);
   const chartHost = node('div', { class: 'fp-chart-wrap' });
   const redraw = () => chartHost.replaceChildren(chart(p, shown));
+  redrawChart = redraw;
   const toggles = node('div', { class: 'fp-toggles' });
   if (types.length > 1) {
     for (const t of types) {
@@ -283,11 +327,38 @@ function render(p: Player, dir: ShardDirectory) {
   redraw();
 
   const rows = historyRows(p);
+  // Offer exact archived periods, including year-only dates. Never silently
+  // substitute the nearest available month for a missing list.
+  const lookup = node('section', { class: 'fp-lookup', 'aria-label': 'Find a rating' });
+  const yearSelect = node('select', { id: 'fpYear' });
+  for (const year of [...new Set(rows.map(r => r.date.slice(0, 4)))]) yearSelect.append(node('option', { value: year }, year));
+  const periodSelect = node('select', { id: 'fpPeriod' });
+  const ratingResult = node('div', { 'aria-live': 'polite', class: 'fp-rating-result' });
+  const showRating = () => {
+    const row = rows.find(r => r.date === periodSelect.value);
+    ratingResult.replaceChildren();
+    if (!row) return;
+    for (const t of types) {
+      const c = row.cells[t];
+      const text = !c ? 'Not listed' : c.rating === null ? 'No rating recorded' : String(c.rating);
+      ratingResult.append(node('div', {}, node('strong', {}, `${TYPE_LABEL[t]}: `), text,
+        c ? ` · Games: ${c.games ?? '—'} · K: ${c.k ?? '—'}${c.flag ? ` · Flag: ${c.flag}` : ''}${c.section ? ` · ${c.section}` : ''}` : ''));
+    }
+  };
+  const chooseYear = () => {
+    periodSelect.replaceChildren(...rows.filter(r => r.date.startsWith(yearSelect.value)).map(r => node('option', { value: r.date }, r.date.length === 4 ? `${r.date} (month unknown)` : r.date)));
+    showRating();
+  };
+  yearSelect.addEventListener('change', chooseYear);
+  periodSelect.addEventListener('change', showRating);
+  chooseYear();
+  lookup.append(node('h3', {}, 'Find a rating'), node('div', { class: 'fp-date-controls' }, node('div', {}, node('label', { for: 'fpYear' }, 'Year'), yearSelect), node('div', {}, node('label', { for: 'fpPeriod' }, 'Archived list'), periodSelect)), ratingResult,
+    node('p', { class: 'fp-note' }, 'Only lists containing this player are shown. Missing periods are not filled in.'));
   const table = node('table', { class: 'fp-table' });
   const heads = ['List', ...types.flatMap((t) => (t === 'standard' ? ['Standard', 'Games', 'K', 'Flag'] : [TYPE_LABEL[t]]))];
   table.append(node('thead', {}, node('tr', {}, ...heads.map((h) => node('th', { scope: 'col' }, h)))));
   const body = node('tbody');
-  const initial = 40;
+  const initial = 12;
   const addRows = (from: number, to: number) => {
     for (const row of rows.slice(from, to)) {
       const cells: HTMLElement[] = [node('th', { scope: 'row' }, row.date)];
@@ -319,19 +390,25 @@ function render(p: Player, dir: ShardDirectory) {
   });
   const fideLink = node('a', { class: 'btn btn-secondary btn-compact', href: `https://ratings.fide.com/profile/${p.id}`, target: '_blank', rel: 'noopener noreferrer' }, 'FIDE profile ↗');
 
+  const fullHistory = node('details', { class: 'fp-history' }, node('summary', {}, `Detailed rating history (${rows.length} lists)`),
+    node('div', { class: 'fp-table-wrap', tabindex: '0', role: 'region', 'aria-label': 'Detailed rating history' }, table), rows.length > initial ? more : '');
+  const archiveNotes = node('details', { class: 'fp-history' }, node('summary', {}, 'Names, titles and federations in the archive'), ...notes);
+
   profile.replaceChildren(
     head,
     grid,
-    ...notes,
-    node('h3', {}, 'Rating history'),
+    biography,
+    lookup,
+    node('h3', {}, 'Rating trend'),
     toggles,
     chartHost,
     node('div', { class: 'fp-actions' }, download, fideLink),
-    node('div', { class: 'fp-table-wrap' }, table),
-    rows.length > initial ? more : '',
+    fullHistory,
+    archiveNotes,
     node('p', { class: 'fp-note' }, 'From the rating lists only, as FIDE published them. Flag: i = inactive, w = woman player. Blank cells mean the list had no value. Results, game lists and title award dates are not in these files; the FIDE profile has them.')
   );
   profile.hidden = false;
+  void enrich();
 }
 
 let playerToken = 0;
