@@ -2,6 +2,69 @@
   "month": "2026-10",
   "commits": [
     {
+      "hash": "ff7cee4244ec96ea488c402669e3674c0574dce6",
+      "short": "ff7cee42",
+      "author": "Shawn Xu <xu107288696@gmail.com>",
+      "date": "2026-10-28T05:14:06Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/ff7cee4244ec96ea488c402669e3674c0574dce6",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ff7cee4244ec96ea488c402669e3674c0574dce6.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/ff7cee4244ec96ea488c402669e3674c0574dce6.tar.gz"
+        }
+      ],
+      "message": "Update NNUE architecture to SFNNv19 and net nn-d1ee674a62ca.nnue\n\nBuilding upon K32Q2 (#7215), add a third block for when no heavy pieces (Queen, Rook) are left.\n\nThe new K32H3 layout is generalized to be block-major, with each block occupying contiguous space in the network. This should allow for further net pruning and facilitate future arch changes. Separately, the threat input/pawn pair horizontal mirroring schemes are flipped to match the HalfKA orientation.\n\nPassed STC:\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 46144 W: 12008 L: 11687 D: 22449\nPtnml(0-2): 79, 5275, 12037, 5608, 73\nhttps://tests.stockfishchess.org/tests/view/6adc7af4733e627f7058d58d\n\nPassed LTC:\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 41256 W: 10680 L: 10360 D: 20216\nPtnml(0-2): 7, 4269, 11757, 4587, 8\nhttps://tests.stockfishchess.org/tests/view/6ade59c52338a45b841f5c44\n\nCleanups Non-regression STC:\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 72704 W: 18528 L: 18361 D: 35815\nPtnml(0-2): 73, 7675, 20688, 7844, 72\nhttps://tests.stockfishchess.org/tests/view/6ae0322120cd2dc3f03d0530\n\nnnue-pytorch: https://github.com/official-stockfish/nnue-pytorch/pull/563\nnettest: https://github.com/vondele/nettest/pull/537\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7265\n\nBench: 1556650\n",
+      "subject": "Update NNUE architecture to SFNNv19 and net nn-d1ee674a62ca.nnue"
+    },
+    {
+      "hash": "61c68717855b03f535ccae33a3920ed83caa0762",
+      "short": "61c68717",
+      "author": "Zero22-Cap <315981073+Zero22-Cap@users.noreply.github.com>",
+      "date": "2026-10-28T05:13:02Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/61c68717855b03f535ccae33a3920ed83caa0762",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/61c68717855b03f535ccae33a3920ed83caa0762.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/61c68717855b03f535ccae33a3920ed83caa0762.tar.gz"
+        }
+      ],
+      "message": "Reduce null move pruning one ply less in odd threads\n\nThreads with an odd index use a null move reduction that is one ply smaller, so half of the threads verify null move cutoffs more carefully.\n\nPassed SMP STC:\nhttps://tests.stockfishchess.org/tests/view/6ac8bd225349156614d940fb\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 279256 W: 71709 L: 71076 D: 136471\nPtnml(0-2): 284, 30895, 76665, 31472, 312\n\nPassed SMP LTC:\nhttps://tests.stockfishchess.org/tests/view/6ad093f0733e627f7058c29d\nLLR: 2.95 (-2.94,2.94) <0.50,2.50>\nTotal: 328158 W: 85355 L: 84497 D: 158306\nPtnml(0-2): 78, 31716, 99656, 32528, 101\n\nNo functional change for a single thread.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7264\n\nNo functional change\n",
+      "subject": "Reduce null move pruning one ply less in odd threads"
+    },
+    {
+      "hash": "2035dded2fbe4cb897c746132cfd56ad2c404593",
+      "short": "2035dded",
+      "author": "Torsten Hellwig <torsten.hellwig93@gmail.com>",
+      "date": "2026-10-28T05:12:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/2035dded2fbe4cb897c746132cfd56ad2c404593",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2035dded2fbe4cb897c746132cfd56ad2c404593.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/2035dded2fbe4cb897c746132cfd56ad2c404593.tar.gz"
+        }
+      ],
+      "message": "Simplify seekMate score selection\n\nIn #7239, we used previousScore only for pvIdx > 0, on the assumption that using it for pvIdx == 0 would be a functional change. This assumption was wrong, because for pvIdx == 0, score is always equal to previousScore. So we can remove the special case and always use previousScore. This patch is non-functional for both MultiPV 1 and MultiPV > 1.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7261\n\nNo functional change\n",
+      "subject": "Simplify seekMate score selection"
+    },
+    {
       "hash": "ff3a6c508ed731f0dcf253f4ddf646df19a62f84",
       "short": "ff3a6c50",
       "author": "Carlos Esparza <ca2010es@gmail.com>",
