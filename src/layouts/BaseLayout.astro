@@ -2,12 +2,13 @@
 import '../styles/global.css';
 import '../styles/jupiter.css';
 import Appearance from '../components/jupiter/Appearance.astro';
-import { ArrowUpRight, House, Search } from '@lucide/astro';
+import { Archive, ArrowUpRight, BookOpen, Code2, Cpu, House, Search, Users } from '@lucide/astro';
 import { navigation } from '../data/navigation';
 interface Props { title:string; description?:string; }
 const {title,description='Chess tournament archives, player rating histories and browser tools.'}=Astro.props;
 const current=Astro.url.pathname.replace(/\/index\.html$/, '/');
 const active=(href:string)=>current === href || current === href.replace('.html','');
+const groupIcons = { archive: Archive, players: Users, analysis: BookOpen, engines: Cpu, developer: Code2 };
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">
@@ -45,7 +46,7 @@ const active=(href:string)=>current === href || current === href.replace('.html'
         <a class:list={['overview-link',{active:current === '/'}]} href="/" aria-current={current === '/' ? 'page' : undefined}><House size={16} aria-hidden="true" /> Overview</a>
         <details class="site-navigation" open><summary>Browse Chess Nerd</summary>
           <label class="visually-hidden" for="navigation-search">Find a page or tool</label><div class="nav-search"><Search size={14} aria-hidden="true" /><input type="search" id="navigation-search" placeholder="Find a page or tool…" /></div>
-          <nav aria-label="Pages and tools">{navigation.map(group=><section class="nav-group"><h2>{group.name}</h2>{group.links.map(link=><a data-navigation-item data-search={`${link.name} ${link.keywords || ''}`.toLowerCase()} href={link.href} aria-current={active(link.href) ? 'page' : undefined}>{link.name}</a>)}</section>)}</nav>
+          <nav aria-label="Pages and tools">{navigation.map(group=>{ const Icon = groupIcons[group.icon]; return <section class:list={['nav-group', `nav-group--${group.icon}`]}><h2><Icon size={16} aria-hidden="true" />{group.name}</h2>{group.links.map(link=><a data-navigation-item data-search={`${link.name} ${'keywords' in link ? link.keywords : ''} ${group.name}`.toLowerCase()} href={link.href} aria-current={active(link.href) ? 'page' : undefined}>{link.name}</a>)}</section>})}</nav>
           <p id="navigation-empty" hidden>No matching pages.</p>
         </details>
         <div class="sidebar-note"><p>Downloads link to their source archives.</p><a href="https://github.com/ianrastall/chessnerd">Source on GitHub ↗</a></div>

@@ -10,6 +10,7 @@ import sys
 import time
 from collections import OrderedDict, defaultdict
 from datetime import datetime, timezone
+from http.client import HTTPException
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -23,6 +24,9 @@ SOURCE_URL = f"https://github.com/{OWNER}/{REPO}"
 COMMITS_API = f"https://api.github.com/repos/{OWNER}/{REPO}/commits"
 DEFAULT_CANONICAL = Path("data/stockfish-commits/commits.json")
 DEFAULT_OUTDIR = Path("public/data/stockfish-commits")
+MAX_ATTEMPTS = 4
+MAX_BACKOFF_SECONDS = 30.0
+RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 
 
 def parse_args() -> argparse.Namespace:
@@ -188,6 +192,12 @@ def github_token() -> str | None:
     return os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
 
 
+def retry_delay(attempt: int, retry_after: str | None = None) -> float:
+    if retry_after and retry_after.isdigit():
+        return min(MAX_BACKOFF_SECONDS, max(1.0, float(retry_after)))
+    return min(MAX_BACKOFF_SECONDS, float(2 ** attempt))
+
+
 def fetch_json(url: str, token: str | None) -> Any:
     headers = {
         "Accept": "application/vnd.github+json",
@@ -197,15 +207,37 @@ def fetch_json(url: str, token: str | None) -> Any:
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    request = Request(url, headers=headers)
-    try:
-        with urlopen(request, timeout=30) as response:
-            return json.load(response)
-    except HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"GitHub API request failed ({exc.code}) for {url}: {body}") from exc
-    except URLError as exc:
-        raise RuntimeError(f"GitHub API request failed for {url}: {exc}") from exc
+    for attempt in range(MAX_ATTEMPTS):
+        request = Request(url, headers=headers)
+        try:
+            with urlopen(request, timeout=30) as response:
+                return json.load(response)
+        except HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            if exc.code in RETRYABLE_STATUS_CODES and attempt < MAX_ATTEMPTS - 1:
+                retry_after = exc.headers.get("Retry-After") if exc.headers else None
+                delay = retry_delay(attempt, retry_after)
+                print(
+                    f"  ! transient HTTP {exc.code} for {url}; retrying in {delay:.1f}s "
+                    f"({attempt + 1}/{MAX_ATTEMPTS - 1})",
+                    file=sys.stderr,
+                )
+                time.sleep(delay)
+                continue
+            raise RuntimeError(f"GitHub API request failed ({exc.code}) for {url}: {body}") from exc
+        except (URLError, HTTPException, TimeoutError, ConnectionError, OSError) as exc:
+            if attempt < MAX_ATTEMPTS - 1:
+                delay = retry_delay(attempt)
+                print(
+                    f"  ! transient connection error for {url} ({exc}); retrying in {delay:.1f}s "
+                    f"({attempt + 1}/{MAX_ATTEMPTS - 1})",
+                    file=sys.stderr,
+                )
+                time.sleep(delay)
+                continue
+            raise RuntimeError(f"GitHub API request failed for {url}: {exc}") from exc
+
+    raise RuntimeError(f"GitHub API retries exhausted for {url}")
 
 
 def fetch_new_commits(known_hashes: set[str], max_pages: int, sleep_seconds: float) -> list[dict[str, Any]]:
