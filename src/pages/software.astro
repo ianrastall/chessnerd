@@ -1,272 +1,137 @@
 ---
 import ToolHeader from '../components/ToolHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { softwareGroups } from '../data/software';
 
-const myTools = [
-  {
-    name: 'PGN Simple Edit (Titania Tools)',
-    releaseDate: '2026-10-12',
-    language: 'C# / Rust',
-    directUrl: 'https://github.com/ianrastall/titania-tools/releases/download/v0.1.0/PgnSimpleEdit-0.1.0-Setup.exe',
-    repoUrl: 'https://github.com/ianrastall/titania-tools'
-  },
-  {
-    name: 'PGN Tools (older program)',
-    releaseDate: '2026-06-20',
-    language: 'C#',
-    directUrl: 'https://github.com/ianrastall/PgnTools/releases/download/2.0.0/PgnTools-2.0.0-win-x64.exe',
-    repoUrl: 'https://github.com/ianrastall/PgnTools'
-  }
-];
-
-interface SoftwareLink {
-  label: string;
-  url: string;
-}
-
-interface Software {
-  name: string;
-  tag?: string;
-  description: string;
-  links: SoftwareLink[];
-}
-
-const essentialSoftware: Software[] = [
-  {
-    name: 'ScanChess',
-    tag: 'Web app / Free tools + paid scanning',
-    description:
-      'Converts chessboard images to editable FEN positions and handwritten scoresheets to PGN games, with review and correction before export. Also offers browser-based analysis and PGN tools. Scanning requires an account and uses credits, with free starter credits on sign-up.',
-    links: [{ label: 'Website', url: 'https://scanchess.com/' }]
-  },
-  {
-    name: 'Cutechess',
-    tag: 'Free / Open source',
-    description:
-      'GUI and command-line tools for running matches and tournaments between chess engines. The de facto standard for engine testing.',
-    links: [
-      { label: 'Website', url: 'https://cutechess.com/' },
-      { label: 'Source', url: 'https://github.com/cutechess/cutechess' }
-    ]
-  },
-  {
-    name: 'ChessBase',
-    tag: 'Commercial',
-    description:
-      'The leading commercial database and analysis suite, with huge game collections (Mega Database) and deep engine integration.',
-    links: [{ label: 'Website', url: 'https://chessbase.com/' }]
-  },
-  {
-    name: 'SCID',
-    tag: 'Free / Open source',
-    description:
-      "Shane's Chess Information Database — a free program for storing, searching, and studying large collections of games.",
-    links: [{ label: 'Website', url: 'https://scid.sourceforge.net/' }]
-  },
-  {
-    name: 'Scid vs. PC',
-    tag: 'Free / Open source',
-    description:
-      'An actively maintained fork of SCID with a refined interface, gameplay, and analysis features. An excellent free database for most players.',
-    links: [{ label: 'Website', url: 'https://scidvspc.sourceforge.net/' }]
-  },
-  {
-    name: 'SCID Resources',
-    tag: 'Reference',
-    description:
-      "The SCID project's own hub of compatible add-ons — game databases, player data (ratings and photos), opening books, engines, and endgame tablebases.",
-    links: [{ label: 'Open', url: 'https://sourceforge.net/p/scid/wiki/GetResources/' }]
-  }
-];
+const total = softwareGroups.reduce((count, group) => count + group.items.length, 0);
+const platforms = ['Windows', 'macOS', 'Linux', 'Web', 'Library'];
 ---
-<BaseLayout title="Software Catalog" description="Titania Tools and my older PGN Tools, plus chess databases, analysis suites, engine tools, and ScanChess image scanning.">
+<BaseLayout title="Software catalogue" description="Jupiter chess programs by Ian Rastall, plus chess databases, engine interfaces, training software, PGN utilities and developer libraries.">
   <main>
-    <div class="tool-container">
-      <ToolHeader title="Software Catalog" icon="inventory_2" />
+    <div class="tool-container software-catalogue">
+      <ToolHeader title="Software catalogue" icon="inventory_2" />
 
-      <section class="software-section">
-        <h2 class="software-section-title">My Contributions</h2>
-        <p class="software-section-intro">Titania Tools is my new suite of chess tools for Windows. Its first GUI, PGN Simple Edit, reports on, joins, merges, splits, and sorts PGN files. It works with whole files rather than editing individual games. PGN Tools (PgnTools) is my older program and remains available below.</p>
+      <form id="software-filters" class="software-filters" role="search" aria-label="Software catalogue" hidden>
+        <div class="software-filter"><label for="software-query">Find software</label><input id="software-query" type="search" placeholder="Name, task or feature" /></div>
+        <div class="software-filter"><label for="software-category">Category</label><select id="software-category"><option value="">All categories</option>{softwareGroups.map(group => <option value={group.id}>{group.name}</option>)}</select></div>
+        <div class="software-filter"><label for="software-platform">Platform</label><select id="software-platform"><option value="">All platforms</option>{platforms.map(platform => <option>{platform}</option>)}</select></div>
+        <button type="reset" class="btn btn-secondary">Clear</button>
+      </form>
 
-        <div class="software-table-wrap">
-          <table class="software-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Release</th>
-                <th>Language</th>
-                <th>Direct Link</th>
-                <th>Repository</th>
-              </tr>
-            </thead>
-            <tbody>
-              {myTools.map((entry) => (
-                <tr>
-                  <td>{entry.name}</td>
-                  <td>{entry.releaseDate}</td>
-                  <td><span class="language-tag">{entry.language}</span></td>
-                  <td><a class="link-btn" href={entry.directUrl} target="_blank" rel="noopener noreferrer">Direct</a></td>
-                  <td><a class="link-btn" href={entry.repoUrl} target="_blank" rel="noopener noreferrer">Repo</a></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <div class="catalogue-summary"><p id="software-count" role="status" aria-live="polite">{total} programs and libraries</p><p>Details checked <time datetime="2026-10-30">30 October 2026</time>.</p></div>
+      <nav class="software-categories" aria-label="Software categories">{softwareGroups.map(group => <a href={`#${group.id}`}>{group.name.replace('My software · ', '')} <span>{group.items.length}</span></a>)}</nav>
+      <p id="software-empty" hidden>No software matches these filters. Change the search or clear the filters.</p>
 
-      <section class="software-section">
-        <h2 class="software-section-title">Essential Chess Software</h2>
-        <p class="software-section-intro">
-          Databases, analysis suites, engine tools, and utilities for turning chess images and scoresheets into usable game data.
-        </p>
-
-        <div class="software-list">
-          {essentialSoftware.map((item) => (
-            <article class="software-item">
-              <div class="software-item-head">
+      {softwareGroups.map(group => (
+        <section id={group.id} class:list={['software-section', `software-section--${group.id}`]} data-software-group aria-labelledby={`${group.id}-heading`}>
+          <div class="software-section-heading"><h2 id={`${group.id}-heading`}>{group.name}</h2><span class="section-count">{group.items.length}</span></div>
+          <p class="software-section-intro">{group.description}</p>
+          {group.id === 'engines' && <p class="section-link"><a href="/engines.html">Browse engine releases</a> · <a href="/stockfish-commits.html">Stockfish development commits</a></p>}
+          <div class="software-list">
+            {group.items.map(item => (
+              <article class="software-item" data-software-item data-category={group.id} data-platforms={item.platforms.join('|')} data-search={`${item.name} ${item.description} ${item.platforms.join(' ')} ${item.access} ${item.availability || ''} ${group.name}`.toLowerCase()}>
                 <h3>{item.name}</h3>
-                {item.tag && <span class="software-tag">{item.tag}</span>}
-              </div>
-              <p>{item.description}</p>
-              <div class="software-item-links">
-                {item.links.map((link) => (
-                  <a class="link-btn" href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+                <p class="software-meta">{item.platforms.join(' / ')} <span aria-hidden="true">·</span> {item.access}</p>
+                <p class="software-description">{item.description}</p>
+                {item.availability && <p class="software-availability">{item.availability}</p>}
+                {item.links.length > 0 && <ul class="software-item-links" aria-label={`${item.name} links`}>{item.links.map(link => <li><a href={link.url}>{link.label}</a></li>)}</ul>}
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <aside class="software-resources" aria-label="Related resources"><h2>Related resources</h2><p><a href="https://sourceforge.net/p/scid/wiki/GetResources/">SCID resources</a>: compatible databases, player data, opening books, engines and tablebases.</p><p><a href="/pgn-downloads.html">PGN downloads</a> · <a href="/pgn-info.html">Inspect a PGN file in your browser</a></p></aside>
+      <details class="earlier-software">
+        <summary>Earlier software: PGN Simple Edit and PgnTools</summary>
+        <p>These earlier releases remain available for existing users. Current Jupiter programs are listed above.</p>
+        <ul>
+          <li>PGN Simple Edit (Titania Tools), 0.1.0: file-level PGN reporting, joining, merging, splitting and sorting. <a href="https://github.com/ianrastall/titania-tools/releases/download/v0.1.0/PgnSimpleEdit-0.1.0-Setup.exe">Original installer</a> · <a href="https://github.com/ianrastall/titania-tools">Repository</a></li>
+          <li>PGN Tools (PgnTools), 2.0.0: older Windows PGN utility. <a href="https://github.com/ianrastall/PgnTools/releases/download/2.0.0/PgnTools-2.0.0-win-x64.exe">Original download</a> · <a href="https://github.com/ianrastall/PgnTools">Repository</a></li>
+        </ul>
+      </details>
     </div>
   </main>
 
+  <script>
+    const form = document.querySelector<HTMLFormElement>('#software-filters')!;
+    const query = document.querySelector<HTMLInputElement>('#software-query')!;
+    const category = document.querySelector<HTMLSelectElement>('#software-category')!;
+    const platform = document.querySelector<HTMLSelectElement>('#software-platform')!;
+    const items = [...document.querySelectorAll<HTMLElement>('[data-software-item]')];
+    const groups = [...document.querySelectorAll<HTMLElement>('[data-software-group]')];
+    const count = document.querySelector<HTMLElement>('#software-count')!;
+    const empty = document.querySelector<HTMLElement>('#software-empty')!;
+
+    function filterSoftware() {
+      const words = query.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let visible = 0;
+      for (const item of items) {
+        item.hidden = !words.every(word => item.dataset.search!.includes(word))
+          || (!!category.value && item.dataset.category !== category.value)
+          || (!!platform.value && !item.dataset.platforms!.split('|').includes(platform.value));
+        if (!item.hidden) visible++;
+      }
+      for (const group of groups) {
+        const matches = group.querySelectorAll('[data-software-item]:not([hidden])').length;
+        group.hidden = matches === 0;
+        group.querySelector('.section-count')!.textContent = String(matches);
+      }
+      count.textContent = `${visible} of ${items.length} programs and libraries`;
+      empty.hidden = visible !== 0;
+    }
+
+    form.hidden = false;
+    form.addEventListener('submit', event => event.preventDefault());
+    form.addEventListener('input', filterSoftware);
+    form.addEventListener('change', filterSoftware);
+    form.addEventListener('reset', () => {
+      query.value = ''; category.value = ''; platform.value = '';
+      filterSoftware();
+    });
+    document.querySelectorAll<HTMLAnchorElement>('.software-categories a').forEach(link => link.addEventListener('click', () => {
+      form.reset();
+    }));
+    filterSoftware();
+  </script>
+
   <style>
-    .software-section {
-      margin-bottom: 2.5rem;
-    }
-
-    .software-section-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 0.35rem;
-    }
-
-    .software-section-intro {
-      color: var(--text-secondary);
-      margin-bottom: 1rem;
-    }
-
-    .software-table-wrap {
-      overflow-x: auto;
-    }
-
-    .software-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--bg-tertiary);
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .software-table th,
-    .software-table td {
-      padding: 0.9rem 1rem;
-      border-bottom: 1px solid var(--border-color);
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    .software-table th {
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-    }
-
-    .software-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .software-table tbody tr:hover {
-      background: var(--bg-secondary);
-    }
-
-    .software-list {
-      display: grid;
-      gap: 0.85rem;
-    }
-
-    .software-item {
-      padding: 1rem 1.1rem;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-    }
-
-    .software-item-head {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .software-item-head h3 {
-      font-size: 1.05rem;
-      font-weight: 650;
-    }
-
-    .software-item p {
-      color: var(--text-primary);
-      margin-bottom: 0.7rem;
-      line-height: 1.45;
-    }
-
-    .software-item-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .software-tag {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 999px;
-      padding: 0.05rem 0.55rem;
-      white-space: nowrap;
-    }
-
-    .language-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      background: var(--bg-secondary);
-      font-size: 0.85rem;
-      color: var(--text-primary);
-    }
-
-    .link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.35rem 0.65rem;
-      border-radius: 6px;
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      text-decoration: none;
-      border: 1px solid var(--border-color);
-      transition: border-color 0.2s, color 0.2s;
-      font-size: 0.9rem;
-    }
-
-    .link-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .software-filters { display:grid; grid-template-columns:minmax(180px,2fr) minmax(160px,1.5fr) minmax(130px,1fr) auto; gap:12px; align-items:end; margin-bottom:12px; }
+    .software-filter { display:grid; gap:6px; min-width:0; }
+    .software-filters label { color:var(--muted); font-size:12px; }
+    .software-filters input, .software-filters select { width:100%; }
+    .software-filters button { min-height:38px; }
+    .catalogue-summary { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 16px; color:var(--muted); font-size:12px; margin-bottom:16px; }
+    .catalogue-summary p { margin:0; }
+    .software-categories { display:flex; flex-wrap:wrap; gap:8px 16px; padding-bottom:20px; border-bottom:1px solid var(--border); margin-bottom:28px; font-size:12px; }
+    .software-categories span { color:var(--muted); margin-left:3px; }
+    .software-section { --section-accent:var(--accent-strong); margin-bottom:32px; scroll-margin-top:24px; padding:20px; border-inline-start:4px solid var(--section-accent); border-radius:0 4px 4px 0; background:color-mix(in srgb,var(--section-accent) 12%,var(--bg)); }
+    .software-section--databases, .software-section--tournaments { --section-accent:var(--info); }
+    .software-section--interfaces, .software-section--engines { --section-accent:var(--danger); }
+    .software-section--training { --section-accent:var(--success); }
+    .software-section--pgn { --section-accent:var(--warning); }
+    .software-section-heading { display:flex; gap:10px; align-items:baseline; margin-bottom:6px; }
+    .software-section-heading h2, .software-resources h2 { font-size:18px; font-weight:600; margin:0; }
+    .section-count { color:var(--muted); font-size:12px; }
+    .software-section-intro { color:var(--muted); font-size:13px; margin-bottom:16px; max-width:80ch; }
+    .section-link { font-size:13px; margin-bottom:16px; }
+    .software-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .software-item { display:flex; flex-direction:column; min-width:0; padding:20px; border:1px solid var(--border); border-radius:4px; background:var(--panel); }
+    .software-item h3 { font-size:16px; font-weight:600; margin:0 0 6px; }
+    .software-meta { color:var(--muted); font-size:11px; margin-bottom:12px; }
+    .software-description { font-size:13px; line-height:1.6; margin-bottom:12px; }
+    .software-availability { font-size:12px; line-height:1.5; color:var(--muted); margin-bottom:12px; }
+    .software-item-links { display:flex; flex-wrap:wrap; gap:8px 16px; list-style:none; padding:0; margin:auto 0 0; font-size:12px; }
+    .software-item-links a { display:inline-block; padding:4px 0; }
+    .software-resources { border-top:1px solid var(--border); padding-top:20px; margin-bottom:24px; font-size:13px; }
+    .software-resources h2 { margin-bottom:12px; }
+    .earlier-software { padding:16px; border:1px solid var(--border); border-radius:4px; font-size:13px; }
+    .earlier-software summary { cursor:pointer; }
+    .earlier-software p { margin:16px 0; color:var(--muted); }
+    .earlier-software ul { padding-left:20px; }
+    .earlier-software li { margin-top:12px; line-height:1.6; }
+    @media(max-width:1100px) { .software-filters { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:700px) { .software-list, .software-filters { grid-template-columns:minmax(0,1fr); } .software-section { padding:16px 12px; } .software-item { padding:16px; } }
+    @media(forced-colors:active) { .software-section { border-color:Highlight; background:Canvas; } }
   </style>
 </BaseLayout>

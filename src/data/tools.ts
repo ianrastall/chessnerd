@@ -124,11 +124,11 @@ export const tools: ToolMeta[] = [
   },
   {
     id: 'software',
-    name: 'Software Catalog',
+    name: 'Software catalogue',
     href: '/software.html',
     icon: 'inventory_2',
     category: 'reference',
-    description: 'My PGN tools, plus the essential chess databases, analysis suites, and engine tools players rely on.'
+    description: 'Jupiter chess programs, databases, engine interfaces, training software, PGN utilities and developer libraries.'
   },
   {
     id: 'stockfish-commits',
