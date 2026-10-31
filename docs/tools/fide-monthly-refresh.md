@@ -19,9 +19,15 @@ and explicitly dated standard, rapid and blitz XML ZIPs (for example
 of each rating in both directions between registry and dated lists. Neither
 download time nor a ZIP timestamp is taken as proof of a rating period.
 Disagreeing sources fail preparation and preserve the previous publication.
-Connection failures and 5xx responses are retried, four attempts per file. A
-dated list that returns 404 before the effective date is a normal wait: nothing
-is prepared and the run succeeds. From the effective date it fails the run.
+A dated list that returns 404 before the effective date is a normal wait:
+nothing is prepared and the run succeeds. From the effective date it fails.
+
+Most GitHub-hosted runner addresses cannot reach `ratings.fide.com`; in an
+eight-runner probe on 31 October 2026, six timed out on every attempt and two
+connected on every attempt. Retrying on one runner does not help, so each run
+tries up to eight runners in turn, and a runner that fails a 20-second access
+check skips preparation. A final job fails if a due period is still unpublished.
+If no runner gets through, the next scheduled run tries again.
 
 The standard XML becomes one SQLite database with the existing 22-column
 `players` table, three indexes and `meta` provenance. No fields are filled from
