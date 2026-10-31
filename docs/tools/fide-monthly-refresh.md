@@ -42,7 +42,9 @@ owner's public release; no cross-repository write token is required.
 `scripts/sync_fide_monthly.py` checks release asset digests, downloaded payload
 hashes, restored SQLite integrity/schema/count/date/meta, player data and source
 provenance before writing public files. Validation failures block commit and
-deployment.
+deployment. Before the effective date a missing release is a normal wait, since
+FIDE may post the dated lists after the last-day runs: the sync stages nothing
+and succeeds. From the effective date a missing release fails the workflow.
 
 Versioned JSON is stored byte-for-byte with Git text normalization disabled
 for that directory. The site build independently checks those payload hashes
@@ -69,8 +71,9 @@ deployment refreshes the archive's non-JavaScript HTML.
 GitHub scheduled workflows can be delayed. Midnight activation works when the
 new month has been successfully staged and deployed beforehand. If FIDE has
 not published consistent files, or preparation/deployment fails, the previous
-month remains available and the workflow reports failure. There is no invented
-next-month dataset or unconditional midnight availability promise.
+month remains available and the producer workflow reports failure, as does the
+site workflow once the period is due. There is no invented next-month dataset
+or unconditional midnight availability promise.
 
 ## Manual recovery
 

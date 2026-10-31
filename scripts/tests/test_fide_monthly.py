@@ -7,9 +7,11 @@ from pathlib import Path
 import sqlite3
 import tempfile
 import unittest
+from unittest import mock
+import urllib.error
 import zipfile
 
-spec = importlib.util.spec_from_file_location('fide_sync', Path(__file__).parents[1] / 'sync_fide_monthly.py')
+spec =importlib.util.spec_from_file_location('fide_sync', Path(__file__).parents[1] / 'sync_fide_monthly.py')
 sync = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(sync)
 
@@ -80,6 +82,30 @@ class FideTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 sync.sync('2026-11', root, source)
             self.assertEqual({p: p.read_bytes() for p in (root / 'public').rglob('*') if p.is_file()}, before)
+
+    def test_missing_release_waits_until_the_period_is_due(self):
+        def not_found(url):
+            raise urllib.error.HTTPError(url, 404, 'Not Found', None, None)
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.fixture(root)
+            before = {p: p.read_bytes() for p in (root / 'public').rglob('*') if p.is_file()}
+            with mock.patch.object(sync, 'download', not_found):
+                sync.sync('2026-11', root, now=datetime(2026, 10, 31, 23, 59, tzinfo=timezone.utc))
+                with self.assertRaisesRegex(ValueError, 'not published'):
+                    sync.sync('2026-11', root, now=datetime(2026, 11, 1, tzinfo=timezone.utc))
+            self.assertEqual({p: p.read_bytes() for p in (root / 'public').rglob('*') if p.is_file()}, before)
+
+    def test_other_release_lookup_errors_fail_before_the_period_is_due(self):
+        def unavailable(url):
+            raise urllib.error.HTTPError(url, 503, 'Service Unavailable', None, None)
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.fixture(root)
+            with mock.patch.object(sync, 'download', unavailable), self.assertRaises(urllib.error.HTTPError):
+                sync.sync('2026-11', root, now=datetime(2026, 10, 31, 23, 59, tzinfo=timezone.utc))
 
 
 if __name__ == '__main__':

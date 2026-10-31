@@ -15,6 +15,7 @@ from pathlib import Path
 import re
 import sqlite3
 import tempfile
+import urllib.error
 import urllib.request
 import zipfile
 
@@ -62,11 +63,22 @@ def sync(period, root=ROOT, directory=None, now=None):
     now = now or datetime.now(timezone.utc)
     tag = f'standard-sqlite-{period}-monthly'
     base = f'https://github.com/{REPO}/releases/download/{tag}/'
+    effective = period + '-01T00:00:00Z'
     release = None
     if directory:
         receipt_data = (directory / 'monthly.json').read_bytes()
     else:
-        release = json.loads(download(f'https://api.github.com/repos/{REPO}/releases/tags/{tag}'))
+        try:
+            release = json.loads(download(f'https://api.github.com/repos/{REPO}/releases/tags/{tag}'))
+        except urllib.error.HTTPError as error:
+            if error.code != 404:
+                raise
+            # The owner publishes after FIDE does, so a missing release (drafts
+            # also read as 404) only means stale data once the period is due.
+            if effective > now.strftime('%Y-%m-%dT%H:%M:%SZ'):
+                print(f'{tag} is not published yet; nothing staged.')
+                return
+            raise ValueError(f'Monthly release {tag} is not published') from error
         if release['draft'] or release['prerelease'] or release['tag_name'] != tag:
             raise ValueError('Monthly release is not published')
         receipt_data = download(base + 'monthly.json')
@@ -74,7 +86,6 @@ def sync(period, root=ROOT, directory=None, now=None):
         if asset.get('digest') != 'sha256:' + digest(receipt_data) or asset['size'] != len(receipt_data):
             raise ValueError('Monthly receipt does not match release digest')
     receipt = json.loads(receipt_data)
-    effective = period + '-01T00:00:00Z'
     if receipt['schema'] != 1 or receipt['period'] != period or receipt['repository'] != REPO or receipt['release'] != tag or receipt['effectiveFrom'] != effective or not re.fullmatch('[a-f0-9]{40}', receipt['sourceRevision']):
         raise ValueError('Invalid monthly release provenance')
     assets = {a['name']: a for a in receipt['assets']}
