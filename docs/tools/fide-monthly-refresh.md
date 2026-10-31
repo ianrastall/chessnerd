@@ -9,16 +9,19 @@ player-history shard publication is outside this refresh's scope.
 `ianrastall/fide-db-archive/refresh_monthly.py` is the owning producer. Its
 `Prepare monthly FIDE ratings` workflow prepares the next period only on the
 actual last calendar day (including leap years), with current-month recovery
-on days 1 and 2. Cron attempts are 12:17, 18:17, 21:17 and 23:17 UTC on days
-28–31, and 00:17 and 03:17 on days 1–2. Other dates in the cron range exit
+on days 1 to 7. Cron attempts are 12:17, 18:17, 21:17 and 23:17 UTC on days
+28–31, and 00:17 and 03:17 on days 1–7. Other dates in the cron range exit
 without acquiring data. A manual `period` input allows explicit YYYY-MM runs.
 
 The producer downloads `https://ratings.fide.com/download/players_list_xml.zip`
 and explicitly dated standard, rapid and blitz XML ZIPs (for example
 `standard_nov26frl_xml.zip`). It checks ZIP integrity, unique IDs and agreement
 of each rating in both directions between registry and dated lists. Neither
-download time nor a ZIP timestamp is taken as proof of a rating period. Missing
-or disagreeing sources fail preparation and preserve the previous publication.
+download time nor a ZIP timestamp is taken as proof of a rating period.
+Disagreeing sources fail preparation and preserve the previous publication.
+Connection failures and 5xx responses are retried, four attempts per file. A
+dated list that returns 404 before the effective date is a normal wait: nothing
+is prepared and the run succeeds. From the effective date it fails the run.
 
 The standard XML becomes one SQLite database with the existing 22-column
 `players` table, three indexes and `meta` provenance. No fields are filled from
@@ -37,7 +40,7 @@ No additional API key is needed; the owning workflow uses its own Actions token.
 ## Website staging and activation
 
 The site workflow `Sync FIDE Ratings Data` runs at 12:43, 18:43, 21:43 and 23:43
-UTC on the last day, with 00:43 and 03:43 recovery on days 1–2. It consumes the
+UTC on the last day, with 00:43 and 03:43 recovery on days 1–7. It consumes the
 owner's public release; no cross-repository write token is required.
 `scripts/sync_fide_monthly.py` checks release asset digests, downloaded payload
 hashes, restored SQLite integrity/schema/count/date/meta, player data and source
@@ -70,10 +73,12 @@ deployment refreshes the archive's non-JavaScript HTML.
 
 GitHub scheduled workflows can be delayed. Midnight activation works when the
 new month has been successfully staged and deployed beforehand. If FIDE has
-not published consistent files, or preparation/deployment fails, the previous
-month remains available and the producer workflow reports failure, as does the
-site workflow once the period is due. There is no invented next-month dataset
-or unconditional midnight availability promise.
+not posted its lists, both workflows wait until the period is due and then
+report failure on each run through day 7; after that, use manual recovery. If
+the files disagree, or preparation/deployment fails, the workflow reports
+failure straight away. Either way the previous month remains available. There
+is no invented next-month dataset or unconditional midnight availability
+promise.
 
 ## Manual recovery
 

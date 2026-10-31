@@ -29,7 +29,7 @@ INTS = set('line_no rank fide_id rating change games k birth_year'.split())
 def target_period(now):
     if now.day == calendar.monthrange(now.year, now.month)[1]:
         return (now.replace(day=1) + timedelta(days=32)).strftime('%Y-%m')
-    return now.strftime('%Y-%m') if now.day <= 2 else None
+    return now.strftime('%Y-%m') if now.day <= 7 else None
 
 
 def digest(data):

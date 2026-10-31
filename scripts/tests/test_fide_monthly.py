@@ -58,6 +58,10 @@ class FideTests(unittest.TestCase):
         sync.save(root / 'public/data/fide-players.json', [{'name': 'October'}])
         return source
 
+    def test_calendar(self):
+        for date, expected in [('2026-10-30', None), ('2026-10-31', '2026-11'), ('2026-11-07', '2026-11'), ('2026-11-08', None)]:
+            self.assertEqual(sync.target_period(datetime.fromisoformat(date).replace(tzinfo=timezone.utc)), expected)
+
     def test_preparation_and_activation_preserve_history(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
