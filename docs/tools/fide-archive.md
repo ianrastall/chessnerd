@@ -8,7 +8,7 @@ rapid/blitz columns, player-registry table, collection link or fixed-height
 scroll region. Period search works on the static table; downloads remain
 available without JavaScript.
 
-New monthly lists use the [scheduled monthly producer and UTC activation](fide-monthly-refresh.md).
+New monthly lists use the [manual monthly update and UTC activation](fide-monthly-refresh.md).
 The original 283-period publication and its URLs remain unchanged.
 
 ## Existing data and authority

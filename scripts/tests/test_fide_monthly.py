@@ -58,10 +58,6 @@ class FideTests(unittest.TestCase):
         sync.save(root / 'public/data/fide-players.json', [{'name': 'October'}])
         return source
 
-    def test_calendar(self):
-        for date, expected in [('2026-10-30', None), ('2026-10-31', '2026-11'), ('2026-11-07', '2026-11'), ('2026-11-08', None)]:
-            self.assertEqual(sync.target_period(datetime.fromisoformat(date).replace(tzinfo=timezone.utc)), expected)
-
     def test_preparation_and_activation_preserve_history(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -87,7 +83,7 @@ class FideTests(unittest.TestCase):
                 sync.sync('2026-11', root, source)
             self.assertEqual({p: p.read_bytes() for p in (root / 'public').rglob('*') if p.is_file()}, before)
 
-    def test_missing_release_waits_until_the_period_is_due(self):
+    def test_missing_release_blocks_all_public_writes(self):
         def not_found(url):
             raise urllib.error.HTTPError(url, 404, 'Not Found', None, None)
 
@@ -95,21 +91,9 @@ class FideTests(unittest.TestCase):
             root = Path(temp)
             self.fixture(root)
             before = {p: p.read_bytes() for p in (root / 'public').rglob('*') if p.is_file()}
-            with mock.patch.object(sync, 'download', not_found):
-                sync.sync('2026-11', root, now=datetime(2026, 10, 31, 23, 59, tzinfo=timezone.utc))
-                with self.assertRaisesRegex(ValueError, 'not published'):
-                    sync.sync('2026-11', root, now=datetime(2026, 11, 1, tzinfo=timezone.utc))
+            with mock.patch.object(sync, 'download', not_found), self.assertRaisesRegex(ValueError, 'not published'):
+                sync.sync('2026-11', root)
             self.assertEqual({p: p.read_bytes() for p in (root / 'public').rglob('*') if p.is_file()}, before)
-
-    def test_other_release_lookup_errors_fail_before_the_period_is_due(self):
-        def unavailable(url):
-            raise urllib.error.HTTPError(url, 503, 'Service Unavailable', None, None)
-
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            self.fixture(root)
-            with mock.patch.object(sync, 'download', unavailable), self.assertRaises(urllib.error.HTTPError):
-                sync.sync('2026-11', root, now=datetime(2026, 10, 31, 23, 59, tzinfo=timezone.utc))
 
 
 if __name__ == '__main__':

@@ -6,9 +6,10 @@ Public route: https://chessnerd.net/fide-2500.html
 
 The FIDE monthly rolling registry is the source, checked against explicitly
 dated standard, rapid and blitz lists by the independent archive's producer.
-The table refreshes monthly at **00:00 UTC** using pre-staged verified data.
-See [monthly FIDE operation](fide-monthly-refresh.md) for ownership, scheduling,
-failure handling and manual recovery.
+The table is updated by hand each month once FIDE posts its lists, switching at
+**00:00 UTC** when the data is staged before the first of the month.
+See [monthly FIDE operation](fide-monthly-refresh.md) for ownership, the update
+commands and failure handling.
 
 The older manual converter remains available for reference/ad hoc XML work:
 

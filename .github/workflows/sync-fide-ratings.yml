@@ -3,12 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       period:
-        description: 'Optional YYYY-MM override (normally calculated in UTC)'
-        required: false
+        description: 'YYYY-MM of the published monthly release'
+        required: true
         type: string
-  schedule:
-    - cron: '43 12,18,21,23 28-31 * *'
-    - cron: '43 0,3 1-7 * *'
 permissions:
   contents: write
 concurrency:
@@ -29,10 +26,7 @@ jobs:
         env:
           PERIOD: ${{ inputs.period }}
         shell: bash
-        run: |
-          args=()
-          if [ -n "$PERIOD" ]; then args+=(--period "$PERIOD"); fi
-          python scripts/sync_fide_monthly.py "${args[@]}"
+        run: python scripts/sync_fide_monthly.py --period "$PERIOD"
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'

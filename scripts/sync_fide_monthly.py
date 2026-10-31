@@ -7,7 +7,7 @@ Any download, digest, schema or provenance failure stops before writing files.
 import argparse
 import calendar
 from contextlib import closing
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 import hashlib
 import io
 import json
@@ -24,12 +24,6 @@ REPO = 'ianrastall/fide-db-archive'
 SHA = re.compile('[a-f0-9]{64}')
 COLUMNS = 'list_date line_no rank rank_note fide_id name fed sex title w_title o_title foa_title title_raw rating change games k birth_year birth_date birth_raw flag section'.split()
 INTS = set('line_no rank fide_id rating change games k birth_year'.split())
-
-
-def target_period(now):
-    if now.day == calendar.monthrange(now.year, now.month)[1]:
-        return (now.replace(day=1) + timedelta(days=32)).strftime('%Y-%m')
-    return now.strftime('%Y-%m') if now.day <= 7 else None
 
 
 def digest(data):
@@ -73,11 +67,6 @@ def sync(period, root=ROOT, directory=None, now=None):
         except urllib.error.HTTPError as error:
             if error.code != 404:
                 raise
-            # The owner publishes after FIDE does, so a missing release (drafts
-            # also read as 404) only means stale data once the period is due.
-            if effective > now.strftime('%Y-%m-%dT%H:%M:%SZ'):
-                print(f'{tag} is not published yet; nothing staged.')
-                return
             raise ValueError(f'Monthly release {tag} is not published') from error
         if release['draft'] or release['prerelease'] or release['tag_name'] != tag:
             raise ValueError('Monthly release is not published')
@@ -189,14 +178,10 @@ def sync(period, root=ROOT, directory=None, now=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--period')
+    parser.add_argument('--period', required=True)
     parser.add_argument('--directory', type=Path, help='Read locally verified producer output instead of GitHub')
     args = parser.parse_args()
-    period = args.period or target_period(datetime.now(timezone.utc))
-    if period:
-        sync(period, directory=args.directory)
-    else:
-        print('No monthly preparation or recovery scheduled today.')
+    sync(args.period, directory=args.directory)
 
 
 if __name__ == '__main__':

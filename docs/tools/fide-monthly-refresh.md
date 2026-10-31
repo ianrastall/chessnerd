@@ -1,33 +1,30 @@
 # Monthly FIDE refresh
 
 The standard-rating archive and FIDE 2500+ table use the same verified monthly
-publication. Activation is **00:00 UTC on the first of the month**. The separate
-player-history shard publication is outside this refresh's scope.
+publication, updated by hand each month; see [Monthly update](#monthly-update).
+A period takes effect at **00:00 UTC on the first of the month**, or as soon as
+it is deployed if that is later. The separate player-history shard publication
+is outside this refresh's scope.
+
+There is no schedule. Most GitHub-hosted runner addresses cannot reach
+`ratings.fide.com`, and the producer's scheduled workflow was removed on
+31 October 2026 for that reason: in an eight-runner probe, six timed out on
+every attempt and two connected on every attempt.
 
 ## Acquisition and ownership
 
-`ianrastall/fide-db-archive/refresh_monthly.py` is the owning producer. Its
-`Prepare monthly FIDE ratings` workflow prepares the next period only on the
-actual last calendar day (including leap years), with current-month recovery
-on days 1 to 7. Cron attempts are 12:17, 18:17, 21:17 and 23:17 UTC on days
-28–31, and 00:17 and 03:17 on days 1–7. Other dates in the cron range exit
-without acquiring data. A manual `period` input allows explicit YYYY-MM runs.
-
-The producer downloads `https://ratings.fide.com/download/players_list_xml.zip`
+`ianrastall/fide-db-archive/refresh_monthly.py` is the owning producer, run
+locally. It downloads `https://ratings.fide.com/download/players_list_xml.zip`
 and explicitly dated standard, rapid and blitz XML ZIPs (for example
 `standard_nov26frl_xml.zip`). It checks ZIP integrity, unique IDs and agreement
 of each rating in both directions between registry and dated lists. Neither
 download time nor a ZIP timestamp is taken as proof of a rating period.
-Disagreeing sources fail preparation and preserve the previous publication.
-A dated list that returns 404 before the effective date is a normal wait:
-nothing is prepared and the run succeeds. From the effective date it fails.
+Missing or disagreeing sources fail preparation and preserve the previous
+publication. A dated list that returns 404 means FIDE has not posted that period.
 
-Most GitHub-hosted runner addresses cannot reach `ratings.fide.com`; in an
-eight-runner probe on 31 October 2026, six timed out on every attempt and two
-connected on every attempt. Retrying on one runner does not help, so each run
-tries up to eight runners in turn, and a runner that fails a 20-second access
-check skips preparation. A final job fails if a due period is still unpublished.
-If no runner gets through, the next scheduled run tries again.
+Undated downloads such as `standard_rating_list_xml.zip` are not accepted. Their
+names carry no period and they keep serving the previous list until FIDE rolls
+over; on 31 October 2026 they still held the October ratings.
 
 The standard XML becomes one SQLite database with the existing 22-column
 `players` table, three indexes and `meta` provenance. No fields are filled from
@@ -39,21 +36,19 @@ The immutable tag is `standard-sqlite-YYYY-MM-monthly`. Assets include the
 individual SQLite ZIP, `players.json`, `players.meta.json`, the four original
 downloads and `monthly.json`. Uploads go to a draft release; every server asset
 digest and size is checked before publication. A failed upload leaves a draft
-for retry. A published month is skipped on subsequent scheduled runs. Releases
-do not replace the existing binary archive or its latest-release designation.
-No additional API key is needed; the owning workflow uses its own Actions token.
+for retry. A month that is already published is skipped. Releases do not replace
+the existing binary archive or its latest-release designation. Publishing uses
+the local `gh` sign-in; no additional API key is needed.
 
 ## Website staging and activation
 
-The site workflow `Sync FIDE Ratings Data` runs at 12:43, 18:43, 21:43 and 23:43
-UTC on the last day, with 00:43 and 03:43 recovery on days 1–7. It consumes the
-owner's public release; no cross-repository write token is required.
+The site workflow `Sync FIDE Ratings Data` runs only by manual dispatch and
+needs a `period`. It consumes the owner's public release, which it reaches from
+any runner; no cross-repository write token is required.
 `scripts/sync_fide_monthly.py` checks release asset digests, downloaded payload
 hashes, restored SQLite integrity/schema/count/date/meta, player data and source
-provenance before writing public files. Validation failures block commit and
-deployment. Before the effective date a missing release is a normal wait, since
-FIDE may post the dated lists after the last-day runs: the sync stages nothing
-and succeeds. From the effective date a missing release fails the workflow.
+provenance before writing public files. A missing release or a validation
+failure blocks commit and deployment.
 
 Versioned JSON is stored byte-for-byte with Git text normalization disabled
 for that directory. The site build independently checks those payload hashes
@@ -73,27 +68,34 @@ The 2500+ page chooses the latest effective snapshot, verifies its payload
 hashes and switches on a UTC timer; the archive reveals its staged period on
 the same boundary. Pages also re-evaluate when restored from a background tab.
 The visitor's clock defines browser activation. A failed refresh retains the
-loaded table. The first post-midnight sync updates the existing
+loaded table. A sync on or after the effective date updates the existing
 `/data/fide-players.json` and `.meta.json` URLs for other consumers, and the
 deployment refreshes the archive's non-JavaScript HTML.
 
-GitHub scheduled workflows can be delayed. Midnight activation works when the
-new month has been successfully staged and deployed beforehand. If FIDE has
-not posted its lists, both workflows wait until the period is due and then
-report failure on each run through day 7; after that, use manual recovery. If
-the files disagree, or preparation/deployment fails, the workflow reports
-failure straight away. Either way the previous month remains available. There
-is no invented next-month dataset or unconditional midnight availability
-promise.
+Until a period is synced and deployed, the previous month remains available.
+There is no invented next-month dataset.
 
-## Manual recovery
+## Monthly update
 
-Dispatch `Prepare monthly FIDE ratings` in the owning archive with `period`
-set to the desired YYYY-MM. Wait for a published monthly release, then dispatch
-`Sync FIDE Ratings Data` in Chess Nerd with the same period. A successful site
-refresh chains to deployment; a failed refresh does not.
+Run these once FIDE has posted the new period. No files need downloading by
+hand; the producer fetches the dated lists itself, and a `FIDE has not posted`
+error means it is too early. Both commands are safe to repeat.
 
-Local reproduction from downloaded originals:
+```powershell
+# In D:\fide\fide-db-archive:
+python refresh_monthly.py --period 2026-11 --publish --output D:\fide\monthly-2026-11
+```
+
+```powershell
+gh workflow run sync-fide-ratings.yml --repo ianrastall/chessnerd -f period=2026-11
+```
+
+A successful site sync chains to deployment; a failed one does not. If the sync
+ran before the first of the month, dispatch it again after 00:00 UTC to update
+the legacy URLs above.
+
+To reproduce a month from saved originals without publishing, pass `--source`
+with a folder holding the four files under FIDE's original names:
 
 ```powershell
 # In a clean checkout of the owning archive:
