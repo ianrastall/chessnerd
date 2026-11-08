@@ -1,4 +1,4 @@
-PRAGMA user_version = 1;
+PRAGMA user_version = 2;
 
 CREATE TABLE source_files (
     file_id INTEGER PRIMARY KEY,
@@ -80,7 +80,8 @@ CREATE TABLE events (
     end_date TEXT,
     status TEXT,
     created TEXT,
-    updated TEXT
+    updated TEXT,
+    event_name TEXT
 );
 
 CREATE TABLE event_places (
@@ -136,6 +137,30 @@ CREATE TABLE match_results (
 CREATE INDEX match_results_event ON match_results(event_id, row_id);
 CREATE INDEX match_results_player ON match_results(player_id);
 
+CREATE TABLE tournament_result_sets (
+    result_set_id INTEGER PRIMARY KEY REFERENCES source_rows,
+    event_id TEXT NOT NULL REFERENCES events,
+    label TEXT NOT NULL CHECK (label IN ('Crosstable scores', 'Match scores'))
+);
+CREATE INDEX tournament_result_sets_event ON tournament_result_sets(event_id, result_set_id);
+
+CREATE TABLE tournament_results (
+    row_id INTEGER PRIMARY KEY REFERENCES source_rows,
+    result_set_id INTEGER NOT NULL REFERENCES tournament_result_sets,
+    match_group INTEGER,
+    player_id INTEGER REFERENCES players,
+    player_name TEXT NOT NULL,
+    rating INTEGER,
+    deviation INTEGER,
+    score REAL NOT NULL,
+    games REAL NOT NULL,
+    score_text TEXT NOT NULL,
+    games_text TEXT NOT NULL,
+    class_text TEXT
+);
+CREATE INDEX tournament_results_set ON tournament_results(result_set_id, row_id);
+CREATE INDEX tournament_results_player ON tournament_results(player_id);
+
 CREATE TABLE event_listings (
     row_id INTEGER PRIMARY KEY REFERENCES source_rows,
     event_id TEXT NOT NULL REFERENCES events,
@@ -179,6 +204,16 @@ CREATE TABLE citations (
 );
 CREATE INDEX citations_file ON citations(file_id);
 
+CREATE TABLE reference_entries (
+    row_id INTEGER PRIMARY KEY REFERENCES source_rows,
+    category TEXT NOT NULL CHECK (category IN ('Books', 'Periodicals', 'Web', 'Rating notes')),
+    label TEXT NOT NULL,
+    description TEXT,
+    coverage TEXT,
+    additional_coverage TEXT
+);
+CREATE INDEX reference_entries_label ON reference_entries(category, label);
+
 CREATE VIEW matches AS SELECT * FROM events WHERE kind = 'match';
 CREATE VIEW tournaments AS SELECT * FROM events WHERE kind = 'tournament';
 
@@ -190,7 +225,11 @@ WHERE l.player_id IS NOT NULL;
 CREATE VIEW event_players AS
 SELECT event_id, player_id FROM event_listings WHERE player_id IS NOT NULL
 UNION
-SELECT event_id, player_id FROM match_results WHERE player_id IS NOT NULL;
+SELECT event_id, player_id FROM match_results WHERE player_id IS NOT NULL
+UNION
+SELECT s.event_id, r.player_id
+FROM tournament_result_sets AS s JOIN tournament_results AS r USING (result_set_id)
+WHERE r.player_id IS NOT NULL;
 
 CREATE VIEW event_years AS
 SELECT DISTINCT event_id, year FROM event_listings WHERE year IS NOT NULL;

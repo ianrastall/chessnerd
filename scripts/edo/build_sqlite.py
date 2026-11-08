@@ -33,8 +33,16 @@ FIELDS = {
     "Died": "died", "Place": "place", "Start date": "start_date",
     "End date": "end_date", "Status": "status", "Player page created": "created",
     "Player information updated": "updated", "Match page created": "created",
-    "Match information updated": "updated",
+    "Match information updated": "updated", "Tournament page created": "created",
+    "Tournament information updated": "updated",
 }
+REFERENCE_PAGES = {
+    "Refs.Books.html": "Books",
+    "Refs.Periodicals.html": "Periodicals",
+    "Refs.Web.Sites.html": "Web",
+    "Rating.table.notes.html": "Rating notes",
+}
+TOURNAMENT_SECTIONS = ("Crosstable scores", "Match scores")
 CATEGORY = re.compile(r"(?:^|/)Refs\.[^/]+\.html$", re.IGNORECASE)
 LEAF_ROWS = html.etree.XPath(".//tr[td or th][not(.//table)]")
 HEADINGS = html.etree.XPath(".//font[@size='6' or @size='7']")
@@ -65,7 +73,8 @@ def local_path(url):
 
 @lru_cache(maxsize=32768)
 def link_target(directory, href):
-    url = urljoin(BASE_URL + directory + "/", href.strip())
+    base = BASE_URL + directory + "/" if directory else BASE_URL
+    url = urljoin(base, href.strip())
     path = local_path(url)
     return url, path, page_key(path) if path else None
 
@@ -93,7 +102,10 @@ def decode(raw):
 def read_manifests(source):
     entries = {}
     urls = {}
-    for filename in ("players.txt", "years.txt", "locations.txt", "matches.txt"):
+    filenames = ["players.txt", "years.txt", "locations.txt", "matches.txt"]
+    if (source / "tournaments.txt").is_file():
+        filenames.append("tournaments.txt")
+    for filename in filenames:
         raw = (source / filename).read_bytes()
         entries[filename] = []
         for line_number, line in enumerate(raw.decode("utf-8-sig").splitlines(), 1):
@@ -123,15 +135,18 @@ class Archive:
     def import_file(self, path, raw, source_url):
         file_id = self.files[path]
         key = page_key(path)
+        category = REFERENCE_PAGES.get(path)
         title = status = encoding = None
-        if key:
+        if key or category:
             decoded, encoding = decode(raw)
             doc = html.fromstring(decoded)
             title = clean(doc.findtext(".//title", ""))
             if title == "Error 404 - Not found":
                 status = "http_404"
-            elif title.startswith("Edo Ratings,") and len(HEADINGS(doc)) == 1:
+            elif key and title.startswith("Edo Ratings,") and len(HEADINGS(doc)) == 1:
                 status = "edo_page"
+            elif category and title.startswith("Edo Ratings - "):
+                status = "edo_reference"
             else:
                 raise ValueError(f"{path}: unrecognized page title or heading: {title!r}")
         self.db.execute(
@@ -140,21 +155,16 @@ class Archive:
              zlib.compress(raw), title, status, encoding),
         )
         if status == "edo_page":
-            self.import_page(doc, key, file_id, path, source_url)
+            links = self.read_links(doc, key, path, source_url)
+            positions = self.import_page(doc, key, file_id, links)
+            self.write_links(file_id, links, positions)
+        elif status == "edo_reference":
+            links = self.read_links(doc, None, path, source_url)
+            positions = self.import_reference(doc, file_id, category)
+            self.write_links(file_id, links, positions)
 
-    def import_page(self, doc, key, file_id, path, source_url):
-        kind, number = key
-        entity = self.remember(key)
-        entity.update(file_id=file_id, heading=clean(HEADINGS(doc)[0].text_content()))
-        if kind == "location":
-            for font in doc.iter("font"):
-                if font.get("size") == "5":
-                    heading = clean(font.text_content())
-                    if heading.startswith("Events taking place in "):
-                        entity["full_name"] = heading.removeprefix("Events taking place in ")
-                        break
-
-        directory = path.split("/")[0]
+    def read_links(self, doc, key, path, source_url):
+        directory = path.rpartition("/")[0]
         links = {}
         for node in doc.iter("a", "img", "link"):
             href = node.get("src" if node.tag == "img" else "href")
@@ -169,24 +179,90 @@ class Archive:
             links[node] = (label, href, url, self.files.get(target), target_key)
             if target_key:
                 self.remember(target_key, label)
+        return links
+
+    def write_row(self, file_id, node, values):
+        return self.db.execute(
+            "INSERT INTO source_rows(file_id, line_number, cells_json) VALUES (?, ?, ?)",
+            (file_id, node.sourceline, json.dumps(values, ensure_ascii=False)),
+        ).lastrowid
+
+    def import_reference(self, doc, file_id, category):
+        positions = {}
+        if category in ("Books", "Rating notes"):
+            selector = ".//ol/li" if category == "Books" else ".//h3/following-sibling::ul/li"
+            for item in doc.xpath(selector):
+                label = clean(item[0].text_content())
+                description = clean(item.text_content()).removeprefix(label).strip()
+                row_id = self.write_row(file_id, item, (label, description))
+                positions[item] = (row_id, 1)
+                self.db.execute("INSERT INTO reference_entries VALUES (?, ?, ?, ?, NULL, NULL)",
+                                (row_id, category, label.rstrip(":"), description or None))
+        else:
+            for row in LEAF_ROWS(doc):
+                cells = [cell for cell in row if cell.tag in ("td", "th")]
+                values = tuple(clean(cell.text_content()) for cell in cells)
+                row_id = self.write_row(file_id, row, values)
+                for index, cell in enumerate(cells, 1):
+                    positions[cell] = (row_id, index)
+                if not values[0]:
+                    continue
+                if category == "Periodicals":
+                    label, description, coverage, additional = values
+                else:
+                    label, description = values
+                    label = label.strip("[]")
+                    coverage = additional = None
+                self.db.execute("INSERT INTO reference_entries VALUES (?, ?, ?, ?, ?, ?)",
+                                (row_id, category, label, description or None,
+                                 coverage or None, additional or None))
+        return positions
+
+    def import_page(self, doc, key, file_id, links):
+        kind, _ = key
+        entity = self.remember(key)
+        entity.update(file_id=file_id, heading=clean(HEADINGS(doc)[0].text_content()))
+        if kind == "location":
+            for font in doc.iter("font"):
+                if font.get("size") == "5":
+                    heading = clean(font.text_content())
+                    if heading.startswith("Events taking place in "):
+                        entity["full_name"] = heading.removeprefix("Events taking place in ")
+                        break
 
         sections = {}
         note_tables = set()
         active_listings = {}
         positions = {}
+        tournament_section = None
+        result_sets = {}
         for row in LEAF_ROWS(doc):
             cells = [cell for cell in row if cell.tag in ("td", "th")]
             values = tuple(clean(cell.text_content()) for cell in cells)
             row_links = [[links[a] for a in cell.iter("a") if a in links] for cell in cells]
+            table = next(row.iterancestors("table"), None)
             if not any(values) and not any(row_links):
+                if table in result_sets and result_sets[table][1] is not None:
+                    result_set_id, group = result_sets[table]
+                    result_sets[table] = (result_set_id, group + 1)
                 continue
-            row_id = self.db.execute(
-                "INSERT INTO source_rows(file_id, line_number, cells_json) VALUES (?, ?, ?)",
-                (file_id, row.sourceline, json.dumps(values, ensure_ascii=False)),
-            ).lastrowid
+            row_id = self.write_row(file_id, row, values)
             for index, cell in enumerate(cells, 1):
                 positions[cell] = (row_id, index)
-            table = next(row.iterancestors("table"), None)
+
+            if kind == "tournament":
+                if len(values) == 1 and values[0] in TOURNAMENT_SECTIONS:
+                    tournament_section = values[0]
+                elif values[:6] == HEADERS["match"]:
+                    if tournament_section is None:
+                        raise ValueError(f"{key}: tournament score table without a section heading")
+                    self.db.execute("INSERT INTO tournament_result_sets VALUES (?, ?, ?)",
+                                    (row_id, event_id(key), tournament_section))
+                    result_sets[table] = (row_id, 1 if tournament_section == "Match scores" else None)
+                    tournament_section = None
+                    continue
+                elif row.get("bgcolor") == "#ffffff":
+                    self.import_tournament_result(key, row_id, values, row_links, result_sets.get(table))
 
             if kind in HEADERS and values == HEADERS[kind]:
                 sections[table] = "data"
@@ -229,10 +305,13 @@ class Archive:
 
             if kind in ("player", "year", "location"):
                 self.import_listing(key, row_id, values, row_links, table, active_listings)
+        return positions
 
+    def write_links(self, file_id, links, positions):
         link_rows = []
         for node, (label, href, url, target_file, _) in links.items():
-            cell = next(node.iterancestors("td", "th"), None)
+            cell = next((ancestor for ancestor in node.iterancestors("td", "th", "li")
+                         if ancestor in positions), None)
             row_id, cell_number = positions.get(cell, (None, None))
             link_rows.append((file_id, row_id, cell_number, node.sourceline, node.tag,
                               label or None, href, url, target_file))
@@ -240,6 +319,21 @@ class Archive:
             "INSERT INTO source_links(file_id, row_id, cell_number, line_number, tag, label, "
             "target_as_written, target_url, target_file_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             link_rows,
+        )
+
+    def import_tournament_result(self, key, row_id, values, links, result_set):
+        if result_set is None or len(values) not in (6, 7) or values[4] != "/":
+            raise ValueError(f"{key}: unexpected tournament result {values}")
+        score, games = decimal(values[3]), decimal(values[5])
+        if score is None or games is None:
+            raise ValueError(f"{key}: invalid tournament score or games {values}")
+        result_set_id, group = result_set
+        class_text = values[6] if len(values) == 7 else ""
+        self.db.execute(
+            "INSERT INTO tournament_results VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (row_id, result_set_id, group, linked_number(links[0], "player"), values[0],
+             integer(values[1]), deviation(values[2]), score, games, values[3], values[5],
+             class_text or None),
         )
 
     def import_rating(self, row_id, key, values, links):
@@ -303,9 +397,10 @@ class Archive:
                 self.db.execute("INSERT INTO locations VALUES (?, ?, ?, ?)",
                                 (number, file_id, name, get("full_name")))
             else:
-                self.db.execute("INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                self.db.execute("INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                                 (event_id(key), kind, file_id, name, get("place"), get("start_date"),
-                                 get("end_date"), get("status"), get("created"), get("updated")))
+                                 get("end_date"), get("status"), get("created"), get("updated"),
+                                 get("full_name")))
 
 
 def linked_number(links, kind):
@@ -323,7 +418,9 @@ def build(source, destination):
         # Links and observations may precede their targets. Check the complete staged database below.
         archive = Archive(db, files)
         for path, file_id in files.items():
-            source_url = urls.get(path) or (BASE_URL + path if page_key(path) else None)
+            source_url = urls.get(path)
+            if source_url is None and (page_key(path) or path in REFERENCE_PAGES):
+                source_url = BASE_URL + path
             archive.import_file(path, (source / path).read_bytes(), source_url)
             if file_id % 5000 == 0:
                 print(f"Archived {file_id:,} of {len(files):,} files", flush=True)
@@ -339,7 +436,8 @@ def build(source, destination):
             raise ValueError("SQLite integrity check failed")
         if db.execute("PRAGMA foreign_key_check").fetchone() is not None:
             raise ValueError("SQLite foreign key check failed")
-        for table in ("source_files", "players", "ratings", "matches", "match_results", "tournaments", "locations"):
+        for table in ("source_files", "players", "ratings", "matches", "match_results",
+                      "tournaments", "tournament_results", "reference_entries", "locations"):
             print(f"{table}: {db.execute(f'SELECT count(*) FROM {table}').fetchone()[0]:,}")
 
 
