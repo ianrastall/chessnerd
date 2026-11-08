@@ -3,9 +3,10 @@
 The mirror starts with the Engine Releases feed generated on 7 November 2026 at
 15:09 UTC (feed commit `99e5c22`). Add releases as later daily feeds discover
 them, retaining earlier versions in Drive. The feed and its GitHub links remain
-the source for the website. A mirror release lives under `owner/repository/tag`
-and contains the original files and a `mirror-manifest.json` with the upstream
-release URL, asset IDs, sizes, SHA-256 checksums and redistribution notes.
+the source for the website. Users browse `platform/engine/tag` for individual
+build ZIPs and their SHA-256 checksums. The untouched files live under
+`Original releases/owner/repository/tag`, with a `mirror-manifest.json` that
+records the upstream URL, asset IDs, sizes, hashes and redistribution notes.
 
 ## Stage files
 
@@ -38,6 +39,22 @@ release, save a review JSON beside its accompanying license and source files.
 | `source_url` | Upstream source URL for this exact version |
 | `asset_sha256` | Object mapping every upstream asset ID to its verified SHA-256 |
 | `accompanying_sha256` | Object mapping any extra filename to its SHA-256 |
+
+For a desktop or Android release, place `packages.json` beside `review.json`.
+Set `engine` to its display name and `builds` to a list of objects. Each build
+has a `platform` (`Windows`, `macOS`, `Linux`, or `Android`), a `label` that
+becomes the ZIP filename, and an `asset` matching the reviewed upstream file.
+Include the architecture and CPU variant in `label` where applicable. For a
+ZIP or tar archive, list the exact `members` to include, with the executable
+first. Include runtime files needed by the build and check the upstream
+relative paths before packaging. An asset without `members` is copied as-is
+into its ZIP. Use the same engine display name for future versions.
+
+The ZIP includes the reviewed accompanying files by default. An optional
+`include` list selects a subset when the original public release folder
+supplies the rest, as with large matching source packages. Each ZIP includes
+the original release and source links. Confirm that users can reach the
+required source and notices before publishing.
 
 ```powershell
 python scripts/engines/publish_mirror.py D:/chessnerd-engine-mirror D:/path/to/review.json
