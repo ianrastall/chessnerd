@@ -18,6 +18,7 @@ Inspected 21 October 2026. This map describes the retained website and its actua
 | Dated FIDE XML lists plus rolling player registry | Owner `standard-sqlite-YYYY-MM-monthly` release → versioned `public/data/fide-monthly/`, index and standard-list manifest; current `fide-players.json` retained | Manual: owner `refresh_monthly.py --publish` run locally, then site `Sync FIDE Ratings Data` by dispatch; 00:00 UTC browser activation; verified immutable releases | Standard SQLite archive and FIDE 2500+ table |
 | Chess.com PubAPI | `public/data/titled-players.json`, `.meta.json` | Daily 03:23 UTC `Sync Titled Players Data`; daily stats, weekly profiles, serial requests, private checkpoints; complete snapshots only | Chess.com titled players |
 | Public engine repositories | `public/data/engines/engines.json` | Daily `Update Chess Engine Data`, Python, GitHub token in Actions, validated bot commit | Engine Releases |
+| Reviewed engine release builds | [Google Drive mirror](tools/engine-mirror.md) | Original GitHub builds staged locally and published by version after redistribution review and checksum verification | Supplemental download link on Engine Releases |
 | `official-stockfish/Stockfish` | `data/stockfish-commits`, `public/data/stockfish-commits` | Daily `Update Stockfish Commit Data`, Python, validated bot commit | Stockfish commits browser |
 | Opening sources under `scripts/eco/sources` | `public/data/eco-code` | Explicit opening-data build | Opening explorer |
 
