@@ -94,7 +94,8 @@ def main():
         if status.returncode == 3:
             rclone('mkdir', staging)
             with ThreadPoolExecutor(max_workers=4) as pool:
-                transfers = [pool.submit(rclone, 'copyto', source, f'{staging}/{name}', '--immutable')
+                transfers = [pool.submit(rclone, 'copyto', source, f'{staging}/{name}',
+                                         '--immutable', '--checksum')
                              for name, source in sources.items()]
                 for transfer in transfers:
                     transfer.result()
