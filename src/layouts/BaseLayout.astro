@@ -4,8 +4,8 @@ import '../styles/jupiter.css';
 import Appearance from '../components/jupiter/Appearance.astro';
 import { Archive, ArrowUpRight, BookOpen, Code2, Cpu, House, Search, Users } from '@lucide/astro';
 import { navigation } from '../data/navigation';
-interface Props { title:string; description?:string; }
-const {title,description='Chess tournament archives, player rating histories and browser tools.'}=Astro.props;
+interface Props { title:string; description?:string; stickyHeader?:boolean; }
+const {title,description='Chess tournament archives, player rating histories and browser tools.',stickyHeader=false}=Astro.props;
 const current=Astro.url.pathname.replace(/\/index\.html$/, '/');
 const active=(href:string)=>current === href || current === href.replace('.html','');
 const groupIcons = { archive: Archive, players: Users, analysis: BookOpen, engines: Cpu, developer: Code2 };
@@ -36,7 +36,7 @@ const groupIcons = { archive: Archive, players: Users, analysis: BookOpen, engin
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <header class="site-header">
+    <header class:list={['site-header', {'site-header--sticky': stickyHeader}]}>
       <a class="brand" href="/" aria-label="Chess Nerd home"><span class="brand-mark" aria-hidden="true">♞</span><span>Chess Nerd<small>A Jupiter project</small></span></a>
       <nav class="site-network" aria-label="Jupiter websites"><a href="https://text-utils.net">Text Utilities <ArrowUpRight size={13} aria-hidden="true" /></a><a class="network-current" href="/" aria-current="true">Chess Nerd</a><a href="https://bookstacks.org">Bookstacks <ArrowUpRight size={13} aria-hidden="true" /></a></nav>
       <Appearance />
@@ -58,6 +58,12 @@ const groupIcons = { archive: Archive, players: Users, analysis: BookOpen, engin
       </div>
     </div>
     <script>
+      const stickyHeader=document.querySelector<HTMLElement>('.site-header--sticky');
+      if (stickyHeader) {
+        new ResizeObserver(()=>{
+          document.documentElement.style.setProperty('--sticky-header-height', `${stickyHeader.offsetHeight}px`);
+        }).observe(stickyHeader);
+      }
       const search=document.querySelector<HTMLInputElement>('#navigation-search')!;
       const navigation=document.querySelector<HTMLDetailsElement>('.site-navigation')!;
       const desktop=matchMedia('(min-width:901px)');navigation.open=desktop.matches;desktop.addEventListener('change',()=>navigation.open=desktop.matches);

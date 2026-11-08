@@ -51,6 +51,21 @@ test('archive series deep links and keyboard tabs remain usable',async({page})=>
   await page.goto('/chesscom-tournaments.html#three-zero-thursday');const tab=page.getByRole('tab',{name:'3-0 Thursday',exact:true});await expect(tab).toHaveAttribute('aria-selected','true');await expect(page.locator('#t3TableBody tr').first()).toBeVisible();await tab.focus();await page.keyboard.press('ArrowRight');await expect(page.getByRole('tab',{name:'CCC',exact:true})).toHaveAttribute('aria-selected','true');
 });
 
+test('engine releases keep the top navigation in view while scrolling', async ({ page }) => {
+  await page.goto('/engines.html');
+  const navigation = page.getByRole('navigation', { name: 'Jupiter websites' });
+  const lastEngine = page.locator('.engine-card').last();
+  await expect(lastEngine).toBeAttached();
+
+  for (const width of [1440, 320]) {
+    await page.setViewportSize({ width, height: 768 });
+    await lastEngine.scrollIntoViewIfNeeded();
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(768);
+    await expect(navigation).toBeInViewport({ ratio: 1 });
+    await expect(lastEngine).toBeInViewport();
+  }
+});
+
 test('engine board accepts a legal opening move',async({page})=>{
   await page.goto('/play-engine.html');await expect(page.locator('#chessBoard .square')).toHaveCount(64);
   await expect(page.locator('#engineStatus')).toHaveText('Lozza ready');
