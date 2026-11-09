@@ -16,3 +16,9 @@ Source collections crawled via `chesscom-crawler` (`D:/pgn/cc/crawl-261022/yearl
 - `chesscom-fide-2400-2025.zip` (`75,698,152` bytes, SHA-256 `61f43d94fae399cca2e88e079c2b7a3980a568643dc110cbfb0fa269a9cac0aa`), containing `chesscom-fide-2400-2025.pgn` (`361,402,361` bytes, `117,652` games, SHA-256 `527c34db5dbb5f5c8310ae1b05f9902856786e020002b46c29d85f4a43b9baf0`).
 
 `public/data/pgn-downloads/chesscom-fide-2400-2024.json` and `public/data/pgn-downloads/chesscom-fide-2400-2025.json` record the display entries, sizes, game counts, and SHA-256 checksums. Both ZIPs are published as GitHub release assets under `pgn-downloads-2026-11-08`.
+
+## Publicly-Available TWIC — 9 November 2026
+
+User-supplied source: `twic_collection.pgn` (`3,212,392,115` bytes, `3,634,713` games, issues 920–1669, SHA-256 `7521c0c693ce33eeb269a9d1922866b06170401ad27673ed65363e3bd89c5c8d`), packaged as `twic-public-261109.zip` (`975,887,255` bytes, SHA-256 `bb315d6470736c52323477cb97efedd4e67a426aebd481eeb7fee4e20134c693`).
+
+`public/data/pgn-downloads/twic-public.json` records the display entry, sizes, game count, and SHA-256 checksums. The ZIP is published as a GitHub release asset under `pgn-downloads-2026-11-09`.

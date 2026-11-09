@@ -3,6 +3,7 @@ import ToolHeader from '../components/ToolHeader.astro';
 import canBase from '../../public/data/pgn-downloads/can-base.json';
 import chesscomFide2400_2024 from '../../public/data/pgn-downloads/chesscom-fide-2400-2024.json';
 import chesscomFide2400_2025 from '../../public/data/pgn-downloads/chesscom-fide-2400-2025.json';
+import twicPublic from '../../public/data/pgn-downloads/twic-public.json';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import eventBundles from '../../public/data/cc-events-archive/bundles.json';
 import { parseEventBundles } from '../lib/events-archive';
@@ -65,10 +66,7 @@ const sections: Section[] = [
   {
     title: 'General Databases',
     items: [
-      pd('4YDEsXpN', 'twic-public-260905.zip', 909_016_671, '2026-09-05', {
-        name: 'Publicly-Available TWIC',
-        description: 'All publicly available TWIC issues, starting at issue 920.',
-      }),
+      twicPublic,
       pd('VfsSt1At', 'historical.zip', 28_197_461, '2026-09-05', {
         name: 'Historical Games',
         description: 'A collection of historical chess games.',
@@ -99,14 +97,30 @@ const sections: Section[] = [
     items: [
       chesscomFide2400_2025,
       chesscomFide2400_2024,
-      pd('9s3334cv', 'cc-2800-2603.zip', 34_535_469, '2026-09-05'),
-      pd('CanR8Bmh', 'cc-2800-2604.zip', 32_510_614, '2026-09-05'),
-      pd('zXweh8Kz', 'cc-2800-2605.zip', 37_794_112, '2026-09-05'),
-      pd('L9bzPcD4', 'cc-2800-2606.zip', 32_498_953, '2026-09-05'),
-      pd('efVTkZ3w', 'cc-2800-2607.zip', 40_453_333, '2026-09-05'),
-      pd('iVWzmddP', 'li-2800-2605.zip', 928_108, '2026-09-05'),
-      pd('3uKPRhbU', 'li-2800-2606.zip', 1_004_634, '2026-09-05'),
-      pd('sbD2jgS6', 'li-2800-2607.zip', 1_056_078, '2026-09-05'),
+      pd('9s3334cv', 'cc-2800-2603.zip', 34_535_469, '2026-09-05', {
+        description: 'Chess.com games from March 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('CanR8Bmh', 'cc-2800-2604.zip', 32_510_614, '2026-09-05', {
+        description: 'Chess.com games from April 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('zXweh8Kz', 'cc-2800-2605.zip', 37_794_112, '2026-09-05', {
+        description: 'Chess.com games from May 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('L9bzPcD4', 'cc-2800-2606.zip', 32_498_953, '2026-09-05', {
+        description: 'Chess.com games from June 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('efVTkZ3w', 'cc-2800-2607.zip', 40_453_333, '2026-09-05', {
+        description: 'Chess.com games from July 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('iVWzmddP', 'li-2800-2605.zip', 928_108, '2026-09-05', {
+        description: 'Lichess games from May 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('3uKPRhbU', 'li-2800-2606.zip', 1_004_634, '2026-09-05', {
+        description: 'Lichess games from June 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
+      pd('sbD2jgS6', 'li-2800-2607.zip', 1_056_078, '2026-09-05', {
+        description: 'Lichess games from July 2026 with both players rated 2800+ (10–150 moves, excluding Chess960, bots, and bullet).',
+      }),
     ]
   }
 ];
@@ -200,18 +214,32 @@ const sections: Section[] = [
       background: var(--bg-tertiary);
     }
 
-    .section-header th {
-      padding: 0.7rem 1rem;
-      color: var(--text-primary);
+    .download-table tr.section-header th {
+      padding: 0.75rem 1rem;
+      background: var(--text-primary);
+      color: var(--bg-primary);
       font-size: 1.05rem;
+      font-weight: 700;
       text-transform: none;
       letter-spacing: normal;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .section-desc {
-      color: var(--text-secondary);
+      color: color-mix(in srgb, var(--bg-primary) 82%, var(--text-primary));
       font-weight: 400;
       font-size: 0.9rem;
+    }
+
+    @media (forced-colors: active) {
+      .download-table tr.section-header th {
+        background: CanvasText;
+        color: Canvas;
+      }
+
+      .section-desc {
+        color: Canvas;
+      }
     }
 
     .download-table td:first-child {
