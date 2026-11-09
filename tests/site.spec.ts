@@ -176,6 +176,7 @@ test('staged FIDE table changes at midnight UTC and retains data on failed refre
   await page.route('**/data/fide-monthly.json',r=>failed ? r.fulfill({status:503}) : r.fulfill({contentType:'application/json',body:JSON.stringify({schema:1,snapshots})}));
   await page.goto('/fide-2500.html');
   await expect(page.locator('#fpBody')).toContainText('October, Player');
+  await expect(page.locator('#fpBody .td-name a').first()).toHaveAttribute('href','/fide-player.html?id=1');
   await expect(page.locator('#fpBody')).not.toContainText('November, Player');
   await page.clock.runFor(1002);
   await expect(page.locator('#fpBody')).toContainText('November, Player');

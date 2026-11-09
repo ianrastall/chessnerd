@@ -311,7 +311,7 @@ function render(): void {
     const status = `<span class="status-badge ${p.active ? "active" : "inactive"}">${p.active ? "active" : "inactive"}</span>`;
     return `<tr>
       <td>${titleBadge(p.title)}</td>
-      <td class="td-name"><a href="https://ratings.fide.com/profile/${p.id}" target="_blank" rel="noopener">${esc(p.name)}</a></td>
+      <td class="td-name"><a href="/fide-player.html?id=${p.id}">${esc(p.name)}</a></td>
       <td class="td-country">${p.country || "—"}</td>
       <td class="td-sex">${p.sex || "—"}</td>
       ${ratingCell(p.std)}
