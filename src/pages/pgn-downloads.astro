@@ -1,6 +1,8 @@
 ---
 import ToolHeader from '../components/ToolHeader.astro';
 import canBase from '../../public/data/pgn-downloads/can-base.json';
+import chesscomFide2400_2024 from '../../public/data/pgn-downloads/chesscom-fide-2400-2024.json';
+import chesscomFide2400_2025 from '../../public/data/pgn-downloads/chesscom-fide-2400-2025.json';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import eventBundles from '../../public/data/cc-events-archive/bundles.json';
 import { parseEventBundles } from '../lib/events-archive';
@@ -93,8 +95,10 @@ const sections: Section[] = [
   },
   {
     title: 'Online Databases',
-    description: '2800+, 10–150 moves, no 960, bots, or bullet.',
+    description: 'Annual FIDE-normalized Chess.com collections (2400+ FIDE standard) and monthly 2800+ online collections (10–150 moves, no 960, bots, or bullet).',
     items: [
+      chesscomFide2400_2025,
+      chesscomFide2400_2024,
       pd('9s3334cv', 'cc-2800-2603.zip', 34_535_469, '2026-09-05'),
       pd('CanR8Bmh', 'cc-2800-2604.zip', 32_510_614, '2026-09-05'),
       pd('zXweh8Kz', 'cc-2800-2605.zip', 37_794_112, '2026-09-05'),
