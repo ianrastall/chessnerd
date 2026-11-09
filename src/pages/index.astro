@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import OverviewTabs from '../components/OverviewTabs.astro';
 import { ArrowDownToLine, Search, FileSearch, Swords, Palette, BookOpen, Cpu, RotateCcwClock } from '@lucide/astro';
 import { archiveCollections,loadArchiveIndex } from '../lib/archive-index';
 import { displayArchiveDate } from '../lib/archive-search';
@@ -12,7 +13,7 @@ const tasks=[{name:'Inspect a PGN',description:'Players, openings, tags and resu
 <BaseLayout title="Chess Nerd" description="Search tournament archives, download PGNs, look up player rating histories and use chess tools.">
   <main class="dashboard">
     <div class="dashboard-heading"><div><h1>Chess Nerd</h1></div></div>
-    <nav class="dashboard-tabs" aria-label="Start a task"><a class="active" href="#games" aria-current="true">Find games</a><a href="#players">Find a player</a><a href="#tools">Use a tool</a><a href="/engines.html">Engine releases</a></nav>
+    <OverviewTabs />
     <div class="dashboard-columns">
       <section id="games" aria-labelledby="archive-heading">
         <div class="section-title"><h2 id="archive-heading">Tournament archives</h2><p>{entries.length.toLocaleString('en-US')} entries · {collections.length} collections</p></div>

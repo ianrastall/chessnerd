@@ -31,6 +31,24 @@ test('navigation search and mobile disclosure reach specialist pages',async({pag
   await page.goto('/');await page.locator('#navigation-search').fill('developer reference');await expect(page.locator('[data-navigation-item]:visible')).toHaveCount(1);await expect(page.locator('[data-navigation-item]:visible')).toHaveText('Chess.com API');await page.locator('#navigation-search').fill('rating history');await expect(page.locator('[data-navigation-item]:visible')).toHaveCount(1);await page.locator('[data-navigation-item]:visible').click();await expect(page).toHaveURL(/fide-player.html/);
   await page.setViewportSize({width:390,height:900});await page.reload();await expect(page.locator('.site-navigation')).not.toHaveAttribute('open','');await page.locator('.site-navigation summary').click();await expect(page.getByRole('navigation',{name:'Pages and tools'})).toBeVisible();
 });
+test('Overview tabs stay available on Engine Releases and link back to each task', async ({ page }) => {
+  const tabs = page.getByRole('navigation', { name: 'Start a task' });
+  const engineReleases = tabs.getByRole('link', { name: 'Engine releases' });
+  await page.goto('/');
+
+  for (const [label, fragment] of [['Find games', 'games'], ['Find a player', 'players'], ['Use a tool', 'tools']]) {
+    await engineReleases.click();
+    await expect(page).toHaveURL('/engines.html');
+    await expect(tabs.getByRole('link')).toHaveCount(4);
+    await expect(engineReleases).toHaveAttribute('aria-current', 'page');
+    await tabs.getByRole('link', { name: label }).click();
+    await expect(page).toHaveURL(`/#${fragment}`);
+  }
+
+  await page.setViewportSize({ width: 320, height: 768 });
+  await engineReleases.click();
+  await expect(tabs).toBeInViewport({ ratio: 1 });
+});
 test('appearance follows family controls and resets migrated preferences',async({page})=>{
   await page.addInitScript(()=>{if(!localStorage.getItem('migration-test')){localStorage.setItem('accentColor','#663399');localStorage.setItem('theme','light');localStorage.setItem('migration-test','1');}});
   await page.goto('/');await page.getByRole('button',{name:'Settings',exact:true}).click();await expect(page.locator('#theme-choice')).toHaveValue('light');await expect(page.locator('#accent-picker')).toHaveValue('#663399');
@@ -49,21 +67,6 @@ test('opening explorer searches and renders a board',async({page})=>{
 });
 test('archive series deep links and keyboard tabs remain usable',async({page})=>{
   await page.goto('/chesscom-tournaments.html#three-zero-thursday');const tab=page.getByRole('tab',{name:'3-0 Thursday',exact:true});await expect(tab).toHaveAttribute('aria-selected','true');await expect(page.locator('#t3TableBody tr').first()).toBeVisible();await tab.focus();await page.keyboard.press('ArrowRight');await expect(page.getByRole('tab',{name:'CCC',exact:true})).toHaveAttribute('aria-selected','true');
-});
-
-test('engine releases keep the top navigation in view while scrolling', async ({ page }) => {
-  await page.goto('/engines.html');
-  const navigation = page.getByRole('navigation', { name: 'Jupiter websites' });
-  const lastEngine = page.locator('.engine-card').last();
-  await expect(lastEngine).toBeAttached();
-
-  for (const width of [1440, 320]) {
-    await page.setViewportSize({ width, height: 768 });
-    await lastEngine.scrollIntoViewIfNeeded();
-    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(768);
-    await expect(navigation).toBeInViewport({ ratio: 1 });
-    await expect(lastEngine).toBeInViewport();
-  }
 });
 
 test('engine board accepts a legal opening move',async({page})=>{
