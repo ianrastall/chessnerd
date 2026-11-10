@@ -49,6 +49,43 @@ test('Overview tabs stay available on Engine Releases and link back to each task
   await engineReleases.click();
   await expect(tabs).toBeInViewport({ ratio: 1 });
 });
+test('engine downloads use platform and architecture filters with the daily feed shape', async ({ page }) => {
+  const upstream = 'https://github.com/example/engine/releases/download/v1/';
+  const assets = ['engine-windows-arm64.zip', 'engine-windows-x86-64.zip', 'engine-linux-x86_64.tar.gz',
+    'engine-windows-arm64.zip.sha256', 'all-builds.zip'].map(name => ({ name, url: upstream + name, size: 1024, downloads: 0 }));
+  await page.route('**/data/engines/engines.json', route => route.fulfill({ json: {
+    generated: '2026-11-10T08:41:00Z', source: 'https://github.com', count: 1,
+    engines: [{ name: 'Example Engine', repo: 'example/engine', latest_release: {
+      tag: 'v1', url: 'https://github.com/example/engine/releases/tag/v1', published_at: '2026-11-09T00:00:00Z', assets,
+    } }],
+  } }));
+  await page.goto('/engines.html');
+  const card = page.locator('.engine-card');
+  const platform = page.getByLabel('Platform', { exact: true });
+  const architecture = page.getByLabel('Architecture', { exact: true });
+  await card.getByText('Downloads (5)', { exact: true }).click();
+  await expect(card.getByRole('list', { name: 'Windows' }).getByRole('link')).toHaveCount(2);
+  await expect(card.getByRole('list', { name: 'Other downloads' }).getByRole('link')).toHaveCount(2);
+
+  await platform.selectOption('windows');
+  await architecture.selectOption('arm64');
+  const links = card.locator('.engine-downloads a');
+  await expect(links).toHaveCount(1);
+  await expect(links).toBeVisible();
+  await expect(links).toHaveAttribute('href', upstream + 'engine-windows-arm64.zip');
+  await expect(card.getByText('ARM64 · 1.0 KB')).toBeVisible();
+  await page.setViewportSize({ width: 320, height: 768 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+
+  await platform.selectOption('linux');
+  await expect(page.getByText('No releases match your search or filters.')).toBeVisible();
+  await architecture.selectOption('');
+  await expect(links).toHaveAttribute('href', upstream + 'engine-linux-x86_64.tar.gz');
+  await platform.selectOption('other');
+  await expect(links).toHaveCount(2);
+  await page.getByRole('searchbox', { name: 'Search engines' }).fill('different engine');
+  await expect(card).toHaveCount(0);
+});
 test('appearance follows family controls and resets migrated preferences',async({page})=>{
   await page.addInitScript(()=>{if(!localStorage.getItem('migration-test')){localStorage.setItem('accentColor','#663399');localStorage.setItem('theme','light');localStorage.setItem('migration-test','1');}});
   await page.goto('/');await page.getByRole('button',{name:'Settings',exact:true}).click();await expect(page.locator('#theme-choice')).toHaveValue('light');await expect(page.locator('#accent-picker')).toHaveValue('#663399');

@@ -2,6 +2,7 @@
 import ToolHeader from '../components/ToolHeader.astro';
 import OverviewTabs from '../components/OverviewTabs.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
 ---
 <BaseLayout title="Engine Releases" description="A daily feed of the latest releases from open-source chess engines on GitHub, newest first.">
   <main>
@@ -11,7 +12,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="options-panel">
         <div class="engines-controls">
-          <div class="option-group">
+          <div class="option-group engines-search">
+            <label for="enginesSearch">Search</label>
+            <input id="enginesSearch" type="search" placeholder="Name, author, language..." autocomplete="off" aria-label="Search engines" />
+          </div>
+          <div class="option-group engines-sort">
             <label for="enginesSort">Sort</label>
             <select id="enginesSort" aria-label="Sort order">
               <option value="released">Newest first</option>
@@ -19,9 +24,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <option value="stars">Most stars</option>
             </select>
           </div>
-          <div class="option-group engines-search">
-            <label for="enginesSearch">Search</label>
-            <input id="enginesSearch" type="search" placeholder="Name, author, language..." autocomplete="off" aria-label="Search engines" />
+          <div class="option-group">
+            <label for="enginesPlatform">Platform</label>
+            <select id="enginesPlatform">
+              <option value="">All platforms</option>
+              {enginePlatforms.map(({ value, label }) => <option value={value}>{label}</option>)}
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="enginesArchitecture">Architecture</label>
+            <select id="enginesArchitecture">
+              <option value="">All architectures</option>
+              {engineArchitectures.map(({ value, label }) => <option value={value}>{label}</option>)}
+            </select>
           </div>
         </div>
       </div>
@@ -36,7 +51,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="engines-note">
         The latest release from each watched open-source engine, pulled automatically from its
         own public GitHub repository and refreshed daily. Independent and not derived from any
-        third-party engine list.
+        third-party engine list. Platform and architecture labels use the upstream filenames.
       </p>
     </div>
   </main>
@@ -46,14 +61,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <style is:global>
     .engines-controls {
       display: grid;
-      grid-template-columns: minmax(180px, 240px) minmax(240px, 1fr);
+      grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
       gap: 1rem;
       align-items: end;
     }
 
-    .engines-search input,
-    #enginesSort {
+    .engines-controls :is(input, select) {
       width: 100%;
+      min-width: 0;
       min-height: 2.2rem;
       padding: 0.35rem 0.6rem;
       background: var(--bg-secondary);
@@ -62,8 +77,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       color: var(--text-primary);
     }
 
-    .engines-search input:focus,
-    #enginesSort:focus {
+    .engines-controls :is(input, select):focus {
       outline: none;
       border-color: var(--accent);
     }
@@ -193,14 +207,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       font-size: 0.82rem;
     }
 
+    .engine-download-groups {
+      margin: 0.5rem 0 0;
+      max-height: 320px;
+      overflow: auto;
+    }
+
+    .engine-download-title {
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 650;
+    }
+
     .engine-downloads ul {
       list-style: none;
-      margin: 0.5rem 0 0;
+      margin: 0 0 0.75rem;
       padding: 0;
       display: grid;
       gap: 0.3rem;
-      max-height: 220px;
-      overflow: auto;
+    }
+
+    .engine-downloads ul:last-child {
+      margin-bottom: 0;
     }
 
     .engine-downloads li {
@@ -215,9 +244,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       overflow-wrap: anywhere;
     }
 
-    .engine-downloads .asset-size {
+    .engine-downloads .asset-meta {
       color: var(--text-secondary);
-      white-space: nowrap;
+      text-align: right;
+      max-width: 42%;
     }
 
     .engines-empty {
@@ -236,9 +266,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       line-height: 1.5;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
       .engines-controls {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .engines-search, .engines-sort {
+        grid-column: 1 / -1;
       }
     }
   </style>

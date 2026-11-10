@@ -1,3 +1,5 @@
+import { classifyEngineDownload, engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
+
 interface ReleaseAsset {
   name: string | null;
   url: string | null;
@@ -38,6 +40,8 @@ interface EnginesPayload {
 }
 
 type SortMode = 'released' | 'name' | 'stars';
+type Download = ReleaseAsset & { name: string; url: string } & ReturnType<typeof classifyEngineDownload>;
+type ListedEngine = Engine & { downloads: Download[] };
 
 const DATA_URL = '/data/engines/engines.json';
 
@@ -101,7 +105,7 @@ function releaseTime(engine: Engine): number {
   return Number.isNaN(time) ? -Infinity : time;
 }
 
-function sortEngines(engines: Engine[], mode: SortMode): Engine[] {
+function sortEngines(engines: ListedEngine[], mode: SortMode): ListedEngine[] {
   const sorted = [...engines];
   switch (mode) {
     case 'name':
@@ -158,36 +162,53 @@ function renderRelease(engine: Engine): HTMLElement {
   return wrap;
 }
 
-function renderDownloads(engine: Engine): HTMLDetailsElement | null {
-  const assets = engine.latest_release?.assets ?? [];
+function renderDownloads(assets: Download[], open: boolean): HTMLDetailsElement | null {
   if (assets.length === 0) return null;
 
   const details = document.createElement('details');
   details.className = 'engine-downloads';
+  details.open = open;
   const summary = document.createElement('summary');
   summary.textContent = `Downloads (${assets.length})`;
   details.append(summary);
 
-  const list = document.createElement('ul');
-  for (const asset of assets) {
-    if (!asset.url || !asset.name) continue;
-    const item = document.createElement('li');
-    const link = document.createElement('a');
-    link.href = asset.url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.textContent = asset.name;
-    const size = document.createElement('span');
-    size.className = 'asset-size';
-    size.textContent = formatSize(asset.size);
-    item.append(link, size);
-    list.append(item);
+  const groups = document.createElement('div');
+  groups.className = 'engine-download-groups';
+  for (const { value, label } of enginePlatforms) {
+    const downloads = assets.filter((asset) => asset.platform === value);
+    if (downloads.length === 0) continue;
+
+    const title = document.createElement('div');
+    title.className = 'engine-download-title';
+    title.textContent = label;
+    const list = document.createElement('ul');
+    list.setAttribute('aria-label', label);
+    for (const asset of downloads) {
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = asset.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = asset.name;
+      item.append(link);
+
+      const architecture = engineArchitectures.find(({ value }) => value === asset.architecture)?.label;
+      const metadata = [architecture, formatSize(asset.size)].filter(Boolean).join(' · ');
+      if (metadata) {
+        const meta = document.createElement('span');
+        meta.className = 'asset-meta';
+        meta.textContent = metadata;
+        item.append(meta);
+      }
+      list.append(item);
+    }
+    groups.append(title, list);
   }
-  details.append(list);
+  details.append(groups);
   return details;
 }
 
-function renderEngine(engine: Engine): HTMLElement {
+function renderEngine(engine: Engine, assets: Download[], showDownloads: boolean): HTMLElement {
   const card = document.createElement('article');
   card.className = 'engine-card';
 
@@ -242,7 +263,7 @@ function renderEngine(engine: Engine): HTMLElement {
   if (engine.homepage) links.append(makeButtonLink('Website', engine.homepage, 'language'));
   if (links.childElementCount > 0) card.append(links);
 
-  const downloads = renderDownloads(engine);
+  const downloads = renderDownloads(assets, showDownloads);
   if (downloads) card.append(downloads);
 
   return card;
@@ -251,20 +272,31 @@ function renderEngine(engine: Engine): HTMLElement {
 function initEngines() {
   const sortSelect = byId<HTMLSelectElement>('enginesSort');
   const searchInput = byId<HTMLInputElement>('enginesSearch');
+  const platformSelect = byId<HTMLSelectElement>('enginesPlatform');
+  const architectureSelect = byId<HTMLSelectElement>('enginesArchitecture');
   const status = byId<HTMLDivElement>('enginesStatus');
   const generated = byId<HTMLDivElement>('enginesGenerated');
   const list = byId<HTMLElement>('enginesList');
 
-  if (!sortSelect || !searchInput || !status || !generated || !list) return;
+  if (!sortSelect || !searchInput || !platformSelect || !architectureSelect || !status || !generated || !list) return;
 
-  let engines: Engine[] = [];
+  let engines: ListedEngine[] = [];
 
   function render() {
     const filter = searchInput!.value.trim().toLowerCase();
     const mode = sortSelect!.value as SortMode;
-    const visible = sortEngines(engines.filter((engine) => engineMatches(engine, filter)), mode);
+    const platform = platformSelect!.value;
+    const architecture = architectureSelect!.value;
+    const hasDownloadFilter = Boolean(platform || architecture);
+    const visible = sortEngines(engines.filter((engine) => engineMatches(engine, filter)), mode)
+      .map((engine) => ({
+        engine,
+        downloads: engine.downloads.filter((asset) =>
+          (!platform || asset.platform === platform) && (!architecture || asset.architecture === architecture)),
+      }))
+      .filter(({ downloads }) => !hasDownloadFilter || downloads.length > 0);
 
-    status!.textContent = filter
+    status!.textContent = filter || hasDownloadFilter
       ? `${visible.length.toLocaleString()} of ${engines.length.toLocaleString()} releases`
       : `${engines.length.toLocaleString()} engine releases`;
 
@@ -272,23 +304,30 @@ function initEngines() {
     if (visible.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'engines-empty';
-      empty.textContent = 'No releases match your search.';
+      empty.textContent = 'No releases match your search or filters.';
       list!.append(empty);
       return;
     }
 
     const fragment = document.createDocumentFragment();
-    for (const engine of visible) fragment.append(renderEngine(engine));
+    for (const { engine, downloads } of visible) fragment.append(renderEngine(engine, downloads, hasDownloadFilter));
     list!.append(fragment);
   }
 
   sortSelect.addEventListener('change', render);
   searchInput.addEventListener('input', render);
+  platformSelect.addEventListener('change', render);
+  architectureSelect.addEventListener('change', render);
 
   void fetchJson<EnginesPayload>(DATA_URL)
     .then((payload) => {
       // The feed only shows engines that have an actual GitHub release.
-      engines = (payload.engines ?? []).filter((engine) => engine.latest_release);
+      engines = (payload.engines ?? []).flatMap((engine) => {
+        if (!engine.latest_release) return [];
+        const downloads = (engine.latest_release.assets ?? []).flatMap((asset) =>
+          asset.name && asset.url ? [{ ...asset, name: asset.name, url: asset.url, ...classifyEngineDownload(asset.name) }] : []);
+        return [{ ...engine, downloads }];
+      });
       generated.textContent = `refreshed ${formatDate(payload.generated)}`;
       render();
     })
