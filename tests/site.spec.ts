@@ -96,8 +96,30 @@ test('appearance follows family controls and resets migrated preferences',async(
 test('homepage player lookup passes surname through to the profile search',async({page})=>{
   await page.route('https://ianrastall.github.io/fide-players/names/**',r=>r.fulfill({status:404}));await page.goto('/');await page.locator('#player-query').fill('Carlsen');await page.getByRole('button',{name:'Find player',exact:true}).click();await expect(page).toHaveURL(/fide-player.html\?q=Carlsen/);await expect(page.locator('#fpSearch')).toHaveValue('Carlsen');await expect(page.locator('#fpStatus')).toContainText('No players match');
 });
-test('PGN analysis and extraction still operate',async({page})=>{
-  await page.goto('/pgn-info.html');await page.locator('#pgnText').fill('[Event "Test"]\n[White "Alice"]\n[Black "Bob"]\n[Result "1-0"]\n\n1. e4 e5 1-0');await page.locator('#analyzeBtn').click();await expect(page.locator('#statsOutput')).toHaveValue(/Total Games:\s+1/);await page.locator('#extractPlayersBtn').click();await expect(page.locator('#statsOutput')).toHaveValue(/Alice[\s\S]*Bob/);
+test('PGN Info reports results and lets readers switch views and copy them', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.setViewportSize({ width: 320, height: 768 });
+  await page.goto('/pgn-info.html');
+  const pgn = '[Event "Club Night"]\n[White "Alice"]\n[Black "Bob"]\n[Result "1-0"]\n\n1. e4! e5 1-0';
+  await page.getByLabel('Choose a PGN file (up to 50 MB)').setInputFiles({
+    name: 'game.pgn', mimeType: 'text/plain', buffer: Buffer.from(pgn),
+  });
+  await expect(page.getByLabel('PGN text')).toHaveValue(pgn);
+  await page.getByRole('button', { name: 'Analyze', exact: true }).click();
+  const report = page.locator('#pgnReport');
+  await expect(report.getByText('Total games', { exact: true })).toBeVisible();
+  await expect(report.locator('.pgn-metrics > div').filter({ hasText: 'Games with symbols' })).toContainText('1 (100.0%)');
+  await page.getByRole('button', { name: 'Players', exact: true }).click();
+  await expect(report.getByRole('listitem')).toHaveText(['Alice', 'Bob']);
+  await page.getByRole('button', { name: 'Events', exact: true }).click();
+  await expect(report.getByRole('listitem')).toHaveText(['Club Night']);
+  await page.getByRole('button', { name: 'Summary', exact: true }).click();
+  await page.getByRole('button', { name: 'Copy report', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('Total games: 1');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await page.getByRole('button', { name: 'Clear', exact: true }).click();
+  await expect(page.getByLabel('PGN text')).toHaveValue('');
+  await expect(report).toHaveText('Results appear here after analysis.');
 });
 test('opening explorer pages through results and keeps ECO filters keyboard accessible', async ({ page }) => {
   await page.goto('/eco-code.html');

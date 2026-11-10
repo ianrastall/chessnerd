@@ -2,69 +2,96 @@
 import ToolHeader from '../components/ToolHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="PGN Info" description="Analyze pasted or uploaded PGN text and extract game statistics, player lists, and event lists.">
+<BaseLayout title="PGN Info" description="Count games, results, players, and events in a chess PGN file or pasted text.">
   <main>
     <div id="toolView">
       <ToolHeader title="PGN Info" icon="assessment" />
 
-      <div class="options-panel">
-        <div class="options-grid">
+      <div class="pgn-layout">
+        <section class="pgn-panel" aria-labelledby="pgnInputHeading">
+          <h2 id="pgnInputHeading">PGN input</h2>
+          <p class="pgn-hint">Choose a chess game file or paste PGN text. Analysis runs in your browser.</p>
           <div class="option-group">
-            <label for="pgnFile">Analyze from File (Max 50MB)</label>
-            <input type="file" id="pgnFile" accept=".pgn,text/plain" aria-label="Upload PGN file" />
+            <label for="pgnFile">Choose a PGN file (up to 50 MB)</label>
+            <input type="file" id="pgnFile" accept=".pgn,text/plain" />
           </div>
-        </div>
-      </div>
+          <div class="pgn-text-label">
+            <label for="pgnText">PGN text</label>
+            <span id="inputStats" class="pgn-hint">0 characters</span>
+          </div>
+          <textarea id="pgnText" rows="12" placeholder={'[Event "Example game"]\n[Result "1-0"]\n\n1. e4 e5 1-0'}></textarea>
+          <div class="pgn-actions">
+            <button id="analyzeBtn" class="btn btn-primary btn-compact" type="button">Analyze</button>
+            <button id="clearBtn" class="btn btn-secondary btn-compact" type="button">Clear</button>
+          </div>
+          <div id="statusMessage" class="pgn-status" role="status"></div>
+        </section>
 
-      <div class="io-container">
-        <div class="io-panel">
-          <div class="io-label">
-            <span>Input PGN Text</span>
-            <span class="stats" id="inputStats">0 chars</span>
+        <section class="pgn-panel" aria-labelledby="pgnReportHeading">
+          <h2 id="pgnReportHeading" tabindex="-1">Report</h2>
+          <div class="pgn-actions" role="group" aria-label="Report view">
+            <button id="pgnSummaryBtn" class="btn btn-secondary btn-compact" type="button" aria-pressed="false">Summary</button>
+            <button id="extractPlayersBtn" class="btn btn-secondary btn-compact" type="button" aria-pressed="false">Players</button>
+            <button id="extractEventsBtn" class="btn btn-secondary btn-compact" type="button" aria-pressed="false">Events</button>
           </div>
-          <textarea id="pgnText" placeholder="Paste PGN data here, or upload a file above..."></textarea>
-        </div>
-        <div class="io-panel">
-          <div class="io-label">
-            <span>Statistics Report</span>
-            <button id="copyBtn" class="btn btn-secondary btn-compact" type="button" title="Copy to clipboard" aria-label="Copy report">
-              <span class="material-icons" aria-hidden="true">content_copy</span>
-            </button>
+          <div id="pgnReport"><p class="pgn-hint">Results appear here after analysis.</p></div>
+          <div id="pgnReportActions" hidden>
+            <button id="copyBtn" class="btn btn-secondary btn-compact" type="button">Copy report</button>
+            <details>
+              <summary>Plain text</summary>
+              <textarea id="statsOutput" class="output" aria-label="Plain-text report" rows="8" readonly></textarea>
+            </details>
           </div>
-          <textarea id="statsOutput" class="output" readonly placeholder="Analysis results will appear here..."></textarea>
-        </div>
-      </div>
-
-      <div class="status-bar tool-status-actions">
-        <div id="statusMessage">Ready to analyze</div>
-        <button id="extractPlayersBtn" class="btn btn-secondary btn-compact" type="button">
-          <span class="material-icons" aria-hidden="true">people</span>
-          Players
-        </button>
-        <button id="extractEventsBtn" class="btn btn-secondary btn-compact" type="button">
-          <span class="material-icons" aria-hidden="true">event</span>
-          Events
-        </button>
-        <button id="analyzeBtn" class="btn btn-primary btn-compact" type="button">
-          <span class="material-icons" aria-hidden="true">play_arrow</span>
-          Analyze
-        </button>
-        <button id="clearBtn" class="btn btn-secondary btn-compact" type="button">
-          <span class="material-icons" aria-hidden="true">delete</span>
-          Clear
-        </button>
+        </section>
       </div>
     </div>
   </main>
 
-  <style>
-    .tool-status-actions {
-      gap: 0.5rem;
-      flex-wrap: wrap;
+  <style is:global>
+    .pgn-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: start;
     }
 
-    .tool-status-actions #statusMessage {
-      flex: 1 1 220px;
+    .pgn-panel {
+      display: grid;
+      gap: 0.75rem;
+      min-width: 0;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+    }
+
+    .pgn-panel :is(h2, h3, p, dl) { margin: 0; }
+    .pgn-panel h2 { font-size: 1.15rem; }
+    .pgn-panel h3 { font-size: 0.95rem; }
+    .pgn-hint, .pgn-status { color: var(--text-secondary); font-size: 0.85rem; }
+    .pgn-text-label, .pgn-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+    .pgn-text-label { justify-content: space-between; }
+    .pgn-panel :is(textarea, input[type='file']) { width: 100%; min-width: 0; }
+    .pgn-panel textarea { min-height: 8rem; }
+    .pgn-actions [aria-pressed='true'] { border-color: var(--accent); color: var(--accent); }
+    #pgnReport > section + section { margin-top: 0.9rem; }
+    #pgnReportActions details { margin-top: 0.75rem; }
+    #pgnReportActions summary { cursor: pointer; color: var(--accent); }
+    #statsOutput { margin-top: 0.5rem; }
+
+    .pgn-metrics > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.65rem;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .pgn-metrics dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+    .pgn-name-list { padding-left: 1.25rem; overflow-wrap: anywhere; }
+
+    @media (max-width: 850px) {
+      .pgn-layout { grid-template-columns: minmax(0, 1fr); }
     }
   </style>
 
