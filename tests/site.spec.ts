@@ -99,8 +99,53 @@ test('homepage player lookup passes surname through to the profile search',async
 test('PGN analysis and extraction still operate',async({page})=>{
   await page.goto('/pgn-info.html');await page.locator('#pgnText').fill('[Event "Test"]\n[White "Alice"]\n[Black "Bob"]\n[Result "1-0"]\n\n1. e4 e5 1-0');await page.locator('#analyzeBtn').click();await expect(page.locator('#statsOutput')).toHaveValue(/Total Games:\s+1/);await page.locator('#extractPlayersBtn').click();await expect(page.locator('#statsOutput')).toHaveValue(/Alice[\s\S]*Bob/);
 });
-test('opening explorer searches and renders a board',async({page})=>{
-  await page.goto('/eco-code.html');await page.locator('#ecoSearch').fill('Najdorf');await expect(page.locator('#ecoList')).toContainText('Najdorf');await page.locator('#ecoList button').first().click();await expect(page.locator('.eco-board .square')).toHaveCount(64);
+test('opening explorer pages through results and keeps ECO filters keyboard accessible', async ({ page }) => {
+  await page.goto('/eco-code.html');
+  await expect(page.getByRole('heading', { name: 'Opening Explorer', exact: true })).toBeVisible();
+  const rows = page.locator('.eco-row-header');
+  await expect(rows).toHaveCount(50);
+  const first = await rows.first().innerText();
+  await page.getByRole('button', { name: 'Next page' }).click();
+  await expect(page.locator('#ecoStatus')).toContainText('Page 2');
+  await expect(rows.first()).not.toHaveText(first, { useInnerText: true });
+  await page.getByRole('button', { name: 'Previous page' }).click();
+  await expect(rows.first()).toHaveText(first, { useInnerText: true });
+
+  await page.getByText('Browse by ECO code', { exact: true }).click();
+  const letter = page.getByRole('button', { name: 'B', exact: true });
+  await letter.press('Enter');
+  await expect(letter).toBeFocused();
+  await expect(letter).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'B9', exact: true }).click();
+  await page.getByRole('button', { name: 'B90', exact: true }).click();
+  await expect(page.locator('.eco-badge').first()).toHaveText('B90');
+  await expect(page.locator('.eco-badge').last()).toHaveText('B90');
+});
+
+test('opening explorer replays moves and copies the displayed position', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.setViewportSize({ width: 320, height: 768 });
+  await page.goto('/eco-code.html');
+  await page.getByRole('searchbox', { name: 'Opening name or ECO code' }).fill('Najdorf B90');
+  const row = page.locator('.eco-row-header').first();
+  await expect(row).toContainText('Najdorf');
+  await row.press('Enter');
+  await expect(row).toBeFocused();
+  await expect(row).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('.eco-board .square')).toHaveCount(64);
+  const controls = page.getByRole('group', { name: 'Opening moves' });
+  await expect(controls.getByRole('button', { name: 'Next move' })).toBeDisabled();
+  await controls.getByRole('button', { name: 'Start' }).click();
+  await expect(page.locator('.eco-position')).toContainText('Starting position');
+  await expect(page.locator('.eco-board [data-square="e2"] [data-piece="wP"]')).toHaveCount(1);
+  await controls.getByRole('button', { name: 'Next move' }).click();
+  await expect(page.locator('.eco-position')).toContainText('1. e4');
+  await expect(page.locator('.eco-board [data-square="e4"].highlight [data-piece="wP"]')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Copy FEN' }).click();
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('/4P3/');
+  await controls.getByRole('button', { name: 'Previous move' }).click();
+  await expect(page.locator('.eco-position')).toContainText('Starting position');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
 });
 test('archive series deep links and keyboard tabs remain usable',async({page})=>{
   await page.goto('/chesscom-tournaments.html#three-zero-thursday');const tab=page.getByRole('tab',{name:'3-0 Thursday',exact:true});await expect(tab).toHaveAttribute('aria-selected','true');await expect(page.locator('#t3TableBody tr').first()).toBeVisible();await tab.focus();await page.keyboard.press('ArrowRight');await expect(page.getByRole('tab',{name:'CCC',exact:true})).toHaveAttribute('aria-selected','true');

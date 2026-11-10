@@ -1,6 +1,4 @@
-// ECO Codes browser: search-first flat list of named opening lines, with a
-// board diagram derived on demand from each line's moves. The dataset is a
-// frozen snapshot (see scripts/eco/build_openings.py); nothing is fetched live.
+// Named opening lines from the frozen dataset built by scripts/eco/build_openings.py.
 
 interface Opening {
   eco: string;
@@ -15,32 +13,45 @@ interface OpeningsPayload {
 
 // Minimal shape of the bundled chess.js global (js/chess.min.js).
 interface ChessGame {
-  move(move: string | { from: string; to: string; promotion?: string }): unknown;
+  move(move: string): PlayedMove | null;
   get(square: string): { type: string; color: string } | null;
   fen(): string;
-  history(options?: { verbose?: boolean }): Array<{ from: string; to: string }>;
+}
+
+interface PlayedMove {
+  from: string;
+  to: string;
+  san: string;
+}
+
+interface Position {
+  fen: string;
+  move?: PlayedMove;
 }
 
 type ChessConstructor = new (fen?: string) => ChessGame;
 
 const DATA_URL = '/data/eco-code/openings.json';
-const RENDER_CAP = 250;
+const PAGE_SIZE = 50;
 
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
 let openings: Opening[] = [];
-let query = '';
+let query: string[] = [];
+let page = 0;
 // Three cascading filter levels, each a single character of the ECO code:
 // volume = code[0] (A–E), tens = code[1] (0–9), ones = code[2] (0–9).
 let volume = '';
 let tens = '';
 let ones = '';
-let expandedKey: string | null = null;
 
 const searchEl = document.getElementById('ecoSearch') as HTMLInputElement | null;
 const statusEl = document.getElementById('ecoStatus');
 const listEl = document.getElementById('ecoList');
+const paginationEl = document.getElementById('ecoPagination');
+const previousPage = document.querySelector<HTMLButtonElement>('#ecoPreviousPage');
+const nextPage = document.querySelector<HTMLButtonElement>('#ecoNextPage');
 
 const volumesEl = document.getElementById('ecoVolumes');
 const tensEl = document.getElementById('ecoTens');
@@ -52,8 +63,8 @@ function getChess(): ChessConstructor | null {
   return (window as unknown as { Chess?: ChessConstructor }).Chess ?? null;
 }
 
-function keyFor(opening: Opening, index: number): string {
-  return `${opening.eco}-${index}`;
+function searchText(text: string): string {
+  return text.normalize('NFD').replace(/[\p{M}'’]/gu, '').toLowerCase();
 }
 
 function matches(opening: Opening): boolean {
@@ -61,42 +72,37 @@ function matches(opening: Opening): boolean {
   if (volume && eco[0] !== volume) return false;
   if (tens && eco[1] !== tens) return false;
   if (ones && eco[2] !== ones) return false;
-  if (!query) return true;
-  const haystack = `${eco} ${opening.name}`.toLowerCase();
-  return haystack.includes(query);
+  if (query.length === 0) return true;
+  const haystack = searchText(`${eco} ${opening.name}`);
+  return query.every((word) => haystack.includes(word));
 }
 
-// Replay the SAN moves so we can read the final position. Returns the game at
-// the end of the line, or null if the moves could not be parsed.
-function gameFromPgn(pgn: string): ChessGame | null {
-  const Chess = getChess();
-  if (!Chess) return null;
+function positionsFromPgn(pgn: string, Chess: ChessConstructor): Position[] | null {
   const game = new Chess();
+  const positions: Position[] = [{ fen: game.fen() }];
   const tokens = pgn.replace(/\d+\.+/g, ' ').split(/\s+/).filter(Boolean);
   for (const token of tokens) {
     if (token === '*' || /^(1-0|0-1|1\/2-1\/2)$/.test(token)) break;
-    const ok = game.move(token);
-    if (!ok) return null;
+    const move = game.move(token);
+    if (!move) return null;
+    positions.push({ fen: game.fen(), move });
   }
-  return game;
+  return positions;
 }
 
-function buildBoard(game: ChessGame): HTMLElement {
+function buildBoard(game: ChessGame, move?: PlayedMove): HTMLElement {
   const board = document.createElement('div');
   board.className = 'chess-board eco-board';
   board.dataset.orientation = 'white';
-
-  const history = game.history({ verbose: true });
-  const last = history[history.length - 1];
-  const highlights = last ? [last.from, last.to] : [];
 
   RANKS.forEach((rank) => {
     FILES.forEach((file) => {
       const square = `${file}${rank}`;
       const squareEl = document.createElement('div');
+      squareEl.dataset.square = square;
       const isLight = (file.charCodeAt(0) - 97 + parseInt(rank, 10)) % 2 === 0;
       squareEl.className = `square ${isLight ? 'light-square' : 'dark-square'}`;
-      if (highlights.includes(square)) squareEl.classList.add('highlight');
+      if (move?.from === square || move?.to === square) squareEl.classList.add('highlight');
 
       const piece = game.get(square);
       if (piece) {
@@ -117,17 +123,16 @@ function copyButton(label: string, getText: () => string): HTMLButtonElement {
   btn.type = 'button';
   btn.className = 'btn btn-secondary btn-compact';
   btn.textContent = label;
+  let resetTimer: number | undefined;
   btn.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(getText());
-      const original = btn.textContent;
       btn.textContent = 'Copied';
-      window.setTimeout(() => {
-        btn.textContent = original;
-      }, 1200);
     } catch {
       btn.textContent = 'Copy failed';
     }
+    window.clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => { btn.textContent = label; }, 1200);
   });
   return btn;
 }
@@ -136,9 +141,56 @@ function buildDetail(opening: Opening): HTMLElement {
   const detail = document.createElement('div');
   detail.className = 'eco-detail';
 
-  const game = gameFromPgn(opening.pgn);
-  if (game) {
-    detail.appendChild(buildBoard(game));
+  const Chess = getChess();
+  const positions = Chess && positionsFromPgn(opening.pgn, Chess);
+  const side = document.createElement('div');
+  side.className = 'eco-detail-side';
+  const actions = document.createElement('div');
+  actions.className = 'eco-detail-actions';
+  actions.appendChild(copyButton('Copy PGN', () => opening.pgn));
+
+  if (Chess && positions) {
+    const boardSlot = document.createElement('div');
+    detail.appendChild(boardSlot);
+    const positionLabel = document.createElement('p');
+    positionLabel.className = 'eco-position';
+    positionLabel.setAttribute('role', 'status');
+    const controls = document.createElement('div');
+    controls.className = 'eco-replay';
+    controls.setAttribute('role', 'group');
+    controls.setAttribute('aria-label', 'Opening moves');
+    const end = positions.length - 1;
+    let current = end;
+    const buttons = [
+      { label: 'Start', target: () => 0 },
+      { label: 'Previous move', target: () => current - 1 },
+      { label: 'Next move', target: () => current + 1 },
+      { label: 'End', target: () => end },
+    ].map(({ label, target }) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn btn-secondary btn-compact';
+      button.textContent = label;
+      button.addEventListener('click', () => showPosition(target()));
+      controls.appendChild(button);
+      return { button, target };
+    });
+
+    const showPosition = (index: number) => {
+      current = index;
+      const { fen, move } = positions[current];
+      boardSlot.replaceChildren(buildBoard(new Chess(fen), move));
+      const moveLabel = move ? `${Math.ceil(current / 2)}${current % 2 === 0 ? '...' : '.'} ${move.san}` : 'Starting position';
+      positionLabel.textContent = `${moveLabel} · ${current} of ${end} moves`;
+      for (const { button, target } of buttons) {
+        const destination = target();
+        button.disabled = destination < 0 || destination > end || destination === current;
+      }
+    };
+
+    showPosition(current);
+    side.append(positionLabel, controls);
+    actions.appendChild(copyButton('Copy FEN', () => positions[current].fen));
   } else {
     const note = document.createElement('p');
     note.className = 'eco-detail-note';
@@ -146,18 +198,11 @@ function buildDetail(opening: Opening): HTMLElement {
     detail.appendChild(note);
   }
 
-  const side = document.createElement('div');
-  side.className = 'eco-detail-side';
-
   const moves = document.createElement('p');
   moves.className = 'eco-detail-moves';
   moves.textContent = opening.pgn;
   side.appendChild(moves);
 
-  const actions = document.createElement('div');
-  actions.className = 'eco-detail-actions';
-  actions.appendChild(copyButton('Copy PGN', () => opening.pgn));
-  if (game) actions.appendChild(copyButton('Copy FEN', () => game.fen()));
   side.appendChild(actions);
 
   detail.appendChild(side);
@@ -167,31 +212,32 @@ function buildDetail(opening: Opening): HTMLElement {
 function render(): void {
   if (!listEl || !statusEl) return;
 
-  const filtered: Array<{ opening: Opening; key: string }> = [];
-  openings.forEach((opening, index) => {
-    if (matches(opening)) filtered.push({ opening, key: keyFor(opening, index) });
-  });
-
-  const shown = filtered.slice(0, RENDER_CAP);
+  const filtered = openings.filter(matches);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const offset = page * PAGE_SIZE;
+  const shown = filtered.slice(offset, offset + PAGE_SIZE);
+  if (paginationEl) paginationEl.hidden = totalPages <= 1;
+  if (previousPage) previousPage.disabled = page === 0;
+  if (nextPage) nextPage.disabled = page + 1 >= totalPages;
   if (filtered.length === 0) {
-    statusEl.textContent = 'No openings match your search.';
-  } else if (filtered.length > shown.length) {
-    statusEl.textContent = `Showing ${shown.length} of ${filtered.length} openings — refine your search to narrow.`;
+    statusEl.textContent = 'No openings match your search or ECO filters.';
+  } else if (totalPages > 1) {
+    statusEl.textContent = `${filtered.length.toLocaleString()} openings · Page ${page + 1} of ${totalPages}`;
   } else {
     statusEl.textContent = `${filtered.length} opening${filtered.length === 1 ? '' : 's'}.`;
   }
 
-  listEl.innerHTML = '';
   const fragment = document.createDocumentFragment();
+  let expanded: { header: HTMLButtonElement; detail: HTMLElement } | null = null;
 
-  shown.forEach(({ opening, key }) => {
+  shown.forEach((opening) => {
     const row = document.createElement('div');
     row.className = 'eco-row';
 
     const header = document.createElement('button');
     header.type = 'button';
     header.className = 'eco-row-header';
-    header.setAttribute('aria-expanded', String(expandedKey === key));
+    header.setAttribute('aria-expanded', 'false');
 
     const badge = document.createElement('span');
     badge.className = 'eco-badge';
@@ -207,16 +253,23 @@ function render(): void {
 
     header.append(badge, name, movesPreview);
     header.addEventListener('click', () => {
-      expandedKey = expandedKey === key ? null : key;
-      render();
+      const wasOpen = expanded?.header === header;
+      expanded?.header.setAttribute('aria-expanded', 'false');
+      expanded?.detail.remove();
+      expanded = null;
+      if (!wasOpen) {
+        const detail = buildDetail(opening);
+        header.setAttribute('aria-expanded', 'true');
+        row.appendChild(detail);
+        expanded = { header, detail };
+      }
     });
 
     row.appendChild(header);
-    if (expandedKey === key) row.appendChild(buildDetail(opening));
     fragment.appendChild(row);
   });
 
-  listEl.appendChild(fragment);
+  listEl.replaceChildren(fragment);
 }
 
 // Distinct values present in the data at one position of the ECO code, given a
@@ -252,8 +305,14 @@ function renderPillRow(
     btn.type = 'button';
     btn.className = 'eco-chip';
     btn.textContent = item.label;
-    if (item.value === selected) btn.classList.add('active');
-    btn.addEventListener('click', () => onSelect(item.value));
+    const isSelected = item.value === selected;
+    btn.setAttribute('aria-pressed', String(isSelected));
+    if (isSelected) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      const wasFocused = document.activeElement === btn;
+      onSelect(item.value);
+      if (wasFocused) container.querySelector<HTMLButtonElement>('button.active')?.focus();
+    });
     container.appendChild(btn);
   });
 }
@@ -267,7 +326,7 @@ function refreshFilters(): void {
       volume = value;
       tens = '';
       ones = '';
-      expandedKey = null;
+      page = 0;
       refreshFilters();
       render();
     });
@@ -282,7 +341,7 @@ function refreshFilters(): void {
       renderPillRow(tensEl, items, tens, (value) => {
         tens = value;
         ones = '';
-        expandedKey = null;
+        page = 0;
         refreshFilters();
         render();
       });
@@ -301,7 +360,7 @@ function refreshFilters(): void {
       }));
       renderPillRow(onesEl, items, ones, (value) => {
         ones = value;
-        expandedKey = null;
+        page = 0;
         refreshFilters();
         render();
       });
@@ -318,11 +377,14 @@ function init(): void {
 
   if (searchEl) {
     searchEl.addEventListener('input', () => {
-      query = searchEl.value.trim().toLowerCase();
-      expandedKey = null;
+      query = searchText(searchEl.value).split(/\s+/).filter(Boolean);
+      page = 0;
       render();
     });
   }
+
+  previousPage?.addEventListener('click', () => { page -= 1; render(); });
+  nextPage?.addEventListener('click', () => { page += 1; render(); });
 
   statusEl.textContent = 'Loading openings…';
   fetch(DATA_URL, { headers: { Accept: 'application/json' } })

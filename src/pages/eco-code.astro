@@ -2,42 +2,50 @@
 import ToolHeader from '../components/ToolHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="ECO Codes" description="Search Encyclopedia of Chess Openings codes and named lines, with a board diagram for every opening.">
+<BaseLayout title="Opening Explorer" description="Find named chess openings by name or ECO code and step through their moves on a board.">
   <main>
     <div id="toolView">
-      <ToolHeader title="ECO Codes" icon="menu_book" />
+      <ToolHeader title="Opening Explorer" icon="menu_book" />
 
       <div class="options-panel">
         <div class="eco-search option-group">
-          <label for="ecoSearch">Search</label>
-          <input id="ecoSearch" type="search" placeholder="Name or code — e.g. Najdorf, London, B90" autocomplete="off" aria-label="Search ECO codes" />
+          <label for="ecoSearch">Opening name or ECO code</label>
+          <input id="ecoSearch" type="search" placeholder="Try Italian Game, Najdorf, or B90" autocomplete="off" aria-describedby="ecoSearchHelp" />
+          <p id="ecoSearchHelp" class="eco-search-help">Select an opening to view its board and step through the moves.</p>
         </div>
 
-        <div class="eco-filters">
-          <div class="eco-filter-row" id="ecoVolumeRow">
-            <span class="eco-filter-label" id="ecoVolumesLabel">Volume</span>
-            <div id="ecoVolumes" class="eco-pills" role="group" aria-labelledby="ecoVolumesLabel"></div>
+        <details class="eco-code-filters">
+          <summary>Browse by ECO code</summary>
+          <div class="eco-filters">
+            <div class="eco-filter-row">
+              <span class="eco-filter-label" id="ecoVolumesLabel">Letter</span>
+              <div id="ecoVolumes" class="eco-pills" role="group" aria-labelledby="ecoVolumesLabel"></div>
+            </div>
+            <div class="eco-filter-row" id="ecoTensRow" hidden>
+              <span class="eco-filter-label" id="ecoTensLabel">Group</span>
+              <div id="ecoTens" class="eco-pills" role="group" aria-labelledby="ecoTensLabel"></div>
+            </div>
+            <div class="eco-filter-row" id="ecoOnesRow" hidden>
+              <span class="eco-filter-label" id="ecoOnesLabel">Code</span>
+              <div id="ecoOnes" class="eco-pills" role="group" aria-labelledby="ecoOnesLabel"></div>
+            </div>
           </div>
-          <div class="eco-filter-row" id="ecoTensRow" hidden>
-            <span class="eco-filter-label" id="ecoTensLabel">Group</span>
-            <div id="ecoTens" class="eco-pills" role="group" aria-labelledby="ecoTensLabel"></div>
-          </div>
-          <div class="eco-filter-row" id="ecoOnesRow" hidden>
-            <span class="eco-filter-label" id="ecoOnesLabel">Code</span>
-            <div id="ecoOnes" class="eco-pills" role="group" aria-labelledby="ecoOnesLabel"></div>
-          </div>
-        </div>
+        </details>
       </div>
 
-      <div class="status-bar">
-        <div id="ecoStatus">Loading openings…</div>
+      <div class="status-bar eco-status">
+        <div id="ecoStatus" role="status">Loading openings…</div>
+        <nav id="ecoPagination" class="eco-pagination" aria-label="Opening result pages" hidden>
+          <button id="ecoPreviousPage" class="btn btn-secondary btn-compact" type="button">Previous page</button>
+          <button id="ecoNextPage" class="btn btn-secondary btn-compact" type="button">Next page</button>
+        </nav>
       </div>
 
-      <section id="ecoList" class="eco-list" aria-live="polite"></section>
+      <section id="ecoList" class="eco-list" aria-label="Opening results"></section>
 
       <p class="eco-note">
-        A searchable index of named opening lines and their ECO codes (A&ndash;E). Each line's board
-        is drawn from its moves. Opening names are a frozen snapshot of the public-domain
+        ECO stands for Encyclopedia of Chess Openings. Codes group related openings from A00 to E99.
+        Opening names and moves come from a frozen snapshot of the public-domain
         <a href="https://github.com/lichess-org/chess-openings" target="_blank" rel="noopener noreferrer">lichess-org/chess-openings</a> list.
       </p>
     </div>
@@ -63,6 +71,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       display: grid;
       gap: 0.6rem;
       margin-top: 1rem;
+    }
+
+    .eco-search-help, .eco-position {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+    }
+
+    .eco-code-filters {
+      margin-top: 0.9rem;
+    }
+
+    .eco-code-filters summary {
+      color: var(--accent);
+      cursor: pointer;
+      width: fit-content;
+    }
+
+    .eco-status {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .eco-pagination, .eco-replay {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .eco-pagination[hidden] {
+      display: none;
     }
 
     .eco-filter-row[hidden] {
