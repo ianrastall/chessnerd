@@ -104,7 +104,8 @@ test('PGN Info reports results and lets readers switch views and copy them', asy
   await page.getByLabel('Choose a PGN file (up to 50 MB)').setInputFiles({
     name: 'game.pgn', mimeType: 'text/plain', buffer: Buffer.from(pgn),
   });
-  await expect(page.getByLabel('PGN text')).toHaveValue(pgn);
+  await expect(page.getByRole('status')).toContainText('File selected');
+  await expect(page.getByLabel('PGN text')).toHaveValue('');
   await page.getByRole('button', { name: 'Analyze', exact: true }).click();
   const report = page.locator('#pgnReport');
   await expect(report.getByText('Total games', { exact: true })).toBeVisible();
@@ -120,6 +121,9 @@ test('PGN Info reports results and lets readers switch views and copy them', asy
   await page.getByRole('button', { name: 'Clear', exact: true }).click();
   await expect(page.getByLabel('PGN text')).toHaveValue('');
   await expect(report).toHaveText('Results appear here after analysis.');
+  await page.getByLabel('PGN text').fill('1. d4 d5 1/2-1/2');
+  await page.getByRole('button', { name: 'Analyze', exact: true }).click();
+  await expect(report.locator('.pgn-metrics > div').filter({ hasText: 'Draws' })).toContainText('1 (100.0%)');
 });
 test('opening explorer pages through results and keeps ECO filters keyboard accessible', async ({ page }) => {
   await page.goto('/eco-code.html');

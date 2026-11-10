@@ -112,7 +112,6 @@ function initPgnInfo() {
     summary: byId('pgnSummaryBtn'), players: byId('extractPlayersBtn'), events: byId('extractEventsBtn'),
   };
   let analysis: PgnAnalysis | null = null;
-  let fileRequest = 0;
   let worker: Worker | null = null;
   let requestedView: View = 'summary';
 
@@ -141,7 +140,8 @@ function initPgnInfo() {
   }
 
   function show(view: View) {
-    if (!textInput.value.trim()) {
+    const source = fileInput.files?.[0] ?? textInput.value;
+    if (typeof source === 'string' && !source.trim()) {
       setStatus('Paste PGN text or choose a file.', 'warning');
       return;
     }
@@ -155,10 +155,14 @@ function initPgnInfo() {
     try {
       const request = new Worker(new URL('./pgn-report-worker.ts', import.meta.url), { type: 'module' });
       worker = request;
-      request.addEventListener('message', (event: MessageEvent<PgnAnalysis>) => {
+      request.addEventListener('message', (event: MessageEvent<PgnAnalysis | null>) => {
         if (worker !== request) return;
         request.terminate();
         worker = null;
+        if (!event.data) {
+          setStatus('Could not read or analyze the PGN. Select Analyze to try again.', 'error');
+          return;
+        }
         analysis = event.data;
         showReport(analysis, requestedView);
       });
@@ -168,7 +172,7 @@ function initPgnInfo() {
         worker = null;
         setStatus('Could not analyze the PGN. Select Analyze to try again.', 'error');
       });
-      request.postMessage(textInput.value);
+      request.postMessage(source);
     } catch {
       worker?.terminate();
       worker = null;
@@ -177,31 +181,23 @@ function initPgnInfo() {
   }
 
   textInput.addEventListener('input', () => {
-    fileRequest += 1;
     fileInput.value = '';
     updateInput();
     setStatus('');
   });
 
-  fileInput.addEventListener('change', async () => {
-    const request = ++fileRequest;
+  fileInput.addEventListener('change', () => {
     const file = fileInput.files?.[0];
     if (!file) return;
     if (file.size > maxBytes) {
-      setStatus(`File is ${formatBytes(file.size)}. Limit is 50 MB.`, 'warning');
       fileInput.value = '';
+      updateInput();
+      setStatus(`File is ${formatBytes(file.size)}. Limit is 50 MB.`, 'warning');
       return;
     }
-    setStatus('Reading file…');
-    try {
-      const text = await file.text();
-      if (request !== fileRequest) return;
-      textInput.value = text;
-      updateInput();
-      setStatus('File loaded. Select Analyze.');
-    } catch {
-      if (request === fileRequest) setStatus('Could not read the file.', 'error');
-    }
+    textInput.value = '';
+    updateInput();
+    setStatus(`File selected (${formatBytes(file.size)}). Select Analyze.`);
   });
 
   analyzeButton.addEventListener('click', () => show('summary'));
@@ -221,7 +217,6 @@ function initPgnInfo() {
   });
 
   byId('clearBtn').addEventListener('click', () => {
-    fileRequest += 1;
     textInput.value = '';
     fileInput.value = '';
     updateInput();

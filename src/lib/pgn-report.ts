@@ -18,11 +18,11 @@ export interface PgnAnalysis {
 const resultMarker = /^(?:1-0|0-1|1\/2-1\/2|\*)$/;
 const move = /^(?:[KQRBN]?[a-h1-8]{0,2}x?[a-h][1-8](?:=?[QRBN])?|[O0]-[O0](?:-[O0])?|--)[+#]?[!?]{0,2}$/;
 
-export function analyzePgn(text: string): PgnAnalysis {
+export function analyzePgn(text: string, totalBytes = new Blob([text]).size): PgnAnalysis {
   const stats: PgnAnalysis = {
     games: 0, whiteWins: 0, blackWins: 0, draws: 0, otherResults: 0, inProgress: 0,
     annotated: 0, withNags: 0, withComments: 0, gamesWithEco: 0,
-    totalBytes: new Blob([text]).size, players: [], events: [], uniqueEcoCodes: 0,
+    totalBytes, players: [], events: [], uniqueEcoCodes: 0,
   };
   const players = new Set<string>();
   const events = new Set<string>();
@@ -65,7 +65,7 @@ export function analyzePgn(text: string): PgnAnalysis {
   }
 
   // Consume comments and quoted tag values as whole tokens before looking for moves or results.
-  const tokens = /^%[^\r\n]*|\[\s*([A-Za-z0-9_]+)\s+"((?:\\.|[^"\\\r\n])*)"\s*\]|\{[^}]*\}|;[^\r\n]*|[()]|\$\d+|[^\s\[\](){};$]+/gm;
+  const tokens = /^%[^\r\n]*|\[\s*([A-Za-z0-9_]+)\s+"((?:\\.|[^"\\\r\n])*)"\s*\]|\{[^}]*\}?|;[^\r\n]*|[()]|\$\d+|[^\s\[\](){};$]+/gm;
   for (const [token, tag, value] of text.matchAll(tokens)) {
     if (token.startsWith('%')) continue;
     if (token.startsWith('{') || token.startsWith(';')) {

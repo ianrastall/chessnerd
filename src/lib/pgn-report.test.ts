@@ -30,5 +30,6 @@ describe('PGN report', () => {
       withNags: 0, annotated: 0,
     });
     expect(analyzePgn('{ [White "Alice"] e4! 1-0 }').games).toBe(0);
+    expect(analyzePgn('1. e4 1-0 { [White "Alice"] e4!').games).toBe(1);
   });
 });
