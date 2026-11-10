@@ -133,6 +133,7 @@ test('opening explorer replays moves and copies the displayed position', async (
   await expect(row).toBeFocused();
   await expect(row).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('.eco-board .square')).toHaveCount(64);
+  await expect(page.locator('.eco-board')).toHaveCSS('touch-action', 'auto');
   const controls = page.getByRole('group', { name: 'Opening moves' });
   await expect(controls.getByRole('button', { name: 'Next move' })).toBeDisabled();
   await controls.getByRole('button', { name: 'Start' }).click();
