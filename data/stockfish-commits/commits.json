@@ -1,5 +1,110 @@
 [
   {
+    "hash": "43e01e07210948e1130dc687c065d7a3742b2793",
+    "short": "43e01e07",
+    "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+    "date": "2026-11-09T20:50:28Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/43e01e07210948e1130dc687c065d7a3742b2793",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/43e01e07210948e1130dc687c065d7a3742b2793.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/43e01e07210948e1130dc687c065d7a3742b2793.tar.gz"
+      }
+    ],
+    "message": "Clean up redundant curly brackets - Rebased\n\nClean up unnecessary curly brackets throughout the code.\nRebased.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7288\n\nNo functional change\n",
+    "subject": "Clean up redundant curly brackets - Rebased"
+  },
+  {
+    "hash": "7feac571ce4aa029e0b174e5baccc5c09e014642",
+    "short": "7feac571",
+    "author": "Timothy Herchen <timothy.herchen@gmail.com>",
+    "date": "2026-11-09T20:48:33Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7feac571ce4aa029e0b174e5baccc5c09e014642",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7feac571ce4aa029e0b174e5baccc5c09e014642.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7feac571ce4aa029e0b174e5baccc5c09e014642.tar.gz"
+      }
+    ],
+    "message": "Unroll important loops\n\nHistorically we've had issues with compilers not unrolling loops in NNUE: https://github.com/official-stockfish/Stockfish/issues/6474 , https://github.com/official-stockfish/Stockfish/pull/7251\n\nThese loops are special in that not unrolling them is always extremely bad for performance, rather than a heuristic that the compiler should guide to balance code size and instruction count. Thus, for GCC and clang, introduce `UNROLLED_FOR` that unconditionally unrolls these loops.\n\nPassed non regression https://tests.stockfishchess.org/tests/view/6aeb791420cd2dc3f03d1d28\n\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 219968 W: 55955 L: 55939 D: 108074\nPtnml(0-2): 195, 23148, 63295, 23138, 208\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7285\n\nNo functional change\n",
+    "subject": "Unroll important loops"
+  },
+  {
+    "hash": "0173667084ff2653ba42cd2de4f2360c0b400ff9",
+    "short": "01736670",
+    "author": "Shawn Xu <xu107288696@gmail.com>",
+    "date": "2026-11-09T20:47:18Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/0173667084ff2653ba42cd2de4f2360c0b400ff9",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0173667084ff2653ba42cd2de4f2360c0b400ff9.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/0173667084ff2653ba42cd2de4f2360c0b400ff9.tar.gz"
+      }
+    ],
+    "message": "Revert \"1 instance of rootNode\"\n\nNot a simplification. This removes the extra indentation, additional code, and fragmented condition logic.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7295\n\nNo functional change\n",
+    "subject": "Revert \"1 instance of rootNode\""
+  },
+  {
+    "hash": "26647279081cdc39d72ef9f10c33289a7da4a5e9",
+    "short": "26647279",
+    "author": "Shawn Xu <xu107288696@gmail.com>",
+    "date": "2026-11-09T20:45:32Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/26647279081cdc39d72ef9f10c33289a7da4a5e9",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/26647279081cdc39d72ef9f10c33289a7da4a5e9.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/26647279081cdc39d72ef9f10c33289a7da4a5e9.tar.gz"
+      }
+    ],
+    "message": "Update NNUE architecture to SFNNv20 and net nn-18cd32e11a9c.nnue\n\nCombination of two changes:\n* An additional two keys to the LayerStack selection, factorized in training, that results in 192 unique configurations. The keys are\n    * Whether pawns occupy the full board, one half, or none\n    * Whether at least one side has >=2 non-pawn pieces (officers)\n* Lower LR for non-factorizer K32Q2 and Threats input weights.\n\nBoth changes have been individually tested. Over half of the 192 LayerStack buckets are impossible to encounter in any reasonable game and are not present in learnable quantities in the training data. These buckets are dynamically pruned pre-training. QAT warmups were added to reduce the impact of init noise. It is not expected to bring any elo gain.\n\nPassed STC:\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 37792 W: 9820 L: 9513 D: 18459\nPtnml(0-2): 54, 4284, 9932, 4553, 73\nhttps://tests.stockfishchess.org/tests/view/6aef9fd120cd2dc3f03d24a4\n\nPassed LTC:\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 57942 W: 15109 L: 14757 D: 28076\nPtnml(0-2): 16, 5974, 16635, 6334, 12\nhttps://tests.stockfishchess.org/tests/view/6aed58c220cd2dc3f03d1ffb\n\nOther relevant tests:\nhttps://tests.stockfishchess.org/tests/view/6ae97b8e20cd2dc3f03d19a2\nhttps://tests.stockfishchess.org/tests/view/6aea35ea20cd2dc3f03d1ae4\nhttps://tests.stockfishchess.org/tests/view/6ae82eb120cd2dc3f03d17b0\nhttps://tests.stockfishchess.org/tests/view/6ae97b8e20cd2dc3f03d19a2\nhttps://tests.stockfishchess.org/tests/view/6ae99ca220cd2dc3f03d19cb\nhttps://tests.stockfishchess.org/tests/view/6ae828fd20cd2dc3f03d17ac\n\nnnue-pytorch: https://github.com/official-stockfish/nnue-pytorch/pull/570\nnettest: https://github.com/vondele/nettest/pull/584\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7296\n\nBench: 3464885\n",
+    "subject": "Update NNUE architecture to SFNNv20 and net nn-18cd32e11a9c.nnue"
+  },
+  {
+    "hash": "428d7c76b872bcaa757f786d2e5a15367693cf76",
+    "short": "428d7c76",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-11-09T20:44:10Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/428d7c76b872bcaa757f786d2e5a15367693cf76",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/428d7c76b872bcaa757f786d2e5a15367693cf76.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/428d7c76b872bcaa757f786d2e5a15367693cf76.tar.gz"
+      }
+    ],
+    "message": "Specialize some accumulator updates (Rebased)\n\nThis is a rebase and retest of https://github.com/official-stockfish/Stockfish/pull/7249 which already passed previously.\n\npassed STC:\nhttps://tests.stockfishchess.org/tests/view/6add1ac6733e627f7058d6eb\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 71776 W: 18342 L: 18007 D: 35427\nPtnml(0-2): 75, 7373, 20665, 7692, 83\n\npassed STC after a 2nd rebase:\nhttps://tests.stockfishchess.org/tests/view/6aee2ee620cd2dc3f03d21e2\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 111808 W: 28588 L: 28201 D: 55019\nPtnml(0-2): 117, 11480, 32307, 11899, 101\n\nAlso includes small cleanups. Written with Astra.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7263\n\nNo functional change\n",
+    "subject": "Specialize some accumulator updates (Rebased)"
+  },
+  {
     "hash": "7cdd5e89a39fe3071b67d91c7bb07d712044bf76",
     "short": "7cdd5e89",
     "author": "Adrian Ladoni <274005880+AdrianGHUB15@users.noreply.github.com>",
