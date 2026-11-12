@@ -92,7 +92,47 @@ test('engine downloads use platform and architecture filters with the daily feed
   await page.getByRole('searchbox', { name: 'Search engines' }).fill('different engine');
   await expect(card).toHaveCount(0);
 });
-test('older engine releases have their own versions, badges and downloads', async ({ page }) => {
+test('latest engine releases are paginated newest first with one card per repository', async ({ page }) => {
+  const engines = Array.from({ length: 19 }, (_, index) => ({
+    name: `Engine ${index + 1}`,
+    repo: `example/engine-${index + 1}`,
+    latest_release: { tag: 'v1', published_at: new Date(Date.UTC(2026, 0, index + 1)).toISOString(), assets: [] },
+  }));
+  let historyRequests = 0;
+  await page.route('**/data/engines/release-history.json', route => {
+    historyRequests += 1;
+    return route.fulfill({ status: 503 });
+  });
+  await page.route('**/data/engines/engines.json', route => route.fulfill({ json: {
+    generated: '2026-11-12T08:41:00Z',
+    engines: [...engines, { ...engines[18], name: 'Engine alias', repo: 'EXAMPLE/ENGINE-19' }],
+  } }));
+
+  await page.goto('/engines.html');
+  const status = page.locator('#enginesStatus');
+  const names = page.locator('.engine-name');
+  const scope = page.getByLabel('Releases', { exact: true });
+  const previous = page.getByRole('button', { name: 'Previous', exact: true });
+  const next = page.getByRole('button', { name: 'Next', exact: true });
+  await expect(scope).toHaveValue('latest');
+  await expect(status).toHaveText('19 releases · Page 1 of 2');
+  await expect(names).toHaveText(engines.slice(1).reverse().map(({ name }) => name));
+  await expect(previous).toBeDisabled();
+  await next.click();
+  await expect(status).toHaveText('19 releases · Page 2 of 2');
+  await expect(names).toHaveText(['Engine 1']);
+  await expect(next).toBeDisabled();
+  await previous.click();
+  await expect(status).toHaveText('19 releases · Page 1 of 2');
+  expect(historyRequests).toBe(0);
+  await next.click();
+  await scope.selectOption('all');
+  await expect(status).toHaveText('19 releases · Page 1 of 2 · Release history unavailable. Showing latest releases.');
+  await scope.selectOption('latest');
+  await expect(status).toHaveText('19 releases · Page 1 of 2');
+});
+
+test('all versions includes older engine releases with their own badges and downloads', async ({ page }) => {
   const repo = 'official-stockfish/Stockfish';
   const versions = Array.from({ length: 20 }, (_, index) => {
     const number = index + 1;
@@ -112,6 +152,11 @@ test('older engine releases have their own versions, badges and downloads', asyn
   await page.route('https://raw.githubusercontent.com/**/icon_128x128.png', route => route.abort());
   await page.goto('/engines.html');
   const cards = page.locator('.engine-card');
+  const scope = page.getByLabel('Releases', { exact: true });
+  await expect(page.locator('#enginesStatus')).toHaveText('1 release');
+  await expect(cards).toHaveCount(1);
+  await expect(cards.locator('.engine-version')).toHaveText('v20.0.0');
+  await scope.selectOption('all');
   await expect(page.locator('#enginesStatus')).toHaveText('20 releases · Page 1 of 2');
   await expect(cards).toHaveCount(18);
   const newest = cards.first();
@@ -129,6 +174,8 @@ test('older engine releases have their own versions, badges and downloads', asyn
   await expect(cards.getByRole('link', { name: 'v1.0.0' })).toHaveAttribute('href', versions[0].url);
   await expect(cards.getByText('Prerelease', { exact: true })).toBeVisible();
   await expect(cards.getByRole('link', { name: 'stockfish-linux-arm64.tar.gz' })).toBeVisible();
+  await scope.selectOption('latest');
+  await expect(page.getByText('No releases match your search or filters.')).toBeVisible();
   await page.setViewportSize({ width: 320, height: 768 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
 });

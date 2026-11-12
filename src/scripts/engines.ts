@@ -146,6 +146,15 @@ function releaseTime(release: EngineRelease): number {
   return Date.parse(release.published_at ?? '') || 0;
 }
 
+function listRelease(engine: Engine, release: EngineRelease): ListedRelease {
+  return {
+    engine,
+    release,
+    downloads: (release.assets ?? []).flatMap((asset) =>
+      asset.name && asset.url ? [{ ...asset, name: asset.name, url: asset.url, ...classifyEngineDownload(asset.name) }] : []),
+  };
+}
+
 function sortReleases(releases: ListedRelease[], mode: SortMode): ListedRelease[] {
   return releases.toSorted((a, b) => {
     const byDate = releaseTime(b.release) - releaseTime(a.release);
@@ -327,6 +336,7 @@ function renderEngine({ engine, release, downloads }: ListedRelease, assets: Dow
 }
 
 function initEngines() {
+  const scopeSelect = byId<HTMLSelectElement>('enginesScope');
   const sortSelect = byId<HTMLSelectElement>('enginesSort');
   const searchInput = byId<HTMLInputElement>('enginesSearch');
   const platformSelect = byId<HTMLSelectElement>('enginesPlatform');
@@ -338,13 +348,28 @@ function initEngines() {
   const previous = byId<HTMLButtonElement>('enginesPrevious');
   const next = byId<HTMLButtonElement>('enginesNext');
 
-  if (!sortSelect || !searchInput || !platformSelect || !architectureSelect || !status || !generated || !list || !pagination || !previous || !next) return;
+  if (!scopeSelect || !sortSelect || !searchInput || !platformSelect || !architectureSelect || !status || !generated || !list || !pagination || !previous || !next) return;
 
-  let releases: ListedRelease[] = [];
+  let latestReleases: ListedRelease[] | undefined;
+  let refreshed: string;
+  let history: 'idle' | 'loading' | 'failed' | { releases: ListedRelease[]; generated: string } = 'idle';
   let page = 0;
-  let historyAvailable = false;
 
   function render() {
+    if (!latestReleases) return;
+    const showHistory = scopeSelect!.value === 'all';
+    if (showHistory && history === 'loading') {
+      status!.textContent = 'Loading release history...';
+      pagination!.hidden = true;
+      list!.replaceChildren();
+      return;
+    }
+
+    const historyData = showHistory && typeof history === 'object' ? history : undefined;
+    const releases = historyData?.releases ?? latestReleases;
+    const updated = historyData?.generated ?? refreshed;
+    generated!.dateTime = updated;
+    generated!.textContent = `Refreshed ${formatDate(updated)}`;
     const filter = searchInput!.value.trim().toLowerCase();
     const mode = sortSelect!.value as SortMode;
     const platform = platformSelect!.value;
@@ -360,11 +385,10 @@ function initEngines() {
 
     const pageCount = Math.ceil(matching.length / PAGE_SIZE);
     page = Math.min(page, Math.max(0, pageCount - 1));
-    const count = matching.length.toLocaleString();
-    const scope = historyAvailable ? '' : ' · Latest releases only';
-    status!.textContent = pageCount > 1
-      ? `${count} releases · Page ${page + 1} of ${pageCount}${scope}`
-      : `${count} releases${scope}`;
+    const count = `${matching.length.toLocaleString()} ${matching.length === 1 ? 'release' : 'releases'}`;
+    const pageLabel = pageCount > 1 ? ` · Page ${page + 1} of ${pageCount}` : '';
+    const fallback = showHistory && history === 'failed' ? ' · Release history unavailable. Showing latest releases.' : '';
+    status!.textContent = count + pageLabel + fallback;
     pagination!.hidden = pageCount <= 1;
     previous!.disabled = page === 0;
     next!.disabled = page + 1 >= pageCount;
@@ -397,32 +421,42 @@ function initEngines() {
   previous.addEventListener('click', () => { page -= 1; render(); });
   next.addEventListener('click', () => { page += 1; render(); });
 
-  void Promise.all([
-    fetchJson<EnginesPayload>(DATA_URL),
-    fetchJson<ReleaseHistory>(HISTORY_URL).catch(() => null),
-  ])
-    .then(([payload, history]) => {
-      historyAvailable = Boolean(history?.releases);
-      const refreshed = history?.generated ?? payload.generated;
-      generated.dateTime = refreshed;
-      generated.textContent = `Refreshed ${formatDate(refreshed)}`;
-      const versionsByRepo = new Map(Object.entries(history?.releases ?? {})
-        .map(([repo, versions]) => [repo.toLowerCase(), versions] as const));
-      const seenRepos = new Set<string>();
-      releases = (payload.engines ?? []).flatMap((engine) => {
+  void fetchJson<EnginesPayload>(DATA_URL)
+    .then((payload) => {
+      const engines = new Map<string, Engine>();
+      for (const engine of payload.engines ?? []) {
         const repo = engine.repo.toLowerCase();
-        if (seenRepos.has(repo)) return [];
-        seenRepos.add(repo);
-        const versions = [...(versionsByRepo.get(repo) ?? [])];
-        const latest = engine.latest_release;
-        if (latest && !versions.some((release) => release.tag === latest.tag)) versions.push(latest);
-        return versions.map((release) => ({
-          engine,
-          release,
-          downloads: (release.assets ?? []).flatMap((asset) =>
-            asset.name && asset.url ? [{ ...asset, name: asset.name, url: asset.url, ...classifyEngineDownload(asset.name) }] : []),
-        }));
+        if (!engines.has(repo)) engines.set(repo, engine);
+      }
+
+      refreshed = payload.generated;
+      latestReleases = Array.from(engines.values()).flatMap((engine) =>
+        engine.latest_release ? [listRelease(engine, engine.latest_release)] : []);
+
+      scopeSelect.addEventListener('change', () => {
+        if (scopeSelect.value === 'all' && (history === 'idle' || history === 'failed')) {
+          history = 'loading';
+          void fetchJson<ReleaseHistory>(HISTORY_URL)
+            .then((payload) => {
+              const versionsByRepo = new Map(Object.entries(payload.releases)
+                .map(([repo, versions]) => [repo.toLowerCase(), versions] as const));
+              const releases = [...engines].flatMap(([repo, engine]) => {
+                const versions = [...(versionsByRepo.get(repo) ?? [])];
+                const latest = engine.latest_release;
+                if (latest && !versions.some((release) => release.tag === latest.tag)) versions.push(latest);
+                return versions.map((release) => listRelease(engine, release));
+              });
+              history = { releases, generated: payload.generated };
+            })
+            .catch(() => {
+              history = 'failed';
+            })
+            .then(render);
+        }
+        resetPage();
       });
+      scopeSelect.value = 'latest';
+      scopeSelect.disabled = false;
       render();
     })
     .catch((error: unknown) => {

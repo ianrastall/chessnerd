@@ -21,7 +21,14 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
             <label for="enginesSearch">Search</label>
             <input id="enginesSearch" type="search" placeholder="Engine, version, author…" autocomplete="off" aria-label="Search engines" />
           </div>
-          <div class="option-group engines-sort">
+          <div class="option-group">
+            <label for="enginesScope">Releases</label>
+            <select id="enginesScope" disabled>
+              <option value="latest">Latest per engine</option>
+              <option value="all">All versions</option>
+            </select>
+          </div>
+          <div class="option-group">
             <label for="enginesSort">Sort</label>
             <select id="enginesSort" aria-label="Sort order">
               <option value="released">Newest first</option>
@@ -70,7 +77,7 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
   <style is:global>
     .engines-controls {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 2fr) repeat(4, minmax(9rem, 1fr));
       gap: 1rem;
       align-items: end;
     }
@@ -326,14 +333,12 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
       line-height: 1.5;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1250px) {
       .engines-controls {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-    }
 
-    @media (max-width: 520px) {
-      .engines-search, .engines-sort {
+      .engines-search {
         grid-column: 1 / -1;
       }
     }
