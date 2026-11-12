@@ -13,12 +13,11 @@ How each tool's data is refreshed today. `docs/data-dependencies.md` has the ful
 Each job validates with `npm run build` and commits only when its output changed. It rebases on `main` before pushing, so commits that land during a long run don't make the push fail. A successful run on `main` triggers **Deploy to GitHub Pages**.
 
 To find additions to Engine Releases, run `python scripts/engines/discover_engines.py`
-from the repository root with `GH_TOKEN` or `GITHUB_TOKEN` set. It searches
+from the repository root with an authenticated GitHub CLI. It searches
 `topic:uci topic:chess`, `topic:ucichessengine`, `topic:uci-chess-engine`,
 `topic:chess-engine` and `topic:chessengine` in order. Results are deduplicated
-and omit repositories already in the manifest. GitHub's search API returns at
-most 1,000 results per query. The command reports when a query exceeds that
-limit and fetches its most-starred results first.
+and omit repositories already in the manifest. Searches with more than 1,000
+matches are divided into creation-date ranges and paginated.
 
 Before adding a candidate, verify in its own repository that it plays standard
 chess via UCI, has an open-source license and offers a GitHub release with
@@ -26,6 +25,36 @@ engine downloads. Record the query and the repository evidence in
 `scripts/engines/sources/github_topics.json`, then regenerate the manifest
 with `python scripts/engines/build_manifest.py`. The scheduled updater uses
 the reviewed manifest.
+
+### Downloadable GitHub chess engine catalogue
+
+The JSON download on Engine Releases covers public repositories for chess
+engines, including projects without tagged releases and engines using any
+protocol. It searches the five topics above plus `topic:chess-engines` and
+repositories with “chess engine” in their description and at least one star.
+Topic searches have no star threshold. The existing engine manifest and RWBC
+GitHub index supply additional candidates. Results depend on the GitHub
+search index and the evidence available in each repository.
+
+Run these commands from the repository root with an authenticated GitHub CLI.
+The evidence cache contains upstream README text and stays local.
+
+```sh
+mkdir -p .cache/github-chess-engines
+python scripts/engines/discover_engines.py --catalog > .cache/github-chess-engines/candidates.json
+python scripts/engines/collect_catalog_evidence.py .cache/github-chess-engines/repositories.jsonl --candidates .cache/github-chess-engines/candidates.json
+python scripts/engines/build_catalog.py .cache/github-chess-engines/candidates.json .cache/github-chess-engines/repositories.jsonl --report .cache/github-chess-engines/excluded.json
+```
+
+Use a fresh evidence cache for each new snapshot. Reuse that cache to resume
+an interrupted collection. The builder checks coverage and deduplicates
+renamed repositories by their current GitHub name. It screens repository
+descriptions, README text and source filenames, and records the basis for
+each inclusion. Manual source checks and exclusions are recorded in
+`scripts/engines/sources/github_catalog_review.json`. `protocols_mentioned`
+records text mentions, and a null
+license means GitHub did not report a recognized license. Review the results
+and the exclusion report before publishing.
 
 The titled-player sync fetches each player's ratings once per UTC day and profiles weekly. All ten title lists must succeed; a removal above 10% fails the run. Requests are serial, retries and backoff bounded by a five-and-a-half-hour budget inside a six-hour job. Failed requests never zero known ratings or advance freshness timestamps. Accounts returning HTTP 404 are left out of that day's snapshot and counted in metadata; more than 1% of the cohort failing this way fails the run. Progress is saved outside public data in an Actions cache; an incomplete run fails without committing public changes or triggering deployment. A same-UTC-day retry resumes fresh stats checkpoints; older stats require another fetch. The page shows the whole cohort's date range, rather than its newest record.
 
