@@ -103,7 +103,10 @@ test('older engine releases have their own versions, badges and downloads', asyn
       assets: [{ name, url: `https://github.com/${repo}/releases/download/${tag}/${name}`, size: 1024 }] };
   });
   await page.route('**/data/engines/engines.json', route => route.fulfill({ json: {
-    generated: '2026-11-12T08:41:00Z', engines: [{ name: 'Stockfish', repo, language: 'C++', latest_release: versions.at(-1) }],
+    generated: '2026-11-12T08:41:00Z', engines: [
+      { name: 'Stockfish', repo, language: 'C++', latest_release: versions.at(-1) },
+      { name: 'Stockfish alias', repo: repo.toLowerCase(), latest_release: versions.at(-1) },
+    ],
   } }));
   await page.route('**/data/engines/release-history.json', route => route.fulfill({ json: { releases: { [repo]: versions } } }));
   await page.route('https://raw.githubusercontent.com/**/icon_128x128.png', route => route.abort());

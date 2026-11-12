@@ -406,8 +406,14 @@ function initEngines() {
       const refreshed = history?.generated ?? payload.generated;
       generated.dateTime = refreshed;
       generated.textContent = `Refreshed ${formatDate(refreshed)}`;
+      const versionsByRepo = new Map(Object.entries(history?.releases ?? {})
+        .map(([repo, versions]) => [repo.toLowerCase(), versions] as const));
+      const seenRepos = new Set<string>();
       releases = (payload.engines ?? []).flatMap((engine) => {
-        const versions = [...(history?.releases?.[engine.repo] ?? [])];
+        const repo = engine.repo.toLowerCase();
+        if (seenRepos.has(repo)) return [];
+        seenRepos.add(repo);
+        const versions = [...(versionsByRepo.get(repo) ?? [])];
         const latest = engine.latest_release;
         if (latest && !versions.some((release) => release.tag === latest.tag)) versions.push(latest);
         return versions.map((release) => ({
