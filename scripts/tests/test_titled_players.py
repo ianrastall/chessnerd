@@ -51,6 +51,13 @@ class TitledTests(unittest.TestCase):
                 sync.safe_request('https://api.chess.com/pub/player/test/stats')
         sleep.assert_not_called()
 
+    def test_zero_retry_after_still_backs_off_and_reports_status(self):
+        response = Mock(status_code=429, headers={'Retry-After': '0'})
+        with patch.object(sync.session, 'get', return_value=response), patch.object(sync.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(sync.RetryExhausted, 'HTTP 429'):
+                sync.safe_request('https://api.chess.com/pub/player/test/stats')
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [2, 4, 8])
+
     def test_stats_404_is_not_an_unrated_player(self):
         old = {'username': 'test', 'rapid': 2700, 'stats_updated_at': '2026-10-01T00:00:00Z'}
         response = Mock(status_code=404)
@@ -143,6 +150,37 @@ class TitledTests(unittest.TestCase):
                     sync.main()
             self.assertEqual((output.read_bytes(), meta.read_bytes()), before)
             self.assertEqual(sync.load(checkpoint)['test']['rapid'], 2700)
+
+    def test_transient_failures_are_retried_after_other_players(self):
+        now = datetime(2026, 11, 12, 6, tzinfo=timezone.utc)
+        for recovers in (True, False):
+            with self.subTest(recovers=recovers), tempfile.TemporaryDirectory() as temp:
+                output, meta, checkpoint, patches, request = self.run_404_fixture(
+                    Path(temp), ['alice', 'bob'], set()
+                )
+                before = output.read_bytes(), meta.read_bytes()
+                stats_requests = []
+
+                def intermittent_request(url):
+                    if url.endswith('/stats'):
+                        stats_requests.append(url.split('/')[-2])
+                        if url.endswith('/alice/stats') and (len(stats_requests) == 1 or not recovers):
+                            raise sync.RetryExhausted('HTTP 503')
+                    return request(url)
+
+                with patches, patch.object(sync, 'utc_now', return_value=now), patch.object(
+                    sync, 'safe_request', side_effect=intermittent_request
+                ):
+                    if recovers:
+                        sync.main()
+                        self.assertEqual(sync.load(output)['alice']['rapid'], 2800)
+                        self.assertEqual(json.loads(meta.read_text())['failed'], 0)
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, 'Incomplete daily snapshot'):
+                            sync.main()
+                        self.assertEqual((output.read_bytes(), meta.read_bytes()), before)
+                        self.assertEqual(sync.load(checkpoint)['bob']['rapid'], 2800)
+                self.assertEqual(stats_requests, ['alice', 'bob', 'alice'])
 
     def test_invalid_response_blocks_publication(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -67,7 +67,14 @@ jobs:
       - name: Build
         run: npm run build
       - name: Install browser
-        run: npx playwright install --with-deps chromium
+        timeout-minutes: 30
+        run: |
+          for delay in 15 30; do
+            if npx playwright install --with-deps chromium; then exit 0; fi
+            echo "Browser installation failed. Retrying in ${delay}s."
+            sleep "$delay"
+          done
+          npx playwright install --with-deps chromium
       - name: Browser regression checks
         run: npm run test:browser
       - name: Upload artifact

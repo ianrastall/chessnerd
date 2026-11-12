@@ -14,9 +14,11 @@ request every player's profile from the visitor's browser.
 cohort, so it is not a replacement for the complete titled-player lists.
 
 Ratings refresh once per UTC day, profiles weekly. Requests run serially with
-an identifying User-Agent, bounded retries and a five-and-a-half-hour total
-budget (`MAX_RUN_SECONDS=19800`). The Actions job allows six hours, leaving
-30 minutes for setup, checkpoint saving and build validation. The
+an identifying User-Agent and bounded retries. The sync revisits players whose
+requests exhausted their retries after the first pass, within the same
+five-and-a-half-hour total budget (`MAX_RUN_SECONDS=19800`). The Actions job
+allows six hours, leaving 30 minutes for setup, checkpoint saving and build
+validation. The
 API may serve cached data; fetch time does not claim real-time rating currency.
 
 All title lists must succeed, and removals greater than 10% fail validation.

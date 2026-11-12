@@ -34,6 +34,10 @@ class NotFound(ValueError):
     pass
 
 
+class RetryExhausted(RuntimeError):
+    pass
+
+
 def utc_now():
     return datetime.now(timezone.utc)
 
@@ -50,6 +54,7 @@ def check_budget():
 def safe_request(url):
     for attempt in range(4):
         check_budget()
+        delay = 2 ** (attempt + 1)
         try:
             response = session.get(url, timeout=min(20, max(0.1, deadline - time.monotonic())))
             if response.status_code == 200:
@@ -61,16 +66,18 @@ def safe_request(url):
                 raise NotFound(f'API HTTP 404: {url}')
             if response.status_code != 429 and response.status_code < 500:
                 raise ValueError(f'API HTTP {response.status_code}: {url}')
+            reason = f'HTTP {response.status_code}'
             retry = response.headers.get('Retry-After', '')
-            delay = min(120, int(retry)) if retry.isdigit() else 2 ** (attempt + 1)
-        except (requests.RequestException, json.JSONDecodeError):
-            delay = 2 ** (attempt + 1)
+            if retry.isdigit():
+                delay = max(delay, min(120, int(retry)))
+        except (requests.RequestException, json.JSONDecodeError) as exc:
+            reason = type(exc).__name__
         if attempt == 3:
             break
         if time.monotonic() + delay >= deadline:
             raise TimeoutError('API retry would exceed refresh time limit')
         time.sleep(delay)
-    raise RuntimeError(f'API retries exhausted: {url}')
+    raise RetryExhausted(f'API retries exhausted ({reason}): {url}')
 
 
 def save(path, data):
@@ -156,28 +163,37 @@ def main():
         raise ValueError(f'Removal guard: {len(departed)} of {len(public)} saved players missing')
     working = {u: dict(p, title=title_map[u]) for u, p in existing.items() if u in title_map}
     failures = []
+    retry_players = []
     unavailable = []
     refreshed = 0
     try:
-        for index, username in enumerate(sorted(title_map), 1):
-            check_budget()
-            old = working.get(username, {})
-            if stats_current(old, utc_now()) and profile_current(old, utc_now()):
-                continue
-            try:
-                working[username] = get_player_data(username, title_map[username], old)
-                refreshed += 1
-            except NotFound as exc:
-                # Listed but not served (closed or temporarily unavailable). Known
-                # data stays in the checkpoint; the player is left out of today's snapshot.
-                unavailable.append(username)
-                print(f'Unavailable {username}: {exc}', flush=True)
-            except (ValueError, RuntimeError, requests.RequestException) as exc:
-                failures.append(username)
-                print(f'Failed {username}: {exc}', flush=True)
-            if index % 50 == 0:
-                save(CHECKPOINT_FILE, sorted(working.values(), key=sort_key))
-                print(f'{index}/{len(title_map)} checked; {refreshed} refreshed; {len(failures)} failed; {len(unavailable)} unavailable', flush=True)
+        for retrying in (False, True):
+            players = retry_players if retrying else sorted(title_map)
+            if retrying and players:
+                print(f'Retrying {len(players)} players after transient API failures', flush=True)
+            for index, username in enumerate(players, 1):
+                check_budget()
+                old = working.get(username, {})
+                if not (stats_current(old, utc_now()) and profile_current(old, utc_now())):
+                    try:
+                        working[username] = get_player_data(username, title_map[username], old)
+                        refreshed += 1
+                    except NotFound as exc:
+                        # Keep known data in the checkpoint for later runs.
+                        unavailable.append(username)
+                        print(f'Unavailable {username}: {exc}', flush=True)
+                    except (ValueError, RuntimeError, requests.RequestException) as exc:
+                        if not retrying and isinstance(exc, RetryExhausted):
+                            retry_players.append(username)
+                            print(f'Deferred {username}: {exc}', flush=True)
+                        else:
+                            failures.append(username)
+                            print(f'Failed {username}: {exc}', flush=True)
+                if index % 50 == 0:
+                    save(CHECKPOINT_FILE, sorted(working.values(), key=sort_key))
+                    phase = 'Retry pass' if retrying else 'Initial pass'
+                    print(f'{phase}: {index}/{len(players)} checked; {refreshed} refreshed; '
+                          f'{len(failures)} failed; {len(unavailable)} unavailable', flush=True)
         if len(unavailable) > MAX_UNAVAILABLE_SHARE * len(title_map):
             raise RuntimeError(f'Unavailable guard: {len(unavailable)} of {len(title_map)} players returned 404; public data retained')
         skipped = set(unavailable)
