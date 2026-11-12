@@ -1,4 +1,5 @@
 import { classifyEngineDownload, engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
+import cardMetadata from '../data/engine-cards.json';
 
 interface ReleaseAsset {
   name: string | null;
@@ -39,11 +40,26 @@ interface EnginesPayload {
   engines: Engine[];
 }
 
-type SortMode = 'released' | 'name' | 'stars';
+interface ReleaseHistory {
+  generated: string;
+  releases: Record<string, EngineRelease[]>;
+}
+
+type SortMode = 'released' | 'oldest' | 'name' | 'stars';
 type Download = ReleaseAsset & { name: string; url: string } & ReturnType<typeof classifyEngineDownload>;
-type ListedEngine = Engine & { downloads: Download[] };
+type ListedRelease = { engine: Engine; release: EngineRelease; downloads: Download[] };
 
 const DATA_URL = '/data/engines/engines.json';
+const HISTORY_URL = '/data/engines/release-history.json';
+const PAGE_SIZE = 18;
+const metadata: Record<string, { protocols?: string[]; logo?: string }> = cardMetadata;
+const platformIcons: Record<string, string> = {
+  windows: 'windows11', macos: 'apple', linux: 'linux', android: 'android',
+};
+const languageIcons: Record<string, string> = {
+  C: 'c', 'C++': 'cplusplus', 'C#': 'csharp', Rust: 'rust', Java: 'java', Go: 'go',
+  Zig: 'zig', Python: 'python', JavaScript: 'javascript', TypeScript: 'typescript', Kotlin: 'kotlin',
+};
 
 function byId<T extends HTMLElement>(id: string): T | null {
   return document.getElementById(id) as T | null;
@@ -92,37 +108,55 @@ function makeButtonLink(label: string, href: string, iconName: string): HTMLAnch
   return link;
 }
 
-function makeTag(text: string): HTMLSpanElement {
+function makeImage(url: string): HTMLImageElement {
+  const image = document.createElement('img');
+  image.src = url;
+  image.alt = '';
+  image.loading = 'lazy';
+  image.decoding = 'async';
+  image.referrerPolicy = 'no-referrer';
+  return image;
+}
+
+function makeBrandIcon(name: string): HTMLImageElement {
+  const image = makeImage(`/img/engine-icons/${name}.svg`);
+  if (name === 'apple' || name === 'linux' || name === 'rust') image.classList.add('engine-icon-mono');
+  return image;
+}
+
+function makePlatformIcon(platform: string): HTMLElement | undefined {
+  const name = platformIcons[platform];
+  return name ? makeBrandIcon(name) : platform === 'freebsd' ? makeIcon('terminal') : undefined;
+}
+
+function makeTag(text: string, icon?: HTMLElement): HTMLSpanElement {
   const tag = document.createElement('span');
   tag.className = 'engine-tag';
-  tag.textContent = text;
+  if (icon) {
+    const label = document.createElement('span');
+    label.textContent = text;
+    tag.append(icon, label);
+  } else {
+    tag.textContent = text;
+  }
   return tag;
 }
 
-function releaseTime(engine: Engine): number {
-  const value = engine.latest_release?.published_at;
-  const time = value ? new Date(value).getTime() : NaN;
-  return Number.isNaN(time) ? -Infinity : time;
+function releaseTime(release: EngineRelease): number {
+  return Date.parse(release.published_at ?? '') || 0;
 }
 
-function sortEngines(engines: ListedEngine[], mode: SortMode): ListedEngine[] {
-  const sorted = [...engines];
-  switch (mode) {
-    case 'name':
-      sorted.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case 'stars':
-      sorted.sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0));
-      break;
-    case 'released':
-    default:
-      sorted.sort((a, b) => releaseTime(b) - releaseTime(a));
-      break;
-  }
-  return sorted;
+function sortReleases(releases: ListedRelease[], mode: SortMode): ListedRelease[] {
+  return releases.toSorted((a, b) => {
+    const byDate = releaseTime(b.release) - releaseTime(a.release);
+    if (mode === 'name') return a.engine.name.localeCompare(b.engine.name) || byDate;
+    if (mode === 'stars') return (b.engine.stars ?? 0) - (a.engine.stars ?? 0) || byDate;
+    if (mode === 'oldest') return -byDate || a.engine.name.localeCompare(b.engine.name);
+    return byDate || a.engine.name.localeCompare(b.engine.name);
+  });
 }
 
-function engineMatches(engine: Engine, filter: string): boolean {
+function releaseMatches({ engine, release }: ListedRelease, filter: string): boolean {
   if (!filter) return true;
   const haystack = [
     engine.name,
@@ -131,7 +165,9 @@ function engineMatches(engine: Engine, filter: string): boolean {
     engine.language,
     engine.license,
     engine.description,
-    engine.latest_release?.tag
+    release.tag,
+    release.name,
+    ...(metadata[engine.repo.toLowerCase()]?.protocols ?? []),
   ]
     .filter(Boolean)
     .join('\n')
@@ -139,26 +175,26 @@ function engineMatches(engine: Engine, filter: string): boolean {
   return haystack.includes(filter);
 }
 
-function renderRelease(engine: Engine): HTMLElement {
-  const release = engine.latest_release;
+function renderVersion(release: EngineRelease): HTMLElement {
   const wrap = document.createElement('div');
-  wrap.className = 'engine-release';
-
-  if (!release) {
-    wrap.classList.add('is-empty');
-    wrap.append(makeIcon('history'), document.createTextNode('No tagged releases'));
-    return wrap;
+  wrap.className = 'engine-version-row';
+  const version = release.url ? document.createElement('a') : document.createElement('span');
+  if (version instanceof HTMLAnchorElement && release.url) {
+    version.href = release.url;
+    version.target = '_blank';
+    version.rel = 'noopener noreferrer';
   }
-
-  const version = document.createElement('span');
   version.className = 'engine-version';
-  version.textContent = release.tag || release.name || 'Release';
+  version.textContent = release.tag || release.name || 'Version details';
 
-  const date = document.createElement('span');
+  const date = document.createElement('time');
   date.className = 'engine-release-date';
+  if (release.published_at) date.dateTime = release.published_at;
   date.textContent = formatDate(release.published_at);
 
-  wrap.append(makeIcon('new_releases'), version, date);
+  wrap.append(version);
+  if (release.prerelease) wrap.append(makeTag('Prerelease'));
+  wrap.append(date);
   return wrap;
 }
 
@@ -180,7 +216,9 @@ function renderDownloads(assets: Download[], open: boolean): HTMLDetailsElement 
 
     const title = document.createElement('div');
     title.className = 'engine-download-title';
-    title.textContent = label;
+    const icon = makePlatformIcon(value);
+    if (icon) title.append(icon);
+    title.append(document.createTextNode(label));
     const list = document.createElement('ul');
     list.setAttribute('aria-label', label);
     for (const asset of downloads) {
@@ -208,12 +246,24 @@ function renderDownloads(assets: Download[], open: boolean): HTMLDetailsElement 
   return details;
 }
 
-function renderEngine(engine: Engine, assets: Download[], showDownloads: boolean): HTMLElement {
+function renderEngine({ engine, release, downloads }: ListedRelease, assets: Download[], showDownloads: boolean): HTMLElement {
   const card = document.createElement('article');
   card.className = 'engine-card';
 
   const head = document.createElement('div');
   head.className = 'engine-head';
+  const details = metadata[engine.repo.toLowerCase()];
+  const identity = document.createElement('div');
+  identity.className = 'engine-identity';
+  const logo = document.createElement('span');
+  logo.className = 'engine-logo';
+  if (details?.logo) {
+    const image = makeImage(details.logo);
+    image.addEventListener('error', () => logo.replaceChildren(makeIcon('extension')), { once: true });
+    logo.append(image);
+  } else {
+    logo.append(makeIcon('extension'));
+  }
 
   const name = document.createElement('a');
   name.className = 'engine-name';
@@ -221,7 +271,8 @@ function renderEngine(engine: Engine, assets: Download[], showDownloads: boolean
   name.target = '_blank';
   name.rel = 'noopener noreferrer';
   name.textContent = engine.name;
-  head.append(name);
+  identity.append(logo, name);
+  head.append(identity);
 
   if (typeof engine.stars === 'number') {
     const stars = document.createElement('span');
@@ -247,24 +298,30 @@ function renderEngine(engine: Engine, assets: Download[], showDownloads: boolean
 
   const tags = document.createElement('div');
   tags.className = 'engine-tags';
-  if (engine.language) tags.append(makeTag(engine.language));
+  for (const protocol of details?.protocols ?? []) tags.append(makeTag(protocol, makeIcon('settings_ethernet')));
+  for (const { value, label } of enginePlatforms) {
+    if (value !== 'other' && downloads.some((asset) => asset.platform === value)) {
+      tags.append(makeTag(label, makePlatformIcon(value)));
+    }
+  }
+  if (engine.language) {
+    const icon = languageIcons[engine.language];
+    tags.append(makeTag(engine.language, icon ? makeBrandIcon(icon) : makeIcon('code')));
+  }
   if (engine.license) tags.append(makeTag(engine.license));
   if (engine.archived) tags.append(makeTag('Archived'));
   if (tags.childElementCount > 0) card.append(tags);
 
-  card.append(renderRelease(engine));
+  card.append(renderVersion(release));
 
   const links = document.createElement('div');
   links.className = 'engine-links';
   if (engine.url) links.append(makeButtonLink('Repo', engine.url, 'open_in_new'));
-  if (engine.latest_release?.url) {
-    links.append(makeButtonLink('Release', engine.latest_release.url, 'new_releases'));
-  }
   if (engine.homepage) links.append(makeButtonLink('Website', engine.homepage, 'language'));
   if (links.childElementCount > 0) card.append(links);
 
-  const downloads = renderDownloads(assets, showDownloads);
-  if (downloads) card.append(downloads);
+  const downloadList = renderDownloads(assets, showDownloads);
+  if (downloadList) card.append(downloadList);
 
   return card;
 }
@@ -275,12 +332,17 @@ function initEngines() {
   const platformSelect = byId<HTMLSelectElement>('enginesPlatform');
   const architectureSelect = byId<HTMLSelectElement>('enginesArchitecture');
   const status = byId<HTMLDivElement>('enginesStatus');
-  const generated = byId<HTMLDivElement>('enginesGenerated');
+  const generated = byId<HTMLTimeElement>('enginesGenerated');
   const list = byId<HTMLElement>('enginesList');
+  const pagination = byId<HTMLElement>('enginesPages');
+  const previous = byId<HTMLButtonElement>('enginesPrevious');
+  const next = byId<HTMLButtonElement>('enginesNext');
 
-  if (!sortSelect || !searchInput || !platformSelect || !architectureSelect || !status || !generated || !list) return;
+  if (!sortSelect || !searchInput || !platformSelect || !architectureSelect || !status || !generated || !list || !pagination || !previous || !next) return;
 
-  let engines: ListedEngine[] = [];
+  let releases: ListedRelease[] = [];
+  let page = 0;
+  let historyAvailable = false;
 
   function render() {
     const filter = searchInput!.value.trim().toLowerCase();
@@ -288,20 +350,27 @@ function initEngines() {
     const platform = platformSelect!.value;
     const architecture = architectureSelect!.value;
     const hasDownloadFilter = Boolean(platform || architecture);
-    const visible = sortEngines(engines.filter((engine) => engineMatches(engine, filter)), mode)
-      .map((engine) => ({
-        engine,
-        downloads: engine.downloads.filter((asset) =>
+    const matching = sortReleases(releases.filter((entry) => releaseMatches(entry, filter)), mode)
+      .map((entry) => ({
+        entry,
+        downloads: entry.downloads.filter((asset) =>
           (!platform || asset.platform === platform) && (!architecture || asset.architecture === architecture)),
       }))
       .filter(({ downloads }) => !hasDownloadFilter || downloads.length > 0);
 
-    status!.textContent = filter || hasDownloadFilter
-      ? `${visible.length.toLocaleString()} of ${engines.length.toLocaleString()} releases`
-      : `${engines.length.toLocaleString()} engine releases`;
+    const pageCount = Math.ceil(matching.length / PAGE_SIZE);
+    page = Math.min(page, Math.max(0, pageCount - 1));
+    const count = matching.length.toLocaleString();
+    const scope = historyAvailable ? '' : ' · Latest releases only';
+    status!.textContent = pageCount > 1
+      ? `${count} releases · Page ${page + 1} of ${pageCount}${scope}`
+      : `${count} releases${scope}`;
+    pagination!.hidden = pageCount <= 1;
+    previous!.disabled = page === 0;
+    next!.disabled = page + 1 >= pageCount;
 
     list!.replaceChildren();
-    if (visible.length === 0) {
+    if (matching.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'engines-empty';
       empty.textContent = 'No releases match your search or filters.';
@@ -310,25 +379,44 @@ function initEngines() {
     }
 
     const fragment = document.createDocumentFragment();
-    for (const { engine, downloads } of visible) fragment.append(renderEngine(engine, downloads, hasDownloadFilter));
+    for (const { entry, downloads } of matching.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)) {
+      fragment.append(renderEngine(entry, downloads, hasDownloadFilter));
+    }
     list!.append(fragment);
   }
 
-  sortSelect.addEventListener('change', render);
-  searchInput.addEventListener('input', render);
-  platformSelect.addEventListener('change', render);
-  architectureSelect.addEventListener('change', render);
+  function resetPage() {
+    page = 0;
+    render();
+  }
 
-  void fetchJson<EnginesPayload>(DATA_URL)
-    .then((payload) => {
-      // The feed only shows engines that have an actual GitHub release.
-      engines = (payload.engines ?? []).flatMap((engine) => {
-        if (!engine.latest_release) return [];
-        const downloads = (engine.latest_release.assets ?? []).flatMap((asset) =>
-          asset.name && asset.url ? [{ ...asset, name: asset.name, url: asset.url, ...classifyEngineDownload(asset.name) }] : []);
-        return [{ ...engine, downloads }];
+  sortSelect.addEventListener('change', resetPage);
+  searchInput.addEventListener('input', resetPage);
+  platformSelect.addEventListener('change', resetPage);
+  architectureSelect.addEventListener('change', resetPage);
+  previous.addEventListener('click', () => { page -= 1; render(); });
+  next.addEventListener('click', () => { page += 1; render(); });
+
+  void Promise.all([
+    fetchJson<EnginesPayload>(DATA_URL),
+    fetchJson<ReleaseHistory>(HISTORY_URL).catch(() => null),
+  ])
+    .then(([payload, history]) => {
+      historyAvailable = Boolean(history?.releases);
+      const refreshed = history?.generated ?? payload.generated;
+      generated.dateTime = refreshed;
+      generated.textContent = `Refreshed ${formatDate(refreshed)}`;
+      releases = (payload.engines ?? []).flatMap((engine) => {
+        const versions = [...(history?.releases?.[engine.repo] ?? [])];
+        const latest = engine.latest_release;
+        if (latest && !versions.some((release) => release.tag === latest.tag)) versions.push(latest);
+        return versions.map((release) => ({
+          engine,
+          release,
+          downloads: (release.assets ?? []).flatMap((asset) =>
+            asset.name && asset.url ? [{ ...asset, name: asset.name, url: asset.url, ...classifyEngineDownload(asset.name) }] : []),
+        }));
       });
-      generated.textContent = `refreshed ${formatDate(payload.generated)}`;
       render();
     })
     .catch((error: unknown) => {

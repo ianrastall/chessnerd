@@ -7,6 +7,7 @@ describe('engine download filenames', () => {
     ['stockfish-linux-x86-64-universal.tar.gz', 'linux', 'x86-64'],
     ['stockfish-macos-universal.tar.gz', 'macos', 'universal'],
     ['stockfish-android-armv7-neon.tar.gz', 'android', 'arm32'],
+    ['dragontooth-0.1-azazel-FREEBSD-x64-64bit', 'freebsd', 'x86-64'],
     ['stockfish-linux-riscv64-universal.tar.gz', 'linux', 'riscv64'],
     ['daydreamer-2.0.0-pre2-i686-apple-darwin.tar.gz', 'macos', 'x86'],
     ['midnightv9-apple-silicon', 'macos', 'arm64'],

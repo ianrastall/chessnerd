@@ -4,7 +4,7 @@ import OverviewTabs from '../components/OverviewTabs.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
 ---
-<BaseLayout title="Engine Releases" description="A daily feed of the latest releases from open-source chess engines on GitHub, newest first.">
+<BaseLayout title="Engine Releases" description="Browse current and past releases from open-source chess engines on GitHub.">
   <main>
     <div id="toolView">
       <ToolHeader title="Engine Releases" icon="new_releases" />
@@ -19,12 +19,13 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
         <div class="engines-controls">
           <div class="option-group engines-search">
             <label for="enginesSearch">Search</label>
-            <input id="enginesSearch" type="search" placeholder="Name, author, language..." autocomplete="off" aria-label="Search engines" />
+            <input id="enginesSearch" type="search" placeholder="Engine, version, author…" autocomplete="off" aria-label="Search engines" />
           </div>
           <div class="option-group engines-sort">
             <label for="enginesSort">Sort</label>
             <select id="enginesSort" aria-label="Sort order">
               <option value="released">Newest first</option>
+              <option value="oldest">Oldest first</option>
               <option value="name">Name (A&ndash;Z)</option>
               <option value="stars">Most stars</option>
             </select>
@@ -47,15 +48,19 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
       </div>
 
       <div class="status-bar engines-status">
-        <div id="enginesStatus">Loading releases...</div>
-        <div id="enginesGenerated"></div>
+        <div id="enginesStatus" role="status">Loading releases...</div>
+        <time id="enginesGenerated"></time>
+        <nav id="enginesPages" class="engines-pages" aria-label="Engine release pages" hidden>
+          <button id="enginesPrevious" class="btn btn-secondary btn-compact" type="button">Previous</button>
+          <button id="enginesNext" class="btn btn-secondary btn-compact" type="button">Next</button>
+        </nav>
       </div>
 
-      <section id="enginesList" class="engines-list" aria-live="polite"></section>
+      <section id="enginesList" class="engines-list" aria-label="Engine releases"></section>
 
       <p class="engines-note">
         Releases refresh daily from each engine’s public GitHub repository.
-        Platform and architecture labels use the upstream filenames.
+        Platform and architecture labels describe the available downloads.
       </p>
     </div>
   </main>
@@ -92,6 +97,16 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
       margin-bottom: 1rem;
     }
 
+    .engines-pages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .engines-pages[hidden] {
+      display: none;
+    }
+
     .engines-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
@@ -116,8 +131,38 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
     .engine-head {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       gap: 0.75rem;
+    }
+
+    .engine-identity {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 0.6rem;
+    }
+
+    .engine-logo {
+      width: 2.25rem;
+      height: 2.25rem;
+      flex: none;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-tertiary);
+      display: grid;
+      place-items: center;
+    }
+
+    .engine-logo img {
+      width: 100%;
+      height: 100%;
+      padding: 0.12rem;
+      object-fit: contain;
+    }
+
+    .engine-logo .material-icons {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
     }
 
     .engine-name {
@@ -162,35 +207,36 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
     .engine-tag {
       display: inline-flex;
       align-items: center;
+      gap: 0.25rem;
       padding: 0.05rem 0.5rem;
       border: 1px solid var(--border-color);
       border-radius: 999px;
       background: var(--bg-tertiary);
       color: var(--text-secondary);
       font-size: 0.75rem;
-      white-space: nowrap;
+      overflow-wrap: anywhere;
     }
 
-    .engine-release {
+    .engine-tag img, .engine-tag .material-icons, .engine-download-title img, .engine-download-title .material-icons {
+      width: 0.95rem;
+      height: 0.95rem;
+      font-size: 0.95rem;
+      flex: none;
+    }
+
+    [data-theme='dark'] .engine-icon-mono {
+      filter: invert(1);
+    }
+
+    .engine-version-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.45rem 0.6rem;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--bg-tertiary);
+      padding-block: 0.4rem;
+      border-block: 1px solid var(--border-color);
       font-size: 0.85rem;
       color: var(--text-primary);
-    }
-
-    .engine-release.is-empty {
-      color: var(--text-secondary);
-    }
-
-    .engine-release .material-icons {
-      font-size: 1rem;
-      color: var(--accent);
     }
 
     .engine-version {
@@ -225,6 +271,9 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
     }
 
     .engine-download-title {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
       margin: 0 0 0.25rem;
       color: var(--text-primary);
       font-size: 0.8rem;
@@ -286,6 +335,12 @@ import { engineArchitectures, enginePlatforms } from '../lib/engine-downloads';
     @media (max-width: 520px) {
       .engines-search, .engines-sort {
         grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 410px) {
+      .engines-controls {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
   </style>

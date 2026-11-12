@@ -92,6 +92,43 @@ test('engine downloads use platform and architecture filters with the daily feed
   await page.getByRole('searchbox', { name: 'Search engines' }).fill('different engine');
   await expect(card).toHaveCount(0);
 });
+test('older engine releases have their own versions, badges and downloads', async ({ page }) => {
+  const repo = 'official-stockfish/Stockfish';
+  const versions = Array.from({ length: 20 }, (_, index) => {
+    const number = index + 1;
+    const tag = `v${number}.0.0`;
+    const name = number === 1 ? 'stockfish-linux-arm64.tar.gz' : 'stockfish-windows-x86-64.zip';
+    return { tag, url: `https://github.com/${repo}/releases/tag/${tag}`,
+      published_at: new Date(Date.UTC(2026, 0, number)).toISOString(), prerelease: number === 1,
+      assets: [{ name, url: `https://github.com/${repo}/releases/download/${tag}/${name}`, size: 1024 }] };
+  });
+  await page.route('**/data/engines/engines.json', route => route.fulfill({ json: {
+    generated: '2026-11-12T08:41:00Z', engines: [{ name: 'Stockfish', repo, language: 'C++', latest_release: versions.at(-1) }],
+  } }));
+  await page.route('**/data/engines/release-history.json', route => route.fulfill({ json: { releases: { [repo]: versions } } }));
+  await page.route('https://raw.githubusercontent.com/**/icon_128x128.png', route => route.abort());
+  await page.goto('/engines.html');
+  const cards = page.locator('.engine-card');
+  await expect(page.locator('#enginesStatus')).toHaveText('20 releases · Page 1 of 2');
+  await expect(cards).toHaveCount(18);
+  const newest = cards.first();
+  await expect(newest.getByRole('link', { name: 'v20.0.0' })).toHaveAttribute('href', versions[19].url);
+  await expect(newest.getByRole('link', { name: 'Release', exact: true })).toHaveCount(0);
+  await expect(newest.getByText('UCI', { exact: true })).toBeVisible();
+  await expect(newest.locator('.engine-tag img[src$="/windows11.svg"]')).toBeVisible();
+  await expect(newest.locator('.engine-tag img[src$="/cplusplus.svg"]')).toBeVisible();
+  await expect(newest.locator('.engine-logo .material-icons')).toBeVisible();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page.locator('#enginesStatus')).toHaveText('20 releases · Page 2 of 2');
+  await expect(cards).toHaveCount(2);
+  await page.getByLabel('Platform', { exact: true }).selectOption('linux');
+  await expect(cards).toHaveCount(1);
+  await expect(cards.getByRole('link', { name: 'v1.0.0' })).toHaveAttribute('href', versions[0].url);
+  await expect(cards.getByText('Prerelease', { exact: true })).toBeVisible();
+  await expect(cards.getByRole('link', { name: 'stockfish-linux-arm64.tar.gz' })).toBeVisible();
+  await page.setViewportSize({ width: 320, height: 768 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+});
 test('appearance follows family controls and resets migrated preferences',async({page})=>{
   await page.addInitScript(()=>{if(!localStorage.getItem('migration-test')){localStorage.setItem('accentColor','#663399');localStorage.setItem('theme','light');localStorage.setItem('migration-test','1');}});
   await page.goto('/');await page.getByRole('button',{name:'Settings',exact:true}).click();await expect(page.locator('#theme-choice')).toHaveValue('light');await expect(page.locator('#accent-picker')).toHaveValue('#663399');

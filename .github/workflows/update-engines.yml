@@ -30,10 +30,13 @@ jobs:
           node-version-file: '.nvmrc'
           cache: npm
 
+      - name: Test release refresh
+        run: python -m unittest discover -s scripts/tests -p "test_update_engines.py"
+
       - name: Update engine data
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python scripts/engines/update_engines.py
+        run: python scripts/engines/update_engines.py --history-output public/data/engines/release-history.json
 
       - name: Install dependencies
         run: npm ci

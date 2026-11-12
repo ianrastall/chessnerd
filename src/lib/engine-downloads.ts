@@ -3,6 +3,7 @@ export const enginePlatforms = [
   { value: 'macos', label: 'macOS' },
   { value: 'linux', label: 'Linux' },
   { value: 'android', label: 'Android' },
+  { value: 'freebsd', label: 'FreeBSD' },
   { value: 'other', label: 'Other downloads' },
 ] as const;
 
@@ -23,6 +24,7 @@ const platformHints: ReadonlyArray<readonly [Exclude<Platform, 'other'>, RegExp]
   ['macos', /(?:^|[^a-z0-9])(?:mac(?:os|64|32|[-_]silicon)?|osx|darwin|apple[-_](?:silicon|m\d+))(?=$|[^a-z0-9])|\.(?:dmg|pkg)$/i],
   ['linux', /(?:^|[^a-z0-9])(?:linux(?:32|64)?|ubuntu|debian)(?=$|[^a-z0-9])|\.(?:appimage|deb|rpm)$/i],
   ['android', /(?:^|[^a-z0-9])android(?=$|[^a-z0-9])|\.apk$/i],
+  ['freebsd', /(?:^|[^a-z0-9])freebsd(?=$|[^a-z0-9])/i],
 ];
 
 const architectureHints: ReadonlyArray<readonly [Exclude<Architecture, 'universal'>, RegExp]> = [

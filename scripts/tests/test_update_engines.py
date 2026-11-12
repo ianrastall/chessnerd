@@ -79,6 +79,42 @@ class UpdateEnginesRetryTests(unittest.TestCase):
         mock_sleep.assert_not_called()
 
 
+class ReleaseHistoryTests(unittest.TestCase):
+    def test_paginates_public_releases_and_ignores_drafts(self):
+        def release(tag, day, **fields):
+            return {"tag_name": tag, "published_at": f"2026-01-0{day}T00:00:00Z",
+                    "html_url": f"https://github.com/example/engine/releases/tag/{tag}", **fields}
+
+        pages = [(200, [release("v2", 2, prerelease=True), release("draft", 3, draft=True)]),
+                 (200, [release("v1", 1)])]
+        with patch.object(update_engines, "RELEASE_PAGE_SIZE", 2), patch.object(
+            update_engines, "fetch_json", side_effect=pages
+        ) as fetch, patch.object(update_engines.time, "sleep"):
+            history = update_engines.fetch_releases("example/engine", None, 0)
+        self.assertEqual([row["tag"] for row in history], ["v2", "v1"])
+        self.assertTrue(history[0]["prerelease"])
+        self.assertTrue(fetch.call_args.args[0].endswith("page=2"))
+
+    def test_latest_endpoint_can_supplement_the_list(self):
+        latest = {"tag": "v2", "published_at": "2026-01-02"}
+        older = {"tag": "v1", "published_at": "2026-01-01"}
+        self.assertEqual(update_engines.include_latest([older], latest), [latest, older])
+        self.assertEqual(update_engines.include_latest([latest, older], latest), [latest, older])
+
+    def test_invalid_history_response_fails_the_refresh(self):
+        with patch.object(update_engines, "fetch_json", return_value=(404, None)):
+            with self.assertRaisesRegex(RuntimeError, "Invalid release history"):
+                update_engines.fetch_releases("example/engine", None, 0)
+
+    def test_latest_release_lookup_distinguishes_missing_repositories_and_releases(self):
+        response = {"data": {"r0": {"latestRelease": {"tagName": "v3"}}, "r1": {"latestRelease": None}, "r2": None},
+                    "errors": [{"type": "NOT_FOUND", "path": ["r2"]}]}
+        with patch.object(update_engines, "fetch_json", return_value=(200, response)) as fetch:
+            tags = update_engines.fetch_latest_tags(["example/engine", "example/unreleased", "example/missing"], "token")
+        self.assertEqual(tags, {"example/engine": "v3", "example/unreleased": None})
+        self.assertIn("latestRelease", fetch.call_args.kwargs["payload"]["query"])
+
+
 if __name__ == "__main__":
     unittest.main()
 

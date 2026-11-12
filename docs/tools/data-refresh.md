@@ -7,10 +7,26 @@ How each tool's data is refreshed today. `docs/data-dependencies.md` has the ful
 | Tool | Source → output | Schedule | Workflow |
 | --- | --- | --- | --- |
 | Stockfish Commits | `scripts/stockfish_commits/update_stockfish_commits.py` → `data/stockfish-commits/`, `public/data/stockfish-commits/` | Daily 08:23 UTC | `update-stockfish-commits.yml` |
-| Engine Releases | `scripts/engines/update_engines.py` (engine list in `scripts/engines/engines.json`) → `public/data/engines/engines.json` | Daily 08:41 UTC | `update-engines.yml` |
+| Engine Releases | `scripts/engines/update_engines.py` (engine list in `scripts/engines/engines.json`) → `public/data/engines/engines.json` and `public/data/engines/release-history.json` | Daily 08:41 UTC | `update-engines.yml` |
 | Chess.com Titled Players | `scripts/sync-titled-players.py` (Chess.com PubAPI) → `public/data/titled-players.json`, `.meta.json` | Daily 03:23 UTC | `sync-titled-players.yml` |
 
 Each job validates with `npm run build` and commits only when its output changed. It rebases on `main` before pushing, so commits that land during a long run don't make the push fail. A successful run on `main` triggers **Deploy to GitHub Pages**.
+
+Engine Releases keeps one card per public GitHub release, including marked
+prereleases. The history follows GitHub’s paginated Releases endpoint and
+supplements it with the latest release when GitHub lists it separately.
+Dates and download URLs come from the upstream release. The existing
+`engines.json` feed still supplies repository metadata and the latest release.
+The daily refresh validates history responses before writing either snapshot.
+It batches GitHub’s latest-release designation lookup so the release archive
+fits within the Actions token’s request budget.
+
+The engine protocol and logo sources are in `src/data/engine-cards.json`.
+Protocol labels use upstream documentation and apply to the project.
+Platform symbols refer to the files attached to the individual release.
+Project logos use the projects’ own image URLs. The platform and language
+icons are from [Devicon v2.18.0](https://github.com/devicons/devicon/tree/v2.18.0),
+with its MIT notice in `public/img/engine-icons/LICENSE.txt`.
 
 To find additions to Engine Releases, run `python scripts/engines/discover_engines.py`
 from the repository root with an authenticated GitHub CLI. It searches

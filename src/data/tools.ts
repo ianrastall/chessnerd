@@ -78,7 +78,7 @@ export const tools: ToolMeta[] = [
     href: '/engines.html',
     icon: 'new_releases',
     category: 'reference',
-    description: 'A daily feed of the latest releases from open-source chess engines on GitHub, newest first.'
+    description: 'Browse current and past releases from open-source chess engines on GitHub.'
   },
   {
     id: 'play-engine',
