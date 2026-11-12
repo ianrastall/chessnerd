@@ -80,7 +80,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <div class="io-panel">
+        <div class="io-panel engine-moves-panel">
           <div class="io-label">
             <span>Moves & Log</span>
             <span class="stats" id="moveStats">0 moves</span>
@@ -119,9 +119,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style is:global>
-  /* Keep both action buttons on one row so the board stays above the fold. */
+  #toolView.engine-game .option-group { min-width: 0; }
+  #toolView.engine-game .options-panel .btn { max-width: 100%; overflow-wrap: anywhere; }
+  /* On wide screens, place the settings beside the board, above the move
+     list, so the board starts directly below the description. */
   @media (min-width: 1100px) {
-    #toolView.engine-game .board-actions-group { grid-column: span 2; }
+    #toolView.engine-game {
+      display: grid; grid-template-columns: minmax(440px, 1.3fr) minmax(260px, .9fr);
+      column-gap: 1rem; align-items: start;
+    }
+    #toolView.engine-game > :not(.options-panel, .engine-grid) { grid-column: 1 / -1; }
+    #toolView.engine-game .engine-grid { display: contents; }
+    #toolView.engine-game .options-panel { grid-column: 2; grid-row: 3; }
+    #toolView.engine-game .engine-board-panel { grid-column: 1; grid-row: 3 / span 2; margin-bottom: 1rem; }
+    #toolView.engine-game .engine-moves-panel { grid-column: 2; grid-row: 4; margin-bottom: 1rem; }
+    #toolView.engine-game .board-actions-group { grid-column: 1 / -1; }
   }
   #toolView.engine-game .board-shell {
     width: min(100%, calc(var(--engine-board-size, 50dvh) + 52px));
