@@ -95,3 +95,12 @@ dialog { margin:auto; width:min(420px,calc(100% - 32px)); padding:24px; border:1
   .event-mobile-meta { display:block; color:var(--muted); font-size:0.625rem; margin-top:4px; }
   .archive-table .download-link { min-height:34px; padding:6px; }
 }
+
+/* Overview tabs (enhanced by dashboard.ts): one task panel at a time. */
+.dashboard[data-tab="games"] #players,.dashboard[data-tab="games"] #tools { display:none; }
+.dashboard[data-tab="players"] #games,.dashboard[data-tab="tools"] #games,.dashboard:is([data-tab="players"],[data-tab="tools"]) .rail-section:not(#players,#tools) { display:none; }
+.dashboard[data-tab="players"] #tools,.dashboard[data-tab="tools"] #players { display:none; }
+.dashboard:is([data-tab="players"],[data-tab="tools"]) .dashboard-columns { display:block; }
+.dashboard:is([data-tab="players"],[data-tab="tools"]) .dashboard-rail { display:block; max-width:44rem; margin-top:0; }
+.dashboard:is([data-tab="players"],[data-tab="tools"]) .rail-section { border-bottom:0; }
+.dashboard[data-tab="players"] .player-search { max-width:28rem; }

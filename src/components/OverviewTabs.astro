@@ -8,8 +8,8 @@ const onOverview = currentPage === 'overview';
 const overviewHref = onOverview ? '' : '/';
 ---
 <nav class="dashboard-tabs" aria-label="Start a task">
-  <a class:list={{ active: onOverview }} href={`${overviewHref}#games`} aria-current={onOverview ? 'true' : undefined}>Find games</a>
-  <a href={`${overviewHref}#players`}>Find a player</a>
-  <a href={`${overviewHref}#tools`}>Use a tool</a>
+  <a class:list={{ active: onOverview }} href={`${overviewHref}#games`} data-tab={onOverview ? 'games' : undefined} aria-current={onOverview ? 'true' : undefined}>Find games</a>
+  <a href={`${overviewHref}#players`} data-tab={onOverview ? 'players' : undefined}>Find a player</a>
+  <a href={`${overviewHref}#tools`} data-tab={onOverview ? 'tools' : undefined}>Use a tool</a>
   <a class:list={{ active: !onOverview }} href="/engines.html" aria-current={onOverview ? undefined : 'page'}>Engine releases</a>
 </nav>

@@ -21,6 +21,12 @@ test('archive search, filters, pagination and shareable URLs',async({page})=>{
   await page.locator('#archive-clear').click();await expect(page.locator('#archive-results tr')).toHaveCount(12);
   const links=await page.locator('#archive-results .download-link').evaluateAll(els=>els.map(el=>(el as HTMLAnchorElement).href));expect(links.every(url=>/^https:\/\/(github.com|raw.githubusercontent.com)\/ianrastall\//.test(url)&&url.endsWith('.zip'))).toBe(true);
 });
+test('overview tabs switch panels and restore from the address',async({page})=>{
+  await page.goto('/');await expect(page.locator('#games')).toBeVisible();await expect(page.locator('#tools')).toBeHidden();
+  await page.getByRole('link',{name:'Use a tool',exact:true}).click();await expect(page.locator('#tools')).toBeVisible();await expect(page.locator('#games')).toBeHidden();await expect(page.getByRole('link',{name:'Use a tool',exact:true})).toHaveAttribute('aria-current','true');
+  await page.goBack();await expect(page.locator('#games')).toBeVisible();
+  await page.goto('/engines.html');await page.getByRole('link',{name:'Find a player',exact:true}).click();await expect(page.locator('#player-query')).toBeVisible();await expect(page.locator('#games')).toBeHidden();
+});
 test('homepage is useful without JavaScript',async({browser})=>{
   const context=await browser.newContext({javaScriptEnabled:false});const page=await context.newPage();await page.goto('http://127.0.0.1:4322/');await expect(page.locator('#archive-results tr')).toHaveCount(12);await expect(page.locator('#archive-results .download-link').first()).toHaveAttribute('href',/^https:/);await expect(page.getByRole('navigation',{name:'Pages and tools'})).toBeVisible();await context.close();
 });
@@ -94,7 +100,7 @@ test('appearance follows family controls and resets migrated preferences',async(
   await page.emulateMedia({forcedColors:'active'});await expect(page.locator('h1')).toBeVisible();
 });
 test('homepage player lookup passes surname through to the profile search',async({page})=>{
-  await page.route('https://ianrastall.github.io/fide-players/names/**',r=>r.fulfill({status:404}));await page.goto('/');await page.locator('#player-query').fill('Carlsen');await page.getByRole('button',{name:'Find player',exact:true}).click();await expect(page).toHaveURL(/fide-player.html\?q=Carlsen/);await expect(page.locator('#fpSearch')).toHaveValue('Carlsen');await expect(page.locator('#fpStatus')).toContainText('No players match');
+  await page.route('https://ianrastall.github.io/fide-players/names/**',r=>r.fulfill({status:404}));await page.goto('/');await expect(page.locator('#player-query')).toBeHidden();await page.getByRole('link',{name:'Find a player',exact:true}).click();await expect(page).toHaveURL(/#players$/);await expect(page.locator('#games')).toBeHidden();await page.locator('#player-query').fill('Carlsen');await page.getByRole('button',{name:'Find player',exact:true}).click();await expect(page).toHaveURL(/fide-player.html\?q=Carlsen/);await expect(page.locator('#fpSearch')).toHaveValue('Carlsen');await expect(page.locator('#fpStatus')).toContainText('No players match');
 });
 test('PGN Info reports results and lets readers switch views and copy them', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
