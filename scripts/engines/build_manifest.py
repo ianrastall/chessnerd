@@ -8,7 +8,8 @@ produce the engine manifest (scripts/engines/engines.json).
   (the quality / notability filter)
 
 An engine is kept when its name matches between both lists. The CCRL spelling is
-used as the display name; the repo comes from the URL list.
+used as the display name; the repo comes from the URL list. Separately verified
+GitHub topic search results are recorded in sources/github_topics.json.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 RWBC = HERE / "sources" / "rwbc_github.txt"
 CCRL = HERE / "sources" / "ccrl_open_single.txt"
+GITHUB_TOPICS = HERE / "sources" / "github_topics.json"
 OUTPUT = HERE / "engines.json"
 
 REPO_RE = re.compile(r"github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)", re.I)
@@ -127,17 +129,23 @@ def main() -> int:
             unmatched.append(display)
             continue
         name, repo = hit
-        if repo in seen_repos:
+        if repo.casefold() in seen_repos:
             continue
-        seen_repos.add(repo)
+        seen_repos.add(repo.casefold())
         manifest.append({"name": name, "repo": repo})
+
+    for entry in json.loads(GITHUB_TOPICS.read_text(encoding="utf-8")):
+        repo = entry["repo"]
+        if repo.casefold() not in seen_repos:
+            manifest.append({"name": entry["name"], "repo": repo})
+            seen_repos.add(repo.casefold())
 
     manifest.sort(key=lambda e: e["name"].lower())
     OUTPUT.write_text(json.dumps(manifest, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
 
     print(f"GitHub URL entries parsed : {len(github)}")
     print(f"CCRL names                : {len(ccrl)}")
-    print(f"Matched (manifest size)   : {len(manifest)}")
+    print(f"Manifest size             : {len(manifest)}")
     print(f"Unmatched CCRL names      : {len(unmatched)}")
     print("\nSample matched:")
     for entry in manifest[:12]:
