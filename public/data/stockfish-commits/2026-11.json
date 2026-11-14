@@ -2,6 +2,111 @@
   "month": "2026-11",
   "commits": [
     {
+      "hash": "1e7e6bdeb97669a950b8e4c063770d135f54f55b",
+      "short": "1e7e6bde",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-11-14T07:12:34Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1e7e6bdeb97669a950b8e4c063770d135f54f55b",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e7e6bdeb97669a950b8e4c063770d135f54f55b.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1e7e6bdeb97669a950b8e4c063770d135f54f55b.tar.gz"
+        }
+      ],
+      "message": "Deduplicate cleanup_partial()\n\ncleanup_partial() and cleanup() have identical bodies.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7309\n\nNo functional change\n",
+      "subject": "Deduplicate cleanup_partial()"
+    },
+    {
+      "hash": "348c5ed77e26dbf7b475469ee13ff82838d4d24e",
+      "short": "348c5ed7",
+      "author": "FauziAkram <fauzi.dabat@hotmail.com>",
+      "date": "2026-11-14T07:12:12Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/348c5ed77e26dbf7b475469ee13ff82838d4d24e",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/348c5ed77e26dbf7b475469ee13ff82838d4d24e.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/348c5ed77e26dbf7b475469ee13ff82838d4d24e.tar.gz"
+        }
+      ],
+      "message": "Remove unused attacks_bb\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7302\n\nNo functional change\n",
+      "subject": "Remove unused attacks_bb"
+    },
+    {
+      "hash": "e7ab6d448a5597d4398dadaa42166882bbd9a208",
+      "short": "e7ab6d44",
+      "author": "Stefan Geschwentner <stgeschwentner@gmail.com>",
+      "date": "2026-11-14T07:11:39Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/e7ab6d448a5597d4398dadaa42166882bbd9a208",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e7ab6d448a5597d4398dadaa42166882bbd9a208.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/e7ab6d448a5597d4398dadaa42166882bbd9a208.tar.gz"
+        }
+      ],
+      "message": "Allow best move history scaling also at PV nodes.\n\nPassed non-regression STC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 229312 W: 58371 L: 58363 D: 112578\nPtnml(0-2): 259, 26539, 61036, 26579, 243\nhttps://tests.stockfishchess.org/tests/view/6ae61ea620cd2dc3f03d147b\n\nPassed non-regression LTC:\nLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 130734 W: 33763 L: 33659 D: 63312\nPtnml(0-2): 15, 13488, 38263, 13580, 21\nhttps://tests.stockfishchess.org/tests/view/6aedc23d20cd2dc3f03d20fb\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7304\n\nBench: 1746735\n",
+      "subject": "Allow best move history scaling also at PV nodes."
+    },
+    {
+      "hash": "54a85ce8f43ffe0204d332c352c7b43ec5f4803d",
+      "short": "54a85ce8",
+      "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+      "date": "2026-11-14T07:10:42Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/54a85ce8f43ffe0204d332c352c7b43ec5f4803d",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/54a85ce8f43ffe0204d332c352c7b43ec5f4803d.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/54a85ce8f43ffe0204d332c352c7b43ec5f4803d.tar.gz"
+        }
+      ],
+      "message": "Verify repetitions exactly and constexpr-generate the hash keys\n\nVerify repetitions against the nibble-packed piece placement in addition to the Zobrist key, fixing false threefold draws from hash collisions. Generate the Zobrist constants and cuckoo tables at compile time and remove Position::init() asserting the needed requirements on the Zobrist keys.\n\nfailed STC:\nLLR: -2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 649728 W: 164888 L: 165785 D: 319055\nPtnml(0-2): 666, 69228, 185983, 68311, 676\nhttps://tests.stockfishchess.org/tests/view/6aeb4dfb20cd2dc3f03d1ce7\n\nfixes https://github.com/official-stockfish/Stockfish/issues/7279\n\nThe 0.4 Elo cost of additional verification is acceptable to guarantee proper 3-fold detection.\n\nThe bench doesn't change, the patch is only functional on relatively rare hash collisions.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7305\n\nNo functional change\n",
+      "subject": "Verify repetitions exactly and constexpr-generate the hash keys"
+    },
+    {
+      "hash": "9d24e938319e96ac372429c5b6481e5f3345fb31",
+      "short": "9d24e938",
+      "author": "SanityEclipse000 <maksym.nikbakht@gmail.com>",
+      "date": "2026-11-14T07:09:58Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/9d24e938319e96ac372429c5b6481e5f3345fb31",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9d24e938319e96ac372429c5b6481e5f3345fb31.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/9d24e938319e96ac372429c5b6481e5f3345fb31.tar.gz"
+        }
+      ],
+      "message": "Prefetch next weight tile in accumulator updates\n\nPrefetches the next tile of each weight row while the current tile is being added in the accumulator update. The tile loops walk all changed rows together and the hardware prefetcher doesn't keep up with that many rows.\n\nFollow-up to #7287. Only compiled in where it helped:\n- rows longer than two tiles, so not avx512 (my first version lost there)\n- builds with fast pext, so not the avx2 build. zen 1/2 only get avx2 builds, and vondele measured #7287 at -1.85% on his 3950X (-0.16% with the pext gate, where it's the same code as master)\nSo avx2, avx512 and everything else compile to the same code as master, only bmi2 and avxvnni change.\n\nRebased on the accumulator rewrite, and dropped the end-of-row check as mstembera suggested (prefetch never faults), so no tile index gets passed around anymore.\n\nPassed STC on bmi2/avxvnni workers:\nhttps://tests.stockfishchess.org/tests/view/6af2eeb28e7fb2e78bc1cd1a\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 34496 W: 8829 L: 8540 D: 17127\nPtnml(0-2): 30, 3584, 9738, 3859, 37\n\nRebased once more after that test, master only got a new net and an unrelated search.cpp change in between.\n\nEarlier tests:\nbefore the rebase: https://tests.stockfishchess.org/tests/view/6aee442e20cd2dc3f03d21ff\n#7287 version, passed on all archs: https://tests.stockfishchess.org/tests/view/6aeb4c0520cd2dc3f03d1ce4\nfirst version, failed: https://tests.stockfishchess.org/tests/view/6aea67e920cd2dc3f03d1b09\n\nLocal speed vs master, Ryzen 7 7735HS (zen 3+), bmi2 build, base and patch running at the same time: +1.6% +-0.2% with one process per core, +1.6% +-0.9% with all 16 threads busy. Smaller than before the rebase (+2.9% in the same session), the accumulator rewrite took part of it. With vs without the end-of-row check: 0.00% +-0.11%.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7294\n\nNo functional change\n",
+      "subject": "Prefetch next weight tile in accumulator updates"
+    },
+    {
       "hash": "def601cc156f7d41f9ddea76d74515eddf232aaf",
       "short": "def601cc",
       "author": "Shawn Xu <xu107288696@gmail.com>",
