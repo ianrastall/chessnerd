@@ -23,18 +23,16 @@ checked-in snapshot supports offline builds; CI's refresh does not commit back
 to the site repository. CI uses its GitHub token for the API request; local runs
 can use the public API or an existing `GITHUB_TOKEN` environment variable.
 
-## Page behavior
+## Public link
 
-- `src/components/TitledTuesdayArchivePanel.astro` renders every download at build
-  time as a tab of `src/pages/chesscom-tournaments.astro`.
-- `src/scripts/titled-tuesday-archive.ts` adds search and 25/50/100-row pagination.
-- Search covers event names, filenames, ISO dates, month names, and early/late.
-- No JavaScript is needed to read the full table or download a ZIP.
-- Dates come from archive filenames. PGN game dates can cross midnight or reflect
-  later corrections; they do not redefine the tournament's identity.
-- Archive filenames follow `titled-tuesday_YYYY-MM-DD[a|b].zip`; `a` and `b` are
-  early and late sessions, and no suffix means the session is unspecified.
-- The page states that this growing collection is incomplete.
+The old series URL opens the Tournament Archive with a link to the original
+`ianrastall/titled-tuesday-archive` repository. The series manifest remains available
+through the full archive metadata index at `/data/archive-search.json`.
+
+Archive filenames follow `titled-tuesday_YYYY-MM-DD[a|b].zip`. The suffixes
+`a` and `b` identify early and late sessions. An absent suffix indicates an
+unspecified session. The filename date identifies the event even when individual
+PGN game dates cross midnight or reflect later corrections. The collection is incomplete.
 
 ## Adding missing PGNs
 

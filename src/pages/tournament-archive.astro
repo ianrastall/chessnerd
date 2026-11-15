@@ -1,249 +1,149 @@
 ---
 import ToolHeader from '../components/ToolHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import manifest from '../../public/data/tournament-archive/manifest.json';
-import { formatBytes, parseTournamentManifest } from '../lib/tournament-archive';
+import { ArrowDownToLine } from '@lucide/astro';
+import { loadCuratedTournaments, sourceRepos, tournamentDates, tournamentZipPath } from '../lib/curated-tournaments';
 
-const entries = parseTournamentManifest(manifest);
-const games = entries.reduce((sum, entry) => sum + entry.games, 0);
-const latest = entries[0];
-const earliest = entries[entries.length - 1];
-const totalBytes = entries.reduce((sum, entry) => sum + entry.bytes, 0);
-const number = (value: number) => value.toLocaleString('en-US');
-const longDate = (value: string) =>
-  new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
-    new Date(`${value}T00:00:00Z`)
-  );
-const shortDate = (value: string) =>
-  new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
-    new Date(`${value}T00:00:00Z`)
-  );
-const dateRange = (start: string, end: string) => (start === end ? shortDate(start) : `${shortDate(start)} – ${shortDate(end)}`);
-const placeText = (entry: (typeof entries)[number]) => {
-  const bits = [entry.place, entry.federation].filter(Boolean);
-  return bits.length ? bits.join(' · ') : entry.site && entry.site !== '?' ? entry.site : '';
-};
-const badges = (entry: (typeof entries)[number]) => [entry.cadence, entry.eventType].filter(Boolean);
+const entries = await loadCuratedTournaments();
+const years = [...new Set(entries.map(entry => entry.year))];
+const number = (value: number | null) => value == null ? '—' : value.toLocaleString('en-US', { maximumFractionDigits: 3 });
+const legacySeries = [
+  { id: 'titled-tuesday', name: 'Titled Tuesday', repo: 'titled-tuesday-archive' },
+  { id: 'bullet-brawl', name: 'Bullet Brawl', repo: 'bullet-brawl-archive' },
+  { id: 'three-zero-thursday', name: '3-0 Thursday', repo: '3-0-thursday-archive' },
+  { id: 'ccc', name: 'Computer Chess Championship', repo: 'ccc-archive' },
+];
 ---
-<BaseLayout
-  title="Tournament Archive"
-  description="Download chess tournament records from the PgnTours archive. Each current ZIP holds CTML, PGN, and a Markdown tournament record."
->
-  <main>
-    <div id="toolView" class="tournament-archive">
-      <ToolHeader title="Tournament Archive" icon="emoji_events" />
-      <p class="ta-intro">
-        Curated tournament PGNs from the <a
-          href="https://github.com/ianrastall/PgnTours"
-          target="_blank"
-          rel="noopener noreferrer">PgnTours archive</a
-        >. Each current ZIP contains the authoritative
-        <a href="https://github.com/ianrastall/ctml" target="_blank" rel="noopener noreferrer">CTML</a> source, a PGN export of every game with movetext, and a Markdown tournament record with reported standings. Older ZIPs retain their original crosstable format until refreshed.
-      </p>
+<BaseLayout title="Tournament Archive" description="Browse chess tournaments averaging at least 2700 Elo and major events such as the Chess Olympiad. Download the catalogue or each event's games.">
+  <main id="toolView" class="tournament-archive">
+    <ToolHeader title="Tournament Archive" icon="emoji_events" />
 
-      <div class="ta-summary">
-        <p>
-          <strong>{number(entries.length)}</strong> tournaments <span aria-hidden="true">·</span>
-          <strong>{number(games)}</strong> games <span aria-hidden="true">·</span>
-          <strong>{formatBytes(totalBytes)}</strong> total
-        </p>
-        <p>
-          Newest: <time datetime={latest.start}>{longDate(latest.start)}</time>
-          <span aria-hidden="true">·</span>
-          Oldest: <time datetime={earliest.start}>{longDate(earliest.start)}</time>
-        </p>
-      </div>
+    {legacySeries.map(series => (
+      <p class="legacy-series" id={series.id}><a href={`https://github.com/ianrastall/${series.repo}`}>Browse the original {series.name} archive on GitHub</a></p>
+    ))}
 
-      <div id="taControls" class="ta-controls" hidden>
-        <div class="ta-search">
-          <label for="taSearch">Search tournaments</label>
-          <input id="taSearch" type="search" placeholder="Event, place, cadence, year…" autocomplete="off" />
-        </div>
-        <div class="ta-page-size">
-          <label for="taPageSize">Rows per page</label>
-          <select id="taPageSize">
-            <option value="25">25</option>
-            <option value="50" selected>50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-      </div>
-
-      <p id="taStatus" class="ta-status" role="status">
-        {number(entries.length)} tournaments, newest first
-      </p>
-      <div class="ta-table-wrap" role="region" aria-label="Tournament archive downloads" tabindex="0">
-        <table class="ta-table">
-          <caption class="visually-hidden">Tournament archive, newest first</caption>
-          <thead>
-            <tr>
-              <th scope="col">Event</th>
-              <th scope="col">Dates</th>
-              <th scope="col">Place</th>
-              <th scope="col">Format</th>
-              <th scope="col" class="ta-number">Games</th>
-              <th scope="col" class="ta-number" title="Field-strength headline rating from the CTML source (usually the FIDE standard mean).">Avg</th>
-              <th scope="col" class="ta-number" title="FIDE tournament category derived from the average rating (Cat 1 = 2251–2275, Cat 14 = 2576–2600, Cat 22 = 2776–2800, and so on in 25-point bands).">Cat</th>
-              <th scope="col" class="ta-number">Size</th>
-              <th scope="col"><span class="visually-hidden">Download</span></th>
-            </tr>
-          </thead>
-          <tbody id="taTableBody">
-            {entries.map((entry) => {
-              const place = placeText(entry);
-              const formatBadges = badges(entry);
-              const searchIndex = [
-                entry.name,
-                entry.slug,
-                entry.zip,
-                entry.site,
-                entry.eco,
-                entry.cadence,
-                entry.eventType,
-                entry.federation,
-                entry.place,
-                String(entry.year),
-                longDate(entry.start),
-                longDate(entry.end),
-                entry.avgRating != null ? String(entry.avgRating) : '',
-                entry.fideCategory != null ? `cat ${entry.fideCategory}` : ''
-              ]
-                .filter(Boolean)
-                .join(' ')
-                .toLowerCase();
-              const catClass =
-                entry.fideCategory == null
-                  ? ''
-                  : entry.fideCategory >= 20
-                    ? 'ta-cat-vhigh'
-                    : entry.fideCategory >= 15
-                      ? 'ta-cat-high'
-                      : '';
-              return (
-                <tr data-ta-entry data-search={searchIndex} class={catClass}>
-                  <th scope="row">
-                    <span class="ta-event">{entry.name}</span>
-                    <span class="ta-filename">{entry.zip}</span>
-                  </th>
-                  <td class="ta-dates">
-                    <time datetime={entry.start}>{dateRange(entry.start, entry.end)}</time>
-                  </td>
-                  <td class="ta-place">{place || <span class="ta-muted">—</span>}</td>
-                  <td class="ta-format">
-                    {formatBadges.length ? (
-                      formatBadges.map((badge) => <span class="ta-badge">{badge}</span>)
-                    ) : (
-                      <span class="ta-muted">—</span>
-                    )}
-                  </td>
-                  <td class="ta-number">{number(entry.games)}</td>
-                  <td class="ta-number">
-                    {entry.avgRating != null ? number(entry.avgRating) : <span class="ta-muted">—</span>}
-                  </td>
-                  <td class="ta-number">
-                    {entry.fideCategory != null ? entry.fideCategory : <span class="ta-muted">—</span>}
-                  </td>
-                  <td class="ta-number">{formatBytes(entry.bytes)}</td>
-                  <td>
-                    <a
-                      class="btn btn-secondary btn-compact ta-download"
-                      href={entry.url}
-                      aria-label={`Download ${entry.name} PGN ZIP`}
-                    >
-                      <span class="material-icons" aria-hidden="true">download</span>ZIP
-                    </a>
-                  </td>
-                </tr>
-              );
-            })}
-            <tr id="taEmpty" hidden>
-              <td colspan="9">No tournaments match your search. Try another name, place, or year.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <nav id="taPagination" class="ta-pagination" aria-label="Archive pages" hidden>
-        <button id="taPrevPage" type="button" class="btn btn-secondary" disabled>Previous</button>
-        <span id="taPageInfo">Page 1 of 1</span>
-        <button id="taNextPage" type="button" class="btn btn-secondary">Next</button>
-      </nav>
-      <p class="ta-note">
-        Older events are added as their CTML sources are digitised. Current ZIPs are safe to open on any platform and contain a UTF-8 CTML record, a plain-text PGN, and a Markdown tournament record.
-      </p>
-      <noscript>
-        <p class="ta-note">All tournaments are listed. Enable JavaScript for search and pagination.</p>
-      </noscript>
+    <div class="tournament-intro" id="events">
+      <p>Tournaments averaging 2700+ Elo and selected major events, including the Chess Olympiad.</p>
+      <a class="btn btn-secondary btn-compact" href={tournamentZipPath} download>
+        <ArrowDownToLine size={15} aria-hidden="true" /> Download table (CSV ZIP)
+      </a>
     </div>
-  </main>
 
-  <style>
-    .ta-intro { margin-bottom: 1rem; }
-    .ta-intro a { color: var(--accent); }
-    .ta-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; }
-    .ta-summary strong { color: var(--text-primary); }
-    .ta-summary p span[aria-hidden] { padding: 0 0.4rem; }
-    .ta-controls { display: flex; align-items: end; gap: 1rem; margin-bottom: 1rem; }
-    .ta-controls[hidden], .ta-pagination[hidden] { display: none; }
-    .ta-search { flex: 1; }
-    .ta-controls label { display: block; font-size: 0.9rem; margin-bottom: 0.4rem; }
-    .ta-controls input, .ta-controls select {
-      width: 100%;
-      min-height: 2.75rem;
-      padding: 0.6rem 0.75rem;
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font: inherit;
-    }
-    .tournament-archive :is(input, select, a, button, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-    .ta-status { margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; }
-    .ta-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
-    .ta-table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); }
-    .ta-table th, .ta-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
-    .ta-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
-    .ta-table tbody th { font-weight: 400; min-width: 18rem; }
-    .ta-table tbody tr:hover { background: var(--bg-tertiary); }
-    /* FIDE-category row shading, mirroring the CTML viewer: strong events
-       (cat 15-19, avg 2601-2725) get a light accent wash; super-elite
-       (cat 20+, avg 2726+) get the same accent at higher density plus a
-       leading rule. Both tints stack on the hover state below the accent. */
-    .ta-table tbody tr.ta-cat-high  { background: color-mix(in srgb, var(--accent) 12%, transparent); }
-    .ta-table tbody tr.ta-cat-high:hover  { background: color-mix(in srgb, var(--accent) 22%, transparent); }
-    .ta-table tbody tr.ta-cat-vhigh { background: color-mix(in srgb, var(--accent) 26%, transparent);
-                                      box-shadow: inset 3px 0 0 var(--accent); }
-    .ta-table tbody tr.ta-cat-vhigh:hover { background: color-mix(in srgb, var(--accent) 36%, transparent); }
-    .ta-event { display: block; font-weight: 600; }
-    .ta-filename { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: var(--text-secondary); overflow-wrap: anywhere; }
-    .ta-dates { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
-    .ta-place { font-size: 0.9rem; }
-    .ta-format { font-size: 0.85rem; }
-    .ta-badge {
-      display: inline-block;
-      margin: 0 0.3rem 0.2rem 0;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      font-size: 0.75rem;
-      text-transform: capitalize;
-      letter-spacing: 0.02em;
-    }
-    .ta-muted { color: var(--text-secondary); }
-    .ta-table .ta-number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .ta-download { white-space: nowrap; min-height: 2.5rem; }
-    .ta-pagination { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-    .ta-pagination span, .ta-note { color: var(--text-secondary); font-size: 0.9rem; }
-    .ta-pagination button:disabled { opacity: 0.45; cursor: default; }
-    .ta-note { margin-top: 1rem; }
-    @media (max-width: 700px) {
-      .ta-controls { align-items: stretch; flex-direction: column; }
-      .ta-table th, .ta-table td { padding: 0.75rem; }
-      .ta-pagination { justify-content: center; gap: 0.6rem; }
-    }
-  </style>
-  <script>
-    import '../scripts/tournament-archive';
-  </script>
+    <form class="tournament-controls archive-controls" id="tournament-controls" hidden>
+      <div class="field search-field">
+        <label for="tournament-query">Event, place or year</label>
+        <input id="tournament-query" name="q" type="search" placeholder="Search tournaments…" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="tournament-year">Year</label>
+        <select id="tournament-year" name="year">
+          <option value="">All years</option>
+          {years.map(year => <option value={year}>{year}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="tournament-sort">Sort by</label>
+        <select id="tournament-sort" name="sort">
+          <option value="">Newest first</option>
+          <option value="elo">Highest average Elo</option>
+          <option value="games">Most games</option>
+          <option value="players">Most players</option>
+        </select>
+      </div>
+    </form>
+
+    <div class="archive-summary">
+      <span id="tournament-count" role="status">{number(entries.length)} tournaments</span>
+      <button class="btn btn-secondary btn-compact" id="tournament-clear" type="button" hidden>Clear filters</button>
+    </div>
+
+    <div class="archive-table-wrap tournament-table-wrap" role="region" aria-label="Tournament downloads" tabindex="0">
+      <table class="tournament-table">
+        <caption class="visually-hidden">Tournament archive</caption>
+        <thead>
+          <tr>
+            <th scope="col">Tournament</th>
+            <th scope="col" class="desktop-detail">Dates</th>
+            <th scope="col" class="number desktop-detail">Category</th>
+            <th scope="col" class="number desktop-detail">Average Elo</th>
+            <th scope="col" class="number desktop-detail">Games</th>
+            <th scope="col" class="number desktop-detail">Players</th>
+            <th scope="col">Download</th>
+          </tr>
+        </thead>
+        <tbody id="tournament-results">
+          {entries.map(entry => {
+            const { start, end } = tournamentDates(entry);
+            const location = [entry.place, entry.source, entry.historical && 'Historical ratings'].filter(Boolean).join(' · ');
+            return (
+              <tr data-search={`${entry.name} ${entry.sourceName} ${entry.place} ${start} ${end}`.toLowerCase()}
+                  data-year={entry.year} data-elo={entry.avgRating ?? -1} data-games={entry.games} data-players={entry.players ?? -1}>
+                <th scope="row">
+                  <span class="tournament-name">{entry.name}</span>
+                  <small>{location}</small>
+                  <small class="mobile-detail">
+                    {start}{start !== end && ` to ${end}`}<br />
+                    Category {number(entry.category)} · Elo {number(entry.avgRating)}<br />
+                    {number(entry.games)} games · {number(entry.players)} players
+                  </small>
+                </th>
+                <td class="desktop-detail">
+                  <time datetime={start}>{start}</time>
+                  {start !== end && <><br /><span class="visually-hidden"> to </span><time datetime={end}>{end}</time></>}
+                </td>
+                <td class="number desktop-detail">{number(entry.category)}</td>
+                <td class="number desktop-detail">{number(entry.avgRating)}</td>
+                <td class="number desktop-detail">{number(entry.games)}</td>
+                <td class="number desktop-detail">{number(entry.players)}</td>
+                <td><a class="tournament-download" href={entry.url} title={`SHA-256: ${entry.sha256}`} aria-label={`Download ${entry.name} games ZIP`}>
+                  <ArrowDownToLine size={14} aria-hidden="true" /> ZIP
+                </a></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+    <p id="tournament-empty" class="archive-empty" hidden>No tournaments match these filters.</p>
+    <div class="archive-pagination" id="tournament-pagination" hidden>
+      <button type="button" id="tournament-previous">← Previous</button>
+      <span id="tournament-page"></span>
+      <button type="button" id="tournament-next">Next →</button>
+    </div>
+    <p class="archive-note">
+      Game counts refer to the games in each ZIP. Some historical files cover only part of the event, and their Elo values can be retrospective estimates.
+      A dash indicates unavailable or inapplicable data. Sources
+      <a href={sourceRepos['cc-events-archive']}>cc-events-archive</a> and <a href={sourceRepos.PgnTours}>PgnTours</a>.
+    </p>
+  </main>
 </BaseLayout>
+
+<style>
+  .tournament-archive { display: grid; gap: 12px; }
+  .tournament-intro { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .tournament-intro p, .legacy-series { color: var(--muted); margin: 0; }
+  .legacy-series:not(:target), .mobile-detail { display: none; }
+  .tournament-controls { border-radius: 5px; }
+  .archive-summary, .archive-pagination { padding: 0; margin: 0; }
+  .tournament-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+  .tournament-table th, .tournament-table td { padding: 10px 12px; text-align: left; vertical-align: top; }
+  .tournament-table thead { background: var(--panel); color: var(--muted); }
+  .tournament-table thead th { font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+  .tournament-table tbody tr { border-top: 1px solid var(--border); }
+  .tournament-table tbody tr:hover { background: var(--panel); }
+  .tournament-table .number { text-align: right; font-variant-numeric: tabular-nums; }
+  .tournament-table time, .tournament-table small { color: var(--muted); }
+  .tournament-table time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .tournament-name { display: block; overflow-wrap: anywhere; }
+  .tournament-table small { font-weight: 400; }
+  .tournament-download { display: inline-flex; gap: 5px; align-items: center; white-space: nowrap; }
+  @media (max-width: 640px) {
+    .desktop-detail { display: none; }
+    .mobile-detail { display: block; margin-top: 4px; }
+    .tournament-download { min-height: 34px; }
+  }
+</style>
+
+<script>
+  import '../scripts/tournament-archive';
+</script>

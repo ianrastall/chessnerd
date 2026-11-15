@@ -1,0 +1,26 @@
+---
+import { tournamentArchivePath } from '../lib/curated-tournaments';
+
+interface Props {
+  fragment?: string;
+}
+const { fragment = '' } = Astro.props;
+const target = tournamentArchivePath + fragment;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tournament Archive · Chess Nerd</title>
+    <link rel="canonical" href={tournamentArchivePath} />
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ tournamentArchivePath, fragment }}>
+      location.replace(tournamentArchivePath + location.search + (fragment || location.hash));
+    </script>
+    <noscript><meta http-equiv="refresh" content={`0; url=${target}`} /></noscript>
+  </head>
+  <body>
+    <p><a href={target}>Open the Tournament Archive</a></p>
+  </body>
+</html>

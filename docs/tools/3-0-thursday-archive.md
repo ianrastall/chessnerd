@@ -5,7 +5,7 @@ Public route: https://chessnerd.net/chesscom-tournaments.html#three-zero-thursda
 ## Ownership and refresh
 
 `ianrastall/3-0-thursday-archive` owns the session ZIPs and `t30_manifest.json`.
-Chess Nerd owns the archive tab. `npm run sync:t30` resolves the archive's current
+`npm run sync:t30` resolves the archive's current
 `main` commit and mirrors its manifest to
 `public/data/3-0-thursday-archive/manifest.json`. Commit-specific reads avoid
 stale raw GitHub branch caches immediately after an archive upload.
@@ -15,14 +15,12 @@ suffixes, event names, game counts, checksums, uniqueness, and expected download
 URLs. It only replaces the local snapshot after the complete manifest passes.
 GitHub Pages runs this sync before tests and the Astro build on every deployment.
 
-## Page behavior
+## Public link
 
-- `src/components/ThreeZeroThursdayArchivePanel.astro` renders every download at
-  build time as a tab of `src/pages/chesscom-tournaments.astro`.
-- `src/scripts/three-zero-thursday-archive.ts` adds search and 25/50/100-row pagination.
-- Search covers filenames, ISO dates, month names, and session names.
-- No JavaScript is needed to read the full table or download a ZIP.
-- The page identifies the collection as growing; the series began November 13, 2025.
+The old series URL opens the Tournament Archive with a link to the original
+`ianrastall/3-0-thursday-archive` repository. The series manifest remains available
+through the full archive metadata index at `/data/archive-search.json`.
+The series began November 13, 2025.
 
 ## Adding PGNs
 

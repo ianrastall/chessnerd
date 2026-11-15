@@ -16,14 +16,11 @@ game counts, checksums, uniqueness, and expected download URLs. It only replaces
 the local snapshot after the complete manifest passes. GitHub Pages runs this
 sync before tests and the Astro build on every deployment.
 
-## Page behavior
+## Public link
 
-- `src/components/BulletBrawlArchivePanel.astro` renders every download at build
-  time as a tab of `src/pages/chesscom-tournaments.astro`.
-- `src/scripts/bullet-brawl-archive.ts` adds search and 25/50/100-row pagination.
-- Search covers event names, filenames, ISO dates, and month names.
-- No JavaScript is needed to read the full table or download a ZIP.
-- The page identifies the collection as growing while older events are added.
+The old series URL opens the Tournament Archive with a link to the original
+`ianrastall/bullet-brawl-archive` repository. The series manifest remains available
+through the full archive metadata index at `/data/archive-search.json`.
 
 ## Adding PGNs
 

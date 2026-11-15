@@ -11,15 +11,32 @@ for(const path of [...pages,'/categories/analysis.html','/categories/data.html',
   for(const width of [1440,1024,768,390,320]){await page.setViewportSize({width,height:900});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`overflow at ${width}`).toBe(true);}
   expect(errors).toEqual([]);
 });
-test('archive search, filters, pagination and shareable URLs',async({page})=>{
-  await page.goto('/');await expect(page.locator('#archive-count')).toContainText('matching entries');await expect(page.locator('#archive-results tr')).toHaveCount(12);
-  const first=await page.locator('#archive-results tr').first().innerText();await page.locator('#archive-next').click();await expect(page.locator('#archive-page')).toContainText('Page 2');expect(await page.locator('#archive-results tr').first().innerText()).not.toBe(first);
-  await page.locator('#archive-collection').selectOption('titled-tuesday');await page.locator('#archive-year').selectOption('2026');await page.locator('#archive-query').fill('October');await expect(page.locator('#archive-results')).toContainText('October');
-  await expect(page.locator('#archive-results tr')).not.toHaveCount(0);await expect(page.locator('#archive-results tr').first()).toContainText('Titled Tuesday');await expect(page).toHaveURL(/collection=titled-tuesday/);await expect(page).toHaveURL(/q=October/);
-  await page.reload();await expect(page.locator('#archive-query')).toHaveValue('October');await expect(page.locator('#archive-results')).toContainText('October');
-  await page.locator('#archive-query').fill('no-such-tournament-xyz');await expect(page.locator('#archive-empty')).toBeVisible();
-  await page.locator('#archive-clear').click();await expect(page.locator('#archive-results tr')).toHaveCount(12);
-  const links=await page.locator('#archive-results .download-link').evaluateAll(els=>els.map(el=>(el as HTMLAnchorElement).href));expect(links.every(url=>/^https:\/\/(github.com|raw.githubusercontent.com)\/ianrastall\//.test(url)&&url.endsWith('.zip'))).toBe(true);
+test('tournament search, filters, sorting, pagination and shareable URLs', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('table')).toHaveCount(0);
+  await page.getByRole('link', { name: 'Browse all selected tournaments' }).click();
+  const rows = page.locator('#tournament-results tr:visible');
+  await expect(rows).toHaveCount(30);
+  const first = await rows.first().innerText();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.locator('#tournament-page')).toContainText('Page 2');
+  expect(await rows.first().innerText()).not.toBe(first);
+
+  await page.getByLabel('Year', { exact: true }).selectOption('2024');
+  await page.getByRole('searchbox', { name: 'Event, place or year' }).fill('Olympiad');
+  await expect(rows).toHaveCount(2);
+  await expect(rows.first()).toContainText('Olympiad');
+  await expect(page).toHaveURL(/year=2024.*q=Olympiad/);
+  await page.reload();
+  await expect(page.locator('#tournament-query')).toHaveValue('Olympiad');
+  await expect(rows).toHaveCount(2);
+  await page.locator('#tournament-query').fill('no-such-tournament-xyz');
+  await expect(page.locator('#tournament-empty')).toBeVisible();
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await page.getByLabel('Sort by', { exact: true }).selectOption('elo');
+  const averages = await rows.evaluateAll(items => items.map(row => Number(row.getAttribute('data-elo'))));
+  expect(averages).toEqual([...averages].sort((a, b) => b - a));
+  await expect(rows.first().getByRole('link')).toHaveAttribute('href', /^https:\/\/github\.com\/ianrastall\/.*\.zip$/);
 });
 test('overview tabs switch panels and restore from the address',async({page})=>{
   await page.goto('/');await expect(page.locator('#games')).toBeVisible();await expect(page.locator('#tools')).toBeHidden();
@@ -27,11 +44,18 @@ test('overview tabs switch panels and restore from the address',async({page})=>{
   await page.goBack();await expect(page.locator('#games')).toBeVisible();
   await page.goto('/engines.html');await page.getByRole('link',{name:'Find a player',exact:true}).click();await expect(page.locator('#player-query')).toBeVisible();await expect(page.locator('#games')).toBeHidden();
 });
-test('homepage is useful without JavaScript',async({browser})=>{
-  const context=await browser.newContext({javaScriptEnabled:false});const page=await context.newPage();await page.goto('http://127.0.0.1:4322/');await expect(page.locator('#archive-results tr')).toHaveCount(12);await expect(page.locator('#archive-results .download-link').first()).toHaveAttribute('href',/^https:/);await expect(page.getByRole('navigation',{name:'Pages and tools'})).toBeVisible();await context.close();
-});
-test('failed search index retains published downloads and can retry',async({page})=>{
-  let fail=true;await page.route('**/data/archive-search.json',r=>fail ? r.fulfill({status:503,body:'Unavailable'}) : r.continue());await page.goto('/');await expect(page.locator('#archive-count')).toContainText('could not load');await expect(page.locator('#archive-results tr')).toHaveCount(12);fail=false;await page.locator('#archive-query').fill('Titled Tuesday');await expect(page.locator('#archive-count')).toContainText('matching entries');
+test('the complete tournament table and ZIP links work without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('http://127.0.0.1:4322/');
+  await page.getByRole('link', { name: 'Browse all selected tournaments' }).click();
+  await expect(page.getByRole('columnheader')).toHaveText(['Tournament', 'Dates', 'Category', 'Average Elo', 'Games', 'Players', 'Download']);
+  expect(await page.locator('#tournament-results tr:visible').count()).toBeGreaterThan(600);
+  await expect(page.locator('#tournament-results tr').first().getByRole('link')).toHaveAttribute('href', /^https:/);
+  const download = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Download table (CSV ZIP)' }).click();
+  expect((await download).suggestedFilename()).toBe('tournaments.zip');
+  await context.close();
 });
 test('navigation search and mobile disclosure reach specialist pages',async({page})=>{
   await page.goto('/');await page.locator('#navigation-search').fill('developer reference');await expect(page.locator('[data-navigation-item]:visible')).toHaveCount(1);await expect(page.locator('[data-navigation-item]:visible')).toHaveText('Chess.com API');await page.locator('#navigation-search').fill('rating history');await expect(page.locator('[data-navigation-item]:visible')).toHaveCount(1);await page.locator('[data-navigation-item]:visible').click();await expect(page).toHaveURL(/fide-player.html/);
@@ -267,8 +291,13 @@ test('opening explorer replays moves and copies the displayed position', async (
   await expect(page.locator('.eco-position')).toContainText('Starting position');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
 });
-test('archive series deep links and keyboard tabs remain usable',async({page})=>{
-  await page.goto('/chesscom-tournaments.html#three-zero-thursday');const tab=page.getByRole('tab',{name:'3-0 Thursday',exact:true});await expect(tab).toHaveAttribute('aria-selected','true');await expect(page.locator('#t3TableBody tr').first()).toBeVisible();await tab.focus();await page.keyboard.press('ArrowRight');await expect(page.getByRole('tab',{name:'CCC',exact:true})).toHaveAttribute('aria-selected','true');
+test('old tournament links open the consolidated archive and retain their series link', async ({ page }) => {
+  await page.goto('/chesscom-tournaments.html#three-zero-thursday');
+  await expect(page).toHaveURL('/tournament-archive.html#three-zero-thursday');
+  await expect(page.getByRole('link', { name: 'Browse the original 3-0 Thursday archive on GitHub' })).toHaveAttribute('href', 'https://github.com/ianrastall/3-0-thursday-archive');
+  await page.goto('/?q=Olympiad&year=2024#games');
+  await expect(page).toHaveURL('/tournament-archive.html?q=Olympiad&year=2024');
+  await expect(page.locator('#tournament-results tr:visible')).toHaveCount(2);
 });
 
 test('engine board accepts a legal opening move',async({page})=>{
@@ -335,10 +364,15 @@ test('board palette exports remain independent of interface accent',async({page}
   const download=page.waitForEvent('download');await page.locator('#downloadSvgBtn').click();expect((await download).suggestedFilename()).toMatch(/\.svg$/);
 });
 
-test('phone archive rows keep downloads visible without sideways scrolling',async({page})=>{
-  await page.setViewportSize({width:320,height:900});await page.goto('/');await expect(page.locator('#archive-count')).toContainText('matching entries');
-  const link=page.locator('#archive-results .download-link').first();const box=await link.boundingBox();expect(box).not.toBeNull();expect(box!.x+box!.width).toBeLessThanOrEqual(320);
-  await expect(page.locator('#archive-results .event-mobile-meta').first()).toBeVisible();
+test('phone tournament rows show metadata and downloads without sideways scrolling', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto('/tournament-archive.html');
+  const first = page.locator('#tournament-results tr:visible').first();
+  const link = first.getByRole('link');
+  await expect(link).toBeVisible();
+  const box = await link.boundingBox();
+  expect(box!.x + box!.width).toBeLessThanOrEqual(320);
+  await expect(first.locator('.mobile-detail')).toContainText(/Category.+Elo.+games.+players/s);
 });
 test('FIDE standard-rating periods have individual SQLite downloads on narrow screens',async({page})=>{
   await page.setViewportSize({width:390,height:844});

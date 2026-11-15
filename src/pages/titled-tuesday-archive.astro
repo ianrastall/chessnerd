@@ -1,21 +1,4 @@
 ---
-// The Titled Tuesday archive is now a tab on the consolidated Chess.com
-// Tournaments page. This route stays as a redirect so existing links keep
-// working.
-const target = '/chesscom-tournaments.html#titled-tuesday';
+import TournamentRedirect from '../components/TournamentRedirect.astro';
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Titled Tuesday Archive has moved</title>
-    <meta http-equiv="refresh" content={`0; url=${target}`} />
-    <link rel="canonical" href="/chesscom-tournaments.html" />
-    <meta name="robots" content="noindex" />
-  </head>
-  <body>
-    <p>The Titled Tuesday archive is now a tab on <a href={target}>Chess.com Tournaments</a>. Redirecting…</p>
-    <script is:inline set:html={`location.replace(${JSON.stringify(target)});`}></script>
-  </body>
-</html>
+<TournamentRedirect fragment="#titled-tuesday" />

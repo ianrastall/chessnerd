@@ -93,7 +93,7 @@ These only mirror and validate published metadata; new PGNs are added in the arc
 | FIDE standard archive and 2500+ table | Local `refresh_monthly.py --publish` in the owning archive, then dispatch `sync-fide-ratings.yml` → versioned snapshots and standard-list manifest | Monthly, once FIDE posts the dated lists. Runs by hand because most GitHub runners cannot reach FIDE; see [monthly FIDE operation](fide-monthly-refresh.md). |
 | Historical FIDE backfill | `scripts/publish_fide_sqlite.py` from verified per-period databases | New monthly lists use the manual monthly update; historical curation remains explicit. |
 | FIDE Player Profiles | Built and published by the separate `fide-players` repository | Nothing to refresh here; see `docs/tools/fide-player-profiles.md`. |
-| Tournament Archive | `python scripts/build_tournament_archive_zip.py <tournament>.ctml` → ZIP plus `public/data/tournament-archive/manifest.json` | One curated event at a time. |
+| Tournament Archive | `python scripts/build_tournament_archive_zip.py <tournament>.ctml` → ZIP plus `public/data/tournament-archive/manifest.json` | Then run `python scripts/update_tournament_player_counts.py <PgnTours checkout>` to verify ZIPs and refresh roster counts. |
 | ECO Codes | `python scripts/eco/build_openings.py` (sources in `scripts/eco/sources/`) → `public/data/eco-code/openings.json` | Only when the opening sources change. |
 | Software Catalog, Chess.com API reference | Edited in their `.astro` pages | Static content. |
 

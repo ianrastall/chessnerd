@@ -4,7 +4,7 @@ Implemented 21 October 2026 in `D:/jupiter/chessnerd`, retaining the original si
 
 ## Interface
 
-The homepage is an archive discovery surface: search six published collections together, filter by collection/year, page through results and download original ZIPs directly. Initial recent downloads render as HTML without JavaScript. Search uses a separate static JSON projection and retains useful downloads when that request fails; another search retries. Filters have shareable URLs. Player lookup accepts a surname or FIDE ID and opens the existing profile workflow. PGN inspection, engine play, opening exploration and board design are direct task links.
+The homepage links to the curated Tournament Archive and forwards event searches to its sortable table. The archive renders its rows and original game ZIP links in HTML and publishes a CSV ZIP from the same data. Filters have shareable URLs. Player lookup accepts a surname or FIDE ID and opens the existing profile workflow. PGN inspection, engine play, opening exploration and board design are direct task links.
 
 Persistent navigation organizes the site into Games & archives, Players & ratings, Analysis & play, Engines & software, and Developer reference. Section icons and colors help distinguish the groups, and a page/tool finder filters by page or section name. All specialist pages, category pages and old standalone archive routes remain available. FIDE Player Profiles is now included in discovery metadata. Two previously extensionless catalogue links now use their existing `.html` URLs.
 
@@ -16,6 +16,6 @@ Narrow screens collapse navigation into a disclosure. Wide tables scroll within 
 
 Astro 7.4.2 static output, TypeScript 6.0.3, plain CSS, pinned npm dependencies/lockfile and Node 24.13.0 match the established Jupiter web baseline. Domain logic and data formats are retained. Read [the dependency and workflow map](data-dependencies.md) before changing acquisition or publication.
 
-Checks: `npm test`, `npm run audit`, `npm run build`, `npm run test:browser`. Archive unit tests remain, with cross-collection losslessness/filter/precision checks added. Browser coverage includes every route and responsive shell plus search, downloads, URL restoration, failures/retry, no-JavaScript content, profile handoff, appearance migration/reset, PGN analysis, opening boards and archive tabs. CI repeats validation before Pages deployment.
+Checks: `npm test`, `npm run audit`, `npm run build`, `npm run test:browser`. Archive unit tests remain, with cross-collection losslessness/filter/precision checks added. Browser coverage includes every route and responsive shell plus search, downloads, URL restoration, no-JavaScript content, profile handoff, appearance migration/reset, PGN analysis, opening boards and legacy tournament links. CI repeats validation before Pages deployment.
 
 Software catalogue, 30 October 2026: the current personal-software section lists six Jupiter chess apps, with verified public installers distinguished from pending releases. The directory now contains 39 programs and libraries in eight categories, with task search, category/platform filters and static HTML for no-JavaScript use. Earlier PGN Simple Edit/PgnTools downloads and SCID resource links remain available. See [catalogue sources and maintenance](tools/software-catalogue.md).

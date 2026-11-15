@@ -30,19 +30,13 @@ The checked-in manifest supports offline local builds. A deployment refresh does
 not commit its copy back to the site repository. Run `npm run sync:ccc` and commit
 the generated file when updating the local snapshot.
 
-## Page implementation
+## Public link
 
-- `src/components/CccArchivePanel.astro` validates and renders the entire table at
-  build time as a tab of `src/pages/chesscom-tournaments.astro`.
-- `src/scripts/ccc-archive.ts` adds case-insensitive search and pagination (25, 50,
-  or 100 rows; 100 by default). Search matches event names, filenames, and ISO dates.
-- With JavaScript disabled, every event and download remains available.
-- `src/lib/ccc-archive.ts` owns the data contract and pagination boundaries.
-- `src/data/tools.ts` lists CCC Archive as ready on the home and Data pages.
-
-The latest archived date describes the games in the source repository, not the
-date of the last website deployment. Refreshing metadata does not fetch new games
-from Chess.com.
+The old series URL opens the Tournament Archive with a link to the original
+`ianrastall/ccc-archive` repository. The series manifest remains available
+through the full archive metadata index at `/data/archive-search.json`.
+The latest archived date describes when the games took place. Refreshing the
+metadata reads the published manifest without fetching new games from Chess.com.
 
 ## Adding tournaments
 

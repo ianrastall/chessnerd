@@ -5,8 +5,7 @@ import chesscomFide2400_2024 from '../../public/data/pgn-downloads/chesscom-fide
 import chesscomFide2400_2025 from '../../public/data/pgn-downloads/chesscom-fide-2400-2025.json';
 import twicPublic from '../../public/data/pgn-downloads/twic-public.json';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import eventBundles from '../../public/data/cc-events-archive/bundles.json';
-import { parseEventBundles } from '../lib/events-archive';
+import { tournamentArchivePath } from '../lib/curated-tournaments';
 
 interface Download {
   id: string;
@@ -39,30 +38,7 @@ interface Section {
   items: Download[];
 }
 
-// The Chess.com events databases are rebuilt by the cc-events-archive
-// pipeline on every publish; this section follows its bundle list.
-const eventItems: Download[] = parseEventBundles(eventBundles).flatMap((bundle) =>
-  bundle.files.map((file) => {
-    const span = bundle.files.length > 1 ? `, ${file.from === file.to ? file.from : `${file.from}–${file.to}`}` : '';
-    const tint = bundle.minAverage >= 2700 ? ' (the light green rows)' : bundle.minAverage >= 2600 ? ' (both green rows)' : '';
-    return {
-      id: file.file,
-      file: file.file,
-      name: `${bundle.minAverage ? `Events ${bundle.minAverage}+` : 'Events, all'}${span}`,
-      description: `${bundle.title}${tint}: ${file.events.toLocaleString('en-US')} events, ${file.games.toLocaleString('en-US')} games in one PGN.`,
-      size: file.bytes,
-      href: file.url,
-      date: bundle.updated,
-    };
-  })
-);
-
 const sections: Section[] = [
-  {
-    title: 'Tournament Events',
-    description: 'From the Events tab of Chess.com Tournaments: Chess.com events and historical tournaments (1834–1990) with a tournament average of 2300+.',
-    items: eventItems,
-  },
   {
     title: 'General Databases',
     items: [
@@ -129,6 +105,7 @@ const sections: Section[] = [
   <main>
     <div id="toolView">
       <ToolHeader title="PGN Downloads" icon="cloud_download" />
+      <p class="archive-note">Individual event ZIPs are available in the <a href={tournamentArchivePath}>Tournament Archive</a>.</p>
 
       <div class="search-box">
         <label class="visually-hidden" for="fileSearch">Filter files</label>

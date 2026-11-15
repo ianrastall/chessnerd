@@ -1,8 +1,6 @@
 export const navigation = [
   { name:'Games & archives', icon:'archive', links:[
-    {name:'Tournament search',href:'/#games'},
-    {name:'Chess.com tournaments',href:'/chesscom-tournaments.html',keywords:'titled tuesday bullet brawl thursday ccc events downloads'},
-    {name:'Tournament archive',href:'/tournament-archive.html',keywords:'ctml pgntours'},
+    {name:'Tournament archive',href:'/tournament-archive.html',keywords:'chess.com events olympiad elo ctml pgntours'},
     {name:'PGN downloads',href:'/pgn-downloads.html'}]},
   { name:'Players & ratings', icon:'players', links:[
     {name:'FIDE player profiles',href:'/fide-player.html',keywords:'rating history surname id'},

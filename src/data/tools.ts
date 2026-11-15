@@ -40,15 +40,6 @@ export const tools: ToolMeta[] = [
     featured: true
   },
   {
-    id: 'chesscom-tournaments',
-    name: 'Chess.com Tournaments',
-    href: '/chesscom-tournaments.html',
-    icon: 'emoji_events',
-    category: 'data',
-    description: 'Event PGNs from Chess.com’s Titled Tuesday, Bullet Brawl, 3-0 Thursday, and Computer Chess Championship, with dates and direct ZIP links.',
-    featured: true
-  },
-  {
     id: 'chesscom-api',
     name: 'Chess.com API',
     href: '/chesscom-api.html',
@@ -144,7 +135,8 @@ export const tools: ToolMeta[] = [
     href: '/tournament-archive.html',
     icon: 'emoji_events',
     category: 'data',
-    description: 'Tournament PGNs from the PgnTours archive, generated from CTML sources with crosstables.'
+    description: 'Browse 2700+ Elo tournaments and major events. Download the table or individual game ZIPs.',
+    featured: true
   }
 ];
 
