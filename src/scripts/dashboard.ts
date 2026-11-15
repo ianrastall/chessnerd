@@ -1,3 +1,5 @@
+export {};
+
 // Forward shared URLs from the original overview search.
 const params = new URLSearchParams(location.search);
 if ((!location.hash || location.hash === '#games')

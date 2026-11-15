@@ -1,3 +1,5 @@
+export {};
+
 const form = document.querySelector<HTMLFormElement>('#tournament-controls')!;
 const query = document.querySelector<HTMLInputElement>('#tournament-query')!;
 const year = document.querySelector<HTMLSelectElement>('#tournament-year')!;
