@@ -6,10 +6,10 @@ Inspected 21 October 2026. This map describes the retained website and its actua
 
 | Publication / owner | Website input | Producer / refresh | Website consumer |
 | --- | --- | --- | --- |
-| `ianrastall/ccc-archive` | `ccc_manifest.json` → `public/data/ccc-archive/manifest.json` | Independent archive maintenance; `npm run sync:ccc` reads a resolved main commit | Legacy archive index and original series link |
-| `ianrastall/titled-tuesday-archive` | `tt_manifest.json` → `public/data/titled-tuesday-archive/manifest.json` | Independent archive maintenance; `npm run sync:tt` | Legacy archive index and original series link |
-| `ianrastall/bullet-brawl-archive` | `bb_manifest.json` → `public/data/bullet-brawl-archive/manifest.json` | Independent archive maintenance; `npm run sync:bb` | Legacy archive index and original series link |
-| `ianrastall/3-0-thursday-archive` | `t30_manifest.json` → `public/data/3-0-thursday-archive/manifest.json` | Independent archive maintenance; `npm run sync:t30` | Legacy archive index and original series link |
+| `ianrastall/ccc-archive` | `ccc_manifest.json` → `public/data/ccc-archive/manifest.json` | Independent archive maintenance; `npm run sync:ccc` reads a resolved main commit | Tournament Archive series tab |
+| `ianrastall/titled-tuesday-archive` | `tt_manifest.json` → `public/data/titled-tuesday-archive/manifest.json` | Independent archive maintenance; `npm run sync:tt` | Tournament Archive series tab |
+| `ianrastall/bullet-brawl-archive` | `bb_manifest.json` → `public/data/bullet-brawl-archive/manifest.json` | Independent archive maintenance; `npm run sync:bb` | Tournament Archive series tab |
+| `ianrastall/3-0-thursday-archive` | `t30_manifest.json` → `public/data/3-0-thursday-archive/manifest.json` | Independent archive maintenance; `npm run sync:t30` | Tournament Archive series tab |
 | `ianrastall/cc-events-archive` | `cc_events_manifest.json`, `cc_events_bundles.json` → corresponding `public/data/cc-events-archive/` files | Independent curation/publication; `npm run sync:events` | Curated Tournament Archive and legacy archive index |
 | `ianrastall/PgnTours` and canonical CTML sources | `public/data/tournament-archive/manifest.json`; ZIP URLs stay in PgnTours | Curated/manual `scripts/build_tournament_archive_zip.py` from canonical CTML; no new automatic sync introduced | Curated Tournament Archive and legacy archive index |
 | `ianrastall/fide-db-archive` → `ianrastall/fide-players` | Player name files and binary shards at `https://ianrastall.github.io/fide-players/` | Independent offline FIDE pipeline and publication | `/fide-player.html`; names load on search, relevant shards on profile selection |
@@ -49,8 +49,8 @@ The catalogue includes archives with games and a reported Elo average of at leas
 plus selected major events. Exceptions cover Chess Olympiads, Candidates events, FIDE World Cups,
 world championship events and the early American Chess Congresses. The rules and known
 duplicate replacements live in `src/lib/curated-tournaments.ts`. Separate draws, stages and
-time controls can have their own rows. Old tournament routes and series fragments point to
-the curated table or the original series, and `/data/archive-search.json` remains the full
+time controls can have their own rows. The four recurring series have their own searchable tabs with their original download links.
+Old tournament routes and series fragments open the corresponding tab, and `/data/archive-search.json` remains the full
 metadata index. The prepared event bundles remain in the owning repository and the synced
 bundle manifest.
 

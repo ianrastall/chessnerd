@@ -25,9 +25,9 @@ can use the public API or an existing `GITHUB_TOKEN` environment variable.
 
 ## Public link
 
-The old series URL opens the Tournament Archive with a link to the original
-`ianrastall/titled-tuesday-archive` repository. The series manifest remains available
-through the full archive metadata index at `/data/archive-search.json`.
+The [Tournament Archive](https://chessnerd.net/tournament-archive.html#titled-tuesday)
+shows the full series with search, pagination, and individual event ZIP links.
+The series is also included in the full metadata index at `/data/archive-search.json`.
 
 Archive filenames follow `titled-tuesday_YYYY-MM-DD[a|b].zip`. The suffixes
 `a` and `b` identify early and late sessions. An absent suffix indicates an

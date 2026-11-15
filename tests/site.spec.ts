@@ -1,6 +1,7 @@
 import { test,expect } from '@playwright/test';
 import { readdir, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { loadCuratedTournaments } from '../src/lib/curated-tournaments';
 const pages=(await readdir('src/pages')).filter(path=>path.endsWith('.astro')).map(path=>path==='index.astro' ? '/' : '/'+path.replace('.astro','.html'));
 test.beforeEach(async({page})=>{await page.route('https://www.googletagmanager.com/**',r=>r.abort());await page.route('https://fonts.googleapis.com/**',r=>r.abort());});
 for(const path of [...pages,'/categories/analysis.html','/categories/data.html','/categories/reference.html'])test(`route and responsive shell: ${path}`,async({page})=>{
@@ -50,11 +51,16 @@ test('the complete tournament table and ZIP links work without JavaScript', asyn
   await page.goto('http://127.0.0.1:4322/');
   await page.getByRole('link', { name: 'Browse all selected tournaments' }).click();
   await expect(page.getByRole('columnheader')).toHaveText(['Tournament', 'Dates', 'Category', 'Average Elo', 'Games', 'Players', 'Download']);
-  expect(await page.locator('#tournament-results tr:visible').count()).toBeGreaterThan(600);
+  const selected = await loadCuratedTournaments();
+  expect(selected.length).toBeGreaterThan(0);
+  await expect(page.locator('#tournament-results tr:visible')).toHaveCount(selected.length);
   await expect(page.locator('#tournament-results tr').first().getByRole('link')).toHaveAttribute('href', /^https:/);
   const download = page.waitForEvent('download');
   await page.getByRole('link', { name: 'Download table (CSV ZIP)' }).click();
   expect((await download).suggestedFilename()).toBe('tournaments.zip');
+  await page.getByRole('link', { name: 'Titled Tuesday', exact: true }).click();
+  await expect(page.locator('#titled-tuesday tbody a').first()).toBeVisible();
+  await expect(page.locator('#events')).toBeHidden();
   await context.close();
 });
 test('navigation search and mobile disclosure reach specialist pages',async({page})=>{
@@ -291,10 +297,48 @@ test('opening explorer replays moves and copies the displayed position', async (
   await expect(page.locator('.eco-position')).toContainText('Starting position');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
 });
-test('old tournament links open the consolidated archive and retain their series link', async ({ page }) => {
+test('tournament page restores every recurring series with its original ZIPs', async ({ page }) => {
+  const series = [
+    { tab: 'Titled Tuesday', archive: 'titled-tuesday', hash: 'titled-tuesday' },
+    { tab: 'Bullet Brawl', archive: 'bullet-brawl', hash: 'bullet-brawl' },
+    { tab: '3-0 Thursday', archive: '3-0-thursday', hash: 'three-zero-thursday' },
+    { tab: 'CCC', archive: 'ccc', hash: 'ccc' },
+  ];
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto('/tournament-archive.html');
+  for (const { tab, archive, hash } of series) {
+    await page.getByRole('tab', { name: tab, exact: true }).click();
+    const panel = page.getByRole('tabpanel', { name: tab, exact: true });
+    await expect(page).toHaveURL(`/tournament-archive.html#${hash}`);
+    const manifest = JSON.parse(await readFile(`public/data/${archive}-archive/manifest.json`, 'utf8')) as { url: string }[];
+    const links = panel.locator('tbody tr a');
+    await expect(links).toHaveCount(manifest.length);
+    expect(await links.evaluateAll(items => items.map(item => item.getAttribute('href')).sort()))
+      .toEqual(manifest.map(item => item.url).sort());
+    await expect(links.first()).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+
+    const search = panel.getByRole('searchbox');
+    await search.fill('no-such-tournament-xyz');
+    await expect(panel.getByRole('status')).toContainText('No matching');
+    await search.clear();
+  }
+  await page.getByRole('tab', { name: 'CCC', exact: true }).press('Home');
+  await expect(page.getByRole('tab', { name: 'Selected tournaments' })).toHaveAttribute('aria-selected', 'true');
+  await page.goBack();
+  await expect(page.getByRole('tabpanel', { name: 'CCC', exact: true })).toBeVisible();
+});
+
+test('old tournament links and shared homepage searches still open their results', async ({ page }) => {
   await page.goto('/chesscom-tournaments.html#three-zero-thursday');
   await expect(page).toHaveURL('/tournament-archive.html#three-zero-thursday');
-  await expect(page.getByRole('link', { name: 'Browse the original 3-0 Thursday archive on GitHub' })).toHaveAttribute('href', 'https://github.com/ianrastall/3-0-thursday-archive');
+  const thursday = page.getByRole('tab', { name: '3-0 Thursday', exact: true });
+  await expect(thursday).toHaveAttribute('aria-selected', 'true');
+  await thursday.press('ArrowRight');
+  await expect(page.getByRole('tab', { name: 'CCC', exact: true })).toBeFocused();
+  await expect(page.getByRole('tabpanel', { name: 'CCC', exact: true })).toBeVisible();
+  await page.goto('/bullet-brawl-archive.html');
+  await expect(page.getByRole('tabpanel', { name: 'Bullet Brawl', exact: true })).toBeVisible();
   await page.goto('/?q=Olympiad&year=2024#games');
   await expect(page).toHaveURL('/tournament-archive.html?q=Olympiad&year=2024');
   await expect(page.locator('#tournament-results tr:visible')).toHaveCount(2);

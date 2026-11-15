@@ -1,6 +1,6 @@
 export const navigation = [
   { name:'Games & archives', icon:'archive', links:[
-    {name:'Tournament archive',href:'/tournament-archive.html',keywords:'chess.com events olympiad elo ctml pgntours'},
+    {name:'Tournament archive',href:'/tournament-archive.html',keywords:'chess.com events olympiad elo ctml pgntours titled tuesday bullet brawl 3-0 thursday ccc computer chess championship'},
     {name:'PGN downloads',href:'/pgn-downloads.html'}]},
   { name:'Players & ratings', icon:'players', links:[
     {name:'FIDE player profiles',href:'/fide-player.html',keywords:'rating history surname id'},

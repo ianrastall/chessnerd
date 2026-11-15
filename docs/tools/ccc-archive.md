@@ -32,9 +32,9 @@ the generated file when updating the local snapshot.
 
 ## Public link
 
-The old series URL opens the Tournament Archive with a link to the original
-`ianrastall/ccc-archive` repository. The series manifest remains available
-through the full archive metadata index at `/data/archive-search.json`.
+The [Tournament Archive](https://chessnerd.net/tournament-archive.html#ccc)
+shows the full series with search, pagination, and individual event ZIP links.
+The series is also included in the full metadata index at `/data/archive-search.json`.
 The latest archived date describes when the games took place. Refreshing the
 metadata reads the published manifest without fetching new games from Chess.com.
 

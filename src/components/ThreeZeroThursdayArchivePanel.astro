@@ -1,0 +1,109 @@
+---
+import manifest from '../../public/data/3-0-thursday-archive/manifest.json';
+import { parseThreeZeroThursdayManifest } from '../lib/three-zero-thursday-archive';
+
+const entries = parseThreeZeroThursdayManifest(manifest);
+const games = entries.reduce((sum, entry) => sum + entry.games, 0);
+const latestDate = entries[0].date;
+const longDate = (value: string) => new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T00:00:00Z`));
+const number = (value: number) => value.toLocaleString('en-US');
+---
+<div class="three-zero-thursday-archive">
+  <p class="t3-intro">3-0 Thursday games for titled players, three sessions each Thursday (First 11 a.m., Second 4 p.m., Third 9 p.m. ET). Each ZIP contains a PGN file.</p>
+
+  <div class="t3-summary">
+    <p><strong>{number(entries.length)}</strong> sessions <span aria-hidden="true">·</span> <strong>{number(games)}</strong> games</p>
+    <p>Latest archived event: <time datetime={latestDate}>{latestDate}</time></p>
+    <a href="https://github.com/ianrastall/3-0-thursday-archive" target="_blank" rel="noopener noreferrer">Archive on GitHub <span aria-hidden="true">↗</span></a>
+  </div>
+
+  <div id="t3Controls" class="t3-controls" hidden>
+    <div class="t3-search">
+      <label for="t3Search">Search sessions</label>
+      <input id="t3Search" type="search" placeholder="Date, session, or filename…" autocomplete="off" />
+    </div>
+    <div class="t3-page-size">
+      <label for="t3PageSize">Rows per page</label>
+      <select id="t3PageSize">
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100" selected>100</option>
+      </select>
+    </div>
+  </div>
+
+  <p id="t3Status" class="t3-status" role="status">{number(entries.length)} sessions, newest first</p>
+  <div class="t3-table-wrap" role="region" aria-label="3-0 Thursday session downloads" tabindex="0">
+    <table class="t3-table">
+      <caption class="visually-hidden">3-0 Thursday sessions, newest first</caption>
+      <thead>
+        <tr>
+          <th scope="col">Event</th>
+          <th scope="col">Date</th>
+          <th scope="col">Session</th>
+          <th scope="col" class="t3-number">Games</th>
+          <th scope="col"><span class="visually-hidden">Download</span></th>
+        </tr>
+      </thead>
+      <tbody id="t3TableBody">
+        {entries.map((entry) => (
+          <tr data-t3-entry data-search={`${entry.event} ${entry.pgn} ${entry.date} ${longDate(entry.date)} ${entry.session}`.toLowerCase()}>
+            <th scope="row">
+              <span class="t3-event">3-0 Thursday · {entry.session}</span>
+              <span class="t3-filename">{entry.pgn}</span>
+            </th>
+            <td class="t3-date"><time datetime={entry.date}>{entry.date}</time></td>
+            <td>{entry.session}</td>
+            <td class="t3-number">{number(entry.games)}</td>
+            <td><a class="btn btn-secondary btn-compact t3-download" href={entry.url} aria-label={`Download 3-0 Thursday ${entry.date} ${entry.session} PGN ZIP`}><span class="material-icons" aria-hidden="true">download</span>ZIP</a></td>
+          </tr>
+        ))}
+        <tr id="t3Empty" hidden><td colspan="5">No sessions match your search. Try another date or session.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <nav id="t3Pagination" class="t3-pagination" aria-label="Archive pages" hidden>
+    <button id="t3PrevPage" type="button" class="btn btn-secondary" disabled>Previous</button>
+    <span id="t3PageInfo">Page 1 of 1</span>
+    <button id="t3NextPage" type="button" class="btn btn-secondary">Next</button>
+  </nav>
+  <p class="t3-note">Began November 13, 2025. This is a growing collection.</p>
+  <noscript><p class="t3-note">All sessions are listed. Enable JavaScript for search and pagination.</p></noscript>
+</div>
+
+<style>
+  .t3-intro { margin-bottom: 1rem; }
+  .t3-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .t3-summary strong { color: var(--text-primary); }
+  .t3-summary p:first-child span { padding: 0 0.4rem; }
+  .t3-controls { display: flex; align-items: end; gap: 1rem; margin-bottom: 1rem; }
+  .t3-controls[hidden], .t3-pagination[hidden] { display: none; }
+  .t3-search { flex: 1; }
+  .t3-controls label { display: block; font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .t3-controls input, .t3-controls select { width: 100%; min-height: 2.75rem; padding: 0.6rem 0.75rem; color: var(--text-primary); background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; font: inherit; }
+  .three-zero-thursday-archive :is(input, select, a, button, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .t3-status { margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .t3-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+  .t3-table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); }
+  .t3-table th, .t3-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+  .t3-table thead th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
+  .t3-table tbody th { font-weight: 400; min-width: 18rem; }
+  .t3-table tbody tr:hover { background: var(--bg-tertiary); }
+  .t3-event { display: block; font-weight: 600; }
+  .t3-filename { display: block; margin-top: 0.2rem; font-size: 0.875rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+  .t3-table .t3-number { text-align: right; font-variant-numeric: tabular-nums; }
+  .t3-date { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+  .t3-download { white-space: nowrap; min-height: 2.5rem; }
+  .t3-pagination { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+  .t3-pagination span, .t3-note { color: var(--text-secondary); font-size: 0.9rem; }
+  .t3-pagination button:disabled { opacity: 0.45; cursor: default; }
+  .t3-note { margin-top: 1rem; }
+  @media (max-width: 600px) {
+    .t3-controls { align-items: stretch; flex-direction: column; }
+    .t3-table th, .t3-table td { padding: 0.75rem; }
+    .t3-pagination { justify-content: center; gap: 0.6rem; }
+  }
+</style>
+<script>
+  import '../scripts/three-zero-thursday-archive';
+</script>

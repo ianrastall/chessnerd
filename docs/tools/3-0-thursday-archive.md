@@ -17,9 +17,9 @@ GitHub Pages runs this sync before tests and the Astro build on every deployment
 
 ## Public link
 
-The old series URL opens the Tournament Archive with a link to the original
-`ianrastall/3-0-thursday-archive` repository. The series manifest remains available
-through the full archive metadata index at `/data/archive-search.json`.
+The [Tournament Archive](https://chessnerd.net/tournament-archive.html#three-zero-thursday)
+shows the full series with search, pagination, and individual event ZIP links.
+The series is also included in the full metadata index at `/data/archive-search.json`.
 The series began November 13, 2025.
 
 ## Adding PGNs
