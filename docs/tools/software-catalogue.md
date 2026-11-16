@@ -1,18 +1,23 @@
 # Software catalogue
 
-Updated 30 October 2026. The public route remains `/software.html`.
+Updated 16 November 2026. The public route is `/software.html`.
 
-`src/data/software.ts` contains 39 current entries in eight functional categories: six Jupiter chess apps and 33 third-party programs, services and developer libraries. Descriptions, supported platforms and access models come from the official project websites or documentation linked with each entry. No prices or third-party release versions are pinned. Website availability can differ from project maintenance status; this directory does not claim every program is actively maintained.
+`src/data/software.ts` contains 44 entries in eight categories, including ten programs by Ian Rastall and 34 third-party programs, services and libraries. Descriptions, platforms and access models come from the linked project websites, official app listings and repository documentation. Third-party entries link to current download pages where available. Arena's project page responded over HTTP during the review. Chessable's homepage rejected automated requests, and its publisher's store listings and MoveTrainer documentation confirmed the listing details.
 
-The Jupiter descriptions were checked against the current sibling repositories' readmes: `chess-engine-compiler`, `lichess-puzzles`, `chesscom-crawler`, `boardroom`, `edit` (EditPGN) and `tour-breaker`. Published GitHub assets were checked separately:
+Jupiter descriptions were checked against the current sibling repositories' readmes. Public source and assets were checked on GitHub.
 
-- Chess Engine Compiler v0.6.0 publishes `ChessEngineCompiler-0.6.0-win-x64-setup.exe`.
-- Lichess Puzzles 3.1.0 publishes `LichessPuzzles-3.1.0-win-x64-setup.exe`.
-- Chess.com Crawler v0.1.0 currently publishes only a portable zip. Link to source; do not label it an installer or present portable delivery as the standard Jupiter distribution.
-- Boardroom's Jupiter migration is local; the retained `titania-tools` public release is PGN Simple Edit, not the current Boardroom installer.
-- EditPGN and Tour Breaker have no public remote/release in their current local repositories. List their function and pending publication without inventing public repositories or download URLs.
+- Chess Engine Compiler v1.1.0 publishes `ChessEngineCompiler-1.1.0-win-x64-setup.exe`.
+- Lichess Puzzles 3.3.0 publishes `LichessPuzzles-3.3.0-win-x64-setup.exe`.
+- Lichess Local v0.1.0 publishes `LichessLocal-0.1.0-Setup.exe`.
+- Chess.com Crawler v0.1.0 publishes a portable zip. The entry links to its public source and instructions.
+- The public Fastchess Desktop repository describes the earlier fastchess frontend. The current sibling checkout uses the fastchess-gui runner and has no public Jupiter release.
+- Boardroom, EditPGN and Tour Breaker are pending public release. The `titania-tools` release asset is PGN Simple Edit.
+- PGN Tools 2.1.0 publishes `PgnTools-2.1.0-win-x64.exe`. The 2.0.0 download is retained below the catalogue.
+- Bear has public MIT-licensed Rust source and build instructions.
 
-Do not infer public availability from a local `dist` installer. Update these records and the page's checked date when publishing new versions. Release publication for sibling apps is outside this website edit.
+Verify public availability against the owning repository's release assets. Update these records and the page's checked date when refreshing the catalogue.
+
+Chess Coach was submitted by its developer. Its [product site](https://thechesscoach.netlify.app/) documents the finished-game restriction, supported services and access terms. The [knight fork example](https://thechesscoach.netlify.app/journey/week-2026-w13/) shows a review of a finished Chess.com game.
 
 The older PGN Simple Edit and PgnTools URLs are preserved under a separate disclosure for existing users. SCID resources remain linked as reference material, outside the program count.
 

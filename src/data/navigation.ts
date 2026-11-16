@@ -15,7 +15,7 @@ export const navigation = [
   { name:'Engines & software', icon:'engines', links:[
     {name:'Engine releases',href:'/engines.html'},
     {name:'Stockfish commits',href:'/stockfish-commits.html'},
-    {name:'Software catalogue',href:'/software.html'}]},
+    {name:'Software catalogue',href:'/software.html',keywords:'software downloads installers apps'}]},
   { name:'Developer reference', icon:'developer', links:[
     {name:'Chess.com API',href:'/chesscom-api.html'}]}
 ] as const;

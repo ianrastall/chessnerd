@@ -4,9 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { softwareGroups } from '../data/software';
 
 const total = softwareGroups.reduce((count, group) => count + group.items.length, 0);
-const platforms = ['Windows', 'macOS', 'Linux', 'Web', 'Library'];
+const platforms = ['Windows', 'macOS', 'Linux', 'iOS', 'Android', 'Web', 'Library'];
 ---
-<BaseLayout title="Software catalogue" description="Jupiter chess programs by Ian Rastall, plus chess databases, engine interfaces, training software, PGN utilities and developer libraries.">
+<BaseLayout title="Software catalogue" description="Chess software by Ian Rastall, plus chess databases, engine interfaces, training software, PGN utilities and developer libraries.">
   <main>
     <div class="tool-container software-catalogue">
       <ToolHeader title="Software catalogue" icon="inventory_2" />
@@ -18,8 +18,8 @@ const platforms = ['Windows', 'macOS', 'Linux', 'Web', 'Library'];
         <button type="reset" class="btn btn-secondary">Clear</button>
       </form>
 
-      <div class="catalogue-summary"><p id="software-count" role="status" aria-live="polite">{total} programs and libraries</p><p>Details checked <time datetime="2026-10-30">30 October 2026</time>.</p></div>
-      <nav class="software-categories" aria-label="Software categories">{softwareGroups.map(group => <a href={`#${group.id}`}>{group.name.replace('My software · ', '')} <span>{group.items.length}</span></a>)}</nav>
+      <div class="catalogue-summary"><p id="software-count" role="status" aria-live="polite">{total} programs and libraries</p><p>Details checked <time datetime="2026-11-16">16 November 2026</time>.</p></div>
+      <nav class="software-categories" aria-label="Software categories">{softwareGroups.map(group => <a href={`#${group.id}`}>{group.name} <span>{group.items.length}</span></a>)}</nav>
       <p id="software-empty" hidden>No software matches these filters. Change the search or clear the filters.</p>
 
       {softwareGroups.map(group => (
@@ -44,7 +44,6 @@ const platforms = ['Windows', 'macOS', 'Linux', 'Web', 'Library'];
       <aside class="software-resources" aria-label="Related resources"><h2>Related resources</h2><p><a href="https://sourceforge.net/p/scid/wiki/GetResources/">SCID resources</a>: compatible databases, player data, opening books, engines and tablebases.</p><p><a href="/pgn-downloads.html">PGN downloads</a> · <a href="/pgn-info.html">Inspect a PGN file in your browser</a></p></aside>
       <details class="earlier-software">
         <summary>Earlier software: PGN Simple Edit and PgnTools</summary>
-        <p>These earlier releases remain available for existing users. Current Jupiter programs are listed above.</p>
         <ul>
           <li>PGN Simple Edit (Titania Tools), 0.1.0: file-level PGN reporting, joining, merging, splitting and sorting. <a href="https://github.com/ianrastall/titania-tools/releases/download/v0.1.0/PgnSimpleEdit-0.1.0-Setup.exe">Original installer</a> · <a href="https://github.com/ianrastall/titania-tools">Repository</a></li>
           <li>PGN Tools (PgnTools), 2.0.0: older Windows PGN utility. <a href="https://github.com/ianrastall/PgnTools/releases/download/2.0.0/PgnTools-2.0.0-win-x64.exe">Original download</a> · <a href="https://github.com/ianrastall/PgnTools">Repository</a></li>
