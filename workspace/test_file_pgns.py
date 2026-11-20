@@ -13,6 +13,15 @@ def completed(code=0, stdout='', stderr=''):
 
 
 class WorkspaceTests(unittest.TestCase):
+    def test_ccc_site_tag_identifies_exports_with_non_ccc_event_names(self):
+        with tempfile.TemporaryDirectory() as folder:
+            pgn = Path(folder) / '521.pgn'
+            event = 'Fry Test: pt. 1'
+            for host, expected in (('www.chess.com', 'ccc'), ('www.chess.com.example.org', None)):
+                with self.subTest(host=host):
+                    pgn.write_bytes(f'[Event "{event}"]\r\n[Site "https://{host}/computer-chess-championship"]\r\n'.encode())
+                    self.assertEqual(filing.classify(pgn), (expected, event))
+
     def test_dry_run_does_not_pull_import_or_move(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

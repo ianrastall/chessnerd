@@ -82,8 +82,8 @@ hand; the producer fetches the dated lists itself, and a `FIDE has not posted`
 error means it is too early. Both commands are safe to repeat.
 
 ```powershell
-# In D:\fide\fide-db-archive:
-python refresh_monthly.py --period 2026-11 --publish --output D:\fide\monthly-2026-11
+# In D:\dev\proj\fide-db-archive:
+python refresh_monthly.py --period 2026-11 --publish --output D:\dev\proj\fide\monthly-2026-11
 ```
 
 ```powershell

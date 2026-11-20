@@ -3,7 +3,11 @@
 Put downloaded PGNs in this folder, then double-click **File PGNs.bat**.
 It previews the imports and asks once before filing. Keep the original download
 filenames for Titled Tuesday, Bullet Brawl and 3-0 Thursday. CCC files can have
-any filename; the importer reads their event tags.
+any filename. The launcher recognizes the CCC event name or the Chess.com CCC
+Site tag, which also identifies test events.
+
+The [monthly FIDE refresh](../docs/tools/fide-monthly-refresh.md) downloads its
+own verified inputs. No manual downloads are needed for that refresh.
 
 The script uses each archive's existing importer, pulls and pushes the archive
 repositories, then syncs the website manifests, runs tests and builds before

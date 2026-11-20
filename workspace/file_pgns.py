@@ -70,6 +70,7 @@ SERIES = {
 }
 WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 FIRST_EVENT = re.compile(rb'^\[Event "(.*)"\]', re.M)
+CCC_SITE = re.compile(rb'^\[Site "https?://(?:www\.)?chess\.com/computer-chess-championship/?"\]\r?$', re.M | re.I)
 IMPORT_LINE = re.compile(r'-> (\S+\.zip): ([\d,]+) games')
 ZIP_DATE = re.compile(r'_(\d{4}-\d{2}-\d{2})([abc]?)\.zip$')
 
@@ -132,7 +133,7 @@ def classify(path: Path) -> tuple[str | None, str]:
         return 'bb', event
     if '3-0-thursday' in name:
         return 't30', event
-    if event.upper().startswith('CCC'):
+    if event.upper().startswith('CCC') or CCC_SITE.search(head):
         return 'ccc', event
     # A Chess.com event export: its Site is the event's page, or (from 2024) the
     # venue, with the Board and Variant tags no other source writes together.
