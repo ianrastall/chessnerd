@@ -213,7 +213,10 @@ function formatDate(value: string): string {
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  const response = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(15_000)
+  });
   if (!response.ok) {
     throw new Error(`${response.status} ${response.statusText}`);
   }
@@ -257,16 +260,18 @@ function initStockfishCommits() {
   const monthSelect = byId<HTMLSelectElement>('stockfishMonth');
   const searchInput = byId<HTMLInputElement>('stockfishSearch');
   const status = byId<HTMLDivElement>('stockfishStatus');
+  const retry = byId<HTMLButtonElement>('stockfishRetry');
   const generated = byId<HTMLDivElement>('stockfishGenerated');
   const list = byId<HTMLElement>('stockfishList');
 
-  if (!monthSelect || !searchInput || !status || !generated || !list) {
+  if (!monthSelect || !searchInput || !status || !retry || !generated || !list) {
     return;
   }
 
   const monthSelectEl: HTMLSelectElement = monthSelect;
   const searchInputEl: HTMLInputElement = searchInput;
   const statusEl: HTMLDivElement = status;
+  const retryEl: HTMLButtonElement = retry;
   const generatedEl: HTMLDivElement = generated;
   const listEl: HTMLElement = list;
 
@@ -369,52 +374,62 @@ function initStockfishCommits() {
 
   async function loadMonth(month: string) {
     activeMonth = month;
+    activeCommits = [];
     monthSelectEl.disabled = true;
     searchInputEl.disabled = true;
+    retryEl.hidden = true;
     setStatus(`Loading ${month}...`);
     listEl.replaceChildren();
 
-    const payload = await fetchJson<StockfishMonth>(`${DATA_ROOT}/${month}.json`);
-    activeCommits = payload.commits;
-    monthSelectEl.disabled = false;
-    searchInputEl.disabled = false;
-    renderCommits();
+    try {
+      const payload = await fetchJson<StockfishMonth>(`${DATA_ROOT}/${month}.json`);
+      activeCommits = payload.commits;
+      renderCommits();
+      searchInputEl.disabled = false;
+    } catch (error) {
+      setStatus(`Could not load ${month}: ${String(error)}`);
+      retryEl.hidden = false;
+    } finally {
+      monthSelectEl.disabled = false;
+    }
   }
 
   async function loadIndex() {
-    index = await fetchJson<StockfishIndex>(`${DATA_ROOT}/index.json`);
-    monthSelectEl.replaceChildren();
-
-    for (const month of index.months) {
-      const option = document.createElement('option');
-      option.value = month;
-      option.textContent = `${month} (${(index.month_counts[month] ?? 0).toLocaleString()})`;
-      monthSelectEl.append(option);
+    retryEl.hidden = true;
+    setStatus('Loading commit data...');
+    try {
+      const payload = await fetchJson<StockfishIndex>(`${DATA_ROOT}/index.json`);
+      if (!Array.isArray(payload.months) || !payload.months.length) {
+        throw new Error('No Stockfish commit months were found.');
+      }
+      monthSelectEl.replaceChildren();
+      for (const month of payload.months) {
+        const option = document.createElement('option');
+        option.value = month;
+        option.textContent = `${month} (${(payload.month_counts[month] ?? 0).toLocaleString()})`;
+        monthSelectEl.append(option);
+      }
+      index = payload;
+      const [firstMonth] = index.months;
+      monthSelectEl.value = firstMonth;
+      await loadMonth(firstMonth);
+    } catch (error) {
+      setStatus(`Could not load Stockfish data: ${String(error)}`);
+      retryEl.hidden = false;
     }
-
-    const [firstMonth] = index.months;
-    if (!firstMonth) {
-      throw new Error('No Stockfish commit months were found.');
-    }
-
-    monthSelectEl.value = firstMonth;
-    await loadMonth(firstMonth);
   }
 
   monthSelectEl.addEventListener('change', () => {
-    void loadMonth(monthSelectEl.value).catch((error: unknown) => {
-      setStatus(`Could not load ${monthSelectEl.value}: ${String(error)}`);
-    });
+    void loadMonth(monthSelectEl.value);
+  });
+  retryEl.addEventListener('click', () => {
+    if (index) void loadMonth(monthSelectEl.value);
+    else void loadIndex();
   });
 
   searchInputEl.addEventListener('input', renderCommits);
 
-  void loadIndex().catch((error: unknown) => {
-    monthSelectEl.disabled = true;
-    searchInputEl.disabled = true;
-    setStatus(`Could not load Stockfish data: ${String(error)}`);
-    setGenerated('');
-  });
+  void loadIndex();
 }
 
 if (document.readyState === 'loading') {

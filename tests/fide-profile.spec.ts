@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { nameFileName } from '../src/lib/fide-players';
 
 // Minimal FPL1 fixture, encoded from fide-players/FORMAT.md. Lists include a
 // year-only date, a missing month, a null rating and an explicit zero games.
@@ -76,3 +77,55 @@ test('biography failure leaves ratings usable and can be retried', async ({ page
   await expect(page.getByLabel('Biography')).toContainText('No additional biography found');
 });
 
+test('failed FIDE name and shard requests retry without reloading and Back restores the search', async ({ page }) => {
+  const names = `**/names/${nameFileName('te')}`;
+  await page.route(names, route => route.fulfill({ status: 503 }), { times: 1 });
+  await page.route('**/players/shard-0000.bin.gz', route => route.fulfill({ status: 503 }), { times: 1 });
+  await page.route('https://query.wikidata.org/**', route => route.fulfill({ json: { results: { bindings: [] } } }));
+
+  await page.goto('/fide-player.html?q=Test');
+  await expect(page.locator('#fpStatus')).toContainText('Search failed');
+  await page.route(names, route => route.fulfill({
+    json: [[1503014, 'Test, Player', 'NOR', 'GM', 2514, '2025-12', 1990]]
+  }));
+  const search = page.getByRole('searchbox', { name: 'Search by name' });
+  await search.fill('test');
+  const result = page.getByRole('link', { name: 'Test, Player' });
+  await result.click();
+  await expect(page.locator('#fpStatus')).toContainText('Could not load player data');
+  await expect(page.getByLabel('FIDE ID', { exact: true })).toHaveValue('1503014');
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Test, Player' })).toBeVisible();
+  await expect(page).toHaveURL(/\?id=1503014$/);
+  await page.goBack();
+  await expect(search).toHaveValue('Test');
+  await expect(result).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Player profile' })).toBeHidden();
+});
+
+test('a late name search error leaves the newer lookup result visible', async ({ page }) => {
+  await page.addInitScript(filename => {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = (resource, options) => {
+      if (typeof resource !== 'string' || !resource.endsWith(filename)) return originalFetch(resource, options);
+      return new Promise(resolve => {
+        window.addEventListener('complete-test-search', () => {
+          resolve(new Response(null, { status: 503 }));
+        }, { once: true });
+        document.documentElement.dataset.testSearchPending = 'true';
+      });
+    };
+  }, nameFileName('te'));
+  await page.route(`**/names/${nameFileName('ot')}`, route => route.fulfill({ status: 404 }));
+  await page.goto('/fide-player.html');
+  const search = page.getByRole('searchbox', { name: 'Search by name' });
+  await search.fill('Test');
+  await expect(page.locator('html')).toHaveAttribute('data-test-search-pending', 'true');
+  await search.fill('Other');
+  await expect(page.locator('#fpStatus')).toContainText('No players match');
+  await page.evaluate(async () => {
+    window.dispatchEvent(new Event('complete-test-search'));
+    await new Promise(resolve => window.setTimeout(resolve, 0));
+  });
+  await expect(page.locator('#fpStatus')).toContainText('No players match');
+});

@@ -50,7 +50,7 @@ const OPTIONAL_COUNTS = ['players', 'ratedPlayers', 'rounds', 'category'] as con
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function assertIsoDate(field: string, value: string): void {
-  if (!ISO_DATE.test(value)) throw new Error(`Invalid ${field}: ${value}`);
+  if (typeof value !== 'string' || !ISO_DATE.test(value)) throw new Error(`Invalid ${field}: ${value}`);
   const parsed = new Date(`${value}T00:00:00Z`);
   if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) {
     throw new Error(`Invalid ${field}: ${value}`);
@@ -169,21 +169,46 @@ export interface EventBundle {
 
 export function parseEventBundles(value: unknown): EventBundle[] {
   if (!Array.isArray(value) || value.length === 0) throw new Error('Event bundles list must not be empty.');
+  const ids = new Set<string>();
   return value.map((item: unknown) => {
     const bundle = item as EventBundle;
-    if (!bundle || typeof bundle.id !== 'string' || typeof bundle.title !== 'string') throw new Error('Invalid event bundle.');
-    for (const key of ['minAverage', 'events', 'games', 'bytes'] as const) {
+    if (!bundle || typeof bundle.id !== 'string' || !bundle.id.trim() || typeof bundle.title !== 'string' || !bundle.title.trim()) {
+      throw new Error('Invalid event bundle.');
+    }
+    if (ids.has(bundle.id)) throw new Error(`Duplicate event bundle: ${bundle.id}.`);
+    ids.add(bundle.id);
+    const countKeys = ['events', 'games', 'bytes'] as const;
+    for (const key of ['minAverage', ...countKeys] as const) {
       if (!Number.isSafeInteger(bundle[key]) || bundle[key] < 0) throw new Error(`Invalid ${key} for bundle ${bundle.id}.`);
     }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(bundle.updated)) throw new Error(`Invalid updated date for bundle ${bundle.id}.`);
+    assertIsoDate(`updated date for bundle ${bundle.id}`, bundle.updated);
+    assertIsoDate(`newest date for bundle ${bundle.id}`, bundle.newest);
     if (!Array.isArray(bundle.files) || bundle.files.length === 0) throw new Error(`Bundle ${bundle.id} has no files.`);
+    const names = new Set<string>();
+    const totals = { events: 0, games: 0, bytes: 0 };
     for (const file of bundle.files) {
+      if (!file || typeof file.file !== 'string' || !/^[\w.-]+\.zip$/.test(file.file)) {
+        throw new Error(`Invalid filename in bundle ${bundle.id}.`);
+      }
+      if (names.has(file.file)) throw new Error(`Duplicate file in bundle ${bundle.id}: ${file.file}.`);
+      names.add(file.file);
       const onGitHub = file.url === `https://github.com/ianrastall/cc-events-archive/raw/main/bundles/${file.file}`;
-      if (!onGitHub && !/^https:\/\/pixeldrain\.com\/u\/[A-Za-z0-9_-]{6,16}$/.test(file.url)) {
+      if (!onGitHub && (typeof file.url !== 'string' || !/^https:\/\/pixeldrain\.com\/u\/[A-Za-z0-9_-]{6,16}$/.test(file.url))) {
         throw new Error(`Unexpected bundle download URL: ${file.url}`);
       }
       if (!Number.isSafeInteger(file.bytes) || file.bytes <= 0) throw new Error(`Invalid size for ${file.file}.`);
-      if (!/^[a-f0-9]{64}$/i.test(file.sha256)) throw new Error(`Invalid checksum for ${file.file}.`);
+      if (typeof file.sha256 !== 'string' || !/^[a-f0-9]{64}$/i.test(file.sha256)) throw new Error(`Invalid checksum for ${file.file}.`);
+      if (typeof file.from !== 'string' || !/^\d{4}$/.test(file.from) ||
+          typeof file.to !== 'string' || !/^\d{4}$/.test(file.to) || file.from > file.to) {
+        throw new Error(`Invalid year range for ${file.file}.`);
+      }
+      for (const key of countKeys) {
+        if (!Number.isSafeInteger(file[key]) || file[key] < 0) throw new Error(`Invalid ${key} for ${file.file}.`);
+        totals[key] += file[key];
+      }
+    }
+    for (const key of countKeys) {
+      if (totals[key] !== bundle[key]) throw new Error(`Bundle ${bundle.id} has inconsistent ${key} totals.`);
     }
     return bundle;
   });

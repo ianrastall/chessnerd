@@ -72,6 +72,9 @@ function loadShard(index: number, dir: ShardDirectory): Promise<Shard> {
     pending = fetch(`${BASE}players/${shardFileName(index)}`).then(async (r) => {
       if (!r.ok) throw new Error(`Shard ${index}: HTTP ${r.status}`);
       return decodeShard(await gunzipIfNeeded(await r.arrayBuffer()), dir.lists);
+    }).catch((error: unknown) => {
+      shards.delete(index);
+      throw error;
     });
     shards.set(index, pending);
   }
@@ -85,6 +88,9 @@ function loadNames(key: string): Promise<NameEntry[]> {
       if (r.status === 404) return [];
       if (!r.ok) throw new Error(`names/${key}: HTTP ${r.status}`);
       return parseNameEntries(JSON.parse(new TextDecoder().decode(await gunzipIfNeeded(await r.arrayBuffer()))));
+    }).catch((error: unknown) => {
+      nameFiles.delete(key);
+      throw error;
     });
     nameFiles.set(key, pending);
   }
@@ -93,23 +99,29 @@ function loadNames(key: string): Promise<NameEntry[]> {
 
 // ── search ───────────────────────────────────────────────────────────────────
 
-let searchToken = 0;
-async function runSearch() {
-  const query = searchInput.value.trim();
-  const token = ++searchToken;
+let lookupToken = 0;
+let searchTimer: number | undefined;
+
+function beginLookup() {
+  window.clearTimeout(searchTimer);
+  return ++lookupToken;
+}
+
+async function runSearch(query: string, token: number) {
   results.replaceChildren();
-  if (query.length < 2) {
+  const words = query.split(/[\s,]+/).filter(Boolean);
+  if (words.join('').length < 2) {
     setStatus('Type at least two letters of a surname.');
     return;
   }
-  const words = query.split(/[\s,]+/).filter(Boolean);
   // Names are "Surname, Given". Try the first word as the surname, then the last.
   const keys = [...new Set([nameKey(words[0]), nameKey(words[words.length - 1])])];
+  setStatus('Searching for players…');
   try {
     let found = { rows: [] as NameEntry[], total: 0 };
     for (const key of keys) {
       found = matchNames(await loadNames(key), query);
-      if (token !== searchToken) return;
+      if (token !== lookupToken) return;
       if (found.total) break;
     }
     if (!found.total) {
@@ -126,6 +138,7 @@ async function runSearch() {
         ...found.rows.map((row) => {
           const link = node('a', { href: `?id=${row.id}` }, row.name || `(no name) ${row.id}`);
           link.addEventListener('click', (event) => {
+            if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
             event.preventDefault();
             void showPlayer(row.id, true);
           });
@@ -135,7 +148,7 @@ async function runSearch() {
     );
     results.append(node('div', { class: 'fp-table-wrap' }, table));
   } catch (error) {
-    setStatus(`Search failed: ${(error as Error).message}`);
+    if (token === lookupToken) setStatus(`Search failed: ${(error as Error).message}`);
   }
 }
 
@@ -411,55 +424,62 @@ function render(p: Player, dir: ShardDirectory) {
   void enrich();
 }
 
-let playerToken = 0;
 async function showPlayer(id: number, push: boolean) {
-  const token = ++playerToken;
+  const token = beginLookup();
   profile.hidden = true;
   if (!Number.isSafeInteger(id) || id <= 0) {
     setStatus('Enter a FIDE ID (digits only).');
     return;
   }
+  idInput.value = String(id);
   setStatus(`Loading FIDE ID ${id}…`);
   try {
     const dir = await loadDirectory();
+    if (token !== lookupToken) return;
     const index = shardIndexFor(dir, id);
     const player = index < 0 ? null : (await loadShard(index, dir)).find(id);
     // A later lookup started while this one was loading; let it win.
-    if (token !== playerToken) return;
+    if (token !== lookupToken) return;
     if (!player) {
       setStatus(`No player with FIDE ID ${id} in the archive.`);
       return;
     }
-    if (push) history.pushState({ id }, '', `?id=${id}`);
+    if (push && location.search !== `?id=${id}`) history.pushState({ id }, '', `?id=${id}`);
     setStatus('');
     results.replaceChildren();
     render(player, dir);
   } catch (error) {
-    if (token !== playerToken) return;
+    if (token !== lookupToken) return;
     setStatus(`Could not load player data from ${BASE}: ${(error as Error).message}`);
   }
 }
 
 searchInput.addEventListener('input', () => {
-  window.clearTimeout((runSearch as unknown as { t?: number }).t);
-  (runSearch as unknown as { t?: number }).t = window.setTimeout(() => void runSearch(), 200);
+  const token = beginLookup();
+  const query = searchInput.value.trim();
+  searchTimer = window.setTimeout(() => void runSearch(query, token), 200);
 });
 idForm.addEventListener('submit', (event) => {
   event.preventDefault();
   void showPlayer(Number(idInput.value.trim()), true);
 });
-window.addEventListener('popstate', () => {
-  const id = Number(new URLSearchParams(location.search).get('id'));
-  if (id) void showPlayer(id, false);
-  else {
-    profile.hidden = true;
-    setStatus('');
-  }
-});
 
-const initialParams = new URLSearchParams(location.search);
-const initialQuery = (initialParams.get('q') || '').trim();
-const initial = Number(initialParams.get('id')) || (/^\d+$/.test(initialQuery) ? Number(initialQuery) : 0);
-if (initial) { idInput.value=String(initial); void showPlayer(initial,false); }
-else if (initialQuery.length >= 2) { searchInput.value=initialQuery; void runSearch(); }
-else setStatus('Search by surname, or enter a FIDE ID.');
+function restoreLocation() {
+  const params = new URLSearchParams(location.search);
+  const query = (params.get('q') || '').trim();
+  const id = Number(params.get('id')) || (/^\d+$/.test(query) ? Number(query) : 0);
+  results.replaceChildren();
+  profile.hidden = true;
+  searchInput.value = id ? '' : query;
+  idInput.value = '';
+  if (id) {
+    void showPlayer(id, false);
+    return;
+  }
+  const token = beginLookup();
+  if (query) void runSearch(query, token);
+  else setStatus('Search by surname, or enter a FIDE ID.');
+}
+
+window.addEventListener('popstate', restoreLocation);
+restoreLocation();

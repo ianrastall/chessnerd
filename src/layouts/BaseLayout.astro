@@ -2,13 +2,13 @@
 import '../styles/global.css';
 import '../styles/jupiter.css';
 import Appearance from '../components/jupiter/Appearance.astro';
-import { Archive, ArrowUpRight, BookOpen, Code2, Cpu, House, Search, Users } from '@lucide/astro';
+import { Archive, ArrowUpRight, BookOpen, CodeXml, Cpu, House, Search, Users } from '@lucide/astro';
 import { navigation } from '../data/navigation';
 interface Props { title:string; description?:string; }
 const {title,description='Chess tournament archives, player rating histories and browser tools.'}=Astro.props;
 const current=Astro.url.pathname.replace(/\/index\.html$/, '/');
 const active=(href:string)=>current === href || current === href.replace('.html','');
-const groupIcons = { archive: Archive, players: Users, analysis: BookOpen, engines: Cpu, developer: Code2 };
+const groupIcons = { archive: Archive, players: Users, analysis: BookOpen, engines: Cpu, developer: CodeXml };
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">

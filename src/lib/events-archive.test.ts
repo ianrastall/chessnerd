@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { parseEventsManifest, formatBytes, type EventArchiveEntry } from './events-archive';
+import bundles from '../../public/data/cc-events-archive/bundles.json';
+import { parseEventBundles, parseEventsManifest, formatBytes, type EventArchiveEntry } from './events-archive';
 
 function entry(slug: string, start: string, end = start): EventArchiveEntry {
   return {
@@ -99,5 +100,34 @@ describe('cc-events manifest', () => {
     expect(formatBytes(512)).toBe('512 B');
     expect(formatBytes(2048)).toBe('2.0 KB');
     expect(formatBytes(5 * 1024 * 1024)).toBe('5.0 MB');
+  });
+});
+
+describe('cc-events bundles', () => {
+  const [bundle] = bundles;
+
+  it('accepts the published bundles and a bundle split across providers', () => {
+    expect(parseEventBundles(bundles)).toEqual(bundles);
+    const [file] = bundle.files;
+    const second = {
+      ...file, file: 'part-2.zip', from: '2027', to: '2027',
+      url: 'https://github.com/ianrastall/cc-events-archive/raw/main/bundles/part-2.zip'
+    };
+    const split = {
+      ...bundle, events: file.events * 2, games: file.games * 2, bytes: file.bytes * 2,
+      newest: '2027-01-01', updated: '2027-01-01', files: [file, second]
+    };
+    expect(parseEventBundles([split])).toEqual([split]);
+  });
+
+  it.each([
+    { updated: '2026-02-30' },
+    { newest: '' },
+    { bytes: bundle.bytes + 1 },
+    { events: bundle.events - 1 },
+    { files: [{ ...bundle.files[0], games: -1 }] },
+    { files: [{ ...bundle.files[0], from: '2030' }] }
+  ])('rejects inconsistent bundle metadata: %j', override => {
+    expect(() => parseEventBundles([{ ...bundle, ...override }])).toThrow();
   });
 });

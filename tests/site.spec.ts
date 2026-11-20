@@ -39,6 +39,35 @@ test('tournament search, filters, sorting, pagination and shareable URLs', async
   expect(averages).toEqual([...averages].sort((a, b) => b - a));
   await expect(rows.first().getByRole('link')).toHaveAttribute('href', /^https:\/\/github\.com\/ianrastall\/.*\.zip$/);
 });
+test('Stockfish recovers from both an index failure and an unavailable month', async ({ page }) => {
+  const index = '**/data/stockfish-commits/index.json';
+  const latest = '**/data/stockfish-commits/2026-11.json';
+  const older = '**/data/stockfish-commits/2026-10.json';
+  await page.route(index, route => route.fulfill({
+    json: { generated: '2026-11-19T00:00:00Z', total_commits: 0, months: ['2026-11', '2026-10'], month_counts: {} }
+  }));
+  await page.route(index, route => route.fulfill({ status: 503 }), { times: 1 });
+  await page.route(latest, route => route.fulfill({ json: { month: '2026-11', commits: [] } }));
+  await page.route(latest, route => route.fulfill({ status: 503 }), { times: 2 });
+  await page.route(older, route => route.fulfill({ json: { month: '2026-10', commits: [] } }));
+
+  await page.goto('/stockfish-commits.html');
+  const status = page.locator('#stockfishStatus');
+  const retry = page.getByRole('button', { name: 'Retry', exact: true });
+  const month = page.getByRole('combobox', { name: 'Select month' });
+  await expect(status).toContainText('Could not load Stockfish data');
+  await retry.click();
+  await expect(status).toContainText('Could not load 2026-11');
+  await expect(month).toBeEnabled();
+  await month.selectOption('2026-10');
+  await expect(status).toHaveText('0 of 0 commits in 2026-10');
+  await month.selectOption('2026-11');
+  await expect(status).toContainText('Could not load 2026-11');
+  await retry.click();
+  await expect(status).toHaveText('0 of 0 commits in 2026-11');
+  await expect(retry).toBeHidden();
+});
+
 test('overview tabs switch panels and restore from the address',async({page})=>{
   await page.goto('/');await expect(page.locator('#games')).toBeVisible();await expect(page.locator('#tools')).toBeHidden();
   await page.getByRole('link',{name:'Use a tool',exact:true}).click();await expect(page.locator('#tools')).toBeVisible();await expect(page.locator('#games')).toBeHidden();await expect(page.getByRole('link',{name:'Use a tool',exact:true})).toHaveAttribute('aria-current','true');

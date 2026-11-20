@@ -14,7 +14,7 @@ Narrow screens collapse navigation into a disclosure. Wide tables scroll within 
 
 ## Technology and data
 
-Astro 7.4.2 static output, TypeScript 6.0.3, plain CSS, pinned npm dependencies/lockfile and Node 24.13.0 match the established Jupiter web baseline. Domain logic and data formats are retained. Read [the dependency and workflow map](data-dependencies.md) before changing acquisition or publication.
+Astro 7.4.13 static output, TypeScript 6.0.3, plain CSS, pinned npm dependencies/lockfile and Node 24.13.0 match the established Jupiter web baseline. Domain logic and data formats are retained. Read [the dependency and workflow map](data-dependencies.md) before changing acquisition or publication.
 
 Checks: `npm test`, `npm run audit`, `npm run build`, `npm run test:browser`. Archive unit tests remain, with cross-collection losslessness/filter/precision checks added. Browser coverage includes every route and responsive shell plus search, downloads, URL restoration, no-JavaScript content, profile handoff, appearance migration/reset, PGN analysis, opening boards and legacy tournament links. CI repeats validation before Pages deployment.
 
