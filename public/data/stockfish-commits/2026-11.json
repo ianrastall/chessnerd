@@ -2,6 +2,132 @@
   "month": "2026-11",
   "commits": [
     {
+      "hash": "1819b9ea37588be8adb044179fb54512f87c8249",
+      "short": "1819b9ea",
+      "author": "Pasit Sangprachathanarak <ouipingpasit@gmail.com>",
+      "date": "2026-11-20T14:43:00Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/1819b9ea37588be8adb044179fb54512f87c8249",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1819b9ea37588be8adb044179fb54512f87c8249.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/1819b9ea37588be8adb044179fb54512f87c8249.tar.gz"
+        }
+      ],
+      "message": "Quote $(SHELL) in Makefile\n\nOn Windows, mingw32-make can pick up Git's sh.exe from \"C:/Program Files\". The space in that path breaks unquoted $(SHELL) calls, so ARCH=native detection returns nothing and the default build fails.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7329\n\nNo functional change\n",
+      "subject": "Quote $(SHELL) in Makefile"
+    },
+    {
+      "hash": "caff844556ecbee574cfc498c1fc029d094536be",
+      "short": "caff8445",
+      "author": "mike-vel <mikevelasquez1974@gmail.com>",
+      "date": "2026-11-20T14:42:26Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/caff844556ecbee574cfc498c1fc029d094536be",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/caff844556ecbee574cfc498c1fc029d094536be.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/caff844556ecbee574cfc498c1fc029d094536be.tar.gz"
+        }
+      ],
+      "message": "Replace cuckoo hashing with Robin Hood hashing\n\nRobin Hood hashing is faster than cuckoo hashing because of its cache locality and predictable lookups, resulting in fewer cache misses.\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6af9bd9d8e7fb2e78bc1d8ac\nLLR: 2.95 (-2.94,2.94) <0.00,2.00>\nTotal: 85344 W: 21739 L: 21384 D: 42221\nPtnml(0-2): 81, 8861, 24428, 9226, 76\n\nTested with: bash bench_parallel.sh ./stockfish-base ./stockfish 20 10\n```\nsf_base =  1037611 +/-   3557 (95%)\nsf_test =  1049555 +/-   4728 (95%)\ndiff    =    11944 +/-   2847 (95%)\nspeedup = 1.15111% +/- 0.274% (95%)\n\nP(speedup > 0%)    = 100.00%\nP(speedup > 0.25%) = 99.99%\nP(speedup > 0.5%)  = 99.94%\nP(speedup > 0.75%) = 99.07%\nP(speedup > 1%)    = 84.58%\nP(speedup > 1.25%) = 24.83%\n```\n\nBench signatures remain identical.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7328\n\nNo functional change\n",
+      "subject": "Replace cuckoo hashing with Robin Hood hashing"
+    },
+    {
+      "hash": "142d5f5829b3ef72b6e923810af774a51119c02a",
+      "short": "142d5f58",
+      "author": "Elhamuddin <elhamuddinazizi607@gmail.com>",
+      "date": "2026-11-20T14:41:56Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/142d5f5829b3ef72b6e923810af774a51119c02a",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/142d5f5829b3ef72b6e923810af774a51119c02a.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/142d5f5829b3ef72b6e923810af774a51119c02a.tar.gz"
+        }
+      ],
+      "message": "Simplify bestValue update condition in parent node futility pruning\n\nThe !is_decisive(bestValue) guard is redundant.\n\nis_decisive is defined as is_win or is_loss. The pruning block in Step 15 only runs if !is_loss(bestValue), so the only way is_decisive(bestValue) could be true is if bestValue is a win score. The same condition requires bestValue <= futilityValue and !is_win(futilityValue), so bestValue can't be a win score either.\n\nThus, dropping the guard retains the bench signature.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7322\n\nNo functional change\n",
+      "subject": "Simplify bestValue update condition in parent node futility pruning"
+    },
+    {
+      "hash": "c5452e1f86b9e62fa5b7d33d5fb9154896d2f5e3",
+      "short": "c5452e1f",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-11-20T14:41:17Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/c5452e1f86b9e62fa5b7d33d5fb9154896d2f5e3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5452e1f86b9e62fa5b7d33d5fb9154896d2f5e3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/c5452e1f86b9e62fa5b7d33d5fb9154896d2f5e3.tar.gz"
+        }
+      ],
+      "message": "Fix too short mated-in announcements when skill level is active\n\nWhen skill level is active, Stockfish may promote a secondary line with a mated-in score to `multipv 1`, which will often mean Stockfish declares a too short mate score.\n\nThis PR fixes this by turning such a mate score into a `lowerbound`. The skill level implementation itself is unchanged.\n\nComparing `python3 matecheck.py --epdFile matedtrack.epd --bmMax 10 --engineOpts '{\"Skill Level\": 15}' --depth 5` (not deterministic) for master:\n\n```\nLoaded 5061 FENs with 5061 bm values, with |bm| (min avg max): 1 7 10.\nAdditional generic engine options:  {'Skill Level': 15}\n\nMatetrack started for ./stockfish on matedtrack.epd with --bmMax 10 --depth 5 ...\n100%|###########################################| 33/33 [00:38<00:00,  1.16s/it]\n\nFound mate #-1 (better) for FEN \"n3b3/Npp4R/p1pp4/k7/N2B4/Kp6/8/R7 b - -\"  with bm #-2.\nFound mate #-1 (better) for FEN \"8/2p1pN1p/n1P4P/P1kB2K1/1pPp1Np1/1n6/5P2/B7 b - -\"  with bm #-4.\nFound mate #-2 (better) for FEN \"3b2n1/1pp3N1/4p2p/1P1kP3/1B4N1/rpPB2p1/p3K3/8 b - -\"  with bm #-3.\nFound mate #-1 (better) for FEN \"8/4B2p/7n/4p1pk/P2n1b2/R3P2q/2r3P1/1Q3R1K w - -\"  with bm #-2.\nFound mate #-2 (better) for FEN \"4b3/4R2n/3R3K/2p2kpN/2p1p3/r3p2P/6PB/bq3Nr1 b - -\"  with bm #-4.\n\nUsing ./stockfish on matedtrack.epd with --bmMax 10 --depth 5\nEngine ID:     Stockfish dev-20261114-1e7e6bde\nTotal FENs:    5061\nFound mates:   34\nBest mates:    27\n\nParsing the engine's full UCI output, the following issues were detected:\nBetter mates:                5   (from 5 FENs)\n```\nand patch\n```\npython3 matecheck.py --epdFile matedtrack.epd --bmMax 10 --engineOpts '{\"Skill Level\": 15}' --depth 5\nLoaded 5061 FENs with 5061 bm values, with |bm| (min avg max): 1 7 10.\nAdditional generic engine options:  {'Skill Level': 15}\n\nMatetrack started for ./stockfish on matedtrack.epd with --bmMax 10 --depth 5 ...\n100%|###########################################| 33/33 [00:34<00:00,  1.05s/it]\n\nUsing ./stockfish on matedtrack.epd with --bmMax 10 --depth 5\nEngine ID:     Stockfish dev-20261114-1e7e6bde\nTotal FENs:    5061\nFound mates:   29\nBest mates:    28\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7313\n\nNo functional change\n",
+      "subject": "Fix too short mated-in announcements when skill level is active"
+    },
+    {
+      "hash": "20584a026f96e7ffb99eed107dfc1aee26375dc3",
+      "short": "20584a02",
+      "author": "Carlos Esparza <ca2010es@gmail.com>",
+      "date": "2026-11-20T14:40:28Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/20584a026f96e7ffb99eed107dfc1aee26375dc3",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20584a026f96e7ffb99eed107dfc1aee26375dc3.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/20584a026f96e7ffb99eed107dfc1aee26375dc3.tar.gz"
+        }
+      ],
+      "message": "Use least significant bit of keys to store stm\n\nThe last bit of `Position::key()`, `Position::pawn_key()`, `::non_pawn_key()` and `::minor_piece_key()` now equals `::side_to_move()`. Consequently we no longer need to explicitly index the corresponding histories by stm. Also removes `Zobrist::noPawns` which was already redundant.\n\nThis might help with blundering already won games due to hash collisions, since the eval obtained will at least be for the correct side.\nThus improves, and possibly fixes #5174\n\npassed STC: https://tests.stockfishchess.org/tests/view/6af2c8b68e7fb2e78bc1ccec\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 43776 W: 11229 L: 11026 D: 21521\nPtnml(0-2): 32, 4954, 11735, 5113, 54\n\npassed LTC: https://tests.stockfishchess.org/tests/view/6af520a18e7fb2e78bc1d0ea\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 72060 W: 18599 L: 18437 D: 35024\nPtnml(0-2): 7, 7406, 21042, 7568, 7\n\nThe version on fishtest had to be rebased onto 54a85ce8f43ffe0204d332c352c7b43ec5f4803d, but that should only change initialization code, not gameplay code.\n\nI measure a small speedup locally, probably due to the fact that the TT lookup after a null move lands on the same cache line\n```\nResult of 44 runs (counting nodes/1B cycles)\n=============================================\nbase (...tockfish.1e7e6b) =  295447 +/- 520\ntest (...tockfish.f95569) =  296243 +/- 506\nspeedup %                 =   +0.27 +/- 0.13\n                             [95% CI; t-test]\n\nlikelihood(speedup > 0)   =  1.0000\n\nCPU: 16 x Intel(R) Core(TM) Ultra 9 185H\n```\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7312\n\nBench: 1488683\n",
+      "subject": "Use least significant bit of keys to store stm"
+    },
+    {
+      "hash": "afc3e378c0aed100963d8901f5e572f8639300b9",
+      "short": "afc3e378",
+      "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+      "date": "2026-11-20T14:38:25Z",
+      "github_url": "https://github.com/official-stockfish/Stockfish/commit/afc3e378c0aed100963d8901f5e572f8639300b9",
+      "source_code": [
+        {
+          "label": "ZIP",
+          "type": "zip",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/afc3e378c0aed100963d8901f5e572f8639300b9.zip"
+        },
+        {
+          "label": "TAR.GZ",
+          "type": "tar.gz",
+          "url": "https://github.com/official-stockfish/Stockfish/archive/afc3e378c0aed100963d8901f5e572f8639300b9.tar.gz"
+        }
+      ],
+      "message": "Fix TM when MultiPV > 1\n\nOur time management, for obvious reasons, is geared towards game play with MultiPV = 1. This leads to suboptimal thinking time allocations when MultiPV > 1. This PR provides two simple fixes to improve the situation. Both are completely non-functional for the case MultiPV = 1.\n\nPassed STC non-reg:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 449344 W: 114227 L: 114440 D: 220677\nPtnml(0-2): 438, 47326, 129340, 47147, 421\nhttps://tests.stockfishchess.org/tests/view/6af5a0c58e7fb2e78bc1d1cb\n\nPassed STC with MultiPV=4:\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 3136 W: 970 L: 692 D: 1474\nPtnml(0-2): 6, 265, 775, 489, 33\nhttps://tests.stockfishchess.org/tests/view/6af5a0f88e7fb2e78bc1d1cd\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7306\n\nNo functional change\n",
+      "subject": "Fix TM when MultiPV > 1"
+    },
+    {
       "hash": "5d03b6e578a5eedc822e4563bdbb89e762fc2a59",
       "short": "5d03b6e5",
       "author": "xu-shawn <50402888+xu-shawn@users.noreply.github.com>",
