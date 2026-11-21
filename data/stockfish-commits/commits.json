@@ -1,5 +1,152 @@
 [
   {
+    "hash": "1c6f497afc176044b2feca9ce74a7bdce9e7e0cb",
+    "short": "1c6f497a",
+    "author": "anematode <timothy.herchen@gmail.com>",
+    "date": "2026-11-21T08:51:06Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/1c6f497afc176044b2feca9ce74a7bdce9e7e0cb",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1c6f497afc176044b2feca9ce74a7bdce9e7e0cb.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1c6f497afc176044b2feca9ce74a7bdce9e7e0cb.tar.gz"
+      }
+    ],
+    "message": "Revert \"Use universal build code for arch detection\"\n\nThis breaks for some OSes for currently unknown reasons on fishtest.\n\nThis reverts commit 44d571fec0039e882ad468eec4f65439c5cd3a4c.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7338\n\nNo functional change\n",
+    "subject": "Revert \"Use universal build code for arch detection\""
+  },
+  {
+    "hash": "44d571fec0039e882ad468eec4f65439c5cd3a4c",
+    "short": "44d571fe",
+    "author": "anematode <timothy.herchen@gmail.com>",
+    "date": "2026-11-21T07:14:19Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/44d571fec0039e882ad468eec4f65439c5cd3a4c",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/44d571fec0039e882ad468eec4f65439c5cd3a4c.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/44d571fec0039e882ad468eec4f65439c5cd3a4c.tar.gz"
+      }
+    ],
+    "message": "Use universal build code for arch detection on x86-64, RISC-V and aarch64\n\nAdds a `DUMP_SELECTED_BUILD` to the universal entry point that is used by `scripts/get_native_properties.sh` to get the optimal build for the host machine.\n\nThis solves incorrect feature flags on AMD under MSYS2/Cygwin (https://github.com/official-stockfish/Stockfish/pull/7321) and simplifies things a lot, at the cost of requiring GCC or clang for `scripts/get_native_properties.sh`. None of this work affects explicit arch selections.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7327\n\nNo functional change\n",
+    "subject": "Use universal build code for arch detection on x86-64, RISC-V and aarch64"
+  },
+  {
+    "hash": "d2f106972b13131e86b1b0f8f0d9565fcc97b5d8",
+    "short": "d2f10697",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-11-21T07:13:50Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d2f106972b13131e86b1b0f8f0d9565fcc97b5d8",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d2f106972b13131e86b1b0f8f0d9565fcc97b5d8.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d2f106972b13131e86b1b0f8f0d9565fcc97b5d8.tar.gz"
+      }
+    ],
+    "message": "Remove unreachable shm name-length clamp\n\ninstead of #6517, since the name is 20 characters, below any limits.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7332\n\nNo functional change\n",
+    "subject": "Remove unreachable shm name-length clamp"
+  },
+  {
+    "hash": "06a13f35b44a1c65b43055b9a84f14147a542145",
+    "short": "06a13f35",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-11-21T07:13:22Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/06a13f35b44a1c65b43055b9a84f14147a542145",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/06a13f35b44a1c65b43055b9a84f14147a542145.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/06a13f35b44a1c65b43055b9a84f14147a542145.tar.gz"
+      }
+    ],
+    "message": "Fix shared memory recovery\n\nKey the Unix server socket path by a process-local counter in addition to the PID, so that several SharedMemory instances in the same process cannot unlink each other's endpoints and make the segment undiscoverable to newly launched processes.\n\nAccept WAIT_ABANDONED from WaitForSingleObject on Windows, which also grants ownership of the initialization mutex, and let the existing initialization flag determine whether the previous owner finished.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7333\n\nNo functional change\n",
+    "subject": "Fix shared memory recovery"
+  },
+  {
+    "hash": "059f9b7105a87000688efae486ad9a51988a01b7",
+    "short": "059f9b71",
+    "author": "Carlos Esparza <ca2010es@gmail.com>",
+    "date": "2026-11-21T07:12:54Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/059f9b7105a87000688efae486ad9a51988a01b7",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/059f9b7105a87000688efae486ad9a51988a01b7.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/059f9b7105a87000688efae486ad9a51988a01b7.tar.gz"
+      }
+    ],
+    "message": "Fix static assert for constexpr Zobrist\n\nWritten on top of #7312, sorry that makes it harder to read. The static_assert from 54a85ce8f43ffe0204d332c352c7b43ec5f4803d is incorrect: For example, if all castling keys are set to zero then the `cr == 0` check in the continue will skip the iteration that should return false. The correct condition is `a == b` instead of `cr == 0`, which is what this patch does.\n\nWhile I was at it I also replaced `int b = 0` with `int b = a` (and same for `f2`) since the cancellation check is symmetric in `a` and `b`.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7319\n\nNo functional change\n",
+    "subject": "Fix static assert for constexpr Zobrist"
+  },
+  {
+    "hash": "436a73c9f1715f101d547312ed927f8165016561",
+    "short": "436a73c9",
+    "author": "Martin <66840021+Mcrtin@users.noreply.github.com>",
+    "date": "2026-11-21T07:10:35Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/436a73c9f1715f101d547312ed927f8165016561",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/436a73c9f1715f101d547312ed927f8165016561.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/436a73c9f1715f101d547312ed927f8165016561.tar.gz"
+      }
+    ],
+    "message": "move stack allocated `StateInfo`s into `Position` as a ringbuffer\n\nTry to move the stateinfos into two arrays (one for read only history and one for searching).\nI ended up with only one array because it's easier in practice.\nI did, however, have to bump up the limit for stack allocating functions, because Position is so big now.\n\nhttps://tests.stockfishchess.org/tests/view/6af6206b8e7fb2e78bc1d2bd\nLLR: 2.92 (-2.94,2.94) <-1.75,0.25>\nTotal: 272160 W: 69011 L: 69048 D: 134101\nPtnml(0-2): 253, 28389, 78825, 28368, 245\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7307\n\nNo functional change\n",
+    "subject": "move stack allocated `StateInfo`s into `Position` as a ringbuffer"
+  },
+  {
+    "hash": "a14e8ec4daffc98cd58ea27b2b8ef4e7298d4f19",
+    "short": "a14e8ec4",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-11-21T07:09:18Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/a14e8ec4daffc98cd58ea27b2b8ef4e7298d4f19",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/a14e8ec4daffc98cd58ea27b2b8ef4e7298d4f19.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/a14e8ec4daffc98cd58ea27b2b8ef4e7298d4f19.tar.gz"
+      }
+    ],
+    "message": "Apply a mutating command only when idle\n\nNon-conforming GUIs could deadlock or crash SF by sending certain UCI commands while searching. This fix ensures no search is running when they are applied.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7062\n\nNo functional change\n\nCo-authored-by: ppigazzini <pasquale.pigazzini@gmail.com>\n",
+    "subject": "Apply a mutating command only when idle"
+  },
+  {
     "hash": "1819b9ea37588be8adb044179fb54512f87c8249",
     "short": "1819b9ea",
     "author": "Pasit Sangprachathanarak <ouipingpasit@gmail.com>",
