@@ -1,5 +1,152 @@
 [
   {
+    "hash": "3e8fde75412e7c47fc140cd82022a395bc681d92",
+    "short": "3e8fde75",
+    "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
+    "date": "2026-11-22T00:15:15Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/3e8fde75412e7c47fc140cd82022a395bc681d92",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/3e8fde75412e7c47fc140cd82022a395bc681d92.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/3e8fde75412e7c47fc140cd82022a395bc681d92.tar.gz"
+      }
+    ],
+    "message": "Clamp static eval contribution to NMP reduction\n\nsignificantly improves matefinding capability for certain fens such as:\n\n8/7p/7R/3p1N2/3P2pN/4p1P1/3pPppk/3Kbr2 b - - ; mate -2 pv h2g1 h6h7 g1h2 h4f3\nrk6/p1r3p1/P3B1Kp/1p2B3/8/8/8/8 w - - ; mate 5 pv e6d7 b5b4 g6f7 b4b3 f7e8 b3b2 e8d8 b2b1q e5c7\n\nfixes CI matetrack, which could take 30min for the mate -2 fen above, but now is solved in seconds.\n\nTestcase:\n\n```\nfor i in $(seq 1 10); do\n  printf \"position fen  8/7p/7R/3p1N2/3P2pN/4p1P1/3pPppk/3Kbr2 b - -\\nsetoption name threads value 4\\ngo mate 2\\nucinewgame\\n\" | \\\n  ./stockfish | grep -B1 bestmove | grep -o \"time [0-9]* \"\ndone\n```\n\npassed STC:\nLLR: 2.97 (-2.94,2.94) <-1.75,0.25>\nTotal: 69440 W: 17719 L: 17540 D: 34181\nPtnml(0-2): 65, 7962, 18495, 8125, 73\nhttps://tests.stockfishchess.org/tests/view/6afefe3e2ff81bd6a63443cf\n\npassed LTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 137244 W: 35348 L: 35250 D: 66646\nPtnml(0-2): 25, 14199, 40072, 14305, 21\nhttps://tests.stockfishchess.org/tests/view/6b0171a3b9d0e035d605f877\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7344\n\nBench: 1210779\n",
+    "subject": "Clamp static eval contribution to NMP reduction"
+  },
+  {
+    "hash": "82d83dc7e62016aac577c2c965ba856376374770",
+    "short": "82d83dc7",
+    "author": "noobpwnftw <noobpwnftw@users.noreply.github.com>",
+    "date": "2026-11-22T00:14:42Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/82d83dc7e62016aac577c2c965ba856376374770",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/82d83dc7e62016aac577c2c965ba856376374770.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/82d83dc7e62016aac577c2c965ba856376374770.tar.gz"
+      }
+    ],
+    "message": "Use SIMD128 for slider attacks on wasm\n\nWebAssembly has no byte swap instruction, so on wasm32 the scalar hyperbola lowers each `bswap` to shifts and masks. This adds a SIMD128 path next to the AVX2 one, with `i8x16.shuffle` doing the byte reversal on two lanes at a time. The lanes are [diagonal, antidiagonal] and [file], so a bishop or rook query computes one vector (v2; the first version paired the file with a diagonal). The wasm32 builds always pass `-msimd128`.\n\nwasm32 v2, emscripten 4.0.10, node 22, one Cortex-X925 core, 8 alternating pairs per comparison:\n\n| | fancy magics (ac1437d5) | master (scalar hyperbola) | this patch |\n|---|---|---|---|\n| bench nps | 662,374 | 649,054 | 666,302 |\n| perft 4 Kiwipete \u00d75, wall time incl. startup | 0.484 s | 0.523 s | 0.486 s |\n\nPatch against master: bench nps +2.66% \u00b10.14%, perft time \u22127.07% \u00b10.34%.\nPatch against fancy magics: bench nps +0.65% \u00b10.11%, perft time +0.66% \u00b10.30%.\n\nx86 numbers and a perft breakdown are in the comment below.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7343\n\nNo functional change\n",
+    "subject": "Use SIMD128 for slider attacks on wasm"
+  },
+  {
+    "hash": "aa49a249a7898eccb3d538943873b9dd2e930219",
+    "short": "aa49a249",
+    "author": "SanityEclipse000 <maksym.nikbakht@gmail.com>",
+    "date": "2026-11-22T00:14:05Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/aa49a249a7898eccb3d538943873b9dd2e930219",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/aa49a249a7898eccb3d538943873b9dd2e930219.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/aa49a249a7898eccb3d538943873b9dd2e930219.tar.gz"
+      }
+    ],
+    "message": "Remove optimism\n\nSanityEclipse000 noted a few weeks ago that recent work in the network and evaluation had reduced the impact of optimism, enough to remove it.\n\nA previous fishtest was ended prematurely, however this batch passed:\n\nPassed STC: https://tests.stockfishchess.org/tests/view/6af533468e7fb2e78bc1d0fd\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 164768 W: 42045 L: 41970 D: 80753\nPtnml(0-2): 165, 19098, 43794, 19151, 176\n\nPassed LTC: https://tests.stockfishchess.org/tests/view/6af922988e7fb2e78bc1d79f\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 302070 W: 77685 L: 77750 D: 146635\nPtnml(0-2): 37, 31477, 88085, 31386, 50\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7342\n\nBench: 1138730\n",
+    "subject": "Remove optimism"
+  },
+  {
+    "hash": "aa6a76795f4e5955f9afbbaa813db769dd2ee8e1",
+    "short": "aa6a7679",
+    "author": "noobpwnftw <noobpwnftw@users.noreply.github.com>",
+    "date": "2026-11-21T21:20:06Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/aa6a76795f4e5955f9afbbaa813db769dd2ee8e1",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/aa6a76795f4e5955f9afbbaa813db769dd2ee8e1.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/aa6a76795f4e5955f9afbbaa813db769dd2ee8e1.tar.gz"
+      }
+    ],
+    "message": "Fix history walks past the state ring buffer\n\nFixes #7340.\n\n`syzygy_extend_pv` now walks the PV on a copy of the root position (`copy_state_infos`) and never undoes, so a line longer than `MAX_HIST` plies can't corrupt the root.\n\nThe repetition walks in `do_move`, `has_repeated` and `upcoming_repetition` run to `min(rule50, pliesFromNull)`, which can exceed `MAX_HIST` after 512 reversible plies (a long hand-pasted move history). Index 512 then wraps onto the current state. They are now clamped to `MAX_HIST - 1`.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7341\n\nNo functional change\n",
+    "subject": "Fix history walks past the state ring buffer"
+  },
+  {
+    "hash": "e345d96550b6b24bdb0f0fd3f1686f74f5e3cf32",
+    "short": "e345d965",
+    "author": "Elhamuddin <elhamuddinazizi607@gmail.com>",
+    "date": "2026-11-21T21:16:21Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/e345d96550b6b24bdb0f0fd3f1686f74f5e3cf32",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e345d96550b6b24bdb0f0fd3f1686f74f5e3cf32.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/e345d96550b6b24bdb0f0fd3f1686f74f5e3cf32.tar.gz"
+      }
+    ],
+    "message": "Remove redundant bestValue initializer in iterative_deepening\n\nbestValue is assigned by search<Root>() at the start\nof the aspiration loop before it is read, so the initial value was never used.\nTherefore, we can remove the initial assignment to -VALUE_INFINITE and declare it alongside alpha and beta.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7337\n\nNo functional change\n",
+    "subject": "Remove redundant bestValue initializer in iterative_deepening"
+  },
+  {
+    "hash": "821e0960b5998cf604d00fc26419cc2d6b33767a",
+    "short": "821e0960",
+    "author": "noobpwnftw <noobpwnftw@users.noreply.github.com>",
+    "date": "2026-11-21T21:15:45Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/821e0960b5998cf604d00fc26419cc2d6b33767a",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/821e0960b5998cf604d00fc26419cc2d6b33767a.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/821e0960b5998cf604d00fc26419cc2d6b33767a.tar.gz"
+      }
+    ],
+    "message": "Hyperbola quintessence on all platforms, retire magics\n\nHyperbola everywhere, retires old magics.\n\nNon-reg with arch filter:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 51328 W: 13029 L: 12843 D: 25456\nPtnml(0-2): 52, 5256, 14857, 5452, 47\nhttps://tests.stockfishchess.org/tests/view/6b015ca5b9d0e035d605f83a\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7336\n\nNo functional change\n",
+    "subject": "Hyperbola quintessence on all platforms, retire magics"
+  },
+  {
+    "hash": "ac1437d5f1adc80aeab6ed572002ef18226a26f0",
+    "short": "ac1437d5",
+    "author": "Robert Nurnberg @ elitebook <28635489+robertnurnberg@users.noreply.github.com>",
+    "date": "2026-11-21T21:15:18Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/ac1437d5f1adc80aeab6ed572002ef18226a26f0",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ac1437d5f1adc80aeab6ed572002ef18226a26f0.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/ac1437d5f1adc80aeab6ed572002ef18226a26f0.tar.gz"
+      }
+    ],
+    "message": "[CI] Allow repeat of final depth PV output\n\nCurrently our CI fails in `test_ucinewgame_and_go_depth_9` if the final depth PV output is repeated. But that can naturally happen due to a ponder move extraction from the TT (since b9f3273af12266b81c00993a360f5f544c345ce9).\n\nThis PR fixes this by allowing `info depth 9` to be repeated once, if the repeated PV is exactly two moves long.\n\nWhile at it, write the code a bit more general so that it can also be used for depths other than 9.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7314\n\nNo functional change\n",
+    "subject": "[CI] Allow repeat of final depth PV output"
+  },
+  {
     "hash": "1c6f497afc176044b2feca9ce74a7bdce9e7e0cb",
     "short": "1c6f497a",
     "author": "anematode <timothy.herchen@gmail.com>",
