@@ -1,5 +1,236 @@
 [
   {
+    "hash": "88337401b7a4d5724611cd1ac32bdacf9e778ebd",
+    "short": "88337401",
+    "author": "Shreeyans Dodda <shreeyans21@gmail.com>",
+    "date": "2026-11-26T17:09:01Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/88337401b7a4d5724611cd1ac32bdacf9e778ebd",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/88337401b7a4d5724611cd1ac32bdacf9e778ebd.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/88337401b7a4d5724611cd1ac32bdacf9e778ebd.tar.gz"
+      }
+    ],
+    "message": "Remove correlation term from evaluation scaling\n\nFollow-up to \"Remove optimism\": without optimism, the correl term is only\na +-3% rescaling of the NNUE eval. Remove it, along with simple_eval().\n\nPassed STC non-regression:\nhttps://tests.stockfishchess.org/tests/view/6b026703b9d0e035d605fb9b\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 76256 W: 19148 L: 18979 D: 38129\nPtnml(0-2): 78, 8771, 20245, 8972, 62\n\nPassed LTC non-regression:\nhttps://tests.stockfishchess.org/tests/view/6b05eb189f65cf9079e25927\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 63132 W: 16378 L: 16207 D: 30547\nPtnml(0-2): 11, 6443, 18483, 6622, 7\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7355\n\nBench: 1128273\n",
+    "subject": "Remove correlation term from evaluation scaling"
+  },
+  {
+    "hash": "d60859c3ea823cbe4b39add66c6ddbe43e957316",
+    "short": "d60859c3",
+    "author": "xu-shawn <50402888+xu-shawn@users.noreply.github.com>",
+    "date": "2026-11-26T16:08:14Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d60859c3ea823cbe4b39add66c6ddbe43e957316",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d60859c3ea823cbe4b39add66c6ddbe43e957316.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d60859c3ea823cbe4b39add66c6ddbe43e957316.tar.gz"
+      }
+    ],
+    "message": "Update default net to nn-684d0e60e71d.nnue\n\nSkip 70% of the positions where |eval|>1000\n\nPassed STC:\nLLR: 2.94 (-2.94,2.94) <0.00,2.00>\nTotal: 50624 W: 12861 L: 12537 D: 25226\nPtnml(0-2): 47, 5763, 13408, 6007, 87\nhttps://tests.stockfishchess.org/tests/view/6b032de9b9d0e035d605fef9\n\nPassed LTC:\nLLR: 2.97 (-2.94,2.94) <0.50,2.50>\nTotal: 46830 W: 12076 L: 11744 D: 23010\nPtnml(0-2): 7, 4808, 13462, 5122, 16\nhttps://tests.stockfishchess.org/tests/view/6b05dec29f65cf9079e25903\n\nnnue-pytorch: https://github.com/official-stockfish/nnue-pytorch/pull/593\nnettest: https://github.com/vondele/nettest/pull/616\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7353\n\nBench: 1649746\n",
+    "subject": "Update default net to nn-684d0e60e71d.nnue"
+  },
+  {
+    "hash": "6ae0e8fb0572acda1dd53d103affde8a5c5921fd",
+    "short": "6ae0e8fb",
+    "author": "Disservin <disservin.social@gmail.com>",
+    "date": "2026-11-26T16:07:47Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/6ae0e8fb0572acda1dd53d103affde8a5c5921fd",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/6ae0e8fb0572acda1dd53d103affde8a5c5921fd.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/6ae0e8fb0572acda1dd53d103affde8a5c5921fd.tar.gz"
+      }
+    ],
+    "message": "Skip array size header for trivially destructible types\n\nPassed Non-Regression STC:\nhttps://tests.stockfishchess.org/tests/view/6b0728389f65cf9079e25c1d\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 60800 W: 15342 L: 15165 D: 30293\nPtnml(0-2): 38, 6335, 17493, 6480, 54\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7354\n\nNo functional change\n",
+    "subject": "Skip array size header for trivially destructible types"
+  },
+  {
+    "hash": "7f531dcd903b5e66c4c12f3a979488d868622389",
+    "short": "7f531dcd",
+    "author": "mstembera <5421953+mstembera@users.noreply.github.com>",
+    "date": "2026-11-26T16:07:23Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/7f531dcd903b5e66c4c12f3a979488d868622389",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7f531dcd903b5e66c4c12f3a979488d868622389.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/7f531dcd903b5e66c4c12f3a979488d868622389.tar.gz"
+      }
+    ],
+    "message": "Split pawn correction history based on Queen(s)\n\nSTC: https://tests.stockfishchess.org/tests/view/6afd1bd82ff81bd6a63440ec\nLLR: 2.93 (-2.94,2.94) <0.00,2.00>\nTotal: 144480 W: 36923 L: 36469 D: 71088\nPtnml(0-2): 136, 16594, 38347, 17006, 157\n\nLTC: https://tests.stockfishchess.org/tests/view/6b022c07b9d0e035d605fb07\nLLR: 2.94 (-2.94,2.94) <0.50,2.50>\nTotal: 106170 W: 27592 L: 27148 D: 51430\nPtnml(0-2): 24, 10819, 30953, 11267, 22\n\nThe idea is that different pawn structures are good or bad depending on if queen(s) are on board.  Maybe the weighting and or bonus of the pawn correction history could be increased as a result of this patch.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7351\n\nBench: 1546769\n",
+    "subject": "Split pawn correction history based on Queen(s)"
+  },
+  {
+    "hash": "8d4320f31343df5bf77880a9c4739b583ea31e96",
+    "short": "8d4320f3",
+    "author": "Pieter te Brake <pieterteb@gmail.com>",
+    "date": "2026-11-26T16:06:55Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/8d4320f31343df5bf77880a9c4739b583ea31e96",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/8d4320f31343df5bf77880a9c4739b583ea31e96.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/8d4320f31343df5bf77880a9c4739b583ea31e96.tar.gz"
+      }
+    ],
+    "message": "Simplify castling rights verification in Position::set.\n\nSimplify invalid castling rights detection and fix incorrect token sent in error message.\n\nAdded tests to tests/instrumented.py for castling rights sanitization and invalid castling rights.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7345\n\nNo functional change\n",
+    "subject": "Simplify castling rights verification in Position::set."
+  },
+  {
+    "hash": "54845c3ebd3cab5a3c0b9373184eb82e78f83bba",
+    "short": "54845c3e",
+    "author": "Vizvezdenec <Vizvezdenec@gmail.com>",
+    "date": "2026-11-25T20:55:04Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/54845c3ebd3cab5a3c0b9373184eb82e78f83bba",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/54845c3ebd3cab5a3c0b9373184eb82e78f83bba.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/54845c3ebd3cab5a3c0b9373184eb82e78f83bba.tar.gz"
+      }
+    ],
+    "message": "Allow futility pruning for promotions in qsearch\n\nSmall simplification that removes one restriction from qsearch futility pruning.\nIdea (somewhat) from Ciekce, author of Stormphrax\n\nPassed STC:\nhttps://tests.stockfishchess.org/tests/view/6afc928a8e7fb2e78bc1dd0f\nLLR: 2.95 (-2.94,2.94) <-1.75,0.25>\nTotal: 179392 W: 45430 L: 45369 D: 88593\nPtnml(0-2): 191, 20576, 48100, 20639, 190\n\nPassed LTC:\nhttps://tests.stockfishchess.org/tests/view/6b028921b9d0e035d605fce6\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 44268 W: 11498 L: 11309 D: 21461\nPtnml(0-2): 6, 4452, 13027, 4645, 4\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7350\n\nBench: 1380383\n",
+    "subject": "Allow futility pruning for promotions in qsearch"
+  },
+  {
+    "hash": "29f9cb7be165c28c320dd2e7d7928a57fda4e396",
+    "short": "29f9cb7b",
+    "author": "Syine Mineta <skdty87@gmail.com>",
+    "date": "2026-11-25T20:54:33Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/29f9cb7be165c28c320dd2e7d7928a57fda4e396",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/29f9cb7be165c28c320dd2e7d7928a57fda4e396.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/29f9cb7be165c28c320dd2e7d7928a57fda4e396.tar.gz"
+      }
+    ],
+    "message": "Rebuild when compile or link commands change\n\nSave compile and link commands so Make can rebuild the affected targets when the compiler, architecture, or flags change.\n\nAlso includes some minor improvements, including Clang universal build fix.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7349\n\nNo functional change\n",
+    "subject": "Rebuild when compile or link commands change"
+  },
+  {
+    "hash": "65a6fa73015945bc5e3babd590394462a1abde12",
+    "short": "65a6fa73",
+    "author": "Elhamuddin <elhamuddinazizi607@gmail.com>",
+    "date": "2026-11-25T20:54:00Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/65a6fa73015945bc5e3babd590394462a1abde12",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/65a6fa73015945bc5e3babd590394462a1abde12.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/65a6fa73015945bc5e3babd590394462a1abde12.tar.gz"
+      }
+    ],
+    "message": "Remove dead null-check branches in Worker::do_move\n\nsearch() and qsearch() dereference ss (ss->inCheck) before any do_move\ncall, and every do_move call passes that ss, so the `ss != nullptr`\nguards never fail. Remove them and take `Stack& ss`.\n\nWith the guards gone, pc and to are in scope for the whole function, so\nreuse them instead of dirtyPiece.pc and move.to_sq(). Position::do_move\nsets dp.pc = piece_on(from), which is what moved_piece(move) returned\nbefore the move, so the table indices are the same.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7348\n\nNo functional change\n",
+    "subject": "Remove dead null-check branches in Worker::do_move"
+  },
+  {
+    "hash": "d0401bd03d578b3532c980089059648038b01674",
+    "short": "d0401bd0",
+    "author": "Martin <66840021+Mcrtin@users.noreply.github.com>",
+    "date": "2026-11-25T20:52:45Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d0401bd03d578b3532c980089059648038b01674",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d0401bd03d578b3532c980089059648038b01674.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d0401bd03d578b3532c980089059648038b01674.tar.gz"
+      }
+    ],
+    "message": "cache repetition look behind max window len\n\nrename plies_from_null to rep_window and make it be at most equal to rule50 which make it be exactly the window where repetitions can occur\n\npassed STC:\nLLR: 2.96 (-2.94,2.94) <-1.75,0.25>\nTotal: 55712 W: 14124 L: 13942 D: 27646\nPtnml(0-2): 48, 5684, 16207, 5872, 45\nhttps://tests.stockfishchess.org/tests/view/6b0190ecb9d0e035d605f8d1\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7347\n\nNo functional change\n\nCo-authored-by: Martin <66840021+mcrtin@users.noreply.github.com>\n",
+    "subject": "cache repetition look behind max window len"
+  },
+  {
+    "hash": "81c865132a5419ccf4295ae8536919c53e588dd1",
+    "short": "81c86513",
+    "author": "Shreeyans Dodda <shreeyans21@gmail.com>",
+    "date": "2026-11-25T20:50:47Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/81c865132a5419ccf4295ae8536919c53e588dd1",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/81c865132a5419ccf4295ae8536919c53e588dd1.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/81c865132a5419ccf4295ae8536919c53e588dd1.tar.gz"
+      }
+    ],
+    "message": "Fix stale comments and remove unused includes\n\nStockfish no longer has a countermove table, so this updates three comments in search.cpp that still referred to it. It also removes includes in `numa.h` (`<atomic>`, `<sstream>`) and `shm.h` (`<iomanip>`, `<sstream>`) that nothing in those files uses.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7346\n\nNo functional change\n",
+    "subject": "Fix stale comments and remove unused includes"
+  },
+  {
+    "hash": "d911805c39e45aad3ffebc834d4f6505e53e35db",
+    "short": "d911805c",
+    "author": "noobpwnftw <noobpwnftw@users.noreply.github.com>",
+    "date": "2026-11-25T20:50:04Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/d911805c39e45aad3ffebc834d4f6505e53e35db",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d911805c39e45aad3ffebc834d4f6505e53e35db.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/d911805c39e45aad3ffebc834d4f6505e53e35db.tar.gz"
+      }
+    ],
+    "message": "Constexpr line tables, remove constexpr limit flags\n\nWith the magic search gone, `Attacks::init()` only builds the line tables. This makes them constexpr and removes `init()`. The between and ray-pass tables are cut from the line by square index, which is cheap enough for the default constexpr limits. The tables are identical to the runtime init, and perft speed is unchanged.\n\nThe empty-board `attacks_bb` is now constexpr too, and replaces the direct `PseudoAttacks` indexing, including the repetition table, which relied on slots 0-1 holding the pawn attacks by color. Hoisting its lookup out of the inner loop halves the table's constexpr steps.\n\nThe raised constexpr limits came with #6706 for the compile-time pext attack tables, which #6939 removed. The one remaining large initializer, `init_threat_luts()`, repeated the same lookups for every target square. With those hoisted out of the inner loop it needs about half of clang's default steps with GCC 15 headers.\n\nBuilds with `-Werror` on clang 20 and GCC 15 (aarch64 native, x86-64-avx2), bench 1488683.\n\nPassed non-reg STC:\nLLR: 2.93 (-2.94,2.94) <-1.75,0.25>\nTotal: 120480 W: 30528 L: 30412 D: 59540\nPtnml(0-2): 119, 12566, 34762, 12666, 127\nhttps://tests.stockfishchess.org/tests/view/6b0232fab9d0e035d605fb12\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7339\n\nNo functional change\n",
+    "subject": "Constexpr line tables, remove constexpr limit flags"
+  },
+  {
     "hash": "3e8fde75412e7c47fc140cd82022a395bc681d92",
     "short": "3e8fde75",
     "author": "Joost VandeVondele <Joost.VandeVondele@gmail.com>",
