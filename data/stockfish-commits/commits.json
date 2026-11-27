@@ -1,5 +1,68 @@
 [
   {
+    "hash": "5bdfd3e1f5ec4c6173909a5a1fff1c19a8a7273d",
+    "short": "5bdfd3e1",
+    "author": "Shreeyans Dodda <shreeyans21@gmail.com>",
+    "date": "2026-11-27T17:20:52Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/5bdfd3e1f5ec4c6173909a5a1fff1c19a8a7273d",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5bdfd3e1f5ec4c6173909a5a1fff1c19a8a7273d.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/5bdfd3e1f5ec4c6173909a5a1fff1c19a8a7273d.tar.gz"
+      }
+    ],
+    "message": "Don't treat a missing TT value as above alpha in ttPv LMR\n\nOn a TT miss `ttData.value` is `VALUE_NONE`, so the ttPv reduction term `(ttData.value > alpha)` was always true at such nodes. Guard it with `is_valid()`, as every other use of `ttData.value` in search already does.\n\nPassed non-regression STC:\nLLR: 2.92 (-2.94,2.94) <-1.75,0.25>\nTotal: 84448 W: 21550 L: 21390 D: 41508\nPtnml(0-2): 86, 9765, 22369, 9911, 93\nhttps://tests.stockfishchess.org/tests/view/6b029a03b9d0e035d605fcfa\n\nPassed non-regression LTC:\nLLR: 2.94 (-2.94,2.94) <-1.75,0.25>\nTotal: 62508 W: 16106 L: 15935 D: 30467\nPtnml(0-2): 10, 6330, 18400, 6507, 7\nhttps://tests.stockfishchess.org/tests/view/6b07230e9f65cf9079e25c14\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7360\n\nBench: 1291032\n",
+    "subject": "Don't treat a missing TT value as above alpha in ttPv LMR"
+  },
+  {
+    "hash": "1af972ef6ef9965d26bd78614c52129ffd84ceaf",
+    "short": "1af972ef",
+    "author": "Luis Josu\u00e9 Cort\u00e9s Anzurez <134738504+luisjosuecortes@users.noreply.github.com>",
+    "date": "2026-11-27T17:20:17Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/1af972ef6ef9965d26bd78614c52129ffd84ceaf",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1af972ef6ef9965d26bd78614c52129ffd84ceaf.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/1af972ef6ef9965d26bd78614c52129ffd84ceaf.tar.gz"
+      }
+    ],
+    "message": "Skip zero NNUE input pairs on SSE2\n\nThe generic x86-64 build evaluates every input for each output in the first NNUE affine layer. This patch groups adjacent inputs in pairs, skips pairs where both activations are zero, and accumulates the rest with SSE2 `pmaddwd`. It preserves the network file format and keeps the weights in 8-bit storage.\n\npassed STC:\nLLR: 2.98 (-2.94,2.94) <0.00,2.00>\nTotal: 2816 W: 840 L: 583 D: 1393\nPtnml(0-2): 1, 199, 755, 448, 5\nhttps://tests.stockfishchess.org/tests/view/6b0926289f65cf9079e260d5\n\nBoth engines were built with `ARCH=x86-64` on AVX2/BMI2 workers to measure the generic SSE2 path.\nThe native AVX2/BMI2 builds have their own implementation.\n\nOn an Intel Core i7-10750H with GCC 13.3 and PGO, the generic build searched **11.82% faster** across 96 held-out UHO openings (95% bootstrap CI +9.67% to +13.80%). A Python script ran `bench 16 1 155000 <epd> nodes` in 16 blocks, swapping physical cores between runs. The engines produced identical node counts, scores, PVs, and best moves in every position.\n\nThe PowerPC VSX build also sets `USE_SSE2`, so it explicitly keeps its existing dense path.\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7359\n\nNo functional change\n",
+    "subject": "Skip zero NNUE input pairs on SSE2"
+  },
+  {
+    "hash": "2e01e797d7446281ea4a44118442459ba9484ba3",
+    "short": "2e01e797",
+    "author": "Syine Mineta <skdty87@gmail.com>",
+    "date": "2026-11-27T17:19:47Z",
+    "github_url": "https://github.com/official-stockfish/Stockfish/commit/2e01e797d7446281ea4a44118442459ba9484ba3",
+    "source_code": [
+      {
+        "label": "ZIP",
+        "type": "zip",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/2e01e797d7446281ea4a44118442459ba9484ba3.zip"
+      },
+      {
+        "label": "TAR.GZ",
+        "type": "tar.gz",
+        "url": "https://github.com/official-stockfish/Stockfish/archive/2e01e797d7446281ea4a44118442459ba9484ba3.tar.gz"
+      }
+    ],
+    "message": "Remove leftover temporary build files\n\ncloses https://github.com/official-stockfish/Stockfish/pull/7356\n\nNo functional change\n",
+    "subject": "Remove leftover temporary build files"
+  },
+  {
     "hash": "88337401b7a4d5724611cd1ac32bdacf9e778ebd",
     "short": "88337401",
     "author": "Shreeyans Dodda <shreeyans21@gmail.com>",
